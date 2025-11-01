@@ -1,7 +1,6 @@
 var classMaxOS_1_1processes_1_1BaseResourceRegistry =
 [
     [ "BaseResourceRegistry", "classMaxOS_1_1processes_1_1BaseResourceRegistry.html#ad568ef43e2b5567459600934d11a3076", null ],
-    [ "~BaseResourceRegistry", "classMaxOS_1_1processes_1_1BaseResourceRegistry.html#ab7c3f284930089defa53bc1b0b83d26e", null ],
     [ "close_resource", "classMaxOS_1_1processes_1_1BaseResourceRegistry.html#a774571ac301f9ae5800c6d186630ab1b", null ],
     [ "create_resource", "classMaxOS_1_1processes_1_1BaseResourceRegistry.html#ae483012d308290bd22760cb63b1c9ee9", null ],
     [ "get_resource", "classMaxOS_1_1processes_1_1BaseResourceRegistry.html#a723b49dd3279da0802f7161475338b44", null ],

@@ -1,5 +1,10 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/drivers/clock/clock.h File Reference}
 \hypertarget{clock_8h}{}\label{clock_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/clock/clock.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/clock/clock.h}}
+
+
+Defines drivers for the Programmable Interval Timer (PIT) and APIC Clock.  
+
+
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$common/time.\+h$>$}\newline
 {\ttfamily \#include $<$drivers/driver.\+h$>$}\newline
@@ -10,58 +15,181 @@
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1TimeEvent}{Max\+OS\+::drivers\+::clock\+::\+Time\+Event}}
-\begin{DoxyCompactList}\small\item\em Event that is triggered when the clock ticks, holds the current time. \end{DoxyCompactList}\item 
-class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler}{Max\+OS\+::drivers\+::clock\+::\+Clock\+Event\+Handler}}
-\begin{DoxyCompactList}\small\item\em Handles the events triggered by the clock. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{Max\+OS\+::drivers\+::clock\+::\+PITCommand}}
-\item 
+\begin{DoxyCompactList}\small\item\em The command byte to send to the \doxylink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{PIT}, specifies the channel, access mode, operating mode and BCD mode. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{Max\+OS\+::drivers\+::clock\+::\+PIT}}
 \begin{DoxyCompactList}\small\item\em \doxylink{classMaxOS_1_1drivers_1_1Driver}{Driver} for the Programmable Interval Timer. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Max\+OS\+::drivers\+::clock\+::\+Clock}}
 \begin{DoxyCompactList}\small\item\em \doxylink{classMaxOS_1_1drivers_1_1Driver}{Driver} for the APIC clock. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1drivers}{Max\+OS\+::drivers}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock}{Max\+OS\+::drivers\+::clock}}
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef struct \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{Max\+OS\+::drivers\+::clock\+::\+PITCommand}} \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a64df5b539699c60554f98af328b16cd9}{Max\+OS\+::drivers\+::clock\+::pit\+\_\+command\+\_\+t}}
+\Hypertarget{clock_8h_a64df5b539699c60554f98af328b16cd9}\label{clock_8h_a64df5b539699c60554f98af328b16cd9} 
+typedef struct \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{Max\+OS\+::drivers\+::clock\+::\+PITCommand}} {\bfseries Max\+OS\+::drivers\+::clock\+::pit\+\_\+command\+\_\+t}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a17687f96357a81b18a16cc4afcdb29a0}{Max\+OS\+::drivers\+::clock\+::\+Clock\+Events}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a17687f96357a81b18a16cc4afcdb29a0a346ff32eaa3c09983fb2ec057816d352}{Max\+OS\+::drivers\+::clock\+::\+TIME}}
+enum class \mbox{\hyperlink{clock_8h_abcf21589b606dd6e2b8a617cda1b0ac3}{Max\+OS\+::drivers\+::clock\+::\+Channel}} \{ {\bfseries INTERRUPT}
+, {\bfseries DRAM\+\_\+\+REFRESH}
+, {\bfseries SPEAKER}
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_abcf21589b606dd6e2b8a617cda1b0ac3}{Max\+OS\+::drivers\+::clock\+::\+Channel}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_abcf21589b606dd6e2b8a617cda1b0ac3a81b7fe15c43052525db74111aa314cc9}{Max\+OS\+::drivers\+::clock\+::\+INTERRUPT}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_abcf21589b606dd6e2b8a617cda1b0ac3a04d305b384e24c98f2818da5a50342ca}{Max\+OS\+::drivers\+::clock\+::\+DRAM\+\_\+\+REFRESH}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_abcf21589b606dd6e2b8a617cda1b0ac3a886db3c4d7f0d4adbb44f0f3f3789d43}{Max\+OS\+::drivers\+::clock\+::\+SPEAKER}}
+\begin{DoxyCompactList}\small\item\em Where should the PIT raise an event to. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{clock_8h_aec467a8b28cb0b1b17948364e6710844}{Max\+OS\+::drivers\+::clock\+::\+Access\+Mode}} \{ {\bfseries LATCH\+\_\+\+COUNT}
+, {\bfseries LOW\+\_\+\+BYTE}
+, {\bfseries HIGH\+\_\+\+BYTE}
+, {\bfseries LOW\+\_\+\+HIGH\+\_\+\+BYTE}
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844}{Max\+OS\+::drivers\+::clock\+::\+Access\+Mode}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844aa814f51f34d95e93c6d83be90275efb7}{Max\+OS\+::drivers\+::clock\+::\+LATCH\+\_\+\+COUNT}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844a9d6b9d6fa63a6900ea19237646019473}{Max\+OS\+::drivers\+::clock\+::\+LOW\+\_\+\+BYTE}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844ae7425eeb852ca574229f177807cb8ca0}{Max\+OS\+::drivers\+::clock\+::\+HIGH\+\_\+\+BYTE}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_aec467a8b28cb0b1b17948364e6710844adbb4778615de7631ad9e4446450576c9}{Max\+OS\+::drivers\+::clock\+::\+LOW\+\_\+\+HIGH\+\_\+\+BYTE}}
- \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7}{Max\+OS\+::drivers\+::clock\+::\+Operating\+Mode}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7ad9a50259f796fe2de870668630a7b727}{Max\+OS\+::drivers\+::clock\+::\+INTERRUPT\+\_\+\+ON\+\_\+\+TERMINAL\+\_\+\+COUNT}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7a5bc2964599423c796ecf0aaecdc5be9d}{Max\+OS\+::drivers\+::clock\+::\+ONE\+\_\+\+SHOT}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7aca50c2eea44eff0b9ae4e9bbec438a65}{Max\+OS\+::drivers\+::clock\+::\+RATE\+\_\+\+GENERATOR}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7a0808de7f19eb9693fc566d3dcb715b08}{Max\+OS\+::drivers\+::clock\+::\+SQUARE\+\_\+\+WAVE}}
+\begin{DoxyCompactList}\small\item\em What mode should the PIT use for the selected channel. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{clock_8h_a9e1786fd3419e0a129f79ffdf56154f7}{Max\+OS\+::drivers\+::clock\+::\+Operating\+Mode}} \{ \newline
+{\bfseries INTERRUPT\+\_\+\+ON\+\_\+\+TERMINAL\+\_\+\+COUNT}
+, {\bfseries ONE\+\_\+\+SHOT}
+, {\bfseries RATE\+\_\+\+GENERATOR}
+, {\bfseries SQUARE\+\_\+\+WAVE}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7a1f1eb7d3c192cb3f8d5a354bfceb28de}{Max\+OS\+::drivers\+::clock\+::\+SOFTWARE\+\_\+\+STROBE}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a9e1786fd3419e0a129f79ffdf56154f7a1d8e2ef6a133c20c377b13a04363e907}{Max\+OS\+::drivers\+::clock\+::\+HARDWARE\+\_\+\+STROBE}}
+{\bfseries SOFTWARE\+\_\+\+STROBE}
+, {\bfseries HARDWARE\+\_\+\+STROBE}
  \}
+\begin{DoxyCompactList}\small\item\em What should the PIT do. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{clock_8h_a138a8792ceb3e2bd560c677d54724b4c}{Max\+OS\+::drivers\+::clock\+::\+BCDMode}} \{ {\bfseries BINARY}
+, {\bfseries BCD}
+ \}
+\begin{DoxyCompactList}\small\item\em Specifies the data encoding mode used by the PIT. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a138a8792ceb3e2bd560c677d54724b4c}{Max\+OS\+::drivers\+::clock\+::\+BCDMode}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a138a8792ceb3e2bd560c677d54724b4ca98ad0e8750ae10ad556ed7a62affb452}{Max\+OS\+::drivers\+::clock\+::\+BINARY}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock_a138a8792ceb3e2bd560c677d54724b4ca8539ef1fba74a70f5a77fcc3f25c1659}{Max\+OS\+::drivers\+::clock\+::\+BCD}}
- \}
-\end{DoxyCompactItemize}
+constexpr uint16\+\_\+t \mbox{\hyperlink{clock_8h_a25cda667ba25c7e95b6d8f2a96efb9a6}{Max\+OS\+::drivers\+::clock\+::\+TICK\+\_\+\+CALIBRATE\+\_\+\+LENGTH}} = 10
+\begin{DoxyCompactList}\small\item\em How many loops to spin for calibration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines drivers for the Programmable Interval Timer (PIT) and APIC Clock. 
+
+\begin{DoxyDate}{Date}
+10th April 2023 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{clock_8h_source}{clock.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{clock_8h_aec467a8b28cb0b1b17948364e6710844}\label{clock_8h_aec467a8b28cb0b1b17948364e6710844} 
+\index{clock.h@{clock.h}!AccessMode@{AccessMode}}
+\index{AccessMode@{AccessMode}!clock.h@{clock.h}}
+\doxysubsubsection{\texorpdfstring{AccessMode}{AccessMode}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{clock_8h_aec467a8b28cb0b1b17948364e6710844}{Max\+OS\+::drivers\+::clock\+::\+Access\+Mode}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+What mode should the PIT use for the selected channel. 
+
+
+
+Definition at line \mbox{\hyperlink{clock_8h_source_l00042}{42}} of file \mbox{\hyperlink{clock_8h_source}{clock.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LATCH\_COUNT,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LOW\_BYTE,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HIGH\_BYTE,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LOW\_HIGH\_BYTE,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{clock_8h_a138a8792ceb3e2bd560c677d54724b4c}\label{clock_8h_a138a8792ceb3e2bd560c677d54724b4c} 
+\index{clock.h@{clock.h}!BCDMode@{BCDMode}}
+\index{BCDMode@{BCDMode}!clock.h@{clock.h}}
+\doxysubsubsection{\texorpdfstring{BCDMode}{BCDMode}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{clock_8h_a138a8792ceb3e2bd560c677d54724b4c}{Max\+OS\+::drivers\+::clock\+::\+BCDMode}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Specifies the data encoding mode used by the PIT. 
+
+
+
+Definition at line \mbox{\hyperlink{clock_8h_source_l00066}{66}} of file \mbox{\hyperlink{clock_8h_source}{clock.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BINARY,}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BCD,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{clock_8h_abcf21589b606dd6e2b8a617cda1b0ac3}\label{clock_8h_abcf21589b606dd6e2b8a617cda1b0ac3} 
+\index{clock.h@{clock.h}!Channel@{Channel}}
+\index{Channel@{Channel}!clock.h@{clock.h}}
+\doxysubsubsection{\texorpdfstring{Channel}{Channel}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{clock_8h_abcf21589b606dd6e2b8a617cda1b0ac3}{Max\+OS\+::drivers\+::clock\+::\+Channel}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Where should the PIT raise an event to. 
+
+\begin{DoxyWarning}{Warning}
+DRAM\+\_\+\+REFRESH may not exist on all systems 
+\end{DoxyWarning}
+
+
+Definition at line \mbox{\hyperlink{clock_8h_source_l00032}{32}} of file \mbox{\hyperlink{clock_8h_source}{clock.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ INTERRUPT,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRAM\_REFRESH,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPEAKER,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{clock_8h_a9e1786fd3419e0a129f79ffdf56154f7}\label{clock_8h_a9e1786fd3419e0a129f79ffdf56154f7} 
+\index{clock.h@{clock.h}!OperatingMode@{OperatingMode}}
+\index{OperatingMode@{OperatingMode}!clock.h@{clock.h}}
+\doxysubsubsection{\texorpdfstring{OperatingMode}{OperatingMode}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{clock_8h_a9e1786fd3419e0a129f79ffdf56154f7}{Max\+OS\+::drivers\+::clock\+::\+Operating\+Mode}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+What should the PIT do. 
+
+
+
+Definition at line \mbox{\hyperlink{clock_8h_source_l00053}{53}} of file \mbox{\hyperlink{clock_8h_source}{clock.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ INTERRUPT\_ON\_TERMINAL\_COUNT,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ONE\_SHOT,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RATE\_GENERATOR,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQUARE\_WAVE,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SOFTWARE\_STROBE,}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HARDWARE\_STROBE,}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{clock_8h_a25cda667ba25c7e95b6d8f2a96efb9a6}\label{clock_8h_a25cda667ba25c7e95b6d8f2a96efb9a6} 
+\index{clock.h@{clock.h}!TICK\_CALIBRATE\_LENGTH@{TICK\_CALIBRATE\_LENGTH}}
+\index{TICK\_CALIBRATE\_LENGTH@{TICK\_CALIBRATE\_LENGTH}!clock.h@{clock.h}}
+\doxysubsubsection{\texorpdfstring{TICK\_CALIBRATE\_LENGTH}{TICK\_CALIBRATE\_LENGTH}}
+{\footnotesize\ttfamily constexpr uint16\+\_\+t Max\+OS\+::drivers\+::clock\+::\+TICK\+\_\+\+CALIBRATE\+\_\+\+LENGTH = 10\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+How many loops to spin for calibration. 
+
+
+
+Definition at line \mbox{\hyperlink{clock_8h_source_l00087}{87}} of file \mbox{\hyperlink{clock_8h_source}{clock.\+h}}.
+

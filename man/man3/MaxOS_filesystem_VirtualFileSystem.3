@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::filesystem::VirtualFileSystem
+MaxOS::filesystem::VirtualFileSystem \- Combines all the filesystems across the partitions on each disk into a single filesystems and exposes a single API to interact with them\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -11,12 +12,6 @@ MaxOS::filesystem::VirtualFileSystem
 .SS "Public Member Functions"
 
 .in +1c
-.ti -1c
-.RI "\fBVirtualFileSystem\fP ()"
-.br
-.ti -1c
-.RI "\fB~VirtualFileSystem\fP ()"
-.br
 .ti -1c
 .RI "\fBvoid\fP \fBmount_filesystem\fP (\fBFileSystem\fP *filesystem)"
 .br
@@ -92,6 +87,7 @@ MaxOS::filesystem::VirtualFileSystem
 .ti -1c
 .RI "\fBstatic\fP \fBDirectory\fP * \fBopen_directory\fP (\fBDirectory\fP *\fBparent\fP, \fBconst\fP \fBstring\fP &\fBname\fP)"
 .br
+.RI "Opens a subdirectory from a parent directory\&. "
 .ti -1c
 .RI "\fBstatic\fP \fBDirectory\fP * \fBcreate_directory\fP (\fBDirectory\fP *\fBparent\fP, \fBconst\fP \fBstring\fP &\fBname\fP)"
 .br
@@ -119,40 +115,40 @@ MaxOS::filesystem::VirtualFileSystem
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB16\fP of file \fBvfs\&.h\fP\&.
+Combines all the filesystems across the partitions on each disk into a single filesystems and exposes a single API to interact with them\&. 
+.PP
+Definition at line \fB26\fP of file \fBvfs\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "VirtualFileSystem::VirtualFileSystem ()"
 
 .PP
-Definition at line \fB11\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB16\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-11                                      {
-12 
-13     // Set the current file system to this instance
-14     s_current_file_system = this;
-15 
-16 }
+16                                      {
+17 
+18     // Set the current file system to this instance
+19     s_current_file_system = this;
+20 
+21 }
 .fi
 
 .SS "VirtualFileSystem::~VirtualFileSystem ()"
 
 .PP
-Definition at line \fB18\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB23\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-18                                       {
-19 
-20     // Remove all mounted filesystems
-21     unmount_all();
-22 
-23     // Set the current file system to null
-24     s_current_file_system = nullptr;
-25 
-26 }
+23                                       {
+24 
+25     // Remove all mounted filesystems
+26     unmount_all();
+27 
+28     // Set the current file system to null
+29     s_current_file_system = nullptr;
+30 
+31 }
 .fi
 
-.PP
-References \fBunmount_all()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBDirectory\fP * VirtualFileSystem::create_directory (\fBDirectory\fP * parent, \fBconst\fP \fBstring\fP & name)\fC [static]\fP"
@@ -174,16 +170,16 @@ The created directory
 .PP
 
 .PP
-Definition at line \fB302\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB314\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-302                                                                                     {
-303 
-304     // Create the directory
-305     Directory* directory = parent\->create_subdirectory(name);
-306     directory\->read_from_disk();
-307 
-308     return directory;
-309 }
+314                                                                                     {
+315 
+316     // Create the directory
+317     Directory* directory = parent\->create_subdirectory(name);
+318     directory\->read_from_disk();
+319 
+320     return directory;
+321 }
 .fi
 
 .PP
@@ -205,29 +201,29 @@ The directory object or null if it could not be opened
 .PP
 
 .PP
-Definition at line \fB273\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB285\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-273                                                           {
-274 
-275     // Ensure a valid path is given
-276     if (!Path::valid(path))
-277         return nullptr;
-278 
-279     path = path\&.strip('/');
-280 
-281     // Try to find the filesystem that is responsible for the path
-282     FileSystem* fs = find_filesystem(path);
-283     if (!fs)
-284         return nullptr;
-285 
-286     // Open the parent directory
-287     Directory* parent_directory = open_directory(path);
-288     if (!parent_directory)
+285                                                           {
+286 
+287     // Ensure a valid path is given
+288     if (!Path::valid(path))
 289         return nullptr;
 290 
-291     string directory_name = Path::file_name(path);
-292     return create_directory(parent_directory, directory_name);
-293 }
+291     path = path\&.strip('/');
+292 
+293     // Try to find the filesystem that is responsible for the path
+294     FileSystem* fs = find_filesystem(path);
+295     if (!fs)
+296         return nullptr;
+297 
+298     // Open the parent directory
+299     Directory* parent_directory = open_directory(path);
+300     if (!parent_directory)
+301         return nullptr;
+302 
+303     string directory_name = Path::file_name(path);
+304     return create_directory(parent_directory, directory_name);
+305 }
 .fi
 
 .PP
@@ -251,23 +247,23 @@ The file object or null if it could not be created
 .PP
 
 .PP
-Definition at line \fB405\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB417\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-405                                                        {
-406 
-407     // Ensure a valid path is given
-408     if (!Path::valid(path))
-409         return nullptr;
-410 
-411     // Open the directory
-412     Directory* directory = open_directory(path);
-413     if (!directory)
-414         return nullptr;
-415 
-416     // Create the file
-417     string file_name = Path::file_name(path);
-418     return create_file(directory, file_name);
-419 }
+417                                                        {
+418 
+419     // Ensure a valid path is given
+420     if (!Path::valid(path))
+421         return nullptr;
+422 
+423     // Open the directory
+424     Directory* directory = open_directory(path);
+425     if (!directory)
+426         return nullptr;
+427 
+428     // Create the file
+429     string file_name = Path::file_name(path);
+430     return create_file(directory, file_name);
+431 }
 .fi
 
 .PP
@@ -288,11 +284,11 @@ Create a file in a directory\&.
 .PP
 
 .PP
-Definition at line \fB427\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB439\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-427                                                                           {
-428     return parent\->create_file(name);
-429 }
+439                                                                           {
+440     return parent\->create_file(name);
+441 }
 .fi
 
 .PP
@@ -309,11 +305,11 @@ The current virtual file system or null if none is set
 .PP
 
 .PP
-Definition at line \fB33\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB38\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-33                                                           {
-34     return s_current_file_system;
-35 }
+38                                                           {
+39     return s_current_file_system;
+40 }
 .fi
 
 .PP
@@ -332,16 +328,16 @@ Delete a directory on the virtual file system and it's sub contents\&.
 .PP
 
 .PP
-Definition at line \fB341\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB353\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-341                                                                               {
-342 
-343     // Find the directory and delete it
-344     for (const auto& directory: parent\->subdirectories())
-345         if (directory\->name() == name)
-346             delete_directory(parent, directory);
-347 
-348 }
+353                                                                               {
+354 
+355     // Find the directory and delete it
+356     for (const auto& directory: parent\->subdirectories())
+357         if (directory\->name() == name)
+358             delete_directory(parent, directory);
+359 
+360 }
 .fi
 
 .PP
@@ -360,49 +356,49 @@ Delete a directory on the virtual file system and it's sub contents\&.
 .PP
 
 .PP
-Definition at line \fB356\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB368\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-356                                                                                 {
-357 
-358     // Nothing to delete
-359     if (!directory)
-360         return;
-361 
-362     // Store a reference to each subdirectory and its parent
-363     Map<Directory*, Directory*> stack;
-364     Vector<Pair<Directory*, Directory*>> to_delete;
-365     stack\&.push_back(parent, directory);
-366 
-367     while (!stack\&.empty()) {
-368 
-369         // Save the current
-370         auto current = stack\&.pop_back();
-371         auto current_directory = current\&.second;
-372         current_directory\->read_from_disk();
-373         to_delete\&.push_back({current\&.first, current_directory});
-374 
-375         // Empty the directory
-376         for (const auto &file: current_directory\->files())
-377             delete_file(current_directory, file\->name());
+368                                                                                 {
+369 
+370     // Nothing to delete
+371     if (!directory)
+372         return;
+373 
+374     // Store a reference to each subdirectory and its parent
+375     Map<Directory*, Directory*> stack;
+376     Vector<Pair<Directory*, Directory*>> to_delete;
+377     stack\&.push_back(parent, directory);
 378 
-379         // Process the subdirectories
-380         for (const auto &subdir: current_directory\->subdirectories())
-381             if (subdir\->name() != "\&." && subdir\->name() != "\&.\&.")
-382                 stack\&.push_back(current_directory, subdir);
-383 
-384     }
-385 
-386     // Delete the directory from the bottom of the tree
-387     for (int i = to_delete\&.size() \- 1; i >= 0; \-\-i) {
-388 
-389         // Get the parent and child
-390         const auto &current = to_delete[i];
-391         Directory* owner = current\&.first;
-392         Directory* subdirectory = current\&.second;
-393 
-394         owner\->remove_subdirectory(subdirectory\->name());
-395     }
-396 }
+379     while (!stack\&.empty()) {
+380 
+381         // Save the current
+382         auto current = stack\&.pop_back();
+383         auto current_directory = current\&.second;
+384         current_directory\->read_from_disk();
+385         to_delete\&.push_back({current\&.first, current_directory});
+386 
+387         // Empty the directory
+388         for (const auto &file: current_directory\->files())
+389             delete_file(current_directory, file\->name());
+390 
+391         // Process the subdirectories
+392         for (const auto &subdir: current_directory\->subdirectories())
+393             if (subdir\->name() != "\&." && subdir\->name() != "\&.\&.")
+394                 stack\&.push_back(current_directory, subdir);
+395 
+396     }
+397 
+398     // Delete the directory from the bottom of the tree
+399     for (int i = to_delete\&.size() \- 1; i >= 0; \-\-i) {
+400 
+401         // Get the parent and child
+402         const auto &current = to_delete[i];
+403         Directory* owner = current\&.first;
+404         Directory* subdirectory = current\&.second;
+405 
+406         owner\->remove_subdirectory(subdirectory\->name());
+407     }
+408 }
 .fi
 
 .PP
@@ -419,25 +415,25 @@ Attempts to open the parent directory and deletes the sub directory at the end o
 .PP
 
 .PP
-Definition at line \fB317\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB329\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-317                                                     {
-318 
-319     // Ensure a valid path is given
-320     if (!Path::valid(path))
-321         return;
-322 
-323     path = path\&.strip('/');
-324 
-325     // Open the directory
-326     Directory* parent_directory = open_directory(path);
-327     if (!parent_directory)
-328         return;
-329 
-330     // Delete the directory
-331     string directory_name = Path::file_name(path);
-332     delete_directory(parent_directory, directory_name);
-333 }
+329                                                     {
+330 
+331     // Ensure a valid path is given
+332     if (!Path::valid(path))
+333         return;
+334 
+335     path = path\&.strip('/');
+336 
+337     // Open the directory
+338     Directory* parent_directory = open_directory(path);
+339     if (!parent_directory)
+340         return;
+341 
+342     // Delete the directory
+343     string directory_name = Path::file_name(path);
+344     delete_directory(parent_directory, directory_name);
+345 }
 .fi
 
 .PP
@@ -456,23 +452,23 @@ Opens a directory on the vfs and deletes the file at the end of the path\&.
 .PP
 
 .PP
-Definition at line \fB478\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB490\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-478                                                       {
-479 
-480     // Ensure a valid path is given
-481     if (!Path::valid(path))
-482         return;
-483 
-484     // Open the directory
-485     Directory* directory = open_directory(path);
-486     if (!directory)
-487         return;
-488 
-489     // Delete the file
-490     string file_name = Path::file_name(path);
-491     delete_file(directory, file_name);
-492 }
+490                                                       {
+491 
+492     // Ensure a valid path is given
+493     if (!Path::valid(path))
+494         return;
+495 
+496     // Open the directory
+497     Directory* directory = open_directory(path);
+498     if (!directory)
+499         return;
+500 
+501     // Delete the file
+502     string file_name = Path::file_name(path);
+503     delete_file(directory, file_name);
+504 }
 .fi
 
 .PP
@@ -493,13 +489,13 @@ Delete a file in the given directory\&.
 .PP
 
 .PP
-Definition at line \fB500\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB512\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-500                                                                          {
-501 
-502     // Delete the file
-503     parent\->remove_file(name);
-504 }
+512                                                                          {
+513 
+514     // Delete the file
+515     parent\->remove_file(name);
+516 }
 .fi
 
 .PP
@@ -521,29 +517,29 @@ The filesystem that contains the path or null if none is found
 .PP
 
 .PP
-Definition at line \fB178\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB183\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-178                                                           {
-179 
-180     // Longest matching path will be where the filesystem is mounted
-181     string longest_match = "";
-182     FileSystem* longest_match_fs = nullptr;
-183 
-184     // Search through the filesystems
-185     for (const auto& filesystem : filesystems) {
-186         // Get the filesystem and mount point
-187         FileSystem* fs = filesystem\&.first;
-188         string mount_point = filesystem\&.second;
-189 
-190         // Check if the path starts with the mount point
-191         if (path\&.starts_with(mount_point) && mount_point\&.length() > longest_match\&.length()) {
-192             longest_match = mount_point;
-193             longest_match_fs = fs;
-194         }
-195     }
-196 
-197     return longest_match_fs;
-198 }
+183                                                           {
+184 
+185     // Longest matching path will be where the filesystem is mounted
+186     string longest_match = "";
+187     FileSystem* longest_match_fs = nullptr;
+188 
+189     // Search through the filesystems
+190     for (const auto& filesystem : filesystems) {
+191         // Get the filesystem and mount point
+192         FileSystem* fs = filesystem\&.first;
+193         string mount_point = filesystem\&.second;
+194 
+195         // Check if the path starts with the mount point
+196         if (path\&.starts_with(mount_point) && mount_point\&.length() > longest_match\&.length()) {
+197             longest_match = mount_point;
+198             longest_match_fs = fs;
+199         }
+200     }
+201 
+202     return longest_match_fs;
+203 }
 .fi
 
 .PP
@@ -565,18 +561,18 @@ The filesystem mounted at the given mount point or null if none is found
 .PP
 
 .PP
-Definition at line \fB161\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB166\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-161                                                                        {
-162 
-163     // Check if the filesystem is mounted
-164     for(const auto& filesystem : filesystems)
-165         if (filesystem\&.second == mount_point)
-166             return filesystem\&.first;
+166                                                                        {
 167 
-168     // Filesystem not found
-169     return nullptr;
-170 }
+168     // Check if the filesystem is mounted
+169     for(const auto& filesystem : filesystems)
+170         if (filesystem\&.second == mount_point)
+171             return filesystem\&.first;
+172 
+173     // Filesystem not found
+174     return nullptr;
+175 }
 .fi
 
 .SS "\fBstring\fP VirtualFileSystem::get_relative_path (\fBFileSystem\fP * filesystem, \fBstring\fP path)"
@@ -598,26 +594,26 @@ The relative path on the filesystem or an empty string if none is found
 .PP
 
 .PP
-Definition at line \fB207\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB212\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-207                                                                                {
-208 
-209     // Find the mount point for the filesystem
-210     auto fs = filesystems\&.find(filesystem);
-211     if (fs == filesystems\&.end())
-212         return "";
+212                                                                                {
 213 
-214     // Get the mount point
-215     string mount_point = fs\->second;
-216 
-217     // Make sure that the path points to the filesystem
-218     if (!path\&.starts_with(mount_point))
-219         return "";
-220 
-221     // Get the relative path
-222     string relative_path = path\&.substring(mount_point\&.length(), path\&.length() \- mount_point\&.length());
-223     return relative_path;
-224 }
+214     // Find the mount point for the filesystem
+215     auto fs = filesystems\&.find(filesystem);
+216     if (fs == filesystems\&.end())
+217         return "";
+218 
+219     // Get the mount point
+220     string mount_point = fs\->second;
+221 
+222     // Make sure that the path points to the filesystem
+223     if (!path\&.starts_with(mount_point))
+224         return "";
+225 
+226     // Get the relative path
+227     string relative_path = path\&.substring(mount_point\&.length(), path\&.length() \- mount_point\&.length());
+228     return relative_path;
+229 }
 .fi
 
 .PP
@@ -634,26 +630,26 @@ Add a filesystem to the virtual file system\&.
 .PP
 
 .PP
-Definition at line \fB42\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB47\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-42                                                                {
-43 
-44     // Check if the filesystem is already mounted
-45     if (filesystems\&.find(filesystem) != filesystems\&.end()) {
-46         Logger::WARNING() << "Filesystem already mounted\\n";
-47         return;
-48     }
-49 
-50     // Get the mount point for the filesystem
-51     string mount_point = "/filesystem_" + filesystems\&.size();
-52 
-53     // If this is the first filesystem to be mounted, set the root filesystem
-54     if (filesystems\&.size() == 0)
-55         mount_point = "/";
-56 
-57     // Add the filesystem to the map
-58     filesystems\&.insert(filesystem, mount_point);
-59 }
+47                                                                {
+48 
+49     // Check if the filesystem is already mounted
+50     if (filesystems\&.find(filesystem) != filesystems\&.end()) {
+51         Logger::WARNING() << "Filesystem already mounted\\n";
+52         return;
+53     }
+54 
+55     // Get the mount point for the filesystem
+56     string mount_point = "/filesystem_" + filesystems\&.size();
+57 
+58     // If this is the first filesystem to be mounted, set the root filesystem
+59     if (filesystems\&.size() == 0)
+60         mount_point = "/";
+61 
+62     // Add the filesystem to the map
+63     filesystems\&.insert(filesystem, mount_point);
+64 }
 .fi
 
 .PP
@@ -672,19 +668,19 @@ Add a filesystem to the virtual file system at a given mount point\&.
 .PP
 
 .PP
-Definition at line \fB67\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB72\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-67                                                                                           {
-68 
-69     // Check if the filesystem is already mounted
-70     if (filesystems\&.find(filesystem) != filesystems\&.end()) {
-71         Logger::WARNING() << "Filesystem already mounted at " << mount_point << "\\n";
-72         return;
-73     }
-74 
-75     // Add the filesystem to the map
-76     filesystems\&.insert(filesystem, mount_point);
-77 }
+72                                                                                           {
+73 
+74     // Check if the filesystem is already mounted
+75     if (filesystems\&.find(filesystem) != filesystems\&.end()) {
+76         Logger::WARNING() << "Filesystem already mounted at " << mount_point << "\\n";
+77         return;
+78     }
+79 
+80     // Add the filesystem to the map
+81     filesystems\&.insert(filesystem, mount_point);
+82 }
 .fi
 
 .PP
@@ -706,31 +702,31 @@ The directory object or null if it could not be opened
 .PP
 
 .PP
-Definition at line \fB232\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB237\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-232                                                                {
-233 
-234     // Ensure a valid path is given
-235     if (!Path::valid(path))
-236         return nullptr;
-237 
-238     // Try to find the filesystem that is responsible for the path
-239     FileSystem* fs = find_filesystem(path);
-240     if (!fs)
+237                                                                {
+238 
+239     // Ensure a valid path is given
+240     if (!Path::valid(path))
 241         return nullptr;
 242 
-243     // Get where to open the directory
-244     string relative_path = get_relative_path(fs, path);
-245     string directory_path = Path::file_path(relative_path);
-246 
-247     // Open the directory
-248     Directory* directory = fs\->get_directory(directory_path);
-249     if (!directory)
-250         return nullptr;
-251     directory\->read_from_disk();
-252 
-253     return directory;
-254 }
+243     // Try to find the filesystem that is responsible for the path
+244     FileSystem* fs = find_filesystem(path);
+245     if (!fs)
+246         return nullptr;
+247 
+248     // Get where to open the directory
+249     string relative_path = get_relative_path(fs, path);
+250     string directory_path = Path::file_path(relative_path);
+251 
+252     // Open the directory
+253     Directory* directory = fs\->get_directory(directory_path);
+254     if (!directory)
+255         return nullptr;
+256     directory\->read_from_disk();
+257 
+258     return directory;
+259 }
 .fi
 
 .PP
@@ -740,18 +736,34 @@ Referenced by \fBcreate_directory()\fP, \fBcreate_file()\fP, \fBdelete_directory
 .SS "\fBDirectory\fP * VirtualFileSystem::open_directory (\fBDirectory\fP * parent, \fBconst\fP \fBstring\fP & name)\fC [static]\fP"
 
 .PP
-Definition at line \fB256\fP of file \fBvfs\&.cpp\fP\&..PP
+Opens a subdirectory from a parent directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparent\fP The parent directory 
+.br
+\fIname\fP The name of the subdirectory 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The opened subdirectory or null if it could not be opened 
+.RE
+.PP
+
+.PP
+Definition at line \fB268\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-256                                                                                   {
-257 
-258     // Open the file
-259     Directory* opened_directory = parent\->open_subdirectory(name);
-260     if (!opened_directory)
-261         return nullptr;
-262 
-263     opened_directory\->read_from_disk();
-264     return opened_directory;
-265 }
+268                                                                                   {
+269 
+270     // Open the file
+271     Directory* opened_directory = parent\->open_subdirectory(name);
+272     if (!opened_directory)
+273         return nullptr;
+274 
+275     opened_directory\->read_from_disk();
+276     return opened_directory;
+277 }
 .fi
 
 .PP
@@ -775,21 +787,21 @@ The file or null pointer if not found
 .PP
 
 .PP
-Definition at line \fB438\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB450\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-438                                                                     {
-439 
-440     // Ensure a valid path is given
-441     if (!Path::valid(path))
-442         return nullptr;
-443 
-444     // Open the directory
-445     Directory* directory = open_directory(path);
-446     if (!directory)
-447         return nullptr;
-448 
-449     return open_file(directory, Path::file_name(path), offset);
-450 }
+450                                                                     {
+451 
+452     // Ensure a valid path is given
+453     if (!Path::valid(path))
+454         return nullptr;
+455 
+456     // Open the directory
+457     Directory* directory = open_directory(path);
+458     if (!directory)
+459         return nullptr;
+460 
+461     return open_file(directory, Path::file_name(path), offset);
+462 }
 .fi
 
 .PP
@@ -817,20 +829,20 @@ The file or null pointer if not found
 .PP
 
 .PP
-Definition at line \fB460\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB472\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-460                                                                                        {
-461 
-462     // Open the file
-463     File* opened_file = parent\->open_file(name);
-464     if (!opened_file)
-465         return nullptr;
-466 
-467     // Seek to the offset
-468     opened_file\->seek(SeekType::SET, offset);
-469 
-470     return opened_file;
-471 }
+472                                                                                        {
+473 
+474     // Open the file
+475     File* opened_file = parent\->open_file(name);
+476     if (!opened_file)
+477         return nullptr;
+478 
+479     // Seek to the offset
+480     opened_file\->seek(SeekType::SET, offset);
+481 
+482     return opened_file;
+483 }
 .fi
 
 .PP
@@ -847,18 +859,18 @@ The root directory of the virtual file system
 .PP
 
 .PP
-Definition at line \fB129\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB134\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-129                                              {
-130 
-131     // Get the root filesystem
-132     FileSystem* fs = root_filesystem();
-133     if (!fs)
-134         return nullptr;
+134                                              {
 135 
-136     // Get the root directory
-137     return fs\->root_directory();
-138 }
+136     // Get the root filesystem
+137     FileSystem* fs = root_filesystem();
+138     if (!fs)
+139         return nullptr;
+140 
+141     // Get the root directory
+142     return fs\->root_directory();
+143 }
 .fi
 
 .PP
@@ -875,17 +887,17 @@ The file system mounted '/' or null if none is mounted
 .PP
 
 .PP
-Definition at line \fB145\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB150\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-145                                                {
-146 
-147     // Ensure there is at least one filesystem mounted
-148     if (filesystems\&.size() == 0)
-149         return nullptr;
-150 
-151     // It is always the first filesystem mounted
-152     return filesystems\&.begin()\->first;
-153 }
+150                                                {
+151 
+152     // Ensure there is at least one filesystem mounted
+153     if (filesystems\&.size() == 0)
+154         return nullptr;
+155 
+156     // It is always the first filesystem mounted
+157     return filesystems\&.begin()\->first;
+158 }
 .fi
 
 .PP
@@ -895,21 +907,19 @@ Referenced by \fBroot_directory()\fP\&.
 .PP
 Remove all mounted filesystems\&. 
 .PP
-Definition at line \fB116\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB121\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-116                                     {
-117 
-118     // Loop through the filesystems and unmount them
-119     for(const auto& filesystem : filesystems)
-120         unmount_filesystem(filesystem\&.first);
-121 
-122 }
+121                                     {
+122 
+123     // Loop through the filesystems and unmount them
+124     for(const auto& filesystem : filesystems)
+125         unmount_filesystem(filesystem\&.first);
+126 
+127 }
 .fi
 
 .PP
 References \fBunmount_filesystem()\fP\&.
-.PP
-Referenced by \fB~VirtualFileSystem()\fP\&.
 .SS "\fBvoid\fP VirtualFileSystem::unmount_filesystem (\fBconst\fP \fBstring\fP & mount_point)"
 
 .PP
@@ -922,18 +932,18 @@ Remove a filesystem from the virtual file system\&.
 .PP
 
 .PP
-Definition at line \fB102\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB107\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-102                                                                     {
-103 
-104     // Remove the filesystem from the map
-105     for(const auto& filesystem : filesystems)
-106         if (filesystem\&.second == mount_point)
-107             return unmount_filesystem(filesystem\&.first);
+107                                                                     {
 108 
-109     // Filesystem not found
-110     Logger::WARNING() << "Filesystem not found at " << mount_point << "\\n";
-111 }
+109     // Remove the filesystem from the map
+110     for(const auto& filesystem : filesystems)
+111         if (filesystem\&.second == mount_point)
+112             return unmount_filesystem(filesystem\&.first);
+113 
+114     // Filesystem not found
+115     Logger::WARNING() << "Filesystem not found at " << mount_point << "\\n";
+116 }
 .fi
 
 .PP
@@ -950,20 +960,20 @@ Remove a filesystem from the virtual file system & delete it\&.
 .PP
 
 .PP
-Definition at line \fB84\fP of file \fBvfs\&.cpp\fP\&..PP
+Definition at line \fB89\fP of file \fBvfs\&.cpp\fP\&..PP
 .nf
-84                                                                  {
-85 
-86     // Check if the filesystem is mounted
-87     if (filesystems\&.find(filesystem) == filesystems\&.end())
-88         return;
-89 
-90     // Remove the filesystem from the map
-91     filesystems\&.erase(filesystem);
-92 
-93     // Delete the filesystem
-94     delete filesystem;
-95 }
+89                                                                  {
+90 
+91     // Check if the filesystem is mounted
+92     if (filesystems\&.find(filesystem) == filesystems\&.end())
+93         return;
+94 
+95     // Remove the filesystem from the map
+96     filesystems\&.erase(filesystem);
+97 
+98     // Delete the filesystem
+99     delete filesystem;
+100 }
 .fi
 
 .PP

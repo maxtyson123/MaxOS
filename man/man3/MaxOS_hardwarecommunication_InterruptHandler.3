@@ -10,7 +10,7 @@ MaxOS::hardwarecommunication::InterruptHandler \- Handles a certain interrupt nu
 .PP
 \fC#include <interrupts\&.h>\fP
 .PP
-Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, \fBMaxOS::drivers::ethernet::intel_i217\fP, \fBMaxOS::drivers::peripherals::KeyboardDriver\fP, \fBMaxOS::drivers::peripherals::MouseDriver\fP, \fBMaxOS::processes::Scheduler\fP, and \fBMaxOS::system::SyscallManager\fP\fC [private]\fP\&.
+Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, \fBMaxOS::drivers::ethernet::IntelI217\fP, \fBMaxOS::drivers::peripherals::KeyboardDriver\fP, \fBMaxOS::drivers::peripherals::MouseDriver\fP, \fBMaxOS::processes::GlobalScheduler\fP, and \fBMaxOS::system::SyscallManager\fP\fC [private]\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -19,7 +19,7 @@ Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\f
 .br
 .RI "Handles an interrupt\&. "
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *\fBstatus\fP)"
+.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
 .in -1c
@@ -29,9 +29,7 @@ Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\f
 .ti -1c
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
-.ti -1c
-.RI "\fB~InterruptHandler\fP ()"
-.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
 .in -1c
 .SS "Protected Attributes"
 
@@ -39,45 +37,59 @@ Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\f
 .ti -1c
 .RI "uint8_t \fBm_interrupt_number\fP"
 .br
+.RI "The interrupt number this handler handles\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles a certain interrupt number\&. 
 .PP
-Definition at line \fB28\fP of file \fBinterrupts\&.h\fP\&.
+Definition at line \fB32\fP of file \fBinterrupts\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "InterruptHandler::InterruptHandler (\fBuint8_t\fP interrupt_number, \fBint64_t\fP redirect = \fC\-1\fP, \fBuint64_t\fP redirect_index = \fC0\fP)\fC [protected]\fP"
 
 .PP
-Definition at line \fB13\fP of file \fBinterrupts\&.cpp\fP\&..PP
+Creates a new interrupt handler and registers it with the interrupt manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinterrupt_number\fP The interrupt number to handle 
+.br
+\fIredirect\fP What legacy interrupt to redirect from (-1 for no redirection) 
+.br
+\fIredirect_index\fP Which index of the legacy interrupt to redirect from 
+.RE
+.PP
+
+.PP
+Definition at line \fB24\fP of file \fBinterrupts\&.cpp\fP\&..PP
 .nf
-14 : m_interrupt_number(interrupt_number)
-15 {
-16 
-17     // Get the interrupt manager
-18     InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
-19     ASSERT(interrupt_manager != nullptr, "No active interrupt manager");
-20 
-21     // Register the handler
-22     interrupt_manager\->set_interrupt_handler(m_interrupt_number, this);
-23 
-24     // Not all interrupts need redirecting
-25     if (redirect == \-1)
-26         return;
+25 : m_interrupt_number(interrupt_number)
+26 {
 27 
-28     // Redirect a legacy interrupt to an interrupt the kernel expects
-29     IOAPIC* io_apic = interrupt_manager\->active_apic()\->io_apic();
-30     interrupt_redirect_t temp = {
-31             \&.type = (uint8_t) redirect,
-32             \&.index = (uint8_t) redirect_index,
-33             \&.interrupt = m_interrupt_number,
-34             \&.destination = 0x00,
-35             \&.flags = 0x00,
-36             \&.mask = false,
-37     };
-38     io_apic\->set_redirect(&temp);
-39 }
+28     // Get the interrupt manager
+29     InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
+30     ASSERT(interrupt_manager != nullptr, "No active interrupt manager");
+31 
+32     // Register the handler
+33     interrupt_manager\->set_interrupt_handler(m_interrupt_number, this);
+34 
+35     // Not all interrupts need redirecting
+36     if (redirect == \-1)
+37         return;
+38 
+39     // Redirect a legacy interrupt to an interrupt the kernel expects
+40     IOAPIC* io_apic = interrupt_manager\->active_apic()\->io_apic();
+41     interrupt_redirect_t temp = {
+42             \&.type = (uint8_t) redirect,
+43             \&.index = (uint8_t) redirect_index,
+44             \&.interrupt = m_interrupt_number,
+45             \&.destination = 0x00,
+46             \&.flags = 0x00,
+47             \&.mask = false,
+48     };
+49     io_apic\->set_redirect(&temp);
+50 }
 .fi
 
 .PP
@@ -85,21 +97,19 @@ References \fBASSERT\fP, \fBm_interrupt_number\fP, \fBMaxOS::hardwarecommunicati
 .SS "InterruptHandler::~InterruptHandler ()\fC [protected]\fP"
 
 .PP
-Definition at line \fB42\fP of file \fBinterrupts\&.cpp\fP\&..PP
+Definition at line \fB53\fP of file \fBinterrupts\&.cpp\fP\&..PP
 .nf
-42                                     {
-43 
-44     // Get the interrupt manager
-45     InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
-46     if (interrupt_manager == nullptr) return;
-47 
-48     // Remove the handler
-49     interrupt_manager\->set_interrupt_handler(m_interrupt_number, nullptr);
-50 }
+53                                     {
+54 
+55     // Get the interrupt manager
+56     InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
+57     if (interrupt_manager == nullptr) return;
+58 
+59     // Remove the handler
+60     interrupt_manager\->set_interrupt_handler(m_interrupt_number, nullptr);
+61 }
 .fi
 
-.PP
-References \fBm_interrupt_number\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::s_active_interrupt_manager\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP InterruptHandler::handle_interrupt ()\fC [virtual]\fP"
@@ -107,13 +117,13 @@ References \fBm_interrupt_number\fP, and \fBMaxOS::hardwarecommunication::Interr
 .PP
 Handles an interrupt\&. 
 .PP
-Reimplemented in \fBMaxOS::drivers::clock::PIT\fP, \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, \fBMaxOS::drivers::ethernet::intel_i217\fP, and \fBMaxOS::drivers::peripherals::KeyboardDriver\fP\&.
+Reimplemented in \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, \fBMaxOS::drivers::ethernet::IntelI217\fP, and \fBMaxOS::drivers::peripherals::KeyboardDriver\fP\&.
 .PP
-Definition at line \fB55\fP of file \fBinterrupts\&.cpp\fP\&..PP
+Definition at line \fB66\fP of file \fBinterrupts\&.cpp\fP\&..PP
 .nf
-55                                         {
-56 
-57 }
+66                                         {
+67 
+68 }
 .fi
 
 .PP
@@ -135,30 +145,32 @@ The status of the CPU
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::processes::Scheduler\fP\&.
+Reimplemented in \fBMaxOS::processes::GlobalScheduler\fP\&.
 .PP
-Definition at line \fB65\fP of file \fBinterrupts\&.cpp\fP\&..PP
+Definition at line \fB76\fP of file \fBinterrupts\&.cpp\fP\&..PP
 .nf
-65                                                                                  {
-66 
-67     // For handlers that don't care about the status
-68     handle_interrupt();
-69 
-70     // Return the default status
-71     return status;
-72 }
+76                                                                                  {
+77 
+78     // For handlers that don't care about the status
+79     handle_interrupt();
+80 
+81     // Return the default status
+82     return status;
+83 }
 .fi
 
 .PP
-References \fBhandle_interrupt()\fP, and \fBstatus\fP\&.
+References \fBhandle_interrupt()\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "uint8_t MaxOS::hardwarecommunication::InterruptHandler::m_interrupt_number\fC [protected]\fP"
 
 .PP
-Definition at line \fB30\fP of file \fBinterrupts\&.h\fP\&.
+The interrupt number this handler handles\&. 
 .PP
-Referenced by \fBInterruptHandler()\fP, and \fB~InterruptHandler()\fP\&.
+Definition at line \fB34\fP of file \fBinterrupts\&.h\fP\&.
+.PP
+Referenced by \fBInterruptHandler()\fP\&.
 
 .SH "Author"
 .PP 

@@ -2,11 +2,10 @@ var classMaxOS_1_1gui_1_1widgets_1_1InputBox =
 [
     [ "InputBox", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#aad92901d623a5905cd19f5c932236a91", null ],
     [ "InputBox", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a3ff5039aee39526fd2e92dd8d3d410f0", null ],
-    [ "~InputBox", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#abe56acf07570e1ff883705edf3223b5b", null ],
     [ "draw", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a09273f742b0f88f65de4da6b6ba742ea", null ],
     [ "on_focus", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a256ff0b2c62feb63c8733890e99ae8bd", null ],
     [ "on_focus_lost", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a609648b3dcb206e78c2c927f1a7e1f60", null ],
-    [ "on_key_down", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a0a6599e1c02985155669e3e37cba8564", null ],
+    [ "on_key_down", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a31b335fdda1f22dc3f156ef9e128c2d8", null ],
     [ "text", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a5cb6a02902b3484d98248f894cec2d08", null ],
     [ "update_text", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a13e52b16b1266510b47c2849b6103d7f", null ],
     [ "background_colour", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a21a3802cece8e9f8e23b370e4533a5a1", null ],

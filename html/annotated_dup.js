@@ -1,7 +1,8 @@
 var annotated_dup =
 [
-    [ "MaxOS", "namespaceMaxOS.html", [
-      [ "common", "namespaceMaxOS_1_1common.html", [
+    [ "MaxOS", null, [
+      [ "common", null, [
+        [ "BlockingLock", "classMaxOS_1_1common_1_1BlockingLock.html", "classMaxOS_1_1common_1_1BlockingLock" ],
         [ "Buffer", "classMaxOS_1_1common_1_1Buffer.html", "classMaxOS_1_1common_1_1Buffer" ],
         [ "Colour", "classMaxOS_1_1common_1_1Colour.html", "classMaxOS_1_1common_1_1Colour" ],
         [ "Event", "classMaxOS_1_1common_1_1Event.html", "classMaxOS_1_1common_1_1Event" ],
@@ -25,37 +26,35 @@ var annotated_dup =
         [ "Vector", "classMaxOS_1_1common_1_1Vector.html", "classMaxOS_1_1common_1_1Vector" ],
         [ "VectorIterationHandler", "classMaxOS_1_1common_1_1VectorIterationHandler.html", "classMaxOS_1_1common_1_1VectorIterationHandler" ]
       ] ],
-      [ "drivers", "namespaceMaxOS_1_1drivers.html", [
-        [ "clock", "namespaceMaxOS_1_1drivers_1_1clock.html", [
+      [ "drivers", null, [
+        [ "clock", null, [
           [ "Clock", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html", "classMaxOS_1_1drivers_1_1clock_1_1Clock" ],
-          [ "ClockEventHandler", "classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler.html", "classMaxOS_1_1drivers_1_1clock_1_1ClockEventHandler" ],
           [ "PIT", "classMaxOS_1_1drivers_1_1clock_1_1PIT.html", "classMaxOS_1_1drivers_1_1clock_1_1PIT" ],
-          [ "PITCommand", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand.html", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand" ],
-          [ "TimeEvent", "classMaxOS_1_1drivers_1_1clock_1_1TimeEvent.html", "classMaxOS_1_1drivers_1_1clock_1_1TimeEvent" ]
+          [ "PITCommand", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand.html", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand" ]
         ] ],
-        [ "console", "namespaceMaxOS_1_1drivers_1_1console.html", [
+        [ "console", null, [
           [ "Console", "classMaxOS_1_1drivers_1_1console_1_1Console.html", "classMaxOS_1_1drivers_1_1console_1_1Console" ],
           [ "ConsoleArea", "classMaxOS_1_1drivers_1_1console_1_1ConsoleArea.html", "classMaxOS_1_1drivers_1_1console_1_1ConsoleArea" ],
           [ "ConsoleStream", "classMaxOS_1_1drivers_1_1console_1_1ConsoleStream.html", "classMaxOS_1_1drivers_1_1console_1_1ConsoleStream" ],
           [ "TextModeConsole", "classMaxOS_1_1drivers_1_1console_1_1TextModeConsole.html", "classMaxOS_1_1drivers_1_1console_1_1TextModeConsole" ],
           [ "VESABootConsole", "classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html", "classMaxOS_1_1drivers_1_1console_1_1VESABootConsole" ]
         ] ],
-        [ "disk", "namespaceMaxOS_1_1drivers_1_1disk.html", [
+        [ "disk", null, [
           [ "AdvancedTechnologyAttachment", "classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment.html", "classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment" ],
           [ "Disk", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html", "classMaxOS_1_1drivers_1_1disk_1_1Disk" ],
           [ "IntegratedDriveElectronicsController", "classMaxOS_1_1drivers_1_1disk_1_1IntegratedDriveElectronicsController.html", "classMaxOS_1_1drivers_1_1disk_1_1IntegratedDriveElectronicsController" ]
         ] ],
-        [ "ethernet", "namespaceMaxOS_1_1drivers_1_1ethernet.html", [
+        [ "ethernet", null, [
           [ "AMD_AM79C973", "classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973.html", "classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973" ],
           [ "BeforeSendEvent", "classMaxOS_1_1drivers_1_1ethernet_1_1BeforeSendEvent.html", "classMaxOS_1_1drivers_1_1ethernet_1_1BeforeSendEvent" ],
           [ "DataReceivedEvent", "classMaxOS_1_1drivers_1_1ethernet_1_1DataReceivedEvent.html", "classMaxOS_1_1drivers_1_1ethernet_1_1DataReceivedEvent" ],
           [ "DataSentEvent", "classMaxOS_1_1drivers_1_1ethernet_1_1DataSentEvent.html", "classMaxOS_1_1drivers_1_1ethernet_1_1DataSentEvent" ],
           [ "EthernetDriver", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver.html", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriver" ],
           [ "EthernetDriverEventHandler", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriverEventHandler.html", "classMaxOS_1_1drivers_1_1ethernet_1_1EthernetDriverEventHandler" ],
-          [ "intel_i217", "classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217.html", "classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217" ],
+          [ "IntelI217", "classMaxOS_1_1drivers_1_1ethernet_1_1IntelI217.html", "classMaxOS_1_1drivers_1_1ethernet_1_1IntelI217" ],
           [ "RawDataHandler", "classMaxOS_1_1drivers_1_1ethernet_1_1RawDataHandler.html", "classMaxOS_1_1drivers_1_1ethernet_1_1RawDataHandler" ]
         ] ],
-        [ "peripherals", "namespaceMaxOS_1_1drivers_1_1peripherals.html", [
+        [ "peripherals", null, [
           [ "KeyboardDriver", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver.html", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver" ],
           [ "KeyboardEventHandler", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler.html", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler" ],
           [ "KeyboardInterpreter", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter.html", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter" ],
@@ -69,7 +68,7 @@ var annotated_dup =
           [ "MouseMoveEvent", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseMoveEvent.html", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseMoveEvent" ],
           [ "MouseUpEvent", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseUpEvent.html", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseUpEvent" ]
         ] ],
-        [ "video", "namespaceMaxOS_1_1drivers_1_1video.html", [
+        [ "video", null, [
           [ "VideoDriver", "classMaxOS_1_1drivers_1_1video_1_1VideoDriver.html", "classMaxOS_1_1drivers_1_1video_1_1VideoDriver" ],
           [ "VideoElectronicsStandardsAssociation", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation" ],
           [ "VideoGraphicsArray", "classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray.html", "classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray" ]
@@ -80,9 +79,9 @@ var annotated_dup =
         [ "DriverSelectorEventHandler", "classMaxOS_1_1drivers_1_1DriverSelectorEventHandler.html", "classMaxOS_1_1drivers_1_1DriverSelectorEventHandler" ],
         [ "SerialConsole", "classMaxOS_1_1drivers_1_1SerialConsole.html", "classMaxOS_1_1drivers_1_1SerialConsole" ]
       ] ],
-      [ "filesystem", "namespaceMaxOS_1_1filesystem.html", [
-        [ "format", "namespaceMaxOS_1_1filesystem_1_1format.html", [
-          [ "ext2", "namespaceMaxOS_1_1filesystem_1_1format_1_1ext2.html", [
+      [ "filesystem", null, [
+        [ "format", null, [
+          [ "ext2", null, [
             [ "BlockGroupDescriptor", "structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1BlockGroupDescriptor.html", "structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1BlockGroupDescriptor" ],
             [ "DirectoryEntry", "structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1DirectoryEntry.html", "structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1DirectoryEntry" ],
             [ "Ext2Directory", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory.html", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory" ],
@@ -103,7 +102,7 @@ var annotated_dup =
           [ "FSInfo", "structMaxOS_1_1filesystem_1_1format_1_1FSInfo.html", "structMaxOS_1_1filesystem_1_1format_1_1FSInfo" ],
           [ "LongFileNameEntry", "structMaxOS_1_1filesystem_1_1format_1_1LongFileNameEntry.html", "structMaxOS_1_1filesystem_1_1format_1_1LongFileNameEntry" ]
         ] ],
-        [ "partition", "namespaceMaxOS_1_1filesystem_1_1partition.html", [
+        [ "partition", null, [
           [ "MasterBootRecord", "structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html", "structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord" ],
           [ "MSDOSPartition", "classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html", null ],
           [ "PartitionTableEntry", "structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html", "structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry" ]
@@ -117,8 +116,8 @@ var annotated_dup =
         [ "VFSResourceRegistry", "classMaxOS_1_1filesystem_1_1VFSResourceRegistry.html", "classMaxOS_1_1filesystem_1_1VFSResourceRegistry" ],
         [ "VirtualFileSystem", "classMaxOS_1_1filesystem_1_1VirtualFileSystem.html", "classMaxOS_1_1filesystem_1_1VirtualFileSystem" ]
       ] ],
-      [ "gui", "namespaceMaxOS_1_1gui.html", [
-        [ "widgets", "namespaceMaxOS_1_1gui_1_1widgets.html", [
+      [ "gui", null, [
+        [ "widgets", null, [
           [ "Button", "classMaxOS_1_1gui_1_1widgets_1_1Button.html", "classMaxOS_1_1gui_1_1widgets_1_1Button" ],
           [ "ButtonEventHandler", "classMaxOS_1_1gui_1_1widgets_1_1ButtonEventHandler.html", "classMaxOS_1_1gui_1_1widgets_1_1ButtonEventHandler" ],
           [ "ButtonPressedEvent", "classMaxOS_1_1gui_1_1widgets_1_1ButtonPressedEvent.html", "classMaxOS_1_1gui_1_1widgets_1_1ButtonPressedEvent" ],
@@ -135,7 +134,7 @@ var annotated_dup =
         [ "WidgetMoverResizer", "classMaxOS_1_1gui_1_1WidgetMoverResizer.html", "classMaxOS_1_1gui_1_1WidgetMoverResizer" ],
         [ "Window", "classMaxOS_1_1gui_1_1Window.html", "classMaxOS_1_1gui_1_1Window" ]
       ] ],
-      [ "hardwarecommunication", "namespaceMaxOS_1_1hardwarecommunication.html", [
+      [ "hardwarecommunication", null, [
         [ "ACPISDTHeader", "structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html", "structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader" ],
         [ "AdvancedConfigurationAndPowerInterface", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface.html", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface" ],
         [ "AdvancedProgrammableInterruptController", "classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController.html", "classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController" ],
@@ -148,8 +147,9 @@ var annotated_dup =
         [ "IOAPIC", "classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html", "classMaxOS_1_1hardwarecommunication_1_1IOAPIC" ],
         [ "LocalAPIC", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC" ],
         [ "MADT", "structMaxOS_1_1hardwarecommunication_1_1MADT.html", "structMaxOS_1_1hardwarecommunication_1_1MADT" ],
-        [ "MADT_IOAPIC", "structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC.html", "structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC" ],
-        [ "MADT_Item", "structMaxOS_1_1hardwarecommunication_1_1MADT__Item.html", "structMaxOS_1_1hardwarecommunication_1_1MADT__Item" ],
+        [ "MADT_IO_APIC", "structMaxOS_1_1hardwarecommunication_1_1MADT__IO__APIC.html", "structMaxOS_1_1hardwarecommunication_1_1MADT__IO__APIC" ],
+        [ "MADT_PROCESSOR_APIC", "structMaxOS_1_1hardwarecommunication_1_1MADT__PROCESSOR__APIC.html", "structMaxOS_1_1hardwarecommunication_1_1MADT__PROCESSOR__APIC" ],
+        [ "MADTEntry", "structMaxOS_1_1hardwarecommunication_1_1MADTEntry.html", "structMaxOS_1_1hardwarecommunication_1_1MADTEntry" ],
         [ "Override", "structMaxOS_1_1hardwarecommunication_1_1Override.html", "structMaxOS_1_1hardwarecommunication_1_1Override" ],
         [ "PeripheralComponentInterconnectController", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController.html", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController" ],
         [ "PeripheralComponentInterconnectDeviceDescriptor", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor" ],
@@ -164,7 +164,7 @@ var annotated_dup =
         [ "RSDT", "structMaxOS_1_1hardwarecommunication_1_1RSDT.html", "structMaxOS_1_1hardwarecommunication_1_1RSDT" ],
         [ "XSDT", "structMaxOS_1_1hardwarecommunication_1_1XSDT.html", "structMaxOS_1_1hardwarecommunication_1_1XSDT" ]
       ] ],
-      [ "memory", "namespaceMaxOS_1_1memory.html", [
+      [ "memory", null, [
         [ "FreeChunk", "structMaxOS_1_1memory_1_1FreeChunk.html", "structMaxOS_1_1memory_1_1FreeChunk" ],
         [ "MemIO", "classMaxOS_1_1memory_1_1MemIO.html", "classMaxOS_1_1memory_1_1MemIO" ],
         [ "MemIO16Bit", "classMaxOS_1_1memory_1_1MemIO16Bit.html", "classMaxOS_1_1memory_1_1MemIO16Bit" ],
@@ -180,9 +180,9 @@ var annotated_dup =
         [ "VirtualMemoryManager", "classMaxOS_1_1memory_1_1VirtualMemoryManager.html", "classMaxOS_1_1memory_1_1VirtualMemoryManager" ],
         [ "VirtualMemoryRegion", "structMaxOS_1_1memory_1_1VirtualMemoryRegion.html", "structMaxOS_1_1memory_1_1VirtualMemoryRegion" ]
       ] ],
-      [ "net", "namespaceMaxOS_1_1net.html", [
+      [ "net", null, [
         [ "AddressResolutionProtocol", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html", "classMaxOS_1_1net_1_1AddressResolutionProtocol" ],
-        [ "AddressResolutionProtocolMessage", "structMaxOS_1_1net_1_1AddressResolutionProtocolMessage.html", "structMaxOS_1_1net_1_1AddressResolutionProtocolMessage" ],
+        [ "ARPMessage", "structMaxOS_1_1net_1_1ARPMessage.html", "structMaxOS_1_1net_1_1ARPMessage" ],
         [ "ConnectedEvent", "classMaxOS_1_1net_1_1ConnectedEvent.html", "classMaxOS_1_1net_1_1ConnectedEvent" ],
         [ "DataReceivedEvent", "classMaxOS_1_1net_1_1DataReceivedEvent.html", "classMaxOS_1_1net_1_1DataReceivedEvent" ],
         [ "DisconnectedEvent", "classMaxOS_1_1net_1_1DisconnectedEvent.html", "classMaxOS_1_1net_1_1DisconnectedEvent" ],
@@ -190,30 +190,31 @@ var annotated_dup =
         [ "EthernetFrameHandler", "classMaxOS_1_1net_1_1EthernetFrameHandler.html", "classMaxOS_1_1net_1_1EthernetFrameHandler" ],
         [ "EthernetFrameHeader", "structMaxOS_1_1net_1_1EthernetFrameHeader.html", "structMaxOS_1_1net_1_1EthernetFrameHeader" ],
         [ "EthernetFramePayloadHandler", "classMaxOS_1_1net_1_1EthernetFramePayloadHandler.html", "classMaxOS_1_1net_1_1EthernetFramePayloadHandler" ],
+        [ "ICMPHeader", "structMaxOS_1_1net_1_1ICMPHeader.html", "structMaxOS_1_1net_1_1ICMPHeader" ],
         [ "InternetControlMessageProtocol", "classMaxOS_1_1net_1_1InternetControlMessageProtocol.html", "classMaxOS_1_1net_1_1InternetControlMessageProtocol" ],
-        [ "InternetControlMessageProtocolHeader", "structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader.html", "structMaxOS_1_1net_1_1InternetControlMessageProtocolHeader" ],
-        [ "InternetProtocolAddressResolver", "classMaxOS_1_1net_1_1InternetProtocolAddressResolver.html", "classMaxOS_1_1net_1_1InternetProtocolAddressResolver" ],
         [ "InternetProtocolHandler", "classMaxOS_1_1net_1_1InternetProtocolHandler.html", "classMaxOS_1_1net_1_1InternetProtocolHandler" ],
-        [ "InternetProtocolPayloadHandler", "classMaxOS_1_1net_1_1InternetProtocolPayloadHandler.html", "classMaxOS_1_1net_1_1InternetProtocolPayloadHandler" ],
-        [ "InternetProtocolV4Header", "structMaxOS_1_1net_1_1InternetProtocolV4Header.html", "structMaxOS_1_1net_1_1InternetProtocolV4Header" ],
+        [ "IPV4AddressResolver", "classMaxOS_1_1net_1_1IPV4AddressResolver.html", "classMaxOS_1_1net_1_1IPV4AddressResolver" ],
+        [ "IPV4Header", "structMaxOS_1_1net_1_1IPV4Header.html", "structMaxOS_1_1net_1_1IPV4Header" ],
+        [ "IPV4PayloadHandler", "classMaxOS_1_1net_1_1IPV4PayloadHandler.html", "classMaxOS_1_1net_1_1IPV4PayloadHandler" ],
+        [ "TCPHeader", "structMaxOS_1_1net_1_1TCPHeader.html", "structMaxOS_1_1net_1_1TCPHeader" ],
+        [ "TCPPayloadHandler", "classMaxOS_1_1net_1_1TCPPayloadHandler.html", "classMaxOS_1_1net_1_1TCPPayloadHandler" ],
+        [ "TCPPseudoHeader", "structMaxOS_1_1net_1_1TCPPseudoHeader.html", "structMaxOS_1_1net_1_1TCPPseudoHeader" ],
+        [ "TCPSocket", "classMaxOS_1_1net_1_1TCPSocket.html", "classMaxOS_1_1net_1_1TCPSocket" ],
         [ "TransmissionControlProtocolHandler", "classMaxOS_1_1net_1_1TransmissionControlProtocolHandler.html", "classMaxOS_1_1net_1_1TransmissionControlProtocolHandler" ],
-        [ "TransmissionControlProtocolHeader", "structMaxOS_1_1net_1_1TransmissionControlProtocolHeader.html", "structMaxOS_1_1net_1_1TransmissionControlProtocolHeader" ],
-        [ "TransmissionControlProtocolPayloadHandler", "classMaxOS_1_1net_1_1TransmissionControlProtocolPayloadHandler.html", "classMaxOS_1_1net_1_1TransmissionControlProtocolPayloadHandler" ],
-        [ "TransmissionControlProtocolPseudoHeader", "structMaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader.html", "structMaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader" ],
-        [ "TransmissionControlProtocolSocket", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket" ],
         [ "UDPDataReceivedEvent", "classMaxOS_1_1net_1_1UDPDataReceivedEvent.html", "classMaxOS_1_1net_1_1UDPDataReceivedEvent" ],
-        [ "UserDatagramProtocolHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler" ],
-        [ "UserDatagramProtocolHeader", "structMaxOS_1_1net_1_1UserDatagramProtocolHeader.html", "structMaxOS_1_1net_1_1UserDatagramProtocolHeader" ],
-        [ "UserDatagramProtocolPayloadHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolPayloadHandler.html", "classMaxOS_1_1net_1_1UserDatagramProtocolPayloadHandler" ],
-        [ "UserDatagramProtocolSocket", "classMaxOS_1_1net_1_1UserDatagramProtocolSocket.html", "classMaxOS_1_1net_1_1UserDatagramProtocolSocket" ]
+        [ "UDPHeader", "structMaxOS_1_1net_1_1UDPHeader.html", "structMaxOS_1_1net_1_1UDPHeader" ],
+        [ "UDPPayloadHandler", "classMaxOS_1_1net_1_1UDPPayloadHandler.html", "classMaxOS_1_1net_1_1UDPPayloadHandler" ],
+        [ "UDPSocket", "classMaxOS_1_1net_1_1UDPSocket.html", "classMaxOS_1_1net_1_1UDPSocket" ],
+        [ "UserDatagramProtocolHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler" ]
       ] ],
-      [ "processes", "namespaceMaxOS_1_1processes.html", [
+      [ "processes", null, [
         [ "BaseResourceRegistry", "classMaxOS_1_1processes_1_1BaseResourceRegistry.html", "classMaxOS_1_1processes_1_1BaseResourceRegistry" ],
-        [ "Elf64", "classMaxOS_1_1processes_1_1Elf64.html", "classMaxOS_1_1processes_1_1Elf64" ],
-        [ "elf_64_header_t", "structMaxOS_1_1processes_1_1elf__64__header__t.html", "structMaxOS_1_1processes_1_1elf__64__header__t" ],
-        [ "elf_64_program_header_t", "structMaxOS_1_1processes_1_1elf__64__program__header__t.html", "structMaxOS_1_1processes_1_1elf__64__program__header__t" ],
-        [ "elf_64_section_header_t", "structMaxOS_1_1processes_1_1elf__64__section__header__t.html", "structMaxOS_1_1processes_1_1elf__64__section__header__t" ],
-        [ "GlobalResourceRegistry", "classMaxOS_1_1processes_1_1GlobalResourceRegistry.html", "classMaxOS_1_1processes_1_1GlobalResourceRegistry" ],
+        [ "ELF64", "classMaxOS_1_1processes_1_1ELF64.html", "classMaxOS_1_1processes_1_1ELF64" ],
+        [ "ELFHeader64", "structMaxOS_1_1processes_1_1ELFHeader64.html", "structMaxOS_1_1processes_1_1ELFHeader64" ],
+        [ "ELFProgramHeader64", "structMaxOS_1_1processes_1_1ELFProgramHeader64.html", "structMaxOS_1_1processes_1_1ELFProgramHeader64" ],
+        [ "ELFSectionHeader64", "structMaxOS_1_1processes_1_1ELFSectionHeader64.html", "structMaxOS_1_1processes_1_1ELFSectionHeader64" ],
+        [ "GlobalResourceRegistry", "classMaxOS_1_1processes_1_1GlobalResourceRegistry.html", null ],
+        [ "GlobalScheduler", "classMaxOS_1_1processes_1_1GlobalScheduler.html", "classMaxOS_1_1processes_1_1GlobalScheduler" ],
         [ "Process", "classMaxOS_1_1processes_1_1Process.html", "classMaxOS_1_1processes_1_1Process" ],
         [ "Resource", "classMaxOS_1_1processes_1_1Resource.html", "classMaxOS_1_1processes_1_1Resource" ],
         [ "ResourceManager", "classMaxOS_1_1processes_1_1ResourceManager.html", "classMaxOS_1_1processes_1_1ResourceManager" ],
@@ -223,37 +224,36 @@ var annotated_dup =
         [ "SharedMessageEndpoint", "classMaxOS_1_1processes_1_1SharedMessageEndpoint.html", "classMaxOS_1_1processes_1_1SharedMessageEndpoint" ],
         [ "Thread", "classMaxOS_1_1processes_1_1Thread.html", "classMaxOS_1_1processes_1_1Thread" ]
       ] ],
-      [ "runtime", "namespaceMaxOS_1_1runtime.html", [
+      [ "runtime", null, [
         [ "atexit_func_entry_t", "structMaxOS_1_1runtime_1_1atexit__func__entry__t.html", "structMaxOS_1_1runtime_1_1atexit__func__entry__t" ],
-        [ "invalid_value_info", "structMaxOS_1_1runtime_1_1invalid__value__info.html", "structMaxOS_1_1runtime_1_1invalid__value__info" ],
-        [ "location_only_info", "structMaxOS_1_1runtime_1_1location__only__info.html", "structMaxOS_1_1runtime_1_1location__only__info" ],
-        [ "out_of_bounds_info", "structMaxOS_1_1runtime_1_1out__of__bounds__info.html", "structMaxOS_1_1runtime_1_1out__of__bounds__info" ],
-        [ "overflow_info", "structMaxOS_1_1runtime_1_1overflow__info.html", "structMaxOS_1_1runtime_1_1overflow__info" ],
-        [ "shift_out_of_bounds_info", "structMaxOS_1_1runtime_1_1shift__out__of__bounds__info.html", "structMaxOS_1_1runtime_1_1shift__out__of__bounds__info" ],
-        [ "source_location", "structMaxOS_1_1runtime_1_1source__location.html", "structMaxOS_1_1runtime_1_1source__location" ],
-        [ "type_descriptor", "structMaxOS_1_1runtime_1_1type__descriptor.html", "structMaxOS_1_1runtime_1_1type__descriptor" ],
-        [ "type_mismatch_info", "structMaxOS_1_1runtime_1_1type__mismatch__info.html", "structMaxOS_1_1runtime_1_1type__mismatch__info" ],
-        [ "type_mismatch_info_v1", "structMaxOS_1_1runtime_1_1type__mismatch__info__v1.html", "structMaxOS_1_1runtime_1_1type__mismatch__info__v1" ],
-        [ "UBSanHandler", "classMaxOS_1_1runtime_1_1UBSanHandler.html", "classMaxOS_1_1runtime_1_1UBSanHandler" ],
-        [ "vla_bound_not_positive_info", "structMaxOS_1_1runtime_1_1vla__bound__not__positive__info.html", "structMaxOS_1_1runtime_1_1vla__bound__not__positive__info" ]
+        [ "InvaildValueInfo", "structMaxOS_1_1runtime_1_1InvaildValueInfo.html", "structMaxOS_1_1runtime_1_1InvaildValueInfo" ],
+        [ "LocationOnlyInfo", "structMaxOS_1_1runtime_1_1LocationOnlyInfo.html", "structMaxOS_1_1runtime_1_1LocationOnlyInfo" ],
+        [ "OutOfBoundsInfo", "structMaxOS_1_1runtime_1_1OutOfBoundsInfo.html", "structMaxOS_1_1runtime_1_1OutOfBoundsInfo" ],
+        [ "OverflowInfo", "structMaxOS_1_1runtime_1_1OverflowInfo.html", "structMaxOS_1_1runtime_1_1OverflowInfo" ],
+        [ "ShiftOutOfBoundsInfo", "structMaxOS_1_1runtime_1_1ShiftOutOfBoundsInfo.html", "structMaxOS_1_1runtime_1_1ShiftOutOfBoundsInfo" ],
+        [ "SourceLocation", "structMaxOS_1_1runtime_1_1SourceLocation.html", "structMaxOS_1_1runtime_1_1SourceLocation" ],
+        [ "TypeDescriptor", "structMaxOS_1_1runtime_1_1TypeDescriptor.html", "structMaxOS_1_1runtime_1_1TypeDescriptor" ],
+        [ "TypeMismatchInfo", "structMaxOS_1_1runtime_1_1TypeMismatchInfo.html", "structMaxOS_1_1runtime_1_1TypeMismatchInfo" ],
+        [ "TypeMismatchInfoV1", "structMaxOS_1_1runtime_1_1TypeMismatchInfoV1.html", "structMaxOS_1_1runtime_1_1TypeMismatchInfoV1" ],
+        [ "UBSanHandler", "classMaxOS_1_1runtime_1_1UBSanHandler.html", null ],
+        [ "VLABoundNotPositiveInfo", "structMaxOS_1_1runtime_1_1VLABoundNotPositiveInfo.html", "structMaxOS_1_1runtime_1_1VLABoundNotPositiveInfo" ]
       ] ],
-      [ "system", "namespaceMaxOS_1_1system.html", [
+      [ "system", null, [
         [ "__attribute__", "structMaxOS_1_1system_1_1____attribute____.html", "structMaxOS_1_1system_1_1____attribute____" ],
+        [ "Core", "classMaxOS_1_1system_1_1Core.html", "classMaxOS_1_1system_1_1Core" ],
+        [ "CoreBootInfo", "structMaxOS_1_1system_1_1CoreBootInfo.html", "structMaxOS_1_1system_1_1CoreBootInfo" ],
         [ "CPU", "classMaxOS_1_1system_1_1CPU.html", "classMaxOS_1_1system_1_1CPU" ],
+        [ "GDTRegister", "structMaxOS_1_1system_1_1GDTRegister.html", "structMaxOS_1_1system_1_1GDTRegister" ],
         [ "GlobalDescriptorTable", "classMaxOS_1_1system_1_1GlobalDescriptorTable.html", "classMaxOS_1_1system_1_1GlobalDescriptorTable" ],
-        [ "GlobalDescriptorTableRegister", "structMaxOS_1_1system_1_1GlobalDescriptorTableRegister.html", "structMaxOS_1_1system_1_1GlobalDescriptorTableRegister" ],
         [ "Multiboot", "classMaxOS_1_1system_1_1Multiboot.html", "classMaxOS_1_1system_1_1Multiboot" ],
         [ "StackFrame", "structMaxOS_1_1system_1_1StackFrame.html", "structMaxOS_1_1system_1_1StackFrame" ],
         [ "SyscallArguments", "structMaxOS_1_1system_1_1SyscallArguments.html", "structMaxOS_1_1system_1_1SyscallArguments" ],
         [ "SyscallManager", "classMaxOS_1_1system_1_1SyscallManager.html", "classMaxOS_1_1system_1_1SyscallManager" ],
-        [ "tss", "structMaxOS_1_1system_1_1tss.html", "structMaxOS_1_1system_1_1tss" ]
+        [ "TaskStateSegment", "structMaxOS_1_1system_1_1TaskStateSegment.html", "structMaxOS_1_1system_1_1TaskStateSegment" ]
       ] ],
-      [ "String", "classMaxOS_1_1String.html", "classMaxOS_1_1String" ]
+      [ "String", "classMaxOS_1_1String.html", "classMaxOS_1_1String" ],
+      [ "StringBuilder", "classMaxOS_1_1StringBuilder.html", "classMaxOS_1_1StringBuilder" ]
     ] ],
-    [ "AMD", "classAMD.html", null ],
-    [ "BiosParameterBlock", "structBiosParameterBlock.html", null ],
-    [ "FileSystemInfo", "structFileSystemInfo.html", null ],
-    [ "Intel", "classIntel.html", null ],
     [ "Logger", "classLogger.html", "classLogger" ],
     [ "multiboot_color", "structmultiboot__color.html", "structmultiboot__color" ],
     [ "multiboot_header", "structmultiboot__header.html", "structmultiboot__header" ],

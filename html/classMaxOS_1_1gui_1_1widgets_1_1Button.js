@@ -1,7 +1,6 @@
 var classMaxOS_1_1gui_1_1widgets_1_1Button =
 [
     [ "Button", "classMaxOS_1_1gui_1_1widgets_1_1Button.html#ac051dd0be19ac7d4a41b8f4dffa21c98", null ],
-    [ "~Button", "classMaxOS_1_1gui_1_1widgets_1_1Button.html#a2a001eb9c3cc8ae54768a850dd345002", null ],
     [ "draw", "classMaxOS_1_1gui_1_1widgets_1_1Button.html#a09ee787207d1122b9276c14cebfa913b", null ],
     [ "on_mouse_button_pressed", "classMaxOS_1_1gui_1_1widgets_1_1Button.html#a9258fc79a226eabc62b727de8863d892", null ],
     [ "on_mouse_button_released", "classMaxOS_1_1gui_1_1widgets_1_1Button.html#ad9b7e5475923dc36a559350a8c6886fb", null ],

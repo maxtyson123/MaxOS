@@ -2,28 +2,18 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::runtime::UBSanHandler \- Handles undefined behaviour sanitizer\&.  
+MaxOS::runtime::UBSanHandler \- Handles undefined behaviour sanitizer runtime errors\&.  
 
 .SH SYNOPSIS
 .br
 .PP
 .PP
 \fC#include <ubsan\&.h>\fP
-.SS "Public Member Functions"
-
-.in +1c
-.ti -1c
-.RI "\fBUBSanHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~UBSanHandler\fP ()"
-.br
-.in -1c
 .SS "Static Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "static void \fBhandle\fP (\fBsource_location_t\fP location)"
+.RI "static void \fBhandle\fP (\fBsource_location_t\fP location, const char *msg)"
 .br
 .RI "Handles the UBSan error (currently only printing the location and panicking) "
 .ti -1c
@@ -37,18 +27,12 @@ MaxOS::runtime::UBSanHandler \- Handles undefined behaviour sanitizer\&.
 .in -1c
 .SH "Detailed Description"
 .PP 
-Handles undefined behaviour sanitizer\&. 
+Handles undefined behaviour sanitizer runtime errors\&. 
 .PP
-Definition at line \fB90\fP of file \fBubsan\&.h\fP\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "UBSanHandler::UBSanHandler ()\fC [default]\fP"
-
-.SS "UBSanHandler::~UBSanHandler ()\fC [default]\fP"
-
+Definition at line \fB134\fP of file \fBubsan\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "void UBSanHandler::handle (\fBsource_location_t\fP location)\fC [static]\fP"
+.SS "void UBSanHandler::handle (\fBsource_location_t\fP location, const char * msg)\fC [static]\fP"
 
 .PP
 Handles the UBSan error (currently only printing the location and panicking) 
@@ -56,25 +40,25 @@ Handles the UBSan error (currently only printing the location and panicking)
 \fBParameters\fP
 .RS 4
 \fIlocation\fP The location of the error 
+.br
+\fImsg\fP The message that informs about the error 
 .RE
 .PP
 
 .PP
-Definition at line \fB20\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB25\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-20                                                     {
-21 
-22     // Print the location
-23     ASSERT(false, "UBSAN ERROR AT %s:%d:%d\\n", location\&.file, location\&.line, location\&.column);
-24 
-25 
-26 }
+25                                                                      {
+26 
+27     // Print the location
+28     ASSERT(false, "UBSAN ERROR AT %s:%d:%d \- %s", location\&.file, location\&.line, location\&.column, msg);
+29 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBMaxOS::runtime::source_location::column\fP, \fBMaxOS::runtime::source_location::file\fP, and \fBMaxOS::runtime::source_location::line\fP\&.
+References \fBASSERT\fP, \fBMaxOS::runtime::SourceLocation::column\fP, \fBMaxOS::runtime::SourceLocation::file\fP, and \fBMaxOS::runtime::SourceLocation::line\fP\&.
 .PP
-Referenced by \fB__ubsan_handle_add_overflow()\fP, \fB__ubsan_handle_builtin_unreachable()\fP, \fB__ubsan_handle_divrem_overflow()\fP, \fB__ubsan_handle_load_invalid_value()\fP, \fB__ubsan_handle_missing_return()\fP, \fB__ubsan_handle_mul_overflow()\fP, \fB__ubsan_handle_negate_overflow()\fP, \fB__ubsan_handle_out_of_bounds()\fP, \fB__ubsan_handle_pointer_overflow()\fP, \fB__ubsan_handle_shift_out_of_bounds()\fP, \fB__ubsan_handle_sub_overflow()\fP, \fB__ubsan_handle_type_mismatch()\fP, \fB__ubsan_handle_type_mismatch_v1()\fP, \fB__ubsan_handle_vla_bound_not_positive()\fP, \fBprint_type_mismatch()\fP, and \fBprint_type_mismatch_v1()\fP\&.
+Referenced by \fBprint_type_mismatch()\fP, and \fBprint_type_mismatch_v1()\fP\&.
 .SS "void UBSanHandler::print_type_mismatch (\fBtype_mismatch_info_t\fP * info, uintptr_t ptr)\fC [static]\fP"
 
 .PP
@@ -89,26 +73,24 @@ Prints the type mismatch error for UBSan\&.
 .PP
 
 .PP
-Definition at line \fB34\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB37\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-34                                                                                 {
-35 
-36     // Print the error
-37     Logger::DEBUG() << "UBSan: ";
-38     if (info\->alignment != 0 && ubsan_aligned(ptr, info\->alignment))
-39         Logger::Out() << "misaligned memory access\\n";
-40     else
-41         Logger::Out() << Type_Check_Kinds[info\->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info\->type\->name << "\\n";
-42 
-43     // Print the location
-44     handle(info\->location);
-45 }
+37                                                                                 {
+38 
+39     // Print the error
+40     string msg;
+41     if (info\->alignment != 0 && ubsan_aligned(ptr, info\->alignment))
+42         msg = "misaligned memory access";
+43     else
+44         msg = (StringBuilder)TYPE_CHECK_KINDS[info\->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info\->type\->name;
+45 
+46     // Print the location
+47     handle(info\->location, msg\&.c_str());
+48 }
 .fi
 
 .PP
-References \fBMaxOS::runtime::type_mismatch_info::alignment\fP, \fBLogger::DEBUG()\fP, \fBhandle()\fP, \fBMaxOS::runtime::type_mismatch_info::location\fP, \fBMaxOS::runtime::type_descriptor::name\fP, \fBLogger::Out()\fP, \fBMaxOS::runtime::type_mismatch_info::type\fP, \fBMaxOS::runtime::type_mismatch_info::type_check_kind\fP, \fBMaxOS::runtime::Type_Check_Kinds\fP, and \fBubsan_aligned\fP\&.
-.PP
-Referenced by \fB__ubsan_handle_type_mismatch()\fP\&.
+References \fBMaxOS::runtime::TypeMismatchInfo::alignment\fP, \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfo::location\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfo::type\fP, \fBMaxOS::runtime::TypeMismatchInfo::type_check_kind\fP, and \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP\&.
 .SS "void UBSanHandler::print_type_mismatch_v1 (\fBtype_mismatch_info_v1_t\fP * info, uintptr_t ptr)\fC [static]\fP"
 
 .PP
@@ -123,26 +105,24 @@ Prints the type mismatch error for UBSan v1\&.
 .PP
 
 .PP
-Definition at line \fB53\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB56\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-53                                                                                       {
-54 
-55     // Print the error
-56     Logger::DEBUG() << "UBSan: ";
-57     if (info\->log_alignment != 0 && ubsan_aligned(ptr, (1 << (info\->log_alignment))))
-58         Logger::Out() << "misaligned memory access\\n";
-59     else
-60         Logger::Out() << Type_Check_Kinds[info\->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info\->type\->name << "\\n";
-61 
-62     // Print the location
-63     handle(info\->location);
-64 }
+56                                                                                       {
+57 
+58     // Print the error
+59     string msg;
+60     if (info\->log_alignment != 0 && ubsan_aligned(ptr, (1 << (info\->log_alignment))))
+61         msg = "misaligned memory access";
+62     else
+63         msg= StringBuilder() << TYPE_CHECK_KINDS[info\->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info\->type\->name;
+64 
+65     // Print the location
+66     handle(info\->location, msg\&.c_str());
+67 }
 .fi
 
 .PP
-References \fBLogger::DEBUG()\fP, \fBhandle()\fP, \fBMaxOS::runtime::type_mismatch_info_v1::location\fP, \fBMaxOS::runtime::type_mismatch_info_v1::log_alignment\fP, \fBMaxOS::runtime::type_descriptor::name\fP, \fBLogger::Out()\fP, \fBMaxOS::runtime::type_mismatch_info_v1::type\fP, \fBMaxOS::runtime::type_mismatch_info_v1::type_check_kind\fP, \fBMaxOS::runtime::Type_Check_Kinds\fP, and \fBubsan_aligned\fP\&.
-.PP
-Referenced by \fB__ubsan_handle_type_mismatch_v1()\fP\&.
+References \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::location\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::log_alignment\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type_check_kind\fP, and \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP\&.
 
 .SH "Author"
 .PP 

@@ -34,6 +34,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
    </div>
@@ -107,288 +108,247 @@ $(document).ready(function(){initNavTree('logger_8cpp_source.html',''); initResi
   <div class="headertitle"><div class="title">logger.cpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="logger_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// Created by 98max on 4/04/2025.</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;<a class="code" href="logger_8h.html">common/logger.h</a>&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;stdarg.h&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;<a class="code" href="vesaboot_8h.html">drivers/console/vesaboot.h</a>&gt;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;common/version.h&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;<a class="code" href="cpu_8h.html">system/cpu.h</a>&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespaceMaxOS.html">MaxOS</a>;</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespaceMaxOS_1_1common.html">MaxOS::common</a>;</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespaceMaxOS_1_1drivers_1_1console.html">MaxOS::drivers::console</a>;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="foldopen" id="foldopen00014" data-start="{" data-end="}">
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="classLogger.html#abc41bfb031d896170c7675fa96a6b30c">   14</a></span><a class="code hl_function" href="classLogger.html#abc41bfb031d896170c7675fa96a6b30c">Logger::Logger</a>()</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>: m_log_writers()</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    s_active_logger = <span class="keyword">this</span>;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="comment">// The following line is generated automatically by the MaxOS build system.</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    s_progress_total = 22;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>}</div>
-</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<a href="logger_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;<a class="code" href="logger_8h.html">common/logger.h</a>&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;stdarg.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;<a class="code" href="vesaboot_8h.html">drivers/console/vesaboot.h</a>&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;common/version.h&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;<a class="code" href="cpu_8h.html">system/cpu.h</a>&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;<a class="code" href="scheduler_8h.html">processes/scheduler.h</a>&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">using namespace </span>MaxOS;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">using namespace </span>MaxOS::common;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">using namespace </span>MaxOS::drivers::console;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">using namespace </span>MaxOS::processes;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">using namespace </span>MaxOS::system;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>Logger::Logger()</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>: m_log_writers()</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>{</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="foldopen" id="foldopen00026" data-start="{" data-end="}">
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classLogger.html#acb668a9e186a25fbaad2e4af6d1ed00a">   26</a></span><a class="code hl_function" href="classLogger.html#acb668a9e186a25fbaad2e4af6d1ed00a">Logger::~Logger</a>() {</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    s_active_logger = <span class="keyword">this</span>;</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>}</div>
-</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="comment">// The following line is generated automatically by the MaxOS build system.</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    s_progress_total = 22;</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="foldopen" id="foldopen00036" data-start="{" data-end="}">
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classLogger.html#a678fdff0e20fc719317669dee1928947">   36</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#a678fdff0e20fc719317669dee1928947">Logger::add_log_writer</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1OutputStream.html">OutputStream</a> *<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_writer</a>) {</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="comment">// If the list is not empty</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordflow">if</span> (m_log_writer_count &gt;= m_max_log_writers)</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="comment">// Add the output stream to the list</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    m_log_writers[m_log_writer_count] = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_writer</a>;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    m_log_writers_enabled[m_log_writer_count] = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    m_log_writer_count++;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="comment">// Print the setup info</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    *<span class="keyword">this</span> &lt;&lt; <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">LogLevel::INFO</a> &lt;&lt; <span class="stringliteral">&quot;Logger setup: &quot;</span> &lt;&lt; m_log_writer_count &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    *<span class="keyword">this</span> &lt;&lt; <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce">LogLevel::HEADER</a> &lt;&lt; <span class="stringliteral">&quot;MaxOS v&quot;</span> &lt;&lt; <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">VERSION_STRING</a> &lt;&lt; <span class="stringliteral">&quot; [ build &quot;</span> &lt;&lt; <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">BUILD_NUMBER</a> &lt;&lt; <span class="stringliteral">&quot; ]\n&quot;</span>;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>}</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>}</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>Logger::~Logger() {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>}</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="foldopen" id="foldopen00044" data-start="{" data-end="}">
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classLogger.html#a678fdff0e20fc719317669dee1928947">   44</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#a678fdff0e20fc719317669dee1928947">Logger::add_log_writer</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1OutputStream.html">OutputStream</a>* <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_writer</a>) {</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="comment">// If the list is not empty</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">if</span> (m_log_writer_count &gt;= <a class="code hl_variable" href="logger_8h.html#a28ef57769ee0016c46a1426fe48e9523">MAX_LOG_WRITERS</a>)</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="comment">// Add the output stream to the list</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    m_log_writers[m_log_writer_count] = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_writer</a>;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    m_log_writers_enabled[m_log_writer_count] = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    m_log_writer_count++;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="comment">// Print the setup info</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    *<span class="keyword">this</span> &lt;&lt; LogLevel::INFO &lt;&lt; <span class="stringliteral">&quot;Logger setup: &quot;</span> &lt;&lt; m_log_writer_count &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    *<span class="keyword">this</span> &lt;&lt; LogLevel::HEADER &lt;&lt; <span class="stringliteral">&quot;MaxOS v&quot;</span> &lt;&lt; <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">VERSION_STRING</a> &lt;&lt; <span class="stringliteral">&quot; [ build &quot;</span> &lt;&lt; <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">BUILD_NUMBER</a> &lt;&lt; <span class="stringliteral">&quot; ]\n&quot;</span>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>}</div>
 </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="foldopen" id="foldopen00058" data-start="{" data-end="}">
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classLogger.html#a47af75515f1f7cb42966de07bef4d5bb">   58</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#a47af75515f1f7cb42966de07bef4d5bb">Logger::disable_log_writer</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1OutputStream.html">OutputStream</a> *<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_writer</a>) {</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="comment">// If the list is empty</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordflow">if</span> (m_log_writer_count == 0)</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="comment">// Find the output stream in the list</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; m_log_writer_count; i++)</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keywordflow">if</span> (m_log_writers[i] == <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_writer</a>)</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            m_log_writers_enabled[i] = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>}</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="foldopen" id="foldopen00066" data-start="{" data-end="}">
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="classLogger.html#a47af75515f1f7cb42966de07bef4d5bb">   66</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#a47af75515f1f7cb42966de07bef4d5bb">Logger::disable_log_writer</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1OutputStream.html">OutputStream</a>* <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_writer</a>) {</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="comment">// If the list is empty</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordflow">if</span> (m_log_writer_count == 0)</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="comment">// Find the output stream in the list</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; m_log_writer_count; i++)</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keywordflow">if</span> (m_log_writers[i] == <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_writer</a>)</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            m_log_writers_enabled[i] = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>}</div>
 </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="foldopen" id="foldopen00075" data-start="{" data-end="}">
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="classLogger.html#abfa73d8f40cb4e6a17695346cebc8314">   75</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#abfa73d8f40cb4e6a17695346cebc8314">Logger::set_log_level</a>(<a class="code hl_enumeration" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">LogLevel</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>) {</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="comment">// Set the log level</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    m_log_level = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="comment">// Update the progress bar</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keywordflow">if</span> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a> == <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">LogLevel::INFO</a>) {</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <a class="code hl_function" href="classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#adad7f5e1e178ad70708c772319050a6f">VESABootConsole::update_progress_bar</a>((m_progress_current * 100) / s_progress_total);</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        m_progress_current++;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    }</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="comment">// Print the header</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keywordflow">switch</span> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>) {</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce">LogLevel::HEADER</a>:</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::FG_Blue] &lt;&lt; <span class="stringliteral">&quot;[  BOOT    ] &quot;</span>;</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">LogLevel::INFO</a>:</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::FG_Cyan] &lt;&lt; <span class="stringliteral">&quot;[  INFO    ]&quot;</span> &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::FG_White] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="foldopen" id="foldopen00083" data-start="{" data-end="}">
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="classLogger.html#abfa73d8f40cb4e6a17695346cebc8314">   83</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#abfa73d8f40cb4e6a17695346cebc8314">Logger::set_log_level</a>(<a class="code hl_enumeration" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">LogLevel</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>) {</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="comment">// Set the log level</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    m_log_level = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="comment">// Update the progress bar</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordflow">if</span> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a> == LogLevel::INFO) {</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        <a class="code hl_function" href="classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#adad7f5e1e178ad70708c772319050a6f">VESABootConsole::update_progress_bar</a>((m_progress_current * 100) / s_progress_total);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        m_progress_current++;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    }</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="comment">// Print the header</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keywordflow">switch</span> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>) {</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15">LogLevel::DEBUG</a>:</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::FG_Yellow] &lt;&lt; <span class="stringliteral">&quot;[  DEBUG   ]&quot;</span> &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::Reset] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keywordflow">case</span> LogLevel::HEADER:</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::FG_Blue] &lt;&lt; <span class="stringliteral">&quot;[  BOOT    ] &quot;</span>;</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b">LogLevel::WARNING</a>:</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::BG_Yellow] &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1common.html#ac660b07c00db1fe517a6f9ab5d1e5c01a84b22940d4cdc49b771c1b0cb12904ef">FG_White</a>] &lt;&lt; <span class="stringliteral">&quot;[ WARNING  ]&quot;</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>                  &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::Reset] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">LogLevel::ERROR</a>:</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::BG_Red] &lt;&lt; <span class="stringliteral">&quot;[  ERROR   ]&quot;</span> &lt;&lt; <a class="code hl_variable" href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::Reset] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    }</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>}</div>
-</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordflow">case</span> LogLevel::INFO:</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::FG_Cyan] &lt;&lt; <span class="stringliteral">&quot;[  INFO    ]&quot;</span> &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::FG_White] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        <span class="keywordflow">case</span> LogLevel::DEBUG:</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::FG_Yellow] &lt;&lt; <span class="stringliteral">&quot;[  DEBUG   ]&quot;</span> &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::Reset] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        <span class="keywordflow">case</span> LogLevel::WARNING:</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::BG_Yellow] &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[FG_White] &lt;&lt; <span class="stringliteral">&quot;[ WARNING  ]&quot;</span> &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::Reset] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="foldopen" id="foldopen00118" data-start="{" data-end="}">
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="classLogger.html#a8c9e978ec0d5df76f888bc5249616918">  118</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#a8c9e978ec0d5df76f888bc5249616918">Logger::write_char</a>(<span class="keywordtype">char</span> c) {</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <span class="comment">// Ensure logging at this level is enabled</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    <span class="keywordflow">if</span> (m_log_level &gt; s_max_log_level)</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="comment">// Write the character to all output streams</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; m_log_writer_count; i++)</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordflow">if</span> (m_log_writers_enabled[i] || m_log_level == <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">LogLevel::ERROR</a>)</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            m_log_writers[i]-&gt;<a class="code hl_function" href="classMaxOS_1_1common_1_1OutputStream.html#ae0452629b7897f797bfb5bde22ef12ac">write_char</a>(c);</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>}</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <span class="keywordflow">case</span> LogLevel::ERROR:</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>            *<span class="keyword">this</span> &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::BG_Red] &lt;&lt; <span class="stringliteral">&quot;[  ERROR   ]&quot;</span> &lt;&lt; <a class="code hl_variable" href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">ANSI_COLOURS</a>[ANSIColour::Reset] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    }</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <a class="code hl_function" href="classMaxOS_1_1processes_1_1GlobalScheduler.html#a4f462a1b05f9bf785a903bd0f3e495a0">GlobalScheduler::print_running_header</a>();</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>}</div>
 </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="foldopen" id="foldopen00136" data-start="{" data-end="}">
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">  136</a></span><a class="code hl_class" href="classLogger.html">Logger</a> &amp;<a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Logger::Out</a>() {</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    <span class="keywordflow">return</span> *<a class="code hl_function" href="classLogger.html#a3f18073f008cf3a9a63a5894fa2cf9f7">active_logger</a>();</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="foldopen" id="foldopen00127" data-start="{" data-end="}">
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="classLogger.html#a8c9e978ec0d5df76f888bc5249616918">  127</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#a8c9e978ec0d5df76f888bc5249616918">Logger::write_char</a>(<span class="keywordtype">char</span> c) {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="comment">// Ensure logging at this level is enabled</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keywordflow">if</span> (m_log_level &gt; <a class="code hl_variable" href="logger_8h.html#a48d28a459e93f33fb3840a0d5e7a3b33">MAX_LOG_LEVEL</a>)</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="comment">// Write the character to all output streams</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; m_log_writer_count; i++)</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        <span class="keywordflow">if</span> (m_log_writers_enabled[i])</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>            m_log_writers[i]-&gt;<a class="code hl_function" href="classMaxOS_1_1common_1_1OutputStream.html#ae0452629b7897f797bfb5bde22ef12ac">write_char</a>(c);</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>}</div>
 </div>
 <div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
 <div class="foldopen" id="foldopen00145" data-start="{" data-end="}">
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno"><a class="line" href="classLogger.html#ac852561ac37a51b7bf4f863a19a4fd40">  145</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#ac852561ac37a51b7bf4f863a19a4fd40">Logger::HEADER</a>() {</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno"><a class="line" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">  145</a></span><a class="code hl_class" href="classLogger.html">Logger</a> &amp;<a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Logger::Out</a>() {</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    s_active_logger-&gt;set_log_level(<a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce">LogLevel::HEADER</a>);</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="keywordflow">return</span> *<a class="code hl_function" href="classLogger.html#a3f18073f008cf3a9a63a5894fa2cf9f7">active_logger</a>();</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>}</div>
+</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>}</div>
+<div class="foldopen" id="foldopen00155" data-start="{" data-end="}">
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno"><a class="line" href="classLogger.html#ac852561ac37a51b7bf4f863a19a4fd40">  155</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#ac852561ac37a51b7bf4f863a19a4fd40">Logger::HEADER</a>() {</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    s_active_logger-&gt;set_log_level(LogLevel::HEADER);</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>}</div>
 </div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
-<div class="foldopen" id="foldopen00157" data-start="{" data-end="}">
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno"><a class="line" href="classLogger.html#a6fa276d92dbf0dd22dcab146f5c99da6">  157</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#a6fa276d92dbf0dd22dcab146f5c99da6">Logger::INFO</a>() {</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    s_active_logger-&gt;set_log_level(<a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">LogLevel::INFO</a>);</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>}</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
+<div class="foldopen" id="foldopen00167" data-start="{" data-end="}">
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="classLogger.html#a6fa276d92dbf0dd22dcab146f5c99da6">  167</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#a6fa276d92dbf0dd22dcab146f5c99da6">Logger::INFO</a>() {</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    s_active_logger-&gt;set_log_level(LogLevel::INFO);</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>}</div>
 </div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
-<div class="foldopen" id="foldopen00168" data-start="{" data-end="}">
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="classLogger.html#a1df434c9cd82457b6830c0500731a601">  168</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#a1df434c9cd82457b6830c0500731a601">Logger::DEBUG</a>() {</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    s_active_logger-&gt;set_log_level(<a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15">LogLevel::DEBUG</a>);</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>}</div>
+<div class="foldopen" id="foldopen00178" data-start="{" data-end="}">
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="classLogger.html#a1df434c9cd82457b6830c0500731a601">  178</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#a1df434c9cd82457b6830c0500731a601">Logger::DEBUG</a>() {</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    s_active_logger-&gt;set_log_level(LogLevel::DEBUG);</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>}</div>
 </div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
-<div class="foldopen" id="foldopen00180" data-start="{" data-end="}">
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno"><a class="line" href="classLogger.html#a4cc5871bd96523f5c50a2ac8ccbf44f3">  180</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#a4cc5871bd96523f5c50a2ac8ccbf44f3">Logger::WARNING</a>() {</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    s_active_logger-&gt;set_log_level(<a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b">LogLevel::WARNING</a>);</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>}</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="foldopen" id="foldopen00190" data-start="{" data-end="}">
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno"><a class="line" href="classLogger.html#a4cc5871bd96523f5c50a2ac8ccbf44f3">  190</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#a4cc5871bd96523f5c50a2ac8ccbf44f3">Logger::WARNING</a>() {</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    s_active_logger-&gt;set_log_level(LogLevel::WARNING);</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>}</div>
 </div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
-<div class="foldopen" id="foldopen00191" data-start="{" data-end="}">
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno"><a class="line" href="classLogger.html#a9d5741991cc756d6abb2ca80b019e137">  191</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#a9d5741991cc756d6abb2ca80b019e137">Logger::ERROR</a>() {</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    s_active_logger-&gt;set_log_level(<a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">LogLevel::ERROR</a>);</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>}</div>
+<div class="foldopen" id="foldopen00201" data-start="{" data-end="}">
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno"><a class="line" href="classLogger.html#a9d5741991cc756d6abb2ca80b019e137">  201</a></span><a class="code hl_class" href="classLogger.html">Logger</a> <a class="code hl_function" href="classLogger.html#a9d5741991cc756d6abb2ca80b019e137">Logger::ERROR</a>() {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span> </div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    s_active_logger-&gt;set_log_level(LogLevel::ERROR);</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Out</a>();</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>}</div>
 </div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
-<div class="foldopen" id="foldopen00203" data-start="{" data-end="}">
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno"><a class="line" href="classLogger.html#a3f18073f008cf3a9a63a5894fa2cf9f7">  203</a></span><a class="code hl_class" href="classLogger.html">Logger</a> *<a class="code hl_function" href="classLogger.html#a3f18073f008cf3a9a63a5894fa2cf9f7">Logger::active_logger</a>() {</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordflow">return</span> s_active_logger;</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>}</div>
-</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
 <div class="foldopen" id="foldopen00213" data-start="{" data-end="}">
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno"><a class="line" href="classLogger.html#a32a5bb7bebb63c0c89527e20315f3db1">  213</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#a32a5bb7bebb63c0c89527e20315f3db1">Logger::printf</a>(<span class="keywordtype">char</span> <span class="keyword">const</span> *format, ...) {</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="comment">// Create a pointer to the data</span></div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">va_list</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>;</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">va_start</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>, format);</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    <span class="comment">// Loop through the format string</span></div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    <span class="keywordflow">for</span> (; *format != <span class="charliteral">&#39;\0&#39;</span>; format++) {</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        <span class="comment">// If it is not a %, print the character</span></div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        <span class="keywordflow">if</span> (*format != <span class="charliteral">&#39;%&#39;</span>) {</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>            <a class="code hl_function" href="classLogger.html#a8c9e978ec0d5df76f888bc5249616918">write_char</a>(*format);</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        }</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        <span class="comment">// Move to the next character</span></div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        format++;</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        <span class="keywordflow">switch</span> (*format) {</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>            <span class="keywordflow">case</span> <span class="charliteral">&#39;d&#39;</span>: {</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>                <span class="comment">// Print a decimal</span></div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>                <span class="keywordtype">int</span> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">number</a> = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">va_arg</a> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>, <span class="keywordtype">int</span>);</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>                <a class="code hl_function" href="classMaxOS_1_1common_1_1OutputStream.html#abdb085bc4254045363b033d56201d97c">write_int</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">number</a>);</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            }</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            <span class="keywordflow">case</span> <span class="charliteral">&#39;x&#39;</span>: {</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>                <span class="comment">// Print a hex</span></div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>                <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uint64_t</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">number</a> = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">va_arg</a> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>, <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uint64_t</a>);</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>                <a class="code hl_function" href="classMaxOS_1_1common_1_1OutputStream.html#a684aef762baaef08e46c4fa2319b5fdc">write_hex</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">number</a>);</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            }</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>            <span class="keywordflow">case</span> <span class="charliteral">&#39;s&#39;</span>: {</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>                <span class="comment">// Print a string</span></div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                <span class="keywordtype">char</span> *<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">str</a> = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">va_arg</a> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>, <span class="keywordtype">char</span>*);</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>                <a class="code hl_variable" href="physical_8h.html#ab4d8d1259f524270d625ab8933700d27">write</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">str</a>);</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>            }</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        }</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    }</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>}</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno"><a class="line" href="classLogger.html#a3f18073f008cf3a9a63a5894fa2cf9f7">  213</a></span><a class="code hl_class" href="classLogger.html">Logger</a> *<a class="code hl_function" href="classLogger.html#a3f18073f008cf3a9a63a5894fa2cf9f7">Logger::active_logger</a>() {</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    <span class="keywordflow">return</span> s_active_logger;</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>}</div>
 </div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
-<div class="foldopen" id="foldopen00259" data-start="{" data-end="}">
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno"><a class="line" href="classLogger.html#acd76d224ed130aaf9b8e68d0560d34d3">  259</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#acd76d224ed130aaf9b8e68d0560d34d3">Logger::ASSERT</a>(<span class="keywordtype">bool</span> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">condition</a>, <span class="keywordtype">char</span> <span class="keyword">const</span> *<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">message</a>, ...) {</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    <span class="comment">// If the condition is met then everything is ok</span></div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>    <span class="keywordflow">if</span> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">condition</a>)</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    <span class="comment">// Print the message</span></div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    s_active_logger-&gt;set_log_level(<a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">LogLevel::ERROR</a>);</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    s_active_logger-&gt;printf(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">message</a>);</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    <span class="comment">// Hang the system</span></div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    <a class="code hl_function" href="classMaxOS_1_1system_1_1CPU.html#a0d33c5755fcbfd08c75ae68f3d62577a">system::CPU::PANIC</a>(<span class="stringliteral">&quot;Check previous logs for more information&quot;</span>);</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>}</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span> </div>
+<div class="foldopen" id="foldopen00223" data-start="{" data-end="}">
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno"><a class="line" href="classLogger.html#a32a5bb7bebb63c0c89527e20315f3db1">  223</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#a32a5bb7bebb63c0c89527e20315f3db1">Logger::printf</a>(<span class="keywordtype">char</span> <span class="keyword">const</span> *format, ...) {</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    <span class="comment">// Create a pointer to the data</span></div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">va_list</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>;</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">va_start</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>, format);</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    <a class="code hl_variable" href="physical_8h.html#ab4d8d1259f524270d625ab8933700d27">write</a>(<a class="code hl_function" href="classMaxOS_1_1String.html#a3ce8f14c851637fa8292888fa33c36bf">String::formatted</a>(format, <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>));</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>}</div>
 </div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span> </div>
-<div class="foldopen" id="foldopen00279" data-start="{" data-end="}">
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno"><a class="line" href="classLogger.html#ae4a08e44a698816d241d08029c37bc59">  279</a></span><a class="code hl_class" href="classLogger.html">Logger</a> &amp;<a class="code hl_function" href="classLogger.html#ae4a08e44a698816d241d08029c37bc59">Logger::operator&lt;&lt;</a>(<a class="code hl_enumeration" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">LogLevel</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>) {</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    <a class="code hl_function" href="classLogger.html#abfa73d8f40cb4e6a17695346cebc8314">set_log_level</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>);</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>}</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
+<div class="foldopen" id="foldopen00238" data-start="{" data-end="}">
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno"><a class="line" href="classLogger.html#acd76d224ed130aaf9b8e68d0560d34d3">  238</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classLogger.html#acd76d224ed130aaf9b8e68d0560d34d3">Logger::ASSERT</a>(<span class="keywordtype">bool</span> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">condition</a>, <span class="keywordtype">char</span> <span class="keyword">const</span> *<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">message</a>, ...) {</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="comment">// If the condition is met then everything is ok</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    <span class="keywordflow">if</span> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">condition</a>)</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span> </div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">va_list</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>;</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">va_start</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>, <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">message</a>);</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    <span class="comment">// Hang the system</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <a class="code hl_function" href="classMaxOS_1_1system_1_1CPU.html#a0d33c5755fcbfd08c75ae68f3d62577a">system::CPU::PANIC</a>(<a class="code hl_function" href="classMaxOS_1_1String.html#a3ce8f14c851637fa8292888fa33c36bf">String::formatted</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">message</a>, <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">parameters</a>).c_str());</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>}</div>
 </div>
-<div class="ttc" id="aclassLogger_html"><div class="ttname"><a href="classLogger.html">Logger</a></div><div class="ttdoc">A class that handles logging messages to the console and files.</div><div class="ttdef"><b>Definition</b> <a href="logger_8h_source.html#l00031">logger.h:32</a></div></div>
-<div class="ttc" id="aclassLogger_html_a1df434c9cd82457b6830c0500731a601"><div class="ttname"><a href="classLogger.html#a1df434c9cd82457b6830c0500731a601">Logger::DEBUG</a></div><div class="ttdeci">static Logger DEBUG()</div><div class="ttdoc">Gets active logger set to DEBUG level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00168">logger.cpp:168</a></div></div>
-<div class="ttc" id="aclassLogger_html_a2240fadc00ba8731c0117c019d800644"><div class="ttname"><a href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Logger::Out</a></div><div class="ttdeci">static Logger &amp; Out()</div><div class="ttdoc">Gets the active logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00136">logger.cpp:136</a></div></div>
-<div class="ttc" id="aclassLogger_html_a32a5bb7bebb63c0c89527e20315f3db1"><div class="ttname"><a href="classLogger.html#a32a5bb7bebb63c0c89527e20315f3db1">Logger::printf</a></div><div class="ttdeci">void printf(const char *format,...)</div><div class="ttdoc">Prints a formatted string to the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00213">logger.cpp:213</a></div></div>
-<div class="ttc" id="aclassLogger_html_a3f18073f008cf3a9a63a5894fa2cf9f7"><div class="ttname"><a href="classLogger.html#a3f18073f008cf3a9a63a5894fa2cf9f7">Logger::active_logger</a></div><div class="ttdeci">static Logger * active_logger()</div><div class="ttdoc">Gets the active logger (to be used to modify the logger)</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00203">logger.cpp:203</a></div></div>
-<div class="ttc" id="aclassLogger_html_a47af75515f1f7cb42966de07bef4d5bb"><div class="ttname"><a href="classLogger.html#a47af75515f1f7cb42966de07bef4d5bb">Logger::disable_log_writer</a></div><div class="ttdeci">void disable_log_writer(OutputStream *log_writer)</div><div class="ttdoc">Removes an output stream from the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00058">logger.cpp:58</a></div></div>
-<div class="ttc" id="aclassLogger_html_a4cc5871bd96523f5c50a2ac8ccbf44f3"><div class="ttname"><a href="classLogger.html#a4cc5871bd96523f5c50a2ac8ccbf44f3">Logger::WARNING</a></div><div class="ttdeci">static Logger WARNING()</div><div class="ttdoc">Gets active logger set to WARNING level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00180">logger.cpp:180</a></div></div>
-<div class="ttc" id="aclassLogger_html_a678fdff0e20fc719317669dee1928947"><div class="ttname"><a href="classLogger.html#a678fdff0e20fc719317669dee1928947">Logger::add_log_writer</a></div><div class="ttdeci">void add_log_writer(OutputStream *log_writer)</div><div class="ttdoc">Adds an output stream to the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00036">logger.cpp:36</a></div></div>
-<div class="ttc" id="aclassLogger_html_a6fa276d92dbf0dd22dcab146f5c99da6"><div class="ttname"><a href="classLogger.html#a6fa276d92dbf0dd22dcab146f5c99da6">Logger::INFO</a></div><div class="ttdeci">static Logger INFO()</div><div class="ttdoc">Gets active logger set to info level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00157">logger.cpp:157</a></div></div>
-<div class="ttc" id="aclassLogger_html_a8c9e978ec0d5df76f888bc5249616918"><div class="ttname"><a href="classLogger.html#a8c9e978ec0d5df76f888bc5249616918">Logger::write_char</a></div><div class="ttdeci">void write_char(char c) final</div><div class="ttdoc">Writes a character to the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00118">logger.cpp:118</a></div></div>
-<div class="ttc" id="aclassLogger_html_a9d5741991cc756d6abb2ca80b019e137"><div class="ttname"><a href="classLogger.html#a9d5741991cc756d6abb2ca80b019e137">Logger::ERROR</a></div><div class="ttdeci">static Logger ERROR()</div><div class="ttdoc">Gets active logger set to ERROR level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00191">logger.cpp:191</a></div></div>
-<div class="ttc" id="aclassLogger_html_abc41bfb031d896170c7675fa96a6b30c"><div class="ttname"><a href="classLogger.html#abc41bfb031d896170c7675fa96a6b30c">Logger::Logger</a></div><div class="ttdeci">Logger()</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00014">logger.cpp:14</a></div></div>
-<div class="ttc" id="aclassLogger_html_abfa73d8f40cb4e6a17695346cebc8314"><div class="ttname"><a href="classLogger.html#abfa73d8f40cb4e6a17695346cebc8314">Logger::set_log_level</a></div><div class="ttdeci">void set_log_level(LogLevel log_level)</div><div class="ttdoc">Sets the log level of the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00075">logger.cpp:75</a></div></div>
-<div class="ttc" id="aclassLogger_html_ac852561ac37a51b7bf4f863a19a4fd40"><div class="ttname"><a href="classLogger.html#ac852561ac37a51b7bf4f863a19a4fd40">Logger::HEADER</a></div><div class="ttdeci">static Logger HEADER()</div><div class="ttdoc">Gets active logger set to task level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00145">logger.cpp:145</a></div></div>
-<div class="ttc" id="aclassLogger_html_acb668a9e186a25fbaad2e4af6d1ed00a"><div class="ttname"><a href="classLogger.html#acb668a9e186a25fbaad2e4af6d1ed00a">Logger::~Logger</a></div><div class="ttdeci">~Logger()</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00026">logger.cpp:26</a></div></div>
-<div class="ttc" id="aclassLogger_html_acd76d224ed130aaf9b8e68d0560d34d3"><div class="ttname"><a href="classLogger.html#acd76d224ed130aaf9b8e68d0560d34d3">Logger::ASSERT</a></div><div class="ttdeci">static void ASSERT(bool condition, const char *message,...)</div><div class="ttdoc">Puts the system into a panic state if the condition is false, printing the message first.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00259">logger.cpp:259</a></div></div>
-<div class="ttc" id="aclassLogger_html_ae4a08e44a698816d241d08029c37bc59"><div class="ttname"><a href="classLogger.html#ae4a08e44a698816d241d08029c37bc59">Logger::operator&lt;&lt;</a></div><div class="ttdeci">Logger &amp; operator&lt;&lt;(LogLevel log_level)</div><div class="ttdoc">Sets the log level of the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00279">logger.cpp:279</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1common_1_1OutputStream_html"><div class="ttname"><a href="classMaxOS_1_1common_1_1OutputStream.html">MaxOS::common::OutputStream</a></div><div class="ttdoc">A stream that strings can be written to.</div><div class="ttdef"><b>Definition</b> <a href="outputStream_8h_source.html#l00041">outputStream.h:42</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1common_1_1OutputStream_html_a684aef762baaef08e46c4fa2319b5fdc"><div class="ttname"><a href="classMaxOS_1_1common_1_1OutputStream.html#a684aef762baaef08e46c4fa2319b5fdc">MaxOS::common::OutputStream::write_hex</a></div><div class="ttdeci">virtual void write_hex(uint64_t hex_to_write)</div><div class="ttdoc">Writes a hex to the output stream.</div><div class="ttdef"><b>Definition</b> <a href="outputStream_8cpp_source.html#l00111">outputStream.cpp:111</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1common_1_1OutputStream_html_abdb085bc4254045363b033d56201d97c"><div class="ttname"><a href="classMaxOS_1_1common_1_1OutputStream.html#abdb085bc4254045363b033d56201d97c">MaxOS::common::OutputStream::write_int</a></div><div class="ttdeci">virtual void write_int(int int_to_write)</div><div class="ttdoc">Writes an integer to the output stream.</div><div class="ttdef"><b>Definition</b> <a href="outputStream_8cpp_source.html#l00100">outputStream.cpp:100</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1common_1_1OutputStream_html_ae0452629b7897f797bfb5bde22ef12ac"><div class="ttname"><a href="classMaxOS_1_1common_1_1OutputStream.html#ae0452629b7897f797bfb5bde22ef12ac">MaxOS::common::OutputStream::write_char</a></div><div class="ttdeci">virtual void write_char(char char_to_write)</div><div class="ttdoc">Writes a character to the output stream.</div><div class="ttdef"><b>Definition</b> <a href="outputStream_8cpp_source.html#l00091">outputStream.cpp:91</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1common_1_1Rectangle_html"><div class="ttname"><a href="classMaxOS_1_1common_1_1Rectangle.html">MaxOS::common::Rectangle</a></div><div class="ttdoc">Stores the left, top, width and height of a rectangle.</div><div class="ttdef"><b>Definition</b> <a href="rectangle_8h_source.html#l00020">rectangle.h:20</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1drivers_1_1console_1_1VESABootConsole_html_adad7f5e1e178ad70708c772319050a6f"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#adad7f5e1e178ad70708c772319050a6f">MaxOS::drivers::console::VESABootConsole::update_progress_bar</a></div><div class="ttdeci">static void update_progress_bar(uint8_t percentage)</div><div class="ttdoc">Updates the progress bar.</div><div class="ttdef"><b>Definition</b> <a href="vesaboot_8cpp_source.html#l00378">vesaboot.cpp:378</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1system_1_1CPU_html_a0d33c5755fcbfd08c75ae68f3d62577a"><div class="ttname"><a href="classMaxOS_1_1system_1_1CPU.html#a0d33c5755fcbfd08c75ae68f3d62577a">MaxOS::system::CPU::PANIC</a></div><div class="ttdeci">static void PANIC(const char *message, cpu_status_t *status=nullptr)</div><div class="ttdef"><b>Definition</b> <a href="cpu_8cpp_source.html#l00154">cpu.cpp:154</a></div></div>
-<div class="ttc" id="acpu_8h_html"><div class="ttname"><a href="cpu_8h.html">cpu.h</a></div></div>
-<div class="ttc" id="alogger_8h_html"><div class="ttname"><a href="logger_8h.html">logger.h</a></div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">LogLevel</a></div><div class="ttdeci">LogLevel</div><div class="ttdoc">Priority levels for logging messages. Different levels may be used to filter messages based on their ...</div><div class="ttdef"><b>Definition</b> <a href="logger_8h_source.html#l00017">logger.h:18</a></div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b">LogLevel::WARNING</a></div><div class="ttdeci">@ WARNING</div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">LogLevel::INFO</a></div><div class="ttdeci">@ INFO</div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce">LogLevel::HEADER</a></div><div class="ttdeci">@ HEADER</div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">LogLevel::ERROR</a></div><div class="ttdeci">@ ERROR</div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15">LogLevel::DEBUG</a></div><div class="ttdeci">@ DEBUG</div></div>
-<div class="ttc" id="anamespaceMaxOS_1_1common_html"><div class="ttname"><a href="namespaceMaxOS_1_1common.html">MaxOS::common</a></div><div class="ttdef"><b>Definition</b> <a href="buffer_8h_source.html#l00015">buffer.h:15</a></div></div>
-<div class="ttc" id="anamespaceMaxOS_1_1common_html_a3364e04f094e16c00bed0dafa17c4b1c"><div class="ttname"><a href="namespaceMaxOS_1_1common.html#a3364e04f094e16c00bed0dafa17c4b1c">MaxOS::common::ANSI_COLOURS</a></div><div class="ttdeci">const char *const ANSI_COLOURS[]</div><div class="ttdef"><b>Definition</b> <a href="colour_8h_source.html#l00016">colour.h:16</a></div></div>
-<div class="ttc" id="anamespaceMaxOS_1_1common_html_ac660b07c00db1fe517a6f9ab5d1e5c01a84b22940d4cdc49b771c1b0cb12904ef"><div class="ttname"><a href="namespaceMaxOS_1_1common.html#ac660b07c00db1fe517a6f9ab5d1e5c01a84b22940d4cdc49b771c1b0cb12904ef">MaxOS::common::FG_White</a></div><div class="ttdeci">@ FG_White</div><div class="ttdef"><b>Definition</b> <a href="colour_8h_source.html#l00045">colour.h:45</a></div></div>
-<div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1console_html"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1console.html">MaxOS::drivers::console</a></div><div class="ttdef"><b>Definition</b> <a href="console_8h_source.html#l00016">console.h:16</a></div></div>
-<div class="ttc" id="anamespaceMaxOS_html"><div class="ttname"><a href="namespaceMaxOS.html">MaxOS</a></div><div class="ttdef"><b>Definition</b> <a href="buffer_8h_source.html#l00013">buffer.h:13</a></div></div>
-<div class="ttc" id="aphysical_8h_html_ab4d8d1259f524270d625ab8933700d27"><div class="ttname"><a href="physical_8h.html#ab4d8d1259f524270d625ab8933700d27">write</a></div><div class="ttdeci">bool write</div><div class="ttdef"><b>Definition</b> <a href="physical_8h_source.html#l00001">physical.h:1</a></div></div>
-<div class="ttc" id="avesaboot_8h_html"><div class="ttname"><a href="vesaboot_8h.html">vesaboot.h</a></div></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="foldopen" id="foldopen00257" data-start="{" data-end="}">
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno"><a class="line" href="classLogger.html#ae4a08e44a698816d241d08029c37bc59">  257</a></span><a class="code hl_class" href="classLogger.html">Logger</a> &amp;<a class="code hl_function" href="classLogger.html#ae4a08e44a698816d241d08029c37bc59">Logger::operator&lt;&lt;</a>(<a class="code hl_enumeration" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">LogLevel</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>) {</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <a class="code hl_function" href="classLogger.html#abfa73d8f40cb4e6a17695346cebc8314">set_log_level</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">log_level</a>);</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>}</div>
+</div>
+<div class="ttc" id="aclassLogger_html"><div class="ttname"><a href="classLogger.html">Logger</a></div><div class="ttdoc">A class that handles logging messages to the console and files.</div><div class="ttdef"><b>Definition</b> <a href="logger_8h_source.html#l00039">logger.h:40</a></div></div>
+<div class="ttc" id="aclassLogger_html_a1df434c9cd82457b6830c0500731a601"><div class="ttname"><a href="classLogger.html#a1df434c9cd82457b6830c0500731a601">Logger::DEBUG</a></div><div class="ttdeci">static Logger DEBUG()</div><div class="ttdoc">Gets active logger set to DEBUG level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00178">logger.cpp:178</a></div></div>
+<div class="ttc" id="aclassLogger_html_a2240fadc00ba8731c0117c019d800644"><div class="ttname"><a href="classLogger.html#a2240fadc00ba8731c0117c019d800644">Logger::Out</a></div><div class="ttdeci">static Logger &amp; Out()</div><div class="ttdoc">Gets the active logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00145">logger.cpp:145</a></div></div>
+<div class="ttc" id="aclassLogger_html_a32a5bb7bebb63c0c89527e20315f3db1"><div class="ttname"><a href="classLogger.html#a32a5bb7bebb63c0c89527e20315f3db1">Logger::printf</a></div><div class="ttdeci">void printf(const char *format,...)</div><div class="ttdoc">Prints a formatted string to the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00223">logger.cpp:223</a></div></div>
+<div class="ttc" id="aclassLogger_html_a3f18073f008cf3a9a63a5894fa2cf9f7"><div class="ttname"><a href="classLogger.html#a3f18073f008cf3a9a63a5894fa2cf9f7">Logger::active_logger</a></div><div class="ttdeci">static Logger * active_logger()</div><div class="ttdoc">Gets the active logger (to be used to modify the logger)</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00213">logger.cpp:213</a></div></div>
+<div class="ttc" id="aclassLogger_html_a47af75515f1f7cb42966de07bef4d5bb"><div class="ttname"><a href="classLogger.html#a47af75515f1f7cb42966de07bef4d5bb">Logger::disable_log_writer</a></div><div class="ttdeci">void disable_log_writer(OutputStream *log_writer)</div><div class="ttdoc">Removes an output stream from the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00066">logger.cpp:66</a></div></div>
+<div class="ttc" id="aclassLogger_html_a4cc5871bd96523f5c50a2ac8ccbf44f3"><div class="ttname"><a href="classLogger.html#a4cc5871bd96523f5c50a2ac8ccbf44f3">Logger::WARNING</a></div><div class="ttdeci">static Logger WARNING()</div><div class="ttdoc">Gets active logger set to WARNING level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00190">logger.cpp:190</a></div></div>
+<div class="ttc" id="aclassLogger_html_a678fdff0e20fc719317669dee1928947"><div class="ttname"><a href="classLogger.html#a678fdff0e20fc719317669dee1928947">Logger::add_log_writer</a></div><div class="ttdeci">void add_log_writer(OutputStream *log_writer)</div><div class="ttdoc">Adds an output stream to the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00044">logger.cpp:44</a></div></div>
+<div class="ttc" id="aclassLogger_html_a6fa276d92dbf0dd22dcab146f5c99da6"><div class="ttname"><a href="classLogger.html#a6fa276d92dbf0dd22dcab146f5c99da6">Logger::INFO</a></div><div class="ttdeci">static Logger INFO()</div><div class="ttdoc">Gets active logger set to info level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00167">logger.cpp:167</a></div></div>
+<div class="ttc" id="aclassLogger_html_a8c9e978ec0d5df76f888bc5249616918"><div class="ttname"><a href="classLogger.html#a8c9e978ec0d5df76f888bc5249616918">Logger::write_char</a></div><div class="ttdeci">void write_char(char c) final</div><div class="ttdoc">Writes a character to the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00127">logger.cpp:127</a></div></div>
+<div class="ttc" id="aclassLogger_html_a9d5741991cc756d6abb2ca80b019e137"><div class="ttname"><a href="classLogger.html#a9d5741991cc756d6abb2ca80b019e137">Logger::ERROR</a></div><div class="ttdeci">static Logger ERROR()</div><div class="ttdoc">Gets active logger set to ERROR level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00201">logger.cpp:201</a></div></div>
+<div class="ttc" id="aclassLogger_html_abfa73d8f40cb4e6a17695346cebc8314"><div class="ttname"><a href="classLogger.html#abfa73d8f40cb4e6a17695346cebc8314">Logger::set_log_level</a></div><div class="ttdeci">void set_log_level(LogLevel log_level)</div><div class="ttdoc">Sets the log level of the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00083">logger.cpp:83</a></div></div>
+<div class="ttc" id="aclassLogger_html_ac852561ac37a51b7bf4f863a19a4fd40"><div class="ttname"><a href="classLogger.html#ac852561ac37a51b7bf4f863a19a4fd40">Logger::HEADER</a></div><div class="ttdeci">static Logger HEADER()</div><div class="ttdoc">Gets active logger set to task level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00155">logger.cpp:155</a></div></div>
+<div class="ttc" id="aclassLogger_html_acd76d224ed130aaf9b8e68d0560d34d3"><div class="ttname"><a href="classLogger.html#acd76d224ed130aaf9b8e68d0560d34d3">Logger::ASSERT</a></div><div class="ttdeci">static void ASSERT(bool condition, const char *message,...)</div><div class="ttdoc">Puts the system into a panic state if the condition is false, printing the message first.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00238">logger.cpp:238</a></div></div>
+<div class="ttc" id="aclassLogger_html_ae4a08e44a698816d241d08029c37bc59"><div class="ttname"><a href="classLogger.html#ae4a08e44a698816d241d08029c37bc59">Logger::operator&lt;&lt;</a></div><div class="ttdeci">Logger &amp; operator&lt;&lt;(LogLevel log_level)</div><div class="ttdoc">Sets the log level of the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00257">logger.cpp:257</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1String_html_a3ce8f14c851637fa8292888fa33c36bf"><div class="ttname"><a href="classMaxOS_1_1String.html#a3ce8f14c851637fa8292888fa33c36bf">MaxOS::String::formatted</a></div><div class="ttdeci">static String formatted(char const *format,...)</div><div class="ttdoc">Creates a formated string. s = string, x = hex, d = decimal.</div><div class="ttdef"><b>Definition</b> <a href="string_8cpp_source.html#l00641">string.cpp:641</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1OutputStream_html"><div class="ttname"><a href="classMaxOS_1_1common_1_1OutputStream.html">MaxOS::common::OutputStream</a></div><div class="ttdoc">A stream that strings can be written to.</div><div class="ttdef"><b>Definition</b> <a href="outputStream_8h_source.html#l00045">outputStream.h:46</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1OutputStream_html_ae0452629b7897f797bfb5bde22ef12ac"><div class="ttname"><a href="classMaxOS_1_1common_1_1OutputStream.html#ae0452629b7897f797bfb5bde22ef12ac">MaxOS::common::OutputStream::write_char</a></div><div class="ttdeci">virtual void write_char(char char_to_write)</div><div class="ttdoc">Writes a character to the output stream.</div><div class="ttdef"><b>Definition</b> <a href="outputStream_8cpp_source.html#l00095">outputStream.cpp:95</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1Rectangle_html"><div class="ttname"><a href="classMaxOS_1_1common_1_1Rectangle.html">MaxOS::common::Rectangle</a></div><div class="ttdoc">Stores the left, top, width and height of a rectangle.</div><div class="ttdef"><b>Definition</b> <a href="rectangle_8h_source.html#l00024">rectangle.h:24</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1drivers_1_1console_1_1VESABootConsole_html_adad7f5e1e178ad70708c772319050a6f"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#adad7f5e1e178ad70708c772319050a6f">MaxOS::drivers::console::VESABootConsole::update_progress_bar</a></div><div class="ttdeci">static void update_progress_bar(uint8_t percentage)</div><div class="ttdoc">Updates the progress bar.</div><div class="ttdef"><b>Definition</b> <a href="vesaboot_8cpp_source.html#l00362">vesaboot.cpp:362</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1processes_1_1GlobalScheduler_html_a4f462a1b05f9bf785a903bd0f3e495a0"><div class="ttname"><a href="classMaxOS_1_1processes_1_1GlobalScheduler.html#a4f462a1b05f9bf785a903bd0f3e495a0">MaxOS::processes::GlobalScheduler::print_running_header</a></div><div class="ttdeci">static void print_running_header()</div><div class="ttdoc">Print the header for the running processes in the form ({name}:t{tid}c{core})</div><div class="ttdef"><b>Definition</b> <a href="scheduler_8cpp_source.html#l00165">scheduler.cpp:165</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1system_1_1CPU_html_a0d33c5755fcbfd08c75ae68f3d62577a"><div class="ttname"><a href="classMaxOS_1_1system_1_1CPU.html#a0d33c5755fcbfd08c75ae68f3d62577a">MaxOS::system::CPU::PANIC</a></div><div class="ttdeci">static void PANIC(const char *message, cpu_status_t *status=nullptr)</div><div class="ttdoc">Puts the CPU into a panic state and halts it. Dumps the stack trace and registers.</div><div class="ttdef"><b>Definition</b> <a href="cpu_8cpp_source.html#l00436">cpu.cpp:436</a></div></div>
+<div class="ttc" id="acolour_8h_html_a3364e04f094e16c00bed0dafa17c4b1c"><div class="ttname"><a href="colour_8h.html#a3364e04f094e16c00bed0dafa17c4b1c">MaxOS::common::ANSI_COLOURS</a></div><div class="ttdeci">const char *const ANSI_COLOURS[]</div><div class="ttdoc">ANSI Colour Codes.</div><div class="ttdef"><b>Definition</b> <a href="colour_8h_source.html#l00020">colour.h:20</a></div></div>
+<div class="ttc" id="acpu_8h_html"><div class="ttname"><a href="cpu_8h.html">cpu.h</a></div><div class="ttdoc">Defines Central Processing Unit (CPU) structures and functions for managing CPU state and features.</div></div>
+<div class="ttc" id="alogger_8h_html"><div class="ttname"><a href="logger_8h.html">logger.h</a></div><div class="ttdoc">Defines a Logger class for logging messages with different severity levels to multiple output streams...</div></div>
+<div class="ttc" id="alogger_8h_html_a28ef57769ee0016c46a1426fe48e9523"><div class="ttname"><a href="logger_8h.html#a28ef57769ee0016c46a1426fe48e9523">MAX_LOG_WRITERS</a></div><div class="ttdeci">constexpr uint8_t MAX_LOG_WRITERS</div><div class="ttdoc">The maximum number of log writers that can be added to the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8h_source.html#l00032">logger.h:32</a></div></div>
+<div class="ttc" id="alogger_8h_html_a48d28a459e93f33fb3840a0d5e7a3b33"><div class="ttname"><a href="logger_8h.html#a48d28a459e93f33fb3840a0d5e7a3b33">MAX_LOG_LEVEL</a></div><div class="ttdeci">constexpr LogLevel MAX_LOG_LEVEL</div><div class="ttdoc">The maximum log level for this build (messages above this level will not be logged)</div><div class="ttdef"><b>Definition</b> <a href="logger_8h_source.html#l00033">logger.h:33</a></div></div>
+<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">LogLevel</a></div><div class="ttdeci">LogLevel</div><div class="ttdoc">Priority levels for logging messages. Different levels may be used to filter messages based on their ...</div><div class="ttdef"><b>Definition</b> <a href="logger_8h_source.html#l00022">logger.h:23</a></div></div>
+<div class="ttc" id="aphysical_8h_html_ab4d8d1259f524270d625ab8933700d27"><div class="ttname"><a href="physical_8h.html#ab4d8d1259f524270d625ab8933700d27">write</a></div><div class="ttdeci">bool write</div><div class="ttdoc">*copydoc PageFlags::WRITE</div><div class="ttdef"><b>Definition</b> <a href="physical_8h_source.html#l00001">physical.h:1</a></div></div>
+<div class="ttc" id="ascheduler_8h_html"><div class="ttname"><a href="scheduler_8h.html">scheduler.h</a></div><div class="ttdoc">Defines a GlobalScheduler and Scheduler for managing processes and threads.</div></div>
+<div class="ttc" id="avesaboot_8h_html"><div class="ttname"><a href="vesaboot_8h.html">vesaboot.h</a></div><div class="ttdoc">Defines the VESABootConsole driver for handling console output during boot using an VESA framebuffer.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

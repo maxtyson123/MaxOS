@@ -17,10 +17,7 @@ Inherits \fBMaxOS::common::Event< EthernetDriverEvents >\fP\&.
 .ti -1c
 .RI "\fBDataSentEvent\fP (\fBuint8_t\fP *\fBbuffer\fP, \fBuint32_t\fP \fBsize\fP)"
 .br
-.RI "__ EVENTS __ "
-.ti -1c
-.RI "\fB~DataSentEvent\fP ()"
-.br
+.RI "Construct a new Data Sent Event object\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::Event< EthernetDriverEvents >\fP
@@ -29,9 +26,6 @@ Public Member Functions inherited from \fBMaxOS::common::Event< EthernetDriverEv
 .RI "\fBEvent\fP (EthernetDriverEvents \fBtype\fP)"
 .br
 .RI "___________________________ Template Implementation ___________________________ "
-.ti -1c
-.RI "\fB~Event\fP ()"
-.br
 .in -1c
 .SS "Public Attributes"
 
@@ -39,9 +33,11 @@ Public Member Functions inherited from \fBMaxOS::common::Event< EthernetDriverEv
 .ti -1c
 .RI "uint8_t * \fBbuffer\fP"
 .br
+.RI "The buffer that was sent\&. "
 .ti -1c
 .RI "uint32_t \fBsize\fP"
 .br
+.RI "The size of the buffer that was sent\&. "
 .in -1c
 
 Public Attributes inherited from \fBMaxOS::common::Event< EthernetDriverEvents >\fP
@@ -78,40 +74,50 @@ Public Attributes inherited from \fBMaxOS::common::Event< EthernetDriverEvents >
 .PP 
 Event that is triggered when data is sent, holds the buffer and size of the data\&. 
 .PP
-Definition at line \fB43\fP of file \fBethernet\&.h\fP\&.
+Definition at line \fB51\fP of file \fBethernet\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "DataSentEvent::DataSentEvent (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)"
 
 .PP
-__ EVENTS __ 
+Construct a new Data Sent Event object\&. 
 .PP
-Definition at line \fB161\fP of file \fBethernet\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer that was sent 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+
+.PP
+Definition at line \fB169\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-162 : Event(EthernetDriverEvents::DATA_SENT)
-163 {
-164     this \-> buffer = buffer;
-165     this \-> size = size;
-166     this \-> size = size;
-167 }
+170         : Event(EthernetDriverEvents::DATA_SENT) {
+171     this\->buffer = buffer;
+172     this\->size = size;
+173     this\->size = size;
+174 }
 .fi
 
 .PP
 References \fBbuffer\fP, and \fBsize\fP\&.
-.SS "DataSentEvent::~DataSentEvent ()\fC [default]\fP"
-
 .SH "Member Data Documentation"
 .PP 
 .SS "uint8_t* MaxOS::drivers::ethernet::DataSentEvent::buffer"
 
 .PP
-Definition at line \fB45\fP of file \fBethernet\&.h\fP\&.
+The buffer that was sent\&. 
+.PP
+Definition at line \fB53\fP of file \fBethernet\&.h\fP\&.
 .PP
 Referenced by \fBDataSentEvent()\fP\&.
 .SS "uint32_t MaxOS::drivers::ethernet::DataSentEvent::size"
 
 .PP
-Definition at line \fB46\fP of file \fBethernet\&.h\fP\&.
+The size of the buffer that was sent\&. 
+.PP
+Definition at line \fB54\fP of file \fBethernet\&.h\fP\&.
 .PP
 Referenced by \fBDataSentEvent()\fP\&.
 

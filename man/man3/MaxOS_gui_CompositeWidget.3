@@ -17,14 +17,9 @@ Inherited by \fBMaxOS::gui::Desktop\fP, and \fBMaxOS::gui::Window\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBCompositeWidget\fP ()"
-.br
-.ti -1c
 .RI "\fBCompositeWidget\fP (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height)"
 .br
-.ti -1c
-.RI "\fB~CompositeWidget\fP ()"
-.br
+.RI "Construct a new Composite \fBWidget\fP object at a specific position and size\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBdraw\fP (\fBcommon::GraphicsContext\fP *\fBgc\fP, \fBcommon::Rectangle\fP< \fBint32_t\fP > &\fBarea\fP) \fBoverride\fP"
 .br
@@ -58,14 +53,9 @@ Inherited by \fBMaxOS::gui::Desktop\fP, and \fBMaxOS::gui::Window\fP\&.
 Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .in +1c
 .ti -1c
-.RI "\fBWidget\fP ()"
-.br
-.ti -1c
 .RI "\fBWidget\fP (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height)"
 .br
-.ti -1c
-.RI "\fB~Widget\fP ()"
-.br
+.RI "Construct a new \fBWidget\fP object at a specific position and size\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBinvalidate\fP ()"
 .br
@@ -77,6 +67,7 @@ Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .ti -1c
 .RI "\fBvirtual\fP \fBcommon::Coordinates\fP \fBabsolute_coordinates\fP (\fBcommon::Coordinates\fP \fBcoordinates\fP)"
 .br
+.RI "Get the absolute coordinates of the widget (relative to the screen) "
 .ti -1c
 .RI "\fBvirtual\fP \fBbool\fP \fBcontains_coordinate\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
 .br
@@ -114,13 +105,7 @@ Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 Public Member Functions inherited from \fBMaxOS::drivers::peripherals::KeyboardEventHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBKeyboardEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~KeyboardEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fBcommon::Event\fP< \fBKeyboardEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBKeyboardEvents\fP > *) \fBoverride\fP"
+.RI "\fBcommon::Event\fP< KeyboardEvents > * \fBon_event\fP (\fBcommon::Event\fP< KeyboardEvents > *) \fBoverride\fP"
 .br
 .RI "Handle the trigger of an event\&. "
 .ti -1c
@@ -135,12 +120,6 @@ Public Member Functions inherited from \fBMaxOS::drivers::peripherals::KeyboardE
 
 Public Member Functions inherited from \fBMaxOS::common::EventHandler< KeyboardEvents >\fP
 .in +1c
-.ti -1c
-.RI "\fBEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventHandler\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBEvent\fP< KeyboardEvents > * \fBon_event\fP (\fBEvent\fP< KeyboardEvents > *\fBevent\fP)"
 .br
@@ -176,49 +155,71 @@ Protected Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBWidget\fP * > \fBm_children\fP"
 .br
+.RI "Widgets contained within this composite widget\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::gui::Widget\fP
 .in +1c
 .ti -1c
+.RI "\fBcommon::Rectangle\fP< int32_t > \fBm_position\fP"
+.br
+.RI "The position and size of the widget (relative to its parent) "
+.ti -1c
 .RI "\fBWidget\fP * \fBm_parent\fP { nullptr }"
 .br
+.RI "The widget that owns this widget\&. "
 .ti -1c
 .RI "bool \fBm_valid\fP { false }"
 .br
+.RI "Is the widget drawn to the screen and up to date\&. "
 .ti -1c
 .RI "uint32_t \fBm_min_width\fP { 5 }"
 .br
+.RI "The smallest m_width the widget can be resized to\&. "
 .ti -1c
 .RI "uint32_t \fBm_min_height\fP { 5 }"
 .br
+.RI "The smallest m_height the widget can be resized to\&. "
 .ti -1c
 .RI "uint32_t \fBm_max_width\fP { 0x8FFFFFFF }"
 .br
+.RI "The largest m_width the widget can be resized to\&. "
 .ti -1c
 .RI "uint32_t \fBm_max_height\fP { 0x8FFFFFFF }"
 .br
+.RI "The largest m_height the widget can be resized to\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 A widget that can contain other widgets\&. 
 .PP
-Definition at line \fB84\fP of file \fBwidget\&.h\fP\&.
+Definition at line \fB87\fP of file \fBwidget\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "CompositeWidget::CompositeWidget ()\fC [default]\fP"
-
 .SS "CompositeWidget::CompositeWidget (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height)"
 
 .PP
-Definition at line \fB291\fP of file \fBwidget\&.cpp\fP\&..PP
-.nf
-292         : Widget(left, top, width, height) {
-293 
-294 }
-.fi
+Construct a new Composite \fBWidget\fP object at a specific position and size\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIleft\fP The left position of the widget relative to its parent 
+.br
+\fItop\fP The top position of the widget relative to its parent 
+.br
+\fIwidth\fP How many pixels wide the widget is 
+.br
+\fIheight\fP How many pixels tall the widget is 
+.RE
+.PP
 
-.SS "CompositeWidget::~CompositeWidget ()\fC [default]\fP"
+.PP
+Definition at line \fB320\fP of file \fBwidget\&.cpp\fP\&..PP
+.nf
+321 : Widget(left, top, width, height) {
+322 
+323 }
+.fi
 
 .SH "Member Function Documentation"
 .PP 
@@ -238,14 +239,14 @@ Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
 Reimplemented in \fBMaxOS::gui::Desktop\fP, and \fBMaxOS::gui::Window\fP\&.
 .PP
-Definition at line \fB372\fP of file \fBwidget\&.cpp\fP\&..PP
+Definition at line \fB401\fP of file \fBwidget\&.cpp\fP\&..PP
 .nf
-372                                              {
-373 
-374     // Store the child and parent the child to this widget
-375     m_children\&.push_back(child);
-376     Widget::add_child(child);
-377 }
+401                                              {
+402 
+403     // Store the child and parent the child to this widget
+404     m_children\&.push_back(child);
+405     Widget::add_child(child);
+406 }
 .fi
 
 .PP
@@ -268,13 +269,13 @@ Draws a section of the widget and its m_children\&.
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line \fB304\fP of file \fBwidget\&.cpp\fP\&..PP
+Definition at line \fB333\fP of file \fBwidget\&.cpp\fP\&..PP
 .nf
-304                                                                         {
-305 
-306     // Draw the widget with its m_children
-307     draw(gc, area, m_children\&.begin());
-308 }
+333                                                                         {
+334 
+335     // Draw the widget with its m_children
+336     draw(gc, area, m_children\&.begin());
+337 }
 .fi
 
 .PP
@@ -295,47 +296,47 @@ Draws a section of the widget and the m_children after a specific child\&.
 .PP
 
 .PP
-Definition at line \fB317\fP of file \fBwidget\&.cpp\fP\&..PP
+Definition at line \fB346\fP of file \fBwidget\&.cpp\fP\&..PP
 .nf
-317                                                                                                        {
-318 
-319     // Draw the widget
-320     Widget::draw(gc, area);
-321 
-322     // Get the area of the widget
-323     Rectangle<int32_t> own_area = position();
-324 
-325     //Note: has to use iterator as the start is not necessarily the m_first_memory_chunk child
-326     for (Vector<Widget*>::iterator child_widget = start; child_widget != m_children\&.end(); child_widget++) {
-327 
-328         Rectangle<int32_t> child_area = (*child_widget)\->position();
-329 
-330         // Check if the child is in the area that needs to be redrawn
-331         if (area\&.intersects(child_area)) {
-332 
-333             // Get the area that needs to be redrawn
-334             Rectangle<int32_t> rectangle = area\&.intersection(child_area);
-335 
-336             // Translate the area so that it is relative to the child
-337             rectangle\&.left \-= child_area\&.left;
-338             rectangle\&.top \-= child_area\&.top;
-339 
-340             // Draw the child
-341             (*child_widget)\->draw(gc, rectangle);
-342 
-343             // Draw what is left of the area that needs to be redrawn
-344             Vector<Rectangle<int32_t>> rest_draw_area = area\&.subtract(child_area);
-345             for (auto& rest_area_part: rest_draw_area)
-346                 draw(gc, rest_area_part, child_widget + 1);
+346                                                                                                        {
 347 
-348             // Return as the entire area has now been drawn
-349             return;
-350         }
-351     }
-352 
-353     // Now draw the widget itself
-354     draw_self(gc, area);
-355 }
+348     // Draw the widget
+349     Widget::draw(gc, area);
+350 
+351     // Get the area of the widget
+352     Rectangle<int32_t> own_area = position();
+353 
+354     //Note: has to use iterator as the start is not necessarily the m_first_memory_chunk child
+355     for (Vector<Widget*>::iterator child_widget = start; child_widget != m_children\&.end(); child_widget++) {
+356 
+357         Rectangle<int32_t> child_area = (*child_widget)\->position();
+358 
+359         // Check if the child is in the area that needs to be redrawn
+360         if (area\&.intersects(child_area)) {
+361 
+362             // Get the area that needs to be redrawn
+363             Rectangle<int32_t> rectangle = area\&.intersection(child_area);
+364 
+365             // Translate the area so that it is relative to the child
+366             rectangle\&.left \-= child_area\&.left;
+367             rectangle\&.top \-= child_area\&.top;
+368 
+369             // Draw the child
+370             (*child_widget)\->draw(gc, rectangle);
+371 
+372             // Draw what is left of the area that needs to be redrawn
+373             Vector<Rectangle<int32_t>> rest_draw_area = area\&.subtract(child_area);
+374             for (auto& rest_area_part: rest_draw_area)
+375                 draw(gc, rest_area_part, child_widget + 1);
+376 
+377             // Return as the entire area has now been drawn
+378             return;
+379         }
+380     }
+381 
+382     // Now draw the widget itself
+383     draw_self(gc, area);
+384 }
 .fi
 
 .PP
@@ -358,11 +359,11 @@ Draws the widget itself (should be overridden by the derived class)
 .PP
 Reimplemented in \fBMaxOS::gui::Desktop\fP, and \fBMaxOS::gui::Window\fP\&.
 .PP
-Definition at line \fB363\fP of file \fBwidget\&.cpp\fP\&..PP
+Definition at line \fB392\fP of file \fBwidget\&.cpp\fP\&..PP
 .nf
-363                                                                                  {
-364 
-365 }
+392                                                                                  {
+393 
+394 }
 .fi
 
 .PP
@@ -392,28 +393,28 @@ Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
 Reimplemented in \fBMaxOS::gui::Window\fP\&.
 .PP
-Definition at line \fB489\fP of file \fBwidget\&.cpp\fP\&..PP
+Definition at line \fB518\fP of file \fBwidget\&.cpp\fP\&..PP
 .nf
-489                                                                                                              {
-490 
-491     MouseEventHandler* mouse_event_handler = nullptr;
-492 
-493     for (auto& child_widget: m_children) {
-494 
-495         // Pass the event to the child
-496         if (child_widget\->contains_coordinate(x, y)) {
-497             mouse_event_handler = child_widget\->on_mouse_button_pressed(x \- child_widget\->m_position\&.left,
-498                                                                         y \- child_widget\->m_position\&.top, button);
-499             break;
-500         }
-501     }
-502 
-503     return mouse_event_handler;
-504 }
+518                                                                                                              {
+519 
+520     MouseEventHandler* mouse_event_handler = nullptr;
+521 
+522     for (auto& child_widget: m_children) {
+523 
+524         // Pass the event to the child
+525         if (child_widget\->contains_coordinate(x, y)) {
+526             mouse_event_handler = child_widget\->on_mouse_button_pressed(x \- child_widget\->m_position\&.left,
+527                                                                         y \- child_widget\->m_position\&.top, button);
+528             break;
+529         }
+530     }
+531 
+532     return mouse_event_handler;
+533 }
 .fi
 
 .PP
-References \fBMaxOS::common::Rectangle< Type >::left\fP, \fBm_children\fP, \fBMaxOS::common::Rectangle< Type >::top\fP, \fBMaxOS::drivers::peripherals::x\fP, and \fBMaxOS::drivers::peripherals::y\fP\&.
+References \fBMaxOS::common::Rectangle< Type >::left\fP, \fBm_children\fP, and \fBMaxOS::common::Rectangle< Type >::top\fP\&.
 .PP
 Referenced by \fBMaxOS::gui::Window::on_mouse_button_pressed()\fP, and \fBMaxOS::gui::Desktop::on_mouse_down_event()\fP\&.
 .SS "\fBvoid\fP CompositeWidget::on_mouse_button_released (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint8_t\fP button)\fC [override]\fP, \fC [virtual]\fP"
@@ -434,25 +435,25 @@ Passes the event to the child that the mouse is over\&. (Event handling should b
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line \fB513\fP of file \fBwidget\&.cpp\fP\&..PP
+Definition at line \fB542\fP of file \fBwidget\&.cpp\fP\&..PP
 .nf
-513                                                                                      {
-514 
-515     // Loop through the m_children
-516     for (auto& child_widget: m_children) {
-517 
-518         // Pass the event to the child
-519         if (child_widget\->contains_coordinate(x, y)) {
-520             child_widget\->on_mouse_button_released(x \- child_widget\->m_position\&.left, y \- child_widget\->m_position\&.top,
-521                                                    button);
-522             break;
-523         }
-524     }
-525 }
+542                                                                                      {
+543 
+544     // Loop through the m_children
+545     for (auto& child_widget: m_children) {
+546 
+547         // Pass the event to the child
+548         if (child_widget\->contains_coordinate(x, y)) {
+549             child_widget\->on_mouse_button_released(x \- child_widget\->m_position\&.left, y \- child_widget\->m_position\&.top,
+550                                                    button);
+551             break;
+552         }
+553     }
+554 }
 .fi
 
 .PP
-References \fBMaxOS::common::Rectangle< Type >::left\fP, \fBm_children\fP, \fBMaxOS::common::Rectangle< Type >::top\fP, \fBMaxOS::drivers::peripherals::x\fP, and \fBMaxOS::drivers::peripherals::y\fP\&.
+References \fBMaxOS::common::Rectangle< Type >::left\fP, \fBm_children\fP, and \fBMaxOS::common::Rectangle< Type >::top\fP\&.
 .PP
 Referenced by \fBMaxOS::gui::Desktop::on_mouse_up_event()\fP\&.
 .SS "\fBvoid\fP CompositeWidget::on_mouse_enter_widget (\fBuint32_t\fP toX, \fBuint32_t\fP toY)\fC [override]\fP, \fC [virtual]\fP"
@@ -471,28 +472,28 @@ Passes the event to the child that the mouse is over\&. (Event handling should b
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line \fB385\fP of file \fBwidget\&.cpp\fP\&..PP
+Definition at line \fB414\fP of file \fBwidget\&.cpp\fP\&..PP
 .nf
-385                                                                       {
-386 
-387     for (auto& child_widget: m_children) {
-388 
-389         // Check if the mouse is in the child
-390         Rectangle<int32_t> child_area = child_widget\->position();
-391         if (child_area\&.contains(toX, toY)) {
-392 
-393             // Get the position of the mouse relative to the child
-394             uint32_t child_x = toX \- child_area\&.left;
-395             uint32_t child_y = toY \- child_area\&.top;
-396 
-397             // Call the child's on_mouse_enter_widget function
-398             child_widget\->on_mouse_enter_widget(child_x, child_y);
-399 
-400             // Break as the event has been handled
-401             break;
-402         }
-403     }
-404 }
+414                                                                       {
+415 
+416     for (auto& child_widget: m_children) {
+417 
+418         // Check if the mouse is in the child
+419         Rectangle<int32_t> child_area = child_widget\->position();
+420         if (child_area\&.contains(toX, toY)) {
+421 
+422             // Get the position of the mouse relative to the child
+423             uint32_t child_x = toX \- child_area\&.left;
+424             uint32_t child_y = toY \- child_area\&.top;
+425 
+426             // Call the child's on_mouse_enter_widget function
+427             child_widget\->on_mouse_enter_widget(child_x, child_y);
+428 
+429             // Break as the event has been handled
+430             break;
+431         }
+432     }
+433 }
 .fi
 
 .PP
@@ -515,28 +516,28 @@ Passes the event to the child that the mouse is over\&. (Event handling should b
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line \fB412\fP of file \fBwidget\&.cpp\fP\&..PP
+Definition at line \fB441\fP of file \fBwidget\&.cpp\fP\&..PP
 .nf
-412                                                                           {
-413 
-414     for (auto& child_widget: m_children) {
-415 
-416         // Check if the mouse is in the child
-417         Rectangle<int32_t> child_area = child_widget\->position();
-418         if (child_area\&.contains(fromX, fromY)) {
-419 
-420             // Get the position of the mouse relative to the child
-421             uint32_t child_x = fromX \- child_area\&.left;
-422             uint32_t child_y = fromY \- child_area\&.top;
-423 
-424             // Call the child's on_mouse_leave_widget function
-425             child_widget\->on_mouse_leave_widget(child_x, child_y);
-426 
-427             // Event has been handled
-428             break;
-429         }
-430     }
-431 }
+441                                                                           {
+442 
+443     for (auto& child_widget: m_children) {
+444 
+445         // Check if the mouse is in the child
+446         Rectangle<int32_t> child_area = child_widget\->position();
+447         if (child_area\&.contains(fromX, fromY)) {
+448 
+449             // Get the position of the mouse relative to the child
+450             uint32_t child_x = fromX \- child_area\&.left;
+451             uint32_t child_y = fromY \- child_area\&.top;
+452 
+453             // Call the child's on_mouse_leave_widget function
+454             child_widget\->on_mouse_leave_widget(child_x, child_y);
+455 
+456             // Event has been handled
+457             break;
+458         }
+459     }
+460 }
 .fi
 
 .PP
@@ -563,47 +564,47 @@ Passes the event to the child that the mouse is over, also generates a leave/ent
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line \fB441\fP of file \fBwidget\&.cpp\fP\&..PP
+Definition at line \fB470\fP of file \fBwidget\&.cpp\fP\&..PP
 .nf
-441                                                                                                      {
-442 
-443     Widget* left_child = nullptr;
-444     Widget* entered_child = nullptr;
-445 
-446     for (auto& child_widget: m_children) {
-447 
-448         // Check if the mouse is in the child
-449         Rectangle<int32_t> child_area = child_widget\->position();
-450         bool mouse_in_from = child_area\&.contains(fromX, fromY);
-451         bool mouse_in_to = child_area\&.contains(toX, toY);
-452 
-453         // If the mouse started in the child
-454         if (mouse_in_from) {
-455 
-456             // The mouse moved out of the child
-457             if (!mouse_in_to) {
-458                 left_child = child_widget;
-459                 continue;
-460             }
-461 
-462             // Mouse still in the child
-463             child_widget\->on_mouse_move_widget(fromX, fromY, toX, toY);
-464 
-465         } else {
-466 
-467             // Mouse moved into the child
-468             if (mouse_in_to)
-469                 entered_child = child_widget;
-470         }
+470                                                                                                      {
 471 
-472         // Pass the events to the child
-473         if (left_child != nullptr)
-474             left_child\->on_mouse_leave_widget(fromX, fromY);
-475 
-476         if (entered_child != nullptr)
-477             entered_child\->on_mouse_enter_widget(toX, toY);
-478     }
-479 }
+472     Widget* left_child = nullptr;
+473     Widget* entered_child = nullptr;
+474 
+475     for (auto& child_widget: m_children) {
+476 
+477         // Check if the mouse is in the child
+478         Rectangle<int32_t> child_area = child_widget\->position();
+479         bool mouse_in_from = child_area\&.contains(fromX, fromY);
+480         bool mouse_in_to = child_area\&.contains(toX, toY);
+481 
+482         // If the mouse started in the child
+483         if (mouse_in_from) {
+484 
+485             // The mouse moved out of the child
+486             if (!mouse_in_to) {
+487                 left_child = child_widget;
+488                 continue;
+489             }
+490 
+491             // Mouse still in the child
+492             child_widget\->on_mouse_move_widget(fromX, fromY, toX, toY);
+493 
+494         } else {
+495 
+496             // Mouse moved into the child
+497             if (mouse_in_to)
+498                 entered_child = child_widget;
+499         }
+500 
+501         // Pass the events to the child
+502         if (left_child != nullptr)
+503             left_child\->on_mouse_leave_widget(fromX, fromY);
+504 
+505         if (entered_child != nullptr)
+506             entered_child\->on_mouse_enter_widget(toX, toY);
+507     }
+508 }
 .fi
 
 .PP
@@ -615,7 +616,9 @@ Referenced by \fBMaxOS::gui::Desktop::on_mouse_move_event()\fP\&.
 .SS "\fBcommon::Vector\fP<\fBWidget\fP*> MaxOS::gui::CompositeWidget::m_children\fC [protected]\fP"
 
 .PP
-Definition at line \fB88\fP of file \fBwidget\&.h\fP\&.
+Widgets contained within this composite widget\&. 
+.PP
+Definition at line \fB91\fP of file \fBwidget\&.h\fP\&.
 .PP
 Referenced by \fBadd_child()\fP, \fBMaxOS::gui::Desktop::bring_to_front()\fP, \fBdraw()\fP, \fBdraw()\fP, \fBon_mouse_button_pressed()\fP, \fBon_mouse_button_released()\fP, \fBon_mouse_enter_widget()\fP, \fBon_mouse_leave_widget()\fP, and \fBon_mouse_move_widget()\fP\&.
 

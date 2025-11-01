@@ -2,31 +2,21 @@
 \hypertarget{classMaxOS_1_1processes_1_1Scheduler}{}\label{classMaxOS_1_1processes_1_1Scheduler}\index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
 
 
-Schedules processes to run on the CPU via their threads.  
+Schedules processes to run on the core via their threads.  
 
 
 
 
 {\ttfamily \#include $<$scheduler.\+h$>$}
 
-Inheritance diagram for Max\+OS\+::processes\+::Scheduler\+:\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[height=2.000000cm]{classMaxOS_1_1processes_1_1Scheduler}
-\end{center}
-\end{figure}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a7a2f7908835cfe127ad167734f0674a3}{Scheduler}} (\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} \&multiboot)
-\item 
-\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_afc8187779b46f64039d3ffa58f0dbe51}{\texorpdfstring{$\sim$}{\string~}\+Scheduler}} ()
-\item 
-system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a5d9c7ddda5adeedff09093b7492101f8}{handle\+\_\+interrupt}} (system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}}) final
-\begin{DoxyCompactList}\small\item\em Handles the interrupt 0x20. \end{DoxyCompactList}\item 
-system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_aecc29abbf74f6f611762c4298d5c3a1d}{schedule}} (system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}})
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3b61aac11466cd45ae42ab8c2b0013f6}{Scheduler}} ()
+\begin{DoxyCompactList}\small\item\em Constructs a new \doxylink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler} object and creates the idle process. \end{DoxyCompactList}\item 
+system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c82e3f0b71fd6e7d570594ea7be397}{schedule}} (system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}cpu\+\_\+state)
 \begin{DoxyCompactList}\small\item\em Schedules the next thread to run. \end{DoxyCompactList}\item 
-system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\+\_\+next}} (system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}})
+system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\+\_\+next}} (system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}status)
 \begin{DoxyCompactList}\small\item\em Schedules the next thread to run. \end{DoxyCompactList}\item 
 system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4e3cb6c6cc95d62dc6149c0ec934c723}{yield}} ()
 \begin{DoxyCompactList}\small\item\em Pass execution to the next thread. \end{DoxyCompactList}\item 
@@ -38,116 +28,67 @@ system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cla
 \begin{DoxyCompactList}\small\item\em Removes a process from the scheduler and deletes all threads, begins running the next process. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{add\+\_\+thread}} (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} \texorpdfstring{$\ast$}{*}thread)
 \begin{DoxyCompactList}\small\item\em Adds a thread to the scheduler. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\+\_\+process}} ()
+\begin{DoxyCompactList}\small\item\em Gets the current process. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a51b58af8b283f0f98131dd2d6ce51540}{get\+\_\+process}} (uint64\+\_\+t pid)
+\begin{DoxyCompactList}\small\item\em Gets a process by its PID. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}{process\+\_\+amount}} ()
+\begin{DoxyCompactList}\small\item\em Gets how processes are running on this scheduler. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\+\_\+thread}} ()
+\begin{DoxyCompactList}\small\item\em Gets the currently executing thread. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a73cf68e70de225ce465f249989766468}{get\+\_\+thread}} (uint64\+\_\+t tid)
+\begin{DoxyCompactList}\small\item\em Gets a thread by its TID. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}{thread\+\_\+amount}} ()
+\begin{DoxyCompactList}\small\item\em Gets how many threads are running on this scheduler. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a349f28166719d94bd978439f24cd2448}{ticks}} () const
 \begin{DoxyCompactList}\small\item\em Gets how long the system has been running for. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ad7bd11e0611b0cad2fc18e3499d82dec}{activate}} ()
 \begin{DoxyCompactList}\small\item\em Activates the scheduler. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af4792bed046b34d0010412e336ec2970}{deactivate}} ()
 \begin{DoxyCompactList}\small\item\em Deactivates the scheduler. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Handler}}}
-\begin{DoxyCompactItemize}
-\item 
-\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{handle\+\_\+interrupt}} ()
-\begin{DoxyCompactList}\small\item\em Handles an interrupt. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Static Public Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-static \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af1bf088153c111f0a4d9411b28471739}{system\+\_\+scheduler}} ()
-\begin{DoxyCompactList}\small\item\em Gets the system scheduler. \end{DoxyCompactList}\item 
-static \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\+\_\+process}} ()
-\begin{DoxyCompactList}\small\item\em Gets the current process. \end{DoxyCompactList}\item 
-static \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a51b58af8b283f0f98131dd2d6ce51540}{get\+\_\+process}} (uint64\+\_\+t pid)
-\begin{DoxyCompactList}\small\item\em Gets a process by its PID. \end{DoxyCompactList}\item 
-static \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\+\_\+thread}} ()
-\begin{DoxyCompactList}\small\item\em Gets the currently executing thread. \end{DoxyCompactList}\item 
-static \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a73cf68e70de225ce465f249989766468}{get\+\_\+thread}} (uint64\+\_\+t tid)
-\begin{DoxyCompactList}\small\item\em Gets a thread by its TID. \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a8273f5b5d5dbfd7fbd10480c32db9ad4}{load\+\_\+multiboot\+\_\+elfs}} (\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} \texorpdfstring{$\ast$}{*}multiboot)
-\begin{DoxyCompactList}\small\item\em Loads any valid ELF files from the multiboot structure. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Additional Inherited Members}
-\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Handler}}}
-\begin{DoxyCompactItemize}
-\item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a79b1054c04bbcc2c72a6d6938212909c}{Interrupt\+Handler}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\+\_\+t}} interrupt\+\_\+number, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{int64\+\_\+t}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect}}=-\/1, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\+\_\+t}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect\+\_\+index}}=0)
-\item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a12b87c89015a61b702184070354e7876}{\texorpdfstring{$\sim$}{\string~}\+Interrupt\+Handler}} ()
-\end{DoxyCompactItemize}
-\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Handler}}}
-\begin{DoxyCompactItemize}
-\item 
-uint8\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\+\_\+interrupt\+\_\+number}}
-\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-Schedules processes to run on the CPU via their threads. 
+Schedules processes to run on the core via their threads. 
 
-Definition at line \mbox{\hyperlink{scheduler_8h_source_l00023}{23}} of file \mbox{\hyperlink{scheduler_8h_source}{scheduler.\+h}}.
+Definition at line \mbox{\hyperlink{scheduler_8h_source_l00085}{85}} of file \mbox{\hyperlink{scheduler_8h_source}{scheduler.\+h}}.
 
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a7a2f7908835cfe127ad167734f0674a3}\label{classMaxOS_1_1processes_1_1Scheduler_a7a2f7908835cfe127ad167734f0674a3} 
+\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a3b61aac11466cd45ae42ab8c2b0013f6}\label{classMaxOS_1_1processes_1_1Scheduler_a3b61aac11466cd45ae42ab8c2b0013f6} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!Scheduler@{Scheduler}}
 \index{Scheduler@{Scheduler}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
 \doxysubsubsection{\texorpdfstring{Scheduler()}{Scheduler()}}
-{\footnotesize\ttfamily Scheduler\+::\+Scheduler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} \&}]{multiboot }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily Scheduler\+::\+Scheduler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00014}{14}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Constructs a new \doxylink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler} object and creates the idle process. 
+
+
+
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00362}{362}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00015\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{InterruptHandler}}(0x20),}
-\DoxyCodeLine{00016\ \ \ m\_current\_thread\_index(0),}
-\DoxyCodeLine{00017\ \ \ m\_active(\textcolor{keyword}{false}),}
-\DoxyCodeLine{00018\ \ \ m\_ticks(0),}
-\DoxyCodeLine{00019\ \ \ m\_next\_pid(-\/1),}
-\DoxyCodeLine{00020\ \ \ m\_next\_tid(-\/1),}
-\DoxyCodeLine{00021\ \ \ m\_shared\_memory\_registry(resource\_type\_t::SHARED\_MEMORY),}
-\DoxyCodeLine{00022\ \ \ m\_shared\_messages\_registry(resource\_type\_t::MESSAGE\_ENDPOINT)}
-\DoxyCodeLine{00023\ \{}
-\DoxyCodeLine{00024\ }
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//\ Set\ up\ the\ basic\ scheduler}}
-\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classLogger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ Scheduler\ \(\backslash\)n"{}};}
-\DoxyCodeLine{00027\ \ \ \ \ s\_instance\ =\ \textcolor{keyword}{this};}
-\DoxyCodeLine{00028\ }
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ idle\ process}}
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{auto}*\ idle\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(\textcolor{stringliteral}{"{}kernelMain\ Idle"{}},\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr},\ 0,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00031\ \ \ \ \ idle-\/>memory\_manager\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{MemoryManager::s\_kernel\_memory\_manager}};}
-\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{add\_process}}(idle);}
-\DoxyCodeLine{00033\ \ \ \ \ idle-\/>set\_pid(0);}
-\DoxyCodeLine{00034\ }
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ elfs}}
-\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a8273f5b5d5dbfd7fbd10480c32db9ad4}{load\_multiboot\_elfs}}(\&multiboot);}
-\DoxyCodeLine{00037\ \}}
+\DoxyCodeLine{00363\ :\ m\_next\_thread\_index(0),}
+\DoxyCodeLine{00364\ \ \ m\_active(\textcolor{keyword}{false}),}
+\DoxyCodeLine{00365\ \ \ m\_ticks(0)}
+\DoxyCodeLine{00366\ \{}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \ \ \ \ \textcolor{comment}{//\ Create\ this\ idle\ process}}
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{keyword}{auto}*\ idle\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(\textcolor{stringliteral}{"{}Idle"{}},\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr},\ 0,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00370\ \ \ \ \ idle-\/>memory\_manager\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{MemoryManager::s\_kernel\_memory\_manager}};}
+\DoxyCodeLine{00371\ \ \ \ \ idle-\/>set\_pid(0);}
+\DoxyCodeLine{00372\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{add\_process}}(idle);}
+\DoxyCodeLine{00373\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{scheduler_8cpp_source_l00161}{add\+\_\+process()}}, \mbox{\hyperlink{logger_8cpp_source_l00157}{Logger\+::\+INFO()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00368}{load\+\_\+multiboot\+\_\+elfs()}}, and \mbox{\hyperlink{memorymanagement_8h_source_l00047}{Max\+OS\+::memory\+::\+Memory\+Manager\+::s\+\_\+kernel\+\_\+memory\+\_\+manager}}.
+References \mbox{\hyperlink{scheduler_8cpp_source_l00502}{add\+\_\+process()}}, and \mbox{\hyperlink{memorymanagement_8h_source_l00053}{Max\+OS\+::memory\+::\+Memory\+Manager\+::s\+\_\+kernel\+\_\+memory\+\_\+manager}}.
 
-\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_afc8187779b46f64039d3ffa58f0dbe51}\label{classMaxOS_1_1processes_1_1Scheduler_afc8187779b46f64039d3ffa58f0dbe51} 
-\index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!````~Scheduler@{\texorpdfstring{$\sim$}{\string~}Scheduler}}
-\index{````~Scheduler@{\texorpdfstring{$\sim$}{\string~}Scheduler}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
-\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Scheduler()}{\string~Scheduler()}}
-{\footnotesize\ttfamily Scheduler\+::\texorpdfstring{$\sim$}{\string~}\+Scheduler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00039}{39}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00040\ }
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{//\ Deactivate\ this\ scheduler}}
-\DoxyCodeLine{00042\ \ \ \ \ s\_instance\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00043\ \ \ \ \ m\_active\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00044\ \}}
-
-\end{DoxyCode}
 
 
 \doxysubsection{Member Function Documentation}
@@ -163,14 +104,14 @@ Activates the scheduler.
 
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00234}{234}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00568}{568}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00235\ }
-\DoxyCodeLine{00236\ \ \ \ \ m\_active\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00237\ \}}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00569\ }
+\DoxyCodeLine{00570\ \ \ \ \ m\_active\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00571\ \}}
 
 \end{DoxyCode}
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}\label{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0} 
@@ -189,35 +130,38 @@ Adds a process to the scheduler.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-The process ID 
+The process ID (will be assigned during add) 
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00161}{161}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00502}{502}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00162\ }
-\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ process\ ID}}
-\DoxyCodeLine{00164\ \ \ \ \ m\_next\_pid++;}
-\DoxyCodeLine{00165\ }
-\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ process\ to\ the\ list}}
-\DoxyCodeLine{00167\ \ \ \ \ m\_processes.push\_back(process);}
-\DoxyCodeLine{00168\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Adding\ process\ "{}}\ <<\ m\_next\_pid\ <<\ \textcolor{stringliteral}{"{}:\ "{}}\ <<\ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{00169\ }
-\DoxyCodeLine{00170\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ process\ ID}}
-\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_next\_pid;}
-\DoxyCodeLine{00172\ \}}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00503\ }
+\DoxyCodeLine{00504\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ process\ ID}}
+\DoxyCodeLine{00505\ \ \ \ \ \textcolor{keyword}{auto}\ pid\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a06e979b83c4cd3db3eed8b333188d037}{GlobalScheduler::next\_pid}}();}
+\DoxyCodeLine{00506\ \ \ \ \ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_ad8173b9cedf33f4f14536985edc5a509}{set\_pid}}(pid);}
+\DoxyCodeLine{00507\ }
+\DoxyCodeLine{00508\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ process\ to\ the\ list}}
+\DoxyCodeLine{00509\ \ \ \ \ m\_processes.push\_back(process);}
+\DoxyCodeLine{00510\ }
+\DoxyCodeLine{00511\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ threads\ to\ the\ list}}
+\DoxyCodeLine{00512\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ thread\ :\ process-\/>threads())}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ thread-\/>tid\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{add\_thread}}(thread);}
+\DoxyCodeLine{00514\ }
+\DoxyCodeLine{00515\ \ \ \ \ \textcolor{keywordflow}{return}\ pid;}
+\DoxyCodeLine{00516\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8cpp_source_l00168}{Logger\+::\+DEBUG()}}, and \mbox{\hyperlink{process_8h_source_l00102}{Max\+OS\+::processes\+::\+Process\+::name}}.
+References \mbox{\hyperlink{scheduler_8cpp_source_l00524}{add\+\_\+thread()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00304}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::next\+\_\+pid()}}, \mbox{\hyperlink{process_8cpp_source_l00291}{Max\+OS\+::processes\+::\+Process\+::set\+\_\+pid()}}, \mbox{\hyperlink{process_8cpp_source_l00309}{Max\+OS\+::processes\+::\+Process\+::threads()}}, and \mbox{\hyperlink{process_8h_source_l00062}{Max\+OS\+::processes\+::\+Thread\+::tid}}.
 
 
 
-Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00014}{Scheduler()}}.
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00183}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::add\+\_\+process()}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00362}{Scheduler()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}\label{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!add\_thread@{add\_thread}}
@@ -239,33 +183,37 @@ The thread ID
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00180}{180}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00524}{524}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00181\ }
-\DoxyCodeLine{00182\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ thread\ ID}}
-\DoxyCodeLine{00183\ \ \ \ \ m\_next\_tid++;}
-\DoxyCodeLine{00184\ }
-\DoxyCodeLine{00185\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ thread\ to\ the\ list}}
-\DoxyCodeLine{00186\ \ \ \ \ m\_threads.push\_back(thread);}
-\DoxyCodeLine{00187\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Adding\ thread\ "{}}\ <<\ m\_next\_tid\ <<\ \textcolor{stringliteral}{"{}\ to\ process\ "{}}\ <<\ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a130e3726d7c4912ab2fdf6bf587f757f}{parent\_pid}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{00188\ }
-\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ thread\ ID}}
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_next\_tid;}
-\DoxyCodeLine{00191\ \}}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00525\ }
+\DoxyCodeLine{00526\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ thread\ ID}}
+\DoxyCodeLine{00527\ \ \ \ \ \textcolor{keyword}{auto}\ tid\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a6197a324f9a16fdf1b3990df4eb7ddd3}{GlobalScheduler::next\_tid}}();}
+\DoxyCodeLine{00528\ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}}\ =\ tid;}
+\DoxyCodeLine{00529\ }
+\DoxyCodeLine{00530\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ thread\ to\ the\ list}}
+\DoxyCodeLine{00531\ \ \ \ \ m\_threads.push\_back(thread);}
+\DoxyCodeLine{00532\ }
+\DoxyCodeLine{00533\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ thread\ ID}}
+\DoxyCodeLine{00534\ \ \ \ \ \textcolor{keywordflow}{return}\ tid;}
+\DoxyCodeLine{00535\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8cpp_source_l00168}{Logger\+::\+DEBUG()}}, and \mbox{\hyperlink{process_8h_source_l00060}{Max\+OS\+::processes\+::\+Thread\+::parent\+\_\+pid}}.
+References \mbox{\hyperlink{scheduler_8cpp_source_l00337}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::next\+\_\+tid()}}, and \mbox{\hyperlink{process_8h_source_l00062}{Max\+OS\+::processes\+::\+Thread\+::tid}}.
+
+
+
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00502}{add\+\_\+process()}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00214}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::add\+\_\+thread()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}\label{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!current\_process@{current\_process}}
 \index{current\_process@{current\_process}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
 \doxysubsubsection{\texorpdfstring{current\_process()}{current\_process()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} \texorpdfstring{$\ast$}{*} Scheduler\+::current\+\_\+process (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} \texorpdfstring{$\ast$}{*} Scheduler\+::current\+\_\+process (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
@@ -276,42 +224,38 @@ The current process, or nullptr if not found
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00309}{309}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00642}{642}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00310\ }
-\DoxyCodeLine{00311\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00312\ }
-\DoxyCodeLine{00313\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ something\ with\ process\ attached}}
-\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keywordflow}{if}\ (!s\_instance)}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00316\ }
-\DoxyCodeLine{00317\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ process\ that\ has\ the\ thread\ being\ executed}}
-\DoxyCodeLine{00318\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ process:\ s\_instance-\/>m\_processes)}
-\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ if\ (process-\/>pid()\ ==\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>parent\_pid)\ \{}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}\ =\ process;}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00323\ }
-\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}};}
-\DoxyCodeLine{00325\ \}}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00643\ }
+\DoxyCodeLine{00644\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00645\ }
+\DoxyCodeLine{00646\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ process\ that\ has\ the\ thread\ being\ executed}}
+\DoxyCodeLine{00647\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ process:\ m\_processes)}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ if\ (process-\/>pid()\ ==\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>parent\_pid)\ \{}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}\ =\ process;}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00652\ }
+\DoxyCodeLine{00653\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}};}
+\DoxyCodeLine{00654\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{scheduler_8cpp_source_l00309}{current\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00350}{current\+\_\+thread()}}, and \mbox{\hyperlink{process_8h_source_l00060}{Max\+OS\+::processes\+::\+Thread\+::parent\+\_\+pid}}.
+References \mbox{\hyperlink{scheduler_8cpp_source_l00642}{current\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00686}{current\+\_\+thread()}}, \mbox{\hyperlink{process_8h_source_l00063}{Max\+OS\+::processes\+::\+Thread\+::parent\+\_\+pid}}, and \mbox{\hyperlink{process_8cpp_source_l00319}{Max\+OS\+::processes\+::\+Process\+::pid()}}.
 
 
 
-Referenced by \mbox{\hyperlink{vfsresource_8cpp_source_l00370}{Max\+OS\+::filesystem\+::\+VFSResource\+Registry\+::create\+\_\+resource()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00309}{current\+\_\+process()}}, \mbox{\hyperlink{virtual_8cpp_source_l00245}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::free()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00352}{Max\+OS\+::filesystem\+::\+VFSResource\+Registry\+::get\+\_\+resource()}}, \mbox{\hyperlink{virtual_8cpp_source_l00410}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory()}}, \mbox{\hyperlink{ipc_8cpp_source_l00073}{Max\+OS\+::processes\+::\+Shared\+Memory\+::open()}}, \mbox{\hyperlink{cpu_8cpp_source_l00154}{Max\+OS\+::system\+::\+CPU\+::\+PANIC()}}, \mbox{\hyperlink{cpu_8cpp_source_l00267}{Max\+OS\+::system\+::\+CPU\+::prepare\+\_\+for\+\_\+panic()}}, \mbox{\hyperlink{ipc_8cpp_source_l00038}{Max\+OS\+::processes\+::\+Shared\+Memory\+::read()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00090}{schedule\+\_\+next()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00114}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+close\+\_\+process()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00132}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+klog()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00222}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+close()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00204}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+open()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00265}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+read()}}, and \mbox{\hyperlink{syscalls_8cpp_source_l00239}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+write()}}.
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00277}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::current\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00642}{current\+\_\+process()}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00413}{schedule\+\_\+next()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}\label{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!current\_thread@{current\_thread}}
 \index{current\_thread@{current\_thread}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
 \doxysubsubsection{\texorpdfstring{current\_thread()}{current\_thread()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} \texorpdfstring{$\ast$}{*} Scheduler\+::current\+\_\+thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} \texorpdfstring{$\ast$}{*} Scheduler\+::current\+\_\+thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
@@ -322,19 +266,19 @@ The currently executing thread
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00350}{350}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00686}{686}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00351\ }
-\DoxyCodeLine{00352\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_instance-\/>m\_threads[s\_instance-\/>m\_current\_thread\_index];}
-\DoxyCodeLine{00353\ \}}
+\DoxyCodeLine{00686\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00687\ }
+\DoxyCodeLine{00688\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_threads[m\_next\_thread\_index];}
+\DoxyCodeLine{00689\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00309}{current\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00281}{force\+\_\+remove\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00064}{schedule()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00090}{schedule\+\_\+next()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00132}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+klog()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00329}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+thread\+\_\+close()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00307}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+thread\+\_\+sleep()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00291}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+thread\+\_\+yield()}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00216}{yield()}}.
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00642}{current\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00313}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::current\+\_\+thread()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00614}{force\+\_\+remove\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00384}{schedule()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00413}{schedule\+\_\+next()}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00550}{yield()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_af4792bed046b34d0010412e336ec2970}\label{classMaxOS_1_1processes_1_1Scheduler_af4792bed046b34d0010412e336ec2970} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!deactivate@{deactivate}}
@@ -348,14 +292,14 @@ Deactivates the scheduler.
 
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00358}{358}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00702}{702}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00359\ }
-\DoxyCodeLine{00360\ \ \ \ \ m\_active\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00361\ \}}
+\DoxyCodeLine{00702\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00703\ }
+\DoxyCodeLine{00704\ \ \ \ \ m\_active\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00705\ \}}
 
 \end{DoxyCode}
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a501213a82c4fa7c7aa8bc6ff39377c0f}\label{classMaxOS_1_1processes_1_1Scheduler_a501213a82c4fa7c7aa8bc6ff39377c0f} 
@@ -378,47 +322,43 @@ The status of the CPU for the next process to run or nullptr if the process was 
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00281}{281}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00614}{614}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00282\ }
-\DoxyCodeLine{00283\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ process,\ fail}}
-\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keywordflow}{if}\ (!process)}
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00286\ }
-\DoxyCodeLine{00287\ \ \ \ \ \textcolor{comment}{//\ Remove\ all\ the\ threads}}
-\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ process-\/>threads())\ \{}
-\DoxyCodeLine{00289\ }
-\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ thread\ from\ the\ scheduler}}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ m\_threads.find(thread)\ -\/\ m\_threads.begin();}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ m\_threads.erase(m\_threads.begin()\ +\ index);}
-\DoxyCodeLine{00293\ }
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ thread}}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\_thread}}(thread-\/>tid);}
-\DoxyCodeLine{00296\ }
-\DoxyCodeLine{00297\ \ \ \ \ \}}
-\DoxyCodeLine{00298\ }
-\DoxyCodeLine{00299\ \ \ \ \ \textcolor{comment}{//\ Process\ will\ be\ dead\ now\ so\ run\ the\ next\ process\ (don't\ care\ about\ the\ execution\ state\ being\ outdated\ as\ it\ is\ being}}
-\DoxyCodeLine{00300\ \ \ \ \ \textcolor{comment}{//\ removed\ regardless)}}
-\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>execution\_state);}
-\DoxyCodeLine{00302\ \}}
+\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00615\ }
+\DoxyCodeLine{00616\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ process,\ fail}}
+\DoxyCodeLine{00617\ \ \ \ \ \textcolor{keywordflow}{if}\ (!process)}
+\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00619\ }
+\DoxyCodeLine{00620\ \ \ \ \ \textcolor{comment}{//\ Remove\ all\ the\ threads}}
+\DoxyCodeLine{00621\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ process-\/>threads())\ \{}
+\DoxyCodeLine{00622\ }
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ thread\ from\ the\ scheduler}}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ m\_threads.find(thread)\ -\/\ m\_threads.begin();}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ m\_threads.erase(m\_threads.begin()\ +\ index);}
+\DoxyCodeLine{00626\ }
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ thread}}
+\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\_thread}}(thread-\/>tid);}
+\DoxyCodeLine{00629\ }
+\DoxyCodeLine{00630\ \ \ \ \ \}}
+\DoxyCodeLine{00631\ }
+\DoxyCodeLine{00632\ \ \ \ \ \textcolor{comment}{//\ Process\ will\ be\ dead\ now\ so\ run\ the\ next\ process\ (don't\ care\ about\ the\ execution\ state\ being\ outdated\ as\ it\ is\ being}}
+\DoxyCodeLine{00633\ \ \ \ \ \textcolor{comment}{//\ removed\ regardless)}}
+\DoxyCodeLine{00634\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(\&\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>execution\_state);}
+\DoxyCodeLine{00635\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{scheduler_8cpp_source_l00350}{current\+\_\+thread()}}, \mbox{\hyperlink{process_8cpp_source_l00221}{Max\+OS\+::processes\+::\+Process\+::remove\+\_\+thread()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00090}{schedule\+\_\+next()}}, and \mbox{\hyperlink{process_8cpp_source_l00268}{Max\+OS\+::processes\+::\+Process\+::threads()}}.
-
-
-
-Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00267}{Max\+OS\+::system\+::\+CPU\+::prepare\+\_\+for\+\_\+panic()}}.
+References \mbox{\hyperlink{scheduler_8cpp_source_l00686}{current\+\_\+thread()}}, \mbox{\hyperlink{process_8cpp_source_l00267}{Max\+OS\+::processes\+::\+Process\+::remove\+\_\+thread()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00413}{schedule\+\_\+next()}}, \mbox{\hyperlink{process_8cpp_source_l00309}{Max\+OS\+::processes\+::\+Process\+::threads()}}, and \mbox{\hyperlink{process_8h_source_l00062}{Max\+OS\+::processes\+::\+Thread\+::tid}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a51b58af8b283f0f98131dd2d6ce51540}\label{classMaxOS_1_1processes_1_1Scheduler_a51b58af8b283f0f98131dd2d6ce51540} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!get\_process@{get\_process}}
 \index{get\_process@{get\_process}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
 \doxysubsubsection{\texorpdfstring{get\_process()}{get\_process()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} \texorpdfstring{$\ast$}{*} Scheduler\+::get\+\_\+process (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{pid }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}} \texorpdfstring{$\ast$}{*} Scheduler\+::get\+\_\+process (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{pid }\end{DoxyParamCaption})}
 
 
 
@@ -434,31 +374,31 @@ The process or nullptr if not found
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00333}{333}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00662}{662}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00334\ }
-\DoxyCodeLine{00335\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ process}}
-\DoxyCodeLine{00336\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ process:\ s\_instance-\/>m\_processes)}
-\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ if\ (process-\/>pid()\ ==\ pid)}
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ return\ process;}
-\DoxyCodeLine{00339\ }
-\DoxyCodeLine{00340\ \ \ \ \ \textcolor{comment}{//\ Not\ found}}
-\DoxyCodeLine{00341\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00342\ \}}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00663\ }
+\DoxyCodeLine{00664\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ process}}
+\DoxyCodeLine{00665\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ process:\ m\_processes)}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ if\ (process-\/>pid()\ ==\ pid)}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ return\ process;}
+\DoxyCodeLine{00668\ }
+\DoxyCodeLine{00669\ \ \ \ \ \textcolor{comment}{//\ Not\ found}}
+\DoxyCodeLine{00670\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00671\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{syscalls_8cpp_source_l00114}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+close\+\_\+process()}}, and \mbox{\hyperlink{syscalls_8cpp_source_l00329}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+thread\+\_\+close()}}.
+References \mbox{\hyperlink{process_8cpp_source_l00319}{Max\+OS\+::processes\+::\+Process\+::pid()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a73cf68e70de225ce465f249989766468}\label{classMaxOS_1_1processes_1_1Scheduler_a73cf68e70de225ce465f249989766468} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!get\_thread@{get\_thread}}
 \index{get\_thread@{get\_thread}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
 \doxysubsubsection{\texorpdfstring{get\_thread()}{get\_thread()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} \texorpdfstring{$\ast$}{*} Scheduler\+::get\+\_\+thread (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{tid }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}} \texorpdfstring{$\ast$}{*} Scheduler\+::get\+\_\+thread (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{tid }\end{DoxyParamCaption})}
 
 
 
@@ -474,119 +414,52 @@ The thread or nullptr if not found
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00401}{401}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00713}{713}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00402\ }
-\DoxyCodeLine{00403\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ thread}}
-\DoxyCodeLine{00404\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ s\_instance-\/>m\_threads)}
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ if\ (thread-\/>tid\ ==\ tid)}
-\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ return\ thread;}
-\DoxyCodeLine{00407\ }
-\DoxyCodeLine{00408\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00409\ \}}
+\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00714\ }
+\DoxyCodeLine{00715\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ thread}}
+\DoxyCodeLine{00716\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ m\_threads)}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ if\ (thread-\/>tid\ ==\ tid)}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \ \ \ \ return\ thread;}
+\DoxyCodeLine{00719\ }
+\DoxyCodeLine{00720\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00721\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{syscalls_8cpp_source_l00329}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+thread\+\_\+close()}}.
+References \mbox{\hyperlink{process_8h_source_l00062}{Max\+OS\+::processes\+::\+Thread\+::tid}}.
 
-\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a5d9c7ddda5adeedff09093b7492101f8}\label{classMaxOS_1_1processes_1_1Scheduler_a5d9c7ddda5adeedff09093b7492101f8} 
-\index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!handle\_interrupt@{handle\_interrupt}}
-\index{handle\_interrupt@{handle\_interrupt}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
-\doxysubsubsection{\texorpdfstring{handle\_interrupt()}{handle\_interrupt()}}
-{\footnotesize\ttfamily cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} Scheduler\+::handle\+\_\+interrupt (\begin{DoxyParamCaption}\item[{system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}}]{status }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [virtual]}}
-
-
-
-Handles the interrupt 0x20. 
+\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}\label{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397} 
+\index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!process\_amount@{process\_amount}}
+\index{process\_amount@{process\_amount}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
+\doxysubsubsection{\texorpdfstring{process\_amount()}{process\_amount()}}
+{\footnotesize\ttfamily uint64\+\_\+t Scheduler\+::process\+\_\+amount (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em status} & The current CPU status \\
-\hline
-\end{DoxyParams}
+
+Gets how processes are running on this scheduler. 
+
 \begin{DoxyReturn}{Returns}
-The new CPU status 
+The amount 
 \end{DoxyReturn}
 
 
-Reimplemented from \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a3f4303652151fbba92aa7b4513ae0875}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Handler}}.
-
-
-
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00052}{52}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00677}{677}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_aecc29abbf74f6f611762c4298d5c3a1d}{schedule}}(\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}});}
-\DoxyCodeLine{00055\ \}}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00678\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_processes.size();}
+\DoxyCodeLine{00679\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{scheduler_8cpp_source_l00064}{schedule()}}, and \mbox{\hyperlink{intel__i217_8h_source_l00003}{status}}.
-
-\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a8273f5b5d5dbfd7fbd10480c32db9ad4}\label{classMaxOS_1_1processes_1_1Scheduler_a8273f5b5d5dbfd7fbd10480c32db9ad4} 
-\index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!load\_multiboot\_elfs@{load\_multiboot\_elfs}}
-\index{load\_multiboot\_elfs@{load\_multiboot\_elfs}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
-\doxysubsubsection{\texorpdfstring{load\_multiboot\_elfs()}{load\_multiboot\_elfs()}}
-{\footnotesize\ttfamily void Scheduler\+::load\+\_\+multiboot\+\_\+elfs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} \texorpdfstring{$\ast$}{*}}]{multiboot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
-
-
-
-Loads any valid ELF files from the multiboot structure. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em multiboot} & The multiboot structure \\
-\hline
-\end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00368}{368}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00369\ }
-\DoxyCodeLine{00370\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*\ tag\ =\ multiboot-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a30987e6538d9e0aa663a7d5663cb452b}{start\_tag}}();\ tag-\/>type\ !=\ \mbox{\hyperlink{multiboot_8h_a9ba1adbd7639e20f723e51dd9668a981}{MULTIBOOT\_TAG\_TYPE\_END}};\ tag\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*)\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot\_uint8\_t}}*)\ tag\ +\ ((tag-\/>size\ +\ 7)\ \&\ \string~7)))\ \{}
-\DoxyCodeLine{00371\ }
-\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tag\ is\ not\ an\ ELF}}
-\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tag-\/>type\ !=\ \mbox{\hyperlink{multiboot_8h_a10b78479319b8790657f13414cf34736}{MULTIBOOT\_TAG\_TYPE\_MODULE}})}
-\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{00375\ }
-\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Try\ create\ the\ elf\ from\ the\ module}}
-\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ \textcolor{keyword}{module}\ =\ (struct\ multiboot\_tag\_module*)\ tag;}
-\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ elf\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64}{Elf64}}((uintptr\_t)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a061e07bff657447294f4005f550d87ac}{PhysicalMemoryManager::to\_dm\_region}}(module-\/>mod\_start));}
-\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!elf-\/>is\_valid())}
-\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{00381\ }
-\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Creating\ process\ from\ multiboot\ module\ for\ "{}}\ <<\ \textcolor{keyword}{module}-\/>cmdline\ <<\ "{}\ (at\ 0x"{}\ <<\ (uint64\_t)\ module-\/>mod\_start\ <<\ "{})\(\backslash\)n"{};}
-\DoxyCodeLine{00383\ }
-\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ an\ array\ of\ args\ for\ the\ process\ TODO:\ handle\ multiple\ args\ ("{}"{}\ \&\ spaces)}}
-\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}*\ args[1]\ =\ \{\textcolor{keyword}{module}-\/>cmdline\};}
-\DoxyCodeLine{00386\ }
-\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ the\ process}}
-\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ process\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(module-\/>cmdline,\ args,\ 1,\ elf);}
-\DoxyCodeLine{00389\ }
-\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Elf\ loaded\ to\ pid\ "{}}\ <<\ process-\/>pid()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ elf;}
-\DoxyCodeLine{00392\ \ \ \ \ \}}
-\DoxyCodeLine{00393\ \}}
-
-\end{DoxyCode}
-
-
-References \mbox{\hyperlink{logger_8cpp_source_l00168}{Logger\+::\+DEBUG()}}, \mbox{\hyperlink{multiboot_8h_source_l00044}{MULTIBOOT\+\_\+\+TAG\+\_\+\+TYPE\+\_\+\+END}}, \mbox{\hyperlink{multiboot_8h_source_l00047}{MULTIBOOT\+\_\+\+TAG\+\_\+\+TYPE\+\_\+\+MODULE}}, \mbox{\hyperlink{multiboot_8cpp_source_l00150}{Max\+OS\+::system\+::\+Multiboot\+::start\+\_\+tag()}}, and \mbox{\hyperlink{physical_8cpp_source_l00942}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+dm\+\_\+region()}}.
-
-
-
-Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00014}{Scheduler()}}.
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00183}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::add\+\_\+process()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a00c2995b3a91021eb4f278a591ff994f}\label{classMaxOS_1_1processes_1_1Scheduler_a00c2995b3a91021eb4f278a591ff994f} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!remove\_process@{remove\_process}}
@@ -602,57 +475,59 @@ Removes a process from the scheduler if the process has no threads, if it does t
 \begin{DoxyParams}{Parameters}
 {\em process} & The process to remove \\
 \hline
-{\em force} & If true, the process will be removed and so will all threads \\
-\hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 -\/1 if the process has threads, 0 otherwise 
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00246}{246}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00579}{579}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00247\ }
-\DoxyCodeLine{00248\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ process\ has\ no\ threads}}
-\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordflow}{if}\ (!process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}().empty())\ \{}
-\DoxyCodeLine{00250\ }
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ threads\ to\ stopped\ or\ remove\ them\ if\ forced}}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ process-\/>threads())}
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ thread-\/>thread\_state\ =\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6}{ThreadState}}::\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a09d4d696b4e935115b9313e3c412509a}{STOPPED}};}
-\DoxyCodeLine{00254\ }
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Need\ to\ wait\ until\ the\ threads\ are\ stopped\ before\ removing\ the\ process\ (this\ will\ be\ called\ again\ when\ all\ threads\ are\ stopped)}}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
-\DoxyCodeLine{00257\ }
-\DoxyCodeLine{00258\ \ \ \ \ \}}
-\DoxyCodeLine{00259\ }
-\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ process}}
-\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint32\_t\ i\ =\ 0;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ <\ m\_processes.size();\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}++)\ \{}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_processes[i]\ ==\ process)\ \{}
-\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ m\_processes.erase(m\_processes.begin()\ +\ i);}
-\DoxyCodeLine{00264\ }
-\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ process\ mem}}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ process;}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00269\ \ \ \ \ \}}
-\DoxyCodeLine{00270\ }
-\DoxyCodeLine{00271\ \ \ \ \ \textcolor{comment}{//\ Process\ not\ found}}
-\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
-\DoxyCodeLine{00273\ \}}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00580\ }
+\DoxyCodeLine{00581\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ process\ has\ no\ threads}}
+\DoxyCodeLine{00582\ \ \ \ \ \textcolor{keywordflow}{if}\ (!process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}().empty())\ \{}
+\DoxyCodeLine{00583\ }
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ threads\ to\ stopped\ or\ remove\ them\ if\ forced}}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ process-\/>threads())}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \ \ \ \ thread-\/>thread\_state\ =\ ThreadState::STOPPED;}
+\DoxyCodeLine{00587\ }
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Need\ to\ wait\ until\ the\ threads\ are\ stopped\ before\ removing\ the\ process\ (this\ will\ be\ called\ again\ when\ all\ threads\ are\ stopped)}}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00590\ }
+\DoxyCodeLine{00591\ \ \ \ \ \}}
+\DoxyCodeLine{00592\ }
+\DoxyCodeLine{00593\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ process}}
+\DoxyCodeLine{00594\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint32\_t\ i\ =\ 0;\ i\ <\ m\_processes.size();\ i++)\ \{}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_processes[i]\ ==\ process)\ \{}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ m\_processes.erase(m\_processes.begin()\ +\ i);}
+\DoxyCodeLine{00597\ }
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ process\ mem}}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ process;}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00602\ \ \ \ \ \}}
+\DoxyCodeLine{00603\ }
+\DoxyCodeLine{00604\ \ \ \ \ \textcolor{comment}{//\ Process\ not\ found}}
+\DoxyCodeLine{00605\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{00606\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a09d4d696b4e935115b9313e3c412509a}{Max\+OS\+::processes\+::\+STOPPED}}, and \mbox{\hyperlink{process_8cpp_source_l00268}{Max\+OS\+::processes\+::\+Process\+::threads()}}.
+References \mbox{\hyperlink{process_8h_source_l00066}{Max\+OS\+::processes\+::\+Thread\+::thread\+\_\+state}}, and \mbox{\hyperlink{process_8cpp_source_l00309}{Max\+OS\+::processes\+::\+Process\+::threads()}}.
 
-\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_aecc29abbf74f6f611762c4298d5c3a1d}\label{classMaxOS_1_1processes_1_1Scheduler_aecc29abbf74f6f611762c4298d5c3a1d} 
+
+
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00413}{schedule\+\_\+next()}}.
+
+\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a85c82e3f0b71fd6e7d570594ea7be397}\label{classMaxOS_1_1processes_1_1Scheduler_a85c82e3f0b71fd6e7d570594ea7be397} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!schedule@{schedule}}
 \index{schedule@{schedule}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
 \doxysubsubsection{\texorpdfstring{schedule()}{schedule()}}
-{\footnotesize\ttfamily cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} Scheduler\+::schedule (\begin{DoxyParamCaption}\item[{system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}}]{status }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} Scheduler\+::schedule (\begin{DoxyParamCaption}\item[{system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}}]{cpu\+\_\+state }\end{DoxyParamCaption})}
 
 
 
@@ -668,38 +543,39 @@ The next CPU state
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00064}{64}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00384}{384}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ Scheduler\ cant\ schedule\ anything}}
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_threads.empty()\ ||\ !m\_active)}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cpu\_state;}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{//\ Thread\ that\ we\ are\ dealing\ with}}
-\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_current\_thread\_index];}
-\DoxyCodeLine{00072\ }
-\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ Ticked}}
-\DoxyCodeLine{00074\ \ \ \ \ m\_ticks++;}
-\DoxyCodeLine{00075\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_adac2079967569c8686ab0d05631065bc}{ticks}}++;}
-\DoxyCodeLine{00076\ }
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ a\ bit\ so\ that\ the\ scheduler\ doesn't\ run\ too\ fast\ TODO:\ fix}}
-\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_ticks\ \%\ s\_ticks\_per\_event\ !=\ 0)\ \textcolor{keywordflow}{return}\ cpu\_state;}
-\DoxyCodeLine{00079\ }
-\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//\ Schedule\ the\ next\ thread}}
-\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(cpu\_state);}
-\DoxyCodeLine{00082\ \}}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \textcolor{comment}{//\ Scheduler\ cant\ schedule\ anything}}
+\DoxyCodeLine{00387\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_threads.empty()\ ||\ !m\_active)}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cpu\_state;}
+\DoxyCodeLine{00389\ }
+\DoxyCodeLine{00390\ \ \ \ \ \textcolor{comment}{//\ Thread\ that\ we\ are\ dealing\ with}}
+\DoxyCodeLine{00391\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_next\_thread\_index];}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \ \ \ \ \textcolor{comment}{//\ Ticked}}
+\DoxyCodeLine{00394\ \ \ \ \ m\_ticks++;}
+\DoxyCodeLine{00395\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_adac2079967569c8686ab0d05631065bc}{ticks}}++;}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{comment}{//\ Thread\ hasn't\ used\ its\ time\ slot\ yet}}
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_adac2079967569c8686ab0d05631065bc}{ticks}}\ \%\ TICKS\_PER\_EVENT)}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cpu\_state;}
+\DoxyCodeLine{00400\ }
+\DoxyCodeLine{00401\ \ \ \ \ \textcolor{comment}{//\ Schedule\ the\ next\ thread}}
+\DoxyCodeLine{00402\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(cpu\_state);}
+\DoxyCodeLine{00403\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{scheduler_8cpp_source_l00350}{current\+\_\+thread()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00090}{schedule\+\_\+next()}}, and \mbox{\hyperlink{process_8h_source_l00065}{Max\+OS\+::processes\+::\+Thread\+::ticks}}.
+References \mbox{\hyperlink{scheduler_8cpp_source_l00686}{current\+\_\+thread()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00413}{schedule\+\_\+next()}}, \mbox{\hyperlink{process_8h_source_l00068}{Max\+OS\+::processes\+::\+Thread\+::ticks}}, and \mbox{\hyperlink{scheduler_8h_source_l00079}{Max\+OS\+::processes\+::\+TICKS\+\_\+\+PER\+\_\+\+EVENT}}.
 
 
 
-Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00052}{handle\+\_\+interrupt()}}.
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00062}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::handle\+\_\+interrupt()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}\label{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!schedule\_next@{schedule\_next}}
@@ -717,115 +593,115 @@ Schedules the next thread to run.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-The next CPU status 
+The next CPU status
 \end{DoxyReturn}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000074}{Todo}}]Remove by reference where possible \end{DoxyRefDesc}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00090}{90}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00413}{413}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00091\ }
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ thread\ that\ is\ executing\ right\ now}}
-\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_current\_thread\_index];}
-\DoxyCodeLine{00094\ }
-\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{//\ Save\ its\ state}}
-\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_afcde2d4d3ee4c3540120034dbbff1807}{execution\_state}}\ =\ cpu\_state;}
-\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a21abe4a5d20033649696849094c415d0}{save\_sse\_state}}();}
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ ==\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a43491564ebcfd38568918efbd6e840fd}{ThreadState::RUNNING}})}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a2baa69eafc7204f3bd8648eba580c489}{ThreadState::READY}};}
-\DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{//\ Switch\ to\ the\ thread\ that\ will\ now\ run}}
-\DoxyCodeLine{00102\ \ \ \ \ m\_current\_thread\_index++;}
-\DoxyCodeLine{00103\ \ \ \ \ m\_current\_thread\_index\ \%=\ m\_threads.size();}
-\DoxyCodeLine{00104\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_current\_thread\_index];}
-\DoxyCodeLine{00105\ }
-\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ owner\_process\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}();}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{//\ Handle\ state\ changes}}
-\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}})\ \{}
-\DoxyCodeLine{00110\ }
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a24d459a81449d7210c8f9a86c2913034}{ThreadState::NEW}}:}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a43491564ebcfd38568918efbd6e840fd}{ThreadState::RUNNING}};}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00114\ }
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a7850588c11fe6db41b8b2dd6c455f8f3}{ThreadState::SLEEPING}}:}
-\DoxyCodeLine{00116\ }
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ wake-\/up\ time\ hasn't\ occurred\ yet,\ run\ the\ next\ thread}}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a2cda049e10651cb61318f38cd88f22e2}{wakeup\_time}}\ >\ m\_ticks)}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_afcde2d4d3ee4c3540120034dbbff1807}{execution\_state}});}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00122\ }
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a09d4d696b4e935115b9313e3c412509a}{ThreadState::STOPPED}}:}
-\DoxyCodeLine{00124\ }
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ process\ that\ has\ the\ thread\ and\ remove\ it}}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ owner\_process-\/>threads())\ \{}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (thread\ ==\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}})\ \{}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\_thread}}(m\_current\_thread\_index);}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00132\ }
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ thread}}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ m\_threads.erase(m\_threads.begin()\ +\ m\_current\_thread\_index);}
-\DoxyCodeLine{00135\ }
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Run\ the\ next\ thread}}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(cpu\_state);}
-\DoxyCodeLine{00138\ }
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00141\ \ \ \ \ \}}
-\DoxyCodeLine{00142\ }
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{//\ Prepare\ the\ next\ thread\ to\ run}}
-\DoxyCodeLine{00144\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a43491564ebcfd38568918efbd6e840fd}{ThreadState::RUNNING}};}
-\DoxyCodeLine{00145\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_acd31b38f01bba4e58e8426f5f0be25f7}{restore\_sse\_state}}();}
-\DoxyCodeLine{00146\ }
-\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ thread's\ memory\ manager\ and\ task\ state}}
-\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ae584e29e4d2925e3e30be409af2dc2e5}{MemoryManager::switch\_active\_memory\_manager}}(owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{memory\_manager}});}
-\DoxyCodeLine{00149\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a6cf50fdc207845c90071a63aaa550d7b}{CPU::tss}}.rsp0\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a9baa5fdcd84593974738c3f62f050283}{tss\_pointer}}();}
-\DoxyCodeLine{00150\ }
-\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_afcde2d4d3ee4c3540120034dbbff1807}{execution\_state}};}
-\DoxyCodeLine{00152\ \}}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00414\ }
+\DoxyCodeLine{00415\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ current\ state}}
+\DoxyCodeLine{00416\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_next\_thread\_index];}
+\DoxyCodeLine{00417\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ owner\_process\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}();}
+\DoxyCodeLine{00418\ \ \ \ \ \textcolor{keyword}{auto}\ old\_tid\ =\ m\_next\_thread\_index;}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ executing\ thread\ state}}
+\DoxyCodeLine{00421\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}}\ =\ *cpu\_state;}
+\DoxyCodeLine{00422\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a21abe4a5d20033649696849094c415d0}{save\_sse\_state}}();}
+\DoxyCodeLine{00423\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ ==\ ThreadState::RUNNING)}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ ThreadState::READY;}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ \textcolor{comment}{//\ Find\ a\ free\ thread\ to\ run}}
+\DoxyCodeLine{00427\ \ \ \ \ \textcolor{keywordflow}{while}\ ((++m\_next\_thread\_index)\ !=\ old\_tid)\{}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ m\_next\_thread\_index\ \%=\ m\_threads.size();}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ current\ thread}}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_next\_thread\_index];}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ owner\_process\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}();}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ state\ changes}}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}})\ \{}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ThreadState::SLEEPING:}
+\DoxyCodeLine{00438\ }
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ wake-\/up\ time\ hasn't\ occurred\ yet,\ run\ the\ next\ thread}}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a2cda049e10651cb61318f38cd88f22e2}{wakeup\_time}}\ >\ TICKS\_PER\_EVENT)\{}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a2cda049e10651cb61318f38cd88f22e2}{wakeup\_time}}\ -\/=\ \mbox{\hyperlink{scheduler_8h_a16e9836793c1567dfa036940aef3db6d}{TICKS\_PER\_EVENT}};}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ThreadState::STOPPED:}
+\DoxyCodeLine{00448\ }
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ process\ that\ has\ the\ thread\ and\ remove\ it}}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ owner\_process-\/>threads())\ \{}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (thread\ ==\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}})\ \{}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\_thread}}(thread-\/>tid);}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00456\ }
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ thread}}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_threads.erase(m\_threads.begin()\ +\ m\_next\_thread\_index);}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}().empty())}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a00c2995b3a91021eb4f278a591ff994f}{remove\_process}}(owner\_process);}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00462\ }
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ThreadState::WAITING:}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00470\ \ \ \ \ \}}
+\DoxyCodeLine{00471\ }
+\DoxyCodeLine{00472\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ thread's\ state}}
+\DoxyCodeLine{00473\ \ \ \ \ \textcolor{keywordflow}{return}\ load\_process(owner\_process,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}});}
+\DoxyCodeLine{00474\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{scheduler_8cpp_source_l00309}{current\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00350}{current\+\_\+thread()}}, \mbox{\hyperlink{process_8h_source_l00062}{Max\+OS\+::processes\+::\+Thread\+::execution\+\_\+state}}, \mbox{\hyperlink{process_8h_source_l00105}{Max\+OS\+::processes\+::\+Process\+::memory\+\_\+manager}}, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a24d459a81449d7210c8f9a86c2913034}{Max\+OS\+::processes\+::\+NEW}}, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a2baa69eafc7204f3bd8648eba580c489}{Max\+OS\+::processes\+::\+READY}}, \mbox{\hyperlink{process_8cpp_source_l00221}{Max\+OS\+::processes\+::\+Process\+::remove\+\_\+thread()}}, \mbox{\hyperlink{process_8cpp_source_l00103}{Max\+OS\+::processes\+::\+Thread\+::restore\+\_\+sse\+\_\+state()}}, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a43491564ebcfd38568918efbd6e840fd}{Max\+OS\+::processes\+::\+RUNNING}}, \mbox{\hyperlink{process_8cpp_source_l00090}{Max\+OS\+::processes\+::\+Thread\+::save\+\_\+sse\+\_\+state()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00090}{schedule\+\_\+next()}}, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a7850588c11fe6db41b8b2dd6c455f8f3}{Max\+OS\+::processes\+::\+SLEEPING}}, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a09d4d696b4e935115b9313e3c412509a}{Max\+OS\+::processes\+::\+STOPPED}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00288}{Max\+OS\+::memory\+::\+Memory\+Manager\+::switch\+\_\+active\+\_\+memory\+\_\+manager()}}, \mbox{\hyperlink{process_8h_source_l00063}{Max\+OS\+::processes\+::\+Thread\+::thread\+\_\+state}}, \mbox{\hyperlink{process_8cpp_source_l00268}{Max\+OS\+::processes\+::\+Process\+::threads()}}, \mbox{\hyperlink{cpu_8h_source_l00158}{Max\+OS\+::system\+::\+CPU\+::tss}}, \mbox{\hyperlink{process_8h_source_l00068}{Max\+OS\+::processes\+::\+Thread\+::tss\+\_\+pointer()}}, and \mbox{\hyperlink{process_8h_source_l00066}{Max\+OS\+::processes\+::\+Thread\+::wakeup\+\_\+time}}.
+References \mbox{\hyperlink{scheduler_8cpp_source_l00642}{current\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00686}{current\+\_\+thread()}}, \mbox{\hyperlink{process_8h_source_l00065}{Max\+OS\+::processes\+::\+Thread\+::execution\+\_\+state}}, \mbox{\hyperlink{scheduler_8cpp_source_l00579}{remove\+\_\+process()}}, \mbox{\hyperlink{process_8cpp_source_l00267}{Max\+OS\+::processes\+::\+Process\+::remove\+\_\+thread()}}, \mbox{\hyperlink{process_8cpp_source_l00087}{Max\+OS\+::processes\+::\+Thread\+::save\+\_\+sse\+\_\+state()}}, \mbox{\hyperlink{process_8h_source_l00066}{Max\+OS\+::processes\+::\+Thread\+::thread\+\_\+state}}, \mbox{\hyperlink{process_8cpp_source_l00309}{Max\+OS\+::processes\+::\+Process\+::threads()}}, \mbox{\hyperlink{scheduler_8h_source_l00079}{Max\+OS\+::processes\+::\+TICKS\+\_\+\+PER\+\_\+\+EVENT}}, and \mbox{\hyperlink{process_8h_source_l00069}{Max\+OS\+::processes\+::\+Thread\+::wakeup\+\_\+time}}.
 
 
 
-Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00281}{force\+\_\+remove\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00064}{schedule()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00090}{schedule\+\_\+next()}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00216}{yield()}}.
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00614}{force\+\_\+remove\+\_\+process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00384}{schedule()}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00550}{yield()}}.
 
-\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_af1bf088153c111f0a4d9411b28471739}\label{classMaxOS_1_1processes_1_1Scheduler_af1bf088153c111f0a4d9411b28471739} 
-\index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!system\_scheduler@{system\_scheduler}}
-\index{system\_scheduler@{system\_scheduler}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
-\doxysubsubsection{\texorpdfstring{system\_scheduler()}{system\_scheduler()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}} \texorpdfstring{$\ast$}{*} Scheduler\+::system\+\_\+scheduler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+\Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}\label{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e} 
+\index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!thread\_amount@{thread\_amount}}
+\index{thread\_amount@{thread\_amount}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
+\doxysubsubsection{\texorpdfstring{thread\_amount()}{thread\_amount()}}
+{\footnotesize\ttfamily uint64\+\_\+t Scheduler\+::thread\+\_\+amount (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
-Gets the system scheduler. 
+Gets how many threads are running on this scheduler. 
 
 \begin{DoxyReturn}{Returns}
-The system scheduler or nullptr if not found 
+The amount 
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00198}{198}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00695}{695}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00199\ }
-\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_instance;}
-\DoxyCodeLine{00201\ \}}
+\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00696\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_threads.size();}
+\DoxyCodeLine{00697\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{spinlock_8cpp_source_l00050}{Max\+OS\+::common\+::\+Spinlock\+::acquire()}}, \mbox{\hyperlink{cpu_8cpp_source_l00154}{Max\+OS\+::system\+::\+CPU\+::\+PANIC()}}, \mbox{\hyperlink{cpu_8cpp_source_l00267}{Max\+OS\+::system\+::\+CPU\+::prepare\+\_\+for\+\_\+panic()}}, \mbox{\hyperlink{process_8cpp_source_l00119}{Max\+OS\+::processes\+::\+Process\+::\+Process()}}, \mbox{\hyperlink{process_8cpp_source_l00221}{Max\+OS\+::processes\+::\+Process\+::remove\+\_\+thread()}}, \mbox{\hyperlink{process_8cpp_source_l00077}{Max\+OS\+::processes\+::\+Thread\+::sleep()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00114}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+close\+\_\+process()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00329}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+thread\+\_\+close()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00291}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+thread\+\_\+yield()}}, and \mbox{\hyperlink{process_8cpp_source_l00018}{Max\+OS\+::processes\+::\+Thread\+::\+Thread()}}.
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00214}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::add\+\_\+thread()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a349f28166719d94bd978439f24cd2448}\label{classMaxOS_1_1processes_1_1Scheduler_a349f28166719d94bd978439f24cd2448} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!ticks@{ticks}}
@@ -842,20 +718,16 @@ The number of ticks
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00208}{208}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00542}{542}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00209\ }
-\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_ticks;}
-\DoxyCodeLine{00211\ \}}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00543\ }
+\DoxyCodeLine{00544\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_ticks;}
+\DoxyCodeLine{00545\ \}}
 
 \end{DoxyCode}
-
-
-Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00154}{Max\+OS\+::system\+::\+CPU\+::\+PANIC()}}.
-
 \Hypertarget{classMaxOS_1_1processes_1_1Scheduler_a4e3cb6c6cc95d62dc6149c0ec934c723}\label{classMaxOS_1_1processes_1_1Scheduler_a4e3cb6c6cc95d62dc6149c0ec934c723} 
 \index{MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}!yield@{yield}}
 \index{yield@{yield}!MaxOS::processes::Scheduler@{MaxOS::processes::Scheduler}}
@@ -868,29 +740,33 @@ Pass execution to the next thread.
 
 
 
-Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00216}{216}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
+Definition at line \mbox{\hyperlink{scheduler_8cpp_source_l00550}{550}} of file \mbox{\hyperlink{scheduler_8cpp_source}{scheduler.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00217\ }
-\DoxyCodeLine{00218\ \ \ \ \ \textcolor{comment}{//\ If\ this\ is\ the\ only\ thread,\ can't\ yield}}
-\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_threads.size()\ <=\ 1)}
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_afcde2d4d3ee4c3540120034dbbff1807}{execution\_state}};}
-\DoxyCodeLine{00221\ }
-\DoxyCodeLine{00222\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ current\ thread\ to\ waiting\ if\ running}}
-\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_threads[m\_current\_thread\_index]-\/>thread\_state\ ==\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a43491564ebcfd38568918efbd6e840fd}{ThreadState::RUNNING}})}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ m\_threads[m\_current\_thread\_index]-\/>thread\_state\ =\ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a2baa69eafc7204f3bd8648eba580c489}{ThreadState::READY}};}
-\DoxyCodeLine{00225\ }
-\DoxyCodeLine{00226\ }
-\DoxyCodeLine{00227\ \ \ \ \ \textcolor{comment}{//\ Schedule\ the\ next\ thread}}
-\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>execution\_state);}
-\DoxyCodeLine{00229\ \}}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00551\ }
+\DoxyCodeLine{00552\ \ \ \ \ \textcolor{comment}{//\ If\ this\ is\ the\ only\ thread,\ can't\ yield}}
+\DoxyCodeLine{00553\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_threads.size()\ <=\ 1)}
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}};}
+\DoxyCodeLine{00555\ }
+\DoxyCodeLine{00556\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ current\ thread\ to\ waiting\ if\ running}}
+\DoxyCodeLine{00557\ \ \ \ \ \textcolor{keyword}{auto}\ thread\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}();}
+\DoxyCodeLine{00558\ \ \ \ \ \textcolor{keywordflow}{if}\ (thread-\/>thread\_state\ ==\ ThreadState::RUNNING)}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ thread-\/>thread\_state\ =\ ThreadState::READY;}
+\DoxyCodeLine{00560\ }
+\DoxyCodeLine{00561\ \ \ \ \ \textcolor{comment}{//\ Schedule\ the\ next\ thread}}
+\DoxyCodeLine{00562\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(\&thread-\/>execution\_state);}
+\DoxyCodeLine{00563\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{scheduler_8cpp_source_l00350}{current\+\_\+thread()}}, \mbox{\hyperlink{process_8h_source_l00062}{Max\+OS\+::processes\+::\+Thread\+::execution\+\_\+state}}, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a2baa69eafc7204f3bd8648eba580c489}{Max\+OS\+::processes\+::\+READY}}, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a43491564ebcfd38568918efbd6e840fd}{Max\+OS\+::processes\+::\+RUNNING}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00090}{schedule\+\_\+next()}}.
+References \mbox{\hyperlink{scheduler_8cpp_source_l00686}{current\+\_\+thread()}}, \mbox{\hyperlink{process_8h_source_l00065}{Max\+OS\+::processes\+::\+Thread\+::execution\+\_\+state}}, \mbox{\hyperlink{scheduler_8cpp_source_l00413}{schedule\+\_\+next()}}, and \mbox{\hyperlink{process_8h_source_l00066}{Max\+OS\+::processes\+::\+Thread\+::thread\+\_\+state}}.
+
+
+
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00078}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::yield()}}.
 
 
 

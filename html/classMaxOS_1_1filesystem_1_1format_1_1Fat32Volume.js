@@ -1,7 +1,6 @@
 var classMaxOS_1_1filesystem_1_1format_1_1Fat32Volume =
 [
     [ "Fat32Volume", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Volume.html#a37d49499071a45b3148a4f2f5b7bc85b", null ],
-    [ "~Fat32Volume", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Volume.html#a843e1b74cf444de13338d8697eaa7c6e", null ],
     [ "allocate_cluster", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Volume.html#a2ad6d0cd23155bcee69a6c712edd3d5e", null ],
     [ "allocate_cluster", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Volume.html#a4b6b16063eca806447da97bc16d5e5e3", null ],
     [ "find_free_cluster", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Volume.html#a0946f929b78b73c74d7a24b41a1886f7", null ],

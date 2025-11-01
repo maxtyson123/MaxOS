@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/net/udp.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/net/udp.h \- Defines the User Datagram Protocol (UDP) for network communication\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -19,30 +20,25 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::net::UserDatagramProtocolHeader\fP"
+.RI "struct \fBMaxOS::net::UDPHeader\fP"
 .br
+.RI "The header of a UDP packet\&. "
 .ti -1c
 .RI "class \fBMaxOS::net::UDPDataReceivedEvent\fP"
 .br
+.RI "Event fired when data is received on a UDP socket\&. "
 .ti -1c
-.RI "class \fBMaxOS::net::UserDatagramProtocolPayloadHandler\fP"
+.RI "class \fBMaxOS::net::UDPPayloadHandler\fP"
 .br
+.RI "Handles the payload of a UDP packet\&. "
 .ti -1c
-.RI "class \fBMaxOS::net::UserDatagramProtocolSocket\fP"
+.RI "class \fBMaxOS::net::UDPSocket\fP"
 .br
+.RI "A UDP socket\&. "
 .ti -1c
 .RI "class \fBMaxOS::net::UserDatagramProtocolHandler\fP"
 .br
-.in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::net\fP"
-.br
+.RI "Handles the UDP protocol\&. "
 .in -1c
 .SS "Typedefs"
 
@@ -55,14 +51,15 @@
 
 .in +1c
 .ti -1c
-.RI "enum class \fBMaxOS::net::UserDatagramProtocolEvents\fP { \fBMaxOS::net::DATA_RECEIVED\fP }"
+.RI "enum class \fBMaxOS::net::UDPEvents\fP { \fBDATA_RECEIVED\fP }"
 .br
+.RI "The events that can be fired by the UDP protocol\&. "
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::net::AddressResolutionProtocolMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::net::ARPMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
 .br
 .in -1c
 .SS "Variables"
@@ -71,24 +68,71 @@
 .ti -1c
 .RI "uint16_t \fBsourcePort\fP"
 .br
+.RI "The port of the sender\&. "
 .ti -1c
 .RI "uint16_t \fBdestinationPort\fP"
 .br
+.RI "The port of the receiver\&. "
 .ti -1c
 .RI "uint16_t \fBlength\fP"
 .br
+.RI "The length of the UDP header and data\&. "
 .ti -1c
 .RI "uint16_t \fBchecksum\fP"
 .br
+.RI "The checksum of the header and data\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines the User Datagram Protocol (UDP) for network communication\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+24th November 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBudp\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef uint16_t \fBMaxOS::net::UserDatagramProtocolPort\fP"
+
+.PP
+Definition at line \fB46\fP of file \fBudp\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBMaxOS::net::UDPEvents\fP\fC [strong]\fP"
+
+.PP
+The events that can be fired by the UDP protocol\&. 
+.PP
+Definition at line \fB38\fP of file \fBudp\&.h\fP\&..PP
+.nf
+38                              {
+39             DATA_RECEIVED,
+40         };
+.fi
+
 .SH "Variable Documentation"
 .PP 
 .SS "uint16_t checksum"
 
 .PP
+The checksum of the header and data\&. 
+.PP
 Definition at line \fB4\fP of file \fBudp\&.h\fP\&.
 .SS "uint16_t destinationPort"
 
+.PP
+The port of the receiver\&. 
 .PP
 Definition at line \fB2\fP of file \fBudp\&.h\fP\&.
 .PP
@@ -96,9 +140,13 @@ Referenced by \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocol
 .SS "uint16_t length"
 
 .PP
+The length of the UDP header and data\&. 
+.PP
 Definition at line \fB3\fP of file \fBudp\&.h\fP\&.
 .SS "uint16_t sourcePort"
 
+.PP
+The port of the sender\&. 
 .PP
 Definition at line \fB1\fP of file \fBudp\&.h\fP\&.
 .PP

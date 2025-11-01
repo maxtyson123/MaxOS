@@ -25,6 +25,6 @@ var structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32 =
     [ "table_size_32", "structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html#a40f78663cb076598a954a817001ee0ce", null ],
     [ "total_sectors_16", "structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html#a82866f49ca61a9e32fb333b7d5b98d67", null ],
     [ "total_sectors_32", "structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html#ab41dc7d73ca1cf773eeae391fc6bf5a5", null ],
-    [ "uint_32", "structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html#ab62d4fa6d0183a234abef82f87e87050", null ],
+    [ "volume_id", "structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html#add8a248f396a1b896f439472ddb26eed", null ],
     [ "volume_label", "structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html#a4139be4b0ee3c9e25b431730de94a22a", null ]
 ];

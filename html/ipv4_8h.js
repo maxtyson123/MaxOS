@@ -1,12 +1,9 @@
 var ipv4_8h =
 [
-    [ "MaxOS::net::InternetProtocolV4Header", "structMaxOS_1_1net_1_1InternetProtocolV4Header.html", "structMaxOS_1_1net_1_1InternetProtocolV4Header" ],
-    [ "MaxOS::net::InternetProtocolAddressResolver", "classMaxOS_1_1net_1_1InternetProtocolAddressResolver.html", "classMaxOS_1_1net_1_1InternetProtocolAddressResolver" ],
-    [ "MaxOS::net::InternetProtocolPayloadHandler", "classMaxOS_1_1net_1_1InternetProtocolPayloadHandler.html", "classMaxOS_1_1net_1_1InternetProtocolPayloadHandler" ],
+    [ "MaxOS::net::IPV4Header", "structMaxOS_1_1net_1_1IPV4Header.html", "structMaxOS_1_1net_1_1IPV4Header" ],
+    [ "MaxOS::net::IPV4AddressResolver", "classMaxOS_1_1net_1_1IPV4AddressResolver.html", "classMaxOS_1_1net_1_1IPV4AddressResolver" ],
+    [ "MaxOS::net::IPV4PayloadHandler", "classMaxOS_1_1net_1_1IPV4PayloadHandler.html", "classMaxOS_1_1net_1_1IPV4PayloadHandler" ],
     [ "MaxOS::net::InternetProtocolHandler", "classMaxOS_1_1net_1_1InternetProtocolHandler.html", "classMaxOS_1_1net_1_1InternetProtocolHandler" ],
-    [ "InternetProtocolAddress", "ipv4_8h.html#af037c025feb88b952b167f4dfa2709a0", null ],
-    [ "SubnetMask", "ipv4_8h.html#a675fed9f30ec224711b40893d3f784d6", null ],
-    [ "__attribute__", "ipv4_8h.html#a4d717afc44af4a0f81e760181db3ccd7", null ],
     [ "checksum", "ipv4_8h.html#a6796c847bbd16253ce2538754c250bd6", null ],
     [ "destinationIP", "ipv4_8h.html#afcc7048c1d9643cebaf1806fa4de390e", null ],
     [ "flagsAndOffset", "ipv4_8h.html#ae5fbba8e197a2e68174867191be7ddac", null ],

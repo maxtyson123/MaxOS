@@ -1,14 +1,13 @@
 var tcp_8h =
 [
-    [ "MaxOS::net::TransmissionControlProtocolHeader", "structMaxOS_1_1net_1_1TransmissionControlProtocolHeader.html", "structMaxOS_1_1net_1_1TransmissionControlProtocolHeader" ],
-    [ "MaxOS::net::TransmissionControlProtocolPseudoHeader", "structMaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader.html", "structMaxOS_1_1net_1_1TransmissionControlProtocolPseudoHeader" ],
+    [ "MaxOS::net::TCPHeader", "structMaxOS_1_1net_1_1TCPHeader.html", "structMaxOS_1_1net_1_1TCPHeader" ],
+    [ "MaxOS::net::TCPPseudoHeader", "structMaxOS_1_1net_1_1TCPPseudoHeader.html", "structMaxOS_1_1net_1_1TCPPseudoHeader" ],
     [ "MaxOS::net::DataReceivedEvent", "classMaxOS_1_1net_1_1DataReceivedEvent.html", "classMaxOS_1_1net_1_1DataReceivedEvent" ],
     [ "MaxOS::net::ConnectedEvent", "classMaxOS_1_1net_1_1ConnectedEvent.html", "classMaxOS_1_1net_1_1ConnectedEvent" ],
     [ "MaxOS::net::DisconnectedEvent", "classMaxOS_1_1net_1_1DisconnectedEvent.html", "classMaxOS_1_1net_1_1DisconnectedEvent" ],
-    [ "MaxOS::net::TransmissionControlProtocolPayloadHandler", "classMaxOS_1_1net_1_1TransmissionControlProtocolPayloadHandler.html", "classMaxOS_1_1net_1_1TransmissionControlProtocolPayloadHandler" ],
-    [ "MaxOS::net::TransmissionControlProtocolSocket", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket.html", "classMaxOS_1_1net_1_1TransmissionControlProtocolSocket" ],
+    [ "MaxOS::net::TCPPayloadHandler", "classMaxOS_1_1net_1_1TCPPayloadHandler.html", "classMaxOS_1_1net_1_1TCPPayloadHandler" ],
+    [ "MaxOS::net::TCPSocket", "classMaxOS_1_1net_1_1TCPSocket.html", "classMaxOS_1_1net_1_1TCPSocket" ],
     [ "MaxOS::net::TransmissionControlProtocolHandler", "classMaxOS_1_1net_1_1TransmissionControlProtocolHandler.html", "classMaxOS_1_1net_1_1TransmissionControlProtocolHandler" ],
-    [ "TransmissionControlProtocolPort", "tcp_8h.html#a8e668c17241c6c0ed8e9f6df338b2307", null ],
     [ "TCPFlag", "tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5", [
       [ "FIN", "tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5af408850c47cccdcedad816d79e100906", null ],
       [ "SYN", "tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5abab6eed0f7cd8bd721e728003b63b54d", null ],
@@ -19,6 +18,11 @@ var tcp_8h =
       [ "ECE", "tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5a411a9a1b1519ebd6c96cd25a5b2ecdd5", null ],
       [ "CWR", "tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5ade3c6ff049b54ae8ae5cdd53b7cfb1b5", null ],
       [ "NS", "tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5a53c8d15a175221d2127083e66a8cc937", null ]
+    ] ],
+    [ "TCPPayloadHandlerEvents", "tcp_8h.html#a1a687a489ef1200d6bb31f22ffff77cf", [
+      [ "CONNECTED", "tcp_8h.html#a1a687a489ef1200d6bb31f22ffff77cfaa5afd6edd5336d91316964e493936858", null ],
+      [ "DISCONNECTED", "tcp_8h.html#a1a687a489ef1200d6bb31f22ffff77cfa99c8ce56e7ab246445d3b134724428f3", null ],
+      [ "DATA_RECEIVED", "tcp_8h.html#a1a687a489ef1200d6bb31f22ffff77cfa1644a05bebcc7abb4e6aa13abc8a75e4", null ]
     ] ],
     [ "TCPSocketState", "tcp_8h.html#aef1bb382dd5d6cdaecb7ffe20b234a44", [
       [ "CLOSED", "tcp_8h.html#aef1bb382dd5d6cdaecb7ffe20b234a44a110ccf2f5d2ff4eda1fd1a494293467d", null ],
@@ -33,12 +37,6 @@ var tcp_8h =
       [ "CLOSE_WAIT", "tcp_8h.html#aef1bb382dd5d6cdaecb7ffe20b234a44a831862ab9b2e65d7f51841e0c739180f", null ],
       [ "LAST_ACK", "tcp_8h.html#aef1bb382dd5d6cdaecb7ffe20b234a44a9cbd9a647dc3edd29dd880e97c352032", null ]
     ] ],
-    [ "TransmissionControlProtocolPayloadHandlerEvents", "tcp_8h.html#a36c6c723a8bfd777e4d45c63c0d793a7", [
-      [ "CONNECTED", "tcp_8h.html#a36c6c723a8bfd777e4d45c63c0d793a7aa5afd6edd5336d91316964e493936858", null ],
-      [ "DISCONNECTED", "tcp_8h.html#a36c6c723a8bfd777e4d45c63c0d793a7a99c8ce56e7ab246445d3b134724428f3", null ],
-      [ "DATA_RECEIVED", "tcp_8h.html#a36c6c723a8bfd777e4d45c63c0d793a7a1644a05bebcc7abb4e6aa13abc8a75e4", null ]
-    ] ],
-    [ "__attribute__", "tcp_8h.html#a4d717afc44af4a0f81e760181db3ccd7", null ],
     [ "acknowledgementNumber", "tcp_8h.html#ac41c406579d1214f4a1f0338bca28b6a", null ],
     [ "checksum", "tcp_8h.html#a6796c847bbd16253ce2538754c250bd6", null ],
     [ "dstIP", "tcp_8h.html#a2287eab8c0183320980c7a0addb74a5a", null ],

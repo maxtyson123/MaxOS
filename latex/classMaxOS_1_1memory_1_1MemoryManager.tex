@@ -13,9 +13,7 @@ Handles memory allocation and deallocation.
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ad4ecc5162e3381090d9ba930e40afacb}{Memory\+Manager}} (\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{Virtual\+Memory\+Manager}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\+\_\+memory\+\_\+manager}}=\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}})
-\item 
-\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ad4570910ccfc14b2da679bee58ee8f48}{\texorpdfstring{$\sim$}{\string~}\+Memory\+Manager}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Construct a new Memory Manager object. Will switch the pml4 to use the calling process\textquotesingle{}s page tables. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a1c24cb5da38bff8a9cb9805bb1e4828a}{handle\+\_\+malloc}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{size\+\_\+t}} \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})
 \begin{DoxyCompactList}\small\item\em Allocates a block of memory. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a5fe3eebb4829ba9ff6172ec53b023c92}{handle\+\_\+free}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \texorpdfstring{$\ast$}{*}pointer)
@@ -39,26 +37,19 @@ Handles memory allocation and deallocation.
 \begin{DoxyCompactList}\small\item\em Aligns the size to the chunk alignment. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{static}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ae584e29e4d2925e3e30be409af2dc2e5}{switch\+\_\+active\+\_\+memory\+\_\+manager}} (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{Memory\+Manager}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{manager}})
 \begin{DoxyCompactList}\small\item\em Switches the active memory manager. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
-\begin{DoxyCompactItemize}
-\item 
-\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{Memory\+Manager}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a96a625a7e3c47d7b5ee661d8d3a5d005}{previous\+\_\+memory\+\_\+manager}} = nullptr
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Static Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 static \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{Memory\+Manager}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\+\_\+current\+\_\+memory\+\_\+manager}} = nullptr
-\item 
+\begin{DoxyCompactList}\small\item\em The memory manager for the current process. \end{DoxyCompactList}\item 
 static \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{Memory\+Manager}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\+\_\+kernel\+\_\+memory\+\_\+manager}} = nullptr
-\item 
-static const size\+\_\+t \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a2cfd48c5dbef5877035e1941154eb121}{s\+\_\+chunk\+\_\+alignment}} = 0x10
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The memory manager for any kernel processes and all kernel allocations. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Handles memory allocation and deallocation. 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00035}{35}} of file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00041}{41}} of file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
 
 
 
@@ -67,42 +58,51 @@ Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00035}{35}} of f
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!MemoryManager@{MemoryManager}}
 \index{MemoryManager@{MemoryManager}!MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}}
 \doxysubsubsection{\texorpdfstring{MemoryManager()}{MemoryManager()}}
-{\footnotesize\ttfamily Memory\+Manager\+::\+Memory\+Manager (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{Virtual\+Memory\+Manager}} \texorpdfstring{$\ast$}{*}}]{virtual\+\_\+memory\+\_\+manager = {\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}}} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily Memory\+Manager\+::\+Memory\+Manager (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{Virtual\+Memory\+Manager}} \texorpdfstring{$\ast$}{*}}]{vmm = {\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}}} }\end{DoxyParamCaption})}
 
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00013}{13}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Construct a new Memory Manager object. Will switch the pml4 to use the calling process\textquotesingle{}s page tables. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vmm} & The virtual memory manager to use, if nullptr a new one will be created \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00022}{22}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00014\ :\ m\_virtual\_memory\_manager(\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_afa39a98646615a25a16aab6c62ada9fe}{vmm}})}
-\DoxyCodeLine{00015\ \{}
-\DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ VMM\ if\ not\ provided}}
-\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_virtual\_memory\_manager\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ m\_virtual\_memory\_manager\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{VirtualMemoryManager}}();}
-\DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//\ Enable\ the\ memory\ manager}}
-\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ae584e29e4d2925e3e30be409af2dc2e5}{switch\_active\_memory\_manager}}(\textcolor{keyword}{this});}
-\DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//\ Setup\ the\ first\ chunk\ of\ memory}}
-\DoxyCodeLine{00025\ \ \ \ \ this-\/>m\_first\_memory\_chunk\ =\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*)\ m\_virtual\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{allocate}}(\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{PhysicalMemoryManager::s\_page\_size}}\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}),\ 0);}
-\DoxyCodeLine{00026\ \ \ \ \ m\_first\_memory\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk_aeb2ac8030a7130c9e046c07c4cd4cfbb}{allocated}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00027\ \ \ \ \ m\_first\_memory\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk_a2165cec76c0674f5180990e65160a862}{prev}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00028\ \ \ \ \ m\_first\_memory\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk_a9b94dfe2f922882b76c7e592673a5a26}{next}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00029\ \ \ \ \ m\_first\_memory\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk_aa61f41e5ca407c31027431719bb3695f}{size}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_afe7fbedb30365ee050a210d4854a15b8}{PhysicalMemoryManager::s\_page\_size}}\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
-\DoxyCodeLine{00030\ \ \ \ \ m\_last\_memory\_chunk\ =\ m\_first\_memory\_chunk;}
-\DoxyCodeLine{00031\ }
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{//\ First\ memory\ manager\ is\ the\ kernel\ memory\ manager}}
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ =\ \textcolor{keyword}{this};}
-\DoxyCodeLine{00035\ }
-\DoxyCodeLine{00036\ \}}
+\DoxyCodeLine{00023\ :\ m\_virtual\_memory\_manager(\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_afa39a98646615a25a16aab6c62ada9fe}{vmm}})}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ VMM\ if\ not\ provided}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_virtual\_memory\_manager\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ m\_virtual\_memory\_manager\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{VirtualMemoryManager}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ Enable\ the\ memory\ manager}}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ae584e29e4d2925e3e30be409af2dc2e5}{switch\_active\_memory\_manager}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ Setup\ the\ first\ chunk\ of\ memory}}
+\DoxyCodeLine{00034\ \ \ \ \ this-\/>m\_first\_memory\_chunk\ =\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*)\ m\_virtual\_memory\_manager-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{allocate}}(PAGE\_SIZE\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}),\ 0);}
+\DoxyCodeLine{00035\ \ \ \ \ m\_first\_memory\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk_aeb2ac8030a7130c9e046c07c4cd4cfbb}{allocated}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00036\ \ \ \ \ m\_first\_memory\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk_a2165cec76c0674f5180990e65160a862}{prev}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00037\ \ \ \ \ m\_first\_memory\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk_a9b94dfe2f922882b76c7e592673a5a26}{next}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00038\ \ \ \ \ m\_first\_memory\_chunk-\/>\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk_aa61f41e5ca407c31027431719bb3695f}{size}}\ =\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}}\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
+\DoxyCodeLine{00039\ \ \ \ \ m\_last\_memory\_chunk\ =\ m\_first\_memory\_chunk;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{//\ First\ memory\ manager\ is\ the\ kernel\ memory\ manager}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{virtual_8cpp_source_l00111}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate()}}, \mbox{\hyperlink{memorymanagement_8h_source_l00026}{Max\+OS\+::memory\+::\+Memory\+Chunk\+::allocated}}, \mbox{\hyperlink{memorymanagement_8h_source_l00023}{Max\+OS\+::memory\+::\+Memory\+Chunk\+::next}}, \mbox{\hyperlink{memorymanagement_8h_source_l00024}{Max\+OS\+::memory\+::\+Memory\+Chunk\+::prev}}, \mbox{\hyperlink{memorymanagement_8h_source_l00047}{s\+\_\+kernel\+\_\+memory\+\_\+manager}}, \mbox{\hyperlink{physical_8h_source_l00116}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::s\+\_\+page\+\_\+size}}, \mbox{\hyperlink{memorymanagement_8h_source_l00027}{Max\+OS\+::memory\+::\+Memory\+Chunk\+::size}}, and \mbox{\hyperlink{memorymanagement_8cpp_source_l00288}{switch\+\_\+active\+\_\+memory\+\_\+manager()}}.
+References \mbox{\hyperlink{virtual_8cpp_source_l00115}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate()}}, \mbox{\hyperlink{memorymanagement_8h_source_l00030}{Max\+OS\+::memory\+::\+Memory\+Chunk\+::allocated}}, \mbox{\hyperlink{memorymanagement_8h_source_l00027}{Max\+OS\+::memory\+::\+Memory\+Chunk\+::next}}, \mbox{\hyperlink{physical_8h_source_l00081}{Max\+OS\+::memory\+::\+PAGE\+\_\+\+SIZE}}, \mbox{\hyperlink{memorymanagement_8h_source_l00028}{Max\+OS\+::memory\+::\+Memory\+Chunk\+::prev}}, \mbox{\hyperlink{memorymanagement_8h_source_l00053}{s\+\_\+kernel\+\_\+memory\+\_\+manager}}, \mbox{\hyperlink{memorymanagement_8h_source_l00031}{Max\+OS\+::memory\+::\+Memory\+Chunk\+::size}}, and \mbox{\hyperlink{memorymanagement_8cpp_source_l00297}{switch\+\_\+active\+\_\+memory\+\_\+manager()}}.
 
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_ad4570910ccfc14b2da679bee58ee8f48}\label{classMaxOS_1_1memory_1_1MemoryManager_ad4570910ccfc14b2da679bee58ee8f48} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!````~MemoryManager@{\texorpdfstring{$\sim$}{\string~}MemoryManager}}
@@ -112,30 +112,26 @@ References \mbox{\hyperlink{virtual_8cpp_source_l00111}{Max\+OS\+::memory\+::\+V
 
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00038}{38}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00047}{47}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ VMM\ (if\ this\ is\ not\ the\ kernel\ memory\ manager)}}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_virtual\_memory\_manager\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ !=\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}})}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ m\_virtual\_memory\_manager;}
-\DoxyCodeLine{00043\ }
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ kernel\ reference\ to\ this}}
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{this})}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ active\ reference\ to\ this}}
-\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ ==\ \textcolor{keyword}{this})}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00051\ \}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ VMM\ (if\ this\ is\ not\ the\ kernel\ memory\ manager)}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_virtual\_memory\_manager\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ !=\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}})}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ m\_virtual\_memory\_manager;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ kernel\ reference\ to\ this}}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{this})}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ active\ reference\ to\ this}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ ==\ \textcolor{keyword}{this})}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00060\ \}}
 
 \end{DoxyCode}
-
-
-References \mbox{\hyperlink{memorymanagement_8h_source_l00046}{s\+\_\+current\+\_\+memory\+\_\+manager}}, and \mbox{\hyperlink{memorymanagement_8h_source_l00047}{s\+\_\+kernel\+\_\+memory\+\_\+manager}}.
-
 
 
 \doxysubsection{Member Function Documentation}
@@ -159,23 +155,23 @@ The aligned size
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00277}{277}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00286}{286}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00278\ }
-\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ /\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a2cfd48c5dbef5877035e1941154eb121}{s\_chunk\_alignment}}\ +\ 1)\ *\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a2cfd48c5dbef5877035e1941154eb121}{s\_chunk\_alignment}};}
-\DoxyCodeLine{00280\ \}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ /\ CHUNK\_ALIGNMENT\ +\ 1)\ *\ \mbox{\hyperlink{memorymanagement_8h_a61108789ebdcfe7fa66d8a20826fec14}{CHUNK\_ALIGNMENT}};}
+\DoxyCodeLine{00289\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8h_source_l00050}{s\+\_\+chunk\+\_\+alignment}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
+References \mbox{\hyperlink{memorymanagement_8h_source_l00035}{Max\+OS\+::memory\+::\+CHUNK\+\_\+\+ALIGNMENT}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
 
 
 
-Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00089}{handle\+\_\+malloc()}}.
+Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00098}{handle\+\_\+malloc()}}.
 
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a7123a072d7307c6ee61759fa7da6f677}\label{classMaxOS_1_1memory_1_1MemoryManager_a7123a072d7307c6ee61759fa7da6f677} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!free@{free}}
@@ -194,27 +190,27 @@ Frees a block of memory using the current memory manager.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00147}{147}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00156}{156}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00148\ }
-\DoxyCodeLine{00149\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ a\ memory\ manager}}
-\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00152\ }
-\DoxyCodeLine{00153\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}-\/>handle\_free(pointer);}
-\DoxyCodeLine{00154\ \}}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ a\ memory\ manager}}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}-\/>handle\_free(pointer);}
+\DoxyCodeLine{00163\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8h_source_l00046}{s\+\_\+current\+\_\+memory\+\_\+manager}}.
+References \mbox{\hyperlink{memorymanagement_8h_source_l00052}{s\+\_\+current\+\_\+memory\+\_\+manager}}.
 
 
 
-Referenced by \mbox{\hyperlink{syscalls_8cpp_source_l00168}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+free\+\_\+memory()}}.
+Referenced by \mbox{\hyperlink{syscalls_8cpp_source_l00179}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+free\+\_\+memory()}}.
 
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a5fe3eebb4829ba9ff6172ec53b023c92}\label{classMaxOS_1_1memory_1_1MemoryManager_a5fe3eebb4829ba9ff6172ec53b023c92} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!handle\_free@{handle\_free}}
@@ -233,54 +229,54 @@ Frees a block of memory.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00175}{175}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00184}{184}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00176\ }
-\DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{//\ Cant\ free\ unallocated\ memory}}
-\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordflow}{if}\ (pointer\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00180\ }
-\DoxyCodeLine{00181\ \ \ \ \ \textcolor{comment}{//\ Check\ bounds}}
-\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ pointer\ <\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_first\_memory\_chunk\ ||\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ pointer\ >\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_last\_memory\_chunk)}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00184\ }
-\DoxyCodeLine{00185\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ chunk\ information\ from\ the\ pointer}}
-\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*)\ ((\textcolor{keywordtype}{size\_t})\ pointer\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
-\DoxyCodeLine{00187\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>allocated\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00188\ }
-\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ a\ free\ chunk\ before\ this\ chunk\ then\ merge\ them}}
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ !\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev-\/>allocated)\ \{}
-\DoxyCodeLine{00191\ }
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grow\ the\ chunk\ behind\ this\ one\ so\ that\ it\ now\ contains\ the\ freed\ one}}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev-\/>size\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next;}
-\DoxyCodeLine{00195\ }
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ chunk\ in\ front\ of\ the\ freed\ one\ now\ needs\ to\ point\ to\ the\ merged\ chunk}}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next\ !=\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>prev\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev;}
-\DoxyCodeLine{00199\ }
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Freed\ chunk\ doesn't\ exist\ anymore\ so\ now\ working\ with\ the\ merged\ chunk}}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev;}
-\DoxyCodeLine{00202\ }
-\DoxyCodeLine{00203\ \ \ \ \ \}}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{//\ Cant\ free\ unallocated\ memory}}
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keywordflow}{if}\ (pointer\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{//\ Check\ bounds}}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ pointer\ <\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_first\_memory\_chunk\ ||\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ pointer\ >\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_last\_memory\_chunk)}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ chunk\ information\ from\ the\ pointer}}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*)\ ((\textcolor{keywordtype}{size\_t})\ pointer\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
+\DoxyCodeLine{00196\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>allocated\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ a\ free\ chunk\ before\ this\ chunk\ then\ merge\ them}}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ !\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev-\/>allocated)\ \{}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grow\ the\ chunk\ behind\ this\ one\ so\ that\ it\ now\ contains\ the\ freed\ one}}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev-\/>size\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next;}
 \DoxyCodeLine{00204\ }
-\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ a\ free\ chunk\ after\ this\ chunk\ then\ merge\ them}}
-\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ !\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>allocated)\ \{}
-\DoxyCodeLine{00207\ }
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grow\ this\ chunk\ so\ that\ it\ now\ contains\ the\ free\ chunk\ in\ front\ of\ the\ old\ (now\ freed)\ one}}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>size\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
-\DoxyCodeLine{00210\ }
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ that\ this\ chunk\ contains\ the\ next\ one,\ it\ has\ to\ point\ to\ the\ one\ in\ front\ of\ what\ has\ just\ been\ merged}}
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ and\ that\ has\ to\ point\ to\ this}}
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>next;}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next\ !=\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>prev\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}};}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ chunk\ in\ front\ of\ the\ freed\ one\ now\ needs\ to\ point\ to\ the\ merged\ chunk}}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>prev\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev;}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Freed\ chunk\ doesn't\ exist\ anymore\ so\ now\ working\ with\ the\ merged\ chunk}}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>prev;}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ a\ free\ chunk\ after\ this\ chunk\ then\ merge\ them}}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ !\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>allocated)\ \{}
 \DoxyCodeLine{00216\ }
-\DoxyCodeLine{00217\ \ \ \ \ \}}
-\DoxyCodeLine{00218\ \}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grow\ this\ chunk\ so\ that\ it\ now\ contains\ the\ free\ chunk\ in\ front\ of\ the\ old\ (now\ freed)\ one}}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>size\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ that\ this\ chunk\ contains\ the\ next\ one,\ it\ has\ to\ point\ to\ the\ one\ in\ front\ of\ what\ has\ just\ been\ merged}}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ and\ that\ has\ to\ point\ to\ this}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>next;}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next-\/>prev\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}};}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \}}
+\DoxyCodeLine{00227\ \}}
 
 \end{DoxyCode}
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a1c24cb5da38bff8a9cb9805bb1e4828a}\label{classMaxOS_1_1memory_1_1MemoryManager_a1c24cb5da38bff8a9cb9805bb1e4828a} 
@@ -303,67 +299,67 @@ A pointer to the block, or nullptr if no block is available
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00089}{89}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00098}{98}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00092\ }
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{//\ Nothing\ to\ allocate}}
-\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ ==\ 0)}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00096\ }
-\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{//\ Add\ room\ to\ store\ the\ chunk\ information}}
-\DoxyCodeLine{00098\ \ \ \ \ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a36af3a4224c45dd0d3f285e3d5545d95}{align}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{00099\ }
-\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ next\ free\ chunk\ that\ is\ big\ enough}}
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ m\_first\_memory\_chunk;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ ==\ \textcolor{keyword}{nullptr};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next)\ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ >\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ \&\&\ !\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>allocated)}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}};}
-\DoxyCodeLine{00104\ \ \ \ \ \}}
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{//\ Nothing\ to\ allocate}}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ ==\ 0)}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
 \DoxyCodeLine{00105\ }
-\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ free\ chunk\ then\ make\ more\ room}}
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ expand\_heap(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{00109\ }
-\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ not\ left\ over\ space\ to\ store\ extra\ chunks\ there\ is\ no\ need\ to\ split\ the\ chunk}}
-\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>size\ <\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}})\ +\ 1)\ \{}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>allocated\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a}{p}}\ =\ (\textcolor{keywordtype}{void}*)\ (((\textcolor{keywordtype}{size\_t})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}})\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a}{p}};}
-\DoxyCodeLine{00115\ \ \ \ \ \}}
-\DoxyCodeLine{00116\ }
-\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{//\ Split\ the\ chunk\ into:\ what\ was\ requested\ +\ free\ overflow\ space\ for\ future\ allocates}}
-\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{//\ \ -\/\ This\ prevents\ waste\ in\ the\ event\ that\ a\ big\ free\ chunk\ was\ found\ but\ the\ requested\ size\ would\ only\ use\ a\ portion\ of\ that}}
-\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}\ =\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*)\ ((\textcolor{keywordtype}{size\_t})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}})\ +\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>allocated\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>size\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>size\ -\/\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
-\DoxyCodeLine{00122\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>prev\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}};}
-\DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{//\ Add\ to\ the\ linked\ list}}
-\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>next;}
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>next\ !=\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>next-\/>prev\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}};}
-\DoxyCodeLine{00128\ }
-\DoxyCodeLine{00129\ \ \ \ \ \textcolor{comment}{//\ Requested\ chunk\ is\ now\ allocated\ exactly\ to\ the\ size\ requested\ and\ points\ to\ the\ free\ (split)\ block\ of\ memory\ that}}
-\DoxyCodeLine{00130\ \ \ \ \ \textcolor{comment}{//\ it\ did\ not\ use}}
-\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>size\ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
-\DoxyCodeLine{00132\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>allocated\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}};}
-\DoxyCodeLine{00134\ }
-\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{//\ Update\ the\ last\ memory\ chunk\ if\ necessary}}
-\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ ==\ m\_last\_memory\_chunk)}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ m\_last\_memory\_chunk\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}};}
-\DoxyCodeLine{00138\ }
-\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{void}*)\ (((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{size\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}})\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
-\DoxyCodeLine{00140\ \}}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{//\ Add\ room\ to\ store\ the\ chunk\ information}}
+\DoxyCodeLine{00107\ \ \ \ \ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a36af3a4224c45dd0d3f285e3d5545d95}{align}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ next\ free\ chunk\ that\ is\ big\ enough}}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ m\_first\_memory\_chunk;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ ==\ \textcolor{keyword}{nullptr};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next)\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ >\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ \&\&\ !\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>allocated)}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}};}
+\DoxyCodeLine{00113\ \ \ \ \ \}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ free\ chunk\ then\ make\ more\ room}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ expand\_heap(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ not\ left\ over\ space\ to\ store\ extra\ chunks\ there\ is\ no\ need\ to\ split\ the\ chunk}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>size\ <\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}})\ +\ 1)\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>allocated\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ p\ =\ (\textcolor{keywordtype}{void}*)\ (((\textcolor{keywordtype}{size\_t})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}})\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ p;}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{//\ Split\ the\ chunk\ into:\ what\ was\ requested\ +\ free\ overflow\ space\ for\ future\ allocates}}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{//\ \ -\/\ This\ prevents\ waste\ in\ the\ event\ that\ a\ big\ free\ chunk\ was\ found\ but\ the\ requested\ size\ would\ only\ use\ a\ portion\ of\ that}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}\ =\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*)\ ((\textcolor{keywordtype}{size\_t})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}})\ +\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{00129\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>allocated\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00130\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>size\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>size\ -\/\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}});}
+\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>prev\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{//\ Add\ to\ the\ linked\ list}}
+\DoxyCodeLine{00134\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>next;}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>next\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}}-\/>next-\/>prev\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}};}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{comment}{//\ Requested\ chunk\ is\ now\ allocated\ exactly\ to\ the\ size\ requested\ and\ points\ to\ the\ free\ (split)\ block\ of\ memory\ that}}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{//\ it\ did\ not\ use}}
+\DoxyCodeLine{00140\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>size\ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>allocated\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00142\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}};}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{comment}{//\ Update\ the\ last\ memory\ chunk\ if\ necessary}}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ ==\ m\_last\_memory\_chunk)}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ m\_last\_memory\_chunk\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{extra}};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{void}*)\ (((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{size\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}})\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}));}
+\DoxyCodeLine{00149\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8cpp_source_l00277}{align()}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
+References \mbox{\hyperlink{memorymanagement_8cpp_source_l00286}{align()}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
 
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20}\label{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!kfree@{kfree}}
@@ -382,27 +378,27 @@ Frees a block of memory using the kernel memory manager.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00161}{161}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00170}{170}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00162\ }
-\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ a\ kernel\ memory\ manager}}
-\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00166\ }
-\DoxyCodeLine{00167\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}-\/>handle\_free(pointer);}
-\DoxyCodeLine{00168\ \}}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ a\ kernel\ memory\ manager}}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}-\/>handle\_free(pointer);}
+\DoxyCodeLine{00177\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8h_source_l00047}{s\+\_\+kernel\+\_\+memory\+\_\+manager}}.
+References \mbox{\hyperlink{memorymanagement_8h_source_l00053}{s\+\_\+kernel\+\_\+memory\+\_\+manager}}.
 
 
 
-Referenced by \mbox{\hyperlink{tcp_8cpp_source_l00112}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Socket\+::\+Connected()}}, \mbox{\hyperlink{udp_8cpp_source_l00196}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Disconnect()}}, \mbox{\hyperlink{tcp_8cpp_source_l00105}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Socket\+::\+Disconnected()}}, \mbox{\hyperlink{tcp_8cpp_source_l00074}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Socket\+::handle\+Transmission\+Control\+Protocol\+Payload()}}, \mbox{\hyperlink{udp_8cpp_source_l00043}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Socket\+::handle\+User\+Datagram\+Protocol\+Payload()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00367}{operator delete()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00390}{operator delete()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00378}{operator delete\mbox{[}$\,$\mbox{]}()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00401}{operator delete\mbox{[}$\,$\mbox{]}()}}, \mbox{\hyperlink{udp_8cpp_source_l00217}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00153}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00166}{Max\+OS\+::net\+::\+Internet\+Protocol\+Handler\+::send\+Internet\+Protocol\+Packet()}}, and \mbox{\hyperlink{tcp_8cpp_source_l00384}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}.
+Referenced by \mbox{\hyperlink{tcp_8cpp_source_l00121}{Max\+OS\+::net\+::\+TCPSocket\+::\+Connected()}}, \mbox{\hyperlink{udp_8cpp_source_l00245}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Disconnect()}}, \mbox{\hyperlink{tcp_8cpp_source_l00111}{Max\+OS\+::net\+::\+TCPSocket\+::\+Disconnected()}}, \mbox{\hyperlink{tcp_8cpp_source_l00078}{Max\+OS\+::net\+::\+TCPSocket\+::handle\+Transmission\+Control\+Protocol\+Payload()}}, \mbox{\hyperlink{udp_8cpp_source_l00070}{Max\+OS\+::net\+::\+UDPSocket\+::handle\+User\+Datagram\+Protocol\+Payload()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00377}{operator delete()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00400}{operator delete()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00388}{operator delete\mbox{[}$\,$\mbox{]}()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00412}{operator delete\mbox{[}$\,$\mbox{]}()}}, \mbox{\hyperlink{udp_8cpp_source_l00266}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00181}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00185}{Max\+OS\+::net\+::\+Internet\+Protocol\+Handler\+::send\+Internet\+Protocol\+Packet()}}, and \mbox{\hyperlink{tcp_8cpp_source_l00385}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}.
 
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a983c849ff604367f7c8a0e70172bb331}\label{classMaxOS_1_1memory_1_1MemoryManager_a983c849ff604367f7c8a0e70172bb331} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!kmalloc@{kmalloc}}
@@ -424,27 +420,27 @@ The pointer to the block, or nullptr if no block is available
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00074}{74}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00083}{83}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ a\ kernel\ memory\ manager}}
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00079\ }
-\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}-\/>handle\_malloc(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{00081\ \}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ a\ kernel\ memory\ manager}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{s\_kernel\_memory\_manager}}-\/>handle\_malloc(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{00090\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8h_source_l00047}{s\+\_\+kernel\+\_\+memory\+\_\+manager}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
+References \mbox{\hyperlink{memorymanagement_8h_source_l00053}{s\+\_\+kernel\+\_\+memory\+\_\+manager}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
 
 
 
-Referenced by \mbox{\hyperlink{amd__am79c973_8cpp_source_l00018}{Max\+OS\+::drivers\+::ethernet\+::\+AMD\+\_\+\+AM79\+C973\+::\+AMD\+\_\+\+AM79\+C973()}}, \mbox{\hyperlink{tcp_8cpp_source_l00449}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Connect()}}, \mbox{\hyperlink{udp_8cpp_source_l00135}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Connect()}}, \mbox{\hyperlink{tcp_8cpp_source_l00511}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Listen()}}, \mbox{\hyperlink{udp_8cpp_source_l00170}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Listen()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00320}{operator new()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00332}{operator new\mbox{[}$\,$\mbox{]}()}}, \mbox{\hyperlink{udp_8cpp_source_l00217}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00153}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00166}{Max\+OS\+::net\+::\+Internet\+Protocol\+Handler\+::send\+Internet\+Protocol\+Packet()}}, \mbox{\hyperlink{tcp_8cpp_source_l00384}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}, \mbox{\hyperlink{process_8cpp_source_l00018}{Max\+OS\+::processes\+::\+Thread\+::\+Thread()}}, and \mbox{\hyperlink{vesaboot_8cpp_source_l00017}{Max\+OS\+::drivers\+::console\+::\+VESABoot\+Console\+::\+VESABoot\+Console()}}.
+Referenced by \mbox{\hyperlink{amd__am79c973_8cpp_source_l00022}{Max\+OS\+::drivers\+::ethernet\+::\+AMD\+\_\+\+AM79\+C973\+::\+AMD\+\_\+\+AM79\+C973()}}, \mbox{\hyperlink{tcp_8cpp_source_l00449}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Connect()}}, \mbox{\hyperlink{udp_8cpp_source_l00178}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Connect()}}, \mbox{\hyperlink{tcp_8cpp_source_l00516}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Listen()}}, \mbox{\hyperlink{udp_8cpp_source_l00219}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Listen()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00329}{operator new()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00341}{operator new\mbox{[}$\,$\mbox{]}()}}, \mbox{\hyperlink{udp_8cpp_source_l00266}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00181}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00185}{Max\+OS\+::net\+::\+Internet\+Protocol\+Handler\+::send\+Internet\+Protocol\+Packet()}}, \mbox{\hyperlink{tcp_8cpp_source_l00385}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}, \mbox{\hyperlink{process_8cpp_source_l00021}{Max\+OS\+::processes\+::\+Thread\+::\+Thread()}}, \mbox{\hyperlink{vesaboot_8cpp_source_l00025}{Max\+OS\+::drivers\+::console\+::\+VESABoot\+Console\+::\+VESABoot\+Console()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00059}{Max\+OS\+::system\+::\+Core\+::wake\+\_\+up()}}.
 
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a90f2d5bec98f1e6cdd71c87853baaab9}\label{classMaxOS_1_1memory_1_1MemoryManager_a90f2d5bec98f1e6cdd71c87853baaab9} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!malloc@{malloc}}
@@ -466,27 +462,27 @@ a pointer to the block, 0 if no block is available or no memory manager is set
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00059}{59}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00068}{68}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00060\ }
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ somthing\ to\ do\ the\ allocation}}
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00064\ }
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}-\/>handle\_malloc(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{00066\ \}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ somthing\ to\ do\ the\ allocation}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}-\/>handle\_malloc(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{00075\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8h_source_l00046}{s\+\_\+current\+\_\+memory\+\_\+manager}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
+References \mbox{\hyperlink{memorymanagement_8h_source_l00052}{s\+\_\+current\+\_\+memory\+\_\+manager}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
 
 
 
-Referenced by \mbox{\hyperlink{syscalls_8cpp_source_l00151}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+allocate\+\_\+memory()}}, and \mbox{\hyperlink{process_8cpp_source_l00018}{Max\+OS\+::processes\+::\+Thread\+::\+Thread()}}.
+Referenced by \mbox{\hyperlink{syscalls_8cpp_source_l00162}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+allocate\+\_\+memory()}}, and \mbox{\hyperlink{process_8cpp_source_l00021}{Max\+OS\+::processes\+::\+Thread\+::\+Thread()}}.
 
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_aba582f32d87efac7782b6ec2b6faaa03}\label{classMaxOS_1_1memory_1_1MemoryManager_aba582f32d87efac7782b6ec2b6faaa03} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!memory\_used@{memory\_used}}
@@ -503,21 +499,21 @@ The amount of memory used
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00259}{259}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00268}{268}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00260\ }
-\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ 0;}
-\DoxyCodeLine{00262\ }
-\DoxyCodeLine{00263\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ all\ the\ chunks\ and\ add\ up\ the\ size\ of\ the\ allocated\ chunks}}
-\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ m\_first\_memory\_chunk;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ !=\ \textcolor{keyword}{nullptr};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next)}
-\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>allocated)}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size;}
-\DoxyCodeLine{00267\ }
-\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}};}
-\DoxyCodeLine{00269\ \}}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ 0;}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ all\ the\ chunks\ and\ add\ up\ the\ size\ of\ the\ allocated\ chunks}}
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{MemoryChunk}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ m\_first\_memory\_chunk;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ !=\ \textcolor{keyword}{nullptr};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>next)}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>allocated)}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size;}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}};}
+\DoxyCodeLine{00278\ \}}
 
 \end{DoxyCode}
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_ae584e29e4d2925e3e30be409af2dc2e5}\label{classMaxOS_1_1memory_1_1MemoryManager_ae584e29e4d2925e3e30be409af2dc2e5} 
@@ -537,31 +533,31 @@ Switches the active memory manager.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00288}{288}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00297}{297}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00289\ }
-\DoxyCodeLine{00290\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ a\ manager}}
-\DoxyCodeLine{00291\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{manager}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00293\ }
-\DoxyCodeLine{00294\ \ \ \ \ \textcolor{comment}{//\ Switch\ the\ address\ space}}
-\DoxyCodeLine{00295\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%cr3"{}}::\textcolor{stringliteral}{"{}r"{}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{manager}}-\/>m\_virtual\_memory\_manager-\/>pml4\_root\_address\_physical())\ :\ \textcolor{stringliteral}{"{}memory"{}});}
-\DoxyCodeLine{00296\ }
-\DoxyCodeLine{00297\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ active\ memory\ manager}}
-\DoxyCodeLine{00298\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{manager}};}
-\DoxyCodeLine{00299\ \}}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ a\ manager}}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{manager}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{//\ Switch\ the\ address\ space}}
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%cr3"{}}::\textcolor{stringliteral}{"{}r"{}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{manager}}-\/>m\_virtual\_memory\_manager-\/>pml4\_root\_address\_physical())\ :\ \textcolor{stringliteral}{"{}memory"{}});}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ active\ memory\ manager}}
+\DoxyCodeLine{00307\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}{s\_current\_memory\_manager}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{manager}};}
+\DoxyCodeLine{00308\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8h_source_l00046}{s\+\_\+current\+\_\+memory\+\_\+manager}}.
+References \mbox{\hyperlink{memorymanagement_8h_source_l00052}{s\+\_\+current\+\_\+memory\+\_\+manager}}.
 
 
 
-Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00013}{Memory\+Manager()}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00090}{Max\+OS\+::processes\+::\+Scheduler\+::schedule\+\_\+next()}}.
+Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00022}{Memory\+Manager()}}.
 
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_afa39a98646615a25a16aab6c62ada9fe}\label{classMaxOS_1_1memory_1_1MemoryManager_afa39a98646615a25a16aab6c62ada9fe} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!vmm@{vmm}}
@@ -576,43 +572,19 @@ The active virtual memory manager
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00306}{306}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00315}{315}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00307\ }
-\DoxyCodeLine{00308\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_virtual\_memory\_manager;}
-\DoxyCodeLine{00309\ \}}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_virtual\_memory\_manager;}
+\DoxyCodeLine{00318\ \}}
 
 \end{DoxyCode}
 
 
 \doxysubsection{Member Data Documentation}
-\Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a96a625a7e3c47d7b5ee661d8d3a5d005}\label{classMaxOS_1_1memory_1_1MemoryManager_a96a625a7e3c47d7b5ee661d8d3a5d005} 
-\index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!previous\_memory\_manager@{previous\_memory\_manager}}
-\index{previous\_memory\_manager@{previous\_memory\_manager}!MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}}
-\doxysubsubsection{\texorpdfstring{previous\_memory\_manager}{previous\_memory\_manager}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{Memory\+Manager}}\texorpdfstring{$\ast$}{*} Max\+OS\+::memory\+::\+Memory\+Manager\+::previous\+\_\+memory\+\_\+manager = nullptr}
-
-
-
-Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00052}{52}} of file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
-
-\Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a2cfd48c5dbef5877035e1941154eb121}\label{classMaxOS_1_1memory_1_1MemoryManager_a2cfd48c5dbef5877035e1941154eb121} 
-\index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!s\_chunk\_alignment@{s\_chunk\_alignment}}
-\index{s\_chunk\_alignment@{s\_chunk\_alignment}!MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}}
-\doxysubsubsection{\texorpdfstring{s\_chunk\_alignment}{s\_chunk\_alignment}}
-{\footnotesize\ttfamily const size\+\_\+t Max\+OS\+::memory\+::\+Memory\+Manager\+::s\+\_\+chunk\+\_\+alignment = 0x10\hspace{0.3cm}{\ttfamily [static]}}
-
-
-
-Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00050}{50}} of file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00277}{align()}}.
-
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e}\label{classMaxOS_1_1memory_1_1MemoryManager_a21c9b41d5a57a6a5c22a15e229fd8b7e} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!s\_current\_memory\_manager@{s\_current\_memory\_manager}}
 \index{s\_current\_memory\_manager@{s\_current\_memory\_manager}!MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}}
@@ -621,11 +593,15 @@ Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00277}{align()}}.
 
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00046}{46}} of file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
+The memory manager for the current process. 
 
 
 
-Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00147}{free()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00059}{malloc()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00288}{switch\+\_\+active\+\_\+memory\+\_\+manager()}}, and \mbox{\hyperlink{memorymanagement_8cpp_source_l00038}{\texorpdfstring{$\sim$}{\string~}\+Memory\+Manager()}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00052}{52}} of file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00156}{free()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00068}{malloc()}}, and \mbox{\hyperlink{memorymanagement_8cpp_source_l00297}{switch\+\_\+active\+\_\+memory\+\_\+manager()}}.
 
 \Hypertarget{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}\label{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48} 
 \index{MaxOS::memory::MemoryManager@{MaxOS::memory::MemoryManager}!s\_kernel\_memory\_manager@{s\_kernel\_memory\_manager}}
@@ -635,11 +611,15 @@ Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00147}{free()}}, \m
 
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00047}{47}} of file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
+The memory manager for any kernel processes and all kernel allocations. 
 
 
 
-Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00161}{kfree()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00074}{kmalloc()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00013}{Memory\+Manager()}}, \mbox{\hyperlink{process_8cpp_source_l00119}{Max\+OS\+::processes\+::\+Process\+::\+Process()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00014}{Max\+OS\+::processes\+::\+Scheduler\+::\+Scheduler()}}, \mbox{\hyperlink{virtual_8cpp_source_l00013}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager()}}, and \mbox{\hyperlink{memorymanagement_8cpp_source_l00038}{\texorpdfstring{$\sim$}{\string~}\+Memory\+Manager()}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00053}{53}} of file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00170}{kfree()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00083}{kmalloc()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00022}{Memory\+Manager()}}, \mbox{\hyperlink{process_8cpp_source_l00176}{Max\+OS\+::processes\+::\+Process\+::\+Process()}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00362}{Max\+OS\+::processes\+::\+Scheduler\+::\+Scheduler()}}.
 
 
 

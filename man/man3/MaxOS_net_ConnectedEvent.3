@@ -2,47 +2,44 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::net::ConnectedEvent
+MaxOS::net::ConnectedEvent \- Event for when a TCP socket is connected\&.  
+
 .SH SYNOPSIS
 .br
 .PP
 .PP
 \fC#include <tcp\&.h>\fP
 .PP
-Inherits \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP\&.
+Inherits \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBConnectedEvent\fP (\fBTransmissionControlProtocolSocket\fP *\fBsocket\fP)"
+.RI "\fBConnectedEvent\fP (\fBTCPSocket\fP *\fBsocket\fP)"
 .br
-.ti -1c
-.RI "\fB~ConnectedEvent\fP ()"
-.br
+.RI "Construct a new Connected Event object\&. "
 .in -1c
 
-Public Member Functions inherited from \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP
+Public Member Functions inherited from \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP
 .in +1c
 .ti -1c
-.RI "\fBEvent\fP (TransmissionControlProtocolPayloadHandlerEvents \fBtype\fP)"
+.RI "\fBEvent\fP (TCPPayloadHandlerEvents \fBtype\fP)"
 .br
 .RI "___________________________ Template Implementation ___________________________ "
-.ti -1c
-.RI "\fB~Event\fP ()"
-.br
 .in -1c
 .SS "Public Attributes"
 
 .in +1c
 .ti -1c
-.RI "\fBTransmissionControlProtocolSocket\fP * \fBsocket\fP"
+.RI "\fBTCPSocket\fP * \fBsocket\fP"
 .br
+.RI "The socket that is connected\&. "
 .in -1c
 
-Public Attributes inherited from \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP
+Public Attributes inherited from \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP
 .in +1c
 .ti -1c
-.RI "TransmissionControlProtocolPayloadHandlerEvents \fBtype\fP"
+.RI "TCPPayloadHandlerEvents \fBtype\fP"
 .br
 .ti -1c
 .RI "\fBuint8_t\fP * \fBbufferValue\fP"
@@ -71,30 +68,40 @@ Public Attributes inherited from \fBMaxOS::common::Event< TransmissionControlPro
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB99\fP of file \fBtcp\&.h\fP\&.
+Event for when a TCP socket is connected\&. 
+.PP
+Definition at line \fB126\fP of file \fBtcp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "ConnectedEvent::ConnectedEvent (\fBTransmissionControlProtocolSocket\fP * socket)"
+.SS "ConnectedEvent::ConnectedEvent (\fBTCPSocket\fP * socket)"
 
 .PP
-Definition at line \fB561\fP of file \fBtcp\&.cpp\fP\&..PP
+Construct a new Connected Event object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsocket\fP The socket that is connected 
+.RE
+.PP
+
+.PP
+Definition at line \fB567\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-562 : Event(TransmissionControlProtocolPayloadHandlerEvents::CONNECTED)
-563 {
-564     this \-> socket = socket;
-565 }
+568         : Event(TCPPayloadHandlerEvents::CONNECTED) {
+569     this\->socket = socket;
+570 }
 .fi
 
 .PP
 References \fBsocket\fP\&.
-.SS "ConnectedEvent::~ConnectedEvent ()\fC [default]\fP"
-
 .SH "Member Data Documentation"
 .PP 
-.SS "\fBTransmissionControlProtocolSocket\fP* MaxOS::net::ConnectedEvent::socket"
+.SS "\fBTCPSocket\fP* MaxOS::net::ConnectedEvent::socket"
 
 .PP
-Definition at line \fB102\fP of file \fBtcp\&.h\fP\&.
+The socket that is connected\&. 
+.PP
+Definition at line \fB128\fP of file \fBtcp\&.h\fP\&.
 .PP
 Referenced by \fBConnectedEvent()\fP\&.
 

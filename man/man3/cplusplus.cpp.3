@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/cplusplus.cpp
+/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/cplusplus.cpp \- Implementation of C++ runtime support functions\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -18,8 +19,12 @@
 .RI "void \fB__cxa_pure_virtual\fP ()"
 .br
 .ti -1c
+.RI "void \fB__stack_chk_fail\fP (void)"
+.br
+.ti -1c
 .RI "void \fBcall_constructors\fP ()"
 .br
+.RI "Calls the C++ static constructors\&. "
 .in -1c
 .SS "Variables"
 
@@ -34,35 +39,61 @@
 .RI "constructor \fBend_ctors\fP"
 .br
 .in -1c
+.SH "Detailed Description"
+.PP 
+Implementation of C++ runtime support functions\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+30th March 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBcplusplus\&.cpp\fP\&.
 .SH "Function Documentation"
 .PP 
 .SS "void __cxa_pure_virtual ()"
 
 .PP
-Definition at line \fB14\fP of file \fBcplusplus\&.cpp\fP\&..PP
+Definition at line \fB19\fP of file \fBcplusplus\&.cpp\fP\&..PP
 .nf
-14                                      {
-15 
-16     ASSERT(false, "Pure virtual function call failed");
-17 }
+19                                      {
+20     ASSERT(false, "Pure virtual function call failed");
+21 }
 .fi
 
-.PP
-References \fBASSERT\fP\&.
-.SS "void call_constructors ()"
+.SS "void __stack_chk_fail (void)"
 
 .PP
-Definition at line \fB22\fP of file \fBcplusplus\&.cpp\fP\&..PP
+Definition at line \fB23\fP of file \fBcplusplus\&.cpp\fP\&..PP
 .nf
-22                                     {
-23     // Loop through and initialise all the global constructors
-24     for (constructor* i = &start_ctors; i != &end_ctors; i++)
-25         (*i)();
+24 {
+25     ASSERT(false, "Stack Smashed");
 26 }
 .fi
 
+.SS "void call_constructors ()"
+
 .PP
-References \fBend_ctors\fP, and \fBstart_ctors\fP\&.
+Calls the C++ static constructors\&. 
+.PP
+Definition at line \fB29\fP of file \fBcplusplus\&.cpp\fP\&..PP
+.nf
+29                                     {
+30     // Loop through and initialise all the global constructors
+31     for (constructor* i = &start_ctors; i != &end_ctors; i++)
+32         (*i)();
+33 }
+.fi
+
 .PP
 Referenced by \fBkernel_main()\fP\&.
 .SH "Variable Documentation"
@@ -70,19 +101,15 @@ Referenced by \fBkernel_main()\fP\&.
 .SS "void* __dso_handle = nullptr"
 
 .PP
-Definition at line \fB11\fP of file \fBcplusplus\&.cpp\fP\&.
+Definition at line \fB16\fP of file \fBcplusplus\&.cpp\fP\&.
 .SS "constructor end_ctors"
 
 .PP
-Definition at line \fB21\fP of file \fBcplusplus\&.cpp\fP\&.
-.PP
-Referenced by \fBcall_constructors()\fP\&.
+Definition at line \fB28\fP of file \fBcplusplus\&.cpp\fP\&.
 .SS "constructor start_ctors"
 
 .PP
-Definition at line \fB20\fP of file \fBcplusplus\&.cpp\fP\&.
-.PP
-Referenced by \fBcall_constructors()\fP\&.
+Definition at line \fB27\fP of file \fBcplusplus\&.cpp\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

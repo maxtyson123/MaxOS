@@ -1,7 +1,5 @@
 var classMaxOS_1_1drivers_1_1disk_1_1Disk =
 [
-    [ "Disk", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a7b4e578f63bfbf395e1f6e24a0e43bf4", null ],
-    [ "~Disk", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a77518c808f3f5d9e902a55942542c337", null ],
     [ "activate", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a2f1d6b2022b29964486a478dfcddba2a", null ],
     [ "device_name", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a657d2b0e8507bf8c14a3d0a6218e1a44", null ],
     [ "flush", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#ab4ab7bd9ad970bdfe4dc72f1ae7c6605", null ],

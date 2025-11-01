@@ -15,11 +15,9 @@ Inherits \fBMaxOS::memory::MemIO\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBMemIO64Bit\fP (uintptr_t \fBaddress\fP)"
+.RI "\fBMemIO64Bit\fP (uintptr_t address)"
 .br
-.ti -1c
-.RI "\fB~MemIO64Bit\fP ()"
-.br
+.RI "Construct a new Mem IO object for 64 bit reads/writes\&. "
 .ti -1c
 .RI "virtual void \fBwrite\fP (uint64_t \fBdata\fP)"
 .br
@@ -35,11 +33,9 @@ Inherits \fBMaxOS::memory::MemIO\fP\&.
 Protected Member Functions inherited from \fBMaxOS::memory::MemIO\fP
 .in +1c
 .ti -1c
-.RI "\fBMemIO\fP (uintptr_t \fBaddress\fP)"
+.RI "\fBMemIO\fP (uintptr_t address)"
 .br
-.ti -1c
-.RI "\fB~MemIO\fP ()"
-.br
+.RI "Construct a new Mem IO object\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::memory::MemIO\fP
@@ -47,25 +43,33 @@ Protected Attributes inherited from \fBMaxOS::memory::MemIO\fP
 .ti -1c
 .RI "uintptr_t \fBm_address\fP"
 .br
+.RI "The memory address to read from / write to\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles 64 bit memory IO\&. 
 .PP
-Definition at line \fB69\fP of file \fBmemoryIO\&.h\fP\&.
+Definition at line \fB75\fP of file \fBmemoryIO\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "MemIO64Bit::MemIO64Bit (uintptr_t address)"
 
 .PP
-Definition at line \fB98\fP of file \fBmemoryIO\&.cpp\fP\&..PP
-.nf
-99 : MemIO(address)
-100 {
-101 }
-.fi
+Construct a new Mem IO object for 64 bit reads/writes\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The memory address to read from / write to 
+.RE
+.PP
 
-.SS "MemIO64Bit::~MemIO64Bit ()\fC [default]\fP"
+.PP
+Definition at line \fB127\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+.nf
+128 : MemIO(address)
+129 {
+130 }
+.fi
 
 .SH "Member Function Documentation"
 .PP 
@@ -81,12 +85,12 @@ the data read
 .PP
 
 .PP
-Definition at line \fB120\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+Definition at line \fB149\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-120                           {
-121 
-122     return *((volatile uint64_t*) (m_address));
-123 }
+149                           {
+150 
+151     return *((volatile uint64_t*) (m_address));
+152 }
 .fi
 
 .PP
@@ -103,12 +107,12 @@ Writes data to the memory address\&.
 .PP
 
 .PP
-Definition at line \fB110\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+Definition at line \fB139\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-110                                     {
-111 
-112     (*((volatile uint64_t*) (m_address))) = (data);
-113 }
+139                                     {
+140 
+141     (*((volatile uint64_t*) (m_address))) = (data);
+142 }
 .fi
 
 .PP

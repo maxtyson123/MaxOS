@@ -1,5 +1,10 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/filesystem/format/fat32.h File Reference}
 \hypertarget{fat32_8h}{}\label{fat32_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/fat32.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/fat32.h}}
+
+
+Defines structures and constants for the File Allocation Table 32 (FAT32) filesystem format and the relevant Filesystem, Directory and File classes.  
+
+
 {\ttfamily \#include $<$drivers/disk/disk.\+h$>$}\newline
 {\ttfamily \#include $<$filesystem/filesystem.\+h$>$}\newline
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
@@ -7,13 +12,13 @@
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32}{Max\+OS\+::filesystem\+::format\+::\+Bios\+Parameter\+Block32}}
-\item 
+\begin{DoxyCompactList}\small\item\em Stores information about the FAT32 filesystem. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1FSInfo}{Max\+OS\+::filesystem\+::format\+::\+FSInfo}}
-\item 
+\begin{DoxyCompactList}\small\item\em Stores extra information about the FAT32 filesystem. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1DirectoryEntry}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry}}
 \begin{DoxyCompactList}\small\item\em Stores information about a file or directory. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1LongFileNameEntry}{Max\+OS\+::filesystem\+::format\+::\+Long\+File\+Name\+Entry}}
-\item 
+\begin{DoxyCompactList}\small\item\em \doxylink{classMaxOS_1_1filesystem_1_1Directory}{Directory} entry for a long file name. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32Volume}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+Volume}}
 \begin{DoxyCompactList}\small\item\em Handles the FAT table that stores the information about the files on the disk and operations on the disk. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32File}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File}}
@@ -22,157 +27,247 @@ class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32Directory}{Max
 \begin{DoxyCompactList}\small\item\em Handles the directory operations on the FAT32 filesystem. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32FileSystem}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+System}}
 \begin{DoxyCompactList}\small\item\em Handles the FAT32 filesystem operations. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1filesystem}{Max\+OS\+::filesystem}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format}{Max\+OS\+::filesystem\+::format}}
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eb}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Attributes}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba88c189a42c87aa49d667fc8ab76bc323}{Max\+OS\+::filesystem\+::format\+::\+FREE}} = 0x00
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba47c7e7cb36a953a8c47e02000036bb44}{Max\+OS\+::filesystem\+::format\+::\+READ\+\_\+\+ONLY}} = 0x01
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba347e628a8f72626a0611ef842fe9d304}{Max\+OS\+::filesystem\+::format\+::\+HIDDEN}} = 0x02
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38ebafa177138f94a7ea01f549b1aa7893d03}{Max\+OS\+::filesystem\+::format\+::\+SYSTEM}} = 0x04
+enum class \mbox{\hyperlink{fat32_8h_a7507baa8014895f34c2e559bb7ab38eb}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Attributes}} \{ \newline
+{\bfseries FREE} = 0x00
+, {\bfseries READ\+\_\+\+ONLY} = 0x01
+, {\bfseries HIDDEN} = 0x02
+, {\bfseries SYSTEM} = 0x04
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38ebac7ab89361775165d882d325f6a44dcab}{Max\+OS\+::filesystem\+::format\+::\+VOLUME\+\_\+\+ID}} = 0x08
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba28766b4be065d0c806c2e9c9d914af48}{Max\+OS\+::filesystem\+::format\+::\+DIRECTORY}} = 0x10
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba71f01f32e90440fd6039511dde69e995}{Max\+OS\+::filesystem\+::format\+::\+ARCHIVE}} = 0x20
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eba6be6b4d55f83c58370e48693daae3f68}{Max\+OS\+::filesystem\+::format\+::\+LONG\+\_\+\+NAME}} = READ\+\_\+\+ONLY \texorpdfstring{$\vert$}{|} HIDDEN \texorpdfstring{$\vert$}{|} SYSTEM \texorpdfstring{$\vert$}{|} VOLUME\+\_\+\+ID
+{\bfseries VOLUME\+\_\+\+ID} = 0x08
+, {\bfseries DIRECTORY} = 0x10
+, {\bfseries ARCHIVE} = 0x20
+, {\bfseries LONG\+\_\+\+NAME} = READ\+\_\+\+ONLY \texorpdfstring{$\vert$}{|} HIDDEN \texorpdfstring{$\vert$}{|} SYSTEM \texorpdfstring{$\vert$}{|} VOLUME\+\_\+\+ID
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_ada91f9a29bc3902c44576cc1e84a4b53}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Type}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_ada91f9a29bc3902c44576cc1e84a4b53af447f5c03508de4d88e340390ba7c78f}{Max\+OS\+::filesystem\+::format\+::\+LAST}} = 0x00
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_ada91f9a29bc3902c44576cc1e84a4b53a88c189a42c87aa49d667fc8ab76bc323}{Max\+OS\+::filesystem\+::format\+::\+FREE}} = 0x\+E5
+\begin{DoxyCompactList}\small\item\em Flags for a directory entry in a FAT32 System. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{fat32_8h_ada91f9a29bc3902c44576cc1e84a4b53}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Type}} \{ {\bfseries LAST} = 0x00
+, {\bfseries FREE} = 0x\+E5
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a21e185e98587cd02f56fcd5b93cafe64}{Max\+OS\+::filesystem\+::format\+::\+Cluster\+State}} \+: uint32\+\_\+t \{ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a21e185e98587cd02f56fcd5b93cafe64a88c189a42c87aa49d667fc8ab76bc323}{Max\+OS\+::filesystem\+::format\+::\+FREE}} = 0x00000000
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a21e185e98587cd02f56fcd5b93cafe64af1b68d66337a81cfa0d2076171cba2a8}{Max\+OS\+::filesystem\+::format\+::\+BAD}} = 0x0\+FFFFFF7
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a21e185e98587cd02f56fcd5b93cafe64acf542699ffaa1a09c5b27c0f72cd3f6f}{Max\+OS\+::filesystem\+::format\+::\+END\+\_\+\+OF\+\_\+\+CHAIN}} = 0x\+FFFFFFFF
+\begin{DoxyCompactList}\small\item\em The type of a directory entry. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{fat32_8h_a21e185e98587cd02f56fcd5b93cafe64}{Max\+OS\+::filesystem\+::format\+::\+Cluster\+State}} \+: uint32\+\_\+t \{ {\bfseries FREE} = 0x00000000
+, {\bfseries BAD} = 0x0\+FFFFFF7
+, {\bfseries END\+\_\+\+OF\+\_\+\+CHAIN} = 0x\+FFFFFFFF
  \}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The state of a cluster in the FAT32 filesystem. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32}{Max\+OS\+::filesystem\+::format\+::\+Bios\+Parameter\+Block32}} \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a52f6620003d8bac345b43e0b30c9ea5f}{Max\+OS\+::filesystem\+::format\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed)) bpb32\+\_\+t
+\Hypertarget{fat32_8h_a52f6620003d8bac345b43e0b30c9ea5f}\label{fat32_8h_a52f6620003d8bac345b43e0b30c9ea5f} 
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32}{Max\+OS\+::filesystem\+::format\+::\+Bios\+Parameter\+Block32}} {\bfseries Max\+OS\+::filesystem\+::format\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed)) bpb32\+\_\+t
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a61b95cffdd449d10352cfd0288b23287}{jump}} \mbox{[}3\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em Jump instruction to boot code. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_ae21b477395a1441f77a079937a0900bb}{OEM\+\_\+name}} \mbox{[}8\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em OEM Name in ASCII. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_aad9aa4ff8c80f1bcb0ac03f23bb9701e}{bytes\+\_\+per\+\_\+sector}}
-\item 
+\begin{DoxyCompactList}\small\item\em Bytes per sector. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_aa3a3c1372b7961d20b11ab8164cc7ef3}{sectors\+\_\+per\+\_\+cluster}}
-\item 
+\begin{DoxyCompactList}\small\item\em Sectors per cluster. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_ab9d9cece402bcfc967b895cd556985ef}{reserved\+\_\+sectors}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of reserved sectors. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a5488b7348d1becdf3e14d0a278eae8d3}{table\+\_\+copies}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of FAT tables. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a6f1caf959e540fc21dae995d08281837}{root\+\_\+entries}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of root directory entries. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_aa6660fa269cbfd3fb8d6da7d5974a1a8}{total\+\_\+sectors\+\_\+16}}
-\item 
+\begin{DoxyCompactList}\small\item\em Total number of sectors (if zero, use total\+\_\+sectors\+\_\+32) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a4b184d5976feb6927aa2a1bd3bc157cc}{media\+\_\+type}}
-\item 
+\begin{DoxyCompactList}\small\item\em Media descriptor. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a18a1f21056d66593d30c1f3ba673b5c1}{fat\+\_\+sector\+\_\+count}}
-\item 
+\begin{DoxyCompactList}\small\item\em Sectors per FAT (FAT12/\+FAT16 only) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a6ff75fddb278127f316c862cbf03bfb6}{sectors\+\_\+per\+\_\+track}}
-\item 
+\begin{DoxyCompactList}\small\item\em Sectors per track. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_ac50aa7989eb3c0662619a9fa573e2cc3}{head\+\_\+count}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of heads/sides. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ad4f0ed516a7d627aa96fd773f27a03a7}{hidden\+\_\+sectors}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of hidden sectors (LBA of start of partition) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a7e57d21626d5fc1d73e4632a89709b54}{total\+\_\+sectors\+\_\+32}}
-\item 
+\begin{DoxyCompactList}\small\item\em Total number of sectors (if total\+\_\+sectors\+\_\+16 is zero) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_addc3b6341df1d5f0b7505254093f4428}{table\+\_\+size\+\_\+32}}
-\item 
+\begin{DoxyCompactList}\small\item\em Sectors per FAT (FAT32 only) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a55dd8549d603eab89b2e0c423f4b3cda}{extended\+\_\+flags}}
-\item 
+\begin{DoxyCompactList}\small\item\em Extended flags. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a7695af2379f9d7dee48a680658d0a524}{fat\+\_\+version}}
-\item 
+\begin{DoxyCompactList}\small\item\em FAT version number (high byte major, low byte minor) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a8f7173a14bd041462761634e52a57e86}{root\+\_\+cluster}}
-\item 
+\begin{DoxyCompactList}\small\item\em Cluster number of root directory start. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a45b262a0b541597f68307aff18c6d358}{fat\+\_\+info}}
-\item 
+\begin{DoxyCompactList}\small\item\em Sector number of FSInfo structure. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_aafa09ac103833cbbeeac1edcbf62bed6}{backup\+\_\+sector}}
-\item 
+\begin{DoxyCompactList}\small\item\em Sector number of backup boot sector. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_ad1a89a7890b52216a93b64d30c131c4b}{reserved0}} \mbox{[}12\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em Should be zero. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a72aedf7609ef652851878e7a1a802c40}{drive\+\_\+number}}
-\item 
+\begin{DoxyCompactList}\small\item\em Drive number (must be identical to BIOS drive number) (0x00 = floppy, 0x80 = first hard disk) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_ab43cbe584bc4765d2e54d9026a1f7c04}{reserved\+\_\+1}}
-\item 
+\begin{DoxyCompactList}\small\item\em Reserved (used by Windows NT) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_ac1a97c4232f0271f6af44f69ae2d3efd}{boot\+\_\+signature}}
-\item 
-uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a4c79470e2d0d72cdbbc391b10e1ba57d}{uint\+\_\+32}}
-\item 
+\begin{DoxyCompactList}\small\item\em Extended boot signature (0x28 or 0x29) \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a77a2cd2807c348ae913c256e41533320}{volume\+\_\+id}}
+\begin{DoxyCompactList}\small\item\em Volume serial number. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a1726642eb49790a81d20ba1024d9791d}{volume\+\_\+label}} \mbox{[}11\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em Volume label in ASCII (spaces padded) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a2f816cb05dbdeaab4822e274c1c132b3}{file\+\_\+system\+\_\+type}} \mbox{[}8\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em System type in ASCII (not null-\/terminated) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ae8383090a2c40a0a44d77f9e4b6d731b}{lead\+\_\+signature}}
-\item 
+\begin{DoxyCompactList}\small\item\em FSInfo lead signature (0x41615252) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_aed41fe36034f1fcda738da60943924a6}{reserved1}} \mbox{[}480\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em Reserved (should be zero) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a86319fe2c708080de55d983c58b52626}{structure\+\_\+signature}}
-\item 
+\begin{DoxyCompactList}\small\item\em FSInfo structure signature (0x61417272) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a82a6626ae16c997b5ed5cf2eb7164bc9}{free\+\_\+cluster\+\_\+count}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of free clusters (or 0x\+FFFFFFFF if unknown) (not reliable, must range check) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_aee407e98526d594cdef398d2cfa05ee8}{next\+\_\+free\+\_\+cluster}}
-\item 
+\begin{DoxyCompactList}\small\item\em Cluster number of the next free cluster (or 0x\+FFFFFFFF if unknown, start searching from cluster 2) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_af6dc8e21f5c1ca5ca997fc835808802c}{reserved2}} \mbox{[}12\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em Reserved (should be zero) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_a760eb704cccb3d6ece4b70d8cff868e6}{trail\+\_\+signature}}
-\item 
+\begin{DoxyCompactList}\small\item\em FSInfo trail signature (0x\+AA550000) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}} \mbox{[}8\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em File name. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_ac53000273f91ccd0a71d565d8063f914}{extension}} \mbox{[}3\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em File extension. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a983149395439fbc9ca8497076b75fd6b}{attributes}}
-\item 
+\begin{DoxyCompactList}\small\item\em File attributes (see Directory\+Entry\+Attributes) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_ac35c1fbebe2017fc1ca10f5803668dfd}{reserved}}
-\item 
+\begin{DoxyCompactList}\small\item\em Reserved for Windows NT. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a60a55b2bce6316ee7e97ede0402491ef}{creation\+\_\+time\+\_\+tenth}}
-\item 
+\begin{DoxyCompactList}\small\item\em Creation time in tenths of a second (or 100ths of a second) (0-\/199 on Windows, 0/100 on Linux) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a95650faad49780e62ace0e0655e24632}{creation\+\_\+time}}
-\item 
+\begin{DoxyCompactList}\small\item\em Creation time (HH\+:\+MM\+:SS) (multiply seconds by 2) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_af720492f0576616c43ffc1324f8d4592}{creation\+\_\+date}}
-\item 
+\begin{DoxyCompactList}\small\item\em Creation date (YYYY-\/\+MM-\/\+DD) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a9ba2d4d6008d657bee96ff6937079b4b}{last\+\_\+access\+\_\+date}}
-\item 
+\begin{DoxyCompactList}\small\item\em Last access date (YYYY-\/\+MM-\/\+DD) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a295849bfe720256aa3a5a454a28c1b84}{first\+\_\+cluster\+\_\+high}}
-\item 
+\begin{DoxyCompactList}\small\item\em High word of this entry\textquotesingle{}s first cluster number (usually 0 for FAT12/\+FAT16) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_ad94dab8bcdb0d7989336d90a69c2a517}{last\+\_\+write\+\_\+time}}
-\item 
+\begin{DoxyCompactList}\small\item\em Last write time (HH\+:\+MM\+:SS) (multiply seconds by 2) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a4cdb9a914e3c619d15373abefccaaf8e}{last\+\_\+write\+\_\+date}}
-\item 
+\begin{DoxyCompactList}\small\item\em Last write date (YYYY-\/\+MM-\/\+DD) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a6344f7a8bbb25a1d5161131b27ca97a4}{first\+\_\+cluster\+\_\+low}}
-\item 
+\begin{DoxyCompactList}\small\item\em Low word of this entry\textquotesingle{}s first cluster number. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{fat32_8h_ab2c6b258f02add8fdf4cfc7c371dd772}{size}}
-\item 
-enum \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a7507baa8014895f34c2e559bb7ab38eb}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Attributes}} \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_a36092eb58028d173cef47dde82f39032}{Max\+OS\+::filesystem\+::format\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\begin{DoxyCompactList}\small\item\em File size in bytes. \end{DoxyCompactList}\item 
+\Hypertarget{fat32_8h_a36092eb58028d173cef47dde82f39032}\label{fat32_8h_a36092eb58028d173cef47dde82f39032} 
+enum \mbox{\hyperlink{fat32_8h_a7507baa8014895f34c2e559bb7ab38eb}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Attributes}} {\bfseries Max\+OS\+::filesystem\+::format\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}
 \item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_aa44597f38af03f4bb6ef069ba7efb24c}{order}}
-\item 
+\begin{DoxyCompactList}\small\item\em Index of this entry in the sequence of LFN entries. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a5838c0c2c16393596822649d9b9d9d8b}{name1}} \mbox{[}5\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em First 5 characters of the long file name. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}
-\item 
+\begin{DoxyCompactList}\small\item\em Type (always 0 for LFN entries) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{fat32_8h_a59eac9627282a484fbaf0aa7aa3b8a9a}{checksum}}
-\item 
+\begin{DoxyCompactList}\small\item\em Checksum of the corresponding short file name. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a5842149c75fb6d31bf351993341cf514}{name2}} \mbox{[}6\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em Next 6 characters of the long file name. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa}{zero}}
-\item 
+\begin{DoxyCompactList}\small\item\em Must be zero. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{fat32_8h_aed3846d60b6d4d21c4efa6c40a37a873}{name3}} \mbox{[}2\mbox{]}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Last 2 characters of the long file name. \end{DoxyCompactList}\item 
+constexpr uint16\+\_\+t \mbox{\hyperlink{fat32_8h_a9baeecdd87b0c5c2ef2bc02bb838307d}{Max\+OS\+::filesystem\+::format\+::\+MAX\+\_\+\+NAME\+\_\+\+LENGTH}} = 255
+\begin{DoxyCompactList}\small\item\em Highest number of characters in a file/directory name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines structures and constants for the File Allocation Table 32 (FAT32) filesystem format and the relevant Filesystem, Directory and File classes. 
+
+\begin{DoxyDate}{Date}
+1st January 2023 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson
+\end{DoxyAuthor}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000013}{Todo}}]BUG\+: Subdirectory seems to write to the disk this end but tools like fatcat complain the that the EOC isn\textquotesingle{}t written (cluster 3037) 
+
+Implment\+: create/delete/rename files \& directories \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{fat32_8h_a21e185e98587cd02f56fcd5b93cafe64}\label{fat32_8h_a21e185e98587cd02f56fcd5b93cafe64} 
+\index{fat32.h@{fat32.h}!ClusterState@{ClusterState}}
+\index{ClusterState@{ClusterState}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{ClusterState}{ClusterState}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{fat32_8h_a21e185e98587cd02f56fcd5b93cafe64}{Max\+OS\+::filesystem\+::format\+::\+Cluster\+State}} \+: uint32\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The state of a cluster in the FAT32 filesystem. 
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00146}{146}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ uint32\_t\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREE\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000000,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BAD\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x0FFFFFF7,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ END\_OF\_CHAIN\ \ \ \ =\ 0xFFFFFFFF,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{fat32_8h_a7507baa8014895f34c2e559bb7ab38eb}\label{fat32_8h_a7507baa8014895f34c2e559bb7ab38eb} 
+\index{fat32.h@{fat32.h}!DirectoryEntryAttributes@{DirectoryEntryAttributes}}
+\index{DirectoryEntryAttributes@{DirectoryEntryAttributes}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{DirectoryEntryAttributes}{DirectoryEntryAttributes}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{fat32_8h_a7507baa8014895f34c2e559bb7ab38eb}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Attributes}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Flags for a directory entry in a FAT32 System. 
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00106}{106}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREE\ =\ 0x00,}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ READ\_ONLY\ =\ 0x01,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HIDDEN\ =\ 0x02,}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SYSTEM\ =\ 0x04,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VOLUME\_ID\ =\ 0x08,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIRECTORY\ =\ 0x10,}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ARCHIVE\ =\ 0x20,}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LONG\_NAME\ =\ READ\_ONLY\ |\ HIDDEN\ |\ SYSTEM\ |\ VOLUME\_ID,}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{fat32_8h_ada91f9a29bc3902c44576cc1e84a4b53}\label{fat32_8h_ada91f9a29bc3902c44576cc1e84a4b53} 
+\index{fat32.h@{fat32.h}!DirectoryEntryType@{DirectoryEntryType}}
+\index{DirectoryEntryType@{DirectoryEntryType}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{DirectoryEntryType}{DirectoryEntryType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{fat32_8h_ada91f9a29bc3902c44576cc1e84a4b53}{Max\+OS\+::filesystem\+::format\+::\+Directory\+Entry\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The type of a directory entry. 
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00121}{121}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LAST\ =\ 0x00,}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREE\ =\ 0xE5,}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
 
 
 \doxysubsection{Variable Documentation}
@@ -184,6 +279,10 @@ uint16\+\_\+t \mbox{\hyperlink{fat32_8h_aed3846d60b6d4d21c4efa6c40a37a873}{name3
 
 
 
+File attributes (see Directory\+Entry\+Attributes) 
+
+Attributes (always 0x0F for LFN entries) 
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_aafa09ac103833cbbeeac1edcbf62bed6}\label{fat32_8h_aafa09ac103833cbbeeac1edcbf62bed6} 
@@ -191,6 +290,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\h
 \index{backup\_sector@{backup\_sector}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{backup\_sector}{backup\_sector}}
 {\footnotesize\ttfamily uint16\+\_\+t backup\+\_\+sector}
+
+
+
+Sector number of backup boot sector. 
 
 
 
@@ -204,6 +307,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00021}{21}} of file \mbox{\
 
 
 
+Extended boot signature (0x28 or 0x29) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00025}{25}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_aad9aa4ff8c80f1bcb0ac03f23bb9701e}\label{fat32_8h_aad9aa4ff8c80f1bcb0ac03f23bb9701e} 
@@ -214,17 +321,25 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00025}{25}} of file \mbox{\
 
 
 
+Bytes per sector. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{fat32_8cpp_source_l00578}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+Directory\+::update\+\_\+entry\+\_\+on\+\_\+disk()}}.
+Referenced by \mbox{\hyperlink{fat32_8cpp_source_l00609}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+Directory\+::update\+\_\+entry\+\_\+on\+\_\+disk()}}.
 
 \Hypertarget{fat32_8h_a59eac9627282a484fbaf0aa7aa3b8a9a}\label{fat32_8h_a59eac9627282a484fbaf0aa7aa3b8a9a} 
 \index{fat32.h@{fat32.h}!checksum@{checksum}}
 \index{checksum@{checksum}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{checksum}{checksum}}
 {\footnotesize\ttfamily uint8\+\_\+t checksum}
+
+
+
+Checksum of the corresponding short file name. 
 
 
 
@@ -238,6 +353,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\h
 
 
 
+Creation date (YYYY-\/\+MM-\/\+DD) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00008}{8}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a95650faad49780e62ace0e0655e24632}\label{fat32_8h_a95650faad49780e62ace0e0655e24632} 
@@ -245,6 +364,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00008}{8}} of file \mbox{\h
 \index{creation\_time@{creation\_time}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{creation\_time}{creation\_time}}
 {\footnotesize\ttfamily uint16\+\_\+t creation\+\_\+time}
+
+
+
+Creation time (HH\+:\+MM\+:SS) (multiply seconds by 2) 
 
 
 
@@ -258,6 +381,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00007}{7}} of file \mbox{\h
 
 
 
+Creation time in tenths of a second (or 100ths of a second) (0-\/199 on Windows, 0/100 on Linux) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a72aedf7609ef652851878e7a1a802c40}\label{fat32_8h_a72aedf7609ef652851878e7a1a802c40} 
@@ -265,6 +392,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\h
 \index{drive\_number@{drive\_number}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{drive\_number}{drive\_number}}
 {\footnotesize\ttfamily uint8\+\_\+t drive\+\_\+number}
+
+
+
+Drive number (must be identical to BIOS drive number) (0x00 = floppy, 0x80 = first hard disk) 
 
 
 
@@ -278,6 +409,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00023}{23}} of file \mbox{\
 
 
 
+Extended flags. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00017}{17}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_ac53000273f91ccd0a71d565d8063f914}\label{fat32_8h_ac53000273f91ccd0a71d565d8063f914} 
@@ -285,6 +420,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00017}{17}} of file \mbox{\
 \index{extension@{extension}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{extension}{extension}}
 {\footnotesize\ttfamily uint8\+\_\+t extension\mbox{[}3\mbox{]}}
+
+
+
+File extension. 
 
 
 
@@ -298,6 +437,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00002}{2}} of file \mbox{\h
 
 
 
+Sector number of FSInfo structure. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00020}{20}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a18a1f21056d66593d30c1f3ba673b5c1}\label{fat32_8h_a18a1f21056d66593d30c1f3ba673b5c1} 
@@ -305,6 +448,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00020}{20}} of file \mbox{\
 \index{fat\_sector\_count@{fat\_sector\_count}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{fat\_sector\_count}{fat\_sector\_count}}
 {\footnotesize\ttfamily uint16\+\_\+t fat\+\_\+sector\+\_\+count}
+
+
+
+Sectors per FAT (FAT12/\+FAT16 only) 
 
 
 
@@ -318,6 +465,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00010}{10}} of file \mbox{\
 
 
 
+FAT version number (high byte major, low byte minor) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00018}{18}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a2f816cb05dbdeaab4822e274c1c132b3}\label{fat32_8h_a2f816cb05dbdeaab4822e274c1c132b3} 
@@ -325,6 +476,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00018}{18}} of file \mbox{\
 \index{file\_system\_type@{file\_system\_type}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{file\_system\_type}{file\_system\_type}}
 {\footnotesize\ttfamily uint8\+\_\+t file\+\_\+system\+\_\+type\mbox{[}8\mbox{]}}
+
+
+
+System type in ASCII (not null-\/terminated) 
 
 
 
@@ -338,6 +493,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00028}{28}} of file \mbox{\
 
 
 
+High word of this entry\textquotesingle{}s first cluster number (usually 0 for FAT12/\+FAT16) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00011}{11}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a6344f7a8bbb25a1d5161131b27ca97a4}\label{fat32_8h_a6344f7a8bbb25a1d5161131b27ca97a4} 
@@ -345,6 +504,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00011}{11}} of file \mbox{\
 \index{first\_cluster\_low@{first\_cluster\_low}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{first\_cluster\_low}{first\_cluster\_low}}
 {\footnotesize\ttfamily uint16\+\_\+t first\+\_\+cluster\+\_\+low}
+
+
+
+Low word of this entry\textquotesingle{}s first cluster number. 
 
 
 
@@ -358,6 +521,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00016}{16}} of file \mbox{\
 
 
 
+Number of free clusters (or 0x\+FFFFFFFF if unknown) (not reliable, must range check) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_ac50aa7989eb3c0662619a9fa573e2cc3}\label{fat32_8h_ac50aa7989eb3c0662619a9fa573e2cc3} 
@@ -365,6 +532,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\h
 \index{head\_count@{head\_count}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{head\_count}{head\_count}}
 {\footnotesize\ttfamily uint16\+\_\+t head\+\_\+count}
+
+
+
+Number of heads/sides. 
 
 
 
@@ -378,6 +549,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00012}{12}} of file \mbox{\
 
 
 
+Number of hidden sectors (LBA of start of partition) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00013}{13}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a61b95cffdd449d10352cfd0288b23287}\label{fat32_8h_a61b95cffdd449d10352cfd0288b23287} 
@@ -385,6 +560,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00013}{13}} of file \mbox{\
 \index{jump@{jump}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{jump}{jump}}
 {\footnotesize\ttfamily uint8\+\_\+t jump\mbox{[}3\mbox{]}}
+
+
+
+Jump instruction to boot code. 
 
 
 
@@ -398,6 +577,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00001}{1}} of file \mbox{\h
 
 
 
+Last access date (YYYY-\/\+MM-\/\+DD) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00009}{9}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a4cdb9a914e3c619d15373abefccaaf8e}\label{fat32_8h_a4cdb9a914e3c619d15373abefccaaf8e} 
@@ -405,6 +588,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00009}{9}} of file \mbox{\h
 \index{last\_write\_date@{last\_write\_date}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{last\_write\_date}{last\_write\_date}}
 {\footnotesize\ttfamily uint16\+\_\+t last\+\_\+write\+\_\+date}
+
+
+
+Last write date (YYYY-\/\+MM-\/\+DD) 
 
 
 
@@ -418,6 +605,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00014}{14}} of file \mbox{\
 
 
 
+Last write time (HH\+:\+MM\+:SS) (multiply seconds by 2) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00013}{13}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_ae8383090a2c40a0a44d77f9e4b6d731b}\label{fat32_8h_ae8383090a2c40a0a44d77f9e4b6d731b} 
@@ -428,13 +619,39 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00013}{13}} of file \mbox{\
 
 
 
+FSInfo lead signature (0x41615252) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00000}{0}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+\Hypertarget{fat32_8h_a9baeecdd87b0c5c2ef2bc02bb838307d}\label{fat32_8h_a9baeecdd87b0c5c2ef2bc02bb838307d} 
+\index{fat32.h@{fat32.h}!MAX\_NAME\_LENGTH@{MAX\_NAME\_LENGTH}}
+\index{MAX\_NAME\_LENGTH@{MAX\_NAME\_LENGTH}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_NAME\_LENGTH}{MAX\_NAME\_LENGTH}}
+{\footnotesize\ttfamily constexpr uint16\+\_\+t Max\+OS\+::filesystem\+::format\+::\+MAX\+\_\+\+NAME\+\_\+\+LENGTH = 255\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Highest number of characters in a file/directory name. 
+
+
+
+Definition at line \mbox{\hyperlink{fat32_8h_source_l00153}{153}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{fat32_8cpp_source_l00893}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+Directory\+::create\+\_\+file()}}, and \mbox{\hyperlink{fat32_8cpp_source_l00936}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+Directory\+::create\+\_\+subdirectory()}}.
 
 \Hypertarget{fat32_8h_a4b184d5976feb6927aa2a1bd3bc157cc}\label{fat32_8h_a4b184d5976feb6927aa2a1bd3bc157cc} 
 \index{fat32.h@{fat32.h}!media\_type@{media\_type}}
 \index{media\_type@{media\_type}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{media\_type}{media\_type}}
 {\footnotesize\ttfamily uint8\+\_\+t media\+\_\+type}
+
+
+
+Media descriptor. 
 
 
 
@@ -448,17 +665,25 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00009}{9}} of file \mbox{\h
 
 
 
+File name. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00001}{1}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{vfs_8cpp_source_l00302}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::create\+\_\+directory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00427}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::create\+\_\+file()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00370}{Max\+OS\+::filesystem\+::\+VFSResource\+Registry\+::create\+\_\+resource()}}, \mbox{\hyperlink{resource_8h_source_l00069}{Max\+OS\+::processes\+::\+Resource\+Registry$<$ Type $>$\+::create\+\_\+resource()}}, \mbox{\hyperlink{vfs_8cpp_source_l00341}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::delete\+\_\+directory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00500}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::delete\+\_\+file()}}, \mbox{\hyperlink{resource_8cpp_source_l00108}{Max\+OS\+::processes\+::\+Base\+Resource\+Registry\+::get\+\_\+resource()}}, \mbox{\hyperlink{resource_8cpp_source_l00319}{Max\+OS\+::processes\+::\+Resource\+Manager\+::get\+\_\+resource()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00352}{Max\+OS\+::filesystem\+::\+VFSResource\+Registry\+::get\+\_\+resource()}}, \mbox{\hyperlink{virtual_8cpp_source_l00410}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00256}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::open\+\_\+directory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00460}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::open\+\_\+file()}}, \mbox{\hyperlink{resource_8cpp_source_l00264}{Max\+OS\+::processes\+::\+Resource\+Manager\+::open\+\_\+resource()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00183}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+create()}}, and \mbox{\hyperlink{syscalls_8cpp_source_l00204}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+open()}}.
+Referenced by \mbox{\hyperlink{vfs_8cpp_source_l00314}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::create\+\_\+directory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00439}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::create\+\_\+file()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00394}{Max\+OS\+::filesystem\+::\+VFSResource\+Registry\+::create\+\_\+resource()}}, \mbox{\hyperlink{resource_8h_source_l00088}{Max\+OS\+::processes\+::\+Resource\+Registry$<$ Type $>$\+::create\+\_\+resource()}}, \mbox{\hyperlink{vfs_8cpp_source_l00353}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::delete\+\_\+directory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00512}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::delete\+\_\+file()}}, \mbox{\hyperlink{resource_8cpp_source_l00125}{Max\+OS\+::processes\+::\+Base\+Resource\+Registry\+::get\+\_\+resource()}}, \mbox{\hyperlink{resource_8cpp_source_l00335}{Max\+OS\+::processes\+::\+Resource\+Manager\+::get\+\_\+resource()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00376}{Max\+OS\+::filesystem\+::\+VFSResource\+Registry\+::get\+\_\+resource()}}, \mbox{\hyperlink{virtual_8cpp_source_l00414}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00268}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::open\+\_\+directory()}}, \mbox{\hyperlink{vfs_8cpp_source_l00472}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::open\+\_\+file()}}, \mbox{\hyperlink{resource_8cpp_source_l00280}{Max\+OS\+::processes\+::\+Resource\+Manager\+::open\+\_\+resource()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00194}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+create()}}, and \mbox{\hyperlink{syscalls_8cpp_source_l00215}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+open()}}.
 
 \Hypertarget{fat32_8h_a5838c0c2c16393596822649d9b9d9d8b}\label{fat32_8h_a5838c0c2c16393596822649d9b9d9d8b} 
 \index{fat32.h@{fat32.h}!name1@{name1}}
 \index{name1@{name1}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{name1}{name1}}
 {\footnotesize\ttfamily uint16\+\_\+t name1\mbox{[}5\mbox{]}}
+
+
+
+First 5 characters of the long file name. 
 
 
 
@@ -472,6 +697,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00001}{1}} of file \mbox{\h
 
 
 
+Next 6 characters of the long file name. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00005}{5}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_aed3846d60b6d4d21c4efa6c40a37a873}\label{fat32_8h_aed3846d60b6d4d21c4efa6c40a37a873} 
@@ -479,6 +708,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00005}{5}} of file \mbox{\h
 \index{name3@{name3}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{name3}{name3}}
 {\footnotesize\ttfamily uint16\+\_\+t name3\mbox{[}2\mbox{]}}
+
+
+
+Last 2 characters of the long file name. 
 
 
 
@@ -492,6 +725,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00007}{7}} of file \mbox{\h
 
 
 
+Cluster number of the next free cluster (or 0x\+FFFFFFFF if unknown, start searching from cluster 2) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_ae21b477395a1441f77a079937a0900bb}\label{fat32_8h_ae21b477395a1441f77a079937a0900bb} 
@@ -499,6 +736,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\h
 \index{OEM\_name@{OEM\_name}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{OEM\_name}{OEM\_name}}
 {\footnotesize\ttfamily uint8\+\_\+t OEM\+\_\+name\mbox{[}8\mbox{]}}
+
+
+
+OEM Name in ASCII. 
 
 
 
@@ -512,6 +753,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00002}{2}} of file \mbox{\h
 
 
 
+Index of this entry in the sequence of LFN entries. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00000}{0}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_ac35c1fbebe2017fc1ca10f5803668dfd}\label{fat32_8h_ac35c1fbebe2017fc1ca10f5803668dfd} 
@@ -522,17 +767,21 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00000}{0}} of file \mbox{\h
 
 
 
+Reserved for Windows NT. 
+
+Reserved bits (should be zero) 
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{tcp_8cpp_source_l00384}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}.
 
 \Hypertarget{fat32_8h_ad1a89a7890b52216a93b64d30c131c4b}\label{fat32_8h_ad1a89a7890b52216a93b64d30c131c4b} 
 \index{fat32.h@{fat32.h}!reserved0@{reserved0}}
 \index{reserved0@{reserved0}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{reserved0}{reserved0}}
 {\footnotesize\ttfamily uint8\+\_\+t reserved0\mbox{[}12\mbox{]}}
+
+
+
+Should be zero. 
 
 
 
@@ -546,6 +795,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00022}{22}} of file \mbox{\
 
 
 
+Reserved (should be zero) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00001}{1}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_af6dc8e21f5c1ca5ca997fc835808802c}\label{fat32_8h_af6dc8e21f5c1ca5ca997fc835808802c} 
@@ -553,6 +806,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00001}{1}} of file \mbox{\h
 \index{reserved2@{reserved2}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{reserved2}{reserved2}}
 {\footnotesize\ttfamily uint8\+\_\+t reserved2\mbox{[}12\mbox{]}}
+
+
+
+Reserved (should be zero) 
 
 
 
@@ -566,6 +823,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00005}{5}} of file \mbox{\h
 
 
 
+Reserved (used by Windows NT) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00024}{24}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_ab9d9cece402bcfc967b895cd556985ef}\label{fat32_8h_ab9d9cece402bcfc967b895cd556985ef} 
@@ -573,6 +834,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00024}{24}} of file \mbox{\
 \index{reserved\_sectors@{reserved\_sectors}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{reserved\_sectors}{reserved\_sectors}}
 {\footnotesize\ttfamily uint16\+\_\+t reserved\+\_\+sectors}
+
+
+
+Number of reserved sectors. 
 
 
 
@@ -586,6 +851,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00005}{5}} of file \mbox{\h
 
 
 
+Cluster number of root directory start. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00019}{19}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a6f1caf959e540fc21dae995d08281837}\label{fat32_8h_a6f1caf959e540fc21dae995d08281837} 
@@ -593,6 +862,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00019}{19}} of file \mbox{\
 \index{root\_entries@{root\_entries}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{root\_entries}{root\_entries}}
 {\footnotesize\ttfamily uint16\+\_\+t root\+\_\+entries}
+
+
+
+Number of root directory entries. 
 
 
 
@@ -606,6 +879,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00007}{7}} of file \mbox{\h
 
 
 
+Sectors per cluster. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a6ff75fddb278127f316c862cbf03bfb6}\label{fat32_8h_a6ff75fddb278127f316c862cbf03bfb6} 
@@ -613,6 +890,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00004}{4}} of file \mbox{\h
 \index{sectors\_per\_track@{sectors\_per\_track}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{sectors\_per\_track}{sectors\_per\_track}}
 {\footnotesize\ttfamily uint16\+\_\+t sectors\+\_\+per\+\_\+track}
+
+
+
+Sectors per track. 
 
 
 
@@ -626,6 +907,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00011}{11}} of file \mbox{\
 
 
 
+File size in bytes. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00018}{18}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a86319fe2c708080de55d983c58b52626}\label{fat32_8h_a86319fe2c708080de55d983c58b52626} 
@@ -633,6 +918,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00018}{18}} of file \mbox{\
 \index{structure\_signature@{structure\_signature}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{structure\_signature}{structure\_signature}}
 {\footnotesize\ttfamily uint32\+\_\+t structure\+\_\+signature}
+
+
+
+FSInfo structure signature (0x61417272) 
 
 
 
@@ -646,6 +935,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00002}{2}} of file \mbox{\h
 
 
 
+Number of FAT tables. 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_addc3b6341df1d5f0b7505254093f4428}\label{fat32_8h_addc3b6341df1d5f0b7505254093f4428} 
@@ -653,6 +946,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\h
 \index{table\_size\_32@{table\_size\_32}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{table\_size\_32}{table\_size\_32}}
 {\footnotesize\ttfamily uint32\+\_\+t table\+\_\+size\+\_\+32}
+
+
+
+Sectors per FAT (FAT32 only) 
 
 
 
@@ -666,6 +963,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00016}{16}} of file \mbox{\
 
 
 
+Total number of sectors (if zero, use total\+\_\+sectors\+\_\+32) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00008}{8}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a7e57d21626d5fc1d73e4632a89709b54}\label{fat32_8h_a7e57d21626d5fc1d73e4632a89709b54} 
@@ -673,6 +974,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00008}{8}} of file \mbox{\h
 \index{total\_sectors\_32@{total\_sectors\_32}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{total\_sectors\_32}{total\_sectors\_32}}
 {\footnotesize\ttfamily uint32\+\_\+t total\+\_\+sectors\+\_\+32}
+
+
+
+Total number of sectors (if total\+\_\+sectors\+\_\+16 is zero) 
 
 
 
@@ -686,6 +991,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00014}{14}} of file \mbox{\
 
 
 
+FSInfo trail signature (0x\+AA550000) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a1d127017fb298b889f4ba24752d08b8e}\label{fat32_8h_a1d127017fb298b889f4ba24752d08b8e} 
@@ -696,13 +1005,21 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00006}{6}} of file \mbox{\h
 
 
 
+Type (always 0 for LFN entries) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00003}{3}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
-\Hypertarget{fat32_8h_a4c79470e2d0d72cdbbc391b10e1ba57d}\label{fat32_8h_a4c79470e2d0d72cdbbc391b10e1ba57d} 
-\index{fat32.h@{fat32.h}!uint\_32@{uint\_32}}
-\index{uint\_32@{uint\_32}!fat32.h@{fat32.h}}
-\doxysubsubsection{\texorpdfstring{uint\_32}{uint\_32}}
-{\footnotesize\ttfamily uint32\+\_\+t uint\+\_\+32}
+\Hypertarget{fat32_8h_a77a2cd2807c348ae913c256e41533320}\label{fat32_8h_a77a2cd2807c348ae913c256e41533320} 
+\index{fat32.h@{fat32.h}!volume\_id@{volume\_id}}
+\index{volume\_id@{volume\_id}!fat32.h@{fat32.h}}
+\doxysubsubsection{\texorpdfstring{volume\_id}{volume\_id}}
+{\footnotesize\ttfamily uint32\+\_\+t volume\+\_\+id}
+
+
+
+Volume serial number. 
 
 
 
@@ -716,6 +1033,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00026}{26}} of file \mbox{\
 
 
 
+Volume label in ASCII (spaces padded) 
+
+
+
 Definition at line \mbox{\hyperlink{fat32_8h_source_l00027}{27}} of file \mbox{\hyperlink{fat32_8h_source}{fat32.\+h}}.
 
 \Hypertarget{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa}\label{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa} 
@@ -723,6 +1044,10 @@ Definition at line \mbox{\hyperlink{fat32_8h_source_l00027}{27}} of file \mbox{\
 \index{zero@{zero}!fat32.h@{fat32.h}}
 \doxysubsubsection{\texorpdfstring{zero}{zero}}
 {\footnotesize\ttfamily uint16\+\_\+t zero}
+
+
+
+Must be zero. 
 
 
 

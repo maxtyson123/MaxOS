@@ -15,9 +15,7 @@ MaxOS::memory::PhysicalMemoryManager \- Manages the physical memory of the syste
 .ti -1c
 .RI "\fBPhysicalMemoryManager\fP (\fBsystem::Multiboot\fP *\fBmultiboot\fP)"
 .br
-.ti -1c
-.RI "\fB~PhysicalMemoryManager\fP ()"
-.br
+.RI "Constructs a \fBPhysicalMemoryManager\fP\&. Unmaps the lower kernel and sets up the bitmap for physical memory management\&. Reserves the kernel and the multiboot regions\&. "
 .ti -1c
 .RI "\fBuint64_t\fP \fBmemory_size\fP () \fBconst\fP"
 .br
@@ -35,7 +33,7 @@ MaxOS::memory::PhysicalMemoryManager \- Manages the physical memory of the syste
 .br
 .RI "Allocates a physical page of memory, if the PMM is not initalise it will use the anon memory instead of the bitmap\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfree_frame\fP (\fBvoid\fP *\fBaddress\fP)"
+.RI "\fBvoid\fP \fBfree_frame\fP (\fBvoid\fP *address)"
 .br
 .RI "Frees a frame in the bit map\&. "
 .ti -1c
@@ -47,58 +45,55 @@ MaxOS::memory::PhysicalMemoryManager \- Manages the physical memory of the syste
 .br
 .RI "Frees an area of physical memory\&. "
 .ti -1c
-.RI "\fBvirtual_address_t\fP * \fBmap\fP (\fBvirtual_address_t\fP *virtual_address, \fBsize_t\fP \fBflags\fP)"
+.RI "virtual_address_t * \fBmap\fP (virtual_address_t *virtual_address, \fBsize_t\fP \fBflags\fP)"
 .br
 .RI "Allocates a physical address to a virtual address\&. "
 .ti -1c
-.RI "\fBvirtual_address_t\fP * \fBmap\fP (\fBphysical_address_t\fP *\fBphysical\fP, \fBvirtual_address_t\fP *virtual_address, \fBsize_t\fP \fBflags\fP)"
+.RI "virtual_address_t * \fBmap\fP (physical_address_t *\fBphysical\fP, virtual_address_t *virtual_address, \fBsize_t\fP \fBflags\fP)"
 .br
 .RI "Maps a physical address to a virtual address, using the kernel's pml4 table\&. "
 .ti -1c
-.RI "\fBvirtual_address_t\fP * \fBmap\fP (\fBphysical_address_t\fP *\fBphysical\fP, \fBvirtual_address_t\fP *virtual_address, \fBsize_t\fP \fBflags\fP, \fBuint64_t\fP *\fBpml4_root\fP)"
+.RI "virtual_address_t * \fBmap\fP (physical_address_t *\fBphysical\fP, virtual_address_t *virtual_address, \fBsize_t\fP \fBflags\fP, \fBuint64_t\fP *\fBpml4_root\fP)"
 .br
 .RI "Maps a physical address to a virtual address\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBmap_area\fP (\fBvirtual_address_t\fP *\fBvirtual_address_start\fP, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP \fBflags\fP)"
+.RI "\fBvoid\fP \fBmap_area\fP (virtual_address_t *\fBvirtual_address_start\fP, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP \fBflags\fP)"
 .br
 .RI "Allocates a new area physical memory to a area virtual address\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBmap_area\fP (\fBphysical_address_t\fP *\fBphysical_address_start\fP, \fBvirtual_address_t\fP *\fBvirtual_address_start\fP, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP \fBflags\fP)"
+.RI "\fBvoid\fP \fBmap_area\fP (physical_address_t *\fBphysical_address_start\fP, virtual_address_t *\fBvirtual_address_start\fP, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP \fBflags\fP)"
 .br
 .RI "Maps an area of physical memory to a virtual address\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBidentity_map\fP (\fBphysical_address_t\fP *\fBphysical_address\fP, \fBsize_t\fP \fBflags\fP)"
+.RI "\fBvoid\fP \fBidentity_map\fP (physical_address_t *\fBphysical_address\fP, \fBsize_t\fP \fBflags\fP)"
 .br
 .RI "Maps a physical address to its virtual address counter-part\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBunmap\fP (\fBvirtual_address_t\fP *virtual_address)"
+.RI "\fBvoid\fP \fBunmap\fP (virtual_address_t *virtual_address)"
 .br
 .RI "Unmaps a virtual address using the kernel's pml4 table\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBunmap\fP (\fBvirtual_address_t\fP *virtual_address, \fBuint64_t\fP *\fBpml4_root\fP)"
+.RI "\fBvoid\fP \fBunmap\fP (virtual_address_t *virtual_address, \fBuint64_t\fP *\fBpml4_root\fP)"
 .br
 .RI "Unmaps a virtual address\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBunmap_area\fP (\fBvirtual_address_t\fP *\fBvirtual_address_start\fP, \fBsize_t\fP \fBlength\fP)"
+.RI "\fBvoid\fP \fBunmap_area\fP (virtual_address_t *\fBvirtual_address_start\fP, \fBsize_t\fP \fBlength\fP)"
 .br
 .RI "Unmaps an area of virtual memory\&. "
 .ti -1c
-.RI "\fBbool\fP \fBis_anonymous_available\fP (\fBsize_t\fP \fBsize\fP)"
-.br
-.RI "Checks if a physical address is reserved by multiboot mmap\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBreserve\fP (\fBuint64_t\fP \fBaddress\fP)"
+.RI "\fBvoid\fP \fBreserve\fP (\fBuint64_t\fP address)"
 .br
 .RI "Reserves a physical address\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBreserve\fP (\fBuint64_t\fP \fBaddress\fP, \fBsize_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBreserve\fP (\fBuint64_t\fP address, \fBsize_t\fP \fBsize\fP, \fBconst\fP \fBchar\fP *='Unknown')"
 .br
 .RI "Reserves an area of physical memory\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBreserve_kernel_regions\fP (\fBsystem::Multiboot\fP *\fBmultiboot\fP)"
 .br
+.RI "Reserves the kernel, multiboot modules, mmap regions and higher half mapping regions in the physical memory manager so that those pages arent overwritten later\&. "
 .ti -1c
-.RI "\fBphysical_address_t\fP * \fBget_physical_address\fP (\fBvirtual_address_t\fP *virtual_address, \fBuint64_t\fP *\fBpml4_root\fP)"
+.RI "physical_address_t * \fBget_physical_address\fP (virtual_address_t *virtual_address, \fBuint64_t\fP *\fBpml4_root\fP)"
 .br
 .RI "Gets the physical address from a virtual address (if it exists) "
 .ti -1c
@@ -106,7 +101,7 @@ MaxOS::memory::PhysicalMemoryManager \- Manages the physical memory of the syste
 .br
 .RI "Checks if a physical address is mapped to a virtual address\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBchange_page_flags\fP (\fBvirtual_address_t\fP *virtual_address, \fBsize_t\fP \fBflags\fP, \fBuint64_t\fP *\fBpml4_root\fP)"
+.RI "\fBvoid\fP \fBchange_page_flags\fP (virtual_address_t *virtual_address, \fBsize_t\fP \fBflags\fP, \fBuint64_t\fP *\fBpml4_root\fP)"
 .br
 .RI "Changes the flags of a page\&. "
 .in -1c
@@ -170,101 +165,91 @@ MaxOS::memory::PhysicalMemoryManager \- Manages the physical memory of the syste
 
 .in +1c
 .ti -1c
-.RI "static const uint32_t \fBs_page_size\fP = 0x1000"
-.br
-.ti -1c
-.RI "static const uint8_t \fBs_row_bits\fP = 64"
-.br
-.ti -1c
-.RI "static const uint64_t \fBs_higher_half_kernel_offset\fP = 0xFFFFFFFF80000000"
-.br
-.ti -1c
-.RI "static const uint64_t \fBs_higher_half_mem_offset\fP = 0xFFFF800000000000"
-.br
-.ti -1c
-.RI "static const uint64_t \fBs_higher_half_mem_reserved\fP = 0x280000000"
-.br
-.ti -1c
-.RI "static const uint64_t \fBs_higher_half_offset\fP = \fBs_higher_half_mem_offset\fP + \fBs_higher_half_mem_reserved\fP"
-.br
-.ti -1c
-.RI "static const uint64_t \fBs_hh_direct_map_offset\fP = \fBs_higher_half_offset\fP + \fBs_page_size\fP"
-.br
-.ti -1c
 .RI "static \fBPhysicalMemoryManager\fP * \fBs_current_manager\fP = nullptr"
 .br
+.RI "The current physical memory manager in use\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Manages the physical memory of the system such as what pages are allocated/free and mapping of virtual to physical addresses\&. 
+
+
 .PP
-Definition at line \fB74\fP of file \fBphysical\&.h\fP\&.
+\fBTodo\fP
+.RS 4
+Global paging so dont have map in every process 
+.RE
+.PP
+
+.PP
+Definition at line \fB96\fP of file \fBphysical\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "PhysicalMemoryManager::PhysicalMemoryManager (\fBsystem::Multiboot\fP * multiboot)"
 
 .PP
-Definition at line \fB23\fP of file \fBphysical\&.cpp\fP\&..PP
+Constructs a \fBPhysicalMemoryManager\fP\&. Unmaps the lower kernel and sets up the bitmap for physical memory management\&. Reserves the kernel and the multiboot regions\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImultiboot\fP The multiboot information structure to use for memory information such as the memory map\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB31\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-24 : m_kernel_end((uint64_t) &_kernel_physical_end),
-25   m_multiboot(multiboot),
-26   m_pml4_root_address((uint64_t*) p4_table),
-27   m_pml4_root((pte_t*) p4_table)
-28 {
-29 
-30     Logger::INFO() << "Setting up Physical Memory Manager\\n";
-31     Logger::DEBUG() << "Kernel Memory: kernel_end = 0x" << (uint64_t) &_kernel_end << ", kernel_size = 0x" << (uint64_t) &_kernel_size << ", kernel_physical_end = 0x" << (uint64_t) &_kernel_physical_end << "\\n";
-32 
-33     // Set up the current manager
-34     unmap_lower_kernel();
-35     m_lock\&.unlock();
-36     s_current_manager = this;
-37     m_nx_allowed = CPU::check_nx();
-38 
-39     // Store the information about the bitmap
-40     m_memory_size = (m_multiboot\->basic_meminfo()\->mem_upper + 1024) * 1024;
-41     m_bitmap_size = m_memory_size / s_page_size + 1;
-42     m_total_entries = m_bitmap_size / s_row_bits + 1;
-43     Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x" << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x" << (uint64_t) s_page_size << "\\n";
-44 
-45     // Find a region of memory available to be used
-46     m_mmap_tag = m_multiboot\->mmap();
-47     for (multiboot_mmap_entry *entry = m_mmap_tag\->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag\->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag\->entry_size)) {
-48 
-49         // Skip if the region is not free or there is not enough space
-50         if (entry\->type != MULTIBOOT_MEMORY_AVAILABLE)
-51             continue;
-52 
-53         // Store the entry\&. (note: don't break here as it is desired to find the last usable entry as that is normally biggest)
-54         m_mmap = entry;
-55     }
-56     Logger::DEBUG() << "Mmap in use: 0x" << (uint64_t) m_mmap\->addr << " \- 0x" << (uint64_t) (m_mmap\->addr + m_mmap\->len) << "\\n";
-57 
-58     // Memory after the kernel to be used for direct mapping (the bitmap is not ready while mapping the higher half so have to use this)
-59     m_anonymous_memory_physical_address = align_up_to_page((size_t) &_kernel_physical_end + s_page_size, s_page_size);
-60     m_anonymous_memory_virtual_address = align_up_to_page((size_t) &_kernel_end + s_page_size, s_page_size);
-61     Logger::DEBUG() << "Anonymous Memory: physical = " << (uint64_t) m_anonymous_memory_physical_address << ", virtual = " << (uint64_t) m_anonymous_memory_virtual_address << "\\n";
-62 
-63     // Map the physical memory into the virtual memory
-64     for (uint64_t physical_address = 0; physical_address < (m_mmap\->addr + m_mmap\->len); physical_address += s_page_size)
-65         map((physical_address_t*) physical_address, (virtual_address_t*) (s_hh_direct_map_offset + physical_address), Present | Write);
-66 
-67     m_anonymous_memory_physical_address += s_page_size;
-68     Logger::DEBUG() << "Mapped physical memory to higher half direct map at offset 0x" << s_hh_direct_map_offset << "\\n";
-69 
-70     // Set up the bitmap
-71     initialise_bit_map();
-72     reserve_kernel_regions(multiboot);
-73 
-74     // Initialisation Done
-75     m_initialized = true;
-76 }
+32 : m_kernel_end((uint64_t) &_kernel_physical_end),
+33   m_multiboot(multiboot),
+34   m_pml4_root_address((uint64_t*) p4_table),
+35   m_pml4_root((pte_t*) p4_table)
+36 {
+37 
+38     Logger::INFO() << "Setting up Physical Memory Manager\\n";
+39     Logger::DEBUG() << "Kernel Memory: kernel_end = 0x" << (uint64_t) &_kernel_end << ", kernel_size = 0x" << (uint64_t) &_kernel_size << ", kernel_physical_end = 0x" << (uint64_t) &_kernel_physical_end << "\\n";
+40     m_kernel_start_page = align_up_to_page((size_t) &_kernel_physical_end + PAGE_SIZE, PAGE_SIZE);
+41 
+42     // Set up the current manager
+43     unmap_lower_kernel();
+44     m_lock\&.unlock();
+45     s_current_manager = this;
+46     m_nx_allowed = CPU::check_nx();
+47 
+48     // Find a region of memory available to be used
+49     m_mmap_tag = m_multiboot\->mmap();
+50     for (multiboot_mmap_entry *entry = m_mmap_tag\->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag\->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag\->entry_size)) {
+51 
+52         // Skip if the region is not free or there is not enough space
+53         if (entry\->type != MULTIBOOT_MEMORY_AVAILABLE)
+54             continue;
+55 
+56         // Store the entry\&. (note: don't break here as it is desired to find the last usable entry as that is normally biggest)
+57         m_mmap = entry;
+58     }
+59 
+60     // Store the information about the bitmap
+61     m_memory_size = (m_mmap\->addr + m_mmap\->len);
+62     m_bitmap_size = m_memory_size / PAGE_SIZE + 1;
+63     m_total_entries = m_bitmap_size / ROW_BITS + 1;
+64     Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x" << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x" << (uint64_t) PAGE_SIZE << "\\n";
+65 
+66     // Map the physical memory into the virtual memory
+67     Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap\->addr + m_mmap\->len) << " to higher half direct map at offset 0x" << HIGHER_HALF_DIRECT_MAP << "\\n";
+68     for (uint64_t physical_address = 0; physical_address < (m_mmap\->addr + m_mmap\->len); physical_address += PAGE_SIZE)
+69         map((physical_address_t*) physical_address, (virtual_address_t*) (HIGHER_HALF_DIRECT_MAP + physical_address), PRESENT | WRITE);
+70 
+71     // Kernel Setup
+72     initialise_bit_map();
+73     reserve_kernel_regions(multiboot);
+74 
+75     // Initialisation Done
+76     m_initialized = true;
+77     Logger::DEBUG() << "Memory used at start: " << (int) (memory_used() / 1024 / 1024) << "mb \\n";
+78 }
 .fi
 
 .PP
-References \fB_kernel_end\fP, \fB_kernel_physical_end\fP, \fB_kernel_size\fP, \fBMaxOS::system::CPU::check_nx()\fP, \fBLogger::DEBUG()\fP, \fBLogger::INFO()\fP, \fBMULTIBOOT_MEMORY_AVAILABLE\fP, \fBphysical_address\fP, \fBMaxOS::memory::Present\fP, and \fBMaxOS::memory::Write\fP\&.
-.SS "PhysicalMemoryManager::~PhysicalMemoryManager ()\fC [default]\fP"
-
+References \fBMaxOS::system::CPU::check_nx()\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::memory::HIGHER_HALF_DIRECT_MAP\fP, \fBLogger::INFO()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBphysical_address\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::memory::ROW_BITS\fP, and \fBMaxOS::memory::WRITE\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBsize_t\fP PhysicalMemoryManager::align_direct_to_page (\fBsize_t\fP size)\fC [static]\fP"
@@ -284,18 +269,18 @@ The aligned address
 .PP
 
 .PP
-Definition at line \fB778\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB748\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-778                                                               {
-779 
-780     return (size & (~(s_page_size \- 1)));
-781 }
+748                                                               {
+749 
+750     return (size & (~(PAGE_SIZE \- 1)));
+751 }
 .fi
 
 .PP
-References \fBs_page_size\fP, and \fBsize\fP\&.
+References \fBMaxOS::memory::PAGE_SIZE\fP, and \fBsize\fP\&.
 .PP
-Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP, \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::map_tables()\fP, \fBreserve()\fP, and \fBreserve()\fP\&.
+Referenced by \fBreserve()\fP\&.
 .SS "\fBsize_t\fP PhysicalMemoryManager::align_to_page (\fBsize_t\fP size)\fC [static]\fP"
 
 .PP
@@ -313,18 +298,18 @@ The aligned size
 .PP
 
 .PP
-Definition at line \fB140\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB154\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-140                                                        {
-141 
-142     return ((size + s_page_size \- 1) / s_page_size) * s_page_size;
-143 }
+154                                                        {
+155 
+156     return ((size + PAGE_SIZE \- 1) / PAGE_SIZE) * PAGE_SIZE;
+157 }
 .fi
 
 .PP
-References \fBs_page_size\fP, and \fBsize\fP\&.
+References \fBMaxOS::memory::PAGE_SIZE\fP, and \fBsize\fP\&.
 .PP
-Referenced by \fBsize_to_frames()\fP, and \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP\&.
+Referenced by \fBsize_to_frames()\fP\&.
 .SS "\fBsize_t\fP PhysicalMemoryManager::align_up_to_page (\fBsize_t\fP size, \fBsize_t\fP page_size)\fC [static]\fP"
 
 .PP
@@ -344,12 +329,12 @@ The aligned size
 .PP
 
 .PP
-Definition at line \fB152\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB166\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-152                                                                             {
-153 
-154     return (size + page_size \- 1) & ~(page_size \- 1);
-155 }
+166                                                                             {
+167 
+168     return (size + page_size \- 1) & ~(page_size \- 1);
+169 }
 .fi
 
 .PP
@@ -375,74 +360,74 @@ A pointer to the start of the block (physical address)
 .PP
 
 .PP
-Definition at line \fB257\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB262\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-257                                                                               {
-258 
-259     m_lock\&.lock();
-260 
-261     // Store the information about the frames needed to be allocated for this size
-262     size_t frame_count = size_to_frames(size);
-263     uint32_t start_row = 0;
-264     uint32_t start_column = 0;
-265     size_t adjacent_frames = 0;
-266 
-267     for (uint32_t row = 0; row < m_total_entries; ++row) {
-268 
-269         // Skip full rows
-270         if (m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
-271             continue;
-272 
-273         for (uint32_t column = 0; column < s_row_bits; ++column) {
-274 
-275             // Not enough adjacent frames
-276             if (m_bit_map[row] & (1ULL << column)) {
-277                 adjacent_frames = 0;
-278                 continue;
-279             }
-280 
-281             // Store the address of the first frame in set of adjacent ones
-282             if (adjacent_frames == 0) {
-283                 start_row = row;
-284                 start_column = column;
-285             }
-286 
-287             // Make sure there are enough frames in a row found
-288             adjacent_frames++;
-289             if (adjacent_frames != frame_count)
-290                 continue;
+262                                                                               {
+263 
+264     m_lock\&.lock();
+265 
+266     // Store the information about the frames needed to be allocated for this size
+267     size_t frame_count = size_to_frames(size);
+268     uint32_t start_row = 0;
+269     uint32_t start_column = 0;
+270     size_t adjacent_frames = 0;
+271 
+272     for (uint32_t row = 0; row < m_total_entries; ++row) {
+273 
+274         // Skip full rows
+275         if (m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
+276             continue;
+277 
+278         for (uint32_t column = 0; column < ROW_BITS; ++column) {
+279 
+280             // Not enough adjacent frames
+281             if (m_bit_map[row] & (1ULL << column)) {
+282                 adjacent_frames = 0;
+283                 continue;
+284             }
+285 
+286             // Store the address of the first frame in set of adjacent ones
+287             if (adjacent_frames == 0) {
+288                 start_row = row;
+289                 start_column = column;
+290             }
 291 
-292             // Mark the frames as used
-293             m_used_frames += frame_count;
-294             for (uint32_t i = 0; i < frame_count; ++i) {
-295 
-296                 // Get the location of the bit
-297                 uint32_t index = start_row + (start_column + i) / s_row_bits;
-298                 uint32_t bit = (start_column + i) % s_row_bits;
-299 
-300                 // Check bounds
-301                 ASSERT(index >= m_total_entries || bit >= s_row_bits, "Index out of bounds\\n");
-302 
-303                 // Mark the bit as used
-304                 m_bit_map[index] |= (1ULL << bit);
-305             }
-306 
-307             // Return start of the block of adjacent frames
-308             m_lock\&.unlock();
-309             return (void*) (start_address + (start_row * s_row_bits + start_column) * s_page_size);
-310 
-311         }
-312     }
-313 
-314     // Not enough free frames adjacent to each other
-315     m_lock\&.unlock();
-316     ASSERT(false, "Cannot allocate that much memory\\n");
-317     return nullptr;
-318 }
+292             // Make sure there are enough frames in a row found
+293             adjacent_frames++;
+294             if (adjacent_frames != frame_count)
+295                 continue;
+296 
+297             // Mark the frames as used
+298             m_used_frames += frame_count;
+299             for (uint32_t i = 0; i < frame_count; ++i) {
+300 
+301                 // Get the location of the bit
+302                 uint32_t index = start_row + (start_column + i) / ROW_BITS;
+303                 uint32_t bit = (start_column + i) % ROW_BITS;
+304 
+305                 // Check bounds
+306                 ASSERT(index >= m_total_entries || bit >= ROW_BITS, "Index out of bounds\\n");
+307 
+308                 // Mark the bit as used
+309                 m_bit_map[index] |= (1ULL << bit);
+310             }
+311 
+312             // Return start of the block of adjacent frames
+313             m_lock\&.unlock();
+314             return (void*) (start_address + (start_row * ROW_BITS + start_column) * PAGE_SIZE);
+315 
+316         }
+317     }
+318 
+319     // Not enough free frames adjacent to each other
+320     m_lock\&.unlock();
+321     ASSERT(false, "Cannot allocate that much memory\\n");
+322     return nullptr;
+323 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBs_page_size\fP, \fBs_row_bits\fP, \fBsize\fP, \fBsize_to_frames()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+References \fBASSERT\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, \fBsize\fP, \fBsize_to_frames()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .SS "\fBvoid\fP * PhysicalMemoryManager::allocate_frame ()"
 
 .PP
@@ -455,74 +440,65 @@ The physical address of the page
 .PP
 
 .PP
-Definition at line \fB173\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB187\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-173                                             {
-174 
-175     // Wait for the lock
-176     m_lock\&.lock();
-177 
-178     // If not initialised, cant use the bitmap or higher half mapped physical memory so use leftover kernel memory already
-179     // mapped in loader\&.s
-180     if (!m_initialized) {
-181         // TODO: This seems to destroy the multiboot memory map, need to fix this
-182 
-183         // Find the first free frame
-184         while ((!is_anonymous_available(m_anonymous_memory_physical_address)) && (m_anonymous_memory_physical_address < m_memory_size)) {
-185             m_anonymous_memory_physical_address += s_page_size;
-186             m_anonymous_memory_virtual_address += s_page_size;
-187         }
+187                                             {
 188 
-189         // Mark frame as used
-190         m_anonymous_memory_physical_address += s_page_size;
-191         m_anonymous_memory_virtual_address += s_page_size;
-192 
-193         // Return the address
-194         m_lock\&.unlock();
-195         return (void*) (m_anonymous_memory_physical_address \- s_page_size);
-196 
-197     }
-198 
-199     // Check if there are enough frames
-200     ASSERT(m_used_frames < m_bitmap_size, "No more frames available\\n");
-201 
-202     for (uint32_t row = 0; row < m_total_entries; ++row) {
+189     // Wait for the lock
+190     m_lock\&.lock();
+191 
+192     // If not initialised, cant use the bitmap or higher half mapped physical memory so use leftover kernel memory already
+193     // mapped in loader\&.s
+194     if (!m_initialized) {
+195 
+196         // Use frames at the start of the mmap free
+197         void* address = (void*)m_mmap\->addr + (m_setup_frames * PAGE_SIZE);
+198         m_setup_frames++;
+199 
+200         m_lock\&.unlock();
+201         return address;
+202     }
 203 
-204         // If the row is full continue
-205         if (m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
-206             continue;
-207 
-208         for (uint32_t column = 0; column < s_row_bits; ++column) {
-209 
-210             // Entry isn't free
-211             if (m_bit_map[row] & (1ULL << column))
-212                 continue;
-213 
-214             // Mark the frame as used
-215             m_bit_map[row] |= (1ULL << column);
-216             m_used_frames++;
-217 
-218             // Thread safe
-219             m_lock\&.unlock();
-220 
-221             // Return the address
-222             uint64_t frame_address = (row * s_row_bits) + column;
-223             return (void*) (frame_address * s_page_size);
-224         }
-225     }
-226 
-227     // Error frame not found
-228     ASSERT(false, "Frame not found\\n");
-229     m_lock\&.unlock();
-230     return nullptr;
-231 }
+204     // Check if there are enough frames
+205     ASSERT(m_used_frames < m_bitmap_size, "No more frames available\\n");
+206 
+207     for (uint32_t row = 0; row < m_total_entries; ++row) {
+208 
+209         // If the row is full continue
+210         if (m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
+211             continue;
+212 
+213         for (uint32_t column = 0; column < ROW_BITS; ++column) {
+214 
+215             // Entry isn't free
+216             if (m_bit_map[row] & (1ULL << column))
+217                 continue;
+218 
+219             // Mark the frame as used
+220             m_bit_map[row] |= (1ULL << column);
+221             m_used_frames++;
+222 
+223             // Thread safe
+224             m_lock\&.unlock();
+225 
+226             // Return the address
+227             uint64_t frame_address = (row * ROW_BITS) + column;
+228             return (void*) (frame_address * PAGE_SIZE);
+229         }
+230     }
+231 
+232     // Error frame not found
+233     ASSERT(false, "Frame not found\\n");
+234     m_lock\&.unlock();
+235     return nullptr;
+236 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBis_anonymous_available()\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBs_page_size\fP, \fBs_row_bits\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+References \fBmultiboot_mmap_entry::addr\fP, \fBASSERT\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .PP
 Referenced by \fBmap()\fP\&.
-.SS "\fBvoid\fP PhysicalMemoryManager::change_page_flags (\fBvirtual_address_t\fP * virtual_address, \fBsize_t\fP flags, \fBuint64_t\fP * pml4_root)"
+.SS "\fBvoid\fP PhysicalMemoryManager::change_page_flags (virtual_address_t * virtual_address, \fBsize_t\fP flags, \fBuint64_t\fP * pml4_root)"
 
 .PP
 Changes the flags of a page\&. 
@@ -532,26 +508,28 @@ Changes the flags of a page\&.
 \fIvirtual_address\fP The virtual address of the page 
 .br
 \fIflags\fP The flags to set the page to 
+.br
+\fIpml4_root\fP The address of the root pml to use 
 .RE
 .PP
 
 .PP
-Definition at line \fB860\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB826\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-860                                                                                                                    {
-861 
-862     pte_t* entry = get_entry(virtual_address, (pml_t*) pml4_root);
-863 
-864     // Cant edit a non\-present entry (will page fault)
-865     if (!entry\->present)
-866         return;
-867 
-868     *entry = create_page_table_entry(physical_address_of_entry(entry), flags);
-869 
-870     // Flush the TLB (cache)
-871     asm volatile("invlpg (%0)"::"r" (virtual_address) : "memory");
-872 
-873 }
+826                                                                                                                    {
+827 
+828     pte_t* entry = get_entry(virtual_address, (pml_t*) pml4_root);
+829 
+830     // Cant edit a non\-present entry (will page fault)
+831     if (!entry\->present)
+832         return;
+833 
+834     *entry = create_page_table_entry(physical_address_of_entry(entry), flags);
+835 
+836     // Flush the TLB (cache)
+837     asm volatile("invlpg (%0)"::"r" (virtual_address) : "memory");
+838 
+839 }
 .fi
 
 .PP
@@ -573,16 +551,16 @@ True if the address is aligned
 .PP
 
 .PP
-Definition at line \fB163\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB177\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-163                                                      {
-164 
-165     return (size % s_page_size) == 0;
-166 }
+177                                                      {
+178 
+179     return (size % PAGE_SIZE) == 0;
+180 }
 .fi
 
 .PP
-References \fBs_page_size\fP, and \fBsize\fP\&.
+References \fBMaxOS::memory::PAGE_SIZE\fP, and \fBsize\fP\&.
 .PP
 Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP\&.
 .SS "\fBvoid\fP PhysicalMemoryManager::clean_page_table (\fBuint64_t\fP * table)\fC [static]\fP"
@@ -597,18 +575,16 @@ Cleans a page table (fills it with 0 or null entries)
 .PP
 
 .PP
-Definition at line \fB620\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB625\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-620                                                             {
-621 
-622     // Null the table (prevents false mappings when re\-using frames)
-623     for (int i = 0; i < 512; i++)
-624         table[i] = 0x00l;
-625 }
+625                                                             {
+626 
+627     // Null the table (prevents false mappings when re\-using frames)
+628     for (int i = 0; i < 512; i++)
+629         table[i] = 0x00l;
+630 }
 .fi
 
-.PP
-Referenced by \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP\&.
 .SS "\fBvoid\fP PhysicalMemoryManager::free_area (\fBuint64_t\fP start_address, \fBsize_t\fP size)"
 
 .PP
@@ -623,32 +599,32 @@ Frees an area of physical memory\&.
 .PP
 
 .PP
-Definition at line \fB326\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB331\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-326                                                                          {
-327 
-328     // Convert address into frames
-329     size_t frame_count = size_to_frames(size);
-330     uint64_t frame_address = start_address / s_page_size;
-331 
-332     // Check bounds
-333     if (frame_address >= m_bitmap_size)
-334         return;
-335 
-336     // Wait until other threads have finished other memory operations
-337     m_lock\&.lock();
-338 
-339     // Mark the frames as not used
-340     m_used_frames \-= frame_count;
-341     for (uint32_t i = 0; i < frame_count; ++i)
-342         m_bit_map[(frame_address + i) / s_row_bits] &= ~(1 << ((frame_address + i) % s_row_bits));
+331                                                                          {
+332 
+333     // Convert address into frames
+334     size_t frame_count = size_to_frames(size);
+335     uint64_t frame_address = start_address / PAGE_SIZE;
+336 
+337     // Check bounds
+338     if (frame_address >= m_bitmap_size)
+339         return;
+340 
+341     // Wait until other threads have finished other memory operations
+342     m_lock\&.lock();
 343 
-344     m_lock\&.unlock();
-345 }
+344     // Mark the frames as not used
+345     m_used_frames \-= frame_count;
+346     for (uint32_t i = 0; i < frame_count; ++i)
+347         m_bit_map[(frame_address + i) / ROW_BITS] &= ~(1 << ((frame_address + i) % ROW_BITS));
+348 
+349     m_lock\&.unlock();
+350 }
 .fi
 
 .PP
-References \fBMaxOS::common::Spinlock::lock()\fP, \fBs_page_size\fP, \fBs_row_bits\fP, \fBsize\fP, \fBsize_to_frames()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+References \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, \fBsize\fP, \fBsize_to_frames()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .SS "\fBvoid\fP PhysicalMemoryManager::free_frame (\fBvoid\fP * address)"
 
 .PP
@@ -661,31 +637,31 @@ Frees a frame in the bit map\&.
 .PP
 
 .PP
-Definition at line \fB238\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB243\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-238                                                     {
-239 
-240     m_lock\&.lock();
-241 
-242     // Mark the frame as not used
-243     m_used_frames\-\-;
-244     uint64_t frame_address = (uint64_t) address / s_page_size;
-245     m_bit_map[frame_address / s_row_bits] &= ~(1 << (frame_address % s_row_bits));
+243                                                     {
+244 
+245     m_lock\&.lock();
 246 
-247     m_lock\&.unlock();
-248 }
+247     // Mark the frame as not used
+248     m_used_frames\-\-;
+249     uint64_t frame_address = (uint64_t) address / PAGE_SIZE;
+250     m_bit_map[frame_address / ROW_BITS] &= ~(1 << (frame_address % ROW_BITS));
+251 
+252     m_lock\&.unlock();
+253 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBs_page_size\fP, \fBs_row_bits\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
-.SS "\fBvoid\fP * PhysicalMemoryManager::from_dm_region (\fBuintptr_t\fP physical_address)\fC [static]\fP"
+References \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+.SS "\fBvoid\fP * PhysicalMemoryManager::from_dm_region (\fBuintptr_t\fP virtual_address)\fC [static]\fP"
 
 .PP
 Converts a direct map region address to a physical address if it is in the higher region using the higher half direct map offset\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIphysical_address\fP The physical address in the direct map region 
+\fIvirtual_address\fP The physical address in the direct map region 
 .RE
 .PP
 \fBReturns\fP
@@ -695,23 +671,23 @@ The physical address
 .PP
 
 .PP
-Definition at line \fB957\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB923\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-957                                                                       {
-958 
-959     if (physical_address > s_hh_direct_map_offset)
-960         return (void*) (physical_address \- s_hh_direct_map_offset);
-961 
-962     // Must be in the lower half
-963     return (void*) physical_address;
-964 }
+923                                                                      {
+924 
+925     if (virtual_address > HIGHER_HALF_DIRECT_MAP)
+926         return (void*) (virtual_address \- HIGHER_HALF_DIRECT_MAP);
+927 
+928     // Must be in the lower half
+929     return (void*) virtual_address;
+930 }
 .fi
 
 .PP
-References \fBphysical_address\fP, and \fBs_hh_direct_map_offset\fP\&.
+References \fBMaxOS::memory::HIGHER_HALF_DIRECT_MAP\fP\&.
 .PP
 Referenced by \fBreserve_kernel_regions()\fP\&.
-.SS "\fBphysical_address_t\fP * PhysicalMemoryManager::get_physical_address (\fBvirtual_address_t\fP * virtual_address, \fBuint64_t\fP * pml4_root)"
+.SS "physical_address_t * PhysicalMemoryManager::get_physical_address (virtual_address_t * virtual_address, \fBuint64_t\fP * pml4_root)"
 
 .PP
 Gets the physical address from a virtual address (if it exists) 
@@ -719,6 +695,8 @@ Gets the physical address from a virtual address (if it exists)
 \fBParameters\fP
 .RS 4
 \fIvirtual_address\fP The virtual address to get the physical address from 
+.br
+\fIpml4_root\fP The address of the root pml to use 
 .RE
 .PP
 \fBReturns\fP
@@ -728,23 +706,23 @@ The physical address or nullptr if it does not exist
 .PP
 
 .PP
-Definition at line \fB843\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB808\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-843                                                                                                                        {
-844 
-845     pte_t* entry = get_entry(virtual_address, (pml_t*) pml4_root);
-846 
-847     // Cant get a physical address if its inst free
-848     if (!entry\->present)
-849         return nullptr;
-850 
-851     return (physical_address_t*) physical_address_of_entry(entry);
-852 }
+808                                                                                                                        {
+809 
+810     pte_t* entry = get_entry(virtual_address, (pml_t*) pml4_root);
+811 
+812     // Cant get a physical address if its inst free
+813     if (!entry\->present)
+814         return nullptr;
+815 
+816     return (physical_address_t*) physical_address_of_entry(entry);
+817 }
 .fi
 
 .PP
 Referenced by \fBis_mapped()\fP\&.
-.SS "\fBvoid\fP PhysicalMemoryManager::identity_map (\fBphysical_address_t\fP * physical_address, \fBsize_t\fP flags)"
+.SS "\fBvoid\fP PhysicalMemoryManager::identity_map (physical_address_t * physical_address, \fBsize_t\fP flags)"
 
 .PP
 Maps a physical address to its virtual address counter-part\&. 
@@ -758,13 +736,13 @@ Maps a physical address to its virtual address counter-part\&.
 .PP
 
 .PP
-Definition at line \fB563\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB568\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-563                                                                                            {
-564 
-565     // Map the physical address to its virtual address counter\-part
-566     map(physical_address, physical_address, flags);
-567 }
+568                                                                                            {
+569 
+570     // Map the physical address to its virtual address counter\-part
+571     map(physical_address, physical_address, flags);
+572 }
 .fi
 
 .PP
@@ -786,72 +764,16 @@ True if the address is in the higher region, false otherwise
 .PP
 
 .PP
-Definition at line \fB973\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB939\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-973                                                                       {
-974 
-975     return virtual_address & (1l << 62);
-976 }
+939                                                                       {
+940 
+941     return virtual_address & (1l << 62);
+942 }
 .fi
 
 .PP
 Referenced by \fBmap()\fP, and \fBMaxOS::system::CPU::prepare_for_panic()\fP\&.
-.SS "\fBbool\fP PhysicalMemoryManager::is_anonymous_available (\fBsize_t\fP address)"
-
-.PP
-Checks if a physical address is reserved by multiboot mmap\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIaddress\fP The address to check 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-True if the address is reserved 
-.RE
-.PP
-
-.PP
-Definition at line \fB666\fP of file \fBphysical\&.cpp\fP\&..PP
-.nf
-666                                                                  {
-667 
-668     // Make sure the address isn't (entirely) within or overlapping with the multiboot memory chunk
-669     if ((address > m_multiboot\->start_address && address + s_page_size < m_multiboot\->end_address)
-670      || (address + s_page_size > m_multiboot\->start_address && address < m_multiboot\->end_address)) {
-671         return false;
-672     }
-673 
-674     // Make sure the address isn't used by a multiboot module
-675     if (m_multiboot\->is_reserved(address))
-676         return false;
-677 
-678     // Make sure the address doesn't overlap with a reserved chunk of physical memory
-679     for (multiboot_mmap_entry* entry = m_mmap_tag\->entries; (multiboot_uint8_t*) entry < (multiboot_uint8_t*) m_mmap_tag + m_mmap_tag\->size; entry = (multiboot_mmap_entry*) ((unsigned long) entry + m_mmap_tag\->entry_size)) {
-680 
-681         // This entry doesnt contain the address
-682         if ((entry\->addr + entry\->len) < (address + s_page_size))
-683             continue;
-684 
-685         // This entry is not free
-686         if (entry\->type != MULTIBOOT_MEMORY_AVAILABLE)
-687             continue;
-688 
-689         // This entry must contain the address and must be free so it can be used
-690         return true;
-691 
-692     }
-693 
-694     // Memory is not available (it was not found in a free region)
-695     return false;
-696 }
-.fi
-
-.PP
-References \fBaddress\fP, \fBmultiboot_tag_mmap::entries\fP, \fBmultiboot_tag_mmap::entry_size\fP, \fBMaxOS::system::Multiboot::is_reserved()\fP, \fBMULTIBOOT_MEMORY_AVAILABLE\fP, \fBs_page_size\fP, \fBmultiboot_tag_mmap::size\fP, and \fBMaxOS::system::Multiboot::start_address\fP\&.
-.PP
-Referenced by \fBallocate_frame()\fP\&.
 .SS "\fBbool\fP PhysicalMemoryManager::is_mapped (\fBuintptr_t\fP physical_address, \fBuintptr_t\fP virtual_address, \fBuint64_t\fP * pml4_root)"
 
 .PP
@@ -873,18 +795,18 @@ True if the physical address is mapped to the virtual address
 .PP
 
 .PP
-Definition at line \fB883\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB849\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-883                                                                                                                 {
-884 
-885     return get_physical_address((virtual_address_t*) virtual_address, pml4_root) == (physical_address_t*) physical_address;
-886 
-887 }
+849                                                                                                                 {
+850 
+851     return get_physical_address((virtual_address_t*) virtual_address, pml4_root) == (physical_address_t*) physical_address;
+852 
+853 }
 .fi
 
 .PP
 References \fBget_physical_address()\fP, and \fBphysical_address\fP\&.
-.SS "\fBvirtual_address_t\fP * PhysicalMemoryManager::map (\fBphysical_address_t\fP * physical_address, \fBvirtual_address_t\fP * virtual_address, \fBsize_t\fP flags)"
+.SS "virtual_address_t * PhysicalMemoryManager::map (physical_address_t * physical_address, virtual_address_t * virtual_address, \fBsize_t\fP flags)"
 
 .PP
 Maps a physical address to a virtual address, using the kernel's pml4 table\&. 
@@ -905,25 +827,25 @@ The virtual address
 .PP
 
 .PP
-Definition at line \fB478\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB483\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-478                                                                                                                                     {
-479 
-480     // Map using the kernel's pml4 table
-481     return map(physical_address, virtual_address, flags, m_pml4_root_address);
-482 }
+483                                                                                                                                     {
+484 
+485     // Map using the kernel's pml4 table
+486     return map(physical_address, virtual_address, flags, m_pml4_root_address);
+487 }
 .fi
 
 .PP
 References \fBflags\fP, \fBmap()\fP, and \fBphysical_address\fP\&.
-.SS "\fBvirtual_address_t\fP * PhysicalMemoryManager::map (\fBphysical_address_t\fP * physical_address, \fBvirtual_address_t\fP * virtual_address, \fBsize_t\fP flags, \fBuint64_t\fP * pml4_table)"
+.SS "virtual_address_t * PhysicalMemoryManager::map (physical_address_t * physical_address, virtual_address_t * virtual_address, \fBsize_t\fP flags, \fBuint64_t\fP * pml4_table)"
 
 .PP
 Maps a physical address to a virtual address\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIphysical\fP The physical address 
+\fIphysical_address\fP The physical address 
 .br
 \fIvirtual_address\fP The virtual address 
 .br
@@ -939,32 +861,32 @@ The virtual address
 .PP
 
 .PP
-Definition at line \fB493\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB498\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-493                                                                                                                                                           {
-494 
-495     // If it is in a lower region then assume it is the user space
-496     if (!in_higher_region((uint64_t) virtual_address))
-497         flags |= User;
-498 
-499     // If the entry already exists then the mapping is already done
-500     pte_t* pte = get_entry(virtual_address, (pml_t*) pml4_table);
-501     if (pte\->present)
-502         return virtual_address;
+498                                                                                                                                                           {
+499 
+500     // If it is in a lower region then assume it is the user space
+501     if (!in_higher_region((uint64_t) virtual_address))
+502         flags |= USER;
 503 
-504     // Map the physical address to the virtual address
-505     *pte = create_page_table_entry((uint64_t) physical_address, flags);
-506 
-507     // Flush the TLB (cache)
-508     asm volatile("invlpg (%0)"::"r" (virtual_address) : "memory");
-509 
-510     return virtual_address;
-511 }
+504     // If the entry already exists then the mapping is already done
+505     pte_t* pte = get_entry(virtual_address, (pml_t*) pml4_table);
+506     if (pte\->present)
+507         return virtual_address;
+508 
+509     // Map the physical address to the virtual address
+510     *pte = create_page_table_entry((uint64_t) physical_address, flags);
+511 
+512     // Flush the TLB (cache)
+513     asm volatile("invlpg (%0)"::"r" (virtual_address) : "memory");
+514 
+515     return virtual_address;
+516 }
 .fi
 
 .PP
-References \fBflags\fP, \fBin_higher_region()\fP, \fBphysical_address\fP, and \fBMaxOS::memory::User\fP\&.
-.SS "\fBvirtual_address_t\fP * PhysicalMemoryManager::map (\fBvirtual_address_t\fP * virtual_address, \fBsize_t\fP flags)"
+References \fBflags\fP, \fBin_higher_region()\fP, \fBphysical_address\fP, and \fBMaxOS::memory::USER\fP\&.
+.SS "virtual_address_t * PhysicalMemoryManager::map (virtual_address_t * virtual_address, \fBsize_t\fP flags)"
 
 .PP
 Allocates a physical address to a virtual address\&. 
@@ -983,21 +905,21 @@ The virtual address
 .PP
 
 .PP
-Definition at line \fB520\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB525\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-520                                                                                               {
-521 
-522     // Map a new physical address to the requested virtual address
-523     return map(allocate_frame(), virtual_address, flags);
-524 
-525 }
+525                                                                                               {
+526 
+527     // Map a new physical address to the requested virtual address
+528     return map(allocate_frame(), virtual_address, flags);
+529 
+530 }
 .fi
 
 .PP
 References \fBallocate_frame()\fP, \fBflags\fP, and \fBmap()\fP\&.
 .PP
-Referenced by \fBidentity_map()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBmap()\fP, \fBmap()\fP, \fBmap_area()\fP, and \fBmap_area()\fP\&.
-.SS "\fBvoid\fP PhysicalMemoryManager::map_area (\fBphysical_address_t\fP * physical_address_start, \fBvirtual_address_t\fP * virtual_address_start, \fBsize_t\fP length, \fBsize_t\fP flags)"
+Referenced by \fBidentity_map()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP, \fBmap()\fP, \fBmap()\fP, \fBmap_area()\fP, and \fBmap_area()\fP\&.
+.SS "\fBvoid\fP PhysicalMemoryManager::map_area (physical_address_t * physical_address_start, virtual_address_t * virtual_address_start, \fBsize_t\fP length, \fBsize_t\fP flags)"
 
 .PP
 Maps an area of physical memory to a virtual address\&. 
@@ -1015,19 +937,19 @@ Maps an area of physical memory to a virtual address\&.
 .PP
 
 .PP
-Definition at line \fB550\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB555\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-550                                                                                                                                                       {
-551 
-552     // Map the required frames
-553     for (size_t i = 0; i < size_to_frames(length); ++i)
-554         map(physical_address_start + (i * s_page_size), virtual_address_start + (i * s_page_size), flags);
-555 }
+555                                                                                                                                                       {
+556 
+557     // Map the required frames
+558     for (size_t i = 0; i < size_to_frames(length); ++i)
+559         map(physical_address_start + (i * PAGE_SIZE), virtual_address_start + (i * PAGE_SIZE), flags);
+560 }
 .fi
 
 .PP
-References \fBflags\fP, \fBlength\fP, \fBmap()\fP, \fBs_page_size\fP, and \fBsize_to_frames()\fP\&.
-.SS "\fBvoid\fP PhysicalMemoryManager::map_area (\fBvirtual_address_t\fP * virtual_address_start, \fBsize_t\fP length, \fBsize_t\fP flags)"
+References \fBflags\fP, \fBlength\fP, \fBmap()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, and \fBsize_to_frames()\fP\&.
+.SS "\fBvoid\fP PhysicalMemoryManager::map_area (virtual_address_t * virtual_address_start, \fBsize_t\fP length, \fBsize_t\fP flags)"
 
 .PP
 Allocates a new area physical memory to a area virtual address\&. 
@@ -1043,19 +965,19 @@ Allocates a new area physical memory to a area virtual address\&.
 .PP
 
 .PP
-Definition at line \fB534\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB539\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-534                                                                                                           {
-535 
-536     // Map the required frames
-537     for (size_t i = 0; i < size_to_frames(length); ++i)
-538         map(virtual_address_start + (i * s_page_size), flags);
-539 
-540 }
+539                                                                                                           {
+540 
+541     // Map the required frames
+542     for (size_t i = 0; i < size_to_frames(length); ++i)
+543         map(virtual_address_start + (i * PAGE_SIZE), flags);
+544 
+545 }
 .fi
 
 .PP
-References \fBflags\fP, \fBlength\fP, \fBmap()\fP, \fBs_page_size\fP, and \fBsize_to_frames()\fP\&.
+References \fBflags\fP, \fBlength\fP, \fBmap()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, and \fBsize_to_frames()\fP\&.
 .SS "\fBuint64_t\fP PhysicalMemoryManager::memory_size () const"
 
 .PP
@@ -1068,12 +990,12 @@ The memory size in bytes
 .PP
 
 .PP
-Definition at line \fB757\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB727\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-757                                                   {
-758 
-759     return m_memory_size;
-760 }
+727                                                   {
+728 
+729     return m_memory_size;
+730 }
 .fi
 
 .SS "\fBuint64_t\fP PhysicalMemoryManager::memory_used () const"
@@ -1088,16 +1010,16 @@ The memory size in bytes
 .PP
 
 .PP
-Definition at line \fB767\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB737\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-767                                                   {
-768 
-769     return m_used_frames * s_page_size;
-770 }
+737                                                   {
+738 
+739     return m_used_frames * PAGE_SIZE;
+740 }
 .fi
 
 .PP
-References \fBs_page_size\fP\&.
+References \fBMaxOS::memory::PAGE_SIZE\fP\&.
 .SS "\fBuint64_t\fP * PhysicalMemoryManager::pml4_root_address ()"
 
 .PP
@@ -1110,12 +1032,12 @@ The pml4 root address
 .PP
 
 .PP
-Definition at line \fB747\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB717\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-747                                                    {
-748 
-749     return m_pml4_root_address;
-750 }
+717                                                    {
+718 
+719     return m_pml4_root_address;
+720 }
 .fi
 
 .SS "\fBvoid\fP PhysicalMemoryManager::reserve (\fBuint64_t\fP address)"
@@ -1130,27 +1052,19 @@ Reserves a physical address\&.
 .PP
 
 .PP
-Definition at line \fB788\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB758\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-788                                                     {
-789 
-790     // Cant reserve virtual addresses (ensure the address is physical)
-791     if (address >= m_memory_size)
-792         return;
-793 
-794     // Mark as used in the bitmap
-795     address = align_direct_to_page(address);
-796     m_bit_map[address / s_row_bits] |= (1 << (address % s_row_bits));
-797 
-798     Logger::DEBUG() << "Reserved Address: 0x" << address << "\\n";
-799 }
+758                                                     {
+759 
+760     reserve(address, PAGE_SIZE);
+761 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBalign_direct_to_page()\fP, \fBLogger::DEBUG()\fP, and \fBs_row_bits\fP\&.
+References \fBMaxOS::memory::PAGE_SIZE\fP, and \fBreserve()\fP\&.
 .PP
-Referenced by \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, and \fBreserve_kernel_regions()\fP\&.
-.SS "\fBvoid\fP PhysicalMemoryManager::reserve (\fBuint64_t\fP address, \fBsize_t\fP size)"
+Referenced by \fBreserve()\fP, and \fBreserve_kernel_regions()\fP\&.
+.SS "\fBvoid\fP PhysicalMemoryManager::reserve (\fBuint64_t\fP address, \fBsize_t\fP size, \fBconst\fP \fBchar\fP * type = \fC'Unknown'\fP)"
 
 .PP
 Reserves an area of physical memory\&. 
@@ -1160,95 +1074,114 @@ Reserves an area of physical memory\&.
 \fIaddress\fP The start of the area 
 .br
 \fIsize\fP The size of the area 
+.br
+\fItype\fP The name for the region being reserved (not required, logging purposes only, defaults to unkown) 
 .RE
 .PP
 
 .PP
-Definition at line \fB807\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB770\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-807                                                                  {
-808 
-809     // Cant reserve virtual addresses (ensure the address is physical)
-810     if (address >= m_memory_size)
-811         return;
-812 
-813     // Wait to be able to reserve
-814     m_lock\&.lock();
-815 
-816     // Ensure the area is a range of pages
-817     address = align_direct_to_page(address);
-818     size = align_up_to_page(size, s_page_size);
-819 
-820     // Convert in to amount of pages
-821     size_t page_count = size / s_page_size;
-822     uint64_t frame_index = address / s_page_size;
-823 
-824     // Mark all as free
-825     for (size_t i = 0; i < page_count; ++i)
-826         m_bit_map[(frame_index + i) / s_row_bits] |= (1ULL << ((frame_index + i) % s_row_bits));
-827 
-828 
-829     // Update the used frames
-830     m_used_frames += page_count;
-831 
-832     // Clear the lock
-833     m_lock\&.unlock();
-834     Logger::DEBUG() << "Reserved Address: 0x" << address << " \- 0x" << address + size << " (length of 0x" << size << ")\\n";
-835 }
+770                                                                                    {
+771 
+772     // Cant reserve virtual addresses (ensure the address is physical)
+773     ASSERT(address < m_memory_size, "Attempt to reserve address bigger then the memory can contain: 0x%x\\n", address);
+774     ASSERT(address + size < m_memory_size, "Attempt to reserve region bigger then the memory can contain: 0x%x\-0x%x\\n", address, address+size);
+775 
+776     // Wait to be able to reserve
+777     m_lock\&.lock();
+778 
+779     // Align to a page, if rounding down need to correct the range
+780     size_t aligned_address = align_direct_to_page(address);
+781     if(aligned_address < address)
+782         size += address \- aligned_address;
+783 
+784     // Convert in to amount of pages
+785     size = align_up_to_page(size, PAGE_SIZE);
+786     size_t page_count = size / PAGE_SIZE;
+787     uint64_t frame_index = aligned_address / PAGE_SIZE;
+788 
+789     // Mark all as used
+790     for (size_t i = 0; i < page_count; ++i)
+791         m_bit_map[(frame_index + i) / ROW_BITS] |= (1ULL << ((frame_index + i) % ROW_BITS));
+792 
+793     // Update the used frames
+794     m_used_frames += page_count;
+795 
+796     // Clear the lock
+797     m_lock\&.unlock();
+798     Logger::DEBUG() << "Reserved Address for "<< type << ": 0x" << aligned_address << " \- 0x" << aligned_address + size << " (length of 0x" << size << ")\\n";
+799 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBalign_direct_to_page()\fP, \fBalign_up_to_page()\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBs_page_size\fP, \fBs_row_bits\fP, \fBsize\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+References \fBalign_direct_to_page()\fP, \fBalign_up_to_page()\fP, \fBASSERT\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, \fBsize\fP, \fBtype\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .SS "\fBvoid\fP PhysicalMemoryManager::reserve_kernel_regions (\fBsystem::Multiboot\fP * multiboot)"
 
 .PP
-Definition at line \fB81\fP of file \fBphysical\&.cpp\fP\&..PP
+Reserves the kernel, multiboot modules, mmap regions and higher half mapping regions in the physical memory manager so that those pages arent overwritten later\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImultiboot\fP The multiboot information structure to use for memory information such as the memory map\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB88\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-81                                                                        {
-82 
-83     // Reserve the area for the bitmap
-84     Logger::DEBUG() << "Bitmap: location: 0x" << (uint64_t) m_bit_map << " \- 0x" << (uint64_t) (m_bit_map + m_bitmap_size / 8) << " (range of 0x" << (uint64_t) m_bitmap_size / 8 << ")\\n";
-85     reserve((uint64_t) from_dm_region((uint64_t) m_bit_map), m_bitmap_size / 8);
-86 
-87     // Calculate how much space the kernel takes up
-88     uint32_t kernel_entries = (m_anonymous_memory_physical_address / s_page_size) + 1;
-89     if ((((uint32_t) (m_anonymous_memory_physical_address)) % s_page_size) != 0)
-90         kernel_entries += 1;
-91 
-92     // Reserve the kernel entries
-93     Logger::DEBUG() << "Kernel: location: 0x" << (uint64_t) m_anonymous_memory_physical_address << " \- 0x" << (uint64_t) (m_anonymous_memory_physical_address + kernel_entries * s_page_size) << " (range of 0x" << (uint64_t) kernel_entries * s_page_size << ")\\n";
-94     reserve(0, kernel_entries * s_page_size);
+88                                                                        {
+89 
+90     // Reserve the pages used by the higher half mapping
+91     reserve((uint64_t)m_mmap\->addr, m_setup_frames * PAGE_SIZE, "HHDM");
+92 
+93     // Reserve the area for the bitmap
+94     reserve((uint64_t) from_dm_region((uint64_t) m_bit_map), m_bitmap_size / 8, "Bitmap");
 95 
-96     // Reserve the area for the mmap
-97     uint64_t mem_end = m_mmap\->addr + m_mmap\->len;
-98     for (multiboot_mmap_entry* entry = m_mmap_tag\->entries; (multiboot_uint8_t*) entry < (multiboot_uint8_t*) m_mmap_tag + m_mmap_tag\->size; entry = (multiboot_mmap_entry*) ((unsigned long) entry + m_mmap_tag\->entry_size)) {
-99 
-100         // Dont reserve free regions
-101         if (entry\->type <= MULTIBOOT_MEMORY_AVAILABLE)
-102             continue;
+96     // Calculate how much space the kernel takes up
+97     uint32_t kernel_entries = (m_kernel_start_page / PAGE_SIZE) + 1;
+98     if ((((uint32_t) (m_kernel_start_page)) % PAGE_SIZE) != 0)
+99         kernel_entries += 1;
+100 
+101     // Reserve the kernel entries
+102     reserve(0, kernel_entries * PAGE_SIZE, "Kernel");
 103 
-104         // Don't reserve the memory being managed by pmm
-105         if (entry\->addr >= mem_end)
-106             continue;
+104     // Reserve the area for the mmap
+105     uint64_t mem_end = m_mmap\->addr + m_mmap\->len;
+106     for (multiboot_mmap_entry* entry = m_mmap_tag\->entries; (multiboot_uint8_t*) entry < (multiboot_uint8_t*) m_mmap_tag + m_mmap_tag\->size; entry = (multiboot_mmap_entry*) ((unsigned long) entry + m_mmap_tag\->entry_size)) {
 107 
-108         reserve(entry\->addr, entry\->len);
-109     }
-110 
-111     // Reserve the area for each multiboot module
-112     for (multiboot_tag* tag = multiboot\->start_tag(); tag\->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag\->size + 7) & ~7))) {
-113 
-114         if (tag\->type != MULTIBOOT_TAG_TYPE_MODULE)
-115             continue;
-116 
-117         // Reserve the module's address
-118         auto* module = (struct multiboot_tag_module*) tag;
-119         reserve(module\->mod_start, module\->mod_end \- module\->mod_start);
-120     }
-121 }
+108         // Dont reserve free regions
+109         if (entry\->type <= MULTIBOOT_MEMORY_AVAILABLE)
+110             continue;
+111 
+112         // Don't reserve the memory being managed by pmm
+113         if (entry\->addr >= mem_end)
+114             continue;
+115 
+116         reserve(entry\->addr, entry\->len, "MMap");
+117     }
+118 
+119     // Reserve the area for each multiboot module
+120     for (multiboot_tag* tag = multiboot\->start_tag(); tag\->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag\->size + 7) & ~7))) {
+121 
+122         if (tag\->type != MULTIBOOT_TAG_TYPE_MODULE)
+123             continue;
+124 
+125         // Reserve the module's address
+126         auto* module = (struct multiboot_tag_module*) tag;
+127         reserve(module\->mod_start, module\->mod_end \- module\->mod_start, "Module");
+128     }
+129 
+130     // Reserve all the tags
+131     auto end_tag = (multiboot_tag*)to_higher_region(multiboot\->end_address);
+132     auto start_tag = (uint64_t)to_lower_region((uintptr_t)multiboot\->start_tag());
+133     size_t tags_size = multiboot\->end_address \- start_tag + ((end_tag\->size + 7) & ~7);
+134     reserve(start_tag, tags_size, "Tags");
+135 }
 .fi
 
 .PP
-References \fBmultiboot_mmap_entry::addr\fP, \fBLogger::DEBUG()\fP, \fBmultiboot_tag_mmap::entries\fP, \fBmultiboot_tag_mmap::entry_size\fP, \fBfrom_dm_region()\fP, \fBmultiboot_mmap_entry::len\fP, \fBMULTIBOOT_MEMORY_AVAILABLE\fP, \fBMULTIBOOT_TAG_TYPE_END\fP, \fBMULTIBOOT_TAG_TYPE_MODULE\fP, \fBreserve()\fP, \fBs_page_size\fP, and \fBmultiboot_tag_mmap::size\fP\&.
+References \fBmultiboot_mmap_entry::addr\fP, \fBmultiboot_tag_mmap::entries\fP, \fBmultiboot_tag_mmap::entry_size\fP, \fBfrom_dm_region()\fP, \fBmultiboot_mmap_entry::len\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBreserve()\fP, \fBmultiboot_tag_mmap::size\fP, \fBto_higher_region()\fP, and \fBto_lower_region()\fP\&.
 .SS "\fBsize_t\fP PhysicalMemoryManager::size_to_frames (\fBsize_t\fP size)\fC [static]\fP"
 
 .PP
@@ -1266,18 +1199,18 @@ The number of frames
 .PP
 
 .PP
-Definition at line \fB129\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB143\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-129                                                         {
-130 
-131     return align_to_page(size) / s_page_size;
-132 }
+143                                                         {
+144 
+145     return align_to_page(size) / PAGE_SIZE;
+146 }
 .fi
 
 .PP
-References \fBalign_to_page()\fP, \fBs_page_size\fP, and \fBsize\fP\&.
+References \fBalign_to_page()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, and \fBsize\fP\&.
 .PP
-Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBallocate_area()\fP, \fBfree_area()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBmap_area()\fP, \fBmap_area()\fP, \fBunmap_area()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP, and \fBMaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()\fP\&.
+Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBallocate_area()\fP, \fBfree_area()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBmap_area()\fP, \fBmap_area()\fP, \fBunmap_area()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
 .SS "\fBvoid\fP * PhysicalMemoryManager::to_dm_region (\fBuintptr_t\fP physical_address)\fC [static]\fP"
 
 .PP
@@ -1295,22 +1228,22 @@ The direct map region address
 .PP
 
 .PP
-Definition at line \fB942\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB908\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-942                                                                     {
-943 
-944     if (physical_address < s_higher_half_offset)
-945         return (void*) (physical_address + s_hh_direct_map_offset);
-946 
-947     // Must be in the higher half
-948     return (void*) physical_address;
-949 }
+908                                                                     {
+909 
+910     if (physical_address < HIGHER_HALF_OFFSET)
+911         return (void*) (physical_address + HIGHER_HALF_DIRECT_MAP);
+912 
+913     // Must be in the higher half
+914     return (void*) physical_address;
+915 }
 .fi
 
 .PP
-References \fBphysical_address\fP, \fBs_hh_direct_map_offset\fP, and \fBs_higher_half_offset\fP\&.
+References \fBMaxOS::memory::HIGHER_HALF_DIRECT_MAP\fP, \fBMaxOS::memory::HIGHER_HALF_OFFSET\fP, and \fBphysical_address\fP\&.
 .PP
-Referenced by \fBMaxOS::processes::Scheduler::load_multiboot_elfs()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP, and \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP\&.
+Referenced by \fBMaxOS::processes::GlobalScheduler::load_multiboot_elfs()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
 .SS "\fBvoid\fP * PhysicalMemoryManager::to_higher_region (\fBuintptr_t\fP physical_address)\fC [static]\fP"
 
 .PP
@@ -1328,23 +1261,23 @@ The higher region address
 .PP
 
 .PP
-Definition at line \fB895\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB861\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-895                                                                         {
-896 
-897     // If it's in the lower half then add the offset
-898     if (physical_address < s_higher_half_kernel_offset)
-899         return (void*) (physical_address + s_higher_half_kernel_offset);
-900 
-901     // Must be in the higher half
-902     return (void*) physical_address;
-903 }
+861                                                                         {
+862 
+863     // If it's in the lower half then add the offset
+864     if (physical_address < HIGHER_HALF_KERNEL_OFFSET)
+865         return (void*) (physical_address + HIGHER_HALF_KERNEL_OFFSET);
+866 
+867     // Must be in the higher half
+868     return (void*) physical_address;
+869 }
 .fi
 
 .PP
-References \fBphysical_address\fP, and \fBs_higher_half_kernel_offset\fP\&.
+References \fBMaxOS::memory::HIGHER_HALF_KERNEL_OFFSET\fP, and \fBphysical_address\fP\&.
 .PP
-Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP\&.
+Referenced by \fBreserve_kernel_regions()\fP\&.
 .SS "\fBvoid\fP * PhysicalMemoryManager::to_io_region (\fBuintptr_t\fP physical_address)\fC [static]\fP"
 
 .PP
@@ -1362,22 +1295,22 @@ The IO region address
 .PP
 
 .PP
-Definition at line \fB927\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB893\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-927                                                                     {
-928 
-929     if (physical_address < s_higher_half_mem_offset)
-930         return (void*) (physical_address + s_higher_half_mem_offset);
-931 
-932     // Must be in the higher half
-933     return (void*) physical_address;
-934 }
+893                                                                     {
+894 
+895     if (physical_address < HIGHER_HALF_MEM_OFFSET)
+896         return (void*) (physical_address + HIGHER_HALF_MEM_OFFSET);
+897 
+898     // Must be in the higher half
+899     return (void*) physical_address;
+900 }
 .fi
 
 .PP
-References \fBphysical_address\fP, and \fBs_higher_half_mem_offset\fP\&.
+References \fBMaxOS::memory::HIGHER_HALF_MEM_OFFSET\fP, and \fBphysical_address\fP\&.
 .PP
-Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, and \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::map_tables()\fP\&.
+Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()\fP, and \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP\&.
 .SS "\fBvoid\fP * PhysicalMemoryManager::to_lower_region (\fBuintptr_t\fP virtual_address)\fC [static]\fP"
 
 .PP
@@ -1395,24 +1328,24 @@ The lower region address
 .PP
 
 .PP
-Definition at line \fB911\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB877\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-911                                                                       {
-912 
-913     // If it's in the lower half then add the offset
-914     if (virtual_address > s_higher_half_kernel_offset)
-915         return (void*) (virtual_address \- s_higher_half_kernel_offset);
-916 
-917     // Must be in the lower half
-918     return (void*) virtual_address;
-919 }
+877                                                                       {
+878 
+879     // If it's in the lower half then add the offset
+880     if (virtual_address > HIGHER_HALF_KERNEL_OFFSET)
+881         return (void*) (virtual_address \- HIGHER_HALF_KERNEL_OFFSET);
+882 
+883     // Must be in the lower half
+884     return (void*) virtual_address;
+885 }
 .fi
 
 .PP
-References \fBs_higher_half_kernel_offset\fP\&.
+References \fBMaxOS::memory::HIGHER_HALF_KERNEL_OFFSET\fP\&.
 .PP
-Referenced by \fBMaxOS::system::Multiboot::Multiboot()\fP, and \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP\&.
-.SS "\fBvoid\fP PhysicalMemoryManager::unmap (\fBvirtual_address_t\fP * virtual_address)"
+Referenced by \fBMaxOS::system::CPU::init_cores()\fP, \fBMaxOS::system::Multiboot::Multiboot()\fP, and \fBreserve_kernel_regions()\fP\&.
+.SS "\fBvoid\fP PhysicalMemoryManager::unmap (virtual_address_t * virtual_address)"
 
 .PP
 Unmaps a virtual address using the kernel's pml4 table\&. 
@@ -1424,20 +1357,20 @@ Unmaps a virtual address using the kernel's pml4 table\&.
 .PP
 
 .PP
-Definition at line \fB574\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB579\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-574                                                                     {
-575 
-576     // Pass the kernel's pml4 table
-577     unmap(virtual_address, m_pml4_root_address);
-578 }
+579                                                                     {
+580 
+581     // Pass the kernel's pml4 table
+582     unmap(virtual_address, m_pml4_root_address);
+583 }
 .fi
 
 .PP
 References \fBunmap()\fP\&.
 .PP
 Referenced by \fBunmap()\fP, and \fBunmap_area()\fP\&.
-.SS "\fBvoid\fP PhysicalMemoryManager::unmap (\fBvirtual_address_t\fP * virtual_address, \fBuint64_t\fP * pml4_root)"
+.SS "\fBvoid\fP PhysicalMemoryManager::unmap (virtual_address_t * virtual_address, \fBuint64_t\fP * pml4_root)"
 
 .PP
 Unmaps a virtual address\&. 
@@ -1451,26 +1384,26 @@ Unmaps a virtual address\&.
 .PP
 
 .PP
-Definition at line \fB586\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB591\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-586                                                                                          {
-587 
-588     // Get the entry
-589     pte_t* pte = get_entry(virtual_address, (pml_t*) pml4_root);
-590 
-591     // Make sure the address is actually mapped
-592     if (!pte\->present)
-593         return;
-594 
-595     // Unmap the entry
-596     pte\->present = false;
-597 
-598     // Flush the TLB (cache)
-599     asm volatile("invlpg (%0)"::"r" (virtual_address) : "memory");
-600 }
+591                                                                                          {
+592 
+593     // Get the entry
+594     pte_t* pte = get_entry(virtual_address, (pml_t*) pml4_root);
+595 
+596     // Make sure the address is actually mapped
+597     if (!pte\->present)
+598         return;
+599 
+600     // Unmap the entry
+601     pte\->present = false;
+602 
+603     // Flush the TLB (cache)
+604     asm volatile("invlpg (%0)"::"r" (virtual_address) : "memory");
+605 }
 .fi
 
-.SS "\fBvoid\fP PhysicalMemoryManager::unmap_area (\fBvirtual_address_t\fP * virtual_address_start, \fBsize_t\fP length)"
+.SS "\fBvoid\fP PhysicalMemoryManager::unmap_area (virtual_address_t * virtual_address_start, \fBsize_t\fP length)"
 
 .PP
 Unmaps an area of virtual memory\&. 
@@ -1484,79 +1417,50 @@ Unmaps an area of virtual memory\&.
 .PP
 
 .PP
-Definition at line \fB608\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB613\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-608                                                                                               {
-609 
-610     // Unmap the required frames
-611     for (size_t i = 0; i < size_to_frames(length); ++i)
-612         unmap(virtual_address_start + (i * s_page_size));
-613 }
+613                                                                                               {
+614 
+615     // Unmap the required frames
+616     for (size_t i = 0; i < size_to_frames(length); ++i)
+617         unmap(virtual_address_start + (i * PAGE_SIZE));
+618 }
 .fi
 
 .PP
-References \fBlength\fP, \fBs_page_size\fP, \fBsize_to_frames()\fP, and \fBunmap()\fP\&.
+References \fBlength\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBsize_to_frames()\fP, and \fBunmap()\fP\&.
 .SS "\fBvoid\fP PhysicalMemoryManager::unmap_lower_kernel ()\fC [static]\fP"
 
 .PP
 Unmaps the kernel physical memory from the lower half that was set up during the kernel boot\&. 
 .PP
-Definition at line \fB982\fP of file \fBphysical\&.cpp\fP\&..PP
+Definition at line \fB948\fP of file \fBphysical\&.cpp\fP\&..PP
 .nf
-982                                                {
-983 
-984     p4_table[0] = 0;
-985 }
+948                                                {
+949 
+950     p4_table[0] = 0;
+951 }
 .fi
 
+.PP
+References \fBp4_table\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBPhysicalMemoryManager\fP* MaxOS::memory::PhysicalMemoryManager::s_current_manager = nullptr\fC [inline]\fP, \fC [static]\fP"
 
 .PP
-Definition at line \fB160\fP of file \fBphysical\&.h\fP\&.
+The current physical memory manager in use\&. 
 .PP
-Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP, \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::processes::SharedMemory::close()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::map_tables()\fP, \fBMaxOS::processes::SharedMemory::SharedMemory()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP, \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP, \fBMaxOS::processes::Process::~Process()\fP, and \fBMaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()\fP\&.
-.SS "const uint64_t MaxOS::memory::PhysicalMemoryManager::s_hh_direct_map_offset = \fBs_higher_half_offset\fP + \fBs_page_size\fP\fC [static]\fP"
+\fBTodo\fP
+.RS 4
+Make private with getter, maybe make mapping static? 
+.RE
+.PP
 
 .PP
-Definition at line \fB123\fP of file \fBphysical\&.h\fP\&.
+Definition at line \fB175\fP of file \fBphysical\&.h\fP\&.
 .PP
-Referenced by \fBfrom_dm_region()\fP, \fBto_dm_region()\fP, and \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP\&.
-.SS "const uint64_t MaxOS::memory::PhysicalMemoryManager::s_higher_half_kernel_offset = 0xFFFFFFFF80000000\fC [static]\fP"
-
-.PP
-Definition at line \fB119\fP of file \fBphysical\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::system::Multiboot::start_tag()\fP, \fBto_higher_region()\fP, and \fBto_lower_region()\fP\&.
-.SS "const uint64_t MaxOS::memory::PhysicalMemoryManager::s_higher_half_mem_offset = 0xFFFF800000000000\fC [static]\fP"
-
-.PP
-Definition at line \fB120\fP of file \fBphysical\&.h\fP\&.
-.PP
-Referenced by \fBto_io_region()\fP\&.
-.SS "const uint64_t MaxOS::memory::PhysicalMemoryManager::s_higher_half_mem_reserved = 0x280000000\fC [static]\fP"
-
-.PP
-Definition at line \fB121\fP of file \fBphysical\&.h\fP\&.
-.SS "const uint64_t MaxOS::memory::PhysicalMemoryManager::s_higher_half_offset = \fBs_higher_half_mem_offset\fP + \fBs_higher_half_mem_reserved\fP\fC [static]\fP"
-
-.PP
-Definition at line \fB122\fP of file \fBphysical\&.h\fP\&.
-.PP
-Referenced by \fBto_dm_region()\fP\&.
-.SS "const uint32_t MaxOS::memory::PhysicalMemoryManager::s_page_size = 0x1000\fC [static]\fP"
-
-.PP
-Definition at line \fB116\fP of file \fBphysical\&.h\fP\&.
-.PP
-Referenced by \fBalign_direct_to_page()\fP, \fBalign_to_page()\fP, \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBallocate_area()\fP, \fBallocate_frame()\fP, \fBcheck_aligned()\fP, \fBfree_area()\fP, \fBfree_frame()\fP, \fBis_anonymous_available()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBmap_area()\fP, \fBmap_area()\fP, \fBmemory_used()\fP, \fBMaxOS::memory::MemoryManager::MemoryManager()\fP, \fBreserve()\fP, \fBreserve_kernel_regions()\fP, \fBsize_to_frames()\fP, \fBunmap_area()\fP, \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP, and \fBMaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()\fP\&.
-.SS "const uint8_t MaxOS::memory::PhysicalMemoryManager::s_row_bits = 64\fC [static]\fP"
-
-.PP
-Definition at line \fB117\fP of file \fBphysical\&.h\fP\&.
-.PP
-Referenced by \fBallocate_area()\fP, \fBallocate_frame()\fP, \fBfree_area()\fP, \fBfree_frame()\fP, \fBreserve()\fP, and \fBreserve()\fP\&.
+Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::processes::SharedMemory::close()\fP, \fBMaxOS::system::CPU::init_cores()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::processes::SharedMemory::SharedMemory()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP, and \fBMaxOS::processes::Process::~Process()\fP\&.
 
 .SH "Author"
 .PP 

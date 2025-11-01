@@ -27,8 +27,6 @@ var fat32_8h =
       [ "LAST", "fat32_8h.html#ada91f9a29bc3902c44576cc1e84a4b53af447f5c03508de4d88e340390ba7c78f", null ],
       [ "FREE", "fat32_8h.html#ada91f9a29bc3902c44576cc1e84a4b53a88c189a42c87aa49d667fc8ab76bc323", null ]
     ] ],
-    [ "__attribute__", "fat32_8h.html#a52f6620003d8bac345b43e0b30c9ea5f", null ],
-    [ "__attribute__", "fat32_8h.html#a36092eb58028d173cef47dde82f39032", null ],
     [ "attributes", "fat32_8h.html#a983149395439fbc9ca8497076b75fd6b", null ],
     [ "backup_sector", "fat32_8h.html#aafa09ac103833cbbeeac1edcbf62bed6", null ],
     [ "boot_signature", "fat32_8h.html#ac1a97c4232f0271f6af44f69ae2d3efd", null ],
@@ -54,6 +52,7 @@ var fat32_8h =
     [ "last_write_date", "fat32_8h.html#a4cdb9a914e3c619d15373abefccaaf8e", null ],
     [ "last_write_time", "fat32_8h.html#ad94dab8bcdb0d7989336d90a69c2a517", null ],
     [ "lead_signature", "fat32_8h.html#ae8383090a2c40a0a44d77f9e4b6d731b", null ],
+    [ "MAX_NAME_LENGTH", "fat32_8h.html#a9baeecdd87b0c5c2ef2bc02bb838307d", null ],
     [ "media_type", "fat32_8h.html#a4b184d5976feb6927aa2a1bd3bc157cc", null ],
     [ "name", "fat32_8h.html#abfa8a0ef7b1321866a7c4099554fdfb0", null ],
     [ "name1", "fat32_8h.html#a5838c0c2c16393596822649d9b9d9d8b", null ],
@@ -80,7 +79,7 @@ var fat32_8h =
     [ "total_sectors_32", "fat32_8h.html#a7e57d21626d5fc1d73e4632a89709b54", null ],
     [ "trail_signature", "fat32_8h.html#a760eb704cccb3d6ece4b70d8cff868e6", null ],
     [ "type", "fat32_8h.html#a1d127017fb298b889f4ba24752d08b8e", null ],
-    [ "uint_32", "fat32_8h.html#a4c79470e2d0d72cdbbc391b10e1ba57d", null ],
+    [ "volume_id", "fat32_8h.html#a77a2cd2807c348ae913c256e41533320", null ],
     [ "volume_label", "fat32_8h.html#a1726642eb49790a81d20ba1024d9791d", null ],
     [ "zero", "fat32_8h.html#a7412b93c6525c9c9e53677b29cc9f5aa", null ]
 ];

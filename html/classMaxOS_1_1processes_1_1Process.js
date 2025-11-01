@@ -2,7 +2,7 @@ var classMaxOS_1_1processes_1_1Process =
 [
     [ "Process", "classMaxOS_1_1processes_1_1Process.html#aa1a99273e3031a8bb99e70f36fd711dc", null ],
     [ "Process", "classMaxOS_1_1processes_1_1Process.html#aa4ff45e2c31cec640dadbb3b2ff54bd0", null ],
-    [ "Process", "classMaxOS_1_1processes_1_1Process.html#aec64f90da9759319c7ca0b2b45ae2b07", null ],
+    [ "Process", "classMaxOS_1_1processes_1_1Process.html#ae23bb0c847207f2302342b626d5085e1", null ],
     [ "~Process", "classMaxOS_1_1processes_1_1Process.html#a990776d181dbbde7ff8ac12713d814b3", null ],
     [ "add_thread", "classMaxOS_1_1processes_1_1Process.html#a87bca165b791fb0c3031e89201973ec7", null ],
     [ "pid", "classMaxOS_1_1processes_1_1Process.html#a37c8fb7d8f9467dd6194ba0b6514e13e", null ],

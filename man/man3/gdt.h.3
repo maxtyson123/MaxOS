@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h \- Defines a Global Descriptor Table (GDT) for setting up memory segments in protected mode\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -15,7 +16,7 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::system::GlobalDescriptorTableRegister\fP"
+.RI "struct \fBMaxOS::system::GDTRegister\fP"
 .br
 .RI "How the \fBCPU\fP stores the GDT\&. "
 .ti -1c
@@ -23,21 +24,11 @@
 .br
 .RI "Sets up the GDT in the \fBCPU\fP\&. "
 .in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::system\fP"
-.br
-.in -1c
 .SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "enum class \fBMaxOS::system::DescriptorFlags\fP : uint64_t { \fBMaxOS::system::Write\fP = (1ULL << 41), \fBMaxOS::system::Execute\fP = (1ULL << 43), \fBMaxOS::system::CodeOrDataSegment\fP = (1ULL << 44), \fBMaxOS::system::GrowDown\fP = (1ULL << 45), \fBMaxOS::system::ConformFromLower\fP = (1ULL << 46), \fBMaxOS::system::Present\fP = (1ULL << 47), \fBMaxOS::system::LongMode\fP = (1ULL << 53) }"
+.RI "enum class \fBMaxOS::system::DescriptorFlags\fP : uint64_t { \fBWrite\fP = (1ULL << 41), \fBExecute\fP = (1ULL << 43), \fBCodeOrDataSegment\fP = (1ULL << 44), \fBGrowDown\fP = (1ULL << 45), \fBConformFromLower\fP = (1ULL << 46), \fBPresent\fP = (1ULL << 47), \fBLongMode\fP = (1ULL << 53) }"
 .br
 .RI "Flags for the GDT entries\&. "
 .in -1c
@@ -45,7 +36,7 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::system::GlobalDescriptorTableRegister\fP \fBMaxOS::system::__attribute__\fP ((packed)) gdtr_t"
+.RI "struct \fBMaxOS::system::GDTRegister\fP \fBMaxOS::system::__attribute__\fP ((packed)) gdtr_t"
 .br
 .in -1c
 .SS "Variables"
@@ -54,18 +45,63 @@
 .ti -1c
 .RI "uint16_t \fBsize\fP"
 .br
+.RI "The size of the GDT\&. "
 .ti -1c
 .RI "uint64_t \fBaddress\fP"
 .br
+.RI "The address of the GDT\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines a Global Descriptor Table (GDT) for setting up memory segments in protected mode\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+3rd October 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBgdt\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBMaxOS::system::DescriptorFlags\fP : uint64_t\fC [strong]\fP"
+
+.PP
+Flags for the GDT entries\&. DescriptorFlags 
+.PP
+Definition at line \fB23\fP of file \fBgdt\&.h\fP\&..PP
+.nf
+23                                     : uint64_t {
+24              Write               = (1ULL << 41),
+25              Execute             = (1ULL << 43),
+26              CodeOrDataSegment   = (1ULL << 44),
+27              GrowDown            = (1ULL << 45),
+28              ConformFromLower    = (1ULL << 46),
+29              Present             = (1ULL << 47),
+30              LongMode            = (1ULL << 53),
+31          };
+.fi
+
 .SH "Variable Documentation"
 .PP 
 .SS "uint64_t address"
 
 .PP
+The address of the GDT\&. 
+.PP
 Definition at line \fB1\fP of file \fBgdt\&.h\fP\&.
 .SS "uint16_t size"
 
+.PP
+The size of the GDT\&. 
 .PP
 Definition at line \fB0\fP of file \fBgdt\&.h\fP\&.
 .SH "Author"

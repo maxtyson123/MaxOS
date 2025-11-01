@@ -1,22 +1,26 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/common/string.h File Reference}
 \hypertarget{string_8h}{}\label{string_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/common/string.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/common/string.h}}
+
+
+Defines a String class for dynamically sized strings with various operations.  
+
+
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$common/vector.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
 class \mbox{\hyperlink{classMaxOS_1_1String}{Max\+OS\+::\+String}}
-\begin{DoxyCompactList}\small\item\em Dynamically sized string with various operations. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Dynamically sized string with various operations. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMaxOS_1_1StringBuilder}{Max\+OS\+::\+String\+Builder}}
+\begin{DoxyCompactList}\small\item\em Creates a string using a using a combination of parts with the \textquotesingle{}\texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<}\textquotesingle{} operator. Simmilar to the logger. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef \mbox{\hyperlink{classMaxOS_1_1String}{String}} \mbox{\hyperlink{namespaceMaxOS_afa22b691550d34d82dd6a5e3f77b31cb}{Max\+OS\+::string}}
-\end{DoxyCompactItemize}
+\Hypertarget{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}\label{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3} 
+typedef class \mbox{\hyperlink{classMaxOS_1_1String}{Max\+OS\+::\+String}} {\bfseries Max\+OS\+::string}
+\begin{DoxyCompactList}\small\item\em Typedef for \doxylink{classMaxOS_1_1String}{String}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -44,6 +48,26 @@ bool \mbox{\hyperlink{string_8h_a1658b202b0b408580eca37b0bccf3cd0}{strncmp}} (\m
 \begin{DoxyCompactList}\small\item\em Checks if one String is equal to another string pointer up to a specified length (each must be \texorpdfstring{$>$}{>}= this length) \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{string_8h_a36ac87929eddbfa0c0ccbc3b14959511}{strncmp}} (\mbox{\hyperlink{classMaxOS_1_1String}{Max\+OS\+::\+String}} const \&str1, \mbox{\hyperlink{classMaxOS_1_1String}{Max\+OS\+::\+String}} const \&str2, int \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}})
 \begin{DoxyCompactList}\small\item\em Checks if one String is equal to another String up to a specified length (each must be \texorpdfstring{$>$}{>}= this length) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr int \mbox{\hyperlink{string_8h_a1044cf535cd081c1386c1aef42a0b395}{Max\+OS\+::\+MAX\+\_\+\+STRING\+\_\+\+SMALL\+\_\+\+STORAGE}} = 0x99
+\begin{DoxyCompactList}\small\item\em How many characters can be stored in the small string optimization array. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines a String class for dynamically sized strings with various operations. 
+
+\begin{DoxyDate}{Date}
+12th April 2023 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{string_8h_source}{string.\+h}}.
+
 
 
 \doxysubsection{Function Documentation}
@@ -61,87 +85,85 @@ Converts a float to a string.
 \begin{DoxyParams}{Parameters}
 {\em number} & The number to convert \\
 \hline
-{\em buffer} & The buffer to store the converted string \\
-\hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 The converted string 
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00666}{666}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00773}{773}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00667\ }
-\DoxyCodeLine{00668\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{char}\ buffer[50];}
-\DoxyCodeLine{00669\ \ \ \ \ \textcolor{keywordtype}{char}\ *ptr\ =\ buffer;}
-\DoxyCodeLine{00670\ }
-\DoxyCodeLine{00671\ \ \ \ \ \textcolor{comment}{//\ Handle\ negative\ numbers.}}
-\DoxyCodeLine{00672\ \ \ \ \ \textcolor{keywordflow}{if}\ (number\ <\ 0)\ \{}
-\DoxyCodeLine{00673\ \ \ \ \ \ \ \ \ *ptr++\ =\ \textcolor{charliteral}{'-\/'};}
-\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ number\ =\ -\/number;}
-\DoxyCodeLine{00675\ \ \ \ \ \}}
-\DoxyCodeLine{00676\ }
-\DoxyCodeLine{00677\ \ \ \ \ \textcolor{comment}{//\ Separate\ integer\ and\ fractional\ parts.}}
-\DoxyCodeLine{00678\ \ \ \ \ int64\_t\ intPart\ =\ (int64\_t)\ number;}
-\DoxyCodeLine{00679\ \ \ \ \ \textcolor{keywordtype}{float}\ fraction\ =\ number\ -\/\ (float)\ intPart;}
-\DoxyCodeLine{00680\ }
-\DoxyCodeLine{00681\ \ \ \ \ \textcolor{comment}{//\ Convert\ integer\ part\ to\ string\ using\ itoa.}}
-\DoxyCodeLine{00682\ \ \ \ \ \textcolor{keywordtype}{char}\ *intStr\ =\ \mbox{\hyperlink{string_8cpp_a100df116078d0e34de582fc45d2e7df2}{itoa}}(10,\ intPart);}
-\DoxyCodeLine{00683\ \ \ \ \ \textcolor{keywordflow}{while}\ (*intStr)\ \{}
-\DoxyCodeLine{00684\ \ \ \ \ \ \ \ \ *ptr++\ =\ *intStr++;}
-\DoxyCodeLine{00685\ \ \ \ \ \}}
-\DoxyCodeLine{00686\ }
-\DoxyCodeLine{00687\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ decimal\ point.}}
-\DoxyCodeLine{00688\ \ \ \ \ *ptr++\ =\ \textcolor{charliteral}{'.'};}
-\DoxyCodeLine{00689\ }
-\DoxyCodeLine{00690\ \ \ \ \ \textcolor{comment}{//\ Define\ the\ desired\ precision\ for\ the\ fractional\ part.}}
-\DoxyCodeLine{00691\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ precision\ =\ 6;}
-\DoxyCodeLine{00692\ }
-\DoxyCodeLine{00693\ \ \ \ \ \textcolor{comment}{//\ Multiply\ the\ fraction\ to\ shift\ the\ decimal\ digits\ into\ integer\ range.}}
-\DoxyCodeLine{00694\ \ \ \ \ \textcolor{keywordtype}{float}\ fracValue\ =\ fraction;}
-\DoxyCodeLine{00695\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ <\ precision;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}++)\ \{}
-\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ fracValue\ *=\ 10.0f;}
-\DoxyCodeLine{00697\ \ \ \ \ \}}
-\DoxyCodeLine{00698\ }
-\DoxyCodeLine{00699\ \ \ \ \ \textcolor{comment}{//\ Optionally,\ round\ the\ value.}}
-\DoxyCodeLine{00700\ \ \ \ \ \textcolor{keyword}{auto}\ fracInt\ =\ (int64\_t)\ (fracValue\ +\ 0.5f);}
-\DoxyCodeLine{00701\ }
-\DoxyCodeLine{00702\ \ \ \ \ \textcolor{comment}{//\ Convert\ the\ fractional\ part\ to\ string.}}
-\DoxyCodeLine{00703\ \ \ \ \ \textcolor{keywordtype}{char}\ fracBuffer[50];}
-\DoxyCodeLine{00704\ \ \ \ \ \textcolor{keywordtype}{char}\ *fracStr\ =\ \mbox{\hyperlink{string_8cpp_a100df116078d0e34de582fc45d2e7df2}{itoa}}(10,\ fracInt);}
-\DoxyCodeLine{00705\ }
-\DoxyCodeLine{00706\ \ \ \ \ \textcolor{comment}{//\ Ensure\ we\ have\ leading\ zeros\ if\ the\ fractional\ part\ doesn't\ produce\ enough\ digits.}}
-\DoxyCodeLine{00707\ \ \ \ \ \textcolor{comment}{//\ Calculate\ length\ of\ the\ converted\ fractional\ string.}}
-\DoxyCodeLine{00708\ \ \ \ \ \textcolor{keywordtype}{int}\ len\ =\ 0;}
-\DoxyCodeLine{00709\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{char}\ *p\ =\ fracStr;\ *\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a}{p}};\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a}{p}}++)\ \{}
-\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ len++;}
-\DoxyCodeLine{00711\ \ \ \ \ \}}
-\DoxyCodeLine{00712\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ <\ precision\ -\/\ len;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}++)\ \{}
-\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ *ptr++\ =\ \textcolor{charliteral}{'0'};}
-\DoxyCodeLine{00714\ \ \ \ \ \}}
-\DoxyCodeLine{00715\ }
-\DoxyCodeLine{00716\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ fractional\ digits.}}
-\DoxyCodeLine{00717\ \ \ \ \ \textcolor{keywordflow}{while}\ (*fracStr)\ \{}
-\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ *ptr++\ =\ *fracStr++;}
-\DoxyCodeLine{00719\ \ \ \ \ \}}
-\DoxyCodeLine{00720\ }
-\DoxyCodeLine{00721\ \ \ \ \ \textcolor{comment}{//\ Null-\/terminate\ the\ string.}}
-\DoxyCodeLine{00722\ \ \ \ \ *ptr\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00723\ }
-\DoxyCodeLine{00724\ \ \ \ \ \textcolor{keywordflow}{return}\ buffer;}
-\DoxyCodeLine{00725\ \}}
+\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00774\ }
+\DoxyCodeLine{00775\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{char}\ buffer[50];}
+\DoxyCodeLine{00776\ \ \ \ \ \textcolor{keywordtype}{char}\ *ptr\ =\ buffer;}
+\DoxyCodeLine{00777\ }
+\DoxyCodeLine{00778\ \ \ \ \ \textcolor{comment}{//\ Handle\ negative\ numbers.}}
+\DoxyCodeLine{00779\ \ \ \ \ \textcolor{keywordflow}{if}\ (number\ <\ 0)\ \{}
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ *ptr++\ =\ \textcolor{charliteral}{'-\/'};}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ number\ =\ -\/number;}
+\DoxyCodeLine{00782\ \ \ \ \ \}}
+\DoxyCodeLine{00783\ }
+\DoxyCodeLine{00784\ \ \ \ \ \textcolor{comment}{//\ Separate\ integer\ and\ fractional\ parts.}}
+\DoxyCodeLine{00785\ \ \ \ \ int64\_t\ intPart\ =\ (int64\_t)\ number;}
+\DoxyCodeLine{00786\ \ \ \ \ \textcolor{keywordtype}{float}\ fraction\ =\ number\ -\/\ (float)\ intPart;}
+\DoxyCodeLine{00787\ }
+\DoxyCodeLine{00788\ \ \ \ \ \textcolor{comment}{//\ Convert\ integer\ part\ to\ string\ using\ itoa.}}
+\DoxyCodeLine{00789\ \ \ \ \ \textcolor{keywordtype}{char}\ *intStr\ =\ \mbox{\hyperlink{string_8cpp_a100df116078d0e34de582fc45d2e7df2}{itoa}}(10,\ intPart);}
+\DoxyCodeLine{00790\ \ \ \ \ \textcolor{keywordflow}{while}\ (*intStr)\ \{}
+\DoxyCodeLine{00791\ \ \ \ \ \ \ \ \ *ptr++\ =\ *intStr++;}
+\DoxyCodeLine{00792\ \ \ \ \ \}}
+\DoxyCodeLine{00793\ }
+\DoxyCodeLine{00794\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ decimal\ point.}}
+\DoxyCodeLine{00795\ \ \ \ \ *ptr++\ =\ \textcolor{charliteral}{'.'};}
+\DoxyCodeLine{00796\ }
+\DoxyCodeLine{00797\ \ \ \ \ \textcolor{comment}{//\ Define\ the\ desired\ precision\ for\ the\ fractional\ part.}}
+\DoxyCodeLine{00798\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ precision\ =\ 6;}
+\DoxyCodeLine{00799\ }
+\DoxyCodeLine{00800\ \ \ \ \ \textcolor{comment}{//\ Multiply\ the\ fraction\ to\ shift\ the\ decimal\ digits\ into\ integer\ range.}}
+\DoxyCodeLine{00801\ \ \ \ \ \textcolor{keywordtype}{float}\ fracValue\ =\ fraction;}
+\DoxyCodeLine{00802\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ precision;\ i++)\ \{}
+\DoxyCodeLine{00803\ \ \ \ \ \ \ \ \ fracValue\ *=\ 10.0f;}
+\DoxyCodeLine{00804\ \ \ \ \ \}}
+\DoxyCodeLine{00805\ }
+\DoxyCodeLine{00806\ \ \ \ \ \textcolor{comment}{//\ Optionally,\ round\ the\ value.}}
+\DoxyCodeLine{00807\ \ \ \ \ \textcolor{keyword}{auto}\ fracInt\ =\ (int64\_t)\ (fracValue\ +\ 0.5f);}
+\DoxyCodeLine{00808\ }
+\DoxyCodeLine{00809\ \ \ \ \ \textcolor{comment}{//\ Convert\ the\ fractional\ part\ to\ string.}}
+\DoxyCodeLine{00810\ \ \ \ \ \textcolor{keywordtype}{char}\ fracBuffer[50];}
+\DoxyCodeLine{00811\ \ \ \ \ \textcolor{keywordtype}{char}\ *fracStr\ =\ \mbox{\hyperlink{string_8cpp_a100df116078d0e34de582fc45d2e7df2}{itoa}}(10,\ fracInt);}
+\DoxyCodeLine{00812\ }
+\DoxyCodeLine{00813\ \ \ \ \ \textcolor{comment}{//\ Ensure\ we\ have\ leading\ zeros\ if\ the\ fractional\ part\ doesn't\ produce\ enough\ digits.}}
+\DoxyCodeLine{00814\ \ \ \ \ \textcolor{comment}{//\ Calculate\ length\ of\ the\ converted\ fractional\ string.}}
+\DoxyCodeLine{00815\ \ \ \ \ \textcolor{keywordtype}{int}\ len\ =\ 0;}
+\DoxyCodeLine{00816\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{char}\ *p\ =\ fracStr;\ *p;\ p++)\ \{}
+\DoxyCodeLine{00817\ \ \ \ \ \ \ \ \ len++;}
+\DoxyCodeLine{00818\ \ \ \ \ \}}
+\DoxyCodeLine{00819\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ precision\ -\/\ len;\ i++)\ \{}
+\DoxyCodeLine{00820\ \ \ \ \ \ \ \ \ *ptr++\ =\ \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{00821\ \ \ \ \ \}}
+\DoxyCodeLine{00822\ }
+\DoxyCodeLine{00823\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ fractional\ digits.}}
+\DoxyCodeLine{00824\ \ \ \ \ \textcolor{keywordflow}{while}\ (*fracStr)\ \{}
+\DoxyCodeLine{00825\ \ \ \ \ \ \ \ \ *ptr++\ =\ *fracStr++;}
+\DoxyCodeLine{00826\ \ \ \ \ \}}
+\DoxyCodeLine{00827\ }
+\DoxyCodeLine{00828\ \ \ \ \ \textcolor{comment}{//\ Null-\/terminate\ the\ string.}}
+\DoxyCodeLine{00829\ \ \ \ \ *ptr\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00830\ }
+\DoxyCodeLine{00831\ \ \ \ \ \textcolor{keywordflow}{return}\ buffer;}
+\DoxyCodeLine{00832\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{string_8cpp_source_l00611}{itoa()}}.
+References \mbox{\hyperlink{string_8cpp_source_l00720}{itoa()}}.
 
 
 
-Referenced by \mbox{\hyperlink{string_8cpp_source_l00100}{Max\+OS\+::\+String\+::\+String()}}.
+Referenced by \mbox{\hyperlink{string_8cpp_source_l00131}{Max\+OS\+::\+String\+::\+String()}}.
 
 \Hypertarget{string_8h_aa45db8c9bd3e58972f39d4a5e0defa44}\label{string_8h_aa45db8c9bd3e58972f39d4a5e0defa44} 
 \index{string.h@{string.h}!htoa@{htoa}}
@@ -157,38 +179,36 @@ Converts hex to string.
 \begin{DoxyParams}{Parameters}
 {\em number} & The number to convert \\
 \hline
-{\em buffer} & The buffer to store the converted string \\
-\hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 The converted string 
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00643}{643}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00751}{751}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00644\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ buffer\ use\ a\ default\ buffer}}
-\DoxyCodeLine{00645\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{char}\ buffer[50]\ =\ \{0\};}
-\DoxyCodeLine{00646\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ =\ 49;}
-\DoxyCodeLine{00647\ }
-\DoxyCodeLine{00648\ \ \ \ \ \textcolor{keywordflow}{if}\ (number\ ==\ 0)\ \{}
-\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ buffer[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}]\ =\ \textcolor{charliteral}{'0'};}
-\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}];}
-\DoxyCodeLine{00651\ \ \ \ \ \}}
-\DoxyCodeLine{00652\ }
-\DoxyCodeLine{00653\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ number\ \&\&\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}};\ -\/-\/\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}},\ number\ /=\ 16)}
-\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ buffer[i]\ =\ \textcolor{stringliteral}{"{}0123456789ABCDEF"{}}[number\ \%\ 16];}
-\DoxyCodeLine{00655\ }
-\DoxyCodeLine{00656\ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ +\ 1];}
-\DoxyCodeLine{00657\ \}}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00752\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ buffer\ use\ a\ default\ buffer}}
+\DoxyCodeLine{00753\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{char}\ buffer[50]\ =\ \{0\};}
+\DoxyCodeLine{00754\ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 49;}
+\DoxyCodeLine{00755\ }
+\DoxyCodeLine{00756\ \ \ \ \ \textcolor{keywordflow}{if}\ (number\ ==\ 0)\ \{}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ buffer[i]\ =\ \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[i];}
+\DoxyCodeLine{00759\ \ \ \ \ \}}
+\DoxyCodeLine{00760\ }
+\DoxyCodeLine{00761\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ number\ \&\&\ i;\ -\/-\/i,\ number\ /=\ 16)}
+\DoxyCodeLine{00762\ \ \ \ \ \ \ \ \ buffer[i]\ =\ \textcolor{stringliteral}{"{}0123456789ABCDEF"{}}[number\ \%\ 16];}
+\DoxyCodeLine{00763\ }
+\DoxyCodeLine{00764\ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[i\ +\ 1];}
+\DoxyCodeLine{00765\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{string_8cpp_source_l00085}{Max\+OS\+::\+String\+::\+String()}}, and \mbox{\hyperlink{outputStream_8cpp_source_l00111}{Max\+OS\+::common\+::\+Output\+Stream\+::write\+\_\+hex()}}.
+Referenced by \mbox{\hyperlink{string_8cpp_source_l00112}{Max\+OS\+::\+String\+::\+String()}}, and \mbox{\hyperlink{outputStream_8cpp_source_l00115}{Max\+OS\+::common\+::\+Output\+Stream\+::write\+\_\+hex()}}.
 
 \Hypertarget{string_8h_a100df116078d0e34de582fc45d2e7df2}\label{string_8h_a100df116078d0e34de582fc45d2e7df2} 
 \index{string.h@{string.h}!itoa@{itoa}}
@@ -204,9 +224,7 @@ Converts integer to string.
 \begin{DoxyParams}{Parameters}
 {\em base} & The base of the number (10 for decimal, 16 for hex) \\
 \hline
-{\em number} & The number to convert \\
-\hline
-{\em buffer} & The buffer to store the converted string\\
+{\em number} & The number to convert\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -214,34 +232,34 @@ The converted string
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00611}{611}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00720}{720}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00612\ }
-\DoxyCodeLine{00613\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ buffer\ use\ a\ default\ buffer}}
-\DoxyCodeLine{00614\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{char}\ buffer[50]\ =\ \{0\};}
-\DoxyCodeLine{00615\ }
-\DoxyCodeLine{00616\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ =\ 49;}
-\DoxyCodeLine{00617\ \ \ \ \ \textcolor{keywordtype}{bool}\ isNegative\ =\ number\ <\ 0;}
-\DoxyCodeLine{00618\ }
-\DoxyCodeLine{00619\ \ \ \ \ \textcolor{keywordflow}{if}\ (number\ ==\ 0)\ \{}
-\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ buffer[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}]\ =\ \textcolor{charliteral}{'0'};}
-\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}];}
-\DoxyCodeLine{00622\ \ \ \ \ \}}
-\DoxyCodeLine{00623\ }
-\DoxyCodeLine{00624\ }
-\DoxyCodeLine{00625\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ number\ \&\&\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}};\ -\/-\/\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}},\ number\ /=\ \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}})}
-\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ buffer[i]\ =\ \textcolor{stringliteral}{"{}0123456789ABCDEF"{}}[number\ \%\ \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}}];}
-\DoxyCodeLine{00627\ }
-\DoxyCodeLine{00628\ \ \ \ \ \textcolor{keywordflow}{if}\ (isNegative)\ \{}
-\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ buffer[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}]\ =\ \textcolor{charliteral}{'-\/'};}
-\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}];}
-\DoxyCodeLine{00631\ \ \ \ \ \}}
-\DoxyCodeLine{00632\ }
-\DoxyCodeLine{00633\ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ +\ 1];}
-\DoxyCodeLine{00634\ \}}
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00721\ }
+\DoxyCodeLine{00722\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ buffer\ use\ a\ default\ buffer}}
+\DoxyCodeLine{00723\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{char}\ buffer[50]\ =\ \{0\};}
+\DoxyCodeLine{00724\ }
+\DoxyCodeLine{00725\ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 49;}
+\DoxyCodeLine{00726\ \ \ \ \ \textcolor{keywordtype}{bool}\ isNegative\ =\ number\ <\ 0;}
+\DoxyCodeLine{00727\ }
+\DoxyCodeLine{00728\ \ \ \ \ \textcolor{keywordflow}{if}\ (number\ ==\ 0)\ \{}
+\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ buffer[i]\ =\ \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[i];}
+\DoxyCodeLine{00731\ \ \ \ \ \}}
+\DoxyCodeLine{00732\ }
+\DoxyCodeLine{00733\ }
+\DoxyCodeLine{00734\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ number\ \&\&\ i;\ -\/-\/i,\ number\ /=\ \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}})}
+\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ buffer[i]\ =\ \textcolor{stringliteral}{"{}0123456789ABCDEF"{}}[number\ \%\ \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}}];}
+\DoxyCodeLine{00736\ }
+\DoxyCodeLine{00737\ \ \ \ \ \textcolor{keywordflow}{if}\ (isNegative)\ \{}
+\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ buffer[i]\ =\ \textcolor{charliteral}{'-\/'};}
+\DoxyCodeLine{00739\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[i];}
+\DoxyCodeLine{00740\ \ \ \ \ \}}
+\DoxyCodeLine{00741\ }
+\DoxyCodeLine{00742\ \ \ \ \ \textcolor{keywordflow}{return}\ \&buffer[i\ +\ 1];}
+\DoxyCodeLine{00743\ \}}
 
 \end{DoxyCode}
 
@@ -250,7 +268,7 @@ References \mbox{\hyperlink{interrupts_8h_source_l00001}{base}}.
 
 
 
-Referenced by \mbox{\hyperlink{string_8cpp_source_l00666}{ftoa()}}, \mbox{\hyperlink{string_8cpp_source_l00064}{Max\+OS\+::\+String\+::\+String()}}, and \mbox{\hyperlink{outputStream_8cpp_source_l00100}{Max\+OS\+::common\+::\+Output\+Stream\+::write\+\_\+int()}}.
+Referenced by \mbox{\hyperlink{string_8cpp_source_l00773}{ftoa()}}, \mbox{\hyperlink{string_8cpp_source_l00091}{Max\+OS\+::\+String\+::\+String()}}, and \mbox{\hyperlink{outputStream_8cpp_source_l00104}{Max\+OS\+::common\+::\+Output\+Stream\+::write\+\_\+int()}}.
 
 \Hypertarget{string_8h_a82efc5a6f65207e2120b326554db0ee9}\label{string_8h_a82efc5a6f65207e2120b326554db0ee9} 
 \index{string.h@{string.h}!strcmp@{strcmp}}
@@ -274,26 +292,26 @@ True if the strings are equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00734}{734}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00841}{841}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00735\ }
-\DoxyCodeLine{00736\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ strings\ are\ equal}}
-\DoxyCodeLine{00737\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ str1[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'}\ ||\ str2[\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}++)}
-\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str1[i]\ !=\ str2[i])}
-\DoxyCodeLine{00739\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00740\ }
-\DoxyCodeLine{00741\ \ \ \ \ \textcolor{comment}{//\ The\ strings\ are\ equal}}
-\DoxyCodeLine{00742\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00743\ }
-\DoxyCodeLine{00744\ \}}
+\DoxyCodeLine{00841\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00842\ }
+\DoxyCodeLine{00843\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ strings\ are\ equal}}
+\DoxyCodeLine{00844\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ str1[i]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'}\ ||\ str2[i]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ i++)}
+\DoxyCodeLine{00845\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str1[i]\ !=\ str2[i])}
+\DoxyCodeLine{00846\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00847\ }
+\DoxyCodeLine{00848\ \ \ \ \ \textcolor{comment}{//\ The\ strings\ are\ equal}}
+\DoxyCodeLine{00849\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00850\ }
+\DoxyCodeLine{00851\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{vesaboot_8cpp_source_l00069}{Max\+OS\+::drivers\+::console\+::\+VESABoot\+Console\+::put\+\_\+character()}}, \mbox{\hyperlink{string_8cpp_source_l00753}{strcmp()}}, \mbox{\hyperlink{string_8cpp_source_l00767}{strcmp()}}, and \mbox{\hyperlink{string_8cpp_source_l00780}{strcmp()}}.
+Referenced by \mbox{\hyperlink{vesaboot_8cpp_source_l00074}{Max\+OS\+::drivers\+::console\+::\+VESABoot\+Console\+::put\+\_\+character()}}, \mbox{\hyperlink{string_8cpp_source_l00860}{strcmp()}}, \mbox{\hyperlink{string_8cpp_source_l00874}{strcmp()}}, and \mbox{\hyperlink{string_8cpp_source_l00887}{strcmp()}}.
 
 \Hypertarget{string_8h_a8a56d039d532fb4707c7100fc47ec822}\label{string_8h_a8a56d039d532fb4707c7100fc47ec822} 
 \index{string.h@{string.h}!strcmp@{strcmp}}
@@ -317,21 +335,21 @@ True if the strings are equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00753}{753}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00860}{860}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00754\ }
-\DoxyCodeLine{00755\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strcmp\ function}}
-\DoxyCodeLine{00756\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a82efc5a6f65207e2120b326554db0ee9}{strcmp}}(str1,\ str2.c\_str());}
-\DoxyCodeLine{00757\ }
-\DoxyCodeLine{00758\ \}}
+\DoxyCodeLine{00860\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00861\ }
+\DoxyCodeLine{00862\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strcmp\ function}}
+\DoxyCodeLine{00863\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a82efc5a6f65207e2120b326554db0ee9}{strcmp}}(str1,\ str2.c\_str());}
+\DoxyCodeLine{00864\ }
+\DoxyCodeLine{00865\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{string_8cpp_source_l00208}{Max\+OS\+::\+String\+::c\+\_\+str()}}, and \mbox{\hyperlink{string_8cpp_source_l00734}{strcmp()}}.
+References \mbox{\hyperlink{string_8cpp_source_l00251}{Max\+OS\+::\+String\+::c\+\_\+str()}}, and \mbox{\hyperlink{string_8cpp_source_l00841}{strcmp()}}.
 
 \Hypertarget{string_8h_a91734b3130415937b3c2fa56c5d79da4}\label{string_8h_a91734b3130415937b3c2fa56c5d79da4} 
 \index{string.h@{string.h}!strcmp@{strcmp}}
@@ -355,20 +373,20 @@ True if the strings are equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00767}{767}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00874}{874}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00768\ }
-\DoxyCodeLine{00769\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strcmp\ function}}
-\DoxyCodeLine{00770\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a82efc5a6f65207e2120b326554db0ee9}{strcmp}}(str1.c\_str(),\ str2);}
-\DoxyCodeLine{00771\ \}}
+\DoxyCodeLine{00874\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00875\ }
+\DoxyCodeLine{00876\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strcmp\ function}}
+\DoxyCodeLine{00877\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a82efc5a6f65207e2120b326554db0ee9}{strcmp}}(str1.c\_str(),\ str2);}
+\DoxyCodeLine{00878\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{string_8cpp_source_l00208}{Max\+OS\+::\+String\+::c\+\_\+str()}}, and \mbox{\hyperlink{string_8cpp_source_l00734}{strcmp()}}.
+References \mbox{\hyperlink{string_8cpp_source_l00251}{Max\+OS\+::\+String\+::c\+\_\+str()}}, and \mbox{\hyperlink{string_8cpp_source_l00841}{strcmp()}}.
 
 \Hypertarget{string_8h_acc06eeb36c694e00b5906ee7f3275405}\label{string_8h_acc06eeb36c694e00b5906ee7f3275405} 
 \index{string.h@{string.h}!strcmp@{strcmp}}
@@ -392,21 +410,21 @@ True if the strings are equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00780}{780}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00887}{887}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00781\ }
-\DoxyCodeLine{00782\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strcmp\ function}}
-\DoxyCodeLine{00783\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a82efc5a6f65207e2120b326554db0ee9}{strcmp}}(str1.c\_str(),\ str2.c\_str());}
-\DoxyCodeLine{00784\ }
-\DoxyCodeLine{00785\ \}}
+\DoxyCodeLine{00887\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00888\ }
+\DoxyCodeLine{00889\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strcmp\ function}}
+\DoxyCodeLine{00890\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a82efc5a6f65207e2120b326554db0ee9}{strcmp}}(str1.c\_str(),\ str2.c\_str());}
+\DoxyCodeLine{00891\ }
+\DoxyCodeLine{00892\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{string_8cpp_source_l00208}{Max\+OS\+::\+String\+::c\+\_\+str()}}, and \mbox{\hyperlink{string_8cpp_source_l00734}{strcmp()}}.
+References \mbox{\hyperlink{string_8cpp_source_l00251}{Max\+OS\+::\+String\+::c\+\_\+str()}}, and \mbox{\hyperlink{string_8cpp_source_l00841}{strcmp()}}.
 
 \Hypertarget{string_8h_ae6c8de953239811a34eeeab09458e55e}\label{string_8h_ae6c8de953239811a34eeeab09458e55e} 
 \index{string.h@{string.h}!strlen@{strlen}}
@@ -428,20 +446,20 @@ The length of the string
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00596}{596}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00706}{706}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00597\ \ \ \ \ \textcolor{keywordtype}{int}\ len\ =\ 0;}
-\DoxyCodeLine{00598\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ str[len]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ len++);}
-\DoxyCodeLine{00599\ \ \ \ \ \textcolor{keywordflow}{return}\ len;}
-\DoxyCodeLine{00600\ \}}
+\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00707\ \ \ \ \ \textcolor{keywordtype}{int}\ len\ =\ 0;}
+\DoxyCodeLine{00708\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ str[len]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ len++);}
+\DoxyCodeLine{00709\ \ \ \ \ \textcolor{keywordflow}{return}\ len;}
+\DoxyCodeLine{00710\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{string_8cpp_source_l00100}{Max\+OS\+::\+String\+::\+String()}}, \mbox{\hyperlink{string_8cpp_source_l00064}{Max\+OS\+::\+String\+::\+String()}}, and \mbox{\hyperlink{string_8cpp_source_l00085}{Max\+OS\+::\+String\+::\+String()}}.
+Referenced by \mbox{\hyperlink{string_8cpp_source_l00131}{Max\+OS\+::\+String\+::\+String()}}, \mbox{\hyperlink{string_8cpp_source_l00091}{Max\+OS\+::\+String\+::\+String()}}, and \mbox{\hyperlink{string_8cpp_source_l00112}{Max\+OS\+::\+String\+::\+String()}}.
 
 \Hypertarget{string_8h_a9a382141e88fb589c55148c54fa45d64}\label{string_8h_a9a382141e88fb589c55148c54fa45d64} 
 \index{string.h@{string.h}!strncmp@{strncmp}}
@@ -467,21 +485,21 @@ True if the strings are equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00795}{795}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00902}{902}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00796\ }
-\DoxyCodeLine{00797\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ strings\ are\ equal}}
-\DoxyCodeLine{00798\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}\ <\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}};\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{i}}++)}
-\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str1[i]\ !=\ str2[i])}
-\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00801\ }
-\DoxyCodeLine{00802\ \ \ \ \ \textcolor{comment}{//\ Strings\ are\ equal}}
-\DoxyCodeLine{00803\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00804\ }
-\DoxyCodeLine{00805\ \}}
+\DoxyCodeLine{00902\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00903\ }
+\DoxyCodeLine{00904\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ strings\ are\ equal}}
+\DoxyCodeLine{00905\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}};\ i++)}
+\DoxyCodeLine{00906\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (str1[i]\ !=\ str2[i])}
+\DoxyCodeLine{00907\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00908\ }
+\DoxyCodeLine{00909\ \ \ \ \ \textcolor{comment}{//\ Strings\ are\ equal}}
+\DoxyCodeLine{00910\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00911\ }
+\DoxyCodeLine{00912\ \}}
 
 \end{DoxyCode}
 
@@ -490,7 +508,7 @@ References \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}.
 
 
 
-Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00106}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}, \mbox{\hyperlink{string_8cpp_source_l00815}{strncmp()}}, \mbox{\hyperlink{string_8cpp_source_l00830}{strncmp()}}, and \mbox{\hyperlink{string_8cpp_source_l00845}{strncmp()}}.
+Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00160}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}, \mbox{\hyperlink{string_8cpp_source_l00922}{strncmp()}}, \mbox{\hyperlink{string_8cpp_source_l00937}{strncmp()}}, and \mbox{\hyperlink{string_8cpp_source_l00952}{strncmp()}}.
 
 \Hypertarget{string_8h_a13f6f6daf353fc8a2edf417dbb33f8de}\label{string_8h_a13f6f6daf353fc8a2edf417dbb33f8de} 
 \index{string.h@{string.h}!strncmp@{strncmp}}
@@ -516,21 +534,21 @@ True if the strings are equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00815}{815}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00922}{922}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00815\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00816\ }
-\DoxyCodeLine{00817\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strncmp\ function}}
-\DoxyCodeLine{00818\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a9a382141e88fb589c55148c54fa45d64}{strncmp}}(str1,\ str2.c\_str(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00819\ }
-\DoxyCodeLine{00820\ \}}
+\DoxyCodeLine{00922\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00923\ }
+\DoxyCodeLine{00924\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strncmp\ function}}
+\DoxyCodeLine{00925\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a9a382141e88fb589c55148c54fa45d64}{strncmp}}(str1,\ str2.c\_str(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00926\ }
+\DoxyCodeLine{00927\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{string_8cpp_source_l00208}{Max\+OS\+::\+String\+::c\+\_\+str()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{string_8cpp_source_l00795}{strncmp()}}.
+References \mbox{\hyperlink{string_8cpp_source_l00251}{Max\+OS\+::\+String\+::c\+\_\+str()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{string_8cpp_source_l00902}{strncmp()}}.
 
 \Hypertarget{string_8h_a1658b202b0b408580eca37b0bccf3cd0}\label{string_8h_a1658b202b0b408580eca37b0bccf3cd0} 
 \index{string.h@{string.h}!strncmp@{strncmp}}
@@ -556,21 +574,21 @@ True if the strings are equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00830}{830}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00937}{937}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00830\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00831\ }
-\DoxyCodeLine{00832\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strncmp\ function}}
-\DoxyCodeLine{00833\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a9a382141e88fb589c55148c54fa45d64}{strncmp}}(str1.c\_str(),\ str2,\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00834\ }
-\DoxyCodeLine{00835\ \}}
+\DoxyCodeLine{00937\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00938\ }
+\DoxyCodeLine{00939\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strncmp\ function}}
+\DoxyCodeLine{00940\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a9a382141e88fb589c55148c54fa45d64}{strncmp}}(str1.c\_str(),\ str2,\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00941\ }
+\DoxyCodeLine{00942\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{string_8cpp_source_l00208}{Max\+OS\+::\+String\+::c\+\_\+str()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{string_8cpp_source_l00795}{strncmp()}}.
+References \mbox{\hyperlink{string_8cpp_source_l00251}{Max\+OS\+::\+String\+::c\+\_\+str()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{string_8cpp_source_l00902}{strncmp()}}.
 
 \Hypertarget{string_8h_a36ac87929eddbfa0c0ccbc3b14959511}\label{string_8h_a36ac87929eddbfa0c0ccbc3b14959511} 
 \index{string.h@{string.h}!strncmp@{strncmp}}
@@ -596,18 +614,35 @@ True if the strings are equal, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{string_8cpp_source_l00845}{845}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
+Definition at line \mbox{\hyperlink{string_8cpp_source_l00952}{952}} of file \mbox{\hyperlink{string_8cpp_source}{string.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00845\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00846\ }
-\DoxyCodeLine{00847\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strncmp\ function}}
-\DoxyCodeLine{00848\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a9a382141e88fb589c55148c54fa45d64}{strncmp}}(str1.c\_str(),\ str2.c\_str(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00849\ \}}
+\DoxyCodeLine{00952\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00953\ }
+\DoxyCodeLine{00954\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ other\ strncmp\ function}}
+\DoxyCodeLine{00955\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{string_8cpp_a9a382141e88fb589c55148c54fa45d64}{strncmp}}(str1.c\_str(),\ str2.c\_str(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00956\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{string_8cpp_source_l00208}{Max\+OS\+::\+String\+::c\+\_\+str()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{string_8cpp_source_l00795}{strncmp()}}.
+References \mbox{\hyperlink{string_8cpp_source_l00251}{Max\+OS\+::\+String\+::c\+\_\+str()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{string_8cpp_source_l00902}{strncmp()}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{string_8h_a1044cf535cd081c1386c1aef42a0b395}\label{string_8h_a1044cf535cd081c1386c1aef42a0b395} 
+\index{string.h@{string.h}!MAX\_STRING\_SMALL\_STORAGE@{MAX\_STRING\_SMALL\_STORAGE}}
+\index{MAX\_STRING\_SMALL\_STORAGE@{MAX\_STRING\_SMALL\_STORAGE}!string.h@{string.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_STRING\_SMALL\_STORAGE}{MAX\_STRING\_SMALL\_STORAGE}}
+{\footnotesize\ttfamily constexpr int Max\+OS\+::\+MAX\+\_\+\+STRING\+\_\+\+SMALL\+\_\+\+STORAGE = 0x99\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+How many characters can be stored in the small string optimization array. 
+
+
+
+Definition at line \mbox{\hyperlink{string_8h_source_l00020}{20}} of file \mbox{\hyperlink{string_8h_source}{string.\+h}}.
 

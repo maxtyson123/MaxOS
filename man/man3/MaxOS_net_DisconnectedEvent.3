@@ -2,47 +2,44 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::net::DisconnectedEvent
+MaxOS::net::DisconnectedEvent \- Event for when a TCP socket is disconnected\&.  
+
 .SH SYNOPSIS
 .br
 .PP
 .PP
 \fC#include <tcp\&.h>\fP
 .PP
-Inherits \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP\&.
+Inherits \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBDisconnectedEvent\fP (\fBTransmissionControlProtocolSocket\fP *\fBsocket\fP)"
+.RI "\fBDisconnectedEvent\fP (\fBTCPSocket\fP *\fBsocket\fP)"
 .br
-.ti -1c
-.RI "\fB~DisconnectedEvent\fP ()"
-.br
+.RI "Construct a new Disconnected Event object\&. "
 .in -1c
 
-Public Member Functions inherited from \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP
+Public Member Functions inherited from \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP
 .in +1c
 .ti -1c
-.RI "\fBEvent\fP (TransmissionControlProtocolPayloadHandlerEvents \fBtype\fP)"
+.RI "\fBEvent\fP (TCPPayloadHandlerEvents \fBtype\fP)"
 .br
 .RI "___________________________ Template Implementation ___________________________ "
-.ti -1c
-.RI "\fB~Event\fP ()"
-.br
 .in -1c
 .SS "Public Attributes"
 
 .in +1c
 .ti -1c
-.RI "\fBTransmissionControlProtocolSocket\fP * \fBsocket\fP"
+.RI "\fBTCPSocket\fP * \fBsocket\fP"
 .br
+.RI "The socket that is disconnected\&. "
 .in -1c
 
-Public Attributes inherited from \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP
+Public Attributes inherited from \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP
 .in +1c
 .ti -1c
-.RI "TransmissionControlProtocolPayloadHandlerEvents \fBtype\fP"
+.RI "TCPPayloadHandlerEvents \fBtype\fP"
 .br
 .ti -1c
 .RI "\fBuint8_t\fP * \fBbufferValue\fP"
@@ -71,30 +68,40 @@ Public Attributes inherited from \fBMaxOS::common::Event< TransmissionControlPro
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB107\fP of file \fBtcp\&.h\fP\&.
+Event for when a TCP socket is disconnected\&. 
+.PP
+Definition at line \fB137\fP of file \fBtcp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "DisconnectedEvent::DisconnectedEvent (\fBTransmissionControlProtocolSocket\fP * socket)"
+.SS "DisconnectedEvent::DisconnectedEvent (\fBTCPSocket\fP * socket)"
 
 .PP
-Definition at line \fB569\fP of file \fBtcp\&.cpp\fP\&..PP
+Construct a new Disconnected Event object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsocket\fP The socket that is disconnected 
+.RE
+.PP
+
+.PP
+Definition at line \fB579\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-570 : Event(TransmissionControlProtocolPayloadHandlerEvents::DISCONNECTED)
-571 {
-572     this \-> socket = socket;
-573 }
+580         : Event(TCPPayloadHandlerEvents::DISCONNECTED) {
+581     this\->socket = socket;
+582 }
 .fi
 
 .PP
 References \fBsocket\fP\&.
-.SS "DisconnectedEvent::~DisconnectedEvent ()\fC [default]\fP"
-
 .SH "Member Data Documentation"
 .PP 
-.SS "\fBTransmissionControlProtocolSocket\fP* MaxOS::net::DisconnectedEvent::socket"
+.SS "\fBTCPSocket\fP* MaxOS::net::DisconnectedEvent::socket"
 
 .PP
-Definition at line \fB110\fP of file \fBtcp\&.h\fP\&.
+The socket that is disconnected\&. 
+.PP
+Definition at line \fB139\fP of file \fBtcp\&.h\fP\&.
 .PP
 Referenced by \fBDisconnectedEvent()\fP\&.
 

@@ -1,7 +1,5 @@
 var classMaxOS_1_1memory_1_1VirtualMemoryManager =
 [
-    [ "VirtualMemoryManager", "classMaxOS_1_1memory_1_1VirtualMemoryManager.html#a1b906972aec924522e630490ff0a8de2", null ],
-    [ "~VirtualMemoryManager", "classMaxOS_1_1memory_1_1VirtualMemoryManager.html#a77e2717ead1bd12e12da9c824b0c7921", null ],
     [ "allocate", "classMaxOS_1_1memory_1_1VirtualMemoryManager.html#a433396979e1b088454eefbce0964b709", null ],
     [ "allocate", "classMaxOS_1_1memory_1_1VirtualMemoryManager.html#a4c1a63b53f6acbba12095a1a13fc0ecf", null ],
     [ "free", "classMaxOS_1_1memory_1_1VirtualMemoryManager.html#a96b3efdb246def1b85d311a61e401af6", null ],

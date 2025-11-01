@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::hardwarecommunication::LocalAPIC
+MaxOS::hardwarecommunication::LocalAPIC \- Handles the local APIC for the current core\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -11,15 +12,6 @@ MaxOS::hardwarecommunication::LocalAPIC
 .SS "Public Member Functions"
 
 .in +1c
-.ti -1c
-.RI "\fBLocalAPIC\fP ()"
-.br
-.ti -1c
-.RI "\fB~LocalAPIC\fP ()"
-.br
-.ti -1c
-.RI "void \fBinit\fP ()"
-.br
 .ti -1c
 .RI "uint32_t \fBread\fP (uint32_t reg) const"
 .br
@@ -36,88 +28,74 @@ MaxOS::hardwarecommunication::LocalAPIC
 .RI "void \fBsend_eoi\fP () const"
 .br
 .RI "Acknowledge that the interrupt has been handled, allowing the PIC to process the next interrupt\&. "
-.in -1c
-.SS "Protected Attributes"
-
-.in +1c
 .ti -1c
-.RI "uint64_t \fBm_apic_base\fP {}"
+.RI "void \fBsend_init\fP (uint8_t \fBapic_id\fP, bool assert)"
 .br
+.RI "Send the init IPI to another apic\&. "
 .ti -1c
-.RI "uint64_t \fBm_apic_base_high\fP {}"
+.RI "void \fBsend_startup\fP (uint8_t \fBapic_id\fP, uint8_t \fBvector\fP)"
 .br
-.ti -1c
-.RI "uint32_t \fBm_id\fP {}"
-.br
-.ti -1c
-.RI "bool \fBm_x2apic\fP {}"
-.br
+.RI "Send the start up IPI to another apic\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB16\fP of file \fBapic\&.h\fP\&.
+Handles the local APIC for the current core\&. 
+.PP
+Definition at line \fB23\fP of file \fBapic\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "LocalAPIC::LocalAPIC ()"
 
 .PP
-Definition at line \fB13\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB18\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-13                      {
-14 
-15     // Get the APIC base address
-16     uint64_t msr_info = CPU::read_msr(0x1B);
-17     m_apic_base = msr_info & 0xFFFFF000;
-18     PhysicalMemoryManager::s_current_manager\->reserve(m_apic_base);
+18                      {
 19 
-20     // Check if the APIC supports x2APIC
-21     uint32_t ignored, xleaf, x2leaf;
-22     CPU::cpuid(0x01, &ignored, &ignored, &x2leaf, &xleaf);
+20     // Get the APIC base address
+21     uint64_t msr_info = CPU::read_msr(0x1B);
+22     m_apic_base = msr_info & 0xFFFFF000;
 23 
-24     if (x2leaf & (1 << 21)) {
-25 
-26         // Enable x2APIC
-27         m_x2apic = true;
-28         msr_info |= (1 << 10);
-29         CPU::write_msr(0x1B, msr_info);
-30         Logger::DEBUG() << "CPU supports x2APIC\\n";
-31 
-32     } else if (xleaf & (1 << 9)) {
-33 
-34         m_x2apic = false;
-35         Logger::DEBUG() << "CPU supports xAPIC\\n";
-36 
-37         // Map the APIC base address to the higher half
-38         m_apic_base_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_apic_base);
-39         PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) m_apic_base,
-40                                                       (virtual_address_t*) m_apic_base_high, Write | Present);
-41         Logger::DEBUG() << "APIC Base: phy=0x" << m_apic_base << ", virt=0x" << m_apic_base_high << "\\n";
+24     // Reserve the base address once
+25     static bool bsp_setup = false;
+26     if(!bsp_setup)
+27         PhysicalMemoryManager::s_current_manager\->reserve(m_apic_base);
+28 
+29     // Check if the APIC supports x2APIC
+30     uint32_t ignored, xleaf, x2leaf;
+31     CPU::cpuid(0x01, &ignored, &ignored, &x2leaf, &xleaf);
+32 
+33     if (x2leaf & (1 << 21)) {
+34 
+35         // Enable x2APIC
+36         m_x2apic = true;
+37         msr_info |= (1 << 10);
+38         CPU::write_msr(0x1B, msr_info);
+39         Logger::DEBUG() << "CPU supports x2APIC\\n";
+40 
+41     } else if (xleaf & (1 << 9)) {
 42 
-43     } else {
-44         ASSERT(false, "CPU does not support xAPIC");
-45     }
-46 
-47     // Get information about the APIC
-48     uint32_t spurious_vector = read(0xF0);
-49     bool is_enabled = msr_info & (1 << 11);
-50     bool is_bsp = msr_info & (1 << 8);
-51     Logger::DEBUG() << "APIC: boot processor: " << (is_bsp ? "Yes" : "No") << ", enabled (globally): " << (is_enabled ? "Yes" : "No") << " Spurious Vector: 0x" << (uint64_t) (spurious_vector & 0xFF) << "\\n";
-52 
+43         m_x2apic = false;
+44         Logger::DEBUG() << "CPU supports xAPIC\\n";
+45 
+46         // Map the APIC base address to the higher half
+47         m_apic_base_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_apic_base);
+48         PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) m_apic_base, (virtual_address_t*) m_apic_base_high, PRESENT | WRITE);
+49         Logger::DEBUG() << "APIC Base: phy=0x" << m_apic_base << ", virt=0x" << m_apic_base_high << "\\n";
+50     } else {
+51         ASSERT(false, "CPU does not support xAPIC");
+52     }
 53 
-54     if (!is_enabled) {
+54     if (!(msr_info & (1 << 11))) {
 55         Logger::WARNING() << "APIC is not enabled\\n";
 56         return;
 57     }
 58 
 59     // Enable the APIC
 60     write(0xF0, (1 << 8) | 0x100);
-61     Logger::DEBUG() << "APIC Enabled\\n";
-62 }
+61     bsp_setup = true;
+62     Logger::DEBUG() << "APIC Enabled\\n";
+63 }
 .fi
-
-.PP
-References \fBASSERT\fP, \fBMaxOS::system::CPU::cpuid()\fP, \fBLogger::DEBUG()\fP, \fBm_apic_base\fP, \fBm_apic_base_high\fP, \fBm_x2apic\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::Present\fP, \fBread()\fP, \fBMaxOS::system::CPU::read_msr()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP, \fBLogger::WARNING()\fP, \fBwrite\fP, \fBMaxOS::memory::Write\fP, and \fBMaxOS::system::CPU::write_msr()\fP\&.
-.SS "LocalAPIC::~LocalAPIC ()\fC [default]\fP"
 
 .SH "Member Function Documentation"
 .PP 
@@ -133,24 +111,22 @@ The id of the local apic
 .PP
 
 .PP
-Definition at line \fB102\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB105\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-102                              {
-103 
-104     // Read the id
-105     uint32_t id = read(0x20);
+105                              {
 106 
-107     // Return the id
-108     return m_x2apic ? id : (id >> 24);
-109 }
+107     // Read the id
+108     uint32_t id = read(0x20);
+109 
+110     // Return the id
+111     return m_x2apic ? id : (id >> 24);
+112 }
 .fi
 
 .PP
-References \fBid()\fP, \fBm_x2apic\fP, and \fBread()\fP\&.
+References \fBid()\fP, and \fBread()\fP\&.
 .PP
 Referenced by \fBid()\fP\&.
-.SS "void MaxOS::hardwarecommunication::LocalAPIC::init ()"
-
 .SS "uint32_t LocalAPIC::read (uint32_t reg) const"
 
 .PP
@@ -168,39 +144,131 @@ The value of the register
 .PP
 
 .PP
-Definition at line \fB72\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB73\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-72                                            {
-73 
-74     // If x2APIC is enabled I/O is done through the MSR
-75     if (m_x2apic)
-76         return (uint32_t) CPU::read_msr((reg >> 4) + 0x800);
-77 
-78     return *(volatile uint32_t*) ((uintptr_t) m_apic_base_high + reg);
-79 }
+73                                            {
+74 
+75     // If x2APIC is enabled I/O is done through the MSR
+76     if (m_x2apic)
+77         return (uint32_t) CPU::read_msr((reg >> 4) + 0x800);
+78 
+79     return *(volatile uint32_t*) ((uintptr_t) m_apic_base_high + reg);
+80 }
 .fi
 
 .PP
-References \fBm_apic_base_high\fP, \fBm_x2apic\fP, and \fBMaxOS::system::CPU::read_msr()\fP\&.
+References \fBMaxOS::system::CPU::read_msr()\fP\&.
 .PP
-Referenced by \fBid()\fP, \fBLocalAPIC()\fP, and \fBMaxOS::drivers::clock::PIT::ticks_per_ms()\fP\&.
+Referenced by \fBid()\fP, \fBsend_init()\fP, and \fBsend_startup()\fP\&.
 .SS "void LocalAPIC::send_eoi () const"
 
 .PP
 Acknowledge that the interrupt has been handled, allowing the PIC to process the next interrupt\&. 
 .PP
-Definition at line \fB114\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB117\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-114                                {
-115 
-116     write(0xB0, 0);
-117 }
+117                                {
+118 
+119     write(0xB0, 0);
+120 }
 .fi
 
 .PP
 References \fBwrite\fP\&.
+.SS "void LocalAPIC::send_init (uint8_t apic_id, bool assert)"
+
 .PP
-Referenced by \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\fP\&.
+Send the init IPI to another apic\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIapic_id\fP The id of the apic to send to 
+.br
+\fIassert\fP Is this an assert code (drive / release the signal) 
+.RE
+.PP
+
+.PP
+Definition at line \fB128\fP of file \fBapic\&.cpp\fP\&..PP
+.nf
+128                                                       {
+129 
+130     uint32_t icr_low = 0;
+131 
+132     // Delivery mode = INIT (101b at bits 8\-10)
+133     icr_low |= (0b101 << 8);
+134 
+135     // Level (bit 14): 1 = assert, 0 = de\-assert
+136     if (assert)
+137         icr_low |= (1 << 14);
+138 
+139     // Trigger mode: Level = 1
+140     icr_low |= (1 << 15);
+141 
+142     if (!m_x2apic) {
+143 
+144         // Select target core
+145         write(0x310, apic_id << 24);
+146 
+147         // Send INIT (Delivery mode = INIT, Level = 1)
+148         write(0x300, icr_low);
+149 
+150         // Wait for delivery
+151         while (read(0x300) & (1 << 12))
+152             asm volatile("pause");
+153 
+154     } else {
+155 
+156         // x2APIC
+157         CPU::write_msr(0x830, apic_id << 32 | icr_low);
+158     }
+159 }
+.fi
+
+.PP
+References \fBapic_id\fP, \fBread()\fP, \fBwrite\fP, and \fBMaxOS::system::CPU::write_msr()\fP\&.
+.SS "void LocalAPIC::send_startup (uint8_t apic_id, uint8_t vector)"
+
+.PP
+Send the start up IPI to another apic\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIapic_id\fP The apic to send it to 
+.br
+\fIvector\fP Where to start executing 
+.RE
+.PP
+
+.PP
+Definition at line \fB167\fP of file \fBapic\&.cpp\fP\&..PP
+.nf
+167                                                             {
+168 
+169     if (!m_x2apic) {
+170 
+171         // Select target core
+172         write(0x310, apic_id << 24);
+173 
+174         // Send SIPI (Delivery mode = STARTUP)
+175         write(0x300, 0x4600 | vector);
+176 
+177         // Wait for delivery
+178         while (read(0x300) & (1 << 12))
+179             asm volatile("pause");
+180 
+181     } else {
+182 
+183         // x2APIC
+184         CPU::write_msr(0x831, apic_id << 32 | 0x4600 | vector);
+185     }
+186 
+187 
+188 }
+.fi
+
+.PP
+References \fBapic_id\fP, \fBread()\fP, \fBvector\fP, \fBwrite\fP, and \fBMaxOS::system::CPU::write_msr()\fP\&.
 .SS "void LocalAPIC::write (uint32_t reg, uint32_t value) const"
 
 .PP
@@ -215,63 +283,25 @@ Write a value to the apic register using the MSR or memory I/O depending on the 
 .PP
 
 .PP
-Definition at line \fB87\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB88\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-87                                                         {
-88 
-89     // If x2APIC is enabled I/O is done through the MSR
-90     if (m_x2apic)
-91         CPU::write_msr((reg >> 4) + 0x800, value);
-92 
-93     // Default to memory I/O
-94     *(volatile uint32_t*) ((uintptr_t) m_apic_base_high + reg) = value;
-95 }
+88                                                         {
+89 
+90     // If x2APIC is enabled I/O is done through the MSR
+91     if (m_x2apic){
+92         CPU::write_msr((reg >> 4) + 0x800, value);
+93         return;
+94     }
+95 
+96     // Default to memory I/O
+97     *(volatile uint32_t*) ((uintptr_t) m_apic_base_high + reg) = value;
+98 }
 .fi
 
 .PP
-References \fBm_apic_base_high\fP, \fBm_x2apic\fP, and \fBMaxOS::system::CPU::write_msr()\fP\&.
+References \fBMaxOS::system::CPU::write_msr()\fP\&.
 .PP
-Referenced by \fBMaxOS::drivers::clock::Clock::calibrate()\fP, and \fBMaxOS::drivers::clock::PIT::ticks_per_ms()\fP\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "uint64_t MaxOS::hardwarecommunication::LocalAPIC::m_apic_base {}\fC [protected]\fP"
-
-.PP
-Definition at line \fB19\fP of file \fBapic\&.h\fP\&..PP
-.nf
-19 {};
-.fi
-
-.PP
-Referenced by \fBLocalAPIC()\fP\&.
-.SS "uint64_t MaxOS::hardwarecommunication::LocalAPIC::m_apic_base_high {}\fC [protected]\fP"
-
-.PP
-Definition at line \fB20\fP of file \fBapic\&.h\fP\&..PP
-.nf
-20 {};
-.fi
-
-.PP
-Referenced by \fBLocalAPIC()\fP, \fBread()\fP, and \fBwrite()\fP\&.
-.SS "uint32_t MaxOS::hardwarecommunication::LocalAPIC::m_id {}\fC [protected]\fP"
-
-.PP
-Definition at line \fB21\fP of file \fBapic\&.h\fP\&..PP
-.nf
-21 {};
-.fi
-
-.SS "bool MaxOS::hardwarecommunication::LocalAPIC::m_x2apic {}\fC [protected]\fP"
-
-.PP
-Definition at line \fB22\fP of file \fBapic\&.h\fP\&..PP
-.nf
-22 {};
-.fi
-
-.PP
-Referenced by \fBid()\fP, \fBLocalAPIC()\fP, \fBread()\fP, and \fBwrite()\fP\&.
+Referenced by \fBMaxOS::drivers::clock::Clock::setup_apic_clock()\fP\&.
 
 .SH "Author"
 .PP 

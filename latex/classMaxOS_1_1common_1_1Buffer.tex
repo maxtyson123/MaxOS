@@ -66,13 +66,13 @@ Wrapper class for a region of bytes in memor in an attempt to add some memory sa
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bool}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\+\_\+offset}} = \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{true}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Should operations write/read/copy update the offset in the buffer? \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Wrapper class for a region of bytes in memor in an attempt to add some memory safety. Automatically allocates the size specified and frees it once done, adds boundary to I/O. 
 
-Definition at line \mbox{\hyperlink{buffer_8h_source_l00022}{22}} of file \mbox{\hyperlink{buffer_8h_source}{buffer.\+h}}.
+Definition at line \mbox{\hyperlink{buffer_8h_source_l00026}{26}} of file \mbox{\hyperlink{buffer_8h_source}{buffer.\+h}}.
 
 
 
@@ -89,23 +89,24 @@ Creates a buffer of the specified size.
 
 
 \begin{DoxyParams}{Parameters}
-{\em size} & \\
+{\em size} & The capacity of the buffer \\
+\hline
+{\em update\+\_\+offset} & Should operations update the offset of the buffer? \\
 \hline
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00015}{15}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00020}{20}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00016\ :\ m\_capacity(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}),}
-\DoxyCodeLine{00017\ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}})}
-\DoxyCodeLine{00018\ \{}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ buffer}}
-\DoxyCodeLine{00021\ \ \ \ \ m\_bytes\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}[\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}];}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ :\ m\_capacity(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}),}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}})\ \{}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ buffer}}
+\DoxyCodeLine{00025\ \ \ \ \ m\_bytes\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}[\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}];}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \}}
 
 \end{DoxyCode}
 
@@ -128,21 +129,22 @@ Creates a buffer pointing to a source.
 \hline
 {\em size} & The capacity of the source \\
 \hline
+{\em update\+\_\+offset} & Should buffer operations update the internal offset? \\
+\hline
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00031}{31}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00036}{36}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00032\ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}})}
-\DoxyCodeLine{00033\ \{}
-\DoxyCodeLine{00034\ }
-\DoxyCodeLine{00035\ \ \ \ \ m\_bytes\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)\mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}};}
-\DoxyCodeLine{00036\ \ \ \ \ m\_capacity\ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
-\DoxyCodeLine{00037\ \ \ \ \ m\_dont\_delete\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}})\ \{}
 \DoxyCodeLine{00038\ }
-\DoxyCodeLine{00039\ \}}
+\DoxyCodeLine{00039\ \ \ \ \ m\_bytes\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}};}
+\DoxyCodeLine{00040\ \ \ \ \ m\_capacity\ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{00041\ \ \ \ \ m\_dont\_delete\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \}}
 
 \end{DoxyCode}
 
@@ -161,14 +163,14 @@ Destroy the buffer, freeing the memory.
 
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00044}{44}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00048}{48}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordflow}{if}(!m\_dont\_delete\ \&\&\ m\_bytes)}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ m\_bytes;}
-\DoxyCodeLine{00047\ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordflow}{if}\ (!m\_dont\_delete\ \&\&\ m\_bytes)}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ m\_bytes;}
+\DoxyCodeLine{00051\ \}}
 
 \end{DoxyCode}
 
@@ -192,18 +194,18 @@ The length of the buffer storage array
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00088}{88}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00092}{92}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_capacity;}
-\DoxyCodeLine{00090\ \}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_capacity;}
+\DoxyCodeLine{00094\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00186}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00200}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00214}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00230}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00273}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00287}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00302}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00318}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00074}{full()}}, \mbox{\hyperlink{buffer_8cpp_source_l00171}{read()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00145}{write()}}.
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00189}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00203}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00217}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00233}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00276}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00290}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00305}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00321}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00078}{full()}}, \mbox{\hyperlink{buffer_8cpp_source_l00174}{read()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00149}{write()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_af8ec6ec556d0227cbcb57d40e2d2fb06}\label{classMaxOS_1_1common_1_1Buffer_af8ec6ec556d0227cbcb57d40e2d2fb06} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!clear@{clear}}
@@ -217,24 +219,24 @@ Fulls the buffer with 0\textquotesingle{}s and resets the offset.
 
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00061}{61}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00065}{65}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ \ \ \ \ m\_offset\ =\ 0;}
-\DoxyCodeLine{00064\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_af609697d85ef5a91e8be47ffa4c20f94}{memset}}(m\_bytes,\ 0,\ m\_capacity);}
-\DoxyCodeLine{00065\ \}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ m\_offset\ =\ 0;}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_af609697d85ef5a91e8be47ffa4c20f94}{memset}}(m\_bytes,\ 0,\ m\_capacity);}
+\DoxyCodeLine{00069\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memoryIO_8cpp_source_l00166}{memset()}}.
+References \mbox{\hyperlink{memoryIO_8cpp_source_l00215}{memset()}}.
 
 
 
-Referenced by \mbox{\hyperlink{fat32_8cpp_source_l00343}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::read()}}, and \mbox{\hyperlink{fat32_8cpp_source_l00242}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::write()}}.
+Referenced by \mbox{\hyperlink{fat32_8cpp_source_l00363}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::read()}}, and \mbox{\hyperlink{fat32_8cpp_source_l00262}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::write()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}\label{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_from@{copy\_from}}
@@ -253,26 +255,26 @@ Copies all the bytes from another buffer into this buffer.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00186}{186}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00189}{189}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00187\ }
-\DoxyCodeLine{00188\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
-\DoxyCodeLine{00189\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ <=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
-\DoxyCodeLine{00190\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ );}
-\DoxyCodeLine{00191\ }
-\DoxyCodeLine{00192\ \}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{00192\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ <=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{00193\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}());}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00186}{copy\+\_\+from()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00053}{raw()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00189}{copy\+\_\+from()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00057}{raw()}}.
 
 
 
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00186}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00200}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00214}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00230}{copy\+\_\+from()}}, \mbox{\hyperlink{fat32_8cpp_source_l00343}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::read()}}, \mbox{\hyperlink{ext2_8cpp_source_l00715}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+::write()}}, \mbox{\hyperlink{fat32_8cpp_source_l00242}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::write()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00090}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::write\+\_\+inode()}}.
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00189}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00203}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00217}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00233}{copy\+\_\+from()}}, \mbox{\hyperlink{fat32_8cpp_source_l00363}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::read()}}, \mbox{\hyperlink{ext2_8cpp_source_l00740}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+::write()}}, \mbox{\hyperlink{fat32_8cpp_source_l00262}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::write()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00100}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::write\+\_\+inode()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_acfa02fb057f183777b07d6d47b8bd671}\label{classMaxOS_1_1common_1_1Buffer_acfa02fb057f183777b07d6d47b8bd671} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_from@{copy\_from}}
@@ -293,22 +295,22 @@ Copies a range of bytes from another buffer into this buffer.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00200}{200}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00203}{203}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00201\ }
-\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
-\DoxyCodeLine{00203\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{length\ <=\ buffer\ -\/>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
-\DoxyCodeLine{00204\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00205\ }
-\DoxyCodeLine{00206\ \}}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{00206\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{length\ <=\ buffer-\/>}}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{00207\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00186}{copy\+\_\+from()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00053}{raw()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00189}{copy\+\_\+from()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00057}{raw()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_ace419faf128d9d7e4e7da210e8f2e7ee}\label{classMaxOS_1_1common_1_1Buffer_ace419faf128d9d7e4e7da210e8f2e7ee} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_from@{copy\_from}}
@@ -322,7 +324,7 @@ Copies a range of bytes from another buffer into this buffer at a specified offs
 
 
 \begin{DoxyParams}{Parameters}
-{\em source} & Where to read from \\
+{\em buffer} & Where to read from \\
 \hline
 {\em length} & How much to read \\
 \hline
@@ -331,22 +333,22 @@ Copies a range of bytes from another buffer into this buffer at a specified offs
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00214}{214}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00217}{217}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00215\ }
-\DoxyCodeLine{00216\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
-\DoxyCodeLine{00217\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{length\ <=\ buffer\ -\/>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
-\DoxyCodeLine{00218\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
-\DoxyCodeLine{00219\ }
-\DoxyCodeLine{00220\ \}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{00220\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{length\ <=\ buffer-\/>}}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{00221\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00186}{copy\+\_\+from()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00053}{raw()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00189}{copy\+\_\+from()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00057}{raw()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_abb7ee7c1c6cfb7e0354417a7f2463ca3}\label{classMaxOS_1_1common_1_1Buffer_abb7ee7c1c6cfb7e0354417a7f2463ca3} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_from@{copy\_from}}
@@ -360,33 +362,33 @@ Copies a range of bytes from another buffer into this buffer at a specified offs
 
 
 \begin{DoxyParams}{Parameters}
-{\em source} & Where to read from \\
+{\em buffer} & Where to read from \\
 \hline
 {\em length} & How much to read \\
 \hline
 {\em offset} & Where to start writing into this at \\
 \hline
-{\em offset} & Where to start reading from the other buffer \\
+{\em offset\+\_\+other} & Where to start reading from the other buffer \\
 \hline
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00230}{230}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00233}{233}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00231\ }
-\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
-\DoxyCodeLine{00233\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other\ <=\ buffer\ -\/>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
-\DoxyCodeLine{00234\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}()\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
-\DoxyCodeLine{00235\ }
-\DoxyCodeLine{00236\ \}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{00236\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other\ <=\ buffer-\/>}}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{00237\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_acb3ece4e4bbfdec74c16390df4cca68a}{copy\_from}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}()\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00186}{copy\+\_\+from()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00053}{raw()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00189}{copy\+\_\+from()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00057}{raw()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_ae8a723030d0a9be37ed3e3e3fd85b357}\label{classMaxOS_1_1common_1_1Buffer_ae8a723030d0a9be37ed3e3e3fd85b357} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_from@{copy\_from}}
@@ -407,22 +409,22 @@ Copies a range of bytes from a source into this buffer.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00244}{244}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00247}{247}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00245\ }
-\DoxyCodeLine{00246\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
-\DoxyCodeLine{00247\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ m\_offset\ <=\ m\_capacity,\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
-\DoxyCodeLine{00248\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(m\_bytes\ +\ m\_offset,\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00249\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00250\ \}}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{00250\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ m\_offset\ <=\ m\_capacity,\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{00251\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(m\_bytes\ +\ m\_offset,\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00252\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00253\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00136}{memcpy()}}, \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}, and \mbox{\hyperlink{apic_8h_source_l00001}{source}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00165}{memcpy()}}, \mbox{\hyperlink{buffer_8cpp_source_l00125}{set\+\_\+offset()}}, and \mbox{\hyperlink{apic_8h_source_l00001}{source}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a1c6c04aa04dc30d3f0f65a5257ec2eb4}\label{classMaxOS_1_1common_1_1Buffer_a1c6c04aa04dc30d3f0f65a5257ec2eb4} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_from@{copy\_from}}
@@ -445,23 +447,23 @@ Copies a range of bytes from a source into this buffer at a specified offset.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00259}{259}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00262}{262}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00260\ }
-\DoxyCodeLine{00261\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
-\DoxyCodeLine{00262\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ \ +\ offset\ +\ m\_offset)\ <=\ m\_capacity,\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
-\DoxyCodeLine{00263\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(m\_bytes\ +\ offset\ +\ m\_offset,\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00264\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00265\ }
-\DoxyCodeLine{00266\ \}}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{00265\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ offset\ +\ m\_offset)\ <=\ m\_capacity,\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{00266\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(m\_bytes\ +\ offset\ +\ m\_offset,\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00267\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00136}{memcpy()}}, \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}, and \mbox{\hyperlink{apic_8h_source_l00001}{source}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00165}{memcpy()}}, \mbox{\hyperlink{buffer_8cpp_source_l00125}{set\+\_\+offset()}}, and \mbox{\hyperlink{apic_8h_source_l00001}{source}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}\label{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_to@{copy\_to}}
@@ -480,26 +482,26 @@ Copies all the bytes from this buffer into another buffer.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00273}{273}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00276}{276}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00274\ }
-\DoxyCodeLine{00275\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
-\DoxyCodeLine{00276\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ <=\ buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
-\DoxyCodeLine{00277\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}());}
-\DoxyCodeLine{00278\ }
-\DoxyCodeLine{00279\ \}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{00279\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ <=\ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{00280\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}());}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00273}{copy\+\_\+to()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00053}{raw()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00276}{copy\+\_\+to()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00057}{raw()}}.
 
 
 
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00273}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00287}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00302}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00318}{copy\+\_\+to()}}, \mbox{\hyperlink{ext2_8cpp_source_l00769}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+::read()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00136}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::read\+\_\+inode()}}.
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00276}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00290}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00305}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00321}{copy\+\_\+to()}}, \mbox{\hyperlink{ext2_8cpp_source_l00794}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+::read()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00146}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::read\+\_\+inode()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_ae1a153ef69c0546137798ceee7f3ec8b}\label{classMaxOS_1_1common_1_1Buffer_ae1a153ef69c0546137798ceee7f3ec8b} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_to@{copy\_to}}
@@ -520,22 +522,22 @@ Writes a range of bytes from this buffer into another buffer.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00287}{287}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00290}{290}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00288\ }
-\DoxyCodeLine{00289\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
-\DoxyCodeLine{00290\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{length\ <=\ buffer\ -\/>}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
-\DoxyCodeLine{00291\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00292\ }
-\DoxyCodeLine{00293\ \}}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ buffer}}
+\DoxyCodeLine{00293\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{length\ <=\ buffer-\/>}}\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{00294\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00273}{copy\+\_\+to()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00053}{raw()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00276}{copy\+\_\+to()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00057}{raw()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a79014ce941145f1f455a9aa47a0e2413}\label{classMaxOS_1_1common_1_1Buffer_a79014ce941145f1f455a9aa47a0e2413} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_to@{copy\_to}}
@@ -549,7 +551,7 @@ Copies a range of bytes from this buffer into another buffer at a specified offs
 
 
 \begin{DoxyParams}{Parameters}
-{\em source} & Where to write to \\
+{\em buffer} & Where to write to \\
 \hline
 {\em length} & How much to write \\
 \hline
@@ -558,22 +560,22 @@ Copies a range of bytes from this buffer into another buffer at a specified offs
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00302}{302}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00305}{305}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00303\ }
-\DoxyCodeLine{00304\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
-\DoxyCodeLine{00305\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ \ +\ offset)\ <=\ buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
-\DoxyCodeLine{00306\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
-\DoxyCodeLine{00307\ }
-\DoxyCodeLine{00308\ \}}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{00308\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ offset)\ <=\ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{00309\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}(),\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00273}{copy\+\_\+to()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00053}{raw()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00276}{copy\+\_\+to()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00057}{raw()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a6449b8857a61c55da9d97b7aea12cfea}\label{classMaxOS_1_1common_1_1Buffer_a6449b8857a61c55da9d97b7aea12cfea} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_to@{copy\_to}}
@@ -587,7 +589,7 @@ Copies a range of bytes from this buffer into another at an offset for each.
 
 
 \begin{DoxyParams}{Parameters}
-{\em destination} & Where to write to \\
+{\em buffer} & Where to write to \\
 \hline
 {\em length} & How much to write \\
 \hline
@@ -598,22 +600,22 @@ Copies a range of bytes from this buffer into another at an offset for each.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00318}{318}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00321}{321}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00319\ }
-\DoxyCodeLine{00320\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
-\DoxyCodeLine{00321\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ \ +\ offset)\ <=\ buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
-\DoxyCodeLine{00322\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}()\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
-\DoxyCodeLine{00323\ }
-\DoxyCodeLine{00324\ \}}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{00324\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ offset)\ <=\ buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ external\ buffer\ capacity"{}});}
+\DoxyCodeLine{00325\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_aa6a3245d3f73a1156ca03e1c5d8d6489}{copy\_to}}(buffer-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}{raw}}()\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{offset\_other}},\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}},\ offset);}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00273}{copy\+\_\+to()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00053}{raw()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, \mbox{\hyperlink{buffer_8cpp_source_l00276}{copy\+\_\+to()}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, and \mbox{\hyperlink{buffer_8cpp_source_l00057}{raw()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_ada89cae5bd56d51f0b8f2196ee71e45c}\label{classMaxOS_1_1common_1_1Buffer_ada89cae5bd56d51f0b8f2196ee71e45c} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_to@{copy\_to}}
@@ -634,23 +636,23 @@ Copies a range of bytes from this buffer into a source.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00333}{333}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00336}{336}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00334\ }
-\DoxyCodeLine{00335\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
-\DoxyCodeLine{00336\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ m\_offset\ <=\ (m\_capacity),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
-\DoxyCodeLine{00337\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ m\_bytes\ +\ m\_offset,\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00338\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00339\ }
-\DoxyCodeLine{00340\ \}}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00337\ }
+\DoxyCodeLine{00338\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{00339\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ m\_offset\ <=\ (m\_capacity),\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{00340\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ m\_bytes\ +\ m\_offset,\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00341\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{apic_8h_source_l00009}{destination}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00136}{memcpy()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{apic_8h_source_l00009}{destination}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00165}{memcpy()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00125}{set\+\_\+offset()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a8434a65eda46e5e7499843067ba9ef2b}\label{classMaxOS_1_1common_1_1Buffer_a8434a65eda46e5e7499843067ba9ef2b} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!copy\_to@{copy\_to}}
@@ -673,23 +675,23 @@ Copies a range of bytes from this buffer at an offset into a source.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00349}{349}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00352}{352}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00350\ }
-\DoxyCodeLine{00351\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
-\DoxyCodeLine{00352\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ \ +\ offset\ +\ m\_offset)\ <=\ m\_capacity,\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
-\DoxyCodeLine{00353\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ m\_bytes\ +\ offset\ +\ m\_offset,\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00354\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
-\DoxyCodeLine{00355\ }
-\DoxyCodeLine{00356\ \}}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00353\ }
+\DoxyCodeLine{00354\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ bytes}}
+\DoxyCodeLine{00355\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}((\mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}\ +\ offset\ +\ m\_offset)\ <=\ m\_capacity,\ \textcolor{stringliteral}{"{}Copy\ exceeds\ buffer\ capacity"{}});}
+\DoxyCodeLine{00356\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}},\ m\_bytes\ +\ offset\ +\ m\_offset,\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00357\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ \mbox{\hyperlink{intel__i217_8h_aebb70c2aab3407a9f05334c47131a43b}{length}});}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{apic_8h_source_l00009}{destination}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00136}{memcpy()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{apic_8h_source_l00009}{destination}}, \mbox{\hyperlink{intel__i217_8h_source_l00001}{length}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00165}{memcpy()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00125}{set\+\_\+offset()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a5bed5a921295c7d94ff47fa401446101}\label{classMaxOS_1_1common_1_1Buffer_a5bed5a921295c7d94ff47fa401446101} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!full@{full}}
@@ -712,24 +714,24 @@ Full the buffer with a specified byte at an offset.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00074}{74}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00078}{78}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//\ Prevent\ writing\ past\ the\ buffer\ bounds}}
-\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ ==\ 0)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ =\ m\_capacity\ -\/\ m\_offset\ -\/\ offset;}
-\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_offset\ +\ offset\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ <=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Buffer\ overflow"{}});}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{00079\ }
-\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_af609697d85ef5a91e8be47ffa4c20f94}{memset}}(m\_bytes\ +\ m\_offset\ +\ offset,\ \textcolor{keywordtype}{byte},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}});}
-\DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//\ Prevent\ writing\ past\ the\ buffer\ bounds}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ ==\ 0)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ =\ m\_capacity\ -\/\ m\_offset\ -\/\ offset;}
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_offset\ +\ offset\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}}\ <=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}(),\ \textcolor{stringliteral}{"{}Buffer\ overflow"{}});}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_af609697d85ef5a91e8be47ffa4c20f94}{memset}}(m\_bytes\ +\ m\_offset\ +\ offset,\ \textcolor{keywordtype}{byte},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{amount}});}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, and \mbox{\hyperlink{memoryIO_8cpp_source_l00166}{memset()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, and \mbox{\hyperlink{memoryIO_8cpp_source_l00215}{memset()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3}\label{classMaxOS_1_1common_1_1Buffer_a810cfa25b61a1777777c9d5483e53ab3} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!raw@{raw}}
@@ -746,19 +748,19 @@ The address of buffer\textquotesingle{}s storage
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00053}{53}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00057}{57}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00054\ }
-\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_bytes;}
-\DoxyCodeLine{00056\ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_bytes;}
+\DoxyCodeLine{00060\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00186}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00200}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00214}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00230}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00273}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00287}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00302}{copy\+\_\+to()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00318}{copy\+\_\+to()}}.
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00189}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00203}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00217}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00233}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00276}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00290}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00305}{copy\+\_\+to()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00321}{copy\+\_\+to()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a9ca1400c35c48a7e5a3600ffb68aa304}\label{classMaxOS_1_1common_1_1Buffer_a9ca1400c35c48a7e5a3600ffb68aa304} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!read@{read}}
@@ -771,25 +773,20 @@ Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00186}{copy\+\_\+from()}}, \m
 Safely reads a byte from the buffer at the current offset. 
 
 
-\begin{DoxyParams}{Parameters}
-{\em offset} & The offset into the buffer storage array \\
-\hline
-\end{DoxyParams}
 
-
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00161}{161}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00164}{164}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00162\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
-\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_bytes[m\_offset\ -\/\ 1];}
-\DoxyCodeLine{00164\ \}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_bytes[m\_offset\ -\/\ 1];}
+\DoxyCodeLine{00167\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}.
+References \mbox{\hyperlink{buffer_8cpp_source_l00125}{set\+\_\+offset()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a7049c99742f6dd099ec95dc96e0db349}\label{classMaxOS_1_1common_1_1Buffer_a7049c99742f6dd099ec95dc96e0db349} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!read@{read}}
@@ -808,24 +805,24 @@ Safely reads a byte from the buffer at the specified offset.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00171}{171}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00174}{174}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00172\ }
-\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{//\ Prevent\ writing\ past\ the\ buffer\ bounds}}
-\DoxyCodeLine{00174\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_offset\ +\ offset\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ \&\&\ offset\ >=\ 0,\ \textcolor{stringliteral}{"{}Buffer\ overflow"{}});}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{00175\ }
-\DoxyCodeLine{00176\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ byte}}
-\DoxyCodeLine{00177\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
-\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_bytes[(m\_offset\ -\/\ 1)\ +\ offset];}
-\DoxyCodeLine{00179\ \}}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{comment}{//\ Prevent\ writing\ past\ the\ buffer\ bounds}}
+\DoxyCodeLine{00177\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_offset\ +\ offset\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ \&\&\ offset\ >=\ 0,\ \textcolor{stringliteral}{"{}Buffer\ overflow"{}});}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ byte}}
+\DoxyCodeLine{00180\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_bytes[(m\_offset\ -\/\ 1)\ +\ offset];}
+\DoxyCodeLine{00182\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00125}{set\+\_\+offset()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_af483172a774d185d08819f3b59d09fc7}\label{classMaxOS_1_1common_1_1Buffer_af483172a774d185d08819f3b59d09fc7} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!resize@{resize}}
@@ -844,33 +841,33 @@ Grow the buffer to fit a new size.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00097}{97}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00101}{101}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00098\ }
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ new\ buffer}}
-\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_buffer}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}[\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}];}
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ old\ buffer}}
-\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordflow}{if}(m\_bytes)}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_buffer}},\ m\_bytes,\ m\_capacity);}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ new\ buffer}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_buffer}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}[\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}];}
 \DoxyCodeLine{00105\ }
-\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{//\ Store\ the\ new\ buffer}}
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordflow}{if}(!m\_dont\_delete\ \&\&\ m\_bytes)}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ m\_bytes;}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ old\ buffer}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_bytes)}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_buffer}},\ m\_bytes,\ m\_capacity);}
 \DoxyCodeLine{00109\ }
-\DoxyCodeLine{00110\ \ \ \ \ m\_bytes\ \ \ \ \ \ \ \ \ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_buffer}};}
-\DoxyCodeLine{00111\ \ \ \ \ m\_capacity\ \ \ \ \ \ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
-\DoxyCodeLine{00112\ \ \ \ \ m\_dont\_delete\ \ \ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{//\ Store\ the\ new\ buffer}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordflow}{if}\ (!m\_dont\_delete\ \&\&\ m\_bytes)}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ m\_bytes;}
 \DoxyCodeLine{00113\ }
-\DoxyCodeLine{00114\ \}}
+\DoxyCodeLine{00114\ \ \ \ \ m\_bytes\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_buffer}};}
+\DoxyCodeLine{00115\ \ \ \ \ m\_capacity\ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
+\DoxyCodeLine{00116\ \ \ \ \ m\_dont\_delete\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memoryIO_8cpp_source_l00136}{memcpy()}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
+References \mbox{\hyperlink{memoryIO_8cpp_source_l00165}{memcpy()}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}\label{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!set\_offset@{set\_offset}}
@@ -889,25 +886,25 @@ Set the offset for where operations should begin from.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00121}{121}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00125}{125}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00122\ }
-\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}})}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ m\_offset\ =\ offset;}
-\DoxyCodeLine{00125\ }
-\DoxyCodeLine{00126\ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a9faaca69a359d618544231d95ad5ae5a}{update\_offset}})}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ m\_offset\ =\ offset;}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{buffer_8h_source_l00041}{update\+\_\+offset}}.
+References \mbox{\hyperlink{buffer_8h_source_l00045}{update\+\_\+offset}}.
 
 
 
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00244}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00259}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00333}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00349}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00161}{read()}}, \mbox{\hyperlink{fat32_8cpp_source_l00343}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::read()}}, \mbox{\hyperlink{buffer_8cpp_source_l00171}{read()}}, \mbox{\hyperlink{ext2_8cpp_source_l00117}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::read\+\_\+block()}}, \mbox{\hyperlink{fat32_8cpp_source_l00242}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::write()}}, \mbox{\hyperlink{buffer_8cpp_source_l00145}{write()}}, \mbox{\hyperlink{buffer_8cpp_source_l00133}{write()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00068}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::write\+\_\+block()}}.
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00247}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00262}{copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00336}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00352}{copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00164}{read()}}, \mbox{\hyperlink{fat32_8cpp_source_l00363}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::read()}}, \mbox{\hyperlink{buffer_8cpp_source_l00174}{read()}}, \mbox{\hyperlink{ext2_8cpp_source_l00127}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::read\+\_\+block()}}, \mbox{\hyperlink{fat32_8cpp_source_l00262}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+::write()}}, \mbox{\hyperlink{buffer_8cpp_source_l00149}{write()}}, \mbox{\hyperlink{buffer_8cpp_source_l00137}{write()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00078}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::write\+\_\+block()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a97bd017146951f4f911aa1107e1e9988}\label{classMaxOS_1_1common_1_1Buffer_a97bd017146951f4f911aa1107e1e9988} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!write@{write}}
@@ -928,25 +925,25 @@ Safely writes a byte to the buffer at the specified offset.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00145}{145}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00149}{149}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00146\ }
-\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{//\ Prevent\ writing\ past\ the\ buffer\ bounds}}
-\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_offset\ +\ offset\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ \&\&\ offset\ >=\ 0,\ \textcolor{stringliteral}{"{}Buffer\ overflow"{}});}
-\DoxyCodeLine{00149\ }
-\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ byte}}
-\DoxyCodeLine{00151\ \ \ \ \ m\_bytes[m\_offset\ +\ offset]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{byte}};}
-\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{//\ Prevent\ writing\ past\ the\ buffer\ bounds}}
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(m\_offset\ +\ offset\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a7e4237091a02b29f42bfa3dd70201178}{capacity}}()\ \&\&\ offset\ >=\ 0,\ \textcolor{stringliteral}{"{}Buffer\ overflow"{}});}
 \DoxyCodeLine{00153\ }
-\DoxyCodeLine{00154\ \}}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ byte}}
+\DoxyCodeLine{00155\ \ \ \ \ m\_bytes[m\_offset\ +\ offset]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{byte}};}
+\DoxyCodeLine{00156\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00088}{capacity()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{buffer_8cpp_source_l00092}{capacity()}}, and \mbox{\hyperlink{buffer_8cpp_source_l00125}{set\+\_\+offset()}}.
 
 \Hypertarget{classMaxOS_1_1common_1_1Buffer_a0b249b319154019e0f60cf5c9274fb1c}\label{classMaxOS_1_1common_1_1Buffer_a0b249b319154019e0f60cf5c9274fb1c} 
 \index{MaxOS::common::Buffer@{MaxOS::common::Buffer}!write@{write}}
@@ -965,19 +962,19 @@ Safely writes a byte to the buffer at the current offset.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00133}{133}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
+Definition at line \mbox{\hyperlink{buffer_8cpp_source_l00137}{137}} of file \mbox{\hyperlink{buffer_8cpp_source}{buffer.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00134\ \ \ \ \ m\_bytes[m\_offset]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{byte}};}
-\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
-\DoxyCodeLine{00136\ \}}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00138\ \ \ \ \ m\_bytes[m\_offset]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{byte}};}
+\DoxyCodeLine{00139\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer_a70eb6792fdd3cf6a5bf5812ec2caa07a}{set\_offset}}(m\_offset\ +\ 1);}
+\DoxyCodeLine{00140\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}.
+References \mbox{\hyperlink{buffer_8cpp_source_l00125}{set\+\_\+offset()}}.
 
 
 
@@ -990,11 +987,15 @@ References \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}.
 
 
 
-Definition at line \mbox{\hyperlink{buffer_8h_source_l00041}{41}} of file \mbox{\hyperlink{buffer_8h_source}{buffer.\+h}}.
+Should operations write/read/copy update the offset in the buffer? 
 
 
 
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00121}{set\+\_\+offset()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00068}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::write\+\_\+block()}}.
+Definition at line \mbox{\hyperlink{buffer_8h_source_l00045}{45}} of file \mbox{\hyperlink{buffer_8h_source}{buffer.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00125}{set\+\_\+offset()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00078}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::write\+\_\+block()}}.
 
 
 

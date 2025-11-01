@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::system::Multiboot
+MaxOS::system::Multiboot \- Parses and provides access to \fBMultiboot\fP 2 information\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -12,34 +13,38 @@ MaxOS::system::Multiboot
 
 .in +1c
 .ti -1c
-.RI "\fBMultiboot\fP (\fBunsigned\fP \fBlong\fP \fBaddress\fP, \fBunsigned\fP \fBlong\fP \fBmagic\fP)"
+.RI "\fBMultiboot\fP (\fBunsigned\fP \fBlong\fP address, \fBunsigned\fP \fBlong\fP \fBmagic\fP)"
 .br
-.ti -1c
-.RI "\fB~Multiboot\fP ()"
-.br
+.RI "Constructor for the \fBMultiboot\fP class\&. Parses the multiboot info struct and loads the tags\&. "
 .ti -1c
 .RI "\fBmultiboot_tag_framebuffer\fP * \fBframebuffer\fP ()"
 .br
+.RI "Get the framebuffer tag\&. "
 .ti -1c
 .RI "\fBmultiboot_tag_basic_meminfo\fP * \fBbasic_meminfo\fP ()"
 .br
+.RI "Get the basic memory info tag\&. "
 .ti -1c
 .RI "\fBmultiboot_tag_string\fP * \fBbootloader_name\fP ()"
 .br
+.RI "Get the bootloader name tag\&. "
 .ti -1c
 .RI "\fBmultiboot_tag_mmap\fP * \fBmmap\fP ()"
 .br
+.RI "Get the module tag\&. "
 .ti -1c
 .RI "\fBmultiboot_tag_old_acpi\fP * \fBold_acpi\fP ()"
 .br
+.RI "Get the old ACPI tag\&. "
 .ti -1c
 .RI "\fBmultiboot_tag_new_acpi\fP * \fBnew_acpi\fP ()"
 .br
+.RI "Get the new ACPI tag\&. "
 .ti -1c
 .RI "\fBmultiboot_tag\fP * \fBstart_tag\fP () \fBconst\fP"
 .br
 .ti -1c
-.RI "\fBbool\fP \fBis_reserved\fP (\fBmultiboot_uint64_t\fP \fBaddress\fP)"
+.RI "\fBbool\fP \fBis_reserved\fP (multiboot_uint64_t address)"
 .br
 .RI "Check if an address is reserved by a multiboot module\&. "
 .in -1c
@@ -49,160 +54,169 @@ MaxOS::system::Multiboot
 .ti -1c
 .RI "unsigned long \fBstart_address\fP"
 .br
+.RI "The start address of the multiboot info struct\&. "
 .ti -1c
 .RI "unsigned long \fBend_address\fP"
 .br
-.in -1c
-.SS "Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "\fBmultiboot_tag_framebuffer\fP * \fBm_framebuffer\fP"
-.br
-.ti -1c
-.RI "\fBmultiboot_tag_basic_meminfo\fP * \fBm_basic_meminfo\fP"
-.br
-.ti -1c
-.RI "\fBmultiboot_tag_string\fP * \fBm_bootloader_name\fP"
-.br
-.ti -1c
-.RI "\fBmultiboot_tag_mmap\fP * \fBm_mmap\fP"
-.br
-.ti -1c
-.RI "\fBmultiboot_tag_old_acpi\fP * \fBm_old_acpi\fP"
-.br
-.ti -1c
-.RI "\fBmultiboot_tag_new_acpi\fP * \fBm_new_acpi\fP"
-.br
-.ti -1c
-.RI "\fBmultiboot_tag_module\fP * \fBm_module\fP"
-.br
+.RI "The end address of the multiboot info struct\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB420\fP of file \fBmultiboot\&.h\fP\&.
+Parses and provides access to \fBMultiboot\fP 2 information\&. 
+.PP
+Definition at line \fB518\fP of file \fBmultiboot\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Multiboot::Multiboot (\fBunsigned\fP \fBlong\fP address, \fBunsigned\fP \fBlong\fP magic)"
 
 .PP
-Definition at line \fB14\fP of file \fBmultiboot\&.cpp\fP\&..PP
+Constructor for the \fBMultiboot\fP class\&. Parses the multiboot info struct and loads the tags\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address of the multiboot info struct 
+.br
+\fImagic\fP The magic number to confirm the bootloader 
+.RE
+.PP
+
+.PP
+Definition at line \fB24\fP of file \fBmultiboot\&.cpp\fP\&..PP
 .nf
-15 : start_address(address)
-16 {
-17 
-18     // Confirm the bootloader
-19     ASSERT(magic == MULTIBOOT2_BOOTLOADER_MAGIC, "Multiboot2 Bootloader Not Detected");
-20     Logger::DEBUG() << "Multiboot2 Bootloader Detected at 0x" << (uint64_t) address << "\\n";
-21 
-22     multiboot_tag* tag = start_tag();
-23 
-24     // Loop through the tags and load them
-25     while (true) {
-26 
-27         // Handle the tag
-28         switch (tag\->type) {
-29 
-30             case MULTIBOOT_TAG_TYPE_END:
-31                 end_address = (unsigned long) PhysicalMemoryManager::to_lower_region((uint64_t) tag);
-32                 return;
+25 : start_address(address)
+26 {
+27 
+28     // Confirm the bootloader
+29     ASSERT(magic == MULTIBOOT2_BOOTLOADER_MAGIC, "Multiboot2 Bootloader Not Detected");
+30     Logger::DEBUG() << "Multiboot2 Bootloader Detected at 0x" << (uint64_t) address << "\\n";
+31 
+32     multiboot_tag* tag = start_tag();
 33 
-34             case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
-35                 m_framebuffer = (multiboot_tag_framebuffer*) tag;
-36                 break;
-37 
-38             case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-39                 m_basic_meminfo = (multiboot_tag_basic_meminfo*) tag;
-40                 break;
-41 
-42             case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
-43                 m_bootloader_name = (multiboot_tag_string*) tag;
-44                 Logger::DEBUG() << "Bootloader: " << m_bootloader_name\->string << "\\n";
-45                 break;
-46 
-47             case MULTIBOOT_TAG_TYPE_BOOTDEV:
-48                 multiboot_tag_bootdev* bootdev;
-49                 bootdev = (multiboot_tag_bootdev*) tag;
-50                 Logger::DEBUG() << "Boot device: drive=0x" << (uint64_t) bootdev\->biosdev << ", partition=0x" << (uint64_t) bootdev\->part << "\\n";
-51                 break;
-52 
-53             case MULTIBOOT_TAG_TYPE_MMAP:
-54 
-55                 // If there is not already a mmap tag, set it
-56                 if (m_mmap == nullptr)
-57                     m_mmap = (multiboot_tag_mmap*) tag;
-58 
-59                 break;
-60 
-61             case MULTIBOOT_TAG_TYPE_ACPI_OLD:
-62                 m_old_acpi = (multiboot_tag_old_acpi*) tag;
-63                 break;
+34     // Loop through the tags and load them
+35     while (true) {
+36 
+37         // Handle the tag
+38         switch (tag\->type) {
+39 
+40             case MULTIBOOT_TAG_TYPE_END:
+41                 end_address = (unsigned long) PhysicalMemoryManager::to_lower_region((uint64_t) tag);
+42                 return;
+43 
+44             case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
+45                 m_framebuffer = (multiboot_tag_framebuffer*) tag;
+46                 break;
+47 
+48             case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
+49                 m_basic_meminfo = (multiboot_tag_basic_meminfo*) tag;
+50                 break;
+51 
+52             case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
+53                 m_bootloader_name = (multiboot_tag_string*) tag;
+54                 Logger::DEBUG() << "Bootloader: " << m_bootloader_name\->string << "\\n";
+55                 break;
+56 
+57             case MULTIBOOT_TAG_TYPE_BOOTDEV:
+58                 multiboot_tag_bootdev* bootdev;
+59                 bootdev = (multiboot_tag_bootdev*) tag;
+60                 Logger::DEBUG() << "Boot device: drive=0x" << (uint64_t) bootdev\->biosdev << ", partition=0x" << (uint64_t) bootdev\->part << "\\n";
+61                 break;
+62 
+63             case MULTIBOOT_TAG_TYPE_MMAP:
 64 
-65 
-66             case MULTIBOOT_TAG_TYPE_ACPI_NEW:
-67                 m_new_acpi = (multiboot_tag_new_acpi*) tag;
-68                 break;
-69 
-70             case MULTIBOOT_TAG_TYPE_MODULE:
-71                 multiboot_tag_module* module;
-72                 module = (multiboot_tag_module*) tag;
-73                 Logger::DEBUG() << "Module: start=0x" << (uint64_t) module\->mod_start << ", end=0x" << (uint64_t) module\->mod_end << ", cmdline=" << module\->cmdline << "\\n";
-74                 m_module = module;
-75                 break;
-76         }
-77 
-78         // Move to the next tag
-79         tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag\->size + 7) & ~7));
-80     }
-81 }
+65                 // If there is not already a mmap tag, set it
+66                 if (m_mmap == nullptr)
+67                     m_mmap = (multiboot_tag_mmap*) tag;
+68 
+69                 break;
+70 
+71             case MULTIBOOT_TAG_TYPE_ACPI_OLD:
+72                 m_old_acpi = (multiboot_tag_old_acpi*) tag;
+73                 break;
+74 
+75 
+76             case MULTIBOOT_TAG_TYPE_ACPI_NEW:
+77                 m_new_acpi = (multiboot_tag_new_acpi*) tag;
+78                 break;
+79 
+80             case MULTIBOOT_TAG_TYPE_MODULE:
+81                 multiboot_tag_module* module;
+82                 module = (multiboot_tag_module*) tag;
+83                 Logger::DEBUG() << "Module: start=0x" << (uint64_t) module\->mod_start << ", end=0x" << (uint64_t) module\->mod_end << ", cmdline=" << module\->cmdline << "\\n";
+84                 m_module = module;
+85                 break;
+86         }
+87 
+88         // Move to the next tag
+89         tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag\->size + 7) & ~7));
+90     }
+91 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBASSERT\fP, \fBLogger::DEBUG()\fP, \fBend_address\fP, \fBm_basic_meminfo\fP, \fBm_bootloader_name\fP, \fBm_framebuffer\fP, \fBm_mmap\fP, \fBm_module\fP, \fBm_new_acpi\fP, \fBm_old_acpi\fP, \fBmagic\fP, \fBMULTIBOOT2_BOOTLOADER_MAGIC\fP, \fBMULTIBOOT_TAG_TYPE_ACPI_NEW\fP, \fBMULTIBOOT_TAG_TYPE_ACPI_OLD\fP, \fBMULTIBOOT_TAG_TYPE_BASIC_MEMINFO\fP, \fBMULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME\fP, \fBMULTIBOOT_TAG_TYPE_BOOTDEV\fP, \fBMULTIBOOT_TAG_TYPE_END\fP, \fBMULTIBOOT_TAG_TYPE_FRAMEBUFFER\fP, \fBMULTIBOOT_TAG_TYPE_MMAP\fP, \fBMULTIBOOT_TAG_TYPE_MODULE\fP, \fBstart_tag()\fP, \fBmultiboot_tag_string::string\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_lower_region()\fP\&.
-.SS "Multiboot::~Multiboot ()\fC [default]\fP"
-
+References \fBASSERT\fP, \fBLogger::DEBUG()\fP, \fBend_address\fP, \fBmagic\fP, \fBstart_tag()\fP, \fBmultiboot_tag_string::string\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_lower_region()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBmultiboot_tag_basic_meminfo\fP * Multiboot::basic_meminfo ()"
 
 .PP
-Definition at line \fB91\fP of file \fBmultiboot\&.cpp\fP\&..PP
-.nf
-91                                                       {
-92 
-93     return m_basic_meminfo;
-94 }
-.fi
+Get the basic memory info tag\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The basic memory info tag 
+.RE
+.PP
 
 .PP
-References \fBm_basic_meminfo\fP\&.
+Definition at line \fB108\fP of file \fBmultiboot\&.cpp\fP\&..PP
+.nf
+108                                                       {
+109 
+110     return m_basic_meminfo;
+111 }
+.fi
+
 .SS "\fBmultiboot_tag_string\fP * Multiboot::bootloader_name ()"
 
 .PP
-Definition at line \fB96\fP of file \fBmultiboot\&.cpp\fP\&..PP
-.nf
-96                                                  {
-97 
-98     return m_bootloader_name;
-99 }
-.fi
+Get the bootloader name tag\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The bootloader name tag 
+.RE
+.PP
 
 .PP
-References \fBm_bootloader_name\fP\&.
+Definition at line \fB117\fP of file \fBmultiboot\&.cpp\fP\&..PP
+.nf
+117                                                  {
+118 
+119     return m_bootloader_name;
+120 }
+.fi
+
 .SS "\fBmultiboot_tag_framebuffer\fP * Multiboot::framebuffer ()"
 
 .PP
-Definition at line \fB86\fP of file \fBmultiboot\&.cpp\fP\&..PP
-.nf
-86                                                   {
-87 
-88     return m_framebuffer;
-89 }
-.fi
+Get the framebuffer tag\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The framebuffer tag 
+.RE
+.PP
 
 .PP
-References \fBm_framebuffer\fP\&.
-.SS "\fBbool\fP Multiboot::is_reserved (\fBmultiboot_uint64_t\fP address)"
+Definition at line \fB99\fP of file \fBmultiboot\&.cpp\fP\&..PP
+.nf
+99                                                   {
+100 
+101     return m_framebuffer;
+102 }
+.fi
+
+.SS "\fBbool\fP Multiboot::is_reserved (multiboot_uint64_t address)"
 
 .PP
 Check if an address is reserved by a multiboot module\&. 
@@ -219,75 +233,94 @@ True if the address is reserved
 .PP
 
 .PP
-Definition at line \fB122\fP of file \fBmultiboot\&.cpp\fP\&..PP
+Definition at line \fB154\fP of file \fBmultiboot\&.cpp\fP\&..PP
 .nf
-122                                                       {
-123 
-124     // Loop through the tags checking if the address is reserved
-125     for (multiboot_tag* tag = start_tag(); tag\->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag\->size + 7) & ~7))) {
-126 
-127         // Check if the tag is a module or mmap
-128         if (tag\->type != MULTIBOOT_TAG_TYPE_MODULE && tag\->type != MULTIBOOT_TAG_TYPE_MMAP)
-129             continue;
-130 
-131         // Get the module tag
-132         auto* module = (struct multiboot_tag_module*) tag;
-133 
-134         // Check if the address is within the module
-135         if (address >= module\->mod_start && address < module\->mod_end)
-136             return true;
-137     }
-138 
-139 
-140     // Not part of multiboot
-141     return false;
-142 
-143 }
+154                                                       {
+155 
+156     // Loop through the tags checking if the address is reserved
+157     for (multiboot_tag* tag = start_tag(); tag\->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag\->size + 7) & ~7))) {
+158 
+159         // Check if the tag is a module or mmap
+160         if (tag\->type != MULTIBOOT_TAG_TYPE_MODULE && tag\->type != MULTIBOOT_TAG_TYPE_MMAP)
+161             continue;
+162 
+163         // Get the module tag
+164         auto* module = (struct multiboot_tag_module*) tag;
+165 
+166         // Check if the address is within the module
+167         if (address >= module\->mod_start && address < module\->mod_end)
+168             return true;
+169     }
+170 
+171 
+172     // Not part of multiboot
+173     return false;
+174 
+175 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBMULTIBOOT_TAG_TYPE_END\fP, \fBMULTIBOOT_TAG_TYPE_MMAP\fP, \fBMULTIBOOT_TAG_TYPE_MODULE\fP, and \fBstart_tag()\fP\&.
-.PP
-Referenced by \fBMaxOS::memory::PhysicalMemoryManager::is_anonymous_available()\fP\&.
+References \fBstart_tag()\fP\&.
 .SS "\fBmultiboot_tag_mmap\fP * Multiboot::mmap ()"
 
 .PP
-Definition at line \fB101\fP of file \fBmultiboot\&.cpp\fP\&..PP
-.nf
-101                                     {
-102 
-103     return m_mmap;
-104 }
-.fi
+Get the module tag\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The module tag 
+.RE
+.PP
 
 .PP
-References \fBm_mmap\fP\&.
+Definition at line \fB126\fP of file \fBmultiboot\&.cpp\fP\&..PP
+.nf
+126                                     {
+127 
+128     return m_mmap;
+129 }
+.fi
+
 .SS "\fBmultiboot_tag_new_acpi\fP * Multiboot::new_acpi ()"
 
 .PP
-Definition at line \fB112\fP of file \fBmultiboot\&.cpp\fP\&..PP
-.nf
-112                                             {
-113 
-114     return m_new_acpi;
-115 }
-.fi
+Get the new ACPI tag\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The new ACPI tag 
+.RE
+.PP
 
 .PP
-References \fBm_new_acpi\fP\&.
+Definition at line \fB144\fP of file \fBmultiboot\&.cpp\fP\&..PP
+.nf
+144                                             {
+145 
+146     return m_new_acpi;
+147 }
+.fi
+
 .SS "\fBmultiboot_tag_old_acpi\fP * Multiboot::old_acpi ()"
 
 .PP
-Definition at line \fB106\fP of file \fBmultiboot\&.cpp\fP\&..PP
-.nf
-106                                             {
-107 
-108     return m_old_acpi;
-109 }
-.fi
+Get the old ACPI tag\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The old ACPI tag 
+.RE
+.PP
 
 .PP
-References \fBm_old_acpi\fP\&.
+Definition at line \fB135\fP of file \fBmultiboot\&.cpp\fP\&..PP
+.nf
+135                                             {
+136 
+137     return m_old_acpi;
+138 }
+.fi
+
 .SS "\fBmultiboot_tag\fP * Multiboot::start_tag () const"
 Get the start tag of the multiboot information (useful for iterating through the tags)
 .PP
@@ -298,74 +331,36 @@ The start tag
 .PP
 
 .PP
-Definition at line \fB150\fP of file \fBmultiboot\&.cpp\fP\&..PP
+Definition at line \fB182\fP of file \fBmultiboot\&.cpp\fP\&..PP
 .nf
-150                                           {
-151 
-152     return (multiboot_tag*) (start_address + PhysicalMemoryManager::s_higher_half_kernel_offset + 8);
-153 }
+182                                           {
+183 
+184     return (multiboot_tag*) (start_address + HIGHER_HALF_KERNEL_OFFSET + 8);
+185 }
 .fi
 
 .PP
-References \fBMaxOS::memory::PhysicalMemoryManager::s_higher_half_kernel_offset\fP, and \fBstart_address\fP\&.
+References \fBMaxOS::memory::HIGHER_HALF_KERNEL_OFFSET\fP, and \fBstart_address\fP\&.
 .PP
-Referenced by \fBis_reserved()\fP, \fBMaxOS::processes::Scheduler::load_multiboot_elfs()\fP, and \fBMultiboot()\fP\&.
+Referenced by \fBis_reserved()\fP, \fBMaxOS::processes::GlobalScheduler::load_multiboot_elfs()\fP, and \fBMultiboot()\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "unsigned long MaxOS::system::Multiboot::end_address"
 
 .PP
-Definition at line \fB442\fP of file \fBmultiboot\&.h\fP\&.
+The end address of the multiboot info struct\&. 
+.PP
+Definition at line \fB540\fP of file \fBmultiboot\&.h\fP\&.
 .PP
 Referenced by \fBMultiboot()\fP\&.
-.SS "\fBmultiboot_tag_basic_meminfo\fP* MaxOS::system::Multiboot::m_basic_meminfo\fC [protected]\fP"
-
-.PP
-Definition at line \fB423\fP of file \fBmultiboot\&.h\fP\&.
-.PP
-Referenced by \fBbasic_meminfo()\fP, and \fBMultiboot()\fP\&.
-.SS "\fBmultiboot_tag_string\fP* MaxOS::system::Multiboot::m_bootloader_name\fC [protected]\fP"
-
-.PP
-Definition at line \fB424\fP of file \fBmultiboot\&.h\fP\&.
-.PP
-Referenced by \fBbootloader_name()\fP, and \fBMultiboot()\fP\&.
-.SS "\fBmultiboot_tag_framebuffer\fP* MaxOS::system::Multiboot::m_framebuffer\fC [protected]\fP"
-
-.PP
-Definition at line \fB422\fP of file \fBmultiboot\&.h\fP\&.
-.PP
-Referenced by \fBframebuffer()\fP, and \fBMultiboot()\fP\&.
-.SS "\fBmultiboot_tag_mmap\fP* MaxOS::system::Multiboot::m_mmap\fC [protected]\fP"
-
-.PP
-Definition at line \fB425\fP of file \fBmultiboot\&.h\fP\&.
-.PP
-Referenced by \fBmmap()\fP, and \fBMultiboot()\fP\&.
-.SS "\fBmultiboot_tag_module\fP* MaxOS::system::Multiboot::m_module\fC [protected]\fP"
-
-.PP
-Definition at line \fB428\fP of file \fBmultiboot\&.h\fP\&.
-.PP
-Referenced by \fBMultiboot()\fP\&.
-.SS "\fBmultiboot_tag_new_acpi\fP* MaxOS::system::Multiboot::m_new_acpi\fC [protected]\fP"
-
-.PP
-Definition at line \fB427\fP of file \fBmultiboot\&.h\fP\&.
-.PP
-Referenced by \fBMultiboot()\fP, and \fBnew_acpi()\fP\&.
-.SS "\fBmultiboot_tag_old_acpi\fP* MaxOS::system::Multiboot::m_old_acpi\fC [protected]\fP"
-
-.PP
-Definition at line \fB426\fP of file \fBmultiboot\&.h\fP\&.
-.PP
-Referenced by \fBMultiboot()\fP, and \fBold_acpi()\fP\&.
 .SS "unsigned long MaxOS::system::Multiboot::start_address"
 
 .PP
-Definition at line \fB441\fP of file \fBmultiboot\&.h\fP\&.
+The start address of the multiboot info struct\&. 
 .PP
-Referenced by \fBMaxOS::memory::PhysicalMemoryManager::is_anonymous_available()\fP, and \fBstart_tag()\fP\&.
+Definition at line \fB539\fP of file \fBmultiboot\&.h\fP\&.
+.PP
+Referenced by \fBstart_tag()\fP\&.
 
 .SH "Author"
 .PP 

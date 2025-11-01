@@ -34,6 +34,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
    </div>
@@ -101,7 +102,6 @@ $(document).ready(function(){initNavTree('physical_8h.html',''); initResizable()
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
@@ -110,9 +110,12 @@ $(document).ready(function(){initNavTree('physical_8h.html',''); initResizable()
   <div class="headertitle"><div class="title">physical.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines a PhysicalMemoryManager class for managing physical memory allocation and deallocation of pages.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &lt;stddef.h&gt;</code><br />
-<code>#include &lt;<a class="el" href="multiboot_8h_source.html">system/multiboot.h</a>&gt;</code><br />
+<code>#include &lt;system/multiboot.h&gt;</code><br />
 <code>#include &lt;<a class="el" href="spinlock_8h_source.html">common/spinlock.h</a>&gt;</code><br />
 </div>
 <p><a href="physical_8h_source.html">Go to the source code of this file.</a></p>
@@ -120,18 +123,13 @@ $(document).ready(function(){initNavTree('physical_8h.html',''); initResizable()
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1memory_1_1PageTableEntry.html">MaxOS::memory::PageTableEntry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct for a page table entry.  <a href="structMaxOS_1_1memory_1_1PageTableEntry.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1memory_1_1PageMapLevel.html">MaxOS::memory::PageMapLevel</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct for a page map level (PML4, PDPT, PD, PT)  <a href="structMaxOS_1_1memory_1_1PageMapLevel.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html">MaxOS::memory::PhysicalMemoryManager</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages the physical memory of the system such as what pages are allocated/free and mapping of virtual to physical addresses.  <a href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespaceMaxOS" id="r_namespaceMaxOS"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS.html">MaxOS</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceMaxOS_1_1memory" id="r_namespaceMaxOS_1_1memory"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1memory.html">MaxOS::memory</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
@@ -140,79 +138,122 @@ Macros</h2></td></tr>
 <tr class="separator:a9a863ef3a659fd011f2a7ee0bf553338"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0de5225931b391ee0a69cfd4aae482c0" id="r_a0de5225931b391ee0a69cfd4aae482c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a0de5225931b391ee0a69cfd4aae482c0">PMLX_GET_INDEX</a>(ADDR,  LEVEL)&#160;&#160;&#160;(((uint64_t)ADDR &amp; ((uint64_t)0x1ff &lt;&lt; (12 + LEVEL * 9))) &gt;&gt; (12 + LEVEL * 9))</td></tr>
 <tr class="separator:a0de5225931b391ee0a69cfd4aae482c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21b56ad4b688267e89e208897cfdad31" id="r_a21b56ad4b688267e89e208897cfdad31"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a21b56ad4b688267e89e208897cfdad31">PML4_GET_INDEX</a>(ADDR)&#160;&#160;&#160;<a class="el" href="physical_8h.html#a0de5225931b391ee0a69cfd4aae482c0">PMLX_GET_INDEX</a>(ADDR, 3)</td></tr>
+<tr class="memitem:a21b56ad4b688267e89e208897cfdad31" id="r_a21b56ad4b688267e89e208897cfdad31"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a21b56ad4b688267e89e208897cfdad31">PML4_GET_INDEX</a>(ADDR)&#160;&#160;&#160;PMLX_GET_INDEX(ADDR, 3)</td></tr>
 <tr class="separator:a21b56ad4b688267e89e208897cfdad31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a363318d5bd935b341ef29aa93046f5de" id="r_a363318d5bd935b341ef29aa93046f5de"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a363318d5bd935b341ef29aa93046f5de">PML3_GET_INDEX</a>(ADDR)&#160;&#160;&#160;<a class="el" href="physical_8h.html#a0de5225931b391ee0a69cfd4aae482c0">PMLX_GET_INDEX</a>(ADDR, 2)</td></tr>
+<tr class="memitem:a363318d5bd935b341ef29aa93046f5de" id="r_a363318d5bd935b341ef29aa93046f5de"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a363318d5bd935b341ef29aa93046f5de">PML3_GET_INDEX</a>(ADDR)&#160;&#160;&#160;PMLX_GET_INDEX(ADDR, 2)</td></tr>
 <tr class="separator:a363318d5bd935b341ef29aa93046f5de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeccd6d6989169ce4bea31a8aebc3c312" id="r_aeccd6d6989169ce4bea31a8aebc3c312"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#aeccd6d6989169ce4bea31a8aebc3c312">PML2_GET_INDEX</a>(ADDR)&#160;&#160;&#160;<a class="el" href="physical_8h.html#a0de5225931b391ee0a69cfd4aae482c0">PMLX_GET_INDEX</a>(ADDR, 1)</td></tr>
+<tr class="memitem:aeccd6d6989169ce4bea31a8aebc3c312" id="r_aeccd6d6989169ce4bea31a8aebc3c312"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#aeccd6d6989169ce4bea31a8aebc3c312">PML2_GET_INDEX</a>(ADDR)&#160;&#160;&#160;PMLX_GET_INDEX(ADDR, 1)</td></tr>
 <tr class="separator:aeccd6d6989169ce4bea31a8aebc3c312"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39f52e0488e29313ac48c0a06c9f8cbd" id="r_a39f52e0488e29313ac48c0a06c9f8cbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a39f52e0488e29313ac48c0a06c9f8cbd">PML1_GET_INDEX</a>(ADDR)&#160;&#160;&#160;<a class="el" href="physical_8h.html#a0de5225931b391ee0a69cfd4aae482c0">PMLX_GET_INDEX</a>(ADDR, 0)</td></tr>
+<tr class="memitem:a39f52e0488e29313ac48c0a06c9f8cbd" id="r_a39f52e0488e29313ac48c0a06c9f8cbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a39f52e0488e29313ac48c0a06c9f8cbd">PML1_GET_INDEX</a>(ADDR)&#160;&#160;&#160;PMLX_GET_INDEX(ADDR, 0)</td></tr>
 <tr class="separator:a39f52e0488e29313ac48c0a06c9f8cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a1a4a2cf740017bbb681bbe110a18fdcb" id="r_a1a4a2cf740017bbb681bbe110a18fdcb"><td class="memItemLeft" align="right" valign="top">typedef void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1memory.html#a1a4a2cf740017bbb681bbe110a18fdcb">MaxOS::memory::virtual_address_t</a></td></tr>
+<tr class="memitem:a1a4a2cf740017bbb681bbe110a18fdcb" id="r_a1a4a2cf740017bbb681bbe110a18fdcb"><td class="memItemLeft" align="right" valign="top">typedef void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a1a4a2cf740017bbb681bbe110a18fdcb">MaxOS::memory::virtual_address_t</a></td></tr>
 <tr class="separator:a1a4a2cf740017bbb681bbe110a18fdcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86d1744b2aea4590cf02ef32ff8acc63" id="r_a86d1744b2aea4590cf02ef32ff8acc63"><td class="memItemLeft" align="right" valign="top">typedef void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1memory.html#a86d1744b2aea4590cf02ef32ff8acc63">MaxOS::memory::physical_address_t</a></td></tr>
+<tr class="memitem:a86d1744b2aea4590cf02ef32ff8acc63" id="r_a86d1744b2aea4590cf02ef32ff8acc63"><td class="memItemLeft" align="right" valign="top">typedef void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a86d1744b2aea4590cf02ef32ff8acc63">MaxOS::memory::physical_address_t</a></td></tr>
 <tr class="separator:a86d1744b2aea4590cf02ef32ff8acc63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afff8f9259424b04221cedf42a6a6be65" id="r_afff8f9259424b04221cedf42a6a6be65"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84eb">MaxOS::memory::PageFlags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1memory.html#afff8f9259424b04221cedf42a6a6be65">MaxOS::memory::page_flags_t</a></td></tr>
+<tr class="memitem:afff8f9259424b04221cedf42a6a6be65" id="r_afff8f9259424b04221cedf42a6a6be65"><td class="memItemLeft" align="right" valign="top"><a id="afff8f9259424b04221cedf42a6a6be65" name="afff8f9259424b04221cedf42a6a6be65"></a>
+typedef enum <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eb">MaxOS::memory::PageFlags</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MaxOS::memory::page_flags_t</b></td></tr>
 <tr class="separator:afff8f9259424b04221cedf42a6a6be65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ae0e83b5743a37b4d0d2a93bb3bbe84eb" id="r_ae0e83b5743a37b4d0d2a93bb3bbe84eb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84eb">MaxOS::memory::PageFlags</a> { <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebab78d15c26f5fc953afaf720fa4a0e2d9">MaxOS::memory::None</a> = 0
-, <a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382">MaxOS::memory::Present</a> = (1 &lt;&lt; 0)
-, <a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151">MaxOS::memory::Write</a> = (1 &lt;&lt; 1)
-, <a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebae45ca5ccdd807182c984942dde55ebaa">MaxOS::memory::User</a> = (1 &lt;&lt; 2)
+<tr class="memitem:ae0e83b5743a37b4d0d2a93bb3bbe84eb" id="r_ae0e83b5743a37b4d0d2a93bb3bbe84eb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eb">MaxOS::memory::PageFlags</a> { <br />
+&#160;&#160;<a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b">MaxOS::memory::NONE</a> = 0
+, <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048">MaxOS::memory::PRESENT</a> = (1 &lt;&lt; 0)
+, <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70">MaxOS::memory::WRITE</a> = (1 &lt;&lt; 1)
+, <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba6c21f04b9fd8f97d73dbcedbd6380a22">MaxOS::memory::USER</a> = (1 &lt;&lt; 2)
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebade1f71893c7ef8ffc647873138cfe2d6">MaxOS::memory::WriteThrough</a> = (1 &lt;&lt; 3)
-, <a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba6ce70735ff3ee88a0984b276c8e2f1c2">MaxOS::memory::CacheDisabled</a> = (1 &lt;&lt; 4)
-, <a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebad0ebc4bf82b25d2ba050127787514d37">MaxOS::memory::Accessed</a> = (1 &lt;&lt; 5)
-, <a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaeedf9362578c44709ec12c15c7a05704">MaxOS::memory::Dirty</a> = (1 &lt;&lt; 6)
+&#160;&#160;<a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba098956b3ae6507f7e6b9d1e3956ba8e3">MaxOS::memory::WRITE_THROUGH</a> = (1 &lt;&lt; 3)
+, <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2">MaxOS::memory::CACHE_DISABLED</a> = (1 &lt;&lt; 4)
+, <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebae1a6e2c7dbcb7e2396a9ace3cd0f6719">MaxOS::memory::ACCESSED</a> = (1 &lt;&lt; 5)
+, <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba4f6db44a6458f735868d173d7cbdac05">MaxOS::memory::DIRTY</a> = (1 &lt;&lt; 6)
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebab5d298d682476077cef0d1cf2449c5a8">MaxOS::memory::HugePage</a> = (1 &lt;&lt; 7)
-, <a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaaee9e41af6b777257ab7e0862ebdba6c">MaxOS::memory::Global</a> = (1 &lt;&lt; 8)
-, <a class="el" href="namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba346d48faacf419ed9c75689c42ac9d1f">MaxOS::memory::NoExecute</a> = (1ULL &lt;&lt; 63)
+&#160;&#160;<a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaec6f6414b8e9cfdb592e7778c29d4a02">MaxOS::memory::HUGE_PAGE</a> = (1 &lt;&lt; 7)
+, <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c">MaxOS::memory::GLOBAL</a> = (1 &lt;&lt; 8)
+, <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebad32e5b4f2655fe653eb0f620de087fd5">MaxOS::memory::NO_EXECUTE</a> = (1ULL &lt;&lt; 63)
 <br />
  }</td></tr>
+<tr class="memdesc:ae0e83b5743a37b4d0d2a93bb3bbe84eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flags for page table entries.  <a href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eb">More...</a><br /></td></tr>
 <tr class="separator:ae0e83b5743a37b4d0d2a93bb3bbe84eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a10570b98e38bc593fa1163b00a058ca2" id="r_a10570b98e38bc593fa1163b00a058ca2"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structMaxOS_1_1memory_1_1PageTableEntry.html">MaxOS::memory::PageTableEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1memory.html#a10570b98e38bc593fa1163b00a058ca2">MaxOS::memory::__attribute__</a> ((packed)) pte_t</td></tr>
+<tr class="memitem:a10570b98e38bc593fa1163b00a058ca2" id="r_a10570b98e38bc593fa1163b00a058ca2"><td class="memItemLeft" align="right" valign="top"><a id="a10570b98e38bc593fa1163b00a058ca2" name="a10570b98e38bc593fa1163b00a058ca2"></a>
+struct <a class="el" href="structMaxOS_1_1memory_1_1PageTableEntry.html">MaxOS::memory::PageTableEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MaxOS::memory::__attribute__</b> ((packed)) pte_t</td></tr>
 <tr class="separator:a10570b98e38bc593fa1163b00a058ca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:aa84cc4dc60e16481b79b15b815aaea31" id="r_aa84cc4dc60e16481b79b15b815aaea31"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#aa84cc4dc60e16481b79b15b815aaea31">present</a></td></tr>
+<tr class="memdesc:aa84cc4dc60e16481b79b15b815aaea31"><td class="mdescLeft">&#160;</td><td class="mdescRight">*copydoc PageFlags::PRESENT  <br /></td></tr>
 <tr class="separator:aa84cc4dc60e16481b79b15b815aaea31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4d8d1259f524270d625ab8933700d27" id="r_ab4d8d1259f524270d625ab8933700d27"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#ab4d8d1259f524270d625ab8933700d27">write</a></td></tr>
+<tr class="memdesc:ab4d8d1259f524270d625ab8933700d27"><td class="mdescLeft">&#160;</td><td class="mdescRight">*copydoc PageFlags::WRITE  <br /></td></tr>
 <tr class="separator:ab4d8d1259f524270d625ab8933700d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d0d274d7162274a04afd0cb39eaccfd" id="r_a8d0d274d7162274a04afd0cb39eaccfd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a8d0d274d7162274a04afd0cb39eaccfd">user</a></td></tr>
+<tr class="memdesc:a8d0d274d7162274a04afd0cb39eaccfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">*copydoc PageFlags::USER  <br /></td></tr>
 <tr class="separator:a8d0d274d7162274a04afd0cb39eaccfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad124499797a0c2567e0689e8586318af" id="r_ad124499797a0c2567e0689e8586318af"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#ad124499797a0c2567e0689e8586318af">write_through</a></td></tr>
+<tr class="memdesc:ad124499797a0c2567e0689e8586318af"><td class="mdescLeft">&#160;</td><td class="mdescRight">*copydoc PageFlags::WRITE_THROUGH  <br /></td></tr>
 <tr class="separator:ad124499797a0c2567e0689e8586318af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7164e1adb9f37fa12d63bc66788850bf" id="r_a7164e1adb9f37fa12d63bc66788850bf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a7164e1adb9f37fa12d63bc66788850bf">cache_disabled</a></td></tr>
+<tr class="memdesc:a7164e1adb9f37fa12d63bc66788850bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">*copydoc PageFlags::CACHE_DISABLED  <br /></td></tr>
 <tr class="separator:a7164e1adb9f37fa12d63bc66788850bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a242ede6c60cc0c65c71f38011ae1fa83" id="r_a242ede6c60cc0c65c71f38011ae1fa83"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a242ede6c60cc0c65c71f38011ae1fa83">accessed</a></td></tr>
+<tr class="memdesc:a242ede6c60cc0c65c71f38011ae1fa83"><td class="mdescLeft">&#160;</td><td class="mdescRight">*copydoc PageFlags::ACCESSED  <br /></td></tr>
 <tr class="separator:a242ede6c60cc0c65c71f38011ae1fa83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad25edacba00e4d0666a9959053b7cc10" id="r_ad25edacba00e4d0666a9959053b7cc10"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#ad25edacba00e4d0666a9959053b7cc10">dirty</a></td></tr>
+<tr class="memdesc:ad25edacba00e4d0666a9959053b7cc10"><td class="mdescLeft">&#160;</td><td class="mdescRight">*copydoc PageFlags::DIRTY  <br /></td></tr>
 <tr class="separator:ad25edacba00e4d0666a9959053b7cc10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae929bd0aeee67959abac551b220720e4" id="r_ae929bd0aeee67959abac551b220720e4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#ae929bd0aeee67959abac551b220720e4">huge_page</a></td></tr>
+<tr class="memdesc:ae929bd0aeee67959abac551b220720e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">*copydoc PageFlags::HUGE_PAGE  <br /></td></tr>
 <tr class="separator:ae929bd0aeee67959abac551b220720e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86004534684821212245555e66ec1d09" id="r_a86004534684821212245555e66ec1d09"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a86004534684821212245555e66ec1d09">global</a></td></tr>
+<tr class="memdesc:a86004534684821212245555e66ec1d09"><td class="mdescLeft">&#160;</td><td class="mdescRight">*copydoc PageFlags::GLOBAL  <br /></td></tr>
 <tr class="separator:a86004534684821212245555e66ec1d09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5a95884eb3a555f48a10bb338c65480" id="r_ad5a95884eb3a555f48a10bb338c65480"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#ad5a95884eb3a555f48a10bb338c65480">available</a></td></tr>
+<tr class="memdesc:ad5a95884eb3a555f48a10bb338c65480"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extra metadata bytes available for OS use.  <br /></td></tr>
 <tr class="separator:ad5a95884eb3a555f48a10bb338c65480"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a069784144afa0b45c14ce1788adb541a" id="r_a069784144afa0b45c14ce1788adb541a"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a069784144afa0b45c14ce1788adb541a">physical_address</a></td></tr>
+<tr class="memdesc:a069784144afa0b45c14ce1788adb541a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The address the page represents in memory.  <br /></td></tr>
 <tr class="separator:a069784144afa0b45c14ce1788adb541a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a571f2ec04bb9a58c7be02c94a37de231" id="r_a571f2ec04bb9a58c7be02c94a37de231"><td class="memItemLeft" align="right" valign="top">pte_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a571f2ec04bb9a58c7be02c94a37de231">entries</a> [512]</td></tr>
+<tr class="memdesc:a571f2ec04bb9a58c7be02c94a37de231"><td class="mdescLeft">&#160;</td><td class="mdescRight">The entries in this page map level. If it is a PT then these are page table entries, otherwise they are pointers to the next level. Indexed by the relevant bits in the virtual address.  <br /></td></tr>
 <tr class="separator:a571f2ec04bb9a58c7be02c94a37de231"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1336b627521dd3a8924945fa01a30a49" id="r_a1336b627521dd3a8924945fa01a30a49"><td class="memItemLeft" align="right" valign="top">class <a class="el" href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html">MaxOS::memory::PhysicalMemoryManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1memory.html#a1336b627521dd3a8924945fa01a30a49">MaxOS::memory::__attribute__</a></td></tr>
+<tr class="memitem:acbb7ce85d6b04d80fa29a7292d4bc3ed" id="r_acbb7ce85d6b04d80fa29a7292d4bc3ed"><td class="memItemLeft" align="right" valign="top">constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#acbb7ce85d6b04d80fa29a7292d4bc3ed">MaxOS::memory::PAGE_SIZE</a> = 0x1000</td></tr>
+<tr class="memdesc:acbb7ce85d6b04d80fa29a7292d4bc3ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of a page (4KB)  <br /></td></tr>
+<tr class="separator:acbb7ce85d6b04d80fa29a7292d4bc3ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aade198fd5ec1031a23cd63fc2709f00c" id="r_aade198fd5ec1031a23cd63fc2709f00c"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#aade198fd5ec1031a23cd63fc2709f00c">MaxOS::memory::ROW_BITS</a> = 64</td></tr>
+<tr class="memdesc:aade198fd5ec1031a23cd63fc2709f00c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of bits in the bitmap row.  <br /></td></tr>
+<tr class="separator:aade198fd5ec1031a23cd63fc2709f00c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c282ffdf004848e8641e1b63f6a339e" id="r_a4c282ffdf004848e8641e1b63f6a339e"><td class="memItemLeft" align="right" valign="top">constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a4c282ffdf004848e8641e1b63f6a339e">MaxOS::memory::HIGHER_HALF_KERNEL_OFFSET</a> = 0xFFFFFFFF80000000</td></tr>
+<tr class="memdesc:a4c282ffdf004848e8641e1b63f6a339e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the kernel is mapped in higher half memory.  <br /></td></tr>
+<tr class="separator:a4c282ffdf004848e8641e1b63f6a339e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fe6a67466d94891bb90880d8b8416a2" id="r_a5fe6a67466d94891bb90880d8b8416a2"><td class="memItemLeft" align="right" valign="top">constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a5fe6a67466d94891bb90880d8b8416a2">MaxOS::memory::HIGHER_HALF_MEM_OFFSET</a> = 0xFFFF800000000000</td></tr>
+<tr class="memdesc:a5fe6a67466d94891bb90880d8b8416a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where higher half memory starts.  <br /></td></tr>
+<tr class="separator:a5fe6a67466d94891bb90880d8b8416a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47c394121636925d369cc1f13548b552" id="r_a47c394121636925d369cc1f13548b552"><td class="memItemLeft" align="right" valign="top">constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a47c394121636925d369cc1f13548b552">MaxOS::memory::HIGHER_HALF_MEM_RESERVED</a> = 0x280000000</td></tr>
+<tr class="memdesc:a47c394121636925d369cc1f13548b552"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserved higher half memory for kernel use (10GB)  <br /></td></tr>
+<tr class="separator:a47c394121636925d369cc1f13548b552"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a113a5e21291a156b8855b4d7eee1cc96" id="r_a113a5e21291a156b8855b4d7eee1cc96"><td class="memItemLeft" align="right" valign="top">constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a113a5e21291a156b8855b4d7eee1cc96">MaxOS::memory::HIGHER_HALF_OFFSET</a> = <a class="el" href="physical_8h.html#a5fe6a67466d94891bb90880d8b8416a2">HIGHER_HALF_MEM_OFFSET</a> + <a class="el" href="physical_8h.html#a47c394121636925d369cc1f13548b552">HIGHER_HALF_MEM_RESERVED</a></td></tr>
+<tr class="memdesc:a113a5e21291a156b8855b4d7eee1cc96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where higher half memory usable space starts.  <br /></td></tr>
+<tr class="separator:a113a5e21291a156b8855b4d7eee1cc96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a209a1e2709f9aac5d70eb43e198608d5" id="r_a209a1e2709f9aac5d70eb43e198608d5"><td class="memItemLeft" align="right" valign="top">constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="physical_8h.html#a209a1e2709f9aac5d70eb43e198608d5">MaxOS::memory::HIGHER_HALF_DIRECT_MAP</a> = <a class="el" href="physical_8h.html#a113a5e21291a156b8855b4d7eee1cc96">HIGHER_HALF_OFFSET</a> + <a class="el" href="physical_8h.html#acbb7ce85d6b04d80fa29a7292d4bc3ed">PAGE_SIZE</a></td></tr>
+<tr class="memdesc:a209a1e2709f9aac5d70eb43e198608d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the map of physical memory to higher half starts.  <br /></td></tr>
+<tr class="separator:a209a1e2709f9aac5d70eb43e198608d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1336b627521dd3a8924945fa01a30a49" id="r_a1336b627521dd3a8924945fa01a30a49"><td class="memItemLeft" align="right" valign="top"><a id="a1336b627521dd3a8924945fa01a30a49" name="a1336b627521dd3a8924945fa01a30a49"></a>
+class <a class="el" href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html">MaxOS::memory::PhysicalMemoryManager</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MaxOS::memory::__attribute__</b></td></tr>
 <tr class="separator:a1336b627521dd3a8924945fa01a30a49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines a PhysicalMemoryManager class for managing physical memory allocation and deallocation of pages. </p>
+<dl class="section date"><dt>Date</dt><dd>30th January 2024 </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Max Tyson </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a9a863ef3a659fd011f2a7ee0bf553338" name="a9a863ef3a659fd011f2a7ee0bf553338"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9a863ef3a659fd011f2a7ee0bf553338">&#9670;&#160;</a></span>ENTRIES_TO_ADDRESS</h2>
 
@@ -251,7 +292,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00018">18</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00022">22</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
 </div>
 </div>
@@ -266,12 +307,12 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">ADDR</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="physical_8h.html#a0de5225931b391ee0a69cfd4aae482c0">PMLX_GET_INDEX</a>(ADDR, 0)</td>
+          <td>&#160;&#160;&#160;PMLX_GET_INDEX(ADDR, 0)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00024">24</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00028">28</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
 </div>
 </div>
@@ -286,12 +327,12 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">ADDR</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="physical_8h.html#a0de5225931b391ee0a69cfd4aae482c0">PMLX_GET_INDEX</a>(ADDR, 1)</td>
+          <td>&#160;&#160;&#160;PMLX_GET_INDEX(ADDR, 1)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00023">23</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00027">27</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
 </div>
 </div>
@@ -306,12 +347,12 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">ADDR</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="physical_8h.html#a0de5225931b391ee0a69cfd4aae482c0">PMLX_GET_INDEX</a>(ADDR, 2)</td>
+          <td>&#160;&#160;&#160;PMLX_GET_INDEX(ADDR, 2)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00022">22</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00026">26</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
 </div>
 </div>
@@ -326,12 +367,12 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">ADDR</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="physical_8h.html#a0de5225931b391ee0a69cfd4aae482c0">PMLX_GET_INDEX</a>(ADDR, 3)</td>
+          <td>&#160;&#160;&#160;PMLX_GET_INDEX(ADDR, 3)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00021">21</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00025">25</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
 </div>
 </div>
@@ -361,8 +402,104 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00019">19</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00023">23</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
+</div>
+</div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a86d1744b2aea4590cf02ef32ff8acc63" name="a86d1744b2aea4590cf02ef32ff8acc63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86d1744b2aea4590cf02ef32ff8acc63">&#9670;&#160;</a></span>physical_address_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">MaxOS::memory::physical_address_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00032">32</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+</div>
+</div>
+<a id="a1a4a2cf740017bbb681bbe110a18fdcb" name="a1a4a2cf740017bbb681bbe110a18fdcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a4a2cf740017bbb681bbe110a18fdcb">&#9670;&#160;</a></span>virtual_address_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">MaxOS::memory::virtual_address_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00031">31</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ae0e83b5743a37b4d0d2a93bb3bbe84eb" name="ae0e83b5743a37b4d0d2a93bb3bbe84eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0e83b5743a37b4d0d2a93bb3bbe84eb">&#9670;&#160;</a></span>PageFlags</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eb">MaxOS::memory::PageFlags</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Flags for page table entries. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000029">Todo:</a></b></dt><dd>: fix. this is stupid. Leave as enum not enum class for bitwise operations </dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b" name="ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b"></a>NONE&#160;</td><td class="fielddoc"><p>No flags. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048" name="ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048"></a>PRESENT&#160;</td><td class="fielddoc"><p>The page is present in memory. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70" name="ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70"></a>WRITE&#160;</td><td class="fielddoc"><p>Memory in this page is writable. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84eba6c21f04b9fd8f97d73dbcedbd6380a22" name="ae0e83b5743a37b4d0d2a93bb3bbe84eba6c21f04b9fd8f97d73dbcedbd6380a22"></a>USER&#160;</td><td class="fielddoc"><p>This page is accessible from user mode. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84eba098956b3ae6507f7e6b9d1e3956ba8e3" name="ae0e83b5743a37b4d0d2a93bb3bbe84eba098956b3ae6507f7e6b9d1e3956ba8e3"></a>WRITE_THROUGH&#160;</td><td class="fielddoc"><p>Write through caching is enabled. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2" name="ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2"></a>CACHE_DISABLED&#160;</td><td class="fielddoc"><p>Dont let the CPU cache this page. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84ebae1a6e2c7dbcb7e2396a9ace3cd0f6719" name="ae0e83b5743a37b4d0d2a93bb3bbe84ebae1a6e2c7dbcb7e2396a9ace3cd0f6719"></a>ACCESSED&#160;</td><td class="fielddoc"><p>This page has been read from or written to. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84eba4f6db44a6458f735868d173d7cbdac05" name="ae0e83b5743a37b4d0d2a93bb3bbe84eba4f6db44a6458f735868d173d7cbdac05"></a>DIRTY&#160;</td><td class="fielddoc"><p>This page has been written to. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84ebaec6f6414b8e9cfdb592e7778c29d4a02" name="ae0e83b5743a37b4d0d2a93bb3bbe84ebaec6f6414b8e9cfdb592e7778c29d4a02"></a>HUGE_PAGE&#160;</td><td class="fielddoc"><p>This page is not 4Kib (2MB or 1GB) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c" name="ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c"></a>GLOBAL&#160;</td><td class="fielddoc"><p>The page can be shared between processes. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae0e83b5743a37b4d0d2a93bb3bbe84ebad32e5b4f2655fe653eb0f620de087fd5" name="ae0e83b5743a37b4d0d2a93bb3bbe84ebad32e5b4f2655fe653eb0f620de087fd5"></a>NO_EXECUTE&#160;</td><td class="fielddoc"><p>Dont let the CPU execute code on this page. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00040">40</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   40</span>                               {</div>
+<div class="line"><span class="lineno">   41</span>            <a class="code hl_enumvalue" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b">NONE</a>            = 0,                </div>
+<div class="line"><span class="lineno">   42</span>            <a class="code hl_enumvalue" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048">PRESENT</a>         = (1 &lt;&lt; 0),         </div>
+<div class="line"><span class="lineno">   43</span>            WRITE           = (1 &lt;&lt; 1),         </div>
+<div class="line"><span class="lineno">   44</span>            <a class="code hl_enumvalue" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba6c21f04b9fd8f97d73dbcedbd6380a22">USER</a>            = (1 &lt;&lt; 2),         </div>
+<div class="line"><span class="lineno">   45</span>            WRITE_THROUGH   = (1 &lt;&lt; 3),         </div>
+<div class="line"><span class="lineno">   46</span>            <a class="code hl_enumvalue" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2">CACHE_DISABLED</a>  = (1 &lt;&lt; 4),         </div>
+<div class="line"><span class="lineno">   47</span>            ACCESSED        = (1 &lt;&lt; 5),         </div>
+<div class="line"><span class="lineno">   48</span>            <a class="code hl_enumvalue" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba4f6db44a6458f735868d173d7cbdac05">DIRTY</a>           = (1 &lt;&lt; 6),         </div>
+<div class="line"><span class="lineno">   49</span>            HUGE_PAGE       = (1 &lt;&lt; 7),         </div>
+<div class="line"><span class="lineno">   50</span>            <a class="code hl_enumvalue" href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c">GLOBAL</a>          = (1 &lt;&lt; 8),         </div>
+<div class="line"><span class="lineno">   51</span>            NO_EXECUTE      = (1ULL &lt;&lt; 63)      </div>
+<div class="line"><span class="lineno">   52</span>        } page_flags_t;</div>
+<div class="ttc" id="aphysical_8h_html_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048"><div class="ttname"><a href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048">MaxOS::memory::PRESENT</a></div><div class="ttdeci">@ PRESENT</div><div class="ttdoc">The page is present in memory.</div><div class="ttdef"><b>Definition</b> <a href="physical_8h_source.html#l00042">physical.h:42</a></div></div>
+<div class="ttc" id="aphysical_8h_html_ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c"><div class="ttname"><a href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c">MaxOS::memory::GLOBAL</a></div><div class="ttdeci">@ GLOBAL</div><div class="ttdoc">The page can be shared between processes.</div><div class="ttdef"><b>Definition</b> <a href="physical_8h_source.html#l00050">physical.h:50</a></div></div>
+<div class="ttc" id="aphysical_8h_html_ae0e83b5743a37b4d0d2a93bb3bbe84eba4f6db44a6458f735868d173d7cbdac05"><div class="ttname"><a href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba4f6db44a6458f735868d173d7cbdac05">MaxOS::memory::DIRTY</a></div><div class="ttdeci">@ DIRTY</div><div class="ttdoc">This page has been written to.</div><div class="ttdef"><b>Definition</b> <a href="physical_8h_source.html#l00048">physical.h:48</a></div></div>
+<div class="ttc" id="aphysical_8h_html_ae0e83b5743a37b4d0d2a93bb3bbe84eba6c21f04b9fd8f97d73dbcedbd6380a22"><div class="ttname"><a href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba6c21f04b9fd8f97d73dbcedbd6380a22">MaxOS::memory::USER</a></div><div class="ttdeci">@ USER</div><div class="ttdoc">This page is accessible from user mode.</div><div class="ttdef"><b>Definition</b> <a href="physical_8h_source.html#l00044">physical.h:44</a></div></div>
+<div class="ttc" id="aphysical_8h_html_ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2"><div class="ttname"><a href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2">MaxOS::memory::CACHE_DISABLED</a></div><div class="ttdeci">@ CACHE_DISABLED</div><div class="ttdoc">Dont let the CPU cache this page.</div><div class="ttdef"><b>Definition</b> <a href="physical_8h_source.html#l00046">physical.h:46</a></div></div>
+<div class="ttc" id="aphysical_8h_html_ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b"><div class="ttname"><a href="physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b">MaxOS::memory::NONE</a></div><div class="ttdeci">@ NONE</div><div class="ttdoc">No flags.</div><div class="ttdef"><b>Definition</b> <a href="physical_8h_source.html#l00041">physical.h:41</a></div></div>
+</div><!-- fragment -->
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -377,6 +514,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>*copydoc PageFlags::ACCESSED </p>
 
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00005">5</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
@@ -394,6 +533,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Extra metadata bytes available for OS use. </p>
+
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00009">9</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
 </div>
@@ -409,6 +550,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>*copydoc PageFlags::CACHE_DISABLED </p>
 
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00004">4</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
@@ -426,6 +569,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>*copydoc PageFlags::DIRTY </p>
+
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00006">6</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
 </div>
@@ -442,9 +587,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The entries in this page map level. If it is a PT then these are page table entries, otherwise they are pointers to the next level. Indexed by the relevant bits in the virtual address. </p>
+
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00000">0</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="acpi_8cpp_source.html#l00106">MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="acpi_8cpp_source.html#l00160">MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()</a>.</p>
 
 </div>
 </div>
@@ -460,7 +607,147 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>*copydoc PageFlags::GLOBAL </p>
+
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00008">8</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+</div>
+</div>
+<a id="a209a1e2709f9aac5d70eb43e198608d5" name="a209a1e2709f9aac5d70eb43e198608d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a209a1e2709f9aac5d70eb43e198608d5">&#9670;&#160;</a></span>HIGHER_HALF_DIRECT_MAP</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint64_t MaxOS::memory::HIGHER_HALF_DIRECT_MAP = HIGHER_HALF_OFFSET + PAGE_SIZE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where the map of physical memory to higher half starts. </p>
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00088">88</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00923">MaxOS::memory::PhysicalMemoryManager::from_dm_region()</a>, <a class="el" href="physical_8cpp_source.html#l00031">MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()</a>, and <a class="el" href="physical_8cpp_source.html#l00908">MaxOS::memory::PhysicalMemoryManager::to_dm_region()</a>.</p>
+
+</div>
+</div>
+<a id="a4c282ffdf004848e8641e1b63f6a339e" name="a4c282ffdf004848e8641e1b63f6a339e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c282ffdf004848e8641e1b63f6a339e">&#9670;&#160;</a></span>HIGHER_HALF_KERNEL_OFFSET</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint64_t MaxOS::memory::HIGHER_HALF_KERNEL_OFFSET = 0xFFFFFFFF80000000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where the kernel is mapped in higher half memory. </p>
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00084">84</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="multiboot_8cpp_source.html#l00182">MaxOS::system::Multiboot::start_tag()</a>, <a class="el" href="physical_8cpp_source.html#l00861">MaxOS::memory::PhysicalMemoryManager::to_higher_region()</a>, and <a class="el" href="physical_8cpp_source.html#l00877">MaxOS::memory::PhysicalMemoryManager::to_lower_region()</a>.</p>
+
+</div>
+</div>
+<a id="a5fe6a67466d94891bb90880d8b8416a2" name="a5fe6a67466d94891bb90880d8b8416a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fe6a67466d94891bb90880d8b8416a2">&#9670;&#160;</a></span>HIGHER_HALF_MEM_OFFSET</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint64_t MaxOS::memory::HIGHER_HALF_MEM_OFFSET = 0xFFFF800000000000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where higher half memory starts. </p>
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00085">85</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00893">MaxOS::memory::PhysicalMemoryManager::to_io_region()</a>.</p>
+
+</div>
+</div>
+<a id="a47c394121636925d369cc1f13548b552" name="a47c394121636925d369cc1f13548b552"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47c394121636925d369cc1f13548b552">&#9670;&#160;</a></span>HIGHER_HALF_MEM_RESERVED</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint64_t MaxOS::memory::HIGHER_HALF_MEM_RESERVED = 0x280000000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reserved higher half memory for kernel use (10GB) </p>
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00086">86</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+</div>
+</div>
+<a id="a113a5e21291a156b8855b4d7eee1cc96" name="a113a5e21291a156b8855b4d7eee1cc96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a113a5e21291a156b8855b4d7eee1cc96">&#9670;&#160;</a></span>HIGHER_HALF_OFFSET</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint64_t MaxOS::memory::HIGHER_HALF_OFFSET = HIGHER_HALF_MEM_OFFSET + HIGHER_HALF_MEM_RESERVED</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where higher half memory usable space starts. </p>
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00087">87</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00908">MaxOS::memory::PhysicalMemoryManager::to_dm_region()</a>.</p>
 
 </div>
 </div>
@@ -476,7 +763,37 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>*copydoc PageFlags::HUGE_PAGE </p>
+
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00007">7</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+</div>
+</div>
+<a id="acbb7ce85d6b04d80fa29a7292d4bc3ed" name="acbb7ce85d6b04d80fa29a7292d4bc3ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbb7ce85d6b04d80fa29a7292d4bc3ed">&#9670;&#160;</a></span>PAGE_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint64_t MaxOS::memory::PAGE_SIZE = 0x1000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The size of a page (4KB) </p>
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00081">81</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00748">MaxOS::memory::PhysicalMemoryManager::align_direct_to_page()</a>, <a class="el" href="physical_8cpp_source.html#l00154">MaxOS::memory::PhysicalMemoryManager::align_to_page()</a>, <a class="el" href="virtual_8cpp_source.html#l00129">MaxOS::memory::VirtualMemoryManager::allocate()</a>, <a class="el" href="physical_8cpp_source.html#l00262">MaxOS::memory::PhysicalMemoryManager::allocate_area()</a>, <a class="el" href="physical_8cpp_source.html#l00187">MaxOS::memory::PhysicalMemoryManager::allocate_frame()</a>, <a class="el" href="physical_8cpp_source.html#l00177">MaxOS::memory::PhysicalMemoryManager::check_aligned()</a>, <a class="el" href="physical_8cpp_source.html#l00331">MaxOS::memory::PhysicalMemoryManager::free_area()</a>, <a class="el" href="physical_8cpp_source.html#l00243">MaxOS::memory::PhysicalMemoryManager::free_frame()</a>, <a class="el" href="virtual_8cpp_source.html#l00451">MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()</a>, <a class="el" href="physical_8cpp_source.html#l00555">MaxOS::memory::PhysicalMemoryManager::map_area()</a>, <a class="el" href="physical_8cpp_source.html#l00539">MaxOS::memory::PhysicalMemoryManager::map_area()</a>, <a class="el" href="physical_8cpp_source.html#l00737">MaxOS::memory::PhysicalMemoryManager::memory_used()</a>, <a class="el" href="memorymanagement_8cpp_source.html#l00022">MaxOS::memory::MemoryManager::MemoryManager()</a>, <a class="el" href="physical_8cpp_source.html#l00031">MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()</a>, <a class="el" href="physical_8cpp_source.html#l00758">MaxOS::memory::PhysicalMemoryManager::reserve()</a>, <a class="el" href="physical_8cpp_source.html#l00770">MaxOS::memory::PhysicalMemoryManager::reserve()</a>, <a class="el" href="physical_8cpp_source.html#l00088">MaxOS::memory::PhysicalMemoryManager::reserve_kernel_regions()</a>, <a class="el" href="physical_8cpp_source.html#l00143">MaxOS::memory::PhysicalMemoryManager::size_to_frames()</a>, and <a class="el" href="physical_8cpp_source.html#l00613">MaxOS::memory::PhysicalMemoryManager::unmap_area()</a>.</p>
 
 </div>
 </div>
@@ -492,9 +809,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The address the page represents in memory. </p>
+
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00010">10</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="acpi_8cpp_source.html#l00013">MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()</a>, <a class="el" href="physical_8cpp_source.html#l00957">MaxOS::memory::PhysicalMemoryManager::from_dm_region()</a>, <a class="el" href="physical_8cpp_source.html#l00563">MaxOS::memory::PhysicalMemoryManager::identity_map()</a>, <a class="el" href="physical_8cpp_source.html#l00883">MaxOS::memory::PhysicalMemoryManager::is_mapped()</a>, <a class="el" href="virtual_8cpp_source.html#l00447">MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()</a>, <a class="el" href="virtual_8cpp_source.html#l00429">MaxOS::memory::VirtualMemoryManager::load_shared_memory()</a>, <a class="el" href="physical_8cpp_source.html#l00478">MaxOS::memory::PhysicalMemoryManager::map()</a>, <a class="el" href="physical_8cpp_source.html#l00493">MaxOS::memory::PhysicalMemoryManager::map()</a>, <a class="el" href="physical_8cpp_source.html#l00023">MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()</a>, <a class="el" href="physical_8cpp_source.html#l00942">MaxOS::memory::PhysicalMemoryManager::to_dm_region()</a>, <a class="el" href="physical_8cpp_source.html#l00895">MaxOS::memory::PhysicalMemoryManager::to_higher_region()</a>, <a class="el" href="physical_8cpp_source.html#l00927">MaxOS::memory::PhysicalMemoryManager::to_io_region()</a>, and <a class="el" href="vesa_8cpp_source.html#l00015">MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="acpi_8cpp_source.html#l00022">MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()</a>, <a class="el" href="physical_8cpp_source.html#l00568">MaxOS::memory::PhysicalMemoryManager::identity_map()</a>, <a class="el" href="physical_8cpp_source.html#l00849">MaxOS::memory::PhysicalMemoryManager::is_mapped()</a>, <a class="el" href="virtual_8cpp_source.html#l00451">MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()</a>, <a class="el" href="virtual_8cpp_source.html#l00433">MaxOS::memory::VirtualMemoryManager::load_shared_memory()</a>, <a class="el" href="physical_8cpp_source.html#l00483">MaxOS::memory::PhysicalMemoryManager::map()</a>, <a class="el" href="physical_8cpp_source.html#l00498">MaxOS::memory::PhysicalMemoryManager::map()</a>, <a class="el" href="physical_8cpp_source.html#l00031">MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()</a>, <a class="el" href="physical_8cpp_source.html#l00908">MaxOS::memory::PhysicalMemoryManager::to_dm_region()</a>, <a class="el" href="physical_8cpp_source.html#l00861">MaxOS::memory::PhysicalMemoryManager::to_higher_region()</a>, <a class="el" href="physical_8cpp_source.html#l00893">MaxOS::memory::PhysicalMemoryManager::to_io_region()</a>, and <a class="el" href="vesa_8cpp_source.html#l00024">MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()</a>.</p>
 
 </div>
 </div>
@@ -510,7 +829,37 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>*copydoc PageFlags::PRESENT </p>
+
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00000">0</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+</div>
+</div>
+<a id="aade198fd5ec1031a23cd63fc2709f00c" name="aade198fd5ec1031a23cd63fc2709f00c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aade198fd5ec1031a23cd63fc2709f00c">&#9670;&#160;</a></span>ROW_BITS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t MaxOS::memory::ROW_BITS = 64</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The number of bits in the bitmap row. </p>
+
+<p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00082">82</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00262">MaxOS::memory::PhysicalMemoryManager::allocate_area()</a>, <a class="el" href="physical_8cpp_source.html#l00187">MaxOS::memory::PhysicalMemoryManager::allocate_frame()</a>, <a class="el" href="physical_8cpp_source.html#l00331">MaxOS::memory::PhysicalMemoryManager::free_area()</a>, <a class="el" href="physical_8cpp_source.html#l00243">MaxOS::memory::PhysicalMemoryManager::free_frame()</a>, <a class="el" href="physical_8cpp_source.html#l00031">MaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()</a>, and <a class="el" href="physical_8cpp_source.html#l00770">MaxOS::memory::PhysicalMemoryManager::reserve()</a>.</p>
 
 </div>
 </div>
@@ -525,6 +874,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>*copydoc PageFlags::USER </p>
 
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00002">2</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
@@ -542,9 +893,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>*copydoc PageFlags::WRITE </p>
+
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00001">1</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="ethernetframe_8cpp_source.html#l00078">MaxOS::net::EthernetFrameHandler::DataReceived()</a>, <a class="el" href="icmp_8cpp_source.html#l00031">MaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()</a>, <a class="el" href="tcp_8cpp_source.html#l00157">MaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()</a>, <a class="el" href="apic_8cpp_source.html#l00013">MaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()</a>, <a class="el" href="outputStream_8h_source.html#l00089">MaxOS::common::GenericOutputStream&lt; Type &gt;::on_stream_read()</a>, <a class="el" href="outputStream_8cpp_source.html#l00171">MaxOS::common::OutputStream::operator&lt;&lt;()</a>, <a class="el" href="outputStream_8cpp_source.html#l00147">MaxOS::common::OutputStream::operator&lt;&lt;()</a>, <a class="el" href="logger_8cpp_source.html#l00213">Logger::printf()</a>, <a class="el" href="icmp_8cpp_source.html#l00075">MaxOS::net::InternetControlMessageProtocol::RequestEchoReply()</a>, <a class="el" href="apic_8cpp_source.html#l00114">MaxOS::hardwarecommunication::LocalAPIC::send_eoi()</a>, <a class="el" href="outputStream_8cpp_source.html#l00049">MaxOS::common::OutputStream::write()</a>, <a class="el" href="disk_8cpp_source.html#l00040">MaxOS::drivers::disk::Disk::write()</a>, <a class="el" href="console_8cpp_source.html#l00412">MaxOS::drivers::console::ConsoleStream::write_char()</a>, <a class="el" href="outputStream_8cpp_source.html#l00111">MaxOS::common::OutputStream::write_hex()</a>, and <a class="el" href="outputStream_8cpp_source.html#l00100">MaxOS::common::OutputStream::write_int()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="ethernetframe_8cpp_source.html#l00104">MaxOS::net::EthernetFrameHandler::DataReceived()</a>, <a class="el" href="icmp_8cpp_source.html#l00043">MaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()</a>, <a class="el" href="outputStream_8h_source.html#l00093">MaxOS::common::GenericOutputStream&lt; Type &gt;::on_stream_read()</a>, <a class="el" href="outputStream_8cpp_source.html#l00175">MaxOS::common::OutputStream::operator&lt;&lt;()</a>, <a class="el" href="outputStream_8cpp_source.html#l00151">MaxOS::common::OutputStream::operator&lt;&lt;()</a>, <a class="el" href="logger_8cpp_source.html#l00223">Logger::printf()</a>, <a class="el" href="icmp_8cpp_source.html#l00084">MaxOS::net::InternetControlMessageProtocol::RequestEchoReply()</a>, <a class="el" href="apic_8cpp_source.html#l00117">MaxOS::hardwarecommunication::LocalAPIC::send_eoi()</a>, <a class="el" href="apic_8cpp_source.html#l00128">MaxOS::hardwarecommunication::LocalAPIC::send_init()</a>, <a class="el" href="apic_8cpp_source.html#l00167">MaxOS::hardwarecommunication::LocalAPIC::send_startup()</a>, <a class="el" href="outputStream_8cpp_source.html#l00053">MaxOS::common::OutputStream::write()</a>, <a class="el" href="disk_8cpp_source.html#l00050">MaxOS::drivers::disk::Disk::write()</a>, <a class="el" href="console_8cpp_source.html#l00440">MaxOS::drivers::console::ConsoleStream::write_char()</a>, <a class="el" href="outputStream_8cpp_source.html#l00115">MaxOS::common::OutputStream::write_hex()</a>, and <a class="el" href="outputStream_8cpp_source.html#l00104">MaxOS::common::OutputStream::write_int()</a>.</p>
 
 </div>
 </div>
@@ -559,6 +912,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>*copydoc PageFlags::WRITE_THROUGH </p>
 
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00003">3</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 

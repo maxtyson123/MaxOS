@@ -1,5 +1,10 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/hardwarecommunication/apic.h File Reference}
 \hypertarget{apic_8h}{}\label{apic_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/apic.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/apic.h}}
+
+
+Defines classes and structures for handling the Advanced Programmable Interrupt Controller (APIC) in a multiprocessor system.  
+
+
 {\ttfamily \#include $<$hardwarecommunication/port.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/acpi.\+h$>$}\newline
 {\ttfamily \#include $<$memory/physical.\+h$>$}\newline
@@ -7,88 +12,210 @@
 \begin{DoxyCompactItemize}
 \item 
 class \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC}}
-\item 
+\begin{DoxyCompactList}\small\item\em Handles the local APIC for the current core. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{Max\+OS\+::hardwarecommunication\+::\+MADT}}
-\item 
-struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__Item}{Max\+OS\+::hardwarecommunication\+::\+MADT\+\_\+\+Item}}
-\item 
-struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__IOAPIC}{Max\+OS\+::hardwarecommunication\+::\+MADT\+\_\+\+IOAPIC}}
-\item 
-union \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry}{Max\+OS\+::hardwarecommunication\+::\+Redirection\+Entry}}
-\item 
+\begin{DoxyCompactList}\small\item\em Multiple APIC Description Table (\doxylink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}) (ACPI 2 or higher). Provides information about the APICs in the system. Following this header are multiple entries describing the APICs (see \doxylink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}). \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{Max\+OS\+::hardwarecommunication\+::\+MADTEntry}}
+\begin{DoxyCompactList}\small\item\em An item in the \doxylink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT} table. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__IO__APIC}{Max\+OS\+::hardwarecommunication\+::\+MADT\+\_\+\+IO\+\_\+\+APIC}}
+\begin{DoxyCompactList}\small\item\em An entry in the \doxylink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT} table describing an IO APIC. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__PROCESSOR__APIC}{Max\+OS\+::hardwarecommunication\+::\+MADT\+\_\+\+PROCESSOR\+\_\+\+APIC}}
+\begin{DoxyCompactList}\small\item\em An entry in the \doxylink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT} table describing a processor local APIC. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry}{Max\+OS\+::hardwarecommunication\+::\+Redirection\+Entry}}
+\begin{DoxyCompactList}\small\item\em An IO APIC redirection entry. Describes how an interrupt is routed. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect}}
-\item 
+\begin{DoxyCompactList}\small\item\em Defines how an interrupt input is redirected to a specific processor via the I/O APIC. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override}{Max\+OS\+::hardwarecommunication\+::\+Override}}
-\item 
+\begin{DoxyCompactList}\small\item\em Specifies how a specific interrupt source is mapped to a global system interrupt. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC}}
-\item 
+\begin{DoxyCompactList}\small\item\em Handles the IO APIC in the system (one per system) \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Programmable\+Interrupt\+Controller}}
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication}{Max\+OS\+::hardwarecommunication}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Handles both the Local APIC (boot core) and IO APIC. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect}} \mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication_a8ed1467ecf3306e3f6d39deae897fbe9}{Max\+OS\+::hardwarecommunication\+::interrupt\+\_\+redirect\+\_\+t}}
+\Hypertarget{apic_8h_a6f11a1bb552086bd3f5f4335b73e2c56}\label{apic_8h_a6f11a1bb552086bd3f5f4335b73e2c56} 
+typedef union \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry}{Max\+OS\+::hardwarecommunication\+::\+Redirection\+Entry}} {\bfseries Max\+OS\+::hardwarecommunication\+::redirection\+\_\+entry\+\_\+t}
+\item 
+\Hypertarget{apic_8h_a8ed1467ecf3306e3f6d39deae897fbe9}\label{apic_8h_a8ed1467ecf3306e3f6d39deae897fbe9} 
+typedef struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect}} {\bfseries Max\+OS\+::hardwarecommunication\+::interrupt\+\_\+redirect\+\_\+t}
 \end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{apic_8h_a61a67b8f6beb43e8dbf2ed85e52292b0}{Max\+OS\+::hardwarecommunication\+::\+MADT\+\_\+\+TYPE}} \{ \newline
+{\bfseries PROCESSOR\+\_\+\+APIC}
+, {\bfseries IO\+\_\+\+APIC}
+, {\bfseries INTERRUPT\+\_\+\+SOURCE\+\_\+\+OVERRIDE}
+, {\bfseries NMI\+\_\+\+SOURCE}
+, \newline
+{\bfseries APIC\+\_\+\+NMIS}
+, {\bfseries APIC\+\_\+\+ADDRESS\+\_\+\+OVERRIDE}
+, {\bfseries PROCESSOR\+\_\+\+X2\+APIC}
+ \}
+\begin{DoxyCompactList}\small\item\em The types of MADT entries. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{apic_8h_ae5961c617d1c9a84a7e86fbec0f59f44}{Max\+OS\+::hardwarecommunication\+::\+Delivery\+Mode}} \{ \newline
+{\bfseries FIXED} = 0
+, {\bfseries LOWEST\+\_\+\+PRIORITY} = 1
+, {\bfseries SMI} = 2
+, {\bfseries NMI} = 4
+, \newline
+{\bfseries INIT} = 5
+, {\bfseries EXTINT} = 7
+ \}
+\begin{DoxyCompactList}\small\item\em How the interrupt should be delivered (can it override others etc). Set fixed/lowest priority for normal interrupts. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor}{Max\+OS\+::hardwarecommunication\+::\+RSDPDescriptor}} \mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication_abe45fccdf160be55b8dc7bd5417235ac}{Max\+OS\+::hardwarecommunication\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed))
+\Hypertarget{acpi_8h_aa1f9def1bb675ba6c602952683c7a8d6}\label{acpi_8h_aa1f9def1bb675ba6c602952683c7a8d6} 
+struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor}{Max\+OS\+::hardwarecommunication\+::\+RSDPDescriptor}} {\bfseries Max\+OS\+::hardwarecommunication\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed)) rsdp\+\_\+descriptor\+\_\+t
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 ACPISDTHeader \mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}}
-\item 
+\begin{DoxyCompactList}\small\item\em Common ACPI SDT header. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{apic_8h_a77c1909868c549176ca0e730c1f10ba7}{local\+\_\+apic\+\_\+address}}
-\item 
+\begin{DoxyCompactList}\small\item\em The physical address of the local APIC. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{apic_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}
-\item 
+\begin{DoxyCompactList}\small\item\em Flags indicating the capabilities of the system (1 = Legacy PICs are present) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{apic_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}
-\item 
+\begin{DoxyCompactList}\small\item\em The type of the MADT entry (see MADT\+\_\+\+TYPE) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{apic_8h_ab2b3adeb2a67e656ff030b56727fd0ac}{length}}
+\begin{DoxyCompactList}\small\item\em How many bytes this entry takes up (including the type and length fields) \end{DoxyCompactList}\item 
+\Hypertarget{apic_8h_a246df0da2f83d4427aeff9b62cb78b01}\label{apic_8h_a246df0da2f83d4427aeff9b62cb78b01} 
+enum \mbox{\hyperlink{apic_8h_a61a67b8f6beb43e8dbf2ed85e52292b0}{Max\+OS\+::hardwarecommunication\+::\+MADT\+\_\+\+TYPE}} {\bfseries Max\+OS\+::hardwarecommunication\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}
 \item 
 uint8\+\_\+t \mbox{\hyperlink{apic_8h_a4aff3b4a7148203f3883e70bcdd8c40d}{io\+\_\+apic\+\_\+id}}
-\item 
+\begin{DoxyCompactList}\small\item\em The ID of the IO APIC. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{apic_8h_ac35c1fbebe2017fc1ca10f5803668dfd}{reserved}}
-\item 
+\begin{DoxyCompactList}\small\item\em Reserved. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{apic_8h_a4349604841b887a946fee74ba157a022}{io\+\_\+apic\+\_\+address}}
-\item 
+\begin{DoxyCompactList}\small\item\em The physical address of the IO APIC. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{apic_8h_ac4cda92a6b75e496401a94055081caf5}{global\+\_\+system\+\_\+interrupt\+\_\+base}}
-\item 
+\begin{DoxyCompactList}\small\item\em The first GSI number that this IO APIC handles. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{apic_8h_a6f9110ed82f52c9153f7ff39bbc68bab}{processor\+\_\+id}}
+\begin{DoxyCompactList}\small\item\em The ID for the core. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{apic_8h_ab2e5b38a20311ef17e9a224eca4183aa}{apic\+\_\+id}}
+\begin{DoxyCompactList}\small\item\em The ID for the APIC that the core uses. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{apic_8h_a6c3589b2f7ad6179e386511136265b54}{vector}}
-\item 
+\begin{DoxyCompactList}\small\item\em The interrupt that will be triggered when this redirection entry is used. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{apic_8h_a4848ec955396c7fd25e76367ff30d2ce}{delivery\+\_\+mode}}
-\item 
+\begin{DoxyCompactList}\small\item\em How the interrupt will be delvied to the core(s) (see Delivery\+Mode) \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{apic_8h_a41a8a4993aae928079a66c4a4df15890}{destination\+\_\+mode}}
-\item 
+\begin{DoxyCompactList}\small\item\em How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores) \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{apic_8h_ab24a43c4d3219125c0797fc07c141b8a}{delivery\+\_\+status}}
-\item 
+\begin{DoxyCompactList}\small\item\em Indicates whether, when setting this entry, the interrupt is still being sent. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{apic_8h_aa0a6b883a5d26ed5cebc4d8d1d361edc}{pin\+\_\+polarity}}
-\item 
+\begin{DoxyCompactList}\small\item\em Defines the electrical signal that indicates an active interrupt line (0 = high active, 1 = low active) (must match the MADT override flags) \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{apic_8h_aaa9e00cfe93d419d84f617ea96d4b918}{remote\+\_\+irr}}
-\item 
+\begin{DoxyCompactList}\small\item\em ? \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{apic_8h_a66b076fc2b8ced94624b91955191984b}{trigger\+\_\+mode}}
-\item 
+\begin{DoxyCompactList}\small\item\em How the electrical signal is interpreted (0 = edge triggered, 1 = level triggered) (must match the MADT override flags) \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{apic_8h_a6f26bbb3e63b096143b8024debecedf9}{mask}}
-\item 
+\begin{DoxyCompactList}\small\item\em Whether the interrupt is disabled or not. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}}
-\item 
+\begin{DoxyCompactList}\small\item\em The core(s) the interrupt should be sent to (interpreted based on destination\+\_\+mode) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{apic_8h_a5262d4a80e6a0b6dce6fd57d4656786d}{bus}}
-\item 
+\begin{DoxyCompactList}\small\item\em Identifies the hardware bus the interrupt comes from (0 = ISA, 1 = PCI) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}}
-\item 
+\begin{DoxyCompactList}\small\item\em The interrupt source number on the specified bus. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{apic_8h_a30e59b950511dd5de9fc8592dbd3777f}{global\+\_\+system\+\_\+interrupt}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The global system interrupt that the source is mapped to. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines classes and structures for handling the Advanced Programmable Interrupt Controller (APIC) in a multiprocessor system. 
+
+\begin{DoxyDate}{Date}
+18th January 2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{apic_8h_ae5961c617d1c9a84a7e86fbec0f59f44}\label{apic_8h_ae5961c617d1c9a84a7e86fbec0f59f44} 
+\index{apic.h@{apic.h}!DeliveryMode@{DeliveryMode}}
+\index{DeliveryMode@{DeliveryMode}!apic.h@{apic.h}}
+\doxysubsubsection{\texorpdfstring{DeliveryMode}{DeliveryMode}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{apic_8h_ae5961c617d1c9a84a7e86fbec0f59f44}{Max\+OS\+::hardwarecommunication\+::\+Delivery\+Mode}}}
+
+
+
+How the interrupt should be delivered (can it override others etc). Set fixed/lowest priority for normal interrupts. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000020}{Todo}}]use this \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{apic_8h_source_l00130}{130}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ FIXED\ \ \ \ \ \ \ \ \ \ \ =\ 0,}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ LOWEST\_PRIORITY\ =\ 1,}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ SMI\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ NMI\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 4,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ INIT\ \ \ \ \ \ \ \ \ \ \ \ =\ 5,}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ EXTINT\ \ \ \ \ \ \ \ \ \ =\ 7,}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{apic_8h_a61a67b8f6beb43e8dbf2ed85e52292b0}\label{apic_8h_a61a67b8f6beb43e8dbf2ed85e52292b0} 
+\index{apic.h@{apic.h}!MADT\_TYPE@{MADT\_TYPE}}
+\index{MADT\_TYPE@{MADT\_TYPE}!apic.h@{apic.h}}
+\doxysubsubsection{\texorpdfstring{MADT\_TYPE}{MADT\_TYPE}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{apic_8h_a61a67b8f6beb43e8dbf2ed85e52292b0}{Max\+OS\+::hardwarecommunication\+::\+MADT\+\_\+\+TYPE}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The types of MADT entries. 
+
+
+
+Definition at line \mbox{\hyperlink{apic_8h_source_l00070}{70}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ PROCESSOR\_APIC,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ IO\_APIC,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ INTERRUPT\_SOURCE\_OVERRIDE,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ NMI\_SOURCE,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ APIC\_NMIS,}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ APIC\_ADDRESS\_OVERRIDE,}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ PROCESSOR\_X2APIC,}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
 
 
 \doxysubsection{Variable Documentation}
+\Hypertarget{apic_8h_ab2e5b38a20311ef17e9a224eca4183aa}\label{apic_8h_ab2e5b38a20311ef17e9a224eca4183aa} 
+\index{apic.h@{apic.h}!apic\_id@{apic\_id}}
+\index{apic\_id@{apic\_id}!apic.h@{apic.h}}
+\doxysubsubsection{\texorpdfstring{apic\_id}{apic\_id}}
+{\footnotesize\ttfamily uint8\+\_\+t apic\+\_\+id}
+
+
+
+The ID for the APIC that the core uses. 
+
+
+
+Definition at line \mbox{\hyperlink{apic_8h_source_l00001}{1}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00128}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::send\+\_\+init()}}, and \mbox{\hyperlink{apic_8cpp_source_l00167}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::send\+\_\+startup()}}.
+
 \Hypertarget{apic_8h_a5262d4a80e6a0b6dce6fd57d4656786d}\label{apic_8h_a5262d4a80e6a0b6dce6fd57d4656786d} 
 \index{apic.h@{apic.h}!bus@{bus}}
 \index{bus@{bus}!apic.h@{apic.h}}
@@ -97,17 +224,25 @@ uint32\+\_\+t \mbox{\hyperlink{apic_8h_a30e59b950511dd5de9fc8592dbd3777f}{global
 
 
 
+Identifies the hardware bus the interrupt comes from (0 = ISA, 1 = PCI) 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00000}{0}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{pci_8cpp_source_l00168}{Max\+OS\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Controller\+::select\+\_\+drivers()}}.
+Referenced by \mbox{\hyperlink{pci_8cpp_source_l00173}{Max\+OS\+::hardwarecommunication\+::\+Peripheral\+Component\+Interconnect\+Controller\+::select\+\_\+drivers()}}.
 
 \Hypertarget{apic_8h_a4848ec955396c7fd25e76367ff30d2ce}\label{apic_8h_a4848ec955396c7fd25e76367ff30d2ce} 
 \index{apic.h@{apic.h}!delivery\_mode@{delivery\_mode}}
 \index{delivery\_mode@{delivery\_mode}!apic.h@{apic.h}}
 \doxysubsubsection{\texorpdfstring{delivery\_mode}{delivery\_mode}}
 {\footnotesize\ttfamily uint64\+\_\+t delivery\+\_\+mode}
+
+
+
+How the interrupt will be delvied to the core(s) (see Delivery\+Mode) 
 
 
 
@@ -121,6 +256,10 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00001}{1}} of file \mbox{\hy
 
 
 
+Indicates whether, when setting this entry, the interrupt is still being sent. 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00003}{3}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{apic_8h_a59b2eeb879f61d30d114944a05683844}\label{apic_8h_a59b2eeb879f61d30d114944a05683844} 
@@ -131,17 +270,25 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00003}{3}} of file \mbox{\hy
 
 
 
+The core(s) the interrupt should be sent to (interpreted based on destination\+\_\+mode) 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00009}{9}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00333}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00349}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+to()}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00136}{memcpy()}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00186}{memmove()}}, and \mbox{\hyperlink{ethernetframe_8cpp_source_l00048}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Payload\+Handler\+::\+Send()}}.
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00336}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00352}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+to()}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00165}{memcpy()}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00235}{memmove()}}, and \mbox{\hyperlink{ethernetframe_8cpp_source_l00062}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Payload\+Handler\+::\+Send()}}.
 
 \Hypertarget{apic_8h_a41a8a4993aae928079a66c4a4df15890}\label{apic_8h_a41a8a4993aae928079a66c4a4df15890} 
 \index{apic.h@{apic.h}!destination\_mode@{destination\_mode}}
 \index{destination\_mode@{destination\_mode}!apic.h@{apic.h}}
 \doxysubsubsection{\texorpdfstring{destination\_mode}{destination\_mode}}
 {\footnotesize\ttfamily uint64\+\_\+t destination\+\_\+mode}
+
+
+
+How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores) 
 
 
 
@@ -155,6 +302,12 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00002}{2}} of file \mbox{\hy
 
 
 
+Flags indicating the capabilities of the system (1 = Legacy PICs are present) 
+
+Flags describing the polarity and trigger mode of the interrupt source (see MADT override flags)
+
+Flags indicating the status of the core (bit 0 = core enabled, bit 1 = can be enabled) 
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00002}{2}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{apic_8h_a30e59b950511dd5de9fc8592dbd3777f}\label{apic_8h_a30e59b950511dd5de9fc8592dbd3777f} 
@@ -162,6 +315,10 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00002}{2}} of file \mbox{\hy
 \index{global\_system\_interrupt@{global\_system\_interrupt}!apic.h@{apic.h}}
 \doxysubsubsection{\texorpdfstring{global\_system\_interrupt}{global\_system\_interrupt}}
 {\footnotesize\ttfamily uint32\+\_\+t global\+\_\+system\+\_\+interrupt}
+
+
+
+The global system interrupt that the source is mapped to. 
 
 
 
@@ -175,6 +332,10 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00002}{2}} of file \mbox{\hy
 
 
 
+The first GSI number that this IO APIC handles. 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00003}{3}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}\label{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c} 
@@ -185,17 +346,25 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00003}{3}} of file \mbox{\hy
 
 
 
+Common ACPI SDT header. 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00000}{0}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00106}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}, \mbox{\hyperlink{udp_8cpp_source_l00084}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{apic_8cpp_source_l00119}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::\+IOAPIC()}}, and \mbox{\hyperlink{udp_8cpp_source_l00217}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}.
+Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00160}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}, \mbox{\hyperlink{udp_8cpp_source_l00127}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{apic_8cpp_source_l00195}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::\+IOAPIC()}}, and \mbox{\hyperlink{udp_8cpp_source_l00266}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}.
 
 \Hypertarget{apic_8h_a4349604841b887a946fee74ba157a022}\label{apic_8h_a4349604841b887a946fee74ba157a022} 
 \index{apic.h@{apic.h}!io\_apic\_address@{io\_apic\_address}}
 \index{io\_apic\_address@{io\_apic\_address}!apic.h@{apic.h}}
 \doxysubsubsection{\texorpdfstring{io\_apic\_address}{io\_apic\_address}}
 {\footnotesize\ttfamily uint32\+\_\+t io\+\_\+apic\+\_\+address}
+
+
+
+The physical address of the IO APIC. 
 
 
 
@@ -209,6 +378,10 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00002}{2}} of file \mbox{\hy
 
 
 
+The ID of the IO APIC. 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00000}{0}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{apic_8h_ab2b3adeb2a67e656ff030b56727fd0ac}\label{apic_8h_ab2b3adeb2a67e656ff030b56727fd0ac} 
@@ -216,6 +389,10 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00000}{0}} of file \mbox{\hy
 \index{length@{length}!apic.h@{apic.h}}
 \doxysubsubsection{\texorpdfstring{length}{length}}
 {\footnotesize\ttfamily uint8\+\_\+t length}
+
+
+
+How many bytes this entry takes up (including the type and length fields) 
 
 
 
@@ -229,6 +406,10 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00001}{1}} of file \mbox{\hy
 
 
 
+The physical address of the local APIC. 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00001}{1}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{apic_8h_a6f26bbb3e63b096143b8024debecedf9}\label{apic_8h_a6f26bbb3e63b096143b8024debecedf9} 
@@ -239,11 +420,15 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00001}{1}} of file \mbox{\hy
 
 
 
+Whether the interrupt is disabled or not. 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00007}{7}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00321}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect\+\_\+mask()}}.
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00396}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect\+\_\+mask()}}.
 
 \Hypertarget{apic_8h_aa0a6b883a5d26ed5cebc4d8d1d361edc}\label{apic_8h_aa0a6b883a5d26ed5cebc4d8d1d361edc} 
 \index{apic.h@{apic.h}!pin\_polarity@{pin\_polarity}}
@@ -253,13 +438,35 @@ Referenced by \mbox{\hyperlink{apic_8cpp_source_l00321}{Max\+OS\+::hardwarecommu
 
 
 
+Defines the electrical signal that indicates an active interrupt line (0 = high active, 1 = low active) (must match the MADT override flags) 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00004}{4}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+\Hypertarget{apic_8h_a6f9110ed82f52c9153f7ff39bbc68bab}\label{apic_8h_a6f9110ed82f52c9153f7ff39bbc68bab} 
+\index{apic.h@{apic.h}!processor\_id@{processor\_id}}
+\index{processor\_id@{processor\_id}!apic.h@{apic.h}}
+\doxysubsubsection{\texorpdfstring{processor\_id}{processor\_id}}
+{\footnotesize\ttfamily uint8\+\_\+t processor\+\_\+id}
+
+
+
+The ID for the core. 
+
+
+
+Definition at line \mbox{\hyperlink{apic_8h_source_l00000}{0}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{apic_8h_aaa9e00cfe93d419d84f617ea96d4b918}\label{apic_8h_aaa9e00cfe93d419d84f617ea96d4b918} 
 \index{apic.h@{apic.h}!remote\_irr@{remote\_irr}}
 \index{remote\_irr@{remote\_irr}!apic.h@{apic.h}}
 \doxysubsubsection{\texorpdfstring{remote\_irr}{remote\_irr}}
 {\footnotesize\ttfamily uint64\+\_\+t remote\+\_\+irr}
+
+
+
+? 
 
 
 
@@ -273,6 +480,10 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00005}{5}} of file \mbox{\hy
 
 
 
+Reserved. 
+
+Reserved bits (should be zero) 
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00001}{1}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{apic_8h_a36a99c772ae64e186f5264a662834eef}\label{apic_8h_a36a99c772ae64e186f5264a662834eef} 
@@ -283,17 +494,25 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00001}{1}} of file \mbox{\hy
 
 
 
+The interrupt source number on the specified bus. 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00001}{1}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00031}{Max\+OS\+::common\+::\+Buffer\+::\+Buffer()}}, \mbox{\hyperlink{buffer_8cpp_source_l00244}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00259}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+from()}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00136}{memcpy()}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00186}{memmove()}}, \mbox{\hyperlink{button_8cpp_source_l00023}{Max\+OS\+::gui\+::widgets\+::\+Button\+Event\+Handler\+::on\+\_\+event()}}, and \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00036}{Max\+OS\+::common\+::\+Buffer\+::\+Buffer()}}, \mbox{\hyperlink{buffer_8cpp_source_l00247}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00262}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+from()}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00165}{memcpy()}}, \mbox{\hyperlink{memoryIO_8cpp_source_l00235}{memmove()}}, \mbox{\hyperlink{button_8cpp_source_l00027}{Max\+OS\+::gui\+::widgets\+::\+Button\+Event\+Handler\+::on\+\_\+event()}}, and \mbox{\hyperlink{apic_8cpp_source_l00362}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
 
 \Hypertarget{apic_8h_a66b076fc2b8ced94624b91955191984b}\label{apic_8h_a66b076fc2b8ced94624b91955191984b} 
 \index{apic.h@{apic.h}!trigger\_mode@{trigger\_mode}}
 \index{trigger\_mode@{trigger\_mode}!apic.h@{apic.h}}
 \doxysubsubsection{\texorpdfstring{trigger\_mode}{trigger\_mode}}
 {\footnotesize\ttfamily uint64\+\_\+t trigger\+\_\+mode}
+
+
+
+How the electrical signal is interpreted (0 = edge triggered, 1 = level triggered) (must match the MADT override flags) 
 
 
 
@@ -307,6 +526,10 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00006}{6}} of file \mbox{\hy
 
 
 
+The type of the MADT entry (see MADT\+\_\+\+TYPE) 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00000}{0}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{apic_8h_a6c3589b2f7ad6179e386511136265b54}\label{apic_8h_a6c3589b2f7ad6179e386511136265b54} 
@@ -317,5 +540,13 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00000}{0}} of file \mbox{\hy
 
 
 
+The interrupt that will be triggered when this redirection entry is used. 
+
+
+
 Definition at line \mbox{\hyperlink{apic_8h_source_l00000}{0}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00167}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::send\+\_\+startup()}}.
 

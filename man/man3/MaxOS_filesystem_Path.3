@@ -53,7 +53,7 @@ MaxOS::filesystem::Path \- Handles file & directory paths\&.
 .PP 
 Handles file & directory paths\&. 
 .PP
-Definition at line \fB18\fP of file \fBpath\&.h\fP\&.
+Definition at line \fB22\fP of file \fBpath\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBstring\fP Path::absolute_path (\fBstring\fP path)\fC [static]\fP"
@@ -73,38 +73,38 @@ The new path, direct from root
 .PP
 
 .PP
-Definition at line \fB165\fP of file \fBpath\&.cpp\fP\&..PP
+Definition at line \fB170\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-165                                       {
-166 
-167     // Split the path into components
-168     auto components = path\&.split("/");
-169     common::Vector<string> absolute_components;
-170     for (auto &component: components) {
+170                                       {
 171 
-172         // Skip empty or self references
-173         if (component == "" || component == "\&.")
-174             continue;
-175 
-176         // Handle parent directory references
-177         if (component == "\&.\&.") {
-178             if (!absolute_components\&.empty())
-179                 absolute_components\&.pop_back();
-180         } else
-181             absolute_components\&.push_back(component);
-182     }
-183 
-184     // Join the components back into a path
-185     string absolute_path = "/";
-186     for(const auto& component : absolute_components)
-187         absolute_path += component + "/";
+172     // Split the path into components
+173     auto components = path\&.split("/");
+174     common::Vector<string> absolute_components;
+175     for (auto &component: components) {
+176 
+177         // Skip empty or self references
+178         if (component == "" || component == "\&.")
+179             continue;
+180 
+181         // Handle parent directory references
+182         if (component == "\&.\&.") {
+183             if (!absolute_components\&.empty())
+184                 absolute_components\&.pop_back();
+185         } else
+186             absolute_components\&.push_back(component);
+187     }
 188 
-189     // Remove trailing slash if file
-190     if(Path::is_file(absolute_path) && absolute_path\&.length() > 1)
-191         absolute_path = absolute_path\&.substring(0, absolute_path\&.length() \- 1);
-192 
-193     return absolute_path;
-194 }
+189     // Join the components back into a path
+190     string absolute_path = "/";
+191     for(const auto& component : absolute_components)
+192         absolute_path += component + "/";
+193 
+194     // Remove trailing slash if file
+195     if(Path::is_file(absolute_path) && absolute_path\&.length() > 1)
+196         absolute_path = absolute_path\&.substring(0, absolute_path\&.length() \- 1);
+197 
+198     return absolute_path;
+199 }
 .fi
 
 .PP
@@ -128,25 +128,25 @@ The file extension or the original path if it does not exist
 .PP
 
 .PP
-Definition at line \fB72\fP of file \fBpath\&.cpp\fP\&..PP
+Definition at line \fB77\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-72                                        {
-73 
-74     // Find the last \&.
-75     int last_dot = \-1;
-76     for (int i = 0; i < path\&.length(); i++)
-77         if (path[i] == '\&.')
-78             last_dot = i;
-79 
-80     // Make sure there was a dot to split
-81     if (last_dot == \-1)
-82         return "";
-83 
-84     // Get the file extension (what is after the "\&.")
-85     string file_extension = path\&.substring(last_dot + 1, path\&.length() \- last_dot \- 1);
-86     return file_extension;
-87 
-88 }
+77                                        {
+78 
+79     // Find the last \&.
+80     int last_dot = \-1;
+81     for (int i = 0; i < path\&.length(); i++)
+82         if (path[i] == '\&.')
+83             last_dot = i;
+84 
+85     // Make sure there was a dot to split
+86     if (last_dot == \-1)
+87         return "";
+88 
+89     // Get the file extension (what is after the "\&.")
+90     string file_extension = path\&.substring(last_dot + 1, path\&.length() \- last_dot \- 1);
+91     return file_extension;
+92 
+93 }
 .fi
 
 .PP
@@ -170,24 +170,24 @@ The file name or the original path if it does not exist
 .PP
 
 .PP
-Definition at line \fB49\fP of file \fBpath\&.cpp\fP\&..PP
+Definition at line \fB54\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-49                                   {
-50 
-51     // Find the last /
-52     int last_slash = \-1;
-53     for (int i = 0; i < path\&.length(); i++)
-54         if (path[i] == '/')
-55             last_slash = i;
-56 
-57     // Make sure there was a slash to split
-58     if (last_slash == \-1)
-59         return path;
-60 
-61     // Get the file name
-62     string file_name = path\&.substring(last_slash + 1, path\&.length() \- last_slash \- 1);
-63     return file_name;
-64 }
+54                                   {
+55 
+56     // Find the last /
+57     int last_slash = \-1;
+58     for (int i = 0; i < path\&.length(); i++)
+59         if (path[i] == '/')
+60             last_slash = i;
+61 
+62     // Make sure there was a slash to split
+63     if (last_slash == \-1)
+64         return path;
+65 
+66     // Get the file name
+67     string file_name = path\&.substring(last_slash + 1, path\&.length() \- last_slash \- 1);
+68     return file_name;
+69 }
 .fi
 
 .PP
@@ -211,25 +211,25 @@ The file path or the original path if it does not exist
 .PP
 
 .PP
-Definition at line \fB96\fP of file \fBpath\&.cpp\fP\&..PP
+Definition at line \fB101\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-96                                   {
-97 
-98     // Try to find the last /
-99     int last_slash = \-1;
-100     for (int i = 0; i < path\&.length(); i++)
-101         if (path[i] == '/')
-102             last_slash = i;
-103 
-104     // Make sure there was a slash to split
-105     if (last_slash == \-1)
-106         return path;
-107 
-108     // Get the file path
-109     string file_path = path\&.substring(0, last_slash);
-110     return file_path;
-111 
-112 }
+101                                   {
+102 
+103     // Try to find the last /
+104     int last_slash = \-1;
+105     for (int i = 0; i < path\&.length(); i++)
+106         if (path[i] == '/')
+107             last_slash = i;
+108 
+109     // Make sure there was a slash to split
+110     if (last_slash == \-1)
+111         return path;
+112 
+113     // Get the file path
+114     string file_path = path\&.substring(0, last_slash);
+115     return file_path;
+116 
+117 }
 .fi
 
 .PP
@@ -253,12 +253,12 @@ True if the path is a file, false otherwise
 .PP
 
 .PP
-Definition at line \fB37\fP of file \fBpath\&.cpp\fP\&..PP
+Definition at line \fB42\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-37                                      {
-38 
-39     return file_name(path)\&.length() > 0 && file_extension(path)\&.length() > 0;
-40 }
+42                                      {
+43 
+44     return file_name(path)\&.length() > 0 && file_extension(path)\&.length() > 0;
+45 }
 .fi
 
 .PP
@@ -284,16 +284,16 @@ The joint path
 .PP
 
 .PP
-Definition at line \fB203\fP of file \fBpath\&.cpp\fP\&..PP
+Definition at line \fB208\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-203                                                    {
-204 
-205     // The new path is from root
-206     if(extended[0] == '/')
-207         return extended;
-208 
-209     return base + extended;
-210 }
+208                                                    {
+209 
+210     // The new path is from root
+211     if(extended[0] == '/')
+212         return extended;
+213 
+214     return base + extended;
+215 }
 .fi
 
 .PP
@@ -316,23 +316,23 @@ Get the parent directory of the path\&.
 .PP
 
 .PP
-Definition at line \fB143\fP of file \fBpath\&.cpp\fP\&..PP
+Definition at line \fB148\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-143                                          {
-144 
-145     // Find the last /
-146     int last_slash = \-1;
-147     for (int i = 0; i < path\&.length(); i++)
-148         if (path[i] == '/')
-149             last_slash = i;
-150 
-151     // If no slash or only root, return empty string
-152     if (last_slash <= 0)
-153         return "/";
-154 
-155     // Return substring up to last slash
-156     return path\&.substring(0, last_slash);
-157 }
+148                                          {
+149 
+150     // Find the last /
+151     int last_slash = \-1;
+152     for (int i = 0; i < path\&.length(); i++)
+153         if (path[i] == '/')
+154             last_slash = i;
+155 
+156     // If no slash or only root, return empty string
+157     if (last_slash <= 0)
+158         return "/";
+159 
+160     // Return substring up to last slash
+161     return path\&.substring(0, last_slash);
+162 }
 .fi
 
 .PP
@@ -354,24 +354,24 @@ The top directory or the original path if it does not exist
 .PP
 
 .PP
-Definition at line \fB120\fP of file \fBpath\&.cpp\fP\&..PP
+Definition at line \fB125\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-120                                       {
-121 
-122     // Find the first /
-123     int first_slash = \-1;
-124     for (int i = 0; i < path\&.length(); i++)
-125         if (path[i] == '/')
-126             first_slash = i;
-127 
-128     // Make sure there was a slash to split
-129     if (first_slash == \-1)
-130         return path;
-131 
-132     // Get the top directory
-133     string top_directory = path\&.substring(0, first_slash);
-134     return top_directory;
-135 }
+125                                       {
+126 
+127     // Find the first /
+128     int first_slash = \-1;
+129     for (int i = 0; i < path\&.length(); i++)
+130         if (path[i] == '/')
+131             first_slash = i;
+132 
+133     // Make sure there was a slash to split
+134     if (first_slash == \-1)
+135         return path;
+136 
+137     // Get the top directory
+138     string top_directory = path\&.substring(0, first_slash);
+139     return top_directory;
+140 }
 .fi
 
 .PP
@@ -395,22 +395,22 @@ True if the path is valid, false otherwise
 .PP
 
 .PP
-Definition at line \fB16\fP of file \fBpath\&.cpp\fP\&..PP
+Definition at line \fB21\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-16                             {
-17 
-18     // Must not be empty
-19     if (path\&.length() == 0)
-20         return false;
-21 
-22     // Must start with a /
-23     if (path[0] != '/')
-24         return false;
-25 
-26     // Valid
-27     return true;
-28 
-29 }
+21                             {
+22 
+23     // Must not be empty
+24     if (path\&.length() == 0)
+25         return false;
+26 
+27     // Must start with a /
+28     if (path[0] != '/')
+29         return false;
+30 
+31     // Valid
+32     return true;
+33 
+34 }
 .fi
 
 .PP

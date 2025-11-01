@@ -17,9 +17,7 @@ Inherits \fBMaxOS::common::OutputStream\fP\&.
 .ti -1c
 .RI "\fBConsoleStream\fP (\fBConsole\fP *)"
 .br
-.ti -1c
-.RI "\fB~ConsoleStream\fP ()"
-.br
+.RI "Construct a new \fBConsole\fP Stream object\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBwrite_char\fP (\fBchar\fP c) \fBoverride\fP"
 .br
@@ -33,13 +31,7 @@ Inherits \fBMaxOS::common::OutputStream\fP\&.
 Public Member Functions inherited from \fBMaxOS::common::OutputStream\fP
 .in +1c
 .ti -1c
-.RI "\fBOutputStream\fP ()"
-.br
-.ti -1c
-.RI "\fB~OutputStream\fP ()"
-.br
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBlineFeed\fP ()"
+.RI "\fBvirtual\fP \fBvoid\fP \fBline_feed\fP ()"
 .br
 .RI "Writes a newline to the output stream\&. "
 .ti -1c
@@ -125,15 +117,19 @@ Public Member Functions inherited from \fBMaxOS::common::InputStreamProcessor< T
 .ti -1c
 .RI "\fBInputStreamProcessor\fP ()"
 .br
+.RI "Creates a new \fBInputStreamProcessor\fP\&. "
 .ti -1c
 .RI "\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *\fBgeneric_stream_event_handler\fP)"
 .br
+.RI "Creates a new \fBInputStreamProcessor\fP\&. "
 .ti -1c
 .RI "\fB~InputStreamProcessor\fP ()"
 .br
+.RI "Destroys the \fBInputStreamProcessor\fP\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBType\fP > *\fBstream\fP) \fBoverride\fP"
 .br
+.RI "Called when a stream has finished\&. Passes the event on to the handlers and then removes the stream from the array of streams\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
@@ -145,6 +141,7 @@ Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler
 .ti -1c
 .RI "\fB~InputStreamEventHandler\fP ()"
 .br
+.RI "Destroys the \fBInputStreamProcessor\fP and disconnects it from all streams\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< ProcessorType >\fP
@@ -152,47 +149,33 @@ Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< Pro
 .ti -1c
 .RI "\fBGenericInputStream\fP ()"
 .br
+.RI "Creates a new \fBGenericInputStream\fP\&. "
 .ti -1c
 .RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
 .br
+.RI "Creates a new \fBGenericInputStream\fP and connects it to the handler\&. "
 .ti -1c
 .RI "\fB~GenericInputStream\fP ()"
 .br
+.RI "Destroys the \fBGenericInputStream\fP and disconnects all handlers\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
 .br
+.RI "Adds a inputStreamEventHandler to the list of internetProtocolHandlers\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
 .br
+.RI "Removes a handler from the list of handlers\&. "
 .in -1c
-.SS "Protected Attributes"
+.SS "Additional Inherited Members"
 
-.in +1c
-.ti -1c
-.RI "\fBConsole\fP * \fBm_console\fP"
-.br
-.ti -1c
-.RI "\fBcommon::ConsoleColour\fP \fBm_foreground\fP { \fBcommon::ConsoleColour::LightGrey\fP }"
-.br
-.ti -1c
-.RI "\fBcommon::ConsoleColour\fP \fBm_background\fP { \fBcommon::ConsoleColour::Black\fP }"
-.br
-.ti -1c
-.RI "bool \fBis_ansi\fP = false"
-.br
-.ti -1c
-.RI "uint16_t \fBm_cursor_x\fP { 0 }"
-.br
-.ti -1c
-.RI "uint16_t \fBm_cursor_y\fP { 0 }"
-.br
-.in -1c
 
 Protected Attributes inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
 .in +1c
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< \fBType\fP > * > \fBm_generic_input_streams\fP"
 .br
+.RI "List of streams being observed by this handler\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< ProcessorType >\fP
@@ -200,33 +183,43 @@ Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< Proces
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< \fBProcessorType\fP > * > \fBm_input_stream_event_handlers\fP"
 .br
+.RI "List of streams being observed by this handler\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 A stream that can be used to write to a console\&. 
 .PP
-Definition at line \fB92\fP of file \fBconsole\&.h\fP\&.
+Definition at line \fB94\fP of file \fBconsole\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "ConsoleStream::ConsoleStream (\fBConsole\fP * console)"
 
 .PP
-Definition at line \fB397\fP of file \fBconsole\&.cpp\fP\&..PP
+Construct a new \fBConsole\fP Stream object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIconsole\fP The console to create the stream on 
+.RE
+.PP
+
+.PP
+Definition at line \fB425\fP of file \fBconsole\&.cpp\fP\&..PP
 .nf
-398 : m_console(console)
-399 {
-400 
-401 }
+426 : m_console(console)
+427 {
+428 
+429 }
 .fi
 
 .SS "ConsoleStream::~ConsoleStream ()"
 
 .PP
-Definition at line \fB403\fP of file \fBconsole\&.cpp\fP\&..PP
+Definition at line \fB431\fP of file \fBconsole\&.cpp\fP\&..PP
 .nf
-403                               {
-404 
-405 }
+431                               {
+432 
+433 }
 .fi
 
 .SH "Member Function Documentation"
@@ -245,18 +238,16 @@ Set the m_position of the cursor\&.
 .PP
 
 .PP
-Definition at line \fB486\fP of file \fBconsole\&.cpp\fP\&..PP
+Definition at line \fB514\fP of file \fBconsole\&.cpp\fP\&..PP
 .nf
-486                                                      {
-487 
-488     // Set the x and y coordinates
-489     m_cursor_x = x;
-490     m_cursor_y = y;
-491 }
+514                                                      {
+515 
+516     // Set the x and y coordinates
+517     m_cursor_x = x;
+518     m_cursor_y = y;
+519 }
 .fi
 
-.PP
-References \fBm_cursor_x\fP, and \fBm_cursor_y\fP\&.
 .PP
 Referenced by \fBMaxOS::drivers::console::VESABootConsole::finish()\fP\&.
 .SS "\fBvoid\fP ConsoleStream::write_char (\fBchar\fP c)\fC [override]\fP, \fC [virtual]\fP"
@@ -273,131 +264,81 @@ write a character to the console stream
 .PP
 Reimplemented from \fBMaxOS::common::OutputStream\fP\&.
 .PP
-Definition at line \fB412\fP of file \fBconsole\&.cpp\fP\&..PP
+Definition at line \fB440\fP of file \fBconsole\&.cpp\fP\&..PP
 .nf
-412                                      {
-413 
-414     uint16_t spaces = 0;
-415 
-416     // If the character placement is more than the width of the console go on a new line
-417     if(m_cursor_x >= m_console\->width() && c != '\\n'){
-418         lineFeed();
-419         write("             ");
-420     }
-421 
-422     // Check if the character is an ANSI escape code
-423     if(c == '\\033') is_ansi = true;
-424 
-425     // Handle the character
-426     switch (c) {
-427         // New line
-428         case '\\n':
-429             // Go to the next line, if it is more then what the console can fit then scroll
-430             if(++m_cursor_y >= m_console\->height()){
-431                 m_console\->scroll_up();
-432 
-433                 // Ensure there is space at the bottom to write
-434                 m_cursor_y = m_console\->height()\-1;
-435             }
-436 
-437             // don't break here, we want to go to the next case because of the \\r
-438             [[fallthrough]];
-439 
-440         // Carriage return
-441         case '\\r':
-442             m_cursor_x = 0;
-443             break;
-444 
-445         // End of string
-446         case '\\0':
-447             break;
-448 
-449         // Backspace
-450         case '\\b':
-451             m_cursor_x\-\-;
-452             break;
-453 
-454         // Tab
-455         case '\\t':
-456 
-457             // Pad with spaces until a tab is reached
-458             spaces = 8 \- (m_cursor_x % 8);
-459             for(uint16_t i = 0; i < spaces; i++)
-460                 write_char(' ');
-461             break;
-462 
-463         default:
-464             // Put the character on the console
-465             m_console\->put_character(m_cursor_x, m_cursor_y, c);
-466 
-467             // Increment the x coordinate (ANSI aren't rendered)
-468             if(!is_ansi)
-469               m_cursor_x++;
-470 
+440                                      {
+441 
+442     uint16_t spaces = 0;
+443 
+444     // If the character placement is more than the width of the console go on a new line
+445     if(m_cursor_x >= m_console\->width() && c != '\\n'){
+446         line_feed();
+447         write("             ");
+448     }
+449 
+450     // Check if the character is an ANSI escape code
+451     if(c == '\\033') is_ansi = true;
+452 
+453     // Handle the character
+454     switch (c) {
+455         // New line
+456         case '\\n':
+457             // Go to the next line, if it is more then what the console can fit then scroll
+458             if(++m_cursor_y >= m_console\->height()){
+459                 m_console\->scroll_up();
+460 
+461                 // Ensure there is space at the bottom to write
+462                 m_cursor_y = m_console\->height()\-1;
+463             }
+464 
+465             // don't break here, we want to go to the next case because of the \\r
+466             [[fallthrough]];
+467 
+468         // Carriage return
+469         case '\\r':
+470             m_cursor_x = 0;
 471             break;
 472 
-473     }
-474 
-475     // Check if the ANSI code is complete
-476     if(c == 'm') is_ansi = false;
-477 
-478 }
+473         // End of string
+474         case '\\0':
+475             break;
+476 
+477         // Backspace
+478         case '\\b':
+479             m_cursor_x\-\-;
+480             break;
+481 
+482         // Tab
+483         case '\\t':
+484 
+485             // Pad with spaces until a tab is reached
+486             spaces = 8 \- (m_cursor_x % 8);
+487             for(uint16_t i = 0; i < spaces; i++)
+488                 write_char(' ');
+489             break;
+490 
+491         default:
+492             // Put the character on the console
+493             m_console\->put_character(m_cursor_x, m_cursor_y, c);
+494 
+495             // Increment the x coordinate (ANSI aren't rendered)
+496             if(!is_ansi)
+497               m_cursor_x++;
+498 
+499             break;
+500 
+501     }
+502 
+503     // Check if the ANSI code is complete
+504     if(c == 'm') is_ansi = false;
+505 
+506 }
 .fi
 
 .PP
-References \fBMaxOS::drivers::console::Console::height()\fP, \fBis_ansi\fP, \fBMaxOS::common::OutputStream::lineFeed()\fP, \fBm_console\fP, \fBm_cursor_x\fP, \fBm_cursor_y\fP, \fBMaxOS::drivers::console::Console::put_character()\fP, \fBMaxOS::drivers::console::Console::scroll_up()\fP, \fBMaxOS::drivers::console::Console::width()\fP, \fBwrite\fP, and \fBwrite_char()\fP\&.
+References \fBMaxOS::drivers::console::Console::height()\fP, \fBMaxOS::common::OutputStream::line_feed()\fP, \fBMaxOS::drivers::console::Console::put_character()\fP, \fBMaxOS::drivers::console::Console::scroll_up()\fP, \fBMaxOS::drivers::console::Console::width()\fP, \fBwrite\fP, and \fBwrite_char()\fP\&.
 .PP
 Referenced by \fBwrite_char()\fP\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "bool MaxOS::drivers::console::ConsoleStream::is_ansi = false\fC [protected]\fP"
-
-.PP
-Definition at line \fB99\fP of file \fBconsole\&.h\fP\&.
-.PP
-Referenced by \fBwrite_char()\fP\&.
-.SS "\fBcommon::ConsoleColour\fP MaxOS::drivers::console::ConsoleStream::m_background { \fBcommon::ConsoleColour::Black\fP }\fC [protected]\fP"
-
-.PP
-Definition at line \fB98\fP of file \fBconsole\&.h\fP\&..PP
-.nf
-98 { common::ConsoleColour::Black };
-.fi
-
-.SS "\fBConsole\fP* MaxOS::drivers::console::ConsoleStream::m_console\fC [protected]\fP"
-
-.PP
-Definition at line \fB95\fP of file \fBconsole\&.h\fP\&.
-.PP
-Referenced by \fBwrite_char()\fP\&.
-.SS "uint16_t MaxOS::drivers::console::ConsoleStream::m_cursor_x { 0 }\fC [protected]\fP"
-
-.PP
-Definition at line \fB101\fP of file \fBconsole\&.h\fP\&..PP
-.nf
-101 { 0 };
-.fi
-
-.PP
-Referenced by \fBset_cursor()\fP, and \fBwrite_char()\fP\&.
-.SS "uint16_t MaxOS::drivers::console::ConsoleStream::m_cursor_y { 0 }\fC [protected]\fP"
-
-.PP
-Definition at line \fB102\fP of file \fBconsole\&.h\fP\&..PP
-.nf
-102 { 0 };
-.fi
-
-.PP
-Referenced by \fBset_cursor()\fP, and \fBwrite_char()\fP\&.
-.SS "\fBcommon::ConsoleColour\fP MaxOS::drivers::console::ConsoleStream::m_foreground { \fBcommon::ConsoleColour::LightGrey\fP }\fC [protected]\fP"
-
-.PP
-Definition at line \fB97\fP of file \fBconsole\&.h\fP\&..PP
-.nf
-97 { common::ConsoleColour::LightGrey };
-.fi
-
 
 .SH "Author"
 .PP 

@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::filesystem::format::ext2::Inode
+MaxOS::filesystem::format::ext2::Inode \- The metadata for a file or directory in ext2\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -17,15 +18,18 @@ MaxOS::filesystem::format::ext2::Inode
 .ti -1c
 .RI "   uint16_t \fBtype_permissions\fP"
 .br
+.RI "The type and permissions of the inode\&. "
 .ti -1c
 .RI "   struct {"
 .br
 .ti -1c
 .RI "      uint16_t \fBpermissions\fP: 12"
 .br
+.RI "The permissions of the inode\&. "
 .ti -1c
 .RI "      uint16_t \fBtype\fP: 4"
 .br
+.RI "The type of the inode\&. "
 .ti -1c
 .RI "   } "
 .br
@@ -35,156 +39,219 @@ MaxOS::filesystem::format::ext2::Inode
 .ti -1c
 .RI "uint16_t \fBuser_id\fP"
 .br
+.RI "The ID of the user who owns the inode\&. "
 .ti -1c
 .RI "uint32_t \fBsize_lower\fP"
 .br
+.RI "The lower 32 bits of the size of the file in bytes\&. "
 .ti -1c
 .RI "uint32_t \fBlast_access_time\fP"
 .br
+.RI "The seconds (since the epoch) of the last access time\&. "
 .ti -1c
 .RI "uint32_t \fBcreation_time\fP"
 .br
+.RI "The seconds (since the epoch) of the time the inode was first allocated\&. "
 .ti -1c
 .RI "uint32_t \fBlast_modification_time\fP"
 .br
+.RI "The seconds (since the epoch) of the last time the inode was written to\&. "
 .ti -1c
 .RI "uint32_t \fBdeletion_time\fP"
 .br
+.RI "The seconds (since the epoch) of the time the inode was marked as not used\&. "
 .ti -1c
 .RI "uint16_t \fBgroup_id\fP"
 .br
+.RI "The ID of the group who owns the inode\&. "
 .ti -1c
 .RI "uint16_t \fBhard_links\fP"
 .br
+.RI "How many directory entries point to this inode\&. "
 .ti -1c
 .RI "uint32_t \fBsectors_used\fP"
 .br
+.RI "How many 512 byte sectors are used by this inode (not blocks) (not including this struct or directory entries linked to it) "
 .ti -1c
 .RI "uint32_t \fBflags\fP"
 .br
+.RI "Flags for the inode (see InodeFlags) "
 .ti -1c
 .RI "uint32_t \fBos_1\fP"
 .br
+.RI "OS specific value (0 for Linux/HURD, 'transaltor' for Masix) "
 .ti -1c
 .RI "uint32_t \fBblock_pointers\fP [12]"
 .br
+.RI "Pointers to the blocks that store the file's data (0 marks unused) "
 .ti -1c
 .RI "uint32_t \fBl1_indirect\fP"
 .br
+.RI "Pointer to a block that contains more block pointers (see block_pointers) "
 .ti -1c
 .RI "uint32_t \fBl2_indirect\fP"
 .br
+.RI "Pointer to a block that contains more l1_indirect pointers\&. "
 .ti -1c
 .RI "uint32_t \fBl3_indirect\fP"
 .br
+.RI "Pointer to a block that contains more l2_indirect pointers\&. "
 .ti -1c
 .RI "uint32_t \fBgeneration\fP"
 .br
+.RI "\fBFile\fP version (used by NFS) "
 .ti -1c
 .RI "uint32_t \fBextended_attribute\fP"
 .br
+.RI "\fBFile\fP extended attribute block (Access Control List) "
 .ti -1c
 .RI "uint32_t \fBsize_upper\fP"
 .br
+.RI "The upper 32 bits of the size of the file in bytes (for files larger than 4GB)\&. If this is a directory, this is the \fBDirectory\fP Access Control List\&. "
 .ti -1c
 .RI "uint32_t \fBos_2\fP [3]"
 .br
+.RI "Second OS specific value (see \fBInodeOS2Linux\fP, \&.\&.\&.) "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB123\fP of file \fBext2\&.h\fP\&.
+The metadata for a file or directory in ext2\&. 
+.PP
+Definition at line \fB165\fP of file \fBext2\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "union  { \&.\&.\&. }  \fBMaxOS::filesystem::format::ext2::Inode\fP"
-
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::block_pointers[12]"
 
 .PP
-Definition at line \fB142\fP of file \fBext2\&.h\fP\&.
+Pointers to the blocks that store the file's data (0 marks unused) 
+.PP
+Definition at line \fB184\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::creation_time"
 
 .PP
-Definition at line \fB134\fP of file \fBext2\&.h\fP\&.
+The seconds (since the epoch) of the time the inode was first allocated\&. 
+.PP
+Definition at line \fB176\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::deletion_time"
 
 .PP
-Definition at line \fB136\fP of file \fBext2\&.h\fP\&.
+The seconds (since the epoch) of the time the inode was marked as not used\&. 
+.PP
+Definition at line \fB178\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::extended_attribute"
 
 .PP
-Definition at line \fB147\fP of file \fBext2\&.h\fP\&.
+\fBFile\fP extended attribute block (Access Control List) 
+.PP
+Definition at line \fB189\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::flags"
 
 .PP
-Definition at line \fB140\fP of file \fBext2\&.h\fP\&.
+Flags for the inode (see InodeFlags) 
+.PP
+Definition at line \fB182\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::generation"
 
 .PP
-Definition at line \fB146\fP of file \fBext2\&.h\fP\&.
+\fBFile\fP version (used by NFS) 
+.PP
+Definition at line \fB188\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::Inode::group_id"
 
 .PP
-Definition at line \fB137\fP of file \fBext2\&.h\fP\&.
+The ID of the group who owns the inode\&. 
+.PP
+Definition at line \fB179\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::Inode::hard_links"
 
 .PP
-Definition at line \fB138\fP of file \fBext2\&.h\fP\&.
+How many directory entries point to this inode\&. 
+.PP
+Definition at line \fB180\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::l1_indirect"
 
 .PP
-Definition at line \fB143\fP of file \fBext2\&.h\fP\&.
+Pointer to a block that contains more block pointers (see block_pointers) 
+.PP
+Definition at line \fB185\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::l2_indirect"
 
 .PP
-Definition at line \fB144\fP of file \fBext2\&.h\fP\&.
+Pointer to a block that contains more l1_indirect pointers\&. 
+.PP
+Definition at line \fB186\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::l3_indirect"
 
 .PP
-Definition at line \fB145\fP of file \fBext2\&.h\fP\&.
+Pointer to a block that contains more l2_indirect pointers\&. 
+.PP
+Definition at line \fB187\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::last_access_time"
 
 .PP
-Definition at line \fB133\fP of file \fBext2\&.h\fP\&.
+The seconds (since the epoch) of the last access time\&. 
+.PP
+Definition at line \fB175\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::last_modification_time"
 
 .PP
-Definition at line \fB135\fP of file \fBext2\&.h\fP\&.
+The seconds (since the epoch) of the last time the inode was written to\&. 
+.PP
+Definition at line \fB177\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::os_1"
 
 .PP
-Definition at line \fB141\fP of file \fBext2\&.h\fP\&.
+OS specific value (0 for Linux/HURD, 'transaltor' for Masix) 
+.PP
+Definition at line \fB183\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::os_2[3]"
 
 .PP
-Definition at line \fB149\fP of file \fBext2\&.h\fP\&.
+Second OS specific value (see \fBInodeOS2Linux\fP, \&.\&.\&.) 
+.PP
+Definition at line \fB191\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::Inode::permissions"
 
 .PP
-Definition at line \fB127\fP of file \fBext2\&.h\fP\&.
+The permissions of the inode\&. 
+.PP
+Definition at line \fB169\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::sectors_used"
 
 .PP
-Definition at line \fB139\fP of file \fBext2\&.h\fP\&.
+How many 512 byte sectors are used by this inode (not blocks) (not including this struct or directory entries linked to it) 
+.PP
+Definition at line \fB181\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::size_lower"
 
 .PP
-Definition at line \fB132\fP of file \fBext2\&.h\fP\&.
+The lower 32 bits of the size of the file in bytes\&. 
+.PP
+Definition at line \fB174\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::Inode::size_upper"
 
 .PP
-Definition at line \fB148\fP of file \fBext2\&.h\fP\&.
+The upper 32 bits of the size of the file in bytes (for files larger than 4GB)\&. If this is a directory, this is the \fBDirectory\fP Access Control List\&. 
+.PP
+Definition at line \fB190\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::Inode::type"
 
 .PP
-Definition at line \fB128\fP of file \fBext2\&.h\fP\&.
+The type of the inode\&. 
+.PP
+Definition at line \fB170\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::Inode::type_permissions"
 
 .PP
-Definition at line \fB125\fP of file \fBext2\&.h\fP\&.
+The type and permissions of the inode\&. 
+.PP
+Definition at line \fB167\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::Inode::user_id"
 
 .PP
-Definition at line \fB131\fP of file \fBext2\&.h\fP\&.
+The ID of the user who owns the inode\&. 
+.PP
+Definition at line \fB173\fP of file \fBext2\&.h\fP\&.
 
 .SH "Author"
 .PP 

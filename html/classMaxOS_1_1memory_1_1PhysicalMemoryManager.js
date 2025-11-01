@@ -1,7 +1,6 @@
 var classMaxOS_1_1memory_1_1PhysicalMemoryManager =
 [
     [ "PhysicalMemoryManager", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a605883472611eb3c3e7dd42b60a61681", null ],
-    [ "~PhysicalMemoryManager", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a8cf728268a7e9fb72d0903a49a301b0a", null ],
     [ "allocate_area", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#af68e198da5c85cc1443f28ecd0f92bd2", null ],
     [ "allocate_frame", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#afbe57cbd6b31ef26b53176f0fd0fc8fe", null ],
     [ "change_page_flags", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a9fa7588d0fb8aadb775d642d2a47b82d", null ],
@@ -9,7 +8,6 @@ var classMaxOS_1_1memory_1_1PhysicalMemoryManager =
     [ "free_frame", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#af0b6a43f9b559575ece938d3918fc3a1", null ],
     [ "get_physical_address", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#af43b96063c89e26eecb6aa9c8e46f4fb", null ],
     [ "identity_map", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#ace56d1f37c7be25425fe92c994a5cedd", null ],
-    [ "is_anonymous_available", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a344d9602dcf5a77e672a1859fa05e67f", null ],
     [ "is_mapped", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a9bee7cca21ce9658ca4dd48cedb6f8a9", null ],
     [ "map", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a981b3d0afa8d5b41eda2d30a4478974c", null ],
     [ "map", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#acadc6bfafbd83d6a73b92cd60e9cd927", null ],
@@ -20,7 +18,7 @@ var classMaxOS_1_1memory_1_1PhysicalMemoryManager =
     [ "memory_used", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#aef4f33418822013ec49d63a19026a6ff", null ],
     [ "pml4_root_address", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a806ede474e24273337321bd491669fe0", null ],
     [ "reserve", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a1cd55c3baaf52d7e41acc76541dd31e1", null ],
-    [ "reserve", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#ab420fbeba638178bc689c68afa9d522b", null ],
+    [ "reserve", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a6374816f05e7671f5d74166b2d7f4ace", null ],
     [ "reserve_kernel_regions", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#ad5a867bd14a95c51e0aeb5798eca15ab", null ],
     [ "unmap", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a47cc8d6c823f3c323f88e21437ba88ea", null ],
     [ "unmap", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a0f453dd61a29a033887b3a531cf3910f", null ],

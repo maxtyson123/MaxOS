@@ -10,7 +10,7 @@ MaxOS::drivers::clock::Clock \- \fBDriver\fP for the APIC clock\&.
 .PP
 \fC#include <clock\&.h>\fP
 .PP
-Inherits \fBMaxOS::drivers::Driver\fP, \fBMaxOS::hardwarecommunication::InterruptHandler\fP, and \fBMaxOS::common::EventManager< ClockEvents >\fP\&.
+Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -18,9 +18,6 @@ Inherits \fBMaxOS::drivers::Driver\fP, \fBMaxOS::hardwarecommunication::Interrup
 .RI "\fBClock\fP (\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP *apic, \fBuint16_t\fP \fBtime_between_events\fP=10)"
 .br
 .RI "Constructor for the \fBClock\fP class\&. "
-.ti -1c
-.RI "\fB~Clock\fP ()"
-.br
 .ti -1c
 .RI "\fBvoid\fP \fBactivate\fP () \fBoverride\fP"
 .br
@@ -34,9 +31,9 @@ Inherits \fBMaxOS::drivers::Driver\fP, \fBMaxOS::hardwarecommunication::Interrup
 .br
 .RI "Configures the APIC clock to fire an interrupt at a specified interval in milliseconds\&. "
 .ti -1c
-.RI "\fBcommon::Time\fP \fBget_time\fP ()"
+.RI "\fBvoid\fP \fBsetup_apic_clock\fP (\fBhardwarecommunication::LocalAPIC\fP *local_apic) \fBconst\fP"
 .br
-.RI "Reads the current time from the APIC clock (in 24hr time) "
+.RI "Sets up the APIC clock to fire interrupts at the desired rate\&. "
 .ti -1c
 .RI "\fBstring\fP \fBvendor_name\fP () \fBfinal\fP"
 .br
@@ -45,16 +42,14 @@ Inherits \fBMaxOS::drivers::Driver\fP, \fBMaxOS::hardwarecommunication::Interrup
 .RI "\fBstring\fP \fBdevice_name\fP () \fBfinal\fP"
 .br
 .RI "Gets the name of the device\&. "
+.ti -1c
+.RI "\fBcommon::Time\fP \fBget_time\fP ()"
+.br
+.RI "Reads the current time from the APIC clock (in 24hr time) "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .in +1c
-.ti -1c
-.RI "\fBDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~Driver\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
@@ -72,31 +67,9 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *\fBstatus\fP)"
+.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
-.in -1c
-
-Public Member Functions inherited from \fBMaxOS::common::EventManager< ClockEvents >\fP
-.in +1c
-.ti -1c
-.RI "\fBEventManager\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventManager\fP ()"
-.br
-.ti -1c
-.RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< ClockEvents > *\fBhandler\fP)"
-.br
-.RI "Connect an event handler to the event manager if it is not already connected\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBdisconnect_event_handler\fP (\fBEventHandler\fP< ClockEvents > *\fBhandler\fP)"
-.br
-.RI "Disconnect an event handler from the event manager if it is connected\&. "
-.ti -1c
-.RI "\fBVector\fP< \fBEvent\fP< ClockEvents > * > \fBraise_event\fP (\fBEvent\fP< ClockEvents > *\fBevent\fP)"
-.br
-.RI "Calls the on_event function of all the event m_handlers connected to the event manager and returns a list of the results\&. "
 .in -1c
 .SS "Static Public Member Functions"
 
@@ -104,6 +77,7 @@ Public Member Functions inherited from \fBMaxOS::common::EventManager< ClockEven
 .ti -1c
 .RI "\fBstatic\fP \fBClock\fP * \fBactive_clock\fP ()"
 .br
+.RI "Gets the currently active clock\&. "
 .in -1c
 .SS "Public Attributes"
 
@@ -111,57 +85,17 @@ Public Member Functions inherited from \fBMaxOS::common::EventManager< ClockEven
 .ti -1c
 .RI "uint64_t \fBclock_accuracy\fP = 1"
 .br
+.RI "How accurate the clock is in microseconds (how often should an interrupt be raised) "
 .in -1c
-.SS "Protected Member Functions"
+.SS "Additional Inherited Members"
 
-.in +1c
-.ti -1c
-.RI "\fBvoid\fP \fBhandle_interrupt\fP () \fBfinal\fP"
-.br
-.RI "Handle the clock interrupt, raising the clock event if enough time has passed\&. "
-.ti -1c
-.RI "\fBuint8_t\fP \fBread_hardware_clock\fP (\fBuint8_t\fP \fBaddress\fP)"
-.br
-.RI "read the current time from the hardware clock and return it "
-.ti -1c
-.RI "\fBuint8_t\fP \fBbinary_representation\fP (\fBuint8_t\fP \fBnumber\fP) \fBconst\fP"
-.br
-.RI "The binary representation of a number\&. "
-.in -1c
 
 Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
-.ti -1c
-.RI "\fB~InterruptHandler\fP ()"
-.br
-.in -1c
-.SS "Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "bool \fBm_binary\fP { true }"
-.br
-.ti -1c
-.RI "bool \fBm_24_hour_clock\fP { true }"
-.br
-.ti -1c
-.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_data_port\fP { 0x71 }"
-.br
-.ti -1c
-.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_command_port\fP { 0x70 }"
-.br
-.ti -1c
-.RI "\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP * \fBm_apic\fP"
-.br
-.ti -1c
-.RI "uint16_t \fBm_ticks_between_events\fP { 0 }"
-.br
-.ti -1c
-.RI "uint16_t \fBm_ticks_until_next_event\fP { 1 }"
-.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
@@ -169,26 +103,13 @@ Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHa
 .ti -1c
 .RI "uint8_t \fBm_interrupt_number\fP"
 .br
-.in -1c
-
-Protected Attributes inherited from \fBMaxOS::common::EventManager< ClockEvents >\fP
-.in +1c
-.ti -1c
-.RI "\fBVector\fP< \fBEventHandler\fP< ClockEvents > * > \fBm_handlers\fP"
-.br
-.in -1c
-.SS "Static Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "static \fBClock\fP * \fBs_active_clock\fP = nullptr"
-.br
+.RI "The interrupt number this handler handles\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 \fBDriver\fP for the APIC clock\&. 
 .PP
-Definition at line \fB128\fP of file \fBclock\&.h\fP\&.
+Definition at line \fB121\fP of file \fBclock\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Clock::Clock (\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP * apic, \fBuint16_t\fP time_between_events = \fC10\fP)"
@@ -198,27 +119,25 @@ Constructor for the \fBClock\fP class\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIinterrupt_manager\fP The interrupt manager 
+\fIapic\fP The apic controller for this core 
 .br
 \fItime_between_events\fP The time between events in 10ths of a second 
 .RE
 .PP
 
 .PP
-Definition at line \fB53\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB24\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-54 : InterruptHandler(0x20),
-55   m_apic(apic),
-56   m_ticks_between_events(time_between_events)
-57 {
-58     Logger::INFO() << "Setting up Clock \\n";
-59 }
+25 : InterruptHandler(0x20),
+26   m_apic(apic),
+27   m_ticks_between_events(time_between_events)
+28 {
+29     Logger::INFO() << "Setting up Clock \\n";
+30 }
 .fi
 
 .PP
 References \fBLogger::INFO()\fP\&.
-.SS "Clock::~Clock ()\fC [default]\fP"
-
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP Clock::activate ()\fC [override]\fP, \fC [virtual]\fP"
@@ -228,71 +147,42 @@ Activates the clock, setting the binary coded decimal representation flag\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB117\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB88\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-117                      {
-118 
-119     s_active_clock = this;
-120 
-121     // Get the stats from the clock
-122     uint8_t status = read_hardware_clock(0xB);
-123 
-124     // Store the clock status
-125     m_24_hour_clock = status & 0x02;
-126     m_binary = status & 0x04;
-127 }
+88                      {
+89 
+90     s_active_clock = this;
+91 
+92     // Get the stats from the clock
+93     uint8_t status = read_hardware_clock(0xB);
+94 
+95     // Store the clock status
+96     m_24_hour_clock = status & 0x02;
+97     m_binary = status & 0x04;
+98 }
 .fi
 
-.PP
-References \fBm_24_hour_clock\fP, \fBm_binary\fP, \fBread_hardware_clock()\fP, \fBs_active_clock\fP, and \fBstatus\fP\&.
 .SS "\fBClock\fP * Clock::active_clock ()\fC [static]\fP"
 
 .PP
-Definition at line \fB223\fP of file \fBclock\&.cpp\fP\&..PP
-.nf
-223                            {
-224     return s_active_clock;
-225 }
-.fi
-
-.PP
-References \fBs_active_clock\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Volume::create_inode()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
-.SS "\fBuint8_t\fP Clock::binary_representation (\fBuint8_t\fP number) const\fC [protected]\fP"
-
-.PP
-The binary representation of a number\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fInumber\fP The number to convert 
-.RE
+Gets the currently active clock\&. 
 .PP
 \fBReturns\fP
 .RS 4
-The binary representation of the number if the binary coded decimal representation is used, otherwise the number 
+The clock being used by the kernel 
 .RE
 .PP
 
 .PP
-Definition at line \fB104\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB208\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-104                                                          {
-105 
-106     // Check if the conversion needed
-107     if (m_binary)
-108         return number;
-109 
-110     // Convert to the binary representation
-111     return ((number / 16) * 10) + (number & 0x0f);
-112 }
+208                            {
+209     return s_active_clock;
+210 }
 .fi
 
 .PP
-References \fBm_binary\fP\&.
-.PP
-Referenced by \fBget_time()\fP\&.
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Volume::create_inode()\fP, \fBMaxOS::system::Core::init()\fP, \fBMaxOS::system::Core::wake_up()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
 .SS "\fBvoid\fP Clock::calibrate (\fBuint64_t\fP ms_per_tick = \fC1\fP)"
 
 .PP
@@ -305,34 +195,26 @@ Configures the APIC clock to fire an interrupt at a specified interval in millis
 .PP
 
 .PP
-Definition at line \fB173\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB144\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-173                                           {
-174 
-175     Logger::INFO() << "Calibrating Clock \\n";
-176     clock_accuracy = ms_per_tick;
-177 
-178     // Get the ticks per ms
-179     PIT pit(m_apic);
-180     uint32_t ticks_per_ms = pit\&.ticks_per_ms();
-181 
-182     // Configure the clock to periodic mode
-183     uint32_t lvt = 0x20 | (1 << 17);
-184     m_apic\->local_apic()\->write(0x320, lvt);
-185 
-186     // Set the initial count
-187     m_apic\->local_apic()\->write(0x380, ms_per_tick * ticks_per_ms);
-188 
-189     // Clear the interrupt mask for the clock
-190     lvt &= ~(1 << 16);
-191     m_apic\->local_apic()\->write(0x380, lvt);
-192 
-193     Logger::DEBUG() << "Clock: Calibrated to " << ms_per_tick << "ms per tick\\n";
-194 }
+144                                           {
+145 
+146     Logger::INFO() << "Calibrating Clock \\n";
+147     clock_accuracy = ms_per_tick;
+148 
+149     // Get the ticks per ms
+150     PIT pit(m_apic);
+151     m_pit_ticks_per_ms = pit\&.ticks_per_ms();
+152 
+153     // Calibrate the BSP apic to the desired time
+154     setup_apic_clock(m_apic\->local_apic());
+155 
+156     Logger::DEBUG() << "Clock: Calibrated to " << ms_per_tick << "ms per kernel tick\\n";
+157 }
 .fi
 
 .PP
-References \fBclock_accuracy\fP, \fBLogger::DEBUG()\fP, \fBLogger::INFO()\fP, \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::local_apic()\fP, \fBm_apic\fP, and \fBMaxOS::hardwarecommunication::LocalAPIC::write()\fP\&.
+References \fBclock_accuracy\fP, \fBLogger::DEBUG()\fP, \fBLogger::INFO()\fP, \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::local_apic()\fP, and \fBsetup_apic_clock()\fP\&.
 .SS "\fBvoid\fP Clock::delay (\fBuint32_t\fP milliseconds) const"
 
 .PP
@@ -350,18 +232,18 @@ Thread::sleep
 .PP
 
 .PP
-Definition at line \fB139\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB110\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-139                                              {
-140 
-141     // Round the number of milliseconds UP to the nearest clock accuracy
-142     uint64_t rounded_milliseconds = (milliseconds + clock_accuracy \- 1) / clock_accuracy;
-143 
-144     // Wait until the time has passed
-145     uint64_t ticks_until_delay_is_over = m_ticks + rounded_milliseconds;
-146     while (m_ticks < ticks_until_delay_is_over)
-147         asm volatile("nop");
-148 }
+110                                              {
+111 
+112     // Round the number of milliseconds UP to the nearest clock accuracy
+113     uint64_t rounded_milliseconds = (milliseconds + clock_accuracy \- 1) / clock_accuracy;
+114 
+115     // Wait until the time has passed
+116     uint64_t ticks_until_delay_is_over = m_ticks + rounded_milliseconds;
+117     while (m_ticks < ticks_until_delay_is_over)
+118         asm volatile("nop");
+119 }
 .fi
 
 .PP
@@ -380,11 +262,11 @@ The name of the device
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB164\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB135\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-164                           {
-165     return "Clock";
-166 }
+135                           {
+136     return "Clock";
+137 }
 .fi
 
 .SS "\fBcommon::Time\fP Clock::get_time ()"
@@ -399,93 +281,64 @@ The current time in a Time struct format
 .PP
 
 .PP
-Definition at line \fB201\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB182\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-201                            {
-202 
-203     // Wait for the clock to be ready
-204     while (read_hardware_clock(0xA) & 0x80)
-205         asm volatile("nop");
-206 
-207     // Read the time from the clock
-208     Time time{};
-209     time\&.year = binary_representation(read_hardware_clock(0x9)) + 2000;
-210     time\&.month = binary_representation(read_hardware_clock(0x8));
-211     time\&.day = binary_representation(read_hardware_clock(0x7));
-212     time\&.hour = binary_representation(read_hardware_clock(0x4));
-213     time\&.minute = binary_representation(read_hardware_clock(0x2));
-214     time\&.second = binary_representation(read_hardware_clock(0x0));
-215 
-216     // If the clock is using 12hr format and PM is set then add 12 to the hour
-217     if (!m_24_hour_clock && (time\&.hour & 0x80) != 0)
-218         time\&.hour = ((time\&.hour & 0x7F) + 12) % 24;
-219 
-220     return time;
-221 }
+182                            {
+183 
+184     // Wait for the clock to be ready
+185     while (read_hardware_clock(0xA) & 0x80)
+186         asm volatile("nop");
+187 
+188     // Read the time from the clock
+189     Time time{};
+190     time\&.year = binary_representation(read_hardware_clock(0x9)) + 2000;
+191     time\&.month = binary_representation(read_hardware_clock(0x8));
+192     time\&.day = binary_representation(read_hardware_clock(0x7));
+193     time\&.hour = binary_representation(read_hardware_clock(0x4));
+194     time\&.minute = binary_representation(read_hardware_clock(0x2));
+195     time\&.second = binary_representation(read_hardware_clock(0x0));
+196 
+197     // If the clock is using 12hr format and PM is set then add 12 to the hour
+198     if (!m_24_hour_clock && (time\&.hour & 0x80) != 0)
+199         time\&.hour = ((time\&.hour & 0x7F) + 12) % 24;
+200 
+201     return time;
+202 }
 .fi
 
-.PP
-References \fBbinary_representation()\fP, \fBm_24_hour_clock\fP, \fBread_hardware_clock()\fP, and \fBMaxOS::common::Time::year\fP\&.
-.SS "\fBvoid\fP Clock::handle_interrupt ()\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
+.SS "\fBvoid\fP Clock::setup_apic_clock (\fBhardwarecommunication::LocalAPIC\fP * local_apic) const"
 
 .PP
-Handle the clock interrupt, raising the clock event if enough time has passed\&. 
-.PP
-Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
-.PP
-Definition at line \fB67\fP of file \fBclock\&.cpp\fP\&..PP
-.nf
-67                              {
-68 
-69     // Clock has ticked
-70     m_ticks++;
-71     m_ticks_until_next_event\-\-;
-72 
-73     // Dont raise events until needed
-74     if (m_ticks_until_next_event != 0)
-75         return;
-76 
-77     // Raise the time event
-78 //    Time time = get_time();
-79 //    raise_event(new TimeEvent(&time));
-80 
-81     // Reset
-82     m_ticks_until_next_event = m_ticks_between_events;
-83 }
-.fi
-
-.PP
-References \fBm_ticks_between_events\fP, and \fBm_ticks_until_next_event\fP\&.
-.SS "\fBuint8_t\fP Clock::read_hardware_clock (\fBuint8_t\fP address)\fC [protected]\fP"
-
-.PP
-read the current time from the hardware clock and return it 
+Sets up the APIC clock to fire interrupts at the desired rate\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIaddress\fP The address of the register to read from 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The value of the register 
+\fIlocal_apic\fP The local APIC to setup the clock on 
 .RE
 .PP
 
 .PP
-Definition at line \fB92\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB163\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-92                                                   {
-93 
-94     m_command_port\&.write(address);
-95     return m_data_port\&.read();
-96 }
+163                                                                              {
+164 
+165     // Configure the clock to periodic mode
+166     uint32_t lvt = 0x20 | (1 << 17);
+167     local_apic\->write(0x320, lvt);
+168 
+169     // Set the initial count
+170     local_apic\->write(0x380, m_pit_ticks_per_ms * clock_accuracy);
+171 
+172     // Clear the interrupt mask for the clock
+173     lvt &= ~(1 << 16);
+174     local_apic\->write(0x320, lvt);
+175 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBm_command_port\fP, \fBm_data_port\fP, \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
+References \fBclock_accuracy\fP, and \fBMaxOS::hardwarecommunication::LocalAPIC::write()\fP\&.
 .PP
-Referenced by \fBactivate()\fP, and \fBget_time()\fP\&.
+Referenced by \fBcalibrate()\fP\&.
 .SS "\fBstring\fP Clock::vendor_name ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -500,11 +353,11 @@ The name of the vendor
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB155\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB126\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-155                           {
-156     return "Generic";
-157 }
+126                           {
+127     return "Generic";
+128 }
 .fi
 
 .SH "Member Data Documentation"
@@ -512,81 +365,11 @@ Definition at line \fB155\fP of file \fBclock\&.cpp\fP\&..PP
 .SS "uint64_t MaxOS::drivers::clock::Clock::clock_accuracy = 1"
 
 .PP
-Definition at line \fB160\fP of file \fBclock\&.h\fP\&.
+How accurate the clock is in microseconds (how often should an interrupt be raised) 
 .PP
-Referenced by \fBcalibrate()\fP, and \fBdelay()\fP\&.
-.SS "bool MaxOS::drivers::clock::Clock::m_24_hour_clock { true }\fC [protected]\fP"
-
+Definition at line \fB153\fP of file \fBclock\&.h\fP\&.
 .PP
-Definition at line \fB136\fP of file \fBclock\&.h\fP\&..PP
-.nf
-136 { true };
-.fi
-
-.PP
-Referenced by \fBactivate()\fP, and \fBget_time()\fP\&.
-.SS "\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP* MaxOS::drivers::clock::Clock::m_apic\fC [protected]\fP"
-
-.PP
-Definition at line \fB143\fP of file \fBclock\&.h\fP\&.
-.PP
-Referenced by \fBcalibrate()\fP\&.
-.SS "bool MaxOS::drivers::clock::Clock::m_binary { true }\fC [protected]\fP"
-
-.PP
-Definition at line \fB135\fP of file \fBclock\&.h\fP\&..PP
-.nf
-135 { true };
-.fi
-
-.PP
-Referenced by \fBactivate()\fP, and \fBbinary_representation()\fP\&.
-.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::Clock::m_command_port { 0x70 }\fC [protected]\fP"
-
-.PP
-Definition at line \fB140\fP of file \fBclock\&.h\fP\&..PP
-.nf
-140 { 0x70 };
-.fi
-
-.PP
-Referenced by \fBread_hardware_clock()\fP\&.
-.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::Clock::m_data_port { 0x71 }\fC [protected]\fP"
-
-.PP
-Definition at line \fB139\fP of file \fBclock\&.h\fP\&..PP
-.nf
-139 { 0x71 };
-.fi
-
-.PP
-Referenced by \fBread_hardware_clock()\fP\&.
-.SS "uint16_t MaxOS::drivers::clock::Clock::m_ticks_between_events { 0 }\fC [protected]\fP"
-
-.PP
-Definition at line \fB146\fP of file \fBclock\&.h\fP\&..PP
-.nf
-146 { 0 };
-.fi
-
-.PP
-Referenced by \fBhandle_interrupt()\fP\&.
-.SS "uint16_t MaxOS::drivers::clock::Clock::m_ticks_until_next_event { 1 }\fC [protected]\fP"
-
-.PP
-Definition at line \fB147\fP of file \fBclock\&.h\fP\&..PP
-.nf
-147 { 1 };
-.fi
-
-.PP
-Referenced by \fBhandle_interrupt()\fP\&.
-.SS "\fBClock\fP* MaxOS::drivers::clock::Clock::s_active_clock = nullptr\fC [inline]\fP, \fC [static]\fP, \fC [protected]\fP"
-
-.PP
-Definition at line \fB154\fP of file \fBclock\&.h\fP\&.
-.PP
-Referenced by \fBactivate()\fP, and \fBactive_clock()\fP\&.
+Referenced by \fBcalibrate()\fP, \fBdelay()\fP, and \fBsetup_apic_clock()\fP\&.
 
 .SH "Author"
 .PP 

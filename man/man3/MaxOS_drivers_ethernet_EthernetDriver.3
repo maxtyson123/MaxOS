@@ -12,17 +12,10 @@ MaxOS::drivers::ethernet::EthernetDriver \- \fBDriver\fP for the Ethernet Contro
 .PP
 Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::common::EventManager< EthernetDriverEvents >\fP\&.
 .PP
-Inherited by \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, and \fBMaxOS::drivers::ethernet::intel_i217\fP\&.
+Inherited by \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, and \fBMaxOS::drivers::ethernet::IntelI217\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
-.ti -1c
-.RI "\fBEthernetDriver\fP ()"
-.br
-.RI "__ETHERNET DRIVER___ "
-.ti -1c
-.RI "\fB~EthernetDriver\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBMediaAccessControlAddress\fP \fBGetMediaAccessControlAddress\fP ()"
 .br
@@ -35,12 +28,6 @@ Inherited by \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, and \fBMaxOS::drivers
 
 Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .in +1c
-.ti -1c
-.RI "\fBDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~Driver\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
 .br
@@ -69,12 +56,6 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 
 Public Member Functions inherited from \fBMaxOS::common::EventManager< EthernetDriverEvents >\fP
 .in +1c
-.ti -1c
-.RI "\fBEventManager\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventManager\fP ()"
-.br
 .ti -1c
 .RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< EthernetDriverEvents > *\fBhandler\fP)"
 .br
@@ -125,15 +106,7 @@ Protected Attributes inherited from \fBMaxOS::common::EventManager< EthernetDriv
 .PP 
 \fBDriver\fP for the Ethernet Controller, manages the sending and receiving of data, the mac address, and the events\&. 
 .PP
-Definition at line \fB85\fP of file \fBethernet\&.h\fP\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "EthernetDriver::EthernetDriver ()\fC [default]\fP"
-
-.PP
-__ETHERNET DRIVER___ 
-.SS "EthernetDriver::~EthernetDriver ()\fC [default]\fP"
-
+Definition at line \fB93\fP of file \fBethernet\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBMediaAccessControlAddress\fP EthernetDriver::CreateMediaAccessControlAddress (\fBuint8_t\fP digit1, \fBuint8_t\fP digit2, \fBuint8_t\fP digit3, \fBuint8_t\fP digit4, \fBuint8_t\fP digit5, \fBuint8_t\fP digit6)\fC [static]\fP"
@@ -163,32 +136,32 @@ The MAC address
 .PP
 
 .PP
-Definition at line \fB148\fP of file \fBethernet\&.cpp\fP\&..PP
+Definition at line \fB153\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-149 {
-150     return // digit6 is the most significant byte
-151             (uint64_t)digit6 << 40
-152             | (uint64_t)digit5 << 32
-153             | (uint64_t)digit4 << 24
-154             | (uint64_t)digit3 << 16
-155             | (uint64_t)digit2 << 8
-156             | (uint64_t)digit1;
-157 }
+153                                                                                                                                                                         {
+154     return // digit6 is the most significant byte
+155             (uint64_t) digit6 << 40
+156             | (uint64_t) digit5 << 32
+157             | (uint64_t) digit4 << 24
+158             | (uint64_t) digit3 << 16
+159             | (uint64_t) digit2 << 8
+160             | (uint64_t) digit1;
+161 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::drivers::ethernet::intel_i217::intel_i217()\fP\&.
+Referenced by \fBMaxOS::drivers::ethernet::IntelI217::IntelI217()\fP\&.
 .SS "\fBvoid\fP EthernetDriver::DoSend (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [protected]\fP, \fC [virtual]\fP"
 
 .PP
 (Device Side) Send the data 
 .PP
-Reimplemented in \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, and \fBMaxOS::drivers::ethernet::intel_i217\fP\&.
+Reimplemented in \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, and \fBMaxOS::drivers::ethernet::IntelI217\fP\&.
 .PP
-Definition at line \fB93\fP of file \fBethernet\&.cpp\fP\&..PP
+Definition at line \fB101\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-94 {
-95 }
+101                                               {
+102 }
 .fi
 
 .PP
@@ -207,31 +180,31 @@ Handle the recieved data\&.
 .PP
 
 .PP
-Definition at line \fB103\fP of file \fBethernet\&.cpp\fP\&..PP
+Definition at line \fB110\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-104 {
-105 
-106     // Raise the event
-107     Vector<Event<EthernetDriverEvents>*> values =
-108         raise_event(new DataReceivedEvent(buffer, size));
-109 
-110     // Loop through the events
-111     for(auto & value : values) {
-112         switch (value\->type) {
-113             case EthernetDriverEvents::DATA_RECEIVED:
-114                 if(value\->return_value\&.boolValue)
-115                     Send(buffer, size);
-116                 break;
-117 
-118             default:
-119                 break;
-120         }
-121     }
-122 }
+110                                                                     {
+111 
+112     // Raise the event
+113     Vector<Event<EthernetDriverEvents>*> values =
+114             raise_event(new DataReceivedEvent(buffer, size));
+115 
+116     // Loop through the events
+117     for (auto &value : values) {
+118         switch (value\->type) {
+119             case EthernetDriverEvents::DATA_RECEIVED:
+120                 if (value\->return_value\&.boolValue)
+121                     Send(buffer, size);
+122                 break;
+123 
+124             default:
+125                 break;
+126         }
+127     }
+128 }
 .fi
 
 .PP
-References \fBMaxOS::drivers::ethernet::DATA_RECEIVED\fP, \fBMaxOS::common::EventManager< EthernetDriverEvents >::raise_event()\fP, \fBSend()\fP, and \fBsize\fP\&.
+References \fBMaxOS::common::EventManager< EthernetDriverEvents >::raise_event()\fP, \fBSend()\fP, and \fBsize\fP\&.
 .SS "\fBvoid\fP EthernetDriver::FireDataSent (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [protected]\fP"
 
 .PP
@@ -246,11 +219,11 @@ Send data\&.
 .PP
 
 .PP
-Definition at line \fB130\fP of file \fBethernet\&.cpp\fP\&..PP
+Definition at line \fB136\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-131 {
-132   raise_event(new DataSentEvent(buffer, size));
-133 }
+136                                                                 {
+137     raise_event(new DataSentEvent(buffer, size));
+138 }
 .fi
 
 .PP
@@ -267,13 +240,13 @@ the MAC address
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, and \fBMaxOS::drivers::ethernet::intel_i217\fP\&.
+Reimplemented in \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, and \fBMaxOS::drivers::ethernet::IntelI217\fP\&.
 .PP
-Definition at line \fB70\fP of file \fBethernet\&.cpp\fP\&..PP
+Definition at line \fB80\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-71 {
-72     return 0;
-73 }
+80                                                                        {
+81     return 0;
+82 }
 .fi
 
 .PP
@@ -292,15 +265,15 @@ Send data to the network via the driver backend\&.
 .PP
 
 .PP
-Definition at line \fB81\fP of file \fBethernet\&.cpp\fP\&..PP
+Definition at line \fB90\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-82 {
-83 
-84     // Raise the event
-85     raise_event(new BeforeSendEvent(buffer, size));
-86 
-87     DoSend(buffer, size);
-88 }
+90                                                         {
+91 
+92     // Raise the event
+93     raise_event(new BeforeSendEvent(buffer, size));
+94 
+95     DoSend(buffer, size);
+96 }
 .fi
 
 .PP

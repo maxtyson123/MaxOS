@@ -20,26 +20,24 @@ Inheritance diagram for Max\+OS\+::hardwarecommunication\+::Interrupt\+Handler\+
 \item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{handle\+\_\+interrupt}} ()
 \begin{DoxyCompactList}\small\item\em Handles an interrupt. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual}} system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a3f4303652151fbba92aa7b4513ae0875}{handle\+\_\+interrupt}} (system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}})
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual}} system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a3f4303652151fbba92aa7b4513ae0875}{handle\+\_\+interrupt}} (system\+::cpu\+\_\+status\+\_\+t \texorpdfstring{$\ast$}{*}status)
 \begin{DoxyCompactList}\small\item\em Handles an interrupt and returns the status. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a79b1054c04bbcc2c72a6d6938212909c}{Interrupt\+Handler}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\+\_\+t}} interrupt\+\_\+number, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{int64\+\_\+t}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect}}=-\/1, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\+\_\+t}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect\+\_\+index}}=0)
-\item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a12b87c89015a61b702184070354e7876}{\texorpdfstring{$\sim$}{\string~}\+Interrupt\+Handler}} ()
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Creates a new interrupt handler and registers it with the interrupt manager. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
 uint8\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\+\_\+interrupt\+\_\+number}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The interrupt number this handler handles. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Handles a certain interrupt number. 
 
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00028}{28}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
+Definition at line \mbox{\hyperlink{interrupts_8h_source_l00032}{32}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
 
 
 
@@ -52,41 +50,54 @@ Definition at line \mbox{\hyperlink{interrupts_8h_source_l00028}{28}} of file \m
 
 
 
-Definition at line \mbox{\hyperlink{interrupts_8cpp_source_l00013}{13}} of file \mbox{\hyperlink{interrupts_8cpp_source}{interrupts.\+cpp}}.
+Creates a new interrupt handler and registers it with the interrupt manager. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em interrupt\+\_\+number} & The interrupt number to handle \\
+\hline
+{\em redirect} & What legacy interrupt to redirect from (-\/1 for no redirection) \\
+\hline
+{\em redirect\+\_\+index} & Which index of the legacy interrupt to redirect from \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{interrupts_8cpp_source_l00024}{24}} of file \mbox{\hyperlink{interrupts_8cpp_source}{interrupts.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00014\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\_interrupt\_number}}(interrupt\_number)}
-\DoxyCodeLine{00015\ \{}
-\DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ interrupt\ manager}}
-\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0eeef5b9eedcd1e20080ddffab96a83b}{InterruptManager::s\_active\_interrupt\_manager}};}
-\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}No\ active\ interrupt\ manager"{}});}
-\DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//\ Register\ the\ handler}}
-\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}-\/>set\_interrupt\_handler(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\_interrupt\_number}},\ \textcolor{keyword}{this});}
-\DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//\ Not\ all\ interrupts\ need\ redirecting}}
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect}}\ ==\ -\/1)}
-\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00025\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\_interrupt\_number}}(interrupt\_number)}
+\DoxyCodeLine{00026\ \{}
 \DoxyCodeLine{00027\ }
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ Redirect\ a\ legacy\ interrupt\ to\ an\ interrupt\ the\ kernel\ expects}}
-\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{IOAPIC}}*\ io\_apic\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}-\/>active\_apic()-\/>io\_apic();}
-\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect}{interrupt\_redirect\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{temp}}\ =\ \{}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ .type\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect}},}
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ .index\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect\_index}},}
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ .interrupt\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\_interrupt\_number}},}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ .destination\ =\ 0x00,}
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ .flags\ =\ 0x00,}
-\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ .mask\ =\ \textcolor{keyword}{false},}
-\DoxyCodeLine{00037\ \ \ \ \ \};}
-\DoxyCodeLine{00038\ \ \ \ \ io\_apic-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a4b794a1a0c15a6262dbd6075961b37c2}{set\_redirect}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{temp}});}
-\DoxyCodeLine{00039\ \}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ interrupt\ manager}}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0eeef5b9eedcd1e20080ddffab96a83b}{InterruptManager::s\_active\_interrupt\_manager}};}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}No\ active\ interrupt\ manager"{}});}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{//\ Register\ the\ handler}}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}-\/>set\_interrupt\_handler(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\_interrupt\_number}},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ Not\ all\ interrupts\ need\ redirecting}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect}}\ ==\ -\/1)}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ Redirect\ a\ legacy\ interrupt\ to\ an\ interrupt\ the\ kernel\ expects}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{IOAPIC}}*\ io\_apic\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}-\/>active\_apic()-\/>io\_apic();}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect}{interrupt\_redirect\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{temp}}\ =\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ .type\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect}},}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ .index\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{redirect\_index}},}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ .interrupt\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\_interrupt\_number}},}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ .destination\ =\ 0x00,}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ .flags\ =\ 0x00,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ .mask\ =\ \textcolor{keyword}{false},}
+\DoxyCodeLine{00048\ \ \ \ \ \};}
+\DoxyCodeLine{00049\ \ \ \ \ io\_apic-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a4b794a1a0c15a6262dbd6075961b37c2}{set\_redirect}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{temp}});}
+\DoxyCodeLine{00050\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{interrupts_8h_source_l00030}{m\+\_\+interrupt\+\_\+number}}, \mbox{\hyperlink{interrupts_8h_source_l00075}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::s\+\_\+active\+\_\+interrupt\+\_\+manager}}, and \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{interrupts_8h_source_l00034}{m\+\_\+interrupt\+\_\+number}}, \mbox{\hyperlink{interrupts_8h_source_l00089}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::s\+\_\+active\+\_\+interrupt\+\_\+manager}}, and \mbox{\hyperlink{apic_8cpp_source_l00362}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
 
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a12b87c89015a61b702184070354e7876}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a12b87c89015a61b702184070354e7876} 
 \index{MaxOS::hardwarecommunication::InterruptHandler@{MaxOS::hardwarecommunication::InterruptHandler}!````~InterruptHandler@{\texorpdfstring{$\sim$}{\string~}InterruptHandler}}
@@ -96,25 +107,21 @@ References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{
 
 
 
-Definition at line \mbox{\hyperlink{interrupts_8cpp_source_l00042}{42}} of file \mbox{\hyperlink{interrupts_8cpp_source}{interrupts.\+cpp}}.
+Definition at line \mbox{\hyperlink{interrupts_8cpp_source_l00053}{53}} of file \mbox{\hyperlink{interrupts_8cpp_source}{interrupts.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00043\ }
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ interrupt\ manager}}
-\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0eeef5b9eedcd1e20080ddffab96a83b}{InterruptManager::s\_active\_interrupt\_manager}};}
-\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}\ ==\ \textcolor{keyword}{nullptr})\ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ handler}}
-\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}-\/>set\_interrupt\_handler(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\_interrupt\_number}},\ \textcolor{keyword}{nullptr});}
-\DoxyCodeLine{00050\ \}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ interrupt\ manager}}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a0eeef5b9eedcd1e20080ddffab96a83b}{InterruptManager::s\_active\_interrupt\_manager}};}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}\ ==\ \textcolor{keyword}{nullptr})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ handler}}
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupt\_manager}}-\/>set\_interrupt\_handler(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\_interrupt\_number}},\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00061\ \}}
 
 \end{DoxyCode}
-
-
-References \mbox{\hyperlink{interrupts_8h_source_l00030}{m\+\_\+interrupt\+\_\+number}}, and \mbox{\hyperlink{interrupts_8h_source_l00075}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::s\+\_\+active\+\_\+interrupt\+\_\+manager}}.
-
 
 
 \doxysubsection{Member Function Documentation}
@@ -130,22 +137,22 @@ Handles an interrupt.
 
 
 
-Reimplemented in \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT_a986401ff44e3c9ef81e50778cf56a5ac}{Max\+OS\+::drivers\+::clock\+::\+PIT}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a1f0352d2346a3bef618e5c6f3bc71c0c}{Max\+OS\+::drivers\+::clock\+::\+Clock}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973_a8edad1ca75667f1e4d407178b5493f7a}{Max\+OS\+::drivers\+::ethernet\+::\+AMD\+\_\+\+AM79\+C973}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1intel__i217_aa02526bc62df43b4e40ad06fd6a6decb}{Max\+OS\+::drivers\+::ethernet\+::intel\+\_\+i217}}, and \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver_a2e23ac39d852e6ecce2954fcce778d0f}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Driver}}.
+Reimplemented in \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973_a8edad1ca75667f1e4d407178b5493f7a}{Max\+OS\+::drivers\+::ethernet\+::\+AMD\+\_\+\+AM79\+C973}}, \mbox{\hyperlink{classMaxOS_1_1drivers_1_1ethernet_1_1IntelI217_aecea26a550aeda675247afca45ee630c}{Max\+OS\+::drivers\+::ethernet\+::\+Intel\+I217}}, and \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver_a2e23ac39d852e6ecce2954fcce778d0f}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Driver}}.
 
 
 
-Definition at line \mbox{\hyperlink{interrupts_8cpp_source_l00055}{55}} of file \mbox{\hyperlink{interrupts_8cpp_source}{interrupts.\+cpp}}.
+Definition at line \mbox{\hyperlink{interrupts_8cpp_source_l00066}{66}} of file \mbox{\hyperlink{interrupts_8cpp_source}{interrupts.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{interrupts_8cpp_source_l00065}{handle\+\_\+interrupt()}}, and \mbox{\hyperlink{interrupts_8cpp_source_l00272}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::handle\+\_\+interrupt\+\_\+request()}}.
+Referenced by \mbox{\hyperlink{interrupts_8cpp_source_l00076}{handle\+\_\+interrupt()}}, and \mbox{\hyperlink{interrupts_8cpp_source_l00277}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::handle\+\_\+interrupt\+\_\+request()}}.
 
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a3f4303652151fbba92aa7b4513ae0875}\label{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a3f4303652151fbba92aa7b4513ae0875} 
 \index{MaxOS::hardwarecommunication::InterruptHandler@{MaxOS::hardwarecommunication::InterruptHandler}!handle\_interrupt@{handle\_interrupt}}
@@ -167,27 +174,27 @@ The status of the CPU
 \end{DoxyReturn}
 
 
-Reimplemented in \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a5d9c7ddda5adeedff09093b7492101f8}{Max\+OS\+::processes\+::\+Scheduler}}.
+Reimplemented in \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a26277c64caeab8b00a68de942dfd2fa7}{Max\+OS\+::processes\+::\+Global\+Scheduler}}.
 
 
 
-Definition at line \mbox{\hyperlink{interrupts_8cpp_source_l00065}{65}} of file \mbox{\hyperlink{interrupts_8cpp_source}{interrupts.\+cpp}}.
+Definition at line \mbox{\hyperlink{interrupts_8cpp_source_l00076}{76}} of file \mbox{\hyperlink{interrupts_8cpp_source}{interrupts.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{//\ For\ handlers\ that\ don't\ care\ about\ the\ status}}
-\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{handle\_interrupt}}();}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ default\ status}}
-\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{intel__i217_8h_ade818037fd6c985038ff29656089758d}{status}};}
-\DoxyCodeLine{00072\ \}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{//\ For\ handlers\ that\ don't\ care\ about\ the\ status}}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{handle\_interrupt}}();}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ default\ status}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordflow}{return}\ status;}
+\DoxyCodeLine{00083\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{interrupts_8cpp_source_l00055}{handle\+\_\+interrupt()}}, and \mbox{\hyperlink{intel__i217_8h_source_l00003}{status}}.
+References \mbox{\hyperlink{interrupts_8cpp_source_l00066}{handle\+\_\+interrupt()}}.
 
 
 
@@ -200,11 +207,15 @@ References \mbox{\hyperlink{interrupts_8cpp_source_l00055}{handle\+\_\+interrupt
 
 
 
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00030}{30}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
+The interrupt number this handler handles. 
 
 
 
-Referenced by \mbox{\hyperlink{interrupts_8cpp_source_l00013}{Interrupt\+Handler()}}, and \mbox{\hyperlink{interrupts_8cpp_source_l00042}{\texorpdfstring{$\sim$}{\string~}\+Interrupt\+Handler()}}.
+Definition at line \mbox{\hyperlink{interrupts_8h_source_l00034}{34}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{interrupts_8cpp_source_l00024}{Interrupt\+Handler()}}.
 
 
 

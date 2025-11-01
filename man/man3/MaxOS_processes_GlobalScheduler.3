@@ -1,0 +1,773 @@
+.TH "MaxOS::processes::GlobalScheduler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::GlobalScheduler \- The global scheduler that manages all processes and threads across all cores\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <scheduler\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGlobalScheduler\fP (\fBsystem::Multiboot\fP &multiboot)"
+.br
+.RI "Constructs a new Global \fBScheduler\fP object\&. Registers as the interrupt handler for interrupt 0x20 and setups the shared resource registries\&. Loads any ELF files from the multiboot structure\&. "
+.ti -1c
+.RI "system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status) final"
+.br
+.RI "Handles the interrupt 0x20\&. "
+.ti -1c
+.RI "void \fBbalance\fP ()"
+.br
+.RI "Moves processes and threads between cores to balance the load so that each core has a similar amount of threads and processes\&. "
+.ti -1c
+.RI "uint64_t \fBadd_process\fP (\fBProcess\fP *process)"
+.br
+.RI "Adds a process to the least busy core\&. "
+.ti -1c
+.RI "uint64_t \fBadd_thread\fP (\fBThread\fP *thread)"
+.br
+.RI "Adds a thread to the least busy core\&. "
+.ti -1c
+.RI "uint64_t \fBremove_process\fP (\fBProcess\fP *process)"
+.br
+.RI "Removes a process from the scheduler if the process has no threads, if it does then the threads are stopped but the process is not removed (this will be done automatically when all threads are stopped) "
+.ti -1c
+.RI "system::cpu_status_t * \fBforce_remove_process\fP (\fBProcess\fP *process)"
+.br
+.RI "Removes a process from the scheduler and deletes all threads, begins running the next process\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBhandle_interrupt\fP ()"
+.br
+.RI "Handles an interrupt\&. "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBGlobalScheduler\fP * \fBsystem_scheduler\fP ()"
+.br
+.RI "Gets the system scheduler\&. "
+.ti -1c
+.RI "static \fBScheduler\fP * \fBcore_scheduler\fP ()"
+.br
+.RI "Gets the scheduler for the currently executing core\&. "
+.ti -1c
+.RI "static system::cpu_status_t * \fByield\fP (system::cpu_status_t *current)"
+.br
+.RI "Pass execution to the next thread\&. "
+.ti -1c
+.RI "static void \fBactivate\fP ()"
+.br
+.RI "Activates each core's scheduler\&. "
+.ti -1c
+.RI "static void \fBdeactivate\fP ()"
+.br
+.RI "Deactivates each core's scheduler\&. "
+.ti -1c
+.RI "static bool \fBis_active\fP ()"
+.br
+.RI "Checks if the global scheduler is active\&. "
+.ti -1c
+.RI "static void \fBload_multiboot_elfs\fP (\fBsystem::Multiboot\fP *multiboot)"
+.br
+.RI "Loads any valid ELF files from the multiboot structure\&. "
+.ti -1c
+.RI "static void \fBprint_running_header\fP ()"
+.br
+.RI "Print the header for the running processes in the form ({name}:t{tid}c{core}) "
+.ti -1c
+.RI "static \fBProcess\fP * \fBcurrent_process\fP ()"
+.br
+.RI "Gets the process on the currently executing core\&. "
+.ti -1c
+.RI "static \fBProcess\fP * \fBget_process\fP (uint64_t pid)"
+.br
+.RI "Gets a process on the currently executing core by its PID\&. "
+.ti -1c
+.RI "static uint64_t \fBnext_pid\fP ()"
+.br
+.RI "Gets the next usable global PID\&. "
+.ti -1c
+.RI "static \fBThread\fP * \fBcurrent_thread\fP ()"
+.br
+.RI "Gets the thread on the currently executing core\&. "
+.ti -1c
+.RI "static \fBThread\fP * \fBget_thread\fP (uint64_t tid)"
+.br
+.RI "Gets a thread on the currently executing core by its TID\&. "
+.ti -1c
+.RI "static uint64_t \fBnext_tid\fP ()"
+.br
+.RI "Gets the next usable global TID\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
+.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_interrupt_number\fP"
+.br
+.RI "The interrupt number this handler handles\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+The global scheduler that manages all processes and threads across all cores\&. 
+.PP
+Definition at line \fB26\fP of file \fBscheduler\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "GlobalScheduler::GlobalScheduler (\fBsystem::Multiboot\fP & multiboot)"
+
+.PP
+Constructs a new Global \fBScheduler\fP object\&. Registers as the interrupt handler for interrupt 0x20 and setups the shared resource registries\&. Loads any ELF files from the multiboot structure\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImultiboot\fP The multiboot structure that may contain ELF files to load 
+.RE
+.PP
+
+.PP
+Definition at line \fB24\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+25 : InterruptHandler(0x20),
+26   m_shared_memory_registry(resource_type_t::SHARED_MEMORY),
+27   m_shared_messages_registry(resource_type_t::MESSAGE_ENDPOINT),
+28   m_next_pid(\-1),
+29   m_next_tid(\-1)
+30 {
+31 
+32     // Set up the global scheduler
+33     Logger::INFO() << "Setting up global Scheduler\\n";
+34     s_instance = this;
+35 
+36     // Set up the per core scheduler
+37     for(const auto& core : CPU::cores)
+38         core \-> scheduler = new Scheduler();
+39 
+40     // Load the elfs
+41     load_multiboot_elfs(&multiboot);
+42 
+43 }
+.fi
+
+.PP
+References \fBMaxOS::system::CPU::cores\fP, \fBLogger::INFO()\fP, and \fBload_multiboot_elfs()\fP\&.
+.SS "GlobalScheduler::~GlobalScheduler ()"
+
+.PP
+Definition at line \fB84\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+84                                  {
+85 
+86     // No longer the global instance
+87     s_instance = nullptr;
+88 
+89     // Free the per core scheduler
+90     for(const auto& core : CPU::cores)
+91         delete core\->scheduler;
+92 
+93 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void GlobalScheduler::activate ()\fC [static]\fP"
+
+.PP
+Activates each core's scheduler\&. 
+.PP
+Definition at line \fB98\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+98                                {
+99 
+100     s_instance \-> m_active = true;
+101     for(const auto& core : CPU::cores)
+102         core\->scheduler\->activate();
+103 
+104 }
+.fi
+
+.PP
+References \fBMaxOS::system::CPU::cores\fP\&.
+.PP
+Referenced by \fBkernel_main()\fP\&.
+.SS "uint64_t GlobalScheduler::add_process (\fBProcess\fP * process)"
+
+.PP
+Adds a process to the least busy core\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIprocess\fP The process to add 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The pid of the new process 
+.RE
+.PP
+
+.PP
+Definition at line \fB183\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+183                                                       {
+184 
+185     // No cores?
+186     if(CPU::cores\&.empty())
+187         return 0;
+188 
+189     // Find the core with the least processes
+190     uint64_t core_id = 0;
+191     Scheduler* scheduler = CPU::cores[core_id]\->scheduler;
+192     for(const auto& core : CPU::cores){
+193         auto core_scheduler = core\->scheduler;
+194         if(core_scheduler\->process_amount() < scheduler\->process_amount()){
+195             core_id = core\->id;
+196             scheduler = core_scheduler;
+197         }
+198     }
+199 
+200     // Save the pid
+201     auto pid = scheduler\->add_process(process);
+202     m_core_pids\&.insert(pid,core_id);
+203 
+204     Logger::DEBUG() << "Adding process " << pid << ": " << process\->name << " to core " << core_id <<"\\n";
+205     return pid;
+206 }
+.fi
+
+.PP
+References \fBMaxOS::processes::Scheduler::add_process()\fP, \fBcore_scheduler()\fP, \fBMaxOS::system::CPU::cores\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::common::Map< Key, Value >::insert()\fP, \fBMaxOS::processes::Process::name\fP, and \fBMaxOS::processes::Scheduler::process_amount()\fP\&.
+.PP
+Referenced by \fBload_multiboot_elfs()\fP\&.
+.SS "uint64_t GlobalScheduler::add_thread (\fBThread\fP * thread)"
+
+.PP
+Adds a thread to the least busy core\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthread\fP The thread to add 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The tid of the new thread 
+.RE
+.PP
+
+.PP
+Definition at line \fB214\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+214                                                    {
+215 
+216     // No cores?
+217     if(CPU::cores\&.empty())
+218         return 0;
+219 
+220     // Find the core with the least threads
+221     uint64_t core_id = 0;
+222     Scheduler* scheduler = CPU::cores[core_id]\->scheduler;
+223     for(const auto& core : CPU::cores){
+224         auto core_scheduler = core\->scheduler;
+225         if(core_scheduler\->thread_amount() < scheduler\->thread_amount()){
+226             core_id = core\->id;
+227             scheduler = core_scheduler;
+228         }
+229     }
+230 
+231     // Save the tid
+232     auto tid = scheduler\->add_thread(thread);
+233     m_core_tids\&.insert(tid,core_id);
+234 
+235     Logger::DEBUG() << "Adding thread " << tid << " to core " << core_id <<"\\n";
+236     return tid;
+237 }
+.fi
+
+.PP
+References \fBMaxOS::processes::Scheduler::add_thread()\fP, \fBcore_scheduler()\fP, \fBMaxOS::system::CPU::cores\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::common::Map< Key, Value >::insert()\fP, and \fBMaxOS::processes::Scheduler::thread_amount()\fP\&.
+.SS "void GlobalScheduler::balance ()"
+
+.PP
+Moves processes and threads between cores to balance the load so that each core has a similar amount of threads and processes\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Implement 
+.RE
+.PP
+
+.PP
+Definition at line \fB123\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+123                               {
+124 
+125 }
+.fi
+
+.SS "\fBScheduler\fP * GlobalScheduler::core_scheduler ()\fC [static]\fP"
+
+.PP
+Gets the scheduler for the currently executing core\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The scheduler for this core 
+.RE
+.PP
+
+.PP
+Definition at line \fB346\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+346                                            {
+347     return CPU::executing_core()\->scheduler;
+348 }
+.fi
+
+.PP
+References \fBMaxOS::system::CPU::executing_core()\fP, and \fBMaxOS::system::Core::scheduler\fP\&.
+.PP
+Referenced by \fBMaxOS::common::BlockingLock::acquire()\fP, \fBadd_process()\fP, \fBadd_thread()\fP, \fBcurrent_process()\fP, \fBcurrent_thread()\fP, \fBhandle_interrupt()\fP, \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::SyscallManager::syscall_close_process()\fP, \fBMaxOS::system::SyscallManager::syscall_thread_close()\fP, and \fByield()\fP\&.
+.SS "\fBProcess\fP * GlobalScheduler::current_process ()\fC [static]\fP"
+
+.PP
+Gets the process on the currently executing core\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The current process, or nullptr if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB277\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+277                                           {
+278     if(!s_instance || !s_instance \->m_active)
+279         return nullptr;
+280 
+281     return core_scheduler()\->current_process();
+282 }
+.fi
+
+.PP
+References \fBcore_scheduler()\fP, and \fBMaxOS::processes::Scheduler::current_process()\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::VFSResourceRegistry::create_resource()\fP, \fBMaxOS::memory::VirtualMemoryManager::free()\fP, \fBMaxOS::filesystem::VFSResourceRegistry::get_resource()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::processes::SharedMemory::open()\fP, \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, \fBprint_running_header()\fP, \fBMaxOS::processes::SharedMemory::read()\fP, \fBMaxOS::system::SyscallManager::syscall_close_process()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_close()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_open()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_read()\fP, and \fBMaxOS::system::SyscallManager::syscall_resource_write()\fP\&.
+.SS "\fBThread\fP * GlobalScheduler::current_thread ()\fC [static]\fP"
+
+.PP
+Gets the thread on the currently executing core\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The currently executing thread 
+.RE
+.PP
+
+.PP
+Definition at line \fB313\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+313                                         {
+314     return core_scheduler()\->current_thread();
+315 }
+.fi
+
+.PP
+References \fBcore_scheduler()\fP, and \fBMaxOS::processes::Scheduler::current_thread()\fP\&.
+.PP
+Referenced by \fBMaxOS::common::BlockingLock::acquire()\fP, \fBprint_running_header()\fP, \fBMaxOS::system::SyscallManager::syscall_thread_close()\fP, \fBMaxOS::system::SyscallManager::syscall_thread_sleep()\fP, and \fByield()\fP\&.
+.SS "void GlobalScheduler::deactivate ()\fC [static]\fP"
+
+.PP
+Deactivates each core's scheduler\&. 
+.PP
+Definition at line \fB109\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+109                                  {
+110 
+111     s_instance \-> m_active = false;
+112     for(const auto& core : CPU::cores)
+113         core\->scheduler\->deactivate();
+114 
+115 }
+.fi
+
+.PP
+References \fBMaxOS::system::CPU::cores\fP\&.
+.SS "system::cpu_status_t * GlobalScheduler::force_remove_process (\fBProcess\fP * process)"
+
+.PP
+Removes a process from the scheduler and deletes all threads, begins running the next process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIprocess\fP The process to remove 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The status of the CPU for the next process to run or nullptr if the process was not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB261\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+261                                                                           {
+262 
+263     // Get the core running the process
+264     if(!s_instance)
+265         return 0;
+266 
+267     auto core = s_instance \-> m_core_pids[process\->pid()];
+268     return CPU::cores[core]\->scheduler\->force_remove_process(process);
+269 
+270 }
+.fi
+
+.PP
+References \fBMaxOS::system::CPU::cores\fP, and \fBMaxOS::processes::Process::pid()\fP\&.
+.SS "\fBProcess\fP * GlobalScheduler::get_process (uint64_t pid)\fC [static]\fP"
+
+.PP
+Gets a process on the currently executing core by its PID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The process ID 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The process or nullptr if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB290\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+290                                                   {
+291 
+292     // Get the core running the pid
+293     if(!s_instance)
+294         return nullptr;
+295 
+296     auto core = s_instance \-> m_core_pids[pid];
+297     return CPU::cores[core]\->scheduler\->get_process(pid);
+298 }
+.fi
+
+.PP
+References \fBMaxOS::system::CPU::cores\fP\&.
+.PP
+Referenced by \fBMaxOS::system::SyscallManager::syscall_close_process()\fP\&.
+.SS "\fBThread\fP * GlobalScheduler::get_thread (uint64_t tid)\fC [static]\fP"
+
+.PP
+Gets a thread on the currently executing core by its TID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItid\fP The thread ID 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The thread or nullptr if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB323\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+323                                                 {
+324 
+325     // Get the core running the tid
+326     if(!s_instance)
+327         return nullptr;
+328 
+329     auto core = s_instance \-> m_core_tids[tid];
+330     return CPU::cores[core]\->scheduler\->get_thread(tid);
+331 }
+.fi
+
+.PP
+References \fBMaxOS::system::CPU::cores\fP\&.
+.PP
+Referenced by \fBMaxOS::common::BlockingLock::release()\fP, and \fBMaxOS::system::SyscallManager::syscall_thread_close()\fP\&.
+.SS "system::cpu_status_t * GlobalScheduler::handle_interrupt (system::cpu_status_t * status)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Handles the interrupt 0x20\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The current CPU status 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The new CPU status 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
+.PP
+Definition at line \fB62\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+62                                                                                 {
+63 
+64     // Scheduler not active
+65     if(!s_instance || !s_instance\->m_active)
+66         return status;
+67 
+68     auto s = core_scheduler()\->schedule(status);
+69     ASSERT(s\->rip != 0, "Cant run a empty state\\n");
+70     return s;
+71 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcore_scheduler()\fP, and \fBMaxOS::processes::Scheduler::schedule()\fP\&.
+.SS "bool GlobalScheduler::is_active ()\fC [static]\fP"
+
+.PP
+Checks if the global scheduler is active\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if the scheduler is active, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB355\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+355                                 {
+356     return s_instance\->m_active;
+357 }
+.fi
+
+.SS "void GlobalScheduler::load_multiboot_elfs (\fBsystem::Multiboot\fP * multiboot)\fC [static]\fP"
+
+.PP
+Loads any valid ELF files from the multiboot structure\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImultiboot\fP The multiboot structure
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Handle passing multiple args to the process 
+.RE
+.PP
+
+.PP
+Definition at line \fB135\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+135                                                               {
+136 
+137     for (multiboot_tag* tag = multiboot\->start_tag(); tag\->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag\->size + 7) & ~7))) {
+138 
+139         // Tag is not an ELF
+140         if (tag\->type != MULTIBOOT_TAG_TYPE_MODULE)
+141             continue;
+142 
+143         // Try to create the elf from the module
+144         auto* module = (struct multiboot_tag_module*) tag;
+145         ELF64 elf((uintptr_t) PhysicalMemoryManager::to_dm_region(module\->mod_start));
+146         if (!elf\&.is_valid())
+147             continue;
+148 
+149         Logger::DEBUG() << "Creating process from multiboot module for " << module\->cmdline << " (at 0x" << (uint64_t) module\->mod_start << ")\\n";
+150 
+151         // Create an array of args for the process
+152         char* args[1] = {module\->cmdline};
+153 
+154         // Create the process
+155         auto* process = new Process(module\->cmdline, args, 1, &elf);
+156         GlobalScheduler::system_scheduler() \-> add_process(process);
+157 
+158         Logger::DEBUG() << "ELF loaded to pid " << process\->pid() << "\\n";
+159     }
+160 }
+.fi
+
+.PP
+References \fBadd_process()\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::processes::ELF64::is_valid()\fP, \fBMaxOS::system::Multiboot::start_tag()\fP, \fBsystem_scheduler()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP\&.
+.PP
+Referenced by \fBGlobalScheduler()\fP\&.
+.SS "uint64_t GlobalScheduler::next_pid ()\fC [static]\fP"
+
+.PP
+Gets the next usable global PID\&. 
+.PP
+\fBReturns\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line \fB304\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+304                                    {
+305     return s_instance \-> m_next_pid++;
+306 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::processes::Scheduler::add_process()\fP\&.
+.SS "uint64_t GlobalScheduler::next_tid ()\fC [static]\fP"
+
+.PP
+Gets the next usable global TID\&. 
+.PP
+\fBReturns\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line \fB337\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+337                                    {
+338     return s_instance\->m_next_tid++;
+339 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::processes::Scheduler::add_thread()\fP\&.
+.SS "void GlobalScheduler::print_running_header ()\fC [static]\fP"
+
+.PP
+Print the header for the running processes in the form ({name}:t{tid}c{core}) 
+.PP
+Definition at line \fB165\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+165                                            {
+166 
+167     // No threads or processes to get
+168     if(!s_instance || !s_instance\->m_active)
+169         return;
+170 
+171     auto process = current_process();
+172     auto thread   = current_thread();
+173 
+174     Logger::Out() << "(" << process\->name << ":t" << thread\->tid  << "c" << CPU::executing_core()\->id << ") ";
+175 }
+.fi
+
+.PP
+References \fBcurrent_process()\fP, \fBcurrent_thread()\fP, \fBMaxOS::system::CPU::executing_core()\fP, \fBMaxOS::system::Core::id\fP, and \fBLogger::Out()\fP\&.
+.PP
+Referenced by \fBLogger::set_log_level()\fP\&.
+.SS "uint64_t GlobalScheduler::remove_process (\fBProcess\fP * process)"
+
+.PP
+Removes a process from the scheduler if the process has no threads, if it does then the threads are stopped but the process is not removed (this will be done automatically when all threads are stopped) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIprocess\fP The process to remove 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+-1 if the process has threads, 0 otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB245\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+245                                                          {
+246 
+247     // Get the core running the process
+248     if(!s_instance)
+249         return 0;
+250 
+251     auto core = s_instance \-> m_core_pids[process\->pid()];
+252     return CPU::cores[core]\->scheduler\->remove_process(process);
+253 }
+.fi
+
+.PP
+References \fBMaxOS::system::CPU::cores\fP, and \fBMaxOS::processes::Process::pid()\fP\&.
+.SS "\fBGlobalScheduler\fP * GlobalScheduler::system_scheduler ()\fC [static]\fP"
+
+.PP
+Gets the system scheduler\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The system scheduler or nullptr if not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB50\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+50                                                    {
+51 
+52     return s_instance;
+53 }
+.fi
+
+.PP
+Referenced by \fBload_multiboot_elfs()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, and \fBMaxOS::system::SyscallManager::syscall_close_process()\fP\&.
+.SS "system::cpu_status_t * GlobalScheduler::yield (system::cpu_status_t * current)\fC [static]\fP"
+
+.PP
+Pass execution to the next thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIcurrent\fP where to resume this thread to 
+.RE
+.PP
+
+.PP
+Definition at line \fB78\fP of file \fBscheduler\&.cpp\fP\&..PP
+.nf
+78                                                                 {
+79     current_thread()\->execution_state = *current;
+80     return core_scheduler()\->yield();
+81 }
+.fi
+
+.PP
+References \fBcore_scheduler()\fP, \fBcurrent_thread()\fP, \fBMaxOS::processes::Thread::execution_state\fP, and \fBMaxOS::processes::Scheduler::yield()\fP\&.
+.PP
+Referenced by \fBMaxOS::system::SyscallManager::syscall_thread_sleep()\fP, and \fBMaxOS::system::SyscallManager::syscall_thread_yield()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

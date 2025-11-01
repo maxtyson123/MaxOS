@@ -8,7 +8,7 @@ var classMaxOS_1_1String =
     [ "String", "classMaxOS_1_1String.html#a773bf225a858fc1f900c0d6de3a4c427", null ],
     [ "String", "classMaxOS_1_1String.html#aab02d1227a024250dd938403d259c5b9", null ],
     [ "String", "classMaxOS_1_1String.html#a7ec66cc2329c07e809fb8334dbeb7e20", null ],
-    [ "~String", "classMaxOS_1_1String.html#ac40b2a3fb58c2d8556f5e6ff73510036", null ],
+    [ "String", "classMaxOS_1_1String.html#ad5dfe3c563e12a6f56be388d7801c2e9", null ],
     [ "c_str", "classMaxOS_1_1String.html#aefb74cf401b56191337867e2780c5286", null ],
     [ "c_str", "classMaxOS_1_1String.html#a8d485340c77fd86c2bd8f1ad2b121100", null ],
     [ "center", "classMaxOS_1_1String.html#ab282882421b9a427219f6bcb36dcb5b0", null ],

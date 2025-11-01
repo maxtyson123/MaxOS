@@ -2,16 +2,15 @@
 \hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
 
 
+Handles the local APIC for the current core.  
+
+
+
+
 {\ttfamily \#include $<$apic.\+h$>$}
 
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
-\item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_aad298560517032c27e104146e740938d}{Local\+APIC}} ()
-\item 
-\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a84eafc2ea20a276e8dc52b6f6f46b73b}{\texorpdfstring{$\sim$}{\string~}\+Local\+APIC}} ()
-\item 
-void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a77bd672dc5572b51cb8e4644da1786aa}{init}} ()
 \item 
 uint32\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ad1a2879252218ed8d96e385b3cc34a7e}{read}} (uint32\+\_\+t reg) const
 \begin{DoxyCompactList}\small\item\em Read a value from the apic register using the MSR or memory I/O depending on the local apic version. \end{DoxyCompactList}\item 
@@ -20,24 +19,17 @@ void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a58100a1d
 uint32\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a6c2c7d947c09f992a1733565d8652eb3}{id}} () const
 \begin{DoxyCompactList}\small\item\em Get the id of the local apic. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a45235d175880c3ef2123d57b588bc675}{send\+\_\+eoi}} () const
-\begin{DoxyCompactList}\small\item\em Acknowledge that the interrupt has been handled, allowing the PIC to process the next interrupt. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Protected Attributes}
-\begin{DoxyCompactItemize}
-\item 
-uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\+\_\+apic\+\_\+base}} \{\}
-\item 
-uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\+\_\+apic\+\_\+base\+\_\+high}} \{\}
-\item 
-uint32\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a732229d18e57d83bb36444cc6eed0c69}{m\+\_\+id}} \{\}
-\item 
-bool \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\+\_\+x2apic}} \{\}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Acknowledge that the interrupt has been handled, allowing the PIC to process the next interrupt. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a242280f9073159d2001966df586de1ee}{send\+\_\+init}} (uint8\+\_\+t \mbox{\hyperlink{apic_8h_ab2e5b38a20311ef17e9a224eca4183aa}{apic\+\_\+id}}, bool assert)
+\begin{DoxyCompactList}\small\item\em Send the init IPI to another apic. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ab70ee7192a01667ab51137a474a4f5e9}{send\+\_\+startup}} (uint8\+\_\+t \mbox{\hyperlink{apic_8h_ab2e5b38a20311ef17e9a224eca4183aa}{apic\+\_\+id}}, uint8\+\_\+t \mbox{\hyperlink{apic_8h_a6c3589b2f7ad6179e386511136265b54}{vector}})
+\begin{DoxyCompactList}\small\item\em Send the start up IPI to another apic. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
+Handles the local APIC for the current core. 
 
-
-Definition at line \mbox{\hyperlink{apic_8h_source_l00016}{16}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+Definition at line \mbox{\hyperlink{apic_8h_source_l00023}{23}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 
 
@@ -50,72 +42,58 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00016}{16}} of file \mbox{\h
 
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00013}{13}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00018}{18}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00014\ }
-\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ APIC\ base\ address}}
-\DoxyCodeLine{00016\ \ \ \ \ uint64\_t\ msr\_info\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ac2eb28384db21eb3075768c17302fff4}{CPU::read\_msr}}(0x1B);}
-\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}}\ =\ msr\_info\ \&\ 0xFFFFF000;}
-\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1cd55c3baaf52d7e41acc76541dd31e1}{reserve}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}});}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ APIC\ supports\ x2APIC}}
-\DoxyCodeLine{00021\ \ \ \ \ uint32\_t\ ignored,\ xleaf,\ x2leaf;}
-\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a9ff943a994f211939c9f1a907e73b0e1}{CPU::cpuid}}(0x01,\ \&ignored,\ \&ignored,\ \&x2leaf,\ \&xleaf);}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ APIC\ base\ address}}
+\DoxyCodeLine{00021\ \ \ \ \ uint64\_t\ msr\_info\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ac2eb28384db21eb3075768c17302fff4}{CPU::read\_msr}}(0x1B);}
+\DoxyCodeLine{00022\ \ \ \ \ m\_apic\_base\ =\ msr\_info\ \&\ 0xFFFFF000;}
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordflow}{if}\ (x2leaf\ \&\ (1\ <<\ 21))\ \{}
-\DoxyCodeLine{00025\ }
-\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Enable\ x2APIC}}
-\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}}\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ msr\_info\ |=\ (1\ <<\ 10);}
-\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}{CPU::write\_msr}}(0x1B,\ msr\_info);}
-\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}CPU\ supports\ x2APIC\(\backslash\)n"{}};}
-\DoxyCodeLine{00031\ }
-\DoxyCodeLine{00032\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (xleaf\ \&\ (1\ <<\ 9))\ \{}
-\DoxyCodeLine{00033\ }
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}CPU\ supports\ xAPIC\(\backslash\)n"{}};}
-\DoxyCodeLine{00036\ }
-\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Map\ the\ APIC\ base\ address\ to\ the\ higher\ half}}
-\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}}\ =\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1ad616354df4569df849c6f1331cd4b4}{PhysicalMemoryManager::to\_io\_region}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}});}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}},}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}},\ \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84ebabc3cb78aef6a50841121fd08c2a49151}{Write}}\ |\ \mbox{\hyperlink{namespaceMaxOS_1_1memory_ae0e83b5743a37b4d0d2a93bb3bbe84eba980a5bc5e6393398f4e52e1c27bdd382}{Present}});}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}APIC\ Base:\ phy=0x"{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}{m\_apic\_base}}\ <<\ \textcolor{stringliteral}{"{},\ virt=0x"{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//\ Reserve\ the\ base\ address\ once}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ bsp\_setup\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordflow}{if}(!bsp\_setup)}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1cd55c3baaf52d7e41acc76541dd31e1}{reserve}}(m\_apic\_base);}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ APIC\ supports\ x2APIC}}
+\DoxyCodeLine{00030\ \ \ \ \ uint32\_t\ ignored,\ xleaf,\ x2leaf;}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a9ff943a994f211939c9f1a907e73b0e1}{CPU::cpuid}}(0x01,\ \&ignored,\ \&ignored,\ \&x2leaf,\ \&xleaf);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordflow}{if}\ (x2leaf\ \&\ (1\ <<\ 21))\ \{}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Enable\ x2APIC}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ m\_x2apic\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ msr\_info\ |=\ (1\ <<\ 10);}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}{CPU::write\_msr}}(0x1B,\ msr\_info);}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}CPU\ supports\ x2APIC\(\backslash\)n"{}};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (xleaf\ \&\ (1\ <<\ 9))\ \{}
 \DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}CPU\ does\ not\ support\ xAPIC"{}});}
-\DoxyCodeLine{00045\ \ \ \ \ \}}
-\DoxyCodeLine{00046\ }
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{//\ Get\ information\ about\ the\ APIC}}
-\DoxyCodeLine{00048\ \ \ \ \ uint32\_t\ spurious\_vector\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ad1a2879252218ed8d96e385b3cc34a7e}{read}}(0xF0);}
-\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_enabled\ =\ msr\_info\ \&\ (1\ <<\ 11);}
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_bsp\ =\ msr\_info\ \&\ (1\ <<\ 8);}
-\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}APIC:\ boot\ processor:\ "{}}\ <<\ (is\_bsp\ ?\ \textcolor{stringliteral}{"{}Yes"{}}\ :\ \textcolor{stringliteral}{"{}No"{}})\ <<\ \textcolor{stringliteral}{"{},\ enabled\ (globally):\ "{}}\ <<\ (is\_enabled\ ?\ \textcolor{stringliteral}{"{}Yes"{}}\ :\ \textcolor{stringliteral}{"{}No"{}})\ <<\ \textcolor{stringliteral}{"{}\ Spurious\ Vector:\ 0x"{}}\ <<\ (uint64\_t)\ (spurious\_vector\ \&\ 0xFF)\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ m\_x2apic\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}CPU\ supports\ xAPIC\(\backslash\)n"{}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Map\ the\ APIC\ base\ address\ to\ the\ higher\ half}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ m\_apic\_base\_high\ =\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1ad616354df4569df849c6f1331cd4b4}{PhysicalMemoryManager::to\_io\_region}}(m\_apic\_base);}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*)\ m\_apic\_base,\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ m\_apic\_base\_high,\ PRESENT\ |\ WRITE);}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}APIC\ Base:\ phy=0x"{}}\ <<\ m\_apic\_base\ <<\ \textcolor{stringliteral}{"{},\ virt=0x"{}}\ <<\ m\_apic\_base\_high\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00050\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}CPU\ does\ not\ support\ xAPIC"{}});}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
 \DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{if}\ (!is\_enabled)\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{if}\ (!(msr\_info\ \&\ (1\ <<\ 11)))\ \{}
 \DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}APIC\ is\ not\ enabled\(\backslash\)n"{}};}
 \DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
 \DoxyCodeLine{00057\ \ \ \ \ \}}
 \DoxyCodeLine{00058\ }
 \DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ Enable\ the\ APIC}}
 \DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}(0xF0,\ (1\ <<\ 8)\ |\ 0x100);}
-\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}APIC\ Enabled\(\backslash\)n"{}};}
-\DoxyCodeLine{00062\ \}}
+\DoxyCodeLine{00061\ \ \ \ \ bsp\_setup\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00062\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}APIC\ Enabled\(\backslash\)n"{}};}
+\DoxyCodeLine{00063\ \}}
 
 \end{DoxyCode}
-
-
-References \mbox{\hyperlink{logger_8h_source_l00089}{ASSERT}}, \mbox{\hyperlink{cpu_8cpp_source_l00129}{Max\+OS\+::system\+::\+CPU\+::cpuid()}}, \mbox{\hyperlink{logger_8cpp_source_l00168}{Logger\+::\+DEBUG()}}, \mbox{\hyperlink{apic_8h_source_l00019}{m\+\_\+apic\+\_\+base}}, \mbox{\hyperlink{apic_8h_source_l00020}{m\+\_\+apic\+\_\+base\+\_\+high}}, \mbox{\hyperlink{apic_8h_source_l00022}{m\+\_\+x2apic}}, \mbox{\hyperlink{physical_8cpp_source_l00520}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map()}}, \mbox{\hyperlink{physical_8h_source_l00033}{Max\+OS\+::memory\+::\+Present}}, \mbox{\hyperlink{apic_8cpp_source_l00072}{read()}}, \mbox{\hyperlink{cpu_8cpp_source_l00113}{Max\+OS\+::system\+::\+CPU\+::read\+\_\+msr()}}, \mbox{\hyperlink{physical_8cpp_source_l00788}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}, \mbox{\hyperlink{physical_8h_source_l00160}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::s\+\_\+current\+\_\+manager}}, \mbox{\hyperlink{physical_8cpp_source_l00927}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+io\+\_\+region()}}, \mbox{\hyperlink{logger_8cpp_source_l00180}{Logger\+::\+WARNING()}}, \mbox{\hyperlink{physical_8h_source_l00001}{write}}, \mbox{\hyperlink{physical_8h_source_l00034}{Max\+OS\+::memory\+::\+Write}}, and \mbox{\hyperlink{cpu_8cpp_source_l00123}{Max\+OS\+::system\+::\+CPU\+::write\+\_\+msr()}}.
-
-\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a84eafc2ea20a276e8dc52b6f6f46b73b}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a84eafc2ea20a276e8dc52b6f6f46b73b} 
-\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!````~LocalAPIC@{\texorpdfstring{$\sim$}{\string~}LocalAPIC}}
-\index{````~LocalAPIC@{\texorpdfstring{$\sim$}{\string~}LocalAPIC}!MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
-\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}LocalAPIC()}{\string~LocalAPIC()}}
-{\footnotesize\ttfamily Local\+APIC\+::\texorpdfstring{$\sim$}{\string~}\+Local\+APIC (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
-
 
 
 \doxysubsection{Member Function Documentation}
@@ -134,33 +112,27 @@ The id of the local apic
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00102}{102}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00105}{105}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ id}}
-\DoxyCodeLine{00105\ \ \ \ \ uint32\_t\ \textcolor{keywordtype}{id}\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ad1a2879252218ed8d96e385b3cc34a7e}{read}}(0x20);}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ id}}
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}}\ ?\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a6c2c7d947c09f992a1733565d8652eb3}{id}}\ :\ (\textcolor{keywordtype}{id}\ >>\ 24);}
-\DoxyCodeLine{00109\ \}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ id}}
+\DoxyCodeLine{00108\ \ \ \ \ uint32\_t\ \textcolor{keywordtype}{id}\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ad1a2879252218ed8d96e385b3cc34a7e}{read}}(0x20);}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ id}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_x2apic\ ?\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a6c2c7d947c09f992a1733565d8652eb3}{id}}\ :\ (\textcolor{keywordtype}{id}\ >>\ 24);}
+\DoxyCodeLine{00112\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{apic_8cpp_source_l00102}{id()}}, \mbox{\hyperlink{apic_8h_source_l00022}{m\+\_\+x2apic}}, and \mbox{\hyperlink{apic_8cpp_source_l00072}{read()}}.
+References \mbox{\hyperlink{apic_8cpp_source_l00105}{id()}}, and \mbox{\hyperlink{apic_8cpp_source_l00073}{read()}}.
 
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00102}{id()}}.
-
-\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a77bd672dc5572b51cb8e4644da1786aa}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a77bd672dc5572b51cb8e4644da1786aa} 
-\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!init@{init}}
-\index{init@{init}!MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
-\doxysubsubsection{\texorpdfstring{init()}{init()}}
-{\footnotesize\ttfamily void Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00105}{id()}}.
 
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ad1a2879252218ed8d96e385b3cc34a7e}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ad1a2879252218ed8d96e385b3cc34a7e} 
 \index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!read@{read}}
@@ -182,27 +154,27 @@ The value of the register
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00072}{72}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00073}{73}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00073\ }
-\DoxyCodeLine{00074\ \ \ \ \ \textcolor{comment}{//\ If\ x2APIC\ is\ enabled\ I/O\ is\ done\ through\ the\ MSR}}
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}})}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint32\_t)\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ac2eb28384db21eb3075768c17302fff4}{CPU::read\_msr}}((reg\ >>\ 4)\ +\ 0x800);}
-\DoxyCodeLine{00077\ }
-\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordflow}{return}\ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ ((uintptr\_t)\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}}\ +\ reg);}
-\DoxyCodeLine{00079\ \}}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{comment}{//\ If\ x2APIC\ is\ enabled\ I/O\ is\ done\ through\ the\ MSR}}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_x2apic)}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint32\_t)\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ac2eb28384db21eb3075768c17302fff4}{CPU::read\_msr}}((reg\ >>\ 4)\ +\ 0x800);}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordflow}{return}\ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ ((uintptr\_t)\ m\_apic\_base\_high\ +\ reg);}
+\DoxyCodeLine{00080\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{apic_8h_source_l00020}{m\+\_\+apic\+\_\+base\+\_\+high}}, \mbox{\hyperlink{apic_8h_source_l00022}{m\+\_\+x2apic}}, and \mbox{\hyperlink{cpu_8cpp_source_l00113}{Max\+OS\+::system\+::\+CPU\+::read\+\_\+msr()}}.
+References \mbox{\hyperlink{cpu_8cpp_source_l00369}{Max\+OS\+::system\+::\+CPU\+::read\+\_\+msr()}}.
 
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00102}{id()}}, \mbox{\hyperlink{apic_8cpp_source_l00013}{Local\+APIC()}}, and \mbox{\hyperlink{clock_8cpp_source_l00260}{Max\+OS\+::drivers\+::clock\+::\+PIT\+::ticks\+\_\+per\+\_\+ms()}}.
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00105}{id()}}, \mbox{\hyperlink{apic_8cpp_source_l00128}{send\+\_\+init()}}, and \mbox{\hyperlink{apic_8cpp_source_l00167}{send\+\_\+startup()}}.
 
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a45235d175880c3ef2123d57b588bc675}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a45235d175880c3ef2123d57b588bc675} 
 \index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!send\_eoi@{send\_eoi}}
@@ -216,23 +188,131 @@ Acknowledge that the interrupt has been handled, allowing the PIC to process the
 
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00114}{114}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00117}{117}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00115\ }
-\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}(0xB0,\ 0);}
-\DoxyCodeLine{00117\ \}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}(0xB0,\ 0);}
+\DoxyCodeLine{00120\ \}}
 
 \end{DoxyCode}
 
 
 References \mbox{\hyperlink{physical_8h_source_l00001}{write}}.
 
+\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a242280f9073159d2001966df586de1ee}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a242280f9073159d2001966df586de1ee} 
+\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!send\_init@{send\_init}}
+\index{send\_init@{send\_init}!MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
+\doxysubsubsection{\texorpdfstring{send\_init()}{send\_init()}}
+{\footnotesize\ttfamily void Local\+APIC\+::send\+\_\+init (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{apic\+\_\+id,  }\item[{bool}]{assert }\end{DoxyParamCaption})}
 
 
-Referenced by \mbox{\hyperlink{interrupts_8cpp_source_l00272}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::handle\+\_\+interrupt\+\_\+request()}}.
+
+Send the init IPI to another apic. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em apic\+\_\+id} & The id of the apic to send to \\
+\hline
+{\em assert} & Is this an assert code (drive / release the signal) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00128}{128}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ uint32\_t\ icr\_low\ =\ 0;}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{//\ Delivery\ mode\ =\ INIT\ (101b\ at\ bits\ 8-\/10)}}
+\DoxyCodeLine{00133\ \ \ \ \ icr\_low\ |=\ (0b101\ <<\ 8);}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{//\ Level\ (bit\ 14):\ 1\ =\ assert,\ 0\ =\ de-\/assert}}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordflow}{if}\ (assert)}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ icr\_low\ |=\ (1\ <<\ 14);}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{//\ Trigger\ mode:\ Level\ =\ 1}}
+\DoxyCodeLine{00140\ \ \ \ \ icr\_low\ |=\ (1\ <<\ 15);}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordflow}{if}\ (!m\_x2apic)\ \{}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Select\ target\ core}}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}(0x310,\ \mbox{\hyperlink{apic_8h_ab2e5b38a20311ef17e9a224eca4183aa}{apic\_id}}\ <<\ 24);}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Send\ INIT\ (Delivery\ mode\ =\ INIT,\ Level\ =\ 1)}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}(0x300,\ icr\_low);}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ delivery}}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ad1a2879252218ed8d96e385b3cc34a7e}{read}}(0x300)\ \&\ (1\ <<\ 12))}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}pause"{}});}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ x2APIC}}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}{CPU::write\_msr}}(0x830,\ \mbox{\hyperlink{apic_8h_ab2e5b38a20311ef17e9a224eca4183aa}{apic\_id}}\ <<\ 32\ |\ icr\_low);}
+\DoxyCodeLine{00158\ \ \ \ \ \}}
+\DoxyCodeLine{00159\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{apic_8h_source_l00001}{apic\+\_\+id}}, \mbox{\hyperlink{apic_8cpp_source_l00073}{read()}}, \mbox{\hyperlink{physical_8h_source_l00001}{write}}, and \mbox{\hyperlink{cpu_8cpp_source_l00385}{Max\+OS\+::system\+::\+CPU\+::write\+\_\+msr()}}.
+
+\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ab70ee7192a01667ab51137a474a4f5e9}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ab70ee7192a01667ab51137a474a4f5e9} 
+\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!send\_startup@{send\_startup}}
+\index{send\_startup@{send\_startup}!MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
+\doxysubsubsection{\texorpdfstring{send\_startup()}{send\_startup()}}
+{\footnotesize\ttfamily void Local\+APIC\+::send\+\_\+startup (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{apic\+\_\+id,  }\item[{uint8\+\_\+t}]{vector }\end{DoxyParamCaption})}
+
+
+
+Send the start up IPI to another apic. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em apic\+\_\+id} & The apic to send it to \\
+\hline
+{\em vector} & Where to start executing \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00167}{167}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordflow}{if}\ (!m\_x2apic)\ \{}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Select\ target\ core}}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}(0x310,\ \mbox{\hyperlink{apic_8h_ab2e5b38a20311ef17e9a224eca4183aa}{apic\_id}}\ <<\ 24);}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Send\ SIPI\ (Delivery\ mode\ =\ STARTUP)}}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}(0x300,\ 0x4600\ |\ \mbox{\hyperlink{apic_8h_a6c3589b2f7ad6179e386511136265b54}{vector}});}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ delivery}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_ad1a2879252218ed8d96e385b3cc34a7e}{read}}(0x300)\ \&\ (1\ <<\ 12))}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}pause"{}});}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ x2APIC}}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}{CPU::write\_msr}}(0x831,\ \mbox{\hyperlink{apic_8h_ab2e5b38a20311ef17e9a224eca4183aa}{apic\_id}}\ <<\ 32\ |\ 0x4600\ |\ \mbox{\hyperlink{apic_8h_a6c3589b2f7ad6179e386511136265b54}{vector}});}
+\DoxyCodeLine{00185\ \ \ \ \ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{apic_8h_source_l00001}{apic\+\_\+id}}, \mbox{\hyperlink{apic_8cpp_source_l00073}{read()}}, \mbox{\hyperlink{apic_8h_source_l00000}{vector}}, \mbox{\hyperlink{physical_8h_source_l00001}{write}}, and \mbox{\hyperlink{cpu_8cpp_source_l00385}{Max\+OS\+::system\+::\+CPU\+::write\+\_\+msr()}}.
 
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a58100a1d7ff3dac52a6abfb1d5686561}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a58100a1d7ff3dac52a6abfb1d5686561} 
 \index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!write@{write}}
@@ -253,103 +333,30 @@ Write a value to the apic register using the MSR or memory I/O depending on the 
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00087}{87}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00088}{88}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00088\ }
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{//\ If\ x2APIC\ is\ enabled\ I/O\ is\ done\ through\ the\ MSR}}
-\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}{m\_x2apic}})}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}{CPU::write\_msr}}((reg\ >>\ 4)\ +\ 0x800,\ value);}
-\DoxyCodeLine{00092\ }
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{//\ Default\ to\ memory\ I/O}}
-\DoxyCodeLine{00094\ \ \ \ \ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ ((uintptr\_t)\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}{m\_apic\_base\_high}}\ +\ reg)\ =\ value;}
-\DoxyCodeLine{00095\ \}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{//\ If\ x2APIC\ is\ enabled\ I/O\ is\ done\ through\ the\ MSR}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_x2apic)\{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}{CPU::write\_msr}}((reg\ >>\ 4)\ +\ 0x800,\ value);}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//\ Default\ to\ memory\ I/O}}
+\DoxyCodeLine{00097\ \ \ \ \ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ ((uintptr\_t)\ m\_apic\_base\_high\ +\ reg)\ =\ value;}
+\DoxyCodeLine{00098\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{apic_8h_source_l00020}{m\+\_\+apic\+\_\+base\+\_\+high}}, \mbox{\hyperlink{apic_8h_source_l00022}{m\+\_\+x2apic}}, and \mbox{\hyperlink{cpu_8cpp_source_l00123}{Max\+OS\+::system\+::\+CPU\+::write\+\_\+msr()}}.
+References \mbox{\hyperlink{cpu_8cpp_source_l00385}{Max\+OS\+::system\+::\+CPU\+::write\+\_\+msr()}}.
 
 
 
-Referenced by \mbox{\hyperlink{clock_8cpp_source_l00173}{Max\+OS\+::drivers\+::clock\+::\+Clock\+::calibrate()}}, and \mbox{\hyperlink{clock_8cpp_source_l00260}{Max\+OS\+::drivers\+::clock\+::\+PIT\+::ticks\+\_\+per\+\_\+ms()}}.
-
-
-
-\doxysubsection{Member Data Documentation}
-\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a745e7ee6cc83206664fbf157b01fd082} 
-\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!m\_apic\_base@{m\_apic\_base}}
-\index{m\_apic\_base@{m\_apic\_base}!MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
-\doxysubsubsection{\texorpdfstring{m\_apic\_base}{m\_apic\_base}}
-{\footnotesize\ttfamily uint64\+\_\+t Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::m\+\_\+apic\+\_\+base \{\}\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line \mbox{\hyperlink{apic_8h_source_l00019}{19}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{00019\ \{\};}
-
-\end{DoxyCode}
-
-
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00013}{Local\+APIC()}}.
-
-\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a334dd5e1bfd0ad7825a01765e4ec0139} 
-\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!m\_apic\_base\_high@{m\_apic\_base\_high}}
-\index{m\_apic\_base\_high@{m\_apic\_base\_high}!MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
-\doxysubsubsection{\texorpdfstring{m\_apic\_base\_high}{m\_apic\_base\_high}}
-{\footnotesize\ttfamily uint64\+\_\+t Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::m\+\_\+apic\+\_\+base\+\_\+high \{\}\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line \mbox{\hyperlink{apic_8h_source_l00020}{20}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{00020\ \{\};}
-
-\end{DoxyCode}
-
-
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00013}{Local\+APIC()}}, \mbox{\hyperlink{apic_8cpp_source_l00072}{read()}}, and \mbox{\hyperlink{apic_8cpp_source_l00087}{write()}}.
-
-\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a732229d18e57d83bb36444cc6eed0c69}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a732229d18e57d83bb36444cc6eed0c69} 
-\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!m\_id@{m\_id}}
-\index{m\_id@{m\_id}!MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
-\doxysubsubsection{\texorpdfstring{m\_id}{m\_id}}
-{\footnotesize\ttfamily uint32\+\_\+t Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::m\+\_\+id \{\}\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line \mbox{\hyperlink{apic_8h_source_l00021}{21}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{00021\ \{\};}
-
-\end{DoxyCode}
-\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a}\label{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a655174d55ab5579b3c8b0bdbbcfae57a} 
-\index{MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}!m\_x2apic@{m\_x2apic}}
-\index{m\_x2apic@{m\_x2apic}!MaxOS::hardwarecommunication::LocalAPIC@{MaxOS::hardwarecommunication::LocalAPIC}}
-\doxysubsubsection{\texorpdfstring{m\_x2apic}{m\_x2apic}}
-{\footnotesize\ttfamily bool Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::m\+\_\+x2apic \{\}\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-Definition at line \mbox{\hyperlink{apic_8h_source_l00022}{22}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{00022\ \{\};}
-
-\end{DoxyCode}
-
-
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00102}{id()}}, \mbox{\hyperlink{apic_8cpp_source_l00013}{Local\+APIC()}}, \mbox{\hyperlink{apic_8cpp_source_l00072}{read()}}, and \mbox{\hyperlink{apic_8cpp_source_l00087}{write()}}.
+Referenced by \mbox{\hyperlink{clock_8cpp_source_l00163}{Max\+OS\+::drivers\+::clock\+::\+Clock\+::setup\+\_\+apic\+\_\+clock()}}.
 
 
 

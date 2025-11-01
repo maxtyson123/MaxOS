@@ -2,10 +2,14 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/common/spinlock.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/common/spinlock.h \- Defines Spinlock and BlockingLock classes for thread synchronization\&.  
+
 .SH SYNOPSIS
 .br
 .PP
+\fC#include <common/vector\&.h>\fP
+.br
+
 .SS "Classes"
 
 .in +1c
@@ -13,17 +17,48 @@
 .RI "class \fBMaxOS::common::Spinlock\fP"
 .br
 .RI "Enables a resource to be used by only one instance at a time through locking and unlocking\&. "
+.ti -1c
+.RI "class \fBMaxOS::common::BlockingLock\fP"
+.br
+.RI "Enables a resource to be used by only one instance at a time through a combination of spinning and queuing\&. When waiting enqueued, thread will sleep\&. "
 .in -1c
-.SS "Namespaces"
+.SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "namespace \fBMaxOS\fP"
+.RI "\fBconstexpr\fP \fBuint8_t\fP \fBMaxOS::common::BLOCKING_FAST_TRY_LIMIT\fP = \fBUINT8_MAX\fP"
 .br
-.ti -1c
-.RI "namespace \fBMaxOS::common\fP"
-.br
+.RI "How many attempts to acquire the lock should fail before queueing\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines Spinlock and BlockingLock classes for thread synchronization\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+24th February 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBspinlock\&.h\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "constexpr uint8_t MaxOS::common::BLOCKING_FAST_TRY_LIMIT = UINT8_MAX\fC [constexpr]\fP"
+
+.PP
+How many attempts to acquire the lock should fail before queueing\&. 
+.PP
+Definition at line \fB42\fP of file \fBspinlock\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::common::BlockingLock::acquire()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

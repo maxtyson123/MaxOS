@@ -7,10 +7,6 @@ var keyboard_8h =
     [ "MaxOS::drivers::peripherals::KeyboardInterpreter", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter.html", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter" ],
     [ "MaxOS::drivers::peripherals::KeyboardInterpreterEN_US", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US" ],
     [ "MaxOS::drivers::peripherals::KeyboardDriver", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver.html", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver" ],
-    [ "KeyboardEvents", "keyboard_8h.html#add731b6c5a9b8a0f34a4d129d9767554", [
-      [ "KEYDOWN", "keyboard_8h.html#add731b6c5a9b8a0f34a4d129d9767554a2193fd2a05dd69466a012d3b6ea00b43", null ],
-      [ "KEYUP", "keyboard_8h.html#add731b6c5a9b8a0f34a4d129d9767554a0f3fb78dab3d8d32a1c72d3e0798536d", null ]
-    ] ],
     [ "KeyCode", "keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebc", [
       [ "A", "keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebca7fc56270e7a70fa81a5935b72eacbe29", null ],
       [ "a", "keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebca0cc175b9c0f1b6a831c399e269772661", null ],
@@ -171,10 +167,5 @@ var keyboard_8h =
       [ "numberPadDownArrow", "keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebca88e13245ab5150093db5eefc8e9e005f", null ],
       [ "numberPadLeftArrow", "keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebcadba659a4e9aa9c1a519a3f50daea4ce4", null ],
       [ "numberPadRightArrow", "keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebcab1202cae38e22d08a1b71c24e296f978", null ]
-    ] ],
-    [ "ScanCodeType", "keyboard_8h.html#a58fa1d0fe070a3f55e3ba46c44a7680e", [
-      [ "REGULAR", "keyboard_8h.html#a58fa1d0fe070a3f55e3ba46c44a7680ea820ead78f0fa32544c7ba38fe7ff53d9", null ],
-      [ "EXTENDED", "keyboard_8h.html#a58fa1d0fe070a3f55e3ba46c44a7680ea137134e62b2c971eba88c77734c14658", null ],
-      [ "EXTENDED_BUFFER", "keyboard_8h.html#a58fa1d0fe070a3f55e3ba46c44a7680ea30b293c78bc61bb66120d71d54f1661b", null ]
     ] ]
 ];

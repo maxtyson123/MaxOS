@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/src/kernel.cpp
+/home/runner/work/MaxOS/MaxOS/kernel/src/kernel.cpp \- The main kernel entry point for the bsp and other cores\&. Handles initialisation of all core systems\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -45,87 +46,172 @@
 .ti -1c
 .RI "void \fBcall_constructors\fP ()"
 .br
+.RI "Calls the C++ static constructors\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBcore_main\fP ()"
+.br
+.RI "The main entry point for secondary cores\&. Sets up the core and waits to be scheduled\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBkernel_main\fP (\fBunsigned\fP \fBlong\fP addr, \fBunsigned\fP \fBlong\fP \fBmagic\fP)"
 .br
+.RI "The main kernel entry point\&. Initialises all core systems and starts the scheduler\&. "
 .in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBuint8_t\fP \fBcore_boot_info\fP []"
+.br
+.RI "The boot info structure for the core being started\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+The main kernel entry point for the bsp and other cores\&. Handles initialisation of all core systems\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBkernel\&.cpp\fP\&.
 .SH "Function Documentation"
 .PP 
 .SS "void call_constructors ()"
 
 .PP
-Definition at line \fB22\fP of file \fBcplusplus\&.cpp\fP\&..PP
+Calls the C++ static constructors\&. 
+.PP
+Definition at line \fB29\fP of file \fBcplusplus\&.cpp\fP\&..PP
 .nf
-22                                     {
-23     // Loop through and initialise all the global constructors
-24     for (constructor* i = &start_ctors; i != &end_ctors; i++)
-25         (*i)();
-26 }
+29                                     {
+30     // Loop through and initialise all the global constructors
+31     for (constructor* i = &start_ctors; i != &end_ctors; i++)
+32         (*i)();
+33 }
 .fi
 
 .PP
-References \fBend_ctors\fP, and \fBstart_ctors\fP\&.
-.PP
 Referenced by \fBkernel_main()\fP\&.
+.SS "\fBvoid\fP core_main ()"
+
+.PP
+The main entry point for secondary cores\&. Sets up the core and waits to be scheduled\&. 
+.PP
+Definition at line \fB46\fP of file \fBkernel\&.cpp\fP\&..PP
+.nf
+46                                         {
+47 
+48     auto info = (core_boot_info_t*)(core_boot_info);
+49     info \-> activated = true;
+50     auto core = CPU::executing_core();
+51 
+52     // Make sure the correct core is being setup
+53     ASSERT(info\->id == core\->id, "Current setup core isn't the core expected");
+54     Logger::DEBUG() << "Core " << core\->id << " now in higher half \\n";
+55 
+56     // Set up the core
+57     core \-> init();
+58     asm("sti");
+59 
+60     // Wait to be scheduled
+61     while (true)
+62         asm("nop");
+63 }
+.fi
+
+.PP
+References \fBactivated\fP, \fBASSERT\fP, \fBcore_boot_info\fP, \fBLogger::DEBUG()\fP, and \fBMaxOS::system::CPU::executing_core()\fP\&.
 .SS "\fBvoid\fP kernel_main (\fBunsigned\fP \fBlong\fP addr, \fBunsigned\fP \fBlong\fP magic)"
 
 .PP
-Definition at line \fB33\fP of file \fBkernel\&.cpp\fP\&..PP
+The main kernel entry point\&. Initialises all core systems and starts the scheduler\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddr\fP The address of the multiboot info struct 
+.br
+\fImagic\fP The multiboot magic number 
+.RE
+.PP
+
+.PP
+Definition at line \fB71\fP of file \fBkernel\&.cpp\fP\&..PP
 .nf
-33                                                                                   {
-34 
-35     call_constructors();
-36 
-37     // Initialise the logger
-38     Logger logger;
-39     SerialConsole serial_console(&logger);
-40     Logger::INFO() << "MaxOS Booted Successfully \\n";
-41 
-42     Logger::HEADER() << "Stage {1}: System Initialisation\\n";
-43     Multiboot multiboot(addr, magic);
-44     GlobalDescriptorTable gdt;
-45     InterruptManager interrupts;
-46 
-47     Logger::HEADER() << "Stage {1\&.1}: Memory Initialisation\\n";
-48     PhysicalMemoryManager pmm(&multiboot);
-49     VirtualMemoryManager vmm;
-50     MemoryManager memoryManager(&vmm);
-51 
-52     Logger::HEADER() << "Stage {1\&.2}: Console Initialisation\\n";
-53     VideoElectronicsStandardsAssociation vesa(multiboot\&.framebuffer());
-54     VESABootConsole console(&vesa);
-55 
-56     Logger::HEADER() << "Stage {2}: Hardware Initialisation\\n";
-57     VirtualFileSystem vfs;
-58     CPU cpu(&gdt, &multiboot);
-59     Clock kernel_clock(cpu\&.apic, 1);
-60     DriverManager driver_manager;
-61     driver_manager\&.add_driver(&kernel_clock);
-62     driver_manager\&.find_drivers();
-63     uint32_t reset_wait_time = driver_manager\&.reset_devices();
-64 
-65     Logger::HEADER() << "Stage {3}: Device Finalisation\\n";
-66     interrupts\&.activate();
-67     kernel_clock\&.calibrate();
-68     kernel_clock\&.delay(reset_wait_time);
-69     driver_manager\&.initialise_drivers();
-70     driver_manager\&.activate_drivers();
-71 
-72     Logger::HEADER() << "Stage {4}: System Finalisation\\n";
-73     Scheduler scheduler(multiboot);
-74     VFSResourceRegistry vfs_registry(&vfs);
-75     SyscallManager syscalls;
-76     console\&.finish();
-77     scheduler\&.activate();
-78 
-79     // Idle loop  (read Idle\&.md)
-80     while (true)
-81         asm("nop");
-82 }
+71                                                                                   {
+72 
+73     call_constructors();
+74 
+75     // Initialise the logger
+76     Logger logger;
+77     SerialConsole serial_console(&logger);
+78     Logger::INFO() << "MaxOS Booted Successfully 0x\\n";
+79 
+80     Logger::HEADER() << "Stage {1}: System Initialisation\\n";
+81     Multiboot multiboot(addr, magic);
+82     GlobalDescriptorTable gdt;
+83     InterruptManager interrupts;
+84 
+85     Logger::HEADER() << "Stage {1\&.1}: Memory Initialisation\\n";
+86     PhysicalMemoryManager pmm(&multiboot);
+87     VirtualMemoryManager vmm;
+88     MemoryManager memoryManager(&vmm);
+89 
+90     Logger::HEADER() << "Stage {1\&.2}: Console Initialisation\\n";
+91     VideoElectronicsStandardsAssociation vesa(multiboot\&.framebuffer());
+92     VESABootConsole console(&vesa);
+93 
+94     Logger::HEADER() << "Stage {2}: Hardware Initialisation\\n";
+95     VirtualFileSystem vfs;
+96     CPU cpu(&gdt, &multiboot);
+97     Clock kernel_clock(&cpu\&.apic, 1);
+98     DriverManager driver_manager;
+99     driver_manager\&.add_driver(&kernel_clock);
+100     driver_manager\&.find_drivers();
+101     uint32_t reset_wait_time = driver_manager\&.reset_devices();
+102 
+103     Logger::HEADER() << "Stage {3}: Device Finalisation\\n";
+104     interrupts\&.activate();
+105     kernel_clock\&.calibrate();
+106     kernel_clock\&.delay(reset_wait_time);
+107     driver_manager\&.initialise_drivers();
+108     driver_manager\&.activate_drivers();
+109     cpu\&.init_cores();
+110 
+111     Logger::HEADER() << "Stage {4}: System Finalisation\\n";
+112     GlobalScheduler scheduler(multiboot);
+113     VFSResourceRegistry vfs_registry(&vfs);
+114     SyscallManager syscalls;
+115     console\&.finish();
+116     GlobalScheduler::activate();
+117 
+118     // Idle loop  (read Idle\&.md)
+119     while (true)
+120         asm("hlt");
+121 
+122 }
 .fi
 
 .PP
-References \fBcall_constructors()\fP, \fBMaxOS::drivers::console::VESABootConsole::finish()\fP, \fBLogger::HEADER()\fP, \fBLogger::INFO()\fP, and \fBmagic\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::activate()\fP, \fBcall_constructors()\fP, \fBMaxOS::drivers::console::VESABootConsole::finish()\fP, \fBLogger::HEADER()\fP, \fBLogger::INFO()\fP, and \fBmagic\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "\fBuint8_t\fP core_boot_info[]"
+
+.PP
+The boot info structure for the core being started\&. 
+.PP
+Definition at line \fB41\fP of file \fBkernel\&.cpp\fP\&.
+.PP
+Referenced by \fBcore_main()\fP, \fBMaxOS::system::CPU::init_cores()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

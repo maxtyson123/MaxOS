@@ -11,6 +11,7 @@ var dir_1c64475bd13d88d7abfb72537ae6fbc7 =
     [ "logo.h", "logo_8h.html", "logo_8h" ],
     [ "logo_kp.h", "logo__kp_8h.html", "logo__kp_8h" ],
     [ "map.h", "map_8h.html", "map_8h" ],
+    [ "math.h", "math_8h.html", null ],
     [ "outputStream.h", "outputStream_8h.html", "outputStream_8h" ],
     [ "pair.h", "pair_8h.html", "pair_8h" ],
     [ "rectangle.h", "rectangle_8h.html", "rectangle_8h" ],

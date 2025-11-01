@@ -15,12 +15,6 @@ Inherits \fBMaxOS::drivers::DriverSelectorEventHandler\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBDriverManager\fP ()"
-.br
-.ti -1c
-.RI "\fB~DriverManager\fP ()"
-.br
-.ti -1c
 .RI "\fBvoid\fP \fBadd_driver_selector\fP (\fBDriverSelector\fP *)"
 .br
 .RI "Add a driver selector to the manager\&. "
@@ -61,58 +55,44 @@ Inherits \fBMaxOS::drivers::DriverSelectorEventHandler\fP\&.
 .br
 .RI "Activate the drivers\&. "
 .in -1c
-
-Public Member Functions inherited from \fBMaxOS::drivers::DriverSelectorEventHandler\fP
-.in +1c
-.ti -1c
-.RI "\fBDriverSelectorEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~DriverSelectorEventHandler\fP ()"
-.br
-.in -1c
 .SH "Detailed Description"
 .PP 
 Manages the drivers, handles the adding and removing of drivers\&. 
 .PP
-Definition at line \fB68\fP of file \fBdriver\&.h\fP\&.
+Definition at line \fB72\fP of file \fBdriver\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "DriverManager::DriverManager ()"
 
 .PP
-Definition at line \fB89\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB93\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-89                              {
-90 
-91     Logger::INFO() << "Setting up Driver Manager \\n";
-92     add_driver_selector(new PeripheralComponentInterconnectController);
-93     // add_driver_selector(new UniversalSerialBusController);
-94 }
+93                              {
+94 
+95     Logger::INFO() << "Setting up Driver Manager \\n";
+96     add_driver_selector(new PeripheralComponentInterconnectController);
+97     // add_driver_selector(new UniversalSerialBusController);
+98 }
 .fi
 
-.PP
-References \fBadd_driver_selector()\fP, and \fBLogger::INFO()\fP\&.
 .SS "DriverManager::~DriverManager ()"
 
 .PP
-Definition at line \fB96\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB100\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-96                               {
-97 
-98     // Remove any drivers that are still attached
-99     while (!m_drivers\&.empty())
-100         remove_driver(*m_drivers\&.begin());
+100                               {
 101 
-102     // Free the driver selectors
-103     for (auto &driver_selector: m_driver_selectors)
-104         delete driver_selector;
+102     // Remove any drivers that are still attached
+103     while (!m_drivers\&.empty())
+104         remove_driver(*m_drivers\&.begin());
 105 
-106 }
+106     // Free the driver selectors
+107     for (auto &driver_selector: m_driver_selectors)
+108         delete driver_selector;
+109 
+110 }
 .fi
 
-.PP
-References \fBremove_driver()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP DriverManager::activate_drivers ()"
@@ -120,18 +100,18 @@ References \fBremove_driver()\fP\&.
 .PP
 Activate the drivers\&. 
 .PP
-Definition at line \fB215\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB219\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-215                                      {
-216 
-217 
-218     Logger::INFO() << "Activating Drivers \\n";
-219 
-220     // Activate the drivers
-221     for (auto &driver: m_drivers)
-222         driver\->activate();
+219                                      {
+220 
+221 
+222     Logger::INFO() << "Activating Drivers \\n";
 223 
-224 }
+224     // Activate the drivers
+225     for (auto &driver: m_drivers)
+226         driver\->activate();
+227 
+228 }
 .fi
 
 .PP
@@ -148,11 +128,11 @@ Adds a driver to the manager\&.
 .PP
 
 .PP
-Definition at line \fB113\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB117\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-113                                              {
-114     m_drivers\&.push_back(driver);
-115 }
+117                                              {
+118     m_drivers\&.push_back(driver);
+119 }
 .fi
 
 .PP
@@ -162,31 +142,29 @@ Referenced by \fBon_driver_selected()\fP\&.
 .PP
 Add a driver selector to the manager\&. 
 .PP
-Definition at line \fB139\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB143\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-139                                                                        {
-140 
-141     m_driver_selectors\&.push_back(driver_selector);
-142 
-143 }
+143                                                                        {
+144 
+145     m_driver_selectors\&.push_back(driver_selector);
+146 
+147 }
 .fi
 
-.PP
-Referenced by \fBDriverManager()\fP\&.
 .SS "\fBvoid\fP DriverManager::deactivate_drivers ()"
 
 .PP
 Deactivate the drivers\&. 
 .PP
-Definition at line \fB204\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB208\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-204                                        {
-205 
-206     // Deactivate the drivers
-207     for (auto &driver: m_drivers)
-208         driver\->deactivate();
+208                                        {
 209 
-210 }
+210     // Deactivate the drivers
+211     for (auto &driver: m_drivers)
+212         driver\->deactivate();
+213 
+214 }
 .fi
 
 .SS "\fBvoid\fP DriverManager::find_drivers ()"
@@ -194,16 +172,16 @@ Definition at line \fB204\fP of file \fBdriver\&.cpp\fP\&..PP
 .PP
 Find the drivers\&. 
 .PP
-Definition at line \fB157\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB161\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-157                                  {
-158 
-159     Logger::INFO() << "Finding Drivers \\n";
-160 
-161     // Select the drivers
-162     for (auto &driver_selector: m_driver_selectors)
-163         driver_selector\->select_drivers(this);
-164 }
+161                                  {
+162 
+163     Logger::INFO() << "Finding Drivers \\n";
+164 
+165     // Select the drivers
+166     for (auto &driver_selector: m_driver_selectors)
+167         driver_selector\->select_drivers(this);
+168 }
 .fi
 
 .PP
@@ -213,17 +191,17 @@ References \fBLogger::INFO()\fP\&.
 .PP
 Initialise the drivers\&. 
 .PP
-Definition at line \fB191\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB195\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-191                                        {
-192 
-193     Logger::INFO() << "Initialising Drivers \\n";
-194 
-195     // Initialise the drivers
-196     for (auto &driver: m_drivers)
-197         driver\->initialise();
+195                                        {
+196 
+197     Logger::INFO() << "Initialising Drivers \\n";
 198 
-199 }
+199     // Initialise the drivers
+200     for (auto &driver: m_drivers)
+201         driver\->initialise();
+202 
+203 }
 .fi
 
 .PP
@@ -235,11 +213,11 @@ When a driver is selected add it to the manager\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::DriverSelectorEventHandler\fP\&.
 .PP
-Definition at line \fB132\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB136\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-132                                                      {
-133     add_driver(driver);
-134 }
+136                                                      {
+137     add_driver(driver);
+138 }
 .fi
 
 .PP
@@ -256,30 +234,28 @@ Removes a driver from the driver vector\&.
 .PP
 
 .PP
-Definition at line \fB122\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB126\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-122                                                 {
-123 
-124     driver\->deactivate();
-125     m_drivers\&.erase(driver);
-126 
-127 }
+126                                                 {
+127 
+128     driver\->deactivate();
+129     m_drivers\&.erase(driver);
+130 
+131 }
 .fi
 
-.PP
-Referenced by \fB~DriverManager()\fP\&.
 .SS "\fBvoid\fP DriverManager::remove_driver_selector (\fBDriverSelector\fP * driver_selector)"
 
 .PP
 Remove a driver selector from the manager\&. 
 .PP
-Definition at line \fB148\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB152\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-148                                                                           {
-149 
-150     m_driver_selectors\&.erase(driver_selector);
-151 
-152 }
+152                                                                           {
+153 
+154     m_driver_selectors\&.erase(driver_selector);
+155 
+156 }
 .fi
 
 .SS "\fBuint32_t\fP DriverManager::reset_devices ()"
@@ -294,24 +270,24 @@ The longest time it takes to reset a device
 .PP
 
 .PP
-Definition at line \fB171\fP of file \fBdriver\&.cpp\fP\&..PP
+Definition at line \fB175\fP of file \fBdriver\&.cpp\fP\&..PP
 .nf
-171                                       {
-172 
-173     Logger::INFO() << "Resetting Devices \\n";
-174 
-175     uint32_t resetWaitTime = 0;
-176     for (auto &driver: m_drivers) {
-177         // Reset the driver
-178         uint32_t waitTime = driver\->reset();
-179 
-180         // If the wait time is longer than the current longest wait time, set it as the new longest wait time
-181         if (waitTime > resetWaitTime)
-182             resetWaitTime = waitTime;
-183     }
-184 
-185     return resetWaitTime;
-186 }
+175                                       {
+176 
+177     Logger::INFO() << "Resetting Devices \\n";
+178 
+179     uint32_t resetWaitTime = 0;
+180     for (auto &driver: m_drivers) {
+181         // Reset the driver
+182         uint32_t waitTime = driver\->reset();
+183 
+184         // If the wait time is longer than the current longest wait time, set it as the new longest wait time
+185         if (waitTime > resetWaitTime)
+186             resetWaitTime = waitTime;
+187     }
+188 
+189     return resetWaitTime;
+190 }
 .fi
 
 .PP

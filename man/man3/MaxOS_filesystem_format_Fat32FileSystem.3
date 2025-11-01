@@ -17,19 +17,11 @@ Inherits \fBMaxOS::filesystem::FileSystem\fP\&.
 .ti -1c
 .RI "\fBFat32FileSystem\fP (\fBdrivers::disk::Disk\fP *disk, \fBuint32_t\fP partition_offset)"
 .br
-.ti -1c
-.RI "\fB~Fat32FileSystem\fP ()"
-.br
+.RI "Construct a new Fat32 \fBFile\fP System object\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::filesystem::FileSystem\fP
 .in +1c
-.ti -1c
-.RI "\fBFileSystem\fP ()"
-.br
-.ti -1c
-.RI "\fBvirtual\fP \fB~FileSystem\fP ()"
-.br
 .ti -1c
 .RI "\fBDirectory\fP * \fBroot_directory\fP ()"
 .br
@@ -51,33 +43,43 @@ Protected Attributes inherited from \fBMaxOS::filesystem::FileSystem\fP
 .ti -1c
 .RI "\fBDirectory\fP * \fBm_root_directory\fP"
 .br
+.RI "The fist directory in the file system (not be confused with the system root) "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles the FAT32 filesystem operations\&. 
 .PP
-Definition at line \fB278\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB266\fP of file \fBfat32\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Fat32FileSystem::Fat32FileSystem (\fBdrivers::disk::Disk\fP * disk, \fBuint32_t\fP partition_offset)"
 
 .PP
-Definition at line \fB955\fP of file \fBfat32\&.cpp\fP\&..PP
+Construct a new Fat32 \fBFile\fP System object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdisk\fP The disk to mount the filesystem from 
+.br
+\fIpartition_offset\fP The partition offset on the disk 
+.RE
+.PP
+
+.PP
+Definition at line \fB992\fP of file \fBfat32\&.cpp\fP\&..PP
 .nf
-956 : m_volume(disk, partition_offset)
-957 {
-958 
-959     // Create the root directory
-960     m_root_directory = new Fat32Directory(&m_volume, m_volume\&.bpb\&.root_cluster, "/");
-961     m_root_directory\->read_from_disk();
-962 
-963 }
+993 : m_volume(disk, partition_offset)
+994 {
+995 
+996     // Create the root directory
+997     m_root_directory = new Fat32Directory(&m_volume, m_volume\&.bpb\&.root_cluster, "/");
+998     m_root_directory\->read_from_disk();
+999 
+1000 }
 .fi
 
 .PP
 References \fBMaxOS::filesystem::format::Fat32Volume::bpb\fP, \fBMaxOS::filesystem::FileSystem::m_root_directory\fP, and \fBMaxOS::filesystem::Directory::read_from_disk()\fP\&.
-.SS "Fat32FileSystem::~Fat32FileSystem ()\fC [default]\fP"
-
 
 .SH "Author"
 .PP 

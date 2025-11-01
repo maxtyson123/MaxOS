@@ -6,13 +6,10 @@ var acpi_8h =
     [ "MaxOS::hardwarecommunication::RSDT", "structMaxOS_1_1hardwarecommunication_1_1RSDT.html", "structMaxOS_1_1hardwarecommunication_1_1RSDT" ],
     [ "MaxOS::hardwarecommunication::XSDT", "structMaxOS_1_1hardwarecommunication_1_1XSDT.html", "structMaxOS_1_1hardwarecommunication_1_1XSDT" ],
     [ "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface.html", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface" ],
-    [ "__attribute__", "acpi_8h.html#abe45fccdf160be55b8dc7bd5417235ac", null ],
-    [ "__attribute__", "acpi_8h.html#a246df0da2f83d4427aeff9b62cb78b01", null ],
     [ "checksum", "acpi_8h.html#a59eac9627282a484fbaf0aa7aa3b8a9a", null ],
     [ "creator_id", "acpi_8h.html#ab38918ce2820bbdf42112e514c767817", null ],
     [ "creator_revision", "acpi_8h.html#a88d54492f1cf62a366b9dacdfd9fbe9a", null ],
     [ "extended_checksum", "acpi_8h.html#a1664604ce1e7885a2c4474ab8320bc2c", null ],
-    [ "firstPart", "acpi_8h.html#adda9797c44ce8ba447927e1f768d9d79", null ],
     [ "length", "acpi_8h.html#aebb70c2aab3407a9f05334c47131a43b", null ],
     [ "OEM_id", "acpi_8h.html#ad06a6e8d6b846f461ef1c9106fa38e91", null ],
     [ "OEM_revision", "acpi_8h.html#abad5aa258fa4eca4a783ea62cff7d1b4", null ],
@@ -22,5 +19,6 @@ var acpi_8h =
     [ "revision", "acpi_8h.html#ab01c6e281b316b1770d5646f3d3101c4", null ],
     [ "rsdt_address", "acpi_8h.html#a502a3436fb16ff00a5de98a6ae50c8c8", null ],
     [ "signature", "acpi_8h.html#af933fbe1d9926d280ef2136b0d3d7074", null ],
+    [ "version_1_info", "acpi_8h.html#a24e63120e9357e1566251f9bd2b615af", null ],
     [ "xsdt_address", "acpi_8h.html#adebb20019785a766c6461acccdfac9a3", null ]
 ];

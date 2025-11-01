@@ -1,7 +1,6 @@
 var classMaxOS_1_1gui_1_1Font =
 [
     [ "Font", "classMaxOS_1_1gui_1_1Font.html#abeb57db4a77270b9f16ed50486799954", null ],
-    [ "~Font", "classMaxOS_1_1gui_1_1Font.html#a134aaa2f78af0c12d3ce504957169768", null ],
     [ "draw_text", "classMaxOS_1_1gui_1_1Font.html#aa80fe1e9d019a378fdf59f901fc1d886", null ],
     [ "draw_text", "classMaxOS_1_1gui_1_1Font.html#a33b99a6e0fc8abe3f8274a141d911f1d", null ],
     [ "get_text_height", "classMaxOS_1_1gui_1_1Font.html#ad200a05cfe15761f01c749dba96c875f", null ],

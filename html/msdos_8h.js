@@ -259,8 +259,6 @@ var msdos_8h =
       [ "NT_HIDDEN", "msdos_8h.html#a2e4fb19c764ea277199e32724975df93af9093a629863e160a59f374bf64c1807", null ],
       [ "XENIX_BAD_BLOCK", "msdos_8h.html#a2e4fb19c764ea277199e32724975df93ab2fa4e5e5e99d97ece2166c438e8288d", null ]
     ] ],
-    [ "__attribute__", "msdos_8h.html#afddaf05ee4263b59484844173c35294b", null ],
-    [ "__attribute__", "msdos_8h.html#a88887f48bf23d5a530521fb8b8a66ecd", null ],
     [ "bootable", "msdos_8h.html#a473a1483ecee72b5fb823dd28190cef8", null ],
     [ "bootloader", "msdos_8h.html#a09835f758bb5328b55a01068bbc4c972", null ],
     [ "disk_signature", "msdos_8h.html#a2eda13dfaaf6d61d3bbad4f0dc86c845", null ],

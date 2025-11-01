@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/memory/physical.h \- Defines a PhysicalMemoryManager class for managing physical memory allocation and deallocation of pages\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -21,23 +22,15 @@
 .ti -1c
 .RI "struct \fBMaxOS::memory::PageTableEntry\fP"
 .br
+.RI "Struct for a page table entry\&. "
 .ti -1c
 .RI "struct \fBMaxOS::memory::PageMapLevel\fP"
 .br
+.RI "Struct for a page map level (PML4, PDPT, PD, PT) "
 .ti -1c
 .RI "class \fBMaxOS::memory::PhysicalMemoryManager\fP"
 .br
 .RI "Manages the physical memory of the system such as what pages are allocated/free and mapping of virtual to physical addresses\&. "
-.in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::memory\fP"
-.br
 .in -1c
 .SS "Macros"
 
@@ -49,16 +42,16 @@
 .RI "#define \fBPMLX_GET_INDEX\fP(ADDR,  LEVEL)   (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))"
 .br
 .ti -1c
-.RI "#define \fBPML4_GET_INDEX\fP(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 3)"
+.RI "#define \fBPML4_GET_INDEX\fP(ADDR)   PMLX_GET_INDEX(ADDR, 3)"
 .br
 .ti -1c
-.RI "#define \fBPML3_GET_INDEX\fP(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 2)"
+.RI "#define \fBPML3_GET_INDEX\fP(ADDR)   PMLX_GET_INDEX(ADDR, 2)"
 .br
 .ti -1c
-.RI "#define \fBPML2_GET_INDEX\fP(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 1)"
+.RI "#define \fBPML2_GET_INDEX\fP(ADDR)   PMLX_GET_INDEX(ADDR, 1)"
 .br
 .ti -1c
-.RI "#define \fBPML1_GET_INDEX\fP(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 0)"
+.RI "#define \fBPML1_GET_INDEX\fP(ADDR)   PMLX_GET_INDEX(ADDR, 0)"
 .br
 .in -1c
 .SS "Typedefs"
@@ -78,8 +71,9 @@
 
 .in +1c
 .ti -1c
-.RI "enum \fBMaxOS::memory::PageFlags\fP { \fBMaxOS::memory::None\fP = 0, \fBMaxOS::memory::Present\fP = (1 << 0), \fBMaxOS::memory::Write\fP = (1 << 1), \fBMaxOS::memory::User\fP = (1 << 2), \fBMaxOS::memory::WriteThrough\fP = (1 << 3), \fBMaxOS::memory::CacheDisabled\fP = (1 << 4), \fBMaxOS::memory::Accessed\fP = (1 << 5), \fBMaxOS::memory::Dirty\fP = (1 << 6), \fBMaxOS::memory::HugePage\fP = (1 << 7), \fBMaxOS::memory::Global\fP = (1 << 8), \fBMaxOS::memory::NoExecute\fP = (1ULL << 63) }"
+.RI "enum \fBMaxOS::memory::PageFlags\fP { \fBMaxOS::memory::NONE\fP = 0, \fBMaxOS::memory::PRESENT\fP = (1 << 0), \fBMaxOS::memory::WRITE\fP = (1 << 1), \fBMaxOS::memory::USER\fP = (1 << 2), \fBMaxOS::memory::WRITE_THROUGH\fP = (1 << 3), \fBMaxOS::memory::CACHE_DISABLED\fP = (1 << 4), \fBMaxOS::memory::ACCESSED\fP = (1 << 5), \fBMaxOS::memory::DIRTY\fP = (1 << 6), \fBMaxOS::memory::HUGE_PAGE\fP = (1 << 7), \fBMaxOS::memory::GLOBAL\fP = (1 << 8), \fBMaxOS::memory::NO_EXECUTE\fP = (1ULL << 63) }"
 .br
+.RI "Flags for page table entries\&. "
 .in -1c
 .SS "Functions"
 
@@ -94,89 +88,235 @@
 .ti -1c
 .RI "bool \fBpresent\fP"
 .br
+.RI "*copydoc PageFlags::PRESENT "
 .ti -1c
 .RI "bool \fBwrite\fP"
 .br
+.RI "*copydoc PageFlags::WRITE "
 .ti -1c
 .RI "bool \fBuser\fP"
 .br
+.RI "*copydoc PageFlags::USER "
 .ti -1c
 .RI "bool \fBwrite_through\fP"
 .br
+.RI "*copydoc PageFlags::WRITE_THROUGH "
 .ti -1c
 .RI "bool \fBcache_disabled\fP"
 .br
+.RI "*copydoc PageFlags::CACHE_DISABLED "
 .ti -1c
 .RI "bool \fBaccessed\fP"
 .br
+.RI "*copydoc PageFlags::ACCESSED "
 .ti -1c
 .RI "bool \fBdirty\fP"
 .br
+.RI "*copydoc PageFlags::DIRTY "
 .ti -1c
 .RI "bool \fBhuge_page\fP"
 .br
+.RI "*copydoc PageFlags::HUGE_PAGE "
 .ti -1c
 .RI "bool \fBglobal\fP"
 .br
+.RI "*copydoc PageFlags::GLOBAL "
 .ti -1c
 .RI "uint8_t \fBavailable\fP"
 .br
+.RI "Extra metadata bytes available for OS use\&. "
 .ti -1c
 .RI "uint64_t \fBphysical_address\fP"
 .br
+.RI "The address the page represents in memory\&. "
 .ti -1c
 .RI "pte_t \fBentries\fP [512]"
 .br
+.RI "The entries in this page map level\&. If it is a PT then these are page table entries, otherwise they are pointers to the next level\&. Indexed by the relevant bits in the virtual address\&. "
+.ti -1c
+.RI "constexpr uint64_t \fBMaxOS::memory::PAGE_SIZE\fP = 0x1000"
+.br
+.RI "The size of a page (4KB) "
+.ti -1c
+.RI "constexpr uint8_t \fBMaxOS::memory::ROW_BITS\fP = 64"
+.br
+.RI "The number of bits in the bitmap row\&. "
+.ti -1c
+.RI "constexpr uint64_t \fBMaxOS::memory::HIGHER_HALF_KERNEL_OFFSET\fP = 0xFFFFFFFF80000000"
+.br
+.RI "Where the kernel is mapped in higher half memory\&. "
+.ti -1c
+.RI "constexpr uint64_t \fBMaxOS::memory::HIGHER_HALF_MEM_OFFSET\fP = 0xFFFF800000000000"
+.br
+.RI "Where higher half memory starts\&. "
+.ti -1c
+.RI "constexpr uint64_t \fBMaxOS::memory::HIGHER_HALF_MEM_RESERVED\fP = 0x280000000"
+.br
+.RI "Reserved higher half memory for kernel use (10GB) "
+.ti -1c
+.RI "constexpr uint64_t \fBMaxOS::memory::HIGHER_HALF_OFFSET\fP = \fBHIGHER_HALF_MEM_OFFSET\fP + \fBHIGHER_HALF_MEM_RESERVED\fP"
+.br
+.RI "Where higher half memory usable space starts\&. "
+.ti -1c
+.RI "constexpr uint64_t \fBMaxOS::memory::HIGHER_HALF_DIRECT_MAP\fP = \fBHIGHER_HALF_OFFSET\fP + \fBPAGE_SIZE\fP"
+.br
+.RI "Where the map of physical memory to higher half starts\&. "
 .ti -1c
 .RI "class \fBMaxOS::memory::PhysicalMemoryManager\fP \fBMaxOS::memory::__attribute__\fP"
 .br
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines a PhysicalMemoryManager class for managing physical memory allocation and deallocation of pages\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+30th January 2024 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBphysical\&.h\fP\&.
 .SH "Macro Definition Documentation"
 .PP 
 .SS "#define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)   ((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))"
 
 .PP
-Definition at line \fB18\fP of file \fBphysical\&.h\fP\&.
-.SS "#define PML1_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 0)"
-
-.PP
-Definition at line \fB24\fP of file \fBphysical\&.h\fP\&.
-.SS "#define PML2_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 1)"
-
-.PP
-Definition at line \fB23\fP of file \fBphysical\&.h\fP\&.
-.SS "#define PML3_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 2)"
-
-.PP
 Definition at line \fB22\fP of file \fBphysical\&.h\fP\&.
-.SS "#define PML4_GET_INDEX(ADDR)   \fBPMLX_GET_INDEX\fP(ADDR, 3)"
+.SS "#define PML1_GET_INDEX(ADDR)   PMLX_GET_INDEX(ADDR, 0)"
 
 .PP
-Definition at line \fB21\fP of file \fBphysical\&.h\fP\&.
+Definition at line \fB28\fP of file \fBphysical\&.h\fP\&.
+.SS "#define PML2_GET_INDEX(ADDR)   PMLX_GET_INDEX(ADDR, 1)"
+
+.PP
+Definition at line \fB27\fP of file \fBphysical\&.h\fP\&.
+.SS "#define PML3_GET_INDEX(ADDR)   PMLX_GET_INDEX(ADDR, 2)"
+
+.PP
+Definition at line \fB26\fP of file \fBphysical\&.h\fP\&.
+.SS "#define PML4_GET_INDEX(ADDR)   PMLX_GET_INDEX(ADDR, 3)"
+
+.PP
+Definition at line \fB25\fP of file \fBphysical\&.h\fP\&.
 .SS "#define PMLX_GET_INDEX(ADDR, LEVEL)   (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))"
 
 .PP
-Definition at line \fB19\fP of file \fBphysical\&.h\fP\&.
+Definition at line \fB23\fP of file \fBphysical\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef void \fBMaxOS::memory::physical_address_t\fP"
+
+.PP
+Definition at line \fB32\fP of file \fBphysical\&.h\fP\&.
+.SS "typedef void \fBMaxOS::memory::virtual_address_t\fP"
+
+.PP
+Definition at line \fB31\fP of file \fBphysical\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBMaxOS::memory::PageFlags\fP"
+
+.PP
+Flags for page table entries\&. 
+.PP
+\fBTodo\fP
+.RS 4
+: fix\&. this is stupid\&. Leave as enum not enum class for bitwise operations 
+.RE
+.PP
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fINONE \fP\fP
+No flags\&. 
+.TP
+\fB\fIPRESENT \fP\fP
+The page is present in memory\&. 
+.TP
+\fB\fIWRITE \fP\fP
+Memory in this page is writable\&. 
+.TP
+\fB\fIUSER \fP\fP
+This page is accessible from user mode\&. 
+.TP
+\fB\fIWRITE_THROUGH \fP\fP
+Write through caching is enabled\&. 
+.TP
+\fB\fICACHE_DISABLED \fP\fP
+Dont let the CPU cache this page\&. 
+.TP
+\fB\fIACCESSED \fP\fP
+This page has been read from or written to\&. 
+.TP
+\fB\fIDIRTY \fP\fP
+This page has been written to\&. 
+.TP
+\fB\fIHUGE_PAGE \fP\fP
+This page is not 4Kib (2MB or 1GB) 
+.TP
+\fB\fIGLOBAL \fP\fP
+The page can be shared between processes\&. 
+.TP
+\fB\fINO_EXECUTE \fP\fP
+Dont let the CPU execute code on this page\&. 
+.PP
+Definition at line \fB40\fP of file \fBphysical\&.h\fP\&..PP
+.nf
+40                                {
+41             NONE            = 0,                
+42             PRESENT         = (1 << 0),         
+43             WRITE           = (1 << 1),         
+44             USER            = (1 << 2),         
+45             WRITE_THROUGH   = (1 << 3),         
+46             CACHE_DISABLED  = (1 << 4),         
+47             ACCESSED        = (1 << 5),         
+48             DIRTY           = (1 << 6),         
+49             HUGE_PAGE       = (1 << 7),         
+50             GLOBAL          = (1 << 8),         
+51             NO_EXECUTE      = (1ULL << 63)      
+52         } page_flags_t;
+.fi
+
 .SH "Variable Documentation"
 .PP 
 .SS "bool accessed"
 
 .PP
+*copydoc PageFlags::ACCESSED 
+.PP
 Definition at line \fB5\fP of file \fBphysical\&.h\fP\&.
 .SS "uint8_t available"
 
+.PP
+Extra metadata bytes available for OS use\&. 
 .PP
 Definition at line \fB9\fP of file \fBphysical\&.h\fP\&.
 .SS "bool cache_disabled"
 
 .PP
+*copydoc PageFlags::CACHE_DISABLED 
+.PP
 Definition at line \fB4\fP of file \fBphysical\&.h\fP\&.
 .SS "bool dirty"
 
 .PP
+*copydoc PageFlags::DIRTY 
+.PP
 Definition at line \fB6\fP of file \fBphysical\&.h\fP\&.
 .SS "pte_t entries[512]"
 
+.PP
+The entries in this page map level\&. If it is a PT then these are page table entries, otherwise they are pointers to the next level\&. Indexed by the relevant bits in the virtual address\&. 
 .PP
 Definition at line \fB0\fP of file \fBphysical\&.h\fP\&.
 .PP
@@ -184,33 +324,101 @@ Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInte
 .SS "bool global"
 
 .PP
+*copydoc PageFlags::GLOBAL 
+.PP
 Definition at line \fB8\fP of file \fBphysical\&.h\fP\&.
+.SS "constexpr uint64_t MaxOS::memory::HIGHER_HALF_DIRECT_MAP = HIGHER_HALF_OFFSET + PAGE_SIZE\fC [constexpr]\fP"
+
+.PP
+Where the map of physical memory to higher half starts\&. 
+.PP
+Definition at line \fB88\fP of file \fBphysical\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::PhysicalMemoryManager::from_dm_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP\&.
+.SS "constexpr uint64_t MaxOS::memory::HIGHER_HALF_KERNEL_OFFSET = 0xFFFFFFFF80000000\fC [constexpr]\fP"
+
+.PP
+Where the kernel is mapped in higher half memory\&. 
+.PP
+Definition at line \fB84\fP of file \fBphysical\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::system::Multiboot::start_tag()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_higher_region()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_lower_region()\fP\&.
+.SS "constexpr uint64_t MaxOS::memory::HIGHER_HALF_MEM_OFFSET = 0xFFFF800000000000\fC [constexpr]\fP"
+
+.PP
+Where higher half memory starts\&. 
+.PP
+Definition at line \fB85\fP of file \fBphysical\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP\&.
+.SS "constexpr uint64_t MaxOS::memory::HIGHER_HALF_MEM_RESERVED = 0x280000000\fC [constexpr]\fP"
+
+.PP
+Reserved higher half memory for kernel use (10GB) 
+.PP
+Definition at line \fB86\fP of file \fBphysical\&.h\fP\&.
+.SS "constexpr uint64_t MaxOS::memory::HIGHER_HALF_OFFSET = HIGHER_HALF_MEM_OFFSET + HIGHER_HALF_MEM_RESERVED\fC [constexpr]\fP"
+
+.PP
+Where higher half memory usable space starts\&. 
+.PP
+Definition at line \fB87\fP of file \fBphysical\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP\&.
 .SS "bool huge_page"
 
 .PP
+*copydoc PageFlags::HUGE_PAGE 
+.PP
 Definition at line \fB7\fP of file \fBphysical\&.h\fP\&.
+.SS "constexpr uint64_t MaxOS::memory::PAGE_SIZE = 0x1000\fC [constexpr]\fP"
+
+.PP
+The size of a page (4KB) 
+.PP
+Definition at line \fB81\fP of file \fBphysical\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::PhysicalMemoryManager::align_direct_to_page()\fP, \fBMaxOS::memory::PhysicalMemoryManager::align_to_page()\fP, \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::PhysicalMemoryManager::allocate_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::allocate_frame()\fP, \fBMaxOS::memory::PhysicalMemoryManager::check_aligned()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_frame()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::memory_used()\fP, \fBMaxOS::memory::MemoryManager::MemoryManager()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve_kernel_regions()\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::unmap_area()\fP\&.
 .SS "uint64_t physical_address"
 
 .PP
+The address the page represents in memory\&. 
+.PP
 Definition at line \fB10\fP of file \fBphysical\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP, \fBMaxOS::memory::PhysicalMemoryManager::from_dm_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::identity_map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::is_mapped()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_higher_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
+Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP, \fBMaxOS::memory::PhysicalMemoryManager::identity_map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::is_mapped()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_higher_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
 .SS "bool present"
 
 .PP
+*copydoc PageFlags::PRESENT 
+.PP
 Definition at line \fB0\fP of file \fBphysical\&.h\fP\&.
+.SS "constexpr uint8_t MaxOS::memory::ROW_BITS = 64\fC [constexpr]\fP"
+
+.PP
+The number of bits in the bitmap row\&. 
+.PP
+Definition at line \fB82\fP of file \fBphysical\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::PhysicalMemoryManager::allocate_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::allocate_frame()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_frame()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP\&.
 .SS "bool user"
 
+.PP
+*copydoc PageFlags::USER 
 .PP
 Definition at line \fB2\fP of file \fBphysical\&.h\fP\&.
 .SS "bool write"
 
 .PP
+*copydoc PageFlags::WRITE 
+.PP
 Definition at line \fB1\fP of file \fBphysical\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::EthernetFrameHandler::DataReceived()\fP, \fBMaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBMaxOS::common::GenericOutputStream< Type >::on_stream_read()\fP, \fBMaxOS::common::OutputStream::operator<<()\fP, \fBMaxOS::common::OutputStream::operator<<()\fP, \fBLogger::printf()\fP, \fBMaxOS::net::InternetControlMessageProtocol::RequestEchoReply()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::send_eoi()\fP, \fBMaxOS::common::OutputStream::write()\fP, \fBMaxOS::drivers::disk::Disk::write()\fP, \fBMaxOS::drivers::console::ConsoleStream::write_char()\fP, \fBMaxOS::common::OutputStream::write_hex()\fP, and \fBMaxOS::common::OutputStream::write_int()\fP\&.
+Referenced by \fBMaxOS::net::EthernetFrameHandler::DataReceived()\fP, \fBMaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()\fP, \fBMaxOS::common::GenericOutputStream< Type >::on_stream_read()\fP, \fBMaxOS::common::OutputStream::operator<<()\fP, \fBMaxOS::common::OutputStream::operator<<()\fP, \fBLogger::printf()\fP, \fBMaxOS::net::InternetControlMessageProtocol::RequestEchoReply()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::send_eoi()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::send_init()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::send_startup()\fP, \fBMaxOS::common::OutputStream::write()\fP, \fBMaxOS::drivers::disk::Disk::write()\fP, \fBMaxOS::drivers::console::ConsoleStream::write_char()\fP, \fBMaxOS::common::OutputStream::write_hex()\fP, and \fBMaxOS::common::OutputStream::write_int()\fP\&.
 .SS "bool write_through"
 
+.PP
+*copydoc PageFlags::WRITE_THROUGH 
 .PP
 Definition at line \fB3\fP of file \fBphysical\&.h\fP\&.
 .SH "Author"

@@ -15,11 +15,9 @@ Inherits \fBMaxOS::memory::MemIO\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBMemIO16Bit\fP (uintptr_t \fBaddress\fP)"
+.RI "\fBMemIO16Bit\fP (uintptr_t address)"
 .br
-.ti -1c
-.RI "\fB~MemIO16Bit\fP ()"
-.br
+.RI "Construct a new Mem IO object for 16 bit reads/writes\&. "
 .ti -1c
 .RI "virtual void \fBwrite\fP (uint16_t \fBdata\fP)"
 .br
@@ -35,11 +33,9 @@ Inherits \fBMaxOS::memory::MemIO\fP\&.
 Protected Member Functions inherited from \fBMaxOS::memory::MemIO\fP
 .in +1c
 .ti -1c
-.RI "\fBMemIO\fP (uintptr_t \fBaddress\fP)"
+.RI "\fBMemIO\fP (uintptr_t address)"
 .br
-.ti -1c
-.RI "\fB~MemIO\fP ()"
-.br
+.RI "Construct a new Mem IO object\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::memory::MemIO\fP
@@ -47,25 +43,33 @@ Protected Attributes inherited from \fBMaxOS::memory::MemIO\fP
 .ti -1c
 .RI "uintptr_t \fBm_address\fP"
 .br
+.RI "The memory address to read from / write to\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles 16 bit memory IO\&. 
 .PP
-Definition at line \fB43\fP of file \fBmemoryIO\&.h\fP\&.
+Definition at line \fB49\fP of file \fBmemoryIO\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "MemIO16Bit::MemIO16Bit (uintptr_t address)"
 
 .PP
-Definition at line \fB44\fP of file \fBmemoryIO\&.cpp\fP\&..PP
-.nf
-45 : MemIO(address)
-46 {
-47 }
-.fi
+Construct a new Mem IO object for 16 bit reads/writes\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The memory address to read from / write to 
+.RE
+.PP
 
-.SS "MemIO16Bit::~MemIO16Bit ()\fC [default]\fP"
+.PP
+Definition at line \fB63\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+.nf
+64 : MemIO(address)
+65 {
+66 }
+.fi
 
 .SH "Member Function Documentation"
 .PP 
@@ -81,12 +85,12 @@ the data read
 .PP
 
 .PP
-Definition at line \fB66\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+Definition at line \fB85\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-66                           {
-67 
-68     return *((volatile uint16_t*) (m_address));
-69 }
+85                           {
+86 
+87     return *((volatile uint16_t*) (m_address));
+88 }
 .fi
 
 .PP
@@ -103,12 +107,12 @@ Writes data to the memory address\&.
 .PP
 
 .PP
-Definition at line \fB56\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+Definition at line \fB75\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-56                                     {
-57 
-58     (*((volatile uint16_t*) (m_address))) = (data);
-59 }
+75                                     {
+76 
+77     (*((volatile uint16_t*) (m_address))) = (data);
+78 }
 .fi
 
 .PP

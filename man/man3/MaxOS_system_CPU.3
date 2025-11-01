@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::system::CPU
+MaxOS::system::CPU \- Manages the \fBCPU\fP and its cores\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -12,97 +13,111 @@ MaxOS::system::CPU
 
 .in +1c
 .ti -1c
-.RI "\fBCPU\fP (\fBGlobalDescriptorTable\fP *gdt, \fBMultiboot\fP *multiboot)"
+.RI "\fBCPU\fP (\fBGlobalDescriptorTable\fP *gdt, \fBMultiboot\fP *\fBmultiboot\fP)"
 .br
 .RI "Constructor for the \fBCPU\fP class\&. "
 .ti -1c
-.RI "\fB~CPU\fP ()"
+.RI "\fBvoid\fP \fBfind_cores\fP ()"
 .br
+.RI "Search the madt for cores and store them\&. "
 .ti -1c
-.RI "void \fBinit_tss\fP (\fBGlobalDescriptorTable\fP *gdt)"
+.RI "\fBvoid\fP \fBinit_cores\fP ()"
 .br
-.RI "Initialises the TSS for interrupt handling\&. "
-.ti -1c
-.RI "void \fBinit_sse\fP ()"
-.br
-.RI "Initialises the SSE instructions\&. "
+.RI "Wake up all the cores\&. "
 .in -1c
 .SS "Static Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "static cpu_status_t * \fBprepare_for_panic\fP (cpu_status_t *\fBstatus\fP=nullptr)"
+.RI "\fBstatic\fP \fBcpu_status_t\fP * \fBprepare_for_panic\fP (\fBcpu_status_t\fP *status=\fBnullptr\fP, \fBconst\fP \fBstring\fP &\fBmsg\fP='')"
 .br
 .RI "Ensure the \fBCPU\fP must panic and prepare for it if so\&. "
 .ti -1c
-.RI "static void \fBPANIC\fP (const char *message, cpu_status_t *\fBstatus\fP=nullptr)"
+.RI "\fBstatic\fP \fBvoid\fP \fBPANIC\fP (\fBconst\fP \fBchar\fP *\fBmessage\fP, \fBcpu_status_t\fP *status=\fBnullptr\fP)"
 .br
+.RI "Puts the \fBCPU\fP into a panic state and halts it\&. Dumps the stack trace and registers\&. "
 .ti -1c
-.RI "static void \fBhalt\fP ()"
+.RI "\fBstatic\fP \fBvoid\fP \fBhalt\fP ()"
 .br
+.RI "Halts the \fBCPU\fP indefinitely\&. "
 .ti -1c
-.RI "static bool \fBcheck_nx\fP ()"
+.RI "\fBstatic\fP \fBCore\fP * \fBexecuting_core\fP ()"
+.br
+.RI "Gets the core that is currently executing\&. "
+.ti -1c
+.RI "\fBstatic\fP \fBbool\fP \fBcheck_nx\fP ()"
 .br
 .RI "Checks if the No Execute page flag is supported\&. "
 .ti -1c
-.RI "static void \fBget_status\fP (cpu_status_t *\fBstatus\fP)"
+.RI "\fBstatic\fP \fBvoid\fP \fBget_status\fP (\fBcpu_status_t\fP *status)"
 .br
+.RI "Gets the current \fBCPU\fP status into the provided structure\&. "
 .ti -1c
-.RI "static void \fBset_status\fP (cpu_status_t *\fBstatus\fP)"
+.RI "\fBstatic\fP \fBvoid\fP \fBset_status\fP (\fBcpu_status_t\fP *status)"
 .br
+.RI "Sets the \fBCPU\fP registers from the provided structure\&. "
 .ti -1c
-.RI "static void \fBprint_registers\fP (cpu_status_t *\fBstatus\fP)"
+.RI "\fBstatic\fP \fBvoid\fP \fBprint_registers\fP (\fBcpu_status_t\fP *status)"
 .br
+.RI "Prints the \fBCPU\fP registers from the provided structure\&. "
 .ti -1c
-.RI "static uint64_t \fBread_msr\fP (uint32_t msr)"
+.RI "\fBstatic\fP \fBuint64_t\fP \fBread_msr\fP (\fBuint32_t\fP \fBmsr\fP)"
 .br
+.RI "Reads the value of the specified MSR\&. "
 .ti -1c
-.RI "static void \fBwrite_msr\fP (uint32_t msr, uint64_t value)"
+.RI "\fBstatic\fP \fBvoid\fP \fBwrite_msr\fP (\fBuint32_t\fP \fBmsr\fP, \fBuint64_t\fP \fBvalue\fP)"
 .br
+.RI "Writes the specified value to the specified MSR\&. "
 .ti -1c
-.RI "static void \fBcpuid\fP (uint32_t leaf, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)"
+.RI "\fBstatic\fP \fBvoid\fP \fBcpuid\fP (\fBuint32_t\fP \fBleaf\fP, \fBuint32_t\fP *\fBeax\fP, \fBuint32_t\fP *\fBebx\fP, \fBuint32_t\fP *\fBecx\fP, \fBuint32_t\fP *\fBedx\fP)"
 .br
+.RI "Executes the CPUID instruction with the specified leaf and returns the results in the provided pointers\&. "
 .ti -1c
-.RI "static bool \fBcheck_cpu_feature\fP (\fBCPU_FEATURE_ECX\fP feature)"
+.RI "\fBstatic\fP \fBbool\fP \fBcheck_cpu_feature\fP (\fBCPU_FEATURE_ECX\fP \fBfeature\fP)"
 .br
 .RI "Checks if a \fBCPU\fP feature is supported (ECX Register) "
 .ti -1c
-.RI "static bool \fBcheck_cpu_feature\fP (\fBCPU_FEATURE_EDX\fP feature)"
+.RI "\fBstatic\fP \fBbool\fP \fBcheck_cpu_feature\fP (\fBCPU_FEATURE_EDX\fP \fBfeature\fP)"
 .br
 .RI "Checks if a \fBCPU\fP feature is supported (EDX Register) "
 .ti -1c
-.RI "static void \fBstack_trace\fP (size_t)"
+.RI "\fBstatic\fP \fBvoid\fP \fBstack_trace\fP (\fBsize_t\fP)"
 .br
+.RI "Prints a stack trace up to the specified level\&. "
 .in -1c
 .SS "Public Attributes"
 
 .in +1c
 .ti -1c
-.RI "\fBhardwarecommunication::AdvancedConfigurationAndPowerInterface\fP * \fBacpi\fP"
+.RI "\fBhardwarecommunication::AdvancedConfigurationAndPowerInterface\fP \fBacpi\fP"
 .br
+.RI "The ACPI interface for the \fBCPU\fP\&. "
 .ti -1c
-.RI "\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP * \fBapic\fP"
+.RI "\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP \fBapic\fP"
 .br
+.RI "The APIC interface for the \fBCPU\fP\&. "
 .in -1c
 .SS "Static Public Attributes"
 
 .in +1c
 .ti -1c
-.RI "static bool \fBis_panicking\fP = { false }"
+.RI "static \fBCore\fP * \fBpanic_core\fP = nullptr"
 .br
+.RI "The core that triggered the panic\&. "
 .ti -1c
-.RI "static tss_t \fBtss\fP = {}"
+.RI "static \fBcommon::Spinlock\fP \fBpanic_lock\fP"
 .br
+.RI "Lock to prevent multiple panics at once\&. "
 .ti -1c
-.RI "static bool \fBs_xsave\fP = false"
+.RI "static \fBcommon::Vector\fP< \fBCore\fP * > \fBcores\fP"
 .br
-.ti -1c
-.RI "static bool \fBs_avx\fP = false"
-.br
+.RI "The list of \fBCPU\fP cores in the system (populated during initialization, includes the BSP and cores that failed to start) "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB142\fP of file \fBcpu\&.h\fP\&.
+Manages the \fBCPU\fP and its cores\&. 
+.PP
+Definition at line \fB228\fP of file \fBcpu\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "CPU::CPU (\fBGlobalDescriptorTable\fP * gdt, \fBMultiboot\fP * multiboot)"
@@ -110,30 +125,32 @@ Definition at line \fB142\fP of file \fBcpu\&.h\fP\&.
 .PP
 Constructor for the \fBCPU\fP class\&. 
 .PP
-Definition at line \fB21\fP of file \fBcpu\&.cpp\fP\&..PP
+Definition at line \fB249\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-21                                                          {
-22 
-23 
-24     Logger::INFO() << "Setting up CPU \\n";
-25     acpi = new AdvancedConfigurationAndPowerInterface(multiboot);
-26     apic = new AdvancedProgrammableInterruptController(acpi);
-27 
-28     // TODO: Multicore
-29 
-30     // Setup cpu features
-31     init_tss(gdt);
-32     init_sse();
-33 }
+250 : acpi(multiboot),
+251   apic(&acpi)
+252 {
+253 
+254     Logger::INFO() << "Setting up CPU \\n";
+255     find_cores();
+256 
+257     // Manually set up the BSP
+258     auto bsp = cores[0];
+259     bsp \-> m_bsp = true;
+260     bsp \-> active = true;
+261     bsp \-> gdt = gdt;
+262     bsp \-> local_apic = apic\&.local_apic();
+263     bsp \-> init_tss();
+264     bsp \-> init_sse();
+265 
+266 }
 .fi
 
 .PP
-References \fBacpi\fP, \fBapic\fP, \fBLogger::INFO()\fP, \fBinit_sse()\fP, and \fBinit_tss()\fP\&.
-.SS "CPU::~CPU ()\fC [default]\fP"
-
+References \fBapic\fP, \fBcores\fP, \fBfind_cores()\fP, \fBLogger::INFO()\fP, and \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::local_apic()\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "bool CPU::check_cpu_feature (\fBCPU_FEATURE_ECX\fP feature)\fC [static]\fP"
+.SS "\fBbool\fP CPU::check_cpu_feature (\fBCPU_FEATURE_ECX\fP feature)\fC [static]\fP"
 
 .PP
 Checks if a \fBCPU\fP feature is supported (ECX Register) 
@@ -150,24 +167,24 @@ If the feature is supported
 .PP
 
 .PP
-Definition at line \fB357\fP of file \fBcpu\&.cpp\fP\&..PP
+Definition at line \fB572\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-357                                                    {
-358 
-359     // Get the CPUID
-360     uint32_t eax, ebx, ecx, edx;
-361     cpuid(0x1, &eax, &ebx, &ecx, &edx);
-362 
-363     // Check the feature
-364     return ecx & (uint32_t) feature;
-365 }
+572                                                    {
+573 
+574     // Get the CPUID
+575     uint32_t eax, ebx, ecx, edx;
+576     cpuid(0x1, &eax, &ebx, &ecx, &edx);
+577 
+578     // Check the feature
+579     return ecx & (uint32_t) feature;
+580 }
 .fi
 
 .PP
 References \fBcpuid()\fP\&.
 .PP
-Referenced by \fBinit_sse()\fP\&.
-.SS "bool CPU::check_cpu_feature (\fBCPU_FEATURE_EDX\fP feature)\fC [static]\fP"
+Referenced by \fBMaxOS::system::Core::init_sse()\fP\&.
+.SS "\fBbool\fP CPU::check_cpu_feature (\fBCPU_FEATURE_EDX\fP feature)\fC [static]\fP"
 
 .PP
 Checks if a \fBCPU\fP feature is supported (EDX Register) 
@@ -184,22 +201,22 @@ True if the feature is supported
 .PP
 
 .PP
-Definition at line \fB373\fP of file \fBcpu\&.cpp\fP\&..PP
+Definition at line \fB588\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-373                                                    {
-374 
-375     // Get the CPUID
-376     uint32_t eax, ebx, ecx, edx;
-377     cpuid(0x1, &eax, &ebx, &ecx, &edx);
-378 
-379     // Check the feature
-380     return edx & (uint32_t) feature;
-381 }
+588                                                    {
+589 
+590     // Get the CPUID
+591     uint32_t eax, ebx, ecx, edx;
+592     cpuid(0x1, &eax, &ebx, &ecx, &edx);
+593 
+594     // Check the feature
+595     return edx & (uint32_t) feature;
+596 }
 .fi
 
 .PP
 References \fBcpuid()\fP\&.
-.SS "bool CPU::check_nx ()\fC [static]\fP"
+.SS "\fBbool\fP CPU::check_nx ()\fC [static]\fP"
 
 .PP
 Checks if the No Execute page flag is supported\&. 
@@ -211,281 +228,281 @@ True if the NX flag is supported
 .PP
 
 .PP
-Definition at line \fB387\fP of file \fBcpu\&.cpp\fP\&..PP
+Definition at line \fB602\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-387                    {
-388 
-389     // Get the EFER MSR
-390     uint64_t efer = read_msr(0xC0000080);
-391 
-392     // Check if the NX flag is supported (bit 11)
-393     bool supported = efer & (1 << 11);
-394     Logger::DEBUG() << "NX: " << (supported ? "Supported" : "Not Supported") << "\\n";
-395 
-396     // Return if the NX flag is supported
-397     return supported;
-398 }
+602                    {
+603 
+604     // Get the EFER MSR
+605     uint64_t efer = read_msr(0xC0000080);
+606 
+607     // Check if the NX flag is supported (bit 11)
+608     bool supported = efer & (1 << 11);
+609     Logger::DEBUG() << "NX: " << (supported ? "Supported" : "Not Supported") << "\\n";
+610 
+611     // Return if the NX flag is supported
+612     return supported;
+613 }
 .fi
 
 .PP
 References \fBLogger::DEBUG()\fP, and \fBread_msr()\fP\&.
 .PP
 Referenced by \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP\&.
-.SS "void CPU::cpuid (uint32_t leaf, uint32_t * eax, uint32_t * ebx, uint32_t * ecx, uint32_t * edx)\fC [static]\fP"
+.SS "\fBvoid\fP CPU::cpuid (\fBuint32_t\fP leaf, \fBuint32_t\fP * eax, \fBuint32_t\fP * ebx, \fBuint32_t\fP * ecx, \fBuint32_t\fP * edx)\fC [static]\fP"
 
 .PP
-Definition at line \fB129\fP of file \fBcpu\&.cpp\fP\&..PP
+Executes the CPUID instruction with the specified leaf and returns the results in the provided pointers\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIleaf\fP The CPUID leaf to query 
+.br
+\fIeax\fP The pointer to store the EAX result 
+.br
+\fIebx\fP The pointer to store the EBX result 
+.br
+\fIecx\fP The pointer to store the ECX result 
+.br
+\fIedx\fP The pointer to store the EDX result 
+.RE
+.PP
+
+.PP
+Definition at line \fB400\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-129                                                                                          {
-130 
-131     // Call the cpuid instruction
-132     __get_cpuid(leaf, eax, ebx, ecx, edx);
-133 }
+400                                                                                          {
+401 
+402     // Call the cpuid instruction
+403     __get_cpuid(leaf, eax, ebx, ecx, edx);
+404 }
 .fi
 
 .PP
-Referenced by \fBcheck_cpu_feature()\fP, \fBcheck_cpu_feature()\fP, and \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP\&.
-.SS "void CPU::get_status (cpu_status_t * status)\fC [static]\fP"
+Referenced by \fBcheck_cpu_feature()\fP, \fBcheck_cpu_feature()\fP, and \fBexecuting_core()\fP\&.
+.SS "\fBCore\fP * CPU::executing_core ()\fC [static]\fP"
 
 .PP
-Definition at line \fB43\fP of file \fBcpu\&.cpp\fP\&..PP
+Gets the core that is currently executing\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The currently executing core 
+.RE
+.PP
+
+.PP
+Definition at line \fB620\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-43                                          {
-44 
-45     // Get the registers
-46     asm volatile("mov %%r15, %0" : "=r" (status\->r15));
-47     asm volatile("mov %%r14, %0" : "=r" (status\->r14));
-48     asm volatile("mov %%r13, %0" : "=r" (status\->r13));
-49     asm volatile("mov %%r12, %0" : "=r" (status\->r12));
-50     asm volatile("mov %%r11, %0" : "=r" (status\->r11));
-51     asm volatile("mov %%r10, %0" : "=r" (status\->r10));
-52     asm volatile("mov %%r9, %0"  : "=r" (status\->r9));
-53     asm volatile("mov %%r8, %0"  : "=r" (status\->r8));
-54     asm volatile("mov %%rdi, %0" : "=r" (status\->rdi));
-55     asm volatile("mov %%rsi, %0" : "=r" (status\->rsi));
-56     asm volatile("mov %%rbp, %0" : "=r" (status\->rbp));
-57     asm volatile("mov %%rdx, %0" : "=r" (status\->rdx));
-58     asm volatile("mov %%rcx, %0" : "=r" (status\->rcx));
-59     asm volatile("mov %%rbx, %0" : "=r" (status\->rbx));
-60     asm volatile("mov %%rax, %0" : "=r" (status\->rax));
-61 }
+620                           {
+621 
+622     // No cores?
+623     if(cores\&.empty())
+624         return nullptr;
+625 
+626     // Get the id of this core
+627     uint32_t eax, ebx, ecx, edx;
+628     CPU::cpuid(1, &eax, &ebx, &ecx, &edx);
+629     uint32_t core_id = (ebx >> 24) & 0xFF;
+630 
+631     return cores[core_id];
+632 }
 .fi
 
 .PP
-References \fBstatus\fP\&.
+References \fBcores\fP, and \fBcpuid()\fP\&.
 .PP
-Referenced by \fBPANIC()\fP\&.
-.SS "void CPU::halt ()\fC [static]\fP"
+Referenced by \fBcore_main()\fP, \fBMaxOS::processes::GlobalScheduler::core_scheduler()\fP, \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\fP, \fBprepare_for_panic()\fP, \fBMaxOS::processes::GlobalScheduler::print_running_header()\fP, \fBMaxOS::processes::Thread::restore_sse_state()\fP, \fBMaxOS::processes::Thread::save_sse_state()\fP, and \fBMaxOS::processes::Thread::Thread()\fP\&.
+.SS "\fBvoid\fP CPU::find_cores ()"
 
 .PP
-Definition at line \fB37\fP of file \fBcpu\&.cpp\fP\&..PP
+Search the madt for cores and store them\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Support for x2apic 
+.RE
+.PP
+
+.PP
+Definition at line \fB524\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-37                             {
-38 
-39     while (true)
-40         asm volatile("hlt");
-41 }
+524                      {
+525 
+526     // Now that memory is set up the vector can be used
+527     cores\&.reserve(1);
+528 
+529     // Search and setup each core
+530     int index = 0;
+531     while (true){
+532 
+533         // Try to find a processor
+534         MADTEntry* processor_madt = apic\&.io_apic()\->get_madt_item(MADT_TYPE::PROCESSOR_APIC, index);
+535         if(!processor_madt)
+536             break;
+537 
+538         // Create a cpu
+539         auto* processor_apic = (madt_processor_apic_t*) ((uint64_t) processor_madt + sizeof(MADTEntry));
+540         cores\&.push_back(new Core(processor_apic));
+541         index++;
+542     }
+543 }
 .fi
 
 .PP
-Referenced by \fBPANIC()\fP\&.
-.SS "void CPU::init_sse ()"
-
-.PP
-Initialises the SSE instructions\&. 
-.PP
-Definition at line \fB293\fP of file \fBcpu\&.cpp\fP\&..PP
-.nf
-293                    {
-294 
-295     // Get the CR0 register
-296     uint64_t cr0;
-297     asm volatile("mov %%cr0, %0" : "=r" (cr0));
-298 
-299     // Get the CR4 register
-300     uint64_t cr4;
-301     asm volatile("mov %%cr4, %0" : "=r" (cr4));
-302 
-303     // Check if FPU is supported
-304     ASSERT(check_cpu_feature(CPU_FEATURE_EDX::FPU), "FPU not supported \- needed for SSE");
-305 
-306     // Clear the emulation flag, task switch flags and enable the monitor coprocessor, native exception bits
-307     cr0 |= (1 << 1);
-308     cr0 &= ~(1 << 2);
-309     cr0 &= ~(1 << 3);
-310     cr0 |= (1 << 5);
-311     asm volatile("mov %0, %%cr0" : : "r" (cr0));
-312 
-313     // Enable the FPU
-314     asm volatile("fninit");
-315 
-316     // Check if SSE is supported
-317     ASSERT(check_cpu_feature(CPU_FEATURE_EDX::SSE), "SSE not supported");
-318 
-319     // Enable FSAVE, FSTORE and SSE instructions
-320     cr4 |= (1 << 9);
-321     cr4 |= (1 << 10);
-322     asm volatile("mov %0, %%cr4" : : "r" (cr4));
-323 
-324     // Check if XSAVE is supported
-325     s_xsave = check_cpu_feature(CPU_FEATURE_ECX::XSAVE) && check_cpu_feature(CPU_FEATURE_ECX::OSXSAVE);
-326     Logger::DEBUG() << "XSAVE: " << (s_xsave ? "Supported" : "Not Supported") << "\\n";
-327     if (!s_xsave) return;
-328 
-329     // Enable the XSAVE and XRESTORE instructions
-330     cr4 |= (1 << 18);
-331     asm volatile("mov %0, %%cr4" : : "r" (cr4));
-332 
-333     // Set the SSE and x87 bits
-334     uint64_t xcr0;
-335     asm volatile("xgetbv" : "=a" (xcr0) : "c" (0));
-336     xcr0 |= 0x7;
-337     asm volatile("xsetbv" : : "c" (0), "a" (xcr0));
-338 
-339     // Check if AVX is supported
-340     s_avx = check_cpu_feature(CPU_FEATURE_ECX::AVX);
-341     Logger::DEBUG() << "AVX: " << (s_avx ? "Supported" : "Not Supported") << "\\n";
-342     if (!s_avx) return;
-343 
-344     // Enable the AVX instructions
-345     cr4 |= (1 << 14);
-346     asm volatile("mov %0, %%cr4" : : "r" (cr4));
-347 
-348     Logger::DEBUG() << "SSE Enabled\\n";
-349 }
-.fi
-
-.PP
-References \fBASSERT\fP, \fBMaxOS::system::AVX\fP, \fBcheck_cpu_feature()\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::system::FPU\fP, \fBMaxOS::system::OSXSAVE\fP, \fBs_avx\fP, \fBs_xsave\fP, \fBMaxOS::system::SSE\fP, and \fBMaxOS::system::XSAVE\fP\&.
+References \fBapic\fP, \fBcores\fP, \fBMaxOS::hardwarecommunication::IOAPIC::get_madt_item()\fP, and \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::io_apic()\fP\&.
 .PP
 Referenced by \fBCPU()\fP\&.
-.SS "void CPU::init_tss (\fBGlobalDescriptorTable\fP * gdt)"
+.SS "\fBvoid\fP CPU::get_status (\fBcpu_status_t\fP * status)\fC [static]\fP"
 
 .PP
-Initialises the TSS for interrupt handling\&. 
+Gets the current \fBCPU\fP status into the provided structure\&. 
 .PP
-Definition at line \fB206\fP of file \fBcpu\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The structure to fill with the \fBCPU\fP status 
+.RE
+.PP
+
+.PP
+Definition at line \fB284\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-206                                              {
-207 
-208     // The reserved have to be 0
-209     tss\&.reserved0 = 0;
-210     tss\&.reserved1 = 0;
-211     tss\&.reserved2 = 0;
-212     tss\&.reserved3 = 0;
-213     tss\&.reserved4 = 0;
-214 
-215     // The stacks
-216     tss\&.rsp0 = (uint64_t) stack + 16384;       // Kernel stack (scheduler will set the threads stack)
-217     tss\&.rsp1 = 0;
-218     tss\&.rsp2 = 0;
-219 
-220     // Interrupt stacks can all be 0
-221     tss\&.ist1 = 0;
-222     tss\&.ist2 = 0;
-223     tss\&.ist3 = 0;
-224     tss\&.ist4 = 0;
-225     tss\&.ist5 = 0;
-226     tss\&.ist6 = 0;
-227     tss\&.ist7 = 0;
-228 
-229     // Ports TODO when setting up userspace drivers come back to this
-230     tss\&.io_bitmap_offset = 0;
-231 
-232     // Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
-233     auto base = (uint64_t) &tss;
-234     uint16_t base_1 = base & 0xFFFF;
-235     uint8_t base_2 = (base >> 16) & 0xFF;
-236     uint8_t base_3 = (base >> 24) & 0xFF;
-237     uint32_t base_4 = (base >> 32) & 0xFFFFFFFF;
-238 
-239     uint16_t limit_low = sizeof(tss);
-240 
-241     // Flags: 1 \- Type = 0x9, Descriptor Privilege Level = 0, Present = 1
-242     //        2 \- Available = 0, Granularity = 0
-243     uint8_t flags_1 = 0x89;
-244     uint8_t flags_2 = 0;
-245 
-246     // Create the TSS descriptors
-247     uint64_t tss_descriptor_low = (uint64_t) base_3 << 56 | (uint64_t) flags_2 << 48 | (uint64_t) flags_1 << 40 | (uint64_t) base_2 << 32 | (uint64_t) base_1 << 16 | (uint64_t) limit_low;
-248     uint64_t tss_descriptor_high = base_4;
-249 
-250     // Store in the GDT
-251     gdt\->table[5] = tss_descriptor_low;
-252     gdt\->table[6] = tss_descriptor_high;
-253 
-254     // Load the TSS
-255     Logger::DEBUG() << "Loading TSS: 0x0" << tss_descriptor_low << " 0x0" << tss_descriptor_high << " at 0x" << (uint64_t) &tss << "\\n";
-256     asm volatile("ltr %%ax" : : "a" (0x28));
-257 
-258     //TODO: For smp \- load the TSS for each core or find a better way to do this
-259 }
+284                                          {
+285 
+286     // Get the registers
+287     asm volatile("mov %%r15, %0" : "=r" (status\->r15));
+288     asm volatile("mov %%r14, %0" : "=r" (status\->r14));
+289     asm volatile("mov %%r13, %0" : "=r" (status\->r13));
+290     asm volatile("mov %%r12, %0" : "=r" (status\->r12));
+291     asm volatile("mov %%r11, %0" : "=r" (status\->r11));
+292     asm volatile("mov %%r10, %0" : "=r" (status\->r10));
+293     asm volatile("mov %%r9, %0"  : "=r" (status\->r9));
+294     asm volatile("mov %%r8, %0"  : "=r" (status\->r8));
+295     asm volatile("mov %%rdi, %0" : "=r" (status\->rdi));
+296     asm volatile("mov %%rsi, %0" : "=r" (status\->rsi));
+297     asm volatile("mov %%rbp, %0" : "=r" (status\->rbp));
+298     asm volatile("mov %%rdx, %0" : "=r" (status\->rdx));
+299     asm volatile("mov %%rcx, %0" : "=r" (status\->rcx));
+300     asm volatile("mov %%rbx, %0" : "=r" (status\->rbx));
+301     asm volatile("mov %%rax, %0" : "=r" (status\->rax));
+302 }
 .fi
 
 .PP
-References \fBbase\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::system::tss::io_bitmap_offset\fP, \fBMaxOS::system::tss::ist1\fP, \fBMaxOS::system::tss::ist2\fP, \fBMaxOS::system::tss::ist3\fP, \fBMaxOS::system::tss::ist4\fP, \fBMaxOS::system::tss::ist5\fP, \fBMaxOS::system::tss::ist6\fP, \fBMaxOS::system::tss::ist7\fP, \fBMaxOS::system::tss::reserved0\fP, \fBMaxOS::system::tss::reserved1\fP, \fBMaxOS::system::tss::reserved2\fP, \fBMaxOS::system::tss::reserved3\fP, \fBMaxOS::system::tss::reserved4\fP, \fBMaxOS::system::tss::rsp0\fP, \fBMaxOS::system::tss::rsp1\fP, \fBMaxOS::system::tss::rsp2\fP, \fBstack\fP, \fBMaxOS::system::GlobalDescriptorTable::table\fP, and \fBtss\fP\&.
-.PP
-Referenced by \fBCPU()\fP\&.
-.SS "void CPU::PANIC (const char * message, cpu_status_t * status = \fCnullptr\fP)\fC [static]\fP"
+Referenced by \fBPANIC()\fP\&.
+.SS "\fBvoid\fP CPU::halt ()\fC [static]\fP"
 
 .PP
-Definition at line \fB154\fP of file \fBcpu\&.cpp\fP\&..PP
+Halts the \fBCPU\fP indefinitely\&. 
+.PP
+Definition at line \fB273\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-154                                                          {
-155 
-156     // Get the current process
-157     Process* process = Scheduler::current_process();
-158 
-159     // Ensure ready to panic  \- At this point it is not an issue if it is possible can avoid the panic as it is most
-160     // likely called by a place that cant switch to the avoidable state
-161     if (!is_panicking)
-162         prepare_for_panic();
-163 
-164     // Print using the backend
-165     Logger::ERROR() << "\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-\\n";
-166     Logger::ERROR() << "Kernel Panic: " << message << "\\n";
-167 
-168     // Info about the running process
-169     Logger::ERROR() << "Process: " << (process ? process\->name\&.c_str() : "Kernel") << "\\n";
-170     if (process)
-171         Logger::ERROR() << "After running for " << process\->total_ticks() << " ticks (system uptime: " << Scheduler::system_scheduler()\->ticks() << " ticks)\\n";
-172 
-173     // Stack trace
-174     Logger::ERROR() << "\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\\n";
-175     Logger::ERROR() << "Stack Trace:\\n";
-176     stack_trace(10);
-177 
-178     // Register dump
-179     Logger::ERROR() << "\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\\n";
-180     Logger::ERROR() << "Register Dump:\\n";
-181 
-182     // Log the regs
-183     cpu_status_t new_status{};
-184     if (!status) {
-185         get_status(&new_status);
-186         status = &new_status;
-187     }
-188     print_registers(status);
-189 
-190     // Print some text to the user
-191     Logger::ERROR() << "\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\\n";
-192     Logger::ERROR() << "There has been a fatal error in MaxOS and the system has been halted\&.\\n";
-193     Logger::ERROR() << "Please restart the system\&.\\n";
-194 
-195     // Print the logo
-196     Logger::ERROR() << "\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\\n";
-197     console::VESABootConsole::print_logo_kernel_panic();
-198 
-199     // Halt
-200     halt();
-201 }
+273                             {
+274 
+275     while (true)
+276         asm volatile("hlt");
+277 }
 .fi
 
 .PP
-References \fBMaxOS::String::c_str()\fP, \fBMaxOS::processes::Scheduler::current_process()\fP, \fBLogger::ERROR()\fP, \fBget_status()\fP, \fBhalt()\fP, \fBis_panicking\fP, \fBMaxOS::processes::Process::name\fP, \fBprepare_for_panic()\fP, \fBMaxOS::drivers::console::VESABootConsole::print_logo_kernel_panic()\fP, \fBprint_registers()\fP, \fBstack_trace()\fP, \fBstatus\fP, \fBMaxOS::processes::Scheduler::system_scheduler()\fP, \fBMaxOS::processes::Scheduler::ticks()\fP, and \fBMaxOS::processes::Process::total_ticks()\fP\&.
+Referenced by \fBPANIC()\fP\&.
+.SS "\fBvoid\fP CPU::init_cores ()"
+
+.PP
+Wake up all the cores\&. 
+.PP
+Definition at line \fB548\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+548                      {
+549 
+550     Logger::INFO() << "Waking up cores: \\n";
+551 
+552     // Make sure core_start is accessible
+553     ASSERT((void*)&core_start == (void*)0x8000, "Core start not at expected address");
+554     PhysicalMemoryManager::s_current_manager\->identity_map((physical_address_t*)0x8000, PRESENT | WRITE);
+555 
+556     // Set up the boot info
+557     auto info = (core_boot_info_t*)(core_boot_info);
+558     info\->p4_table = (uint64_t)PhysicalMemoryManager::to_lower_region((uintptr_t)p4_table);
+559 
+560     // Start each core
+561     for(const auto& core : cores)
+562         core\->wake_up(this);
+563 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBcore_boot_info\fP, \fBcores\fP, \fBLogger::INFO()\fP, \fBp4_table\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_lower_region()\fP, and \fBMaxOS::memory::WRITE\fP\&.
+.SS "\fBvoid\fP CPU::PANIC (\fBconst\fP \fBchar\fP * message, \fBcpu_status_t\fP * status = \fC\fBnullptr\fP\fP)\fC [static]\fP"
+
+.PP
+Puts the \fBCPU\fP into a panic state and halts it\&. Dumps the stack trace and registers\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImessage\fP The panic message 
+.br
+\fIstatus\fP The \fBCPU\fP status at the time of the panic (if available, otherwise will be fetched) 
+.RE
+.PP
+
+.PP
+Definition at line \fB436\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+436                                                          {
+437 
+438     // Ensure ready to panic  \- At this point it is not an issue if it is possible can avoid the panic as it is most
+439     // likely called by a place that cant switch to the avoidable state
+440     prepare_for_panic();
+441     panic_lock\&.lock();
+442 
+443     // Get the current process
+444     Process* process = GlobalScheduler::current_process();
+445 
+446     // Print using the backend
+447     Logger::ERROR() << "\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-=\-\\n";
+448     Logger::ERROR() << "Kernel Panic: " << message << "\\n";
+449     Logger::ERROR() << "On Core: " << (panic_core ? panic_core\->id : 0) << "\\n";
+450 
+451     // Info about the running process
+452     Logger::ERROR() << "Process: " << (process ? process\->name\&.c_str() : "Kernel") << "\\n";
+453     if (process)
+454         Logger::ERROR() << "After running for " << process\->total_ticks() << " ticks (system uptime: " << GlobalScheduler::core_scheduler()\->ticks() << " ticks)\\n";
+455 
+456     // Stack trace
+457     Logger::ERROR() << "\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\\n";
+458     Logger::ERROR() << "Stack Trace:\\n";
+459     stack_trace(10);
+460 
+461     // Register dump
+462     Logger::ERROR() << "\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\\n";
+463     Logger::ERROR() << "Register Dump:\\n";
+464 
+465     // Log the regs
+466     cpu_status_t new_status{};
+467     if (!status) {
+468         get_status(&new_status);
+469         status = &new_status;
+470     }
+471     print_registers(status);
+472 
+473     // Print some text to the user
+474     Logger::ERROR() << "\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\\n";
+475     Logger::ERROR() << "There has been a fatal error in MaxOS and the system has been halted\&.\\n";
+476     Logger::ERROR() << "Please restart the system\&.\\n";
+477 
+478     // Print the logo
+479     Logger::ERROR() << "\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\\n";
+480 
+481     // Halt
+482     halt();
+483 }
+.fi
+
+.PP
+References \fBMaxOS::processes::GlobalScheduler::core_scheduler()\fP, \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBLogger::ERROR()\fP, \fBget_status()\fP, \fBhalt()\fP, \fBpanic_core\fP, \fBpanic_lock\fP, \fBprepare_for_panic()\fP, \fBprint_registers()\fP, and \fBstack_trace()\fP\&.
 .PP
 Referenced by \fBLogger::ASSERT()\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::HandleInterrupt()\fP\&.
-.SS "cpu_status_t * CPU::prepare_for_panic (cpu_status_t * status = \fCnullptr\fP)\fC [static]\fP"
+.SS "\fBcpu_status_t\fP * CPU::prepare_for_panic (\fBcpu_status_t\fP * status = \fC\fBnullptr\fP\fP, \fBconst\fP \fBstring\fP & msg = \fC''\fP)\fC [static]\fP"
 
 .PP
 Ensure the \fBCPU\fP must panic and prepare for it if so\&. 
@@ -493,6 +510,8 @@ Ensure the \fBCPU\fP must panic and prepare for it if so\&.
 \fBParameters\fP
 .RS 4
 \fIstatus\fP The status of the \fBCPU\fP (if available) 
+.br
+\fImsg\fP The message to print to diagnose the cause of the panic (prints when close program) 
 .RE
 .PP
 \fBReturns\fP
@@ -502,210 +521,258 @@ A \fBCPU\fP status to avoid having to panic or a nullptr if the \fBCPU\fP must p
 .PP
 
 .PP
-Definition at line \fB267\fP of file \fBcpu\&.cpp\fP\&..PP
+Definition at line \fB492\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-267                                                          {
-268 
-269 
-270     // If it may have occurred in a process, switch to the avoidable state
-271     if (Scheduler::system_scheduler() != nullptr && Scheduler::current_process() != nullptr) {
-272 
-273         // Get the current process
-274         Process* process = Scheduler::current_process();
-275 
-276         // If the faulting address is in lower half just kill the process and move on
-277         if (status && !memory::PhysicalMemoryManager::in_higher_region(status\->rip)) {
-278             Logger::ERROR() << "CPU Panicked in process " << process\->name\&.c_str() << " at 0x" << status\->rip << " \- killing process\\n";
-279             return Scheduler::system_scheduler()\->force_remove_process(process);
-280         }
-281 
-282         // Otherwise occurred whilst the kernel was doing something for the process
-283     }
-284 
-285     // We are panicking
-286     is_panicking = true;
-287     return nullptr;
-288 }
+492                                                                             {
+493     panic_lock\&.lock();
+494 
+495     // If it may have occurred in a process, switch to the avoidable state
+496     if (GlobalScheduler::system_scheduler() != nullptr && GlobalScheduler::current_process() != nullptr) {
+497 
+498         // Get the current process
+499         Process* process = GlobalScheduler::current_process();
+500 
+501         // If the faulting address is in lower half just kill the process and move on
+502         if (status && !memory::PhysicalMemoryManager::in_higher_region(status\->rip)) {
+503             Logger::ERROR() << "CPU Panicked (i " << (int)status\->interrupt_number << ") in process " << process\->name\&.c_str() << " at 0x" << status\->rip << " \- killing process\\n";
+504             Logger::ERROR() << msg;
+505             panic_lock\&.unlock();
+506             return GlobalScheduler::system_scheduler()\->force_remove_process(process);
+507         }
+508 
+509         // Otherwise occurred whilst the kernel was doing something for the process
+510     }
+511 
+512     // We are panicking
+513     panic_core = executing_core();
+514     console::VESABootConsole::print_logo(true);
+515     panic_lock\&.unlock();
+516     return nullptr;
+517 }
 .fi
 
 .PP
-References \fBMaxOS::String::c_str()\fP, \fBMaxOS::processes::Scheduler::current_process()\fP, \fBLogger::ERROR()\fP, \fBMaxOS::processes::Scheduler::force_remove_process()\fP, \fBMaxOS::memory::PhysicalMemoryManager::in_higher_region()\fP, \fBis_panicking\fP, \fBMaxOS::processes::Process::name\fP, \fBstatus\fP, and \fBMaxOS::processes::Scheduler::system_scheduler()\fP\&.
-.PP
-Referenced by \fBMaxOS::hardwarecommunication::InterruptManager::HandleInterrupt()\fP, and \fBPANIC()\fP\&.
-.SS "void CPU::print_registers (cpu_status_t * status)\fC [static]\fP"
-
-.PP
-Definition at line \fB84\fP of file \fBcpu\&.cpp\fP\&..PP
-.nf
-84                                               {
-85 
-86     // Print the registers
-87     Logger::ERROR() << "R15: \\t0x" << status\->r15 << "\\n";
-88     Logger::ERROR() << "R14: \\t0x" << status\->r14 << "\\n";
-89     Logger::ERROR() << "R13: \\t0x" << status\->r13 << "\\n";
-90     Logger::ERROR() << "R12: \\t0x" << status\->r12 << "\\n";
-91     Logger::ERROR() << "R11: \\t0x" << status\->r11 << "\\n";
-92     Logger::ERROR() << "R10: \\t0x" << status\->r10 << "\\n";
-93     Logger::ERROR() << "R9: \\t0x" << status\->r9 << "\\n";
-94     Logger::ERROR() << "R8: \\t0x" << status\->r8 << "\\n";
-95     Logger::ERROR() << "RDI: \\t0x" << status\->rdi << "\\n";
-96     Logger::ERROR() << "RSI: \\t0x" << status\->rsi << "\\n";
-97     Logger::ERROR() << "RBP: \\t0x" << status\->rbp << "\\n";
-98     Logger::ERROR() << "RDX: \\t0x" << status\->rdx << "\\n";
-99     Logger::ERROR() << "RCX: \\t0x" << status\->rcx << "\\n";
-100     Logger::ERROR() << "RBX: \\t0x" << status\->rbx << "\\n";
-101     Logger::ERROR() << "RAX: \\t0x" << status\->rax << "\\n";
-102     Logger::ERROR() << "INT: \\t0x" << status\->interrupt_number << "\\n";
-103     Logger::ERROR() << "ERRCD: \\t0x" << status\->error_code << "\\n";
-104     Logger::ERROR() << "RIP: \\t0x" << status\->rip << "\\n";
-105     Logger::ERROR() << "CS: \\t0x" << status\->cs << "\\n";
-106     Logger::ERROR() << "RFlGS: \\t0x" << status\->rflags << "\\n";
-107     Logger::ERROR() << "RSP: \\t0x" << status\->rsp << "\\n";
-108     Logger::ERROR() << "SS: \\t0x" << status\->ss << "\\n";
-109 
-110 }
-.fi
-
-.PP
-References \fBLogger::ERROR()\fP, and \fBstatus\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBLogger::ERROR()\fP, \fBexecuting_core()\fP, \fBMaxOS::memory::PhysicalMemoryManager::in_higher_region()\fP, \fBpanic_core\fP, \fBpanic_lock\fP, \fBMaxOS::drivers::console::VESABootConsole::print_logo()\fP, and \fBMaxOS::processes::GlobalScheduler::system_scheduler()\fP\&.
 .PP
 Referenced by \fBPANIC()\fP\&.
-.SS "uint64_t CPU::read_msr (uint32_t msr)\fC [static]\fP"
+.SS "\fBvoid\fP CPU::print_registers (\fBcpu_status_t\fP * status)\fC [static]\fP"
 
 .PP
-Definition at line \fB113\fP of file \fBcpu\&.cpp\fP\&..PP
+Prints the \fBCPU\fP registers from the provided structure\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The structure containing the \fBCPU\fP status 
+.RE
+.PP
+
+.PP
+Definition at line \fB335\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-113                                    {
-114 
-115     // Read the MSR
-116     uint32_t low, high;
-117     asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (msr));
-118 
-119     // Return the value
-120     return (uint64_t) low | ((uint64_t) high << 32);
-121 }
-.fi
-
-.PP
-Referenced by \fBcheck_nx()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, and \fBMaxOS::hardwarecommunication::LocalAPIC::read()\fP\&.
-.SS "void CPU::set_status (cpu_status_t * status)\fC [static]\fP"
-
-.PP
-Definition at line \fB63\fP of file \fBcpu\&.cpp\fP\&..PP
-.nf
-63                                          {
-64 
-65     // Set the registers
-66     asm volatile("mov %0, %%r15" : : "r" (status\->r15));
-67     asm volatile("mov %0, %%r14" : : "r" (status\->r14));
-68     asm volatile("mov %0, %%r13" : : "r" (status\->r13));
-69     asm volatile("mov %0, %%r12" : : "r" (status\->r12));
-70     asm volatile("mov %0, %%r11" : : "r" (status\->r11));
-71     asm volatile("mov %0, %%r10" : : "r" (status\->r10));
-72     asm volatile("mov %0, %%r9"  : : "r" (status\->r9));
-73     asm volatile("mov %0, %%r8"  : : "r" (status\->r8));
-74     asm volatile("mov %0, %%rdi" : : "r" (status\->rdi));
-75     asm volatile("mov %0, %%rsi" : : "r" (status\->rsi));
-76     asm volatile("mov %0, %%rbp" : : "r" (status\->rbp));
-77     asm volatile("mov %0, %%rdx" : : "r" (status\->rdx));
-78     asm volatile("mov %0, %%rcx" : : "r" (status\->rcx));
-79     asm volatile("mov %0, %%rbx" : : "r" (status\->rbx));
-80     asm volatile("mov %0, %%rax" : : "r" (status\->rax));
-81 
-82 }
-.fi
-
-.PP
-References \fBstatus\fP\&.
-.SS "void CPU::stack_trace (size_t level)\fC [static]\fP"
-
-.PP
-Definition at line \fB135\fP of file \fBcpu\&.cpp\fP\&..PP
-.nf
-135                                   {
-136 
-137     // Get the first stack frame
-138     auto* frame = (stack_frame_t*) __builtin_frame_address(0);
-139 
-140     // Loop through the frames logging
-141     for (size_t current_level = 0; current_level < level; current_level++) {
-142 
-143         // Print the frame
-144         Logger::ERROR() << "(" << current_level << "):\\t at 0x" << frame\->rip << "\\n";
-145 
-146         // Next frame
-147         frame = frame\->next;
-148         if (frame == nullptr)
-149             break;
-150 
-151     }
-152 }
+335                                               {
+336 
+337     // Print the registers
+338     Logger::ERROR() << "R15: \\t0x" << status\->r15 << "\\n";
+339     Logger::ERROR() << "R14: \\t0x" << status\->r14 << "\\n";
+340     Logger::ERROR() << "R13: \\t0x" << status\->r13 << "\\n";
+341     Logger::ERROR() << "R12: \\t0x" << status\->r12 << "\\n";
+342     Logger::ERROR() << "R11: \\t0x" << status\->r11 << "\\n";
+343     Logger::ERROR() << "R10: \\t0x" << status\->r10 << "\\n";
+344     Logger::ERROR() << "R9: \\t0x" << status\->r9 << "\\n";
+345     Logger::ERROR() << "R8: \\t0x" << status\->r8 << "\\n";
+346     Logger::ERROR() << "RDI: \\t0x" << status\->rdi << "\\n";
+347     Logger::ERROR() << "RSI: \\t0x" << status\->rsi << "\\n";
+348     Logger::ERROR() << "RBP: \\t0x" << status\->rbp << "\\n";
+349     Logger::ERROR() << "RDX: \\t0x" << status\->rdx << "\\n";
+350     Logger::ERROR() << "RCX: \\t0x" << status\->rcx << "\\n";
+351     Logger::ERROR() << "RBX: \\t0x" << status\->rbx << "\\n";
+352     Logger::ERROR() << "RAX: \\t0x" << status\->rax << "\\n";
+353     Logger::ERROR() << "INT: \\t0x" << status\->interrupt_number << "\\n";
+354     Logger::ERROR() << "ERRCD: \\t0x" << status\->error_code << "\\n";
+355     Logger::ERROR() << "RIP: \\t0x" << status\->rip << "\\n";
+356     Logger::ERROR() << "CS: \\t0x" << status\->cs << "\\n";
+357     Logger::ERROR() << "RFlGS: \\t0x" << status\->rflags << "\\n";
+358     Logger::ERROR() << "RSP: \\t0x" << status\->rsp << "\\n";
+359     Logger::ERROR() << "SS: \\t0x" << status\->ss << "\\n";
+360 
+361 }
 .fi
 
 .PP
 References \fBLogger::ERROR()\fP\&.
 .PP
 Referenced by \fBPANIC()\fP\&.
-.SS "void CPU::write_msr (uint32_t msr, uint64_t value)\fC [static]\fP"
+.SS "\fBuint64_t\fP CPU::read_msr (\fBuint32_t\fP msr)\fC [static]\fP"
 
 .PP
-Definition at line \fB123\fP of file \fBcpu\&.cpp\fP\&..PP
+Reads the value of the specified MSR\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImsr\fP The MSR to read 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The value of the MSR 
+.RE
+.PP
+
+.PP
+Definition at line \fB369\fP of file \fBcpu\&.cpp\fP\&..PP
 .nf
-123                                                 {
-124 
-125     // Write the MSR
-126     asm volatile("wrmsr" : : "a" ((uint32_t) value), "d" ((uint32_t) (value >> 32)), "c" (msr));
-127 }
+369                                    {
+370 
+371     // Read the MSR
+372     uint32_t low, high;
+373     asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (msr));
+374 
+375     // Return the value
+376     return (uint64_t) low | ((uint64_t) high << 32);
+377 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, and \fBMaxOS::hardwarecommunication::LocalAPIC::write()\fP\&.
+Referenced by \fBcheck_nx()\fP, and \fBMaxOS::hardwarecommunication::LocalAPIC::read()\fP\&.
+.SS "\fBvoid\fP CPU::set_status (\fBcpu_status_t\fP * status)\fC [static]\fP"
+
+.PP
+Sets the \fBCPU\fP registers from the provided structure\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The structure containing the \fBCPU\fP status 
+.RE
+.PP
+
+.PP
+Definition at line \fB309\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+309                                          {
+310 
+311     // Set the registers
+312     asm volatile("mov %0, %%r15" : : "r" (status\->r15));
+313     asm volatile("mov %0, %%r14" : : "r" (status\->r14));
+314     asm volatile("mov %0, %%r13" : : "r" (status\->r13));
+315     asm volatile("mov %0, %%r12" : : "r" (status\->r12));
+316     asm volatile("mov %0, %%r11" : : "r" (status\->r11));
+317     asm volatile("mov %0, %%r10" : : "r" (status\->r10));
+318     asm volatile("mov %0, %%r9"  : : "r" (status\->r9));
+319     asm volatile("mov %0, %%r8"  : : "r" (status\->r8));
+320     asm volatile("mov %0, %%rdi" : : "r" (status\->rdi));
+321     asm volatile("mov %0, %%rsi" : : "r" (status\->rsi));
+322     asm volatile("mov %0, %%rbp" : : "r" (status\->rbp));
+323     asm volatile("mov %0, %%rdx" : : "r" (status\->rdx));
+324     asm volatile("mov %0, %%rcx" : : "r" (status\->rcx));
+325     asm volatile("mov %0, %%rbx" : : "r" (status\->rbx));
+326     asm volatile("mov %0, %%rax" : : "r" (status\->rax));
+327 
+328 }
+.fi
+
+.SS "\fBvoid\fP CPU::stack_trace (\fBsize_t\fP level)\fC [static]\fP"
+
+.PP
+Prints a stack trace up to the specified level\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlevel\fP The number of stack frames to print 
+.RE
+.PP
+
+.PP
+Definition at line \fB411\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+411                                   {
+412 
+413     auto* frame = (stack_frame_t*) __builtin_frame_address(0);
+414 
+415     // Loop through the frames logging
+416     for (size_t current_level = 0; current_level < level; current_level++) {
+417 
+418         // Print the frame
+419         auto function = resolve_symbol(frame\->rip);
+420         Logger::ERROR() << "(" << current_level << "): " << (function ? function : "Unknown()")  << " at 0x" << frame\->rip << "\\n";
+421 
+422         // Next frame
+423         frame = frame\->next;
+424         if (frame == nullptr)
+425             break;
+426 
+427     }
+428 }
+.fi
+
+.PP
+References \fBLogger::ERROR()\fP, and \fBMaxOS::common::resolve_symbol()\fP\&.
+.PP
+Referenced by \fBPANIC()\fP\&.
+.SS "\fBvoid\fP CPU::write_msr (\fBuint32_t\fP msr, \fBuint64_t\fP value)\fC [static]\fP"
+
+.PP
+Writes the specified value to the specified MSR\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImsr\fP The MSR to write to 
+.br
+\fIvalue\fP The value to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB385\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+385                                                 {
+386 
+387     // Write the MSR
+388     asm volatile("wrmsr" : : "a" ((uint32_t) value), "d" ((uint32_t) (value >> 32)), "c" (msr));
+389 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::hardwarecommunication::LocalAPIC::send_init()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::send_startup()\fP, and \fBMaxOS::hardwarecommunication::LocalAPIC::write()\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "\fBhardwarecommunication::AdvancedConfigurationAndPowerInterface\fP* MaxOS::system::CPU::acpi"
+.SS "\fBhardwarecommunication::AdvancedConfigurationAndPowerInterface\fP MaxOS::system::CPU::acpi"
 
 .PP
-Definition at line \fB149\fP of file \fBcpu\&.h\fP\&.
+The ACPI interface for the \fBCPU\fP\&. 
 .PP
-Referenced by \fBCPU()\fP\&.
-.SS "\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP* MaxOS::system::CPU::apic"
+Definition at line \fB235\fP of file \fBcpu\&.h\fP\&.
+.SS "\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP MaxOS::system::CPU::apic"
 
 .PP
-Definition at line \fB150\fP of file \fBcpu\&.h\fP\&.
+The APIC interface for the \fBCPU\fP\&. 
 .PP
-Referenced by \fBCPU()\fP\&.
-.SS "bool MaxOS::system::CPU::is_panicking = { false }\fC [inline]\fP, \fC [static]\fP"
+Definition at line \fB236\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBCPU()\fP, and \fBfind_cores()\fP\&.
+.SS "\fBcommon::Vector\fP<\fBCore\fP*> MaxOS::system::CPU::cores\fC [inline]\fP, \fC [static]\fP"
 
 .PP
-Definition at line \fB152\fP of file \fBcpu\&.h\fP\&..PP
-.nf
-152 { false };
-.fi
+The list of \fBCPU\fP cores in the system (populated during initialization, includes the BSP and cores that failed to start) 
+.PP
+Definition at line \fB245\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::GlobalScheduler::activate()\fP, \fBMaxOS::processes::GlobalScheduler::add_process()\fP, \fBMaxOS::processes::GlobalScheduler::add_thread()\fP, \fBCPU()\fP, \fBMaxOS::processes::GlobalScheduler::deactivate()\fP, \fBexecuting_core()\fP, \fBfind_cores()\fP, \fBMaxOS::processes::GlobalScheduler::force_remove_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_thread()\fP, \fBMaxOS::processes::GlobalScheduler::GlobalScheduler()\fP, \fBinit_cores()\fP, and \fBMaxOS::processes::GlobalScheduler::remove_process()\fP\&.
+.SS "\fBCore\fP* MaxOS::system::CPU::panic_core = nullptr\fC [inline]\fP, \fC [static]\fP"
 
 .PP
-Referenced by \fBPANIC()\fP, \fBprepare_for_panic()\fP, and \fBMaxOS::drivers::console::VESABootConsole::scroll_up()\fP\&.
-.SS "bool MaxOS::system::CPU::s_avx = false\fC [inline]\fP, \fC [static]\fP"
+The core that triggered the panic\&. 
+.PP
+Definition at line \fB238\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBPANIC()\fP, and \fBprepare_for_panic()\fP\&.
+.SS "\fBcommon::Spinlock\fP MaxOS::system::CPU::panic_lock\fC [inline]\fP, \fC [static]\fP"
 
 .PP
-Definition at line \fB161\fP of file \fBcpu\&.h\fP\&.
+Lock to prevent multiple panics at once\&. 
 .PP
-Referenced by \fBinit_sse()\fP\&.
-.SS "bool MaxOS::system::CPU::s_xsave = false\fC [inline]\fP, \fC [static]\fP"
-
+Definition at line \fB239\fP of file \fBcpu\&.h\fP\&.
 .PP
-Definition at line \fB160\fP of file \fBcpu\&.h\fP\&.
-.PP
-Referenced by \fBinit_sse()\fP, \fBMaxOS::processes::Thread::restore_sse_state()\fP, and \fBMaxOS::processes::Thread::save_sse_state()\fP\&.
-.SS "tss_t MaxOS::system::CPU::tss = {}\fC [inline]\fP, \fC [static]\fP"
-
-.PP
-Definition at line \fB158\fP of file \fBcpu\&.h\fP\&..PP
-.nf
-158 {};
-.fi
-
-.PP
-Referenced by \fBinit_tss()\fP, \fBMaxOS::processes::Scheduler::schedule_next()\fP, and \fBMaxOS::processes::Thread::Thread()\fP\&.
+Referenced by \fBMaxOS::drivers::console::VESABootConsole::get_background_color()\fP, \fBMaxOS::drivers::console::VESABootConsole::get_foreground_color()\fP, \fBPANIC()\fP, and \fBprepare_for_panic()\fP\&.
 
 .SH "Author"
 .PP 

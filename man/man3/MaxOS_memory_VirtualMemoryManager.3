@@ -13,21 +13,15 @@ MaxOS::memory::VirtualMemoryManager \- Manages the virtual memory of the system 
 
 .in +1c
 .ti -1c
-.RI "\fBVirtualMemoryManager\fP ()"
-.br
-.ti -1c
-.RI "\fB~VirtualMemoryManager\fP ()"
-.br
-.ti -1c
 .RI "\fBvoid\fP * \fBallocate\fP (\fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP)"
 .br
 .RI "Allocate a new chunk of virtual memory\&. "
 .ti -1c
-.RI "\fBvoid\fP * \fBallocate\fP (\fBuint64_t\fP \fBaddress\fP, \fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP)"
+.RI "\fBvoid\fP * \fBallocate\fP (\fBuint64_t\fP address, \fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP)"
 .br
 .RI "Allocate a new chunk of virtual memory at a specific address (ie for mmap io devices) "
 .ti -1c
-.RI "\fBvoid\fP \fBfree\fP (\fBvoid\fP *\fBaddress\fP)"
+.RI "\fBvoid\fP \fBfree\fP (\fBvoid\fP *address)"
 .br
 .RI "Free a chunk of virtual memory\&. "
 .ti -1c
@@ -58,116 +52,121 @@ MaxOS::memory::VirtualMemoryManager \- Manages the virtual memory of the system 
 .SH "Detailed Description"
 .PP 
 Manages the virtual memory of the system and provides functions to allocate and free memory in the virtual address space\&. 
+
+
 .PP
-Definition at line \fB49\fP of file \fBvirtual\&.h\fP\&.
+\fBNote\fP
+.RS 4
+Have to use a linked list as vector class depends on dynamic memory allocation (which depends on this) 
+.RE
+.PP
+
+.PP
+Definition at line \fB77\fP of file \fBvirtual\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "VirtualMemoryManager::VirtualMemoryManager ()"
 
 .PP
-Definition at line \fB13\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB17\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-13                                            {
-14 
-15     // Set the kernel flag
-16     bool is_kernel = MemoryManager::s_kernel_memory_manager == nullptr;
-17     if (!is_kernel) {
+17                                            {
 18 
-19         // Get a new pml4 table
-20         m_pml4_root_physical_address = (uint64_t*) PhysicalMemoryManager::s_current_manager\->allocate_frame();
-21         m_pml4_root_address = (uint64_t*) PhysicalMemoryManager::to_dm_region((uint64_t) m_pml4_root_physical_address);
+19     // Set the kernel flag
+20     bool is_kernel = MemoryManager::s_kernel_memory_manager == nullptr;
+21     if (!is_kernel) {
 22 
-23         // Clear the table
-24         PhysicalMemoryManager::clean_page_table(m_pml4_root_address);
-25 
-26         // Map the higher half of the kernel (p4 256 \- 511)
-27         for (size_t i = 256; i < 512; i++) {
-28 
-29             // Recursive Map the pml4 table (so that we can access the new pml4 table later on)
-30             if (i == 510) {
-31                 m_pml4_root_address[i] = (uint64_t) m_pml4_root_physical_address | Present | Write;
-32                 continue;
-33             }
-34 
-35             // Set the new pml4 table to the old (kernel) pml4 table
-36             m_pml4_root_address[i] = PhysicalMemoryManager::s_current_manager\->pml4_root_address()[i];
-37 
-38         }
-39         Logger::DEBUG() << "Mapped higher half of kernel\\n";
-40 
+23         // Get a new pml4 table
+24         m_pml4_root_physical_address = (uint64_t*) PhysicalMemoryManager::s_current_manager\->allocate_frame();
+25         m_pml4_root_address = (uint64_t*) PhysicalMemoryManager::to_dm_region((uint64_t) m_pml4_root_physical_address);
+26 
+27         // Clear the table
+28         PhysicalMemoryManager::clean_page_table(m_pml4_root_address);
+29 
+30         // Map the higher half of the kernel (p4 256 \- 511)
+31         for (size_t i = 256; i < 512; i++) {
+32 
+33             // Recursive Map the pml4 table (so that we can access the new pml4 table later on)
+34             if (i == 510) {
+35                 m_pml4_root_address[i] = (uint64_t) m_pml4_root_physical_address | PRESENT | WRITE;
+36                 continue;
+37             }
+38 
+39             // Set the new pml4 table to the old (kernel) pml4 table
+40             m_pml4_root_address[i] = PhysicalMemoryManager::s_current_manager\->pml4_root_address()[i];
 41 
-42     } else {
-43         m_pml4_root_address = PhysicalMemoryManager::s_current_manager\->pml4_root_address();
-44         m_pml4_root_physical_address = (uint64_t*) PhysicalMemoryManager::to_lower_region((uint64_t) m_pml4_root_address);
-45     }
-46 
-47     // Allocate space for the vmm
-48     uint64_t vmm_space = PhysicalMemoryManager::align_to_page(PhysicalMemoryManager::s_hh_direct_map_offset + PhysicalMemoryManager::s_current_manager\->memory_size() + PhysicalMemoryManager::s_page_size);    //TODO: Check that am not slowly overwriting the kernel (filling first space with 0s bugs out the kernel)
-49     void* vmm_space_physical = PhysicalMemoryManager::s_current_manager\->allocate_frame();
-50     PhysicalMemoryManager::s_current_manager\->map(vmm_space_physical, (virtual_address_t*) vmm_space, Present | Write, m_pml4_root_address);
-51     Logger::DEBUG() << "VMM space: physical \- 0x" << (uint64_t) vmm_space_physical << ", virtual \- 0x" << (uint64_t) vmm_space << "\\n";
-52 
-53     // Make sure everything is mapped correctly
-54     if (!is_kernel)
-55         ASSERT(vmm_space_physical != PhysicalMemoryManager::s_current_manager\->get_physical_address((virtual_address_t*) vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\\n", vmm_space_physical,
-56                PhysicalMemoryManager::s_current_manager\->get_physical_address((virtual_address_t*) vmm_space, m_pml4_root_address));
-57 
-58     // Set the first region
-59     m_first_region = (virtual_memory_region_t*) vmm_space;
-60     m_current_region = m_first_region;
-61     m_first_region\->next = nullptr;
-62 
-63     // Calculate the next available address (kernel needs to reserve space for the higher half)
-64     m_next_available_address = is_kernel ? vmm_space + s_reserved_space : PhysicalMemoryManager::s_page_size;
-65     Logger::DEBUG() << "Next available address: 0x" << m_next_available_address << "\\n";
+42         }
+43         Logger::DEBUG() << "Mapped higher half of kernel\\n";
+44 
+45 
+46     } else {
+47         m_pml4_root_address = PhysicalMemoryManager::s_current_manager\->pml4_root_address();
+48         m_pml4_root_physical_address = (uint64_t*) PhysicalMemoryManager::to_lower_region((uint64_t) m_pml4_root_address);
+49     }
+50 
+51     // Allocate space for the vmm
+52     uint64_t vmm_space = PhysicalMemoryManager::align_to_page(HIGHER_HALF_DIRECT_MAP + PhysicalMemoryManager::s_current_manager\->memory_size() + PAGE_SIZE);
+53     void* vmm_space_physical = PhysicalMemoryManager::s_current_manager\->allocate_frame();
+54     PhysicalMemoryManager::s_current_manager\->map(vmm_space_physical, (virtual_address_t*) vmm_space, PRESENT | WRITE, m_pml4_root_address);
+55     Logger::DEBUG() << "VMM space: physical \- 0x" << (uint64_t) vmm_space_physical << ", virtual \- 0x" << (uint64_t) vmm_space << "\\n";
+56 
+57     // Make sure everything is mapped correctly
+58     if (!is_kernel)
+59         ASSERT(vmm_space_physical != PhysicalMemoryManager::s_current_manager\->get_physical_address((virtual_address_t*) vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\\n", vmm_space_physical,
+60                PhysicalMemoryManager::s_current_manager\->get_physical_address((virtual_address_t*) vmm_space, m_pml4_root_address));
+61 
+62     // Set the first region
+63     m_first_region = (virtual_memory_region_t*) vmm_space;
+64     m_current_region = m_first_region;
+65     m_first_region\->next = nullptr;
 66 
-67 }
+67     // Calculate the next available address (kernel needs to reserve space for the higher half)
+68     m_next_available_address = is_kernel ? vmm_space + VMM_RESERVED : PAGE_SIZE;
+69     Logger::DEBUG() << "Next available address: 0x" << m_next_available_address << "\\n";
+70 
+71 }
 .fi
 
-.PP
-References \fBMaxOS::memory::PhysicalMemoryManager::align_to_page()\fP, \fBASSERT\fP, \fBMaxOS::memory::PhysicalMemoryManager::clean_page_table()\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::memory::Present\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_hh_direct_map_offset\fP, \fBMaxOS::memory::MemoryManager::s_kernel_memory_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_page_size\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_lower_region()\fP, and \fBMaxOS::memory::Write\fP\&.
 .SS "VirtualMemoryManager::~VirtualMemoryManager ()"
 
 .PP
-Definition at line \fB69\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB73\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-69                                             {
-70 
-71     // Free all the frames used by the VMM
-72     virtual_memory_region_t* region = m_first_region;
-73 
-74     // Loop through the regions
-75     while (region != nullptr) {
-76 
-77         // Loop through the chunks
-78         for (size_t i = 0; i < s_chunks_per_page; i++) {
-79 
-80             // Have reached the end?
-81             if (i == m_current_chunk && region == m_current_region)
-82                 break;
+73                                             {
+74 
+75     // Free all the frames used by the VMM
+76     virtual_memory_region_t* region = m_first_region;
+77 
+78     // Loop through the regions
+79     while (region != nullptr) {
+80 
+81         // Loop through the chunks
+82         for (size_t i = 0; i < CHUNKS_PER_PAGE; i++) {
 83 
-84             // Loop through the pages
-85             size_t pages = PhysicalMemoryManager::size_to_frames(region\->chunks[i]\&.size);
-86             for (size_t j = 0; j < pages; j++) {
+84             // Have reached the end?
+85             if (i == m_current_chunk && region == m_current_region)
+86                 break;
 87 
-88                 // Get the frame
-89                 physical_address_t* frame = PhysicalMemoryManager::s_current_manager\->get_physical_address((virtual_address_t*) region\->chunks[i]\&.start_address + (j * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
-90 
-91                 // Free the frame
-92                 PhysicalMemoryManager::s_current_manager\->free_frame(frame);
-93 
-94             }
-95         }
-96 
-97         // Move to the next region
-98         region = region\->next;
-99 
-100     }
-101 }
+88             // Loop through the pages
+89             size_t pages = PhysicalMemoryManager::size_to_frames(region\->chunks[i]\&.size);
+90             for (size_t j = 0; j < pages; j++) {
+91 
+92                 // Get the frame
+93                 physical_address_t* frame = PhysicalMemoryManager::s_current_manager\->get_physical_address((virtual_address_t*) region\->chunks[i]\&.start_address + (j * PAGE_SIZE), m_pml4_root_address);
+94 
+95                 // Free the frame
+96                 PhysicalMemoryManager::s_current_manager\->free_frame(frame);
+97 
+98             }
+99         }
+100 
+101         // Move to the next region
+102         region = region\->next;
+103 
+104     }
+105 }
 .fi
 
-.PP
-References \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_page_size\fP, and \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP * VirtualMemoryManager::allocate (\fBsize_t\fP size, \fBsize_t\fP flags)"
@@ -189,12 +188,12 @@ The address of the allocated memory
 .PP
 
 .PP
-Definition at line \fB111\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB115\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-111                                                               {
-112 
-113     return allocate(0, size, flags);
-114 }
+115                                                               {
+116 
+117     return allocate(0, size, flags);
+118 }
 .fi
 
 .PP
@@ -222,97 +221,97 @@ The address of the allocated memory or nullptr if failed
 .PP
 
 .PP
-Definition at line \fB125\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB129\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-125                                                                                 {
-126 
-127     // Make sure allocating something
-128     if (size == 0)
-129         return nullptr;
+129                                                                                 {
 130 
-131     // If specific address is given
-132     if (address != 0) {
-133 
-134         // Make sure isn't already allocated
-135         if (address < m_next_available_address)
-136             return nullptr;
+131     // Make sure allocating something
+132     if (size == 0)
+133         return nullptr;
+134 
+135     // If specific address is given
+136     if (address != 0) {
 137 
-138         // Make sure its aligned
-139         if (!PhysicalMemoryManager::check_aligned(address))
+138         // Make sure isn't already allocated
+139         if (address < m_next_available_address)
 140             return nullptr;
 141 
-142     }
-143 
-144     // Make sure the size is aligned
-145     size = PhysicalMemoryManager::align_up_to_page(size, PhysicalMemoryManager::s_page_size);
-146 
-147     // Check the free list for a chunk (if not asking for a specific address)
-148     free_chunk_t* reusable_chunk = address == 0 ? find_and_remove_free_chunk(size) : nullptr;
-149     if (reusable_chunk != nullptr) {
+142         // Make sure its aligned
+143         if (!PhysicalMemoryManager::check_aligned(address))
+144             return nullptr;
+145 
+146     }
+147 
+148     // Make sure the size is aligned
+149     size = PhysicalMemoryManager::align_up_to_page(size, PAGE_SIZE);
 150 
-151         // If the chunk is not being reserved then the old memory needs to be unmapped
-152         if (flags & Reserve) {
-153 
-154             // Unmap the memory
-155             size_t pages = PhysicalMemoryManager::size_to_frames(size);
-156             for (size_t i = 0; i < pages; i++) {
+151     // Check the free list for a chunk (if not asking for a specific address)
+152     free_chunk_t* reusable_chunk = address == 0 ? find_and_remove_free_chunk(size) : nullptr;
+153     if (reusable_chunk != nullptr) {
+154 
+155         // If the chunk is not being reserved then the old memory needs to be unmapped
+156         if (flags & VirtualFlags::RESERVE) {
 157 
-158                 // Get the frame
-159                 physical_address_t* frame = PhysicalMemoryManager::s_current_manager\->get_physical_address((virtual_address_t*) reusable_chunk\->start_address + (i * PhysicalMemoryManager::s_page_size), m_pml4_root_address);
-160 
-161                 // Free the frame
-162                 PhysicalMemoryManager::s_current_manager\->free_frame(frame);
-163 
-164             }
-165         }
-166 
-167         // Return the address
-168         return (void*) reusable_chunk\->start_address;
-169     }
+158             // Unmap the memory
+159             size_t pages = PhysicalMemoryManager::size_to_frames(size);
+160             for (size_t i = 0; i < pages; i++) {
+161 
+162                 // Get the frame
+163                 physical_address_t* frame = PhysicalMemoryManager::s_current_manager\->get_physical_address((virtual_address_t*) reusable_chunk\->start_address + (i * PAGE_SIZE), m_pml4_root_address);
+164 
+165                 // Free the frame
+166                 PhysicalMemoryManager::s_current_manager\->free_frame(frame);
+167 
+168             }
+169         }
 170 
-171 
-172     // Is there space in the current region
-173     if (m_current_chunk >= s_chunks_per_page)
-174         new_region();
+171         // Return the address
+172         return (void*) reusable_chunk\->start_address;
+173     }
+174 
 175 
-176     // If needed to allocate at a specific address, fill with free memory up to that address to prevent fragmentation
-177     if (address != 0)
-178         fill_up_to_address(address, flags, false);
+176     // Is there space in the current region
+177     if (m_current_chunk >= CHUNKS_PER_PAGE)
+178         new_region();
 179 
-180     // Allocate the memory
-181     virtual_memory_chunk_t* chunk = &m_current_region\->chunks[m_current_chunk];
-182     chunk\->size = size;
-183     chunk\->flags = flags;
-184     chunk\->start_address = m_next_available_address;
-185 
-186     // Update the next available address
-187     m_next_available_address += size;
-188     m_current_chunk++;
+180     // If needed to allocate at a specific address, fill with free memory up to that address to prevent fragmentation
+181     if (address != 0)
+182         fill_up_to_address(address, flags, false);
+183 
+184     // Allocate the memory
+185     virtual_memory_chunk_t* chunk = &m_current_region\->chunks[m_current_chunk];
+186     chunk\->size = size;
+187     chunk\->flags = flags;
+188     chunk\->start_address = m_next_available_address;
 189 
-190     // If just reserving the space don't map it
-191     if (flags & Reserve)
-192         return (void*) chunk\->start_address;
+190     // Update the next available address
+191     m_next_available_address += size;
+192     m_current_chunk++;
 193 
-194     // Map the memory
-195     size_t pages = PhysicalMemoryManager::size_to_frames(size);
-196     for (size_t i = 0; i < pages; i++) {
+194     // If just reserving the space don't map it
+195     if (flags & RESERVE)
+196         return (void*) chunk\->start_address;
 197 
-198         // Allocate a new frame
-199         physical_address_t* frame = PhysicalMemoryManager::s_current_manager\->allocate_frame();
-200         ASSERT(frame != nullptr, "Failed to allocate frame (from current region)\\n");
+198     // Map the memory
+199     size_t pages = PhysicalMemoryManager::size_to_frames(size);
+200     for (size_t i = 0; i < pages; i++) {
 201 
-202         // Map the frame
-203         PhysicalMemoryManager::s_current_manager\->map(frame, (virtual_address_t*) chunk\->start_address + (i * PhysicalMemoryManager::s_page_size), Present | Write, m_pml4_root_address);
-204 
-205     }
-206 
-207     // Return the address
-208     return (void*) chunk\->start_address;
-209 }
+202         // Allocate a new frame
+203         physical_address_t* frame = PhysicalMemoryManager::s_current_manager\->allocate_frame();
+204         ASSERT(frame != nullptr, "Failed to allocate frame (from current region)\\n");
+205 
+206         // Map the frame
+207         PhysicalMemoryManager::s_current_manager\->map(frame, (virtual_address_t*) chunk\->start_address + (i * PAGE_SIZE), PRESENT | WRITE, m_pml4_root_address);
+208 
+209     }
+210 
+211     // Return the address
+212     return (void*) chunk\->start_address;
+213 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBMaxOS::memory::PhysicalMemoryManager::align_up_to_page()\fP, \fBASSERT\fP, \fBMaxOS::memory::PhysicalMemoryManager::check_aligned()\fP, \fBflags\fP, \fBMaxOS::memory::Present\fP, \fBMaxOS::memory::Reserve\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_page_size\fP, \fBsize\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, and \fBMaxOS::memory::Write\fP\&.
+References \fBMaxOS::memory::PhysicalMemoryManager::align_up_to_page()\fP, \fBASSERT\fP, \fBMaxOS::memory::PhysicalMemoryManager::check_aligned()\fP, \fBflags\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::memory::RESERVE\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBsize\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, and \fBMaxOS::memory::WRITE\fP\&.
 .SS "\fBvoid\fP VirtualMemoryManager::free (\fBvoid\fP * address)"
 
 .PP
@@ -325,73 +324,73 @@ Free a chunk of virtual memory\&.
 .PP
 
 .PP
-Definition at line \fB245\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB249\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-245                                              {
-246 
-247     // Make sure freeing something
-248     if (address == nullptr)
-249         return;
+249                                              {
 250 
-251     // Find the chunk
-252     virtual_memory_region_t* region = m_first_region;
-253     virtual_memory_chunk_t* chunk = nullptr;
-254     while (region != nullptr) {
-255 
-256         // Loop through the chunks
-257         for (size_t i = 0; i < s_chunks_per_page; i++) {
-258 
-259             // Check if the address is in the chunk
-260             if (region\->chunks[i]\&.start_address == (uintptr_t) address) {
-261                 chunk = &region\->chunks[i];
-262                 break;
-263             }
-264         }
-265 
-266         // If the chunk was found
-267         if (chunk != nullptr)
-268             break;
+251     // Make sure freeing something
+252     if (address == nullptr)
+253         return;
+254 
+255     // Find the chunk
+256     virtual_memory_region_t* region = m_first_region;
+257     virtual_memory_chunk_t* chunk = nullptr;
+258     while (region != nullptr) {
+259 
+260         // Loop through the chunks
+261         for (size_t i = 0; i < CHUNKS_PER_PAGE; i++) {
+262 
+263             // Check if the address is in the chunk
+264             if (region\->chunks[i]\&.start_address == (uintptr_t) address) {
+265                 chunk = &region\->chunks[i];
+266                 break;
+267             }
+268         }
 269 
-270         // Move to the next region
-271         region = region\->next;
-272     }
+270         // If the chunk was found
+271         if (chunk != nullptr)
+272             break;
 273 
-274     // Make sure the chunk was found
-275     if (chunk == nullptr)
-276         return;
+274         // Move to the next region
+275         region = region\->next;
+276     }
 277 
-278     // If the chunk is shared, don't unmap it incase other processes are using it
-279     if (chunk\->flags & Shared) {
-280 
-281         // Find the resource
-282         for(const auto& resource : Scheduler::current_process()\->resource_manager\&.resources()){
-283 
-284             // Skip non\-shared memory resources
-285             if(resource\&.second\->type() != resource_type_t::SHARED_MEMORY)
-286                 continue;
+278     // Make sure the chunk was found
+279     if (chunk == nullptr)
+280         return;
+281 
+282     // If the chunk is shared, don't unmap it incase other processes are using it
+283     if (chunk\->flags & VirtualFlags::SHARED) {
+284 
+285         // Find the resource
+286         for(const auto& resource : GlobalScheduler::current_process()\->resource_manager\&.resources()){
 287 
-288             // Skip shared memory that points elsewhere
-289             auto shared = (SharedMemory*)resource\&.second;
-290             if((void*)shared\->physical_address() != address)
-291                 continue;
-292 
-293             // Close the resource
-294             Scheduler::current_process()\->resource_manager\&.close_resource(resource\&.first, 0);
-295         }
-296     }
-297 
-298     // Add the chunk to the free list
-299     add_free_chunk(chunk\->start_address, chunk\->size);
-300 
-301     // Clear the chunk
-302     chunk\->size = 0;
-303     chunk\->flags = 0;
-304     chunk\->start_address = 0;
-305 }
+288             // Skip non\-shared memory resources
+289             if(resource\&.second\->type() != resource_type_t::SHARED_MEMORY)
+290                 continue;
+291 
+292             // Skip shared memory that points elsewhere
+293             auto shared = (SharedMemory*)resource\&.second;
+294             if((void*)shared\->physical_address() != address)
+295                 continue;
+296 
+297             // Close the resource
+298             GlobalScheduler::current_process()\->resource_manager\&.close_resource(resource\&.first, 0);
+299         }
+300     }
+301 
+302     // Add the chunk to the free list
+303     add_free_chunk(chunk\->start_address, chunk\->size);
+304 
+305     // Clear the chunk
+306     chunk\->size = 0;
+307     chunk\->flags = 0;
+308     chunk\->start_address = 0;
+309 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBMaxOS::processes::Scheduler::current_process()\fP, and \fBMaxOS::memory::Shared\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP\&.
 .SS "\fBvoid\fP * VirtualMemoryManager::load_physical_into_address_space (\fBuintptr_t\fP physical_address, \fBsize_t\fP size, \fBsize_t\fP flags)"
 
 .PP
@@ -413,26 +412,26 @@ The address of the memory in the VMM's address space
 .PP
 
 .PP
-Definition at line \fB447\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB451\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-447                                                                                                                   {
-448 
-449     // Reserve some space
-450     void* address = allocate(size, flags | Reserve);
-451 
-452     // Map the shared memory
-453     size_t pages = PhysicalMemoryManager::size_to_frames(size);
-454     for (size_t i = 0; i < pages; i++)
-455         PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) (physical_address + (i * PhysicalMemoryManager::s_page_size)), (virtual_address_t*) ((uintptr_t) address + (i * PhysicalMemoryManager::s_page_size)), Present | Write, m_pml4_root_address);
-456 
-457 
-458     // All done
-459     return address;
-460 }
+451                                                                                                                   {
+452 
+453     // Reserve some space
+454     void* address = allocate(size, flags | RESERVE);
+455 
+456     // Map the shared memory
+457     size_t pages = PhysicalMemoryManager::size_to_frames(size);
+458     for (size_t i = 0; i < pages; i++)
+459         PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) (physical_address + (i * PAGE_SIZE)), (virtual_address_t*) ((uintptr_t) address + (i * PAGE_SIZE)), PRESENT | WRITE, m_pml4_root_address);
+460 
+461 
+462     // All done
+463     return address;
+464 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBallocate()\fP, \fBflags\fP, \fBphysical_address\fP, \fBMaxOS::memory::Present\fP, \fBMaxOS::memory::Reserve\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_page_size\fP, \fBsize\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, and \fBMaxOS::memory::Write\fP\&.
+References \fBallocate()\fP, \fBflags\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBphysical_address\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::memory::RESERVE\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBsize\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, and \fBMaxOS::memory::WRITE\fP\&.
 .PP
 Referenced by \fBload_shared_memory()\fP\&.
 .SS "\fBvoid\fP * VirtualMemoryManager::load_shared_memory (\fBconst\fP \fBstring\fP & name)"
@@ -452,23 +451,23 @@ The address of the shared memory in the VMM's address space
 .PP
 
 .PP
-Definition at line \fB410\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB414\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-410                                                                  {
-411 
-412     // Get the shared memory block
-413     auto block = (SharedMemory*)Scheduler::current_process()\->resource_manager\&.get_resource(name);
-414 
-415     // Load the shared memory
-416     if (block != nullptr)
-417         return load_shared_memory(block\->physical_address(), block\->size());
+414                                                                  {
+415 
+416     // Get the shared memory block
+417     auto block = (SharedMemory*)GlobalScheduler::current_process()\->resource_manager\&.get_resource(name);
 418 
-419     return nullptr;
-420 }
+419     // Load the shared memory
+420     if (block != nullptr)
+421         return load_shared_memory(block\->physical_address(), block\->size());
+422 
+423     return nullptr;
+424 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Scheduler::current_process()\fP, \fBload_shared_memory()\fP, and \fBname\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBload_shared_memory()\fP, and \fBname\fP\&.
 .PP
 Referenced by \fBload_shared_memory()\fP\&.
 .SS "\fBvoid\fP * VirtualMemoryManager::load_shared_memory (\fBuintptr_t\fP physical_address, \fBsize_t\fP size)"
@@ -490,21 +489,21 @@ The address of the shared memory in the VMM's address space
 .PP
 
 .PP
-Definition at line \fB429\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB433\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-429                                                                                       {
-430 
-431     // Make sure there is somthing to map
-432     if (size == 0 || physical_address == 0)
-433         return nullptr;
+433                                                                                       {
 434 
-435     // Load it into physical memory
-436     return load_physical_into_address_space(physical_address, size, Shared);
-437 }
+435     // Make sure there is somthing to map
+436     if (size == 0 || physical_address == 0)
+437         return nullptr;
+438 
+439     // Load it into physical memory
+440     return load_physical_into_address_space(physical_address, size, SHARED);
+441 }
 .fi
 
 .PP
-References \fBload_physical_into_address_space()\fP, \fBphysical_address\fP, \fBMaxOS::memory::Shared\fP, and \fBsize\fP\&.
+References \fBload_physical_into_address_space()\fP, \fBphysical_address\fP, \fBMaxOS::memory::SHARED\fP, and \fBsize\fP\&.
 .SS "\fBsize_t\fP VirtualMemoryManager::memory_used ()"
 
 .PP
@@ -517,31 +516,31 @@ The amount of memory used
 .PP
 
 .PP
-Definition at line \fB312\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB316\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-312                                          {
-313 
-314     // Loop through all the regions and add up the size of the allocated chunks
-315     size_t result = 0;
-316 
-317     // Iterate through the regions
-318     virtual_memory_region_t* region = m_first_region;
-319     while (region != nullptr) {
+316                                          {
+317 
+318     // Loop through all the regions and add up the size of the allocated chunks
+319     size_t result = 0;
 320 
-321         // Loop through the chunks
-322         for (size_t i = 0; i < s_chunks_per_page; i++) {
-323 
-324             // Check if the address is in the chunk
-325             if (region\->chunks[i]\&.size != 0)
-326                 result += region\->chunks[i]\&.size;
-327         }
-328 
-329         // Move to the next region
-330         region = region\->next;
-331     }
+321     // Iterate through the regions
+322     virtual_memory_region_t* region = m_first_region;
+323     while (region != nullptr) {
+324 
+325         // Loop through the chunks
+326         for (size_t i = 0; i < CHUNKS_PER_PAGE; i++) {
+327 
+328             // Check if the address is in the chunk
+329             if (region\->chunks[i]\&.size != 0)
+330                 result += region\->chunks[i]\&.size;
+331         }
 332 
-333     return result;
-334 }
+333         // Move to the next region
+334         region = region\->next;
+335     }
+336 
+337     return result;
+338 }
 .fi
 
 .SS "\fBuint64_t\fP * VirtualMemoryManager::pml4_root_address ()"
@@ -556,17 +555,17 @@ The virtual address or nullptr if not found
 .PP
 
 .PP
-Definition at line \fB513\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB517\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-513                                                   {
-514 
-515     // Make sure the address is valid
-516     if (m_pml4_root_address == nullptr)
-517         return nullptr;
+517                                                   {
 518 
-519     // Return the address
-520     return m_pml4_root_address;
-521 }
+519     // Make sure the address is valid
+520     if (m_pml4_root_address == nullptr)
+521         return nullptr;
+522 
+523     // Return the address
+524     return m_pml4_root_address;
+525 }
 .fi
 
 .SS "\fBuint64_t\fP * VirtualMemoryManager::pml4_root_address_physical ()"
@@ -581,12 +580,12 @@ The physical address of the PML4 root
 .PP
 
 .PP
-Definition at line \fB399\fP of file \fBvirtual\&.cpp\fP\&..PP
+Definition at line \fB403\fP of file \fBvirtual\&.cpp\fP\&..PP
 .nf
-399                                                            {
-400 
-401     return m_pml4_root_physical_address;
-402 }
+403                                                            {
+404 
+405     return m_pml4_root_physical_address;
+406 }
 .fi
 
 

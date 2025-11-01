@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/net/arp.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/net/arp.h \- Defines the Address Resolution Protocol (ARP) for resolving IP addresses to MAC addresses\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -15,27 +16,19 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::net::AddressResolutionProtocolMessage\fP"
+.RI "struct \fBMaxOS::net::ARPMessage\fP"
 .br
+.RI "An ARP message\&. "
 .ti -1c
 .RI "class \fBMaxOS::net::AddressResolutionProtocol\fP"
 .br
-.in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::net\fP"
-.br
+.RI "Handles ARP requests and replies\&. "
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::net::AddressResolutionProtocolMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::net::ARPMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
 .br
 .in -1c
 .SS "Variables"
@@ -44,50 +37,84 @@
 .ti -1c
 .RI "uint16_t \fBhardwareType\fP"
 .br
+.RI "The type of device that sent the ARP message (1 = Ethernet) "
 .ti -1c
 .RI "uint16_t \fBprotocol\fP"
 .br
+.RI "The protocol being used (0x0800 = IPv4) "
 .ti -1c
 .RI "uint8_t \fBhardwareAddressSize\fP"
 .br
+.RI "The size of the hardware address (6 for MAC) "
 .ti -1c
 .RI "uint8_t \fBprotocolAddressSize\fP"
 .br
+.RI "The size of the protocol address (4 for IPv4) "
 .ti -1c
 .RI "uint16_t \fBcommand\fP"
 .br
+.RI "The ARP command (1 = request, 2 = reply) "
 .ti -1c
 .RI "uint64_t \fBsrcMAC\fP"
 .br
+.RI "The MAC address of the sender\&. "
 .ti -1c
 .RI "uint32_t \fBsrcIP\fP"
 .br
+.RI "The IP address of the sender\&. "
 .ti -1c
 .RI "uint64_t \fBdstMAC\fP"
 .br
+.RI "The MAC address of the target\&. "
 .ti -1c
 .RI "uint32_t \fBdstIP\fP"
 .br
+.RI "The IP address of the target\&. "
 .ti -1c
 .RI "\fBMaxOS::net::AddressResolutionProtocol\fP \fBMaxOS::net::__attribute__\fP"
 .br
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines the Address Resolution Protocol (ARP) for resolving IP addresses to MAC addresses\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+11th November 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBarp\&.h\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "uint16_t command"
 
 .PP
+The ARP command (1 = request, 2 = reply) 
+.PP
 Definition at line \fB6\fP of file \fBarp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP, and \fBMaxOS::drivers::clock::PIT::ticks_per_ms()\fP\&.
+Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP\&.
 .SS "uint32_t dstIP"
 
 .PP
+The IP address of the target\&. 
+.PP
 Definition at line \fB11\fP of file \fBarp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP\&.
 .SS "uint64_t dstMAC"
 
+.PP
+The MAC address of the target\&. 
 .PP
 Definition at line \fB10\fP of file \fBarp\&.h\fP\&.
 .PP
@@ -95,11 +122,15 @@ Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePaylo
 .SS "uint8_t hardwareAddressSize"
 
 .PP
+The size of the hardware address (6 for MAC) 
+.PP
 Definition at line \fB3\fP of file \fBarp\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP\&.
 .SS "uint16_t hardwareType"
 
+.PP
+The type of device that sent the ARP message (1 = Ethernet) 
 .PP
 Definition at line \fB1\fP of file \fBarp\&.h\fP\&.
 .PP
@@ -107,11 +138,15 @@ Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePaylo
 .SS "uint16_t protocol"
 
 .PP
+The protocol being used (0x0800 = IPv4) 
+.PP
 Definition at line \fB2\fP of file \fBarp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP, \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::net::InternetProtocolPayloadHandler::InternetProtocolPayloadHandler()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP, \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::net::IPV4PayloadHandler::IPV4PayloadHandler()\fP, and \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
 .SS "uint8_t protocolAddressSize"
 
+.PP
+The size of the protocol address (4 for IPv4) 
 .PP
 Definition at line \fB4\fP of file \fBarp\&.h\fP\&.
 .PP
@@ -119,11 +154,15 @@ Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePaylo
 .SS "uint32_t srcIP"
 
 .PP
+The IP address of the sender\&. 
+.PP
 Definition at line \fB9\fP of file \fBarp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Referenced by \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP\&.
 .SS "uint64_t srcMAC"
 
+.PP
+The MAC address of the sender\&. 
 .PP
 Definition at line \fB8\fP of file \fBarp\&.h\fP\&.
 .PP

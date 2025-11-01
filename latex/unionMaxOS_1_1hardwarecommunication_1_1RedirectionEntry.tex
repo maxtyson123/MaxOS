@@ -1,5 +1,10 @@
-\doxysection{Max\+OS\+::hardwarecommunication\+::Redirection\+Entry Union Reference}
+\doxysection{Max\+OS\+::hardwarecommunication\+::Redirection\+Entry Struct Reference}
 \hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry}{}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry}\index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}}
+
+
+An IO APIC redirection entry. Describes how an interrupt is routed.  
+
+
 
 
 {\ttfamily \#include $<$apic.\+h$>$}
@@ -7,42 +12,44 @@
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+\Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a43f151bf0cce8315d76a4ce8af102824}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a43f151bf0cce8315d76a4ce8af102824} 
 \begin{tabbing}
 xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
 struct \{\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_ac756e3e65a2efaa9710b14e3747ad5e1}{vector}}: 8\\
+\>\>{\em The interrupt that will be triggered when this redirection entry is used. }\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a14c74ba970a94938049e72b03cc394b9}{delivery\_mode}}: 3\\
+\>\>{\em How the interrupt will be delvied to the core(s) (see DeliveryMode) }\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a895797a25027006ee1a8b995b51b9bb0}{destination\_mode}}: 1\\
+\>\>{\em How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores) }\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a6c42f8c545b408da401ee1c4551b6cfe}{delivery\_status}}: 1\\
+\>\>{\em Indicates whether, when setting this entry, the interrupt is still being sent. }\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_ab8c3cc93c370cff4594e269d1120770c}{pin\_polarity}}: 1\\
+\>\>{\em Defines the electrical signal that indicates an active interrupt line (0 = high active, 1 = low active) (must match the \doxylink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT} override flags) }\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a7efe5b46548feab43a916d6922b48411}{remote\_irr}}: 1\\
+\>\>{\em ? }\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_ac34cba0b60090294c8f936423b43f762}{trigger\_mode}}: 1\\
+\>\>{\em How the electrical signal is interpreted (0 = edge triggered, 1 = level triggered) (must match the \doxylink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT} override flags) }\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_aadf5b364be23f4bb80d87d12107fbee5}{mask}}: 1\\
+\>\>{\em Whether the interrupt is disabled or not. }\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a30f07e47ea80dfad0b8394fc7da02593}{reserved}}: 39\\
+\>\>{\em Reserved bits (should be zero) }\\
 \>uint64\_t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a811baa508c6ca51ad98537c17439529f}{destination}}: 8\\
-\} \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a43f151bf0cce8315d76a4ce8af102824}{\_\_attribute\_\_}} ((packed))\\
+\>\>{\em The core(s) the interrupt should be sent to (interpreted based on destination\_mode) }\\
+\} {\bfseries \_\_attribute\_\_} ((packed))\\
 
-\end{tabbing}\end{DoxyCompactItemize}
+\end{tabbing}\begin{DoxyCompactList}\small\item\em Packed because the bitfields should be one uint64\+\_\+t together. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 uint64\+\_\+t \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_aa32d100a3e49b6c0f5b07d1566415dc2}{raw}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The raw 64-\/bit value of the redirection entry. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
+An IO APIC redirection entry. Describes how an interrupt is routed. 
 
-
-Definition at line \mbox{\hyperlink{apic_8h_source_l00056}{56}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
-
-
-
-\doxysubsection{Member Function Documentation}
-\Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a43f151bf0cce8315d76a4ce8af102824}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a43f151bf0cce8315d76a4ce8af102824} 
-\index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!\_\_attribute\_\_@{\_\_attribute\_\_}}
-\index{\_\_attribute\_\_@{\_\_attribute\_\_}!MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}}
-\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}}
-{\footnotesize\ttfamily struct Max\+OS\+::hardwarecommunication\+::\+Redirection\+Entry\+::@9 Max\+OS\+::hardwarecommunication\+::\+Redirection\+Entry\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(packed)}]{ }\end{DoxyParamCaption})}
+Definition at line \mbox{\hyperlink{apic_8h_source_l00107}{107}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 
 
@@ -55,7 +62,11 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00056}{56}} of file \mbox{\h
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00059}{59}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+How the interrupt will be delvied to the core(s) (see Delivery\+Mode) 
+
+
+
+Definition at line \mbox{\hyperlink{apic_8h_source_l00110}{110}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a6c42f8c545b408da401ee1c4551b6cfe}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a6c42f8c545b408da401ee1c4551b6cfe} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!delivery\_status@{delivery\_status}}
@@ -65,7 +76,11 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00059}{59}} of file \mbox{\h
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00061}{61}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+Indicates whether, when setting this entry, the interrupt is still being sent. 
+
+
+
+Definition at line \mbox{\hyperlink{apic_8h_source_l00112}{112}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a811baa508c6ca51ad98537c17439529f}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a811baa508c6ca51ad98537c17439529f} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!destination@{destination}}
@@ -75,11 +90,15 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00061}{61}} of file \mbox{\h
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00067}{67}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+The core(s) the interrupt should be sent to (interpreted based on destination\+\_\+mode) 
 
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
+Definition at line \mbox{\hyperlink{apic_8h_source_l00118}{118}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00362}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a895797a25027006ee1a8b995b51b9bb0}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a895797a25027006ee1a8b995b51b9bb0} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!destination\_mode@{destination\_mode}}
@@ -89,7 +108,11 @@ Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommu
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00060}{60}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores) 
+
+
+
+Definition at line \mbox{\hyperlink{apic_8h_source_l00111}{111}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_aadf5b364be23f4bb80d87d12107fbee5}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_aadf5b364be23f4bb80d87d12107fbee5} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!mask@{mask}}
@@ -99,11 +122,15 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00060}{60}} of file \mbox{\h
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00065}{65}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+Whether the interrupt is disabled or not. 
 
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}, and \mbox{\hyperlink{apic_8cpp_source_l00321}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect\+\_\+mask()}}.
+Definition at line \mbox{\hyperlink{apic_8h_source_l00116}{116}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00362}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}, and \mbox{\hyperlink{apic_8cpp_source_l00396}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect\+\_\+mask()}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_ab8c3cc93c370cff4594e269d1120770c}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_ab8c3cc93c370cff4594e269d1120770c} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!pin\_polarity@{pin\_polarity}}
@@ -113,11 +140,15 @@ Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommu
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00062}{62}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+Defines the electrical signal that indicates an active interrupt line (0 = high active, 1 = low active) (must match the \doxylink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT} override flags) 
 
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
+Definition at line \mbox{\hyperlink{apic_8h_source_l00113}{113}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00362}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_aa32d100a3e49b6c0f5b07d1566415dc2}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_aa32d100a3e49b6c0f5b07d1566415dc2} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!raw@{raw}}
@@ -127,11 +158,15 @@ Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommu
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00070}{70}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+The raw 64-\/bit value of the redirection entry. 
 
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
+Definition at line \mbox{\hyperlink{apic_8h_source_l00121}{121}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00362}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a7efe5b46548feab43a916d6922b48411}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a7efe5b46548feab43a916d6922b48411} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!remote\_irr@{remote\_irr}}
@@ -141,7 +176,11 @@ Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommu
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00063}{63}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+? 
+
+
+
+Definition at line \mbox{\hyperlink{apic_8h_source_l00114}{114}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a30f07e47ea80dfad0b8394fc7da02593}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_a30f07e47ea80dfad0b8394fc7da02593} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!reserved@{reserved}}
@@ -151,7 +190,11 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00063}{63}} of file \mbox{\h
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00066}{66}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+Reserved bits (should be zero) 
+
+
+
+Definition at line \mbox{\hyperlink{apic_8h_source_l00117}{117}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_ac34cba0b60090294c8f936423b43f762}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_ac34cba0b60090294c8f936423b43f762} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!trigger\_mode@{trigger\_mode}}
@@ -161,11 +204,15 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00066}{66}} of file \mbox{\h
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00064}{64}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+How the electrical signal is interpreted (0 = edge triggered, 1 = level triggered) (must match the \doxylink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT} override flags) 
 
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
+Definition at line \mbox{\hyperlink{apic_8h_source_l00115}{115}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00362}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::set\+\_\+redirect()}}.
 
 \Hypertarget{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_ac756e3e65a2efaa9710b14e3747ad5e1}\label{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_ac756e3e65a2efaa9710b14e3747ad5e1} 
 \index{MaxOS::hardwarecommunication::RedirectionEntry@{MaxOS::hardwarecommunication::RedirectionEntry}!vector@{vector}}
@@ -175,10 +222,14 @@ Referenced by \mbox{\hyperlink{apic_8cpp_source_l00287}{Max\+OS\+::hardwarecommu
 
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00058}{58}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+The interrupt that will be triggered when this redirection entry is used. 
 
 
 
-The documentation for this union was generated from the following file\+:\begin{DoxyCompactItemize}
+Definition at line \mbox{\hyperlink{apic_8h_source_l00109}{109}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
 /home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/hardwarecommunication/\mbox{\hyperlink{apic_8h}{apic.\+h}}\end{DoxyCompactItemize}

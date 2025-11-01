@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/net/icmp.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/net/icmp.h \- Defines the Internet Control Message Protocol (ICMP) handler for network communication\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -17,27 +18,19 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::net::InternetControlMessageProtocolHeader\fP"
+.RI "struct \fBMaxOS::net::ICMPHeader\fP"
 .br
+.RI "The header of an ICMP packet\&. "
 .ti -1c
 .RI "class \fBMaxOS::net::InternetControlMessageProtocol\fP"
 .br
-.in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::net\fP"
-.br
+.RI "Handles ICMP packets\&. "
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::net::AddressResolutionProtocolMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::net::ARPMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
 .br
 .in -1c
 .SS "Variables"
@@ -46,34 +39,65 @@
 .ti -1c
 .RI "uint8_t \fBtype\fP"
 .br
+.RI "The type of ICMP message\&. "
 .ti -1c
 .RI "uint8_t \fBcode\fP"
 .br
+.RI "The code of the ICMP message\&. "
 .ti -1c
 .RI "uint16_t \fBchecksum\fP"
 .br
+.RI "Checksum to verify integrity\&. "
 .ti -1c
 .RI "uint32_t \fBdata\fP"
 .br
+.RI "Payload data (Varies by type and code) "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines the Internet Control Message Protocol (ICMP) handler for network communication\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+24th November 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBicmp\&.h\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "uint16_t checksum"
 
 .PP
+Checksum to verify integrity\&. 
+.PP
 Definition at line \fB3\fP of file \fBicmp\&.h\fP\&.
 .SS "uint8_t code"
 
+.PP
+The code of the ICMP message\&. 
 .PP
 Definition at line \fB1\fP of file \fBicmp\&.h\fP\&.
 .SS "uint32_t data"
 
 .PP
+Payload data (Varies by type and code) 
+.PP
 Definition at line \fB4\fP of file \fBicmp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::Checksum()\fP, \fBMaxOS::net::TransmissionControlProtocolSocket::handleTransmissionControlProtocolPayload()\fP, \fBMaxOS::net::UserDatagramProtocolSocket::handleUserDatagramProtocolPayload()\fP, \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment::identify()\fP, \fBMaxOS::net::TransmissionControlProtocolPayloadHandler::on_event()\fP, \fBMaxOS::net::UserDatagramProtocolPayloadHandler::on_event()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::read()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBMaxOS::net::EthernetFramePayloadHandler::Send()\fP, \fBMaxOS::net::TransmissionControlProtocolSocket::Send()\fP, \fBMaxOS::net::UserDatagramProtocolSocket::Send()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP, \fBMaxOS::filesystem::format::Fat32File::write()\fP, \fBMaxOS::hardwarecommunication::Port16Bit::write()\fP, \fBMaxOS::memory::MemIO16Bit::write()\fP, \fBMaxOS::hardwarecommunication::Port32Bit::write()\fP, \fBMaxOS::memory::MemIO32Bit::write()\fP, \fBMaxOS::drivers::disk::Disk::write()\fP, \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment::write()\fP, \fBMaxOS::memory::MemIO64Bit::write()\fP, \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP, \fBMaxOS::memory::MemIO8Bit::write()\fP, and \fBMaxOS::hardwarecommunication::Port8BitSlow::write()\fP\&.
+Referenced by \fBMaxOS::net::InternetProtocolHandler::Checksum()\fP, \fBMaxOS::net::TCPSocket::handleTransmissionControlProtocolPayload()\fP, \fBMaxOS::net::UDPSocket::handleUserDatagramProtocolPayload()\fP, \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment::identify()\fP, \fBMaxOS::net::TCPPayloadHandler::on_event()\fP, \fBMaxOS::net::UDPPayloadHandler::on_event()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::read()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, \fBMaxOS::net::EthernetFramePayloadHandler::Send()\fP, \fBMaxOS::net::TCPSocket::Send()\fP, \fBMaxOS::net::UDPSocket::Send()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP, \fBMaxOS::filesystem::format::Fat32File::write()\fP, \fBMaxOS::hardwarecommunication::Port16Bit::write()\fP, \fBMaxOS::memory::MemIO16Bit::write()\fP, \fBMaxOS::hardwarecommunication::Port32Bit::write()\fP, \fBMaxOS::memory::MemIO32Bit::write()\fP, \fBMaxOS::drivers::disk::Disk::write()\fP, \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment::write()\fP, \fBMaxOS::memory::MemIO64Bit::write()\fP, \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP, \fBMaxOS::memory::MemIO8Bit::write()\fP, and \fBMaxOS::hardwarecommunication::Port8BitSlow::write()\fP\&.
 .SS "uint8_t type"
 
+.PP
+The type of ICMP message\&. 
 .PP
 Definition at line \fB0\fP of file \fBicmp\&.h\fP\&.
 .SH "Author"

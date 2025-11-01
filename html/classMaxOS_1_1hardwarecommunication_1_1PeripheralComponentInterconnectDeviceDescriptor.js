@@ -1,7 +1,5 @@
 var classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor =
 [
-    [ "PeripheralComponentInterconnectDeviceDescriptor", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html#ae64179c11318c08c38806ccdfe3dedbb", null ],
-    [ "~PeripheralComponentInterconnectDeviceDescriptor", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html#a9df6d9c794b0d429ec632d7329d41647", null ],
     [ "get_type", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html#a2496dd0655e6d093d62fe6de53cb66a2", null ],
     [ "bus", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html#a9355ec4832975165808fe4cc5460e4a1", null ],
     [ "class_id", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html#a22f5e9804805ec403208f97eb38502d5", null ],

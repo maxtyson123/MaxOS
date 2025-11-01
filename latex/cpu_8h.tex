@@ -1,167 +1,377 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/system/cpu.h File Reference}
 \hypertarget{cpu_8h}{}\label{cpu_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/system/cpu.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/system/cpu.h}}
+
+
+Defines Central Processing Unit (CPU) structures and functions for managing CPU state and features.  
+
+
 {\ttfamily \#include $<$cpuid.\+h$>$}\newline
 {\ttfamily \#include $<$stddef.\+h$>$}\newline
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$system/gdt.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/acpi.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/apic.\+h$>$}\newline
+{\ttfamily \#include $<$memory/physical.\+h$>$}\newline
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute____}{Max\+OS\+::system\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
-\begin{DoxyCompactList}\small\item\em Style Guide Note\+: \doxylink{classMaxOS_1_1system_1_1CPU}{CPU} abbreviation is preferred over Central Processing Unit. \end{DoxyCompactList}\item 
-struct \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{Max\+OS\+::system\+::tss}}
-\item 
+\begin{DoxyCompactList}\small\item\em The state of the \doxylink{classMaxOS_1_1system_1_1CPU}{CPU} when an interrupt occurs (must align with the interrupt handler assembly code) \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment}{Max\+OS\+::system\+::\+Task\+State\+Segment}}
+\begin{DoxyCompactList}\small\item\em Task State Segment (TSS) structure for x86\+\_\+64. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame}{Max\+OS\+::system\+::\+Stack\+Frame}}
-\item 
+\begin{DoxyCompactList}\small\item\em A snapshot of the a frame in the call stack. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo}{Max\+OS\+::system\+::\+Core\+Boot\+Info}}
+\begin{DoxyCompactList}\small\item\em Information needed when booting a core. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{Max\+OS\+::system\+::\+Core}}
+\begin{DoxyCompactList}\small\item\em Represents a \doxylink{classMaxOS_1_1system_1_1CPU}{CPU} core in the system. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{Max\+OS\+::system\+::\+CPU}}
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1system}{Max\+OS\+::system}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Manages the \doxylink{classMaxOS_1_1system_1_1CPU}{CPU} and its cores. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200}{Max\+OS\+::system\+::\+CPU\+\_\+\+FEATURE\+\_\+\+ECX}} \+: int32\+\_\+t \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200ac6603310b6588e97789264110f6e9101}{Max\+OS\+::system\+::\+SSE3}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 0
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a6032723e90ef0acd47ce885772cb659b}{Max\+OS\+::system\+::\+PCLMUL}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 1
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200aa2f8d2fa2331eb9766b32b3dc626eeec}{Max\+OS\+::system\+::\+DTES64}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 2
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200aff3e179b3cc64393841107ccba0d6e48}{Max\+OS\+::system\+::\+MONITOR}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 3
+enum class \mbox{\hyperlink{cpu_8h_a955509bd4aa295b6038a6812bf689200}{Max\+OS\+::system\+::\+CPU\+\_\+\+FEATURE\+\_\+\+ECX}} \+: int32\+\_\+t \{ \newline
+{\bfseries SSE3} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 0
+, {\bfseries PCLMUL} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 1
+, {\bfseries DTES64} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 2
+, {\bfseries MONITOR} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 3
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a6e21d9cd5cb8b15cd0068f5c69b7ecb8}{Max\+OS\+::system\+::\+DS\+\_\+\+CPL}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 4
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200ab21819f000ff3fd488fe20c783df0402}{Max\+OS\+::system\+::\+VMX}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 5
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200acad386640202b01915001cf1dc26164e}{Max\+OS\+::system\+::\+SMX}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 6
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a33a61062aa4da2b795b7f9616c138b89}{Max\+OS\+::system\+::\+EST}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 7
+{\bfseries DS\+\_\+\+CPL} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 4
+, {\bfseries VMX} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 5
+, {\bfseries SMX} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 6
+, {\bfseries EST} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 7
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a39c266dca8396334e6a478ee7d6a58a3}{Max\+OS\+::system\+::\+TM2}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 8
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a1aee6afddc2384c63b5adef3a9bb9f8b}{Max\+OS\+::system\+::\+SSSE3}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 9
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200add395d6201581ad212d782d571f0ad64}{Max\+OS\+::system\+::\+CID}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 10
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200af69a5c2dc16e31e03fd3acf67bce22db}{Max\+OS\+::system\+::\+SDBG}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 11
+{\bfseries TM2} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 8
+, {\bfseries SSSE3} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 9
+, {\bfseries CID} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 10
+, {\bfseries SDBG} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 11
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200afcf973d1553272be39c9fceeeeeffc28}{Max\+OS\+::system\+::\+FMA}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 12
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a0a1f6ee60423ae7066499e4267ac37e9}{Max\+OS\+::system\+::\+CX16}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 13
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a130a5bef8c251220d55a464358093be1}{Max\+OS\+::system\+::\+XTPR}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 14
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a5f1a20641930246ba7aa82c2e4c78d93}{Max\+OS\+::system\+::\+PDCM}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 15
+{\bfseries FMA} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 12
+, {\bfseries CX16} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 13
+, {\bfseries XTPR} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 14
+, {\bfseries PDCM} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 15
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a9929cbe36146d8dd8b79aacdb08b4f37}{Max\+OS\+::system\+::\+PCID}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 17
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200acf4c24e87f3bf7a7ba3bc78dd952a0c1}{Max\+OS\+::system\+::\+DCA}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 18
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a9a7d3ec1a04d0b6f4a123d86baacccdb}{Max\+OS\+::system\+::\+SSE4\+\_\+1}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 19
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a46503c282f6150b96358dd8b5b7b85b4}{Max\+OS\+::system\+::\+SSE4\+\_\+2}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 20
+{\bfseries PCID} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 17
+, {\bfseries DCA} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 18
+, {\bfseries SSE4\+\_\+1} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 19
+, {\bfseries SSE4\+\_\+2} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 20
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200ad109db768c962d0dcbff314147149a20}{Max\+OS\+::system\+::\+X2\+APIC}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 21
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a0736bd85aa45e4d08a43ef2a500266ad}{Max\+OS\+::system\+::\+MOVBE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 22
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a34073e80906c50c0f159a1b631b4bfdf}{Max\+OS\+::system\+::\+POPCNT}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 23
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a28e098175bb05703eb34c5adbb234370}{Max\+OS\+::system\+::\+TSC}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 24
+{\bfseries X2\+APIC} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 21
+, {\bfseries MOVBE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 22
+, {\bfseries POPCNT} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 23
+, {\bfseries TSC} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 24
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a76b7593457e2ab50befe2dcd63cf388f}{Max\+OS\+::system\+::\+AES}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 25
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a367c5d2642c63edb641f8a2228414526}{Max\+OS\+::system\+::\+XSAVE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 26
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a63b0727cb48c60da1a4f12f995db8dd0}{Max\+OS\+::system\+::\+OSXSAVE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 27
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200a4863502abea45861b9ed022e66d66cb2}{Max\+OS\+::system\+::\+AVX}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 28
+{\bfseries AES} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 25
+, {\bfseries XSAVE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 26
+, {\bfseries OSXSAVE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 27
+, {\bfseries AVX} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 28
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200ab3d388f4cf8c78d3592959b1ddf8fa34}{Max\+OS\+::system\+::\+F16C}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 29
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200ada6e177ae13693e83f8bfcb689218d62}{Max\+OS\+::system\+::\+RDRAND}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 30
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200aabb9899dda14ee146fe60811ffced005}{Max\+OS\+::system\+::\+HYPERVISOR}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 31
+{\bfseries F16C} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 29
+, {\bfseries RDRAND} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 30
+, {\bfseries HYPERVISOR} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 31
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6ab}{Max\+OS\+::system\+::\+CPU\+\_\+\+FEATURE\+\_\+\+EDX}} \+: int32\+\_\+t \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba11e4d339cb835db9884cd4a4e0c3dbb7}{Max\+OS\+::system\+::\+FPU}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 0
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba5b382b19324e0a71d404284d5c312804}{Max\+OS\+::system\+::\+VME}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 1
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba3a52f3c22ed6fcde5bf696a6c02c9e73}{Max\+OS\+::system\+::\+DE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 2
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba6f0862d55fca52dbe032fa0b99e9c6b5}{Max\+OS\+::system\+::\+PSE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 3
+\begin{DoxyCompactList}\small\item\em CPU features indicated by the ECX register after calling CPUID with EAX = 1. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}{Max\+OS\+::system\+::\+CPU\+\_\+\+FEATURE\+\_\+\+EDX}} \+: int32\+\_\+t \{ \newline
+{\bfseries FPU} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 0
+, {\bfseries VME} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 1
+, {\bfseries DE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 2
+, {\bfseries PSE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 3
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba28e098175bb05703eb34c5adbb234370}{Max\+OS\+::system\+::\+TSC}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 4
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba88c3927325f37f64ba93991bb88caf8a}{Max\+OS\+::system\+::\+MSR}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 5
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6ababb156e28d38e80191e14b4d6525c844b}{Max\+OS\+::system\+::\+PAE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 6
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abaff3da9fa37305280824b8a9e11299b56}{Max\+OS\+::system\+::\+MCE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 7
+{\bfseries TSC} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 4
+, {\bfseries MSR} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 5
+, {\bfseries PAE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 6
+, {\bfseries MCE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 7
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba8b7992d96d737490be72d598a6b8449c}{Max\+OS\+::system\+::\+CX8}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 8
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abaa545e1cb82e5b040d4cd6afe0e0cea62}{Max\+OS\+::system\+::\+APIC}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 9
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abaedf5bdfdf496166746e1794e80042a49}{Max\+OS\+::system\+::\+SEP}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 11
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba13a8342a37e721bab5a9c655ca2cce34}{Max\+OS\+::system\+::\+MTRR}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 12
+{\bfseries CX8} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 8
+, {\bfseries APIC} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 9
+, {\bfseries SEP} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 11
+, {\bfseries MTRR} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 12
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abaeab15251d3e7452fb90874a2f4211b29}{Max\+OS\+::system\+::\+PGE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 13
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6ababa1cd891cc365a37012794107bf7a494}{Max\+OS\+::system\+::\+MCA}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 14
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abaf4e7952302d93f100a8f19e1f87ad783}{Max\+OS\+::system\+::\+CMOV}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 15
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba157181ffcabbeae54bb036e489bc2b77}{Max\+OS\+::system\+::\+PAT}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 16
+{\bfseries PGE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 13
+, {\bfseries MCA} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 14
+, {\bfseries CMOV} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 15
+, {\bfseries PAT} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 16
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abaf0ab1f2970682e7e2a2a0e2ef1d90410}{Max\+OS\+::system\+::\+PSE36}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 17
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba3061f19c6be3cbb270da5bd31ceb4be4}{Max\+OS\+::system\+::\+PSN}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 18
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba54ee0bbeba3f7b1b0156eb6b5b46f4bc}{Max\+OS\+::system\+::\+CLFLUSH}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 19
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba47b79bd259e22596ffc4be2ffbbe5c5a}{Max\+OS\+::system\+::\+DS}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 21
+{\bfseries PSE36} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 17
+, {\bfseries PSN} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 18
+, {\bfseries CLFLUSH} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 19
+, {\bfseries DS} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 21
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba970d747229841c61b3c063fb45baa9e7}{Max\+OS\+::system\+::\+ACPI}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 22
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba54cc5c1b13d96ded25684285263eab0f}{Max\+OS\+::system\+::\+MMX}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 23
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6ababe797ddea71e0d3970fb71a78ecd26fd}{Max\+OS\+::system\+::\+FXSR}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 24
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba5fc53fc8197865c63285f74b1e147013}{Max\+OS\+::system\+::\+SSE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 25
+{\bfseries ACPI} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 22
+, {\bfseries MMX} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 23
+, {\bfseries FXSR} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 24
+, {\bfseries SSE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 25
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abacbb179b45ebb240c6ec51390ac12e562}{Max\+OS\+::system\+::\+SSE2}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 26
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abad53aeb78abc83a52ab8982f5c82a3d5b}{Max\+OS\+::system\+::\+SS}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 27
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba0e7756b24afbdddbe3f085470b133c50}{Max\+OS\+::system\+::\+HTT}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 28
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abaac7a4fbd0d788d94f43454817e1c208c}{Max\+OS\+::system\+::\+TM}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 29
+{\bfseries SSE2} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 26
+, {\bfseries SS} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 27
+, {\bfseries HTT} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 28
+, {\bfseries TM} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 29
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6aba4c2c294c51f3230d47a6bf0fb0cbe47a}{Max\+OS\+::system\+::\+IA64}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 30
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_aabd92958148e45d498450aaf57c8d6abaeff7c5571b267c9cf48a2c16d82e99f4}{Max\+OS\+::system\+::\+PBE}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 31
+{\bfseries IA64} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 30
+, {\bfseries PBE} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 31
  \}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em CPU features indicated by the EDX register after calling CPUID with EAX = 1. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1system_1_1tss}{Max\+OS\+::system\+::tss}} \mbox{\hyperlink{namespaceMaxOS_1_1system_a0eefbe7986fc94cfb5bb15e0dca7d6b1}{Max\+OS\+::system\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((\+\_\+\+\_\+packed\+\_\+\+\_\+)) tss\+\_\+t
-\end{DoxyCompactItemize}
+\Hypertarget{cpu_8h_a2d3ce0f98cbfe481d7597fef8f25a230}\label{cpu_8h_a2d3ce0f98cbfe481d7597fef8f25a230} 
+struct \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment}{Max\+OS\+::system\+::\+Task\+State\+Segment}} {\bfseries Max\+OS\+::system\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((\+\_\+\+\_\+packed\+\_\+\+\_\+)) tss\+\_\+t
+\begin{DoxyCompactList}\small\item\em Task State Segment (TSS) structure for x86\+\_\+64. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{cpu_8h_aed93283265f941dc1d2bf8d634164493}{reserved0}}
-\item 
+\begin{DoxyCompactList}\small\item\em Unused, must be zero. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a72b38046f765f14ce3d8f74ead10766b}{rsp0}}
-\item 
+\begin{DoxyCompactList}\small\item\em Stack pointer for ring 0. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a01fe81e8371ef1ebbf418968c24938af}{rsp1}}
-\item 
+\begin{DoxyCompactList}\small\item\em Stack pointer for ring 1. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a15cb2c4ffbfbf962c70a94c7519ef51f}{rsp2}}
-\item 
+\begin{DoxyCompactList}\small\item\em Stack pointer for ring 2. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a70e1f8ea009867b1bee1dcd6740874a1}{reserved1}}
-\item 
+\begin{DoxyCompactList}\small\item\em Unused, must be zero. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a43927117f60a83134aaf449767b87b6c}{reserved2}}
-\item 
+\begin{DoxyCompactList}\small\item\em Unused, must be zero. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a715597b286f1f3911516ff33f7daed1d}{ist1}}
-\item 
+\begin{DoxyCompactList}\small\item\em Interrupt Stack Table entry 1. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a0cad174ca03880e2ef66877fa7452908}{ist2}}
-\item 
+\begin{DoxyCompactList}\small\item\em Interrupt Stack Table entry 2. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_adfffc52e9460241dab25a95518f110f1}{ist3}}
-\item 
+\begin{DoxyCompactList}\small\item\em Interrupt Stack Table entry 3. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_aa9913c81119fe2e85184295729bb919f}{ist4}}
-\item 
+\begin{DoxyCompactList}\small\item\em Interrupt Stack Table entry 4. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_ad44d2330d19aca0011f83bd384e17ffb}{ist5}}
-\item 
+\begin{DoxyCompactList}\small\item\em Interrupt Stack Table entry 5. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a50ceffaaa84b8c9e483ab22a3e446a25}{ist6}}
-\item 
+\begin{DoxyCompactList}\small\item\em Interrupt Stack Table entry 6. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a92d8554e63dfe173bb1cdc79e6105b77}{ist7}}
-\item 
+\begin{DoxyCompactList}\small\item\em Interrupt Stack Table entry 7. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{cpu_8h_aa0c86982c9eef8033adb225c9f4c0458}{reserved3}}
-\item 
+\begin{DoxyCompactList}\small\item\em Unused, must be zero. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{cpu_8h_af9c80382144c72c09f80eb6458d5238e}{reserved4}}
-\item 
+\begin{DoxyCompactList}\small\item\em Unused, must be zero. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{cpu_8h_ac0cd4cbf2cda7bf0599dc6441efc8b3c}{io\+\_\+bitmap\+\_\+offset}}
-\item 
-enum \mbox{\hyperlink{namespaceMaxOS_1_1system_a955509bd4aa295b6038a6812bf689200}{Max\+OS\+::system\+::\+CPU\+\_\+\+FEATURE\+\_\+\+ECX}} \mbox{\hyperlink{namespaceMaxOS_1_1system_a6ffe95b2b6023ed7f9266bbc3e94971a}{Max\+OS\+::system\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Offset to the I/O bitmap. \end{DoxyCompactList}\item 
+\Hypertarget{cpu_8h_a6ffe95b2b6023ed7f9266bbc3e94971a}\label{cpu_8h_a6ffe95b2b6023ed7f9266bbc3e94971a} 
+enum \mbox{\hyperlink{cpu_8h_a955509bd4aa295b6038a6812bf689200}{Max\+OS\+::system\+::\+CPU\+\_\+\+FEATURE\+\_\+\+ECX}} {\bfseries Max\+OS\+::system\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}
 \item 
 Stack\+Frame \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cpu_8h_adacd1bb3e91dd22eaae8f252d4135d4d}{next}}
-\item 
+\begin{DoxyCompactList}\small\item\em Pointer to the next stack frame (up the call stack) \end{DoxyCompactList}\item 
 uintptr\+\_\+t \mbox{\hyperlink{cpu_8h_ad37248eb45d2509df75a205d8412ac65}{rip}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The instruction pointer at this frame. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a1eed65db00a29bed626cd7e0a16cbd05}{stack}}
+\begin{DoxyCompactList}\small\item\em The stack pointer for the core. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{cpu_8h_a9fc1d0f743f4314f0b9083fa0b755e07}{p4\+\_\+table}}
+\begin{DoxyCompactList}\small\item\em The physical address of the P4 page table. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{cpu_8h_a1e6927fa1486224044e568f9c370519b}{id}}
+\begin{DoxyCompactList}\small\item\em The ID of the core. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{cpu_8h_a73e9fa0c3543560192f38a8ab6a78c47}{activated}}
+\begin{DoxyCompactList}\small\item\em Whether the core has been activated. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cpu_8h_a3f6e3329ba03df2dd96fa12c454d0c32}{gdt\+\_\+64\+\_\+base}}
+\begin{DoxyCompactList}\small\item\em The base of the 64-\/bit GDT. \end{DoxyCompactList}\item 
+constexpr size\+\_\+t \mbox{\hyperlink{cpu_8h_a0cdb341b2d45114c2d033ec00bc3b356}{Max\+OS\+::system\+::\+BOOT\+\_\+\+STACK\+\_\+\+SIZE}} = 16384
+\begin{DoxyCompactList}\small\item\em The size of the stack allocated for booting a core (should align with the startup assembly code for the kernel) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines Central Processing Unit (CPU) structures and functions for managing CPU state and features. 
+
+\begin{DoxyDate}{Date}
+17th January 2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{cpu_8h_a955509bd4aa295b6038a6812bf689200}\label{cpu_8h_a955509bd4aa295b6038a6812bf689200} 
+\index{cpu.h@{cpu.h}!CPU\_FEATURE\_ECX@{CPU\_FEATURE\_ECX}}
+\index{CPU\_FEATURE\_ECX@{CPU\_FEATURE\_ECX}!cpu.h@{cpu.h}}
+\doxysubsubsection{\texorpdfstring{CPU\_FEATURE\_ECX}{CPU\_FEATURE\_ECX}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{cpu_8h_a955509bd4aa295b6038a6812bf689200}{Max\+OS\+::system\+::\+CPU\+\_\+\+FEATURE\+\_\+\+ECX}} \+: int32\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+CPU features indicated by the ECX register after calling CPUID with EAX = 1. 
+
+\begin{DoxySeeAlso}{See also}
+\href{https://wiki.osdev.org/CPUID}{\texttt{ https\+://wiki.\+osdev.\+org/\+CPUID}} as the original author 
+\end{DoxySeeAlso}
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00085}{85}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ int32\_t\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ SSE3\ \ \ \ \ \ \ \ =\ 1\ <<\ 0,}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ PCLMUL\ \ \ \ \ \ =\ 1\ <<\ 1,}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ DTES64\ \ \ \ \ \ =\ 1\ <<\ 2,}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ MONITOR\ \ \ \ \ =\ 1\ <<\ 3,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ DS\_CPL\ \ \ \ \ \ =\ 1\ <<\ 4,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ VMX\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 5,}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ SMX\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 6,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ EST\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 7,}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ TM2\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 8,}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ SSSE3\ \ \ \ \ \ \ =\ 1\ <<\ 9,}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ CID\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 10,}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ SDBG\ \ \ \ \ \ \ \ =\ 1\ <<\ 11,}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ FMA\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 12,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ CX16\ \ \ \ \ \ \ \ =\ 1\ <<\ 13,}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ XTPR\ \ \ \ \ \ \ \ =\ 1\ <<\ 14,}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ PDCM\ \ \ \ \ \ \ \ =\ 1\ <<\ 15,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ PCID\ \ \ \ \ \ \ \ =\ 1\ <<\ 17,}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ DCA\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 18,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ SSE4\_1\ \ \ \ \ \ =\ 1\ <<\ 19,}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ SSE4\_2\ \ \ \ \ \ =\ 1\ <<\ 20,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ X2APIC\ \ \ \ \ \ =\ 1\ <<\ 21,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ MOVBE\ \ \ \ \ \ \ =\ 1\ <<\ 22,}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ POPCNT\ \ \ \ \ \ =\ 1\ <<\ 23,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ TSC\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 24,}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ AES\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 25,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ XSAVE\ \ \ \ \ \ \ =\ 1\ <<\ 26,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ OSXSAVE\ \ \ \ \ =\ 1\ <<\ 27,}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ AVX\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 28,}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ F16C\ \ \ \ \ \ \ \ =\ 1\ <<\ 29,}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ RDRAND\ \ \ \ \ \ =\ 1\ <<\ 30,}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ HYPERVISOR\ \ =\ 1\ <<\ 31,}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}\label{cpu_8h_aabd92958148e45d498450aaf57c8d6ab} 
+\index{cpu.h@{cpu.h}!CPU\_FEATURE\_EDX@{CPU\_FEATURE\_EDX}}
+\index{CPU\_FEATURE\_EDX@{CPU\_FEATURE\_EDX}!cpu.h@{cpu.h}}
+\doxysubsubsection{\texorpdfstring{CPU\_FEATURE\_EDX}{CPU\_FEATURE\_EDX}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}{Max\+OS\+::system\+::\+CPU\+\_\+\+FEATURE\+\_\+\+EDX}} \+: int32\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+CPU features indicated by the EDX register after calling CPUID with EAX = 1. 
+
+\begin{DoxySeeAlso}{See also}
+\href{https://wiki.osdev.org/CPUID}{\texttt{ https\+://wiki.\+osdev.\+org/\+CPUID}} as the original author 
+\end{DoxySeeAlso}
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00125}{125}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ int32\_t\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ FPU\ \ \ \ \ =\ 1\ <<\ 0,}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ VME\ \ \ \ \ =\ 1\ <<\ 1,}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ DE\ \ \ \ \ \ =\ 1\ <<\ 2,}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ PSE\ \ \ \ \ =\ 1\ <<\ 3,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ TSC\ \ \ \ \ =\ 1\ <<\ 4,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ MSR\ \ \ \ \ =\ 1\ <<\ 5,}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ PAE\ \ \ \ \ =\ 1\ <<\ 6,}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ MCE\ \ \ \ \ =\ 1\ <<\ 7,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ CX8\ \ \ \ \ =\ 1\ <<\ 8,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ APIC\ \ \ \ =\ 1\ <<\ 9,}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ SEP\ \ \ \ \ =\ 1\ <<\ 11,}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ MTRR\ \ \ \ =\ 1\ <<\ 12,}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ PGE\ \ \ \ \ =\ 1\ <<\ 13,}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ MCA\ \ \ \ \ =\ 1\ <<\ 14,}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ CMOV\ \ \ \ =\ 1\ <<\ 15,}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ PAT\ \ \ \ \ =\ 1\ <<\ 16,}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ PSE36\ \ \ =\ 1\ <<\ 17,}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ PSN\ \ \ \ \ =\ 1\ <<\ 18,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ CLFLUSH\ =\ 1\ <<\ 19,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ DS\ \ \ \ \ \ =\ 1\ <<\ 21,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ ACPI\ \ \ \ =\ 1\ <<\ 22,}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ MMX\ \ \ \ \ =\ 1\ <<\ 23,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ FXSR\ \ \ \ =\ 1\ <<\ 24,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ SSE\ \ \ \ \ =\ 1\ <<\ 25,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ SSE2\ \ \ \ =\ 1\ <<\ 26,}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ SS\ \ \ \ \ \ =\ 1\ <<\ 27,}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ HTT\ \ \ \ \ =\ 1\ <<\ 28,}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ TM\ \ \ \ \ \ =\ 1\ <<\ 29,}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ IA64\ \ \ \ =\ 1\ <<\ 30,}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ PBE\ \ \ \ \ =\ 1\ <<\ 31}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
 
 
 \doxysubsection{Variable Documentation}
+\Hypertarget{cpu_8h_a73e9fa0c3543560192f38a8ab6a78c47}\label{cpu_8h_a73e9fa0c3543560192f38a8ab6a78c47} 
+\index{cpu.h@{cpu.h}!activated@{activated}}
+\index{activated@{activated}!cpu.h@{cpu.h}}
+\doxysubsubsection{\texorpdfstring{activated}{activated}}
+{\footnotesize\ttfamily bool activated}
+
+
+
+Whether the core has been activated. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00003}{3}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{kernel_8cpp_source_l00046}{core\+\_\+main()}}.
+
+\Hypertarget{cpu_8h_a0cdb341b2d45114c2d033ec00bc3b356}\label{cpu_8h_a0cdb341b2d45114c2d033ec00bc3b356} 
+\index{cpu.h@{cpu.h}!BOOT\_STACK\_SIZE@{BOOT\_STACK\_SIZE}}
+\index{BOOT\_STACK\_SIZE@{BOOT\_STACK\_SIZE}!cpu.h@{cpu.h}}
+\doxysubsubsection{\texorpdfstring{BOOT\_STACK\_SIZE}{BOOT\_STACK\_SIZE}}
+{\footnotesize\ttfamily constexpr size\+\_\+t Max\+OS\+::system\+::\+BOOT\+\_\+\+STACK\+\_\+\+SIZE = 16384\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+The size of the stack allocated for booting a core (should align with the startup assembly code for the kernel) 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00180}{180}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00110}{Max\+OS\+::system\+::\+Core\+::init\+\_\+tss()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00059}{Max\+OS\+::system\+::\+Core\+::wake\+\_\+up()}}.
+
+\Hypertarget{cpu_8h_a3f6e3329ba03df2dd96fa12c454d0c32}\label{cpu_8h_a3f6e3329ba03df2dd96fa12c454d0c32} 
+\index{cpu.h@{cpu.h}!gdt\_64\_base@{gdt\_64\_base}}
+\index{gdt\_64\_base@{gdt\_64\_base}!cpu.h@{cpu.h}}
+\doxysubsubsection{\texorpdfstring{gdt\_64\_base}{gdt\_64\_base}}
+{\footnotesize\ttfamily void\texorpdfstring{$\ast$}{*} gdt\+\_\+64\+\_\+base}
+
+
+
+The base of the 64-\/bit GDT. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00004}{4}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+\Hypertarget{cpu_8h_a1e6927fa1486224044e568f9c370519b}\label{cpu_8h_a1e6927fa1486224044e568f9c370519b} 
+\index{cpu.h@{cpu.h}!id@{id}}
+\index{id@{id}!cpu.h@{cpu.h}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily uint8\+\_\+t id}
+
+
+
+The ID of the core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00002}{2}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
 \Hypertarget{cpu_8h_ac0cd4cbf2cda7bf0599dc6441efc8b3c}\label{cpu_8h_ac0cd4cbf2cda7bf0599dc6441efc8b3c} 
 \index{cpu.h@{cpu.h}!io\_bitmap\_offset@{io\_bitmap\_offset}}
 \index{io\_bitmap\_offset@{io\_bitmap\_offset}!cpu.h@{cpu.h}}
 \doxysubsubsection{\texorpdfstring{io\_bitmap\_offset}{io\_bitmap\_offset}}
 {\footnotesize\ttfamily uint16\+\_\+t io\+\_\+bitmap\+\_\+offset}
+
+
+
+Offset to the I/O bitmap. 
 
 
 
@@ -175,6 +385,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00015}{15}} of file \mbox{\hy
 
 
 
+Interrupt Stack Table entry 1. 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00006}{6}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 \Hypertarget{cpu_8h_a0cad174ca03880e2ef66877fa7452908}\label{cpu_8h_a0cad174ca03880e2ef66877fa7452908} 
@@ -182,6 +396,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00006}{6}} of file \mbox{\hyp
 \index{ist2@{ist2}!cpu.h@{cpu.h}}
 \doxysubsubsection{\texorpdfstring{ist2}{ist2}}
 {\footnotesize\ttfamily uint64\+\_\+t ist2}
+
+
+
+Interrupt Stack Table entry 2. 
 
 
 
@@ -195,6 +413,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00007}{7}} of file \mbox{\hyp
 
 
 
+Interrupt Stack Table entry 3. 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00008}{8}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 \Hypertarget{cpu_8h_aa9913c81119fe2e85184295729bb919f}\label{cpu_8h_aa9913c81119fe2e85184295729bb919f} 
@@ -202,6 +424,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00008}{8}} of file \mbox{\hyp
 \index{ist4@{ist4}!cpu.h@{cpu.h}}
 \doxysubsubsection{\texorpdfstring{ist4}{ist4}}
 {\footnotesize\ttfamily uint64\+\_\+t ist4}
+
+
+
+Interrupt Stack Table entry 4. 
 
 
 
@@ -215,6 +441,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00009}{9}} of file \mbox{\hyp
 
 
 
+Interrupt Stack Table entry 5. 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00010}{10}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 \Hypertarget{cpu_8h_a50ceffaaa84b8c9e483ab22a3e446a25}\label{cpu_8h_a50ceffaaa84b8c9e483ab22a3e446a25} 
@@ -222,6 +452,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00010}{10}} of file \mbox{\hy
 \index{ist6@{ist6}!cpu.h@{cpu.h}}
 \doxysubsubsection{\texorpdfstring{ist6}{ist6}}
 {\footnotesize\ttfamily uint64\+\_\+t ist6}
+
+
+
+Interrupt Stack Table entry 6. 
 
 
 
@@ -235,6 +469,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00011}{11}} of file \mbox{\hy
 
 
 
+Interrupt Stack Table entry 7. 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00012}{12}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 \Hypertarget{cpu_8h_adacd1bb3e91dd22eaae8f252d4135d4d}\label{cpu_8h_adacd1bb3e91dd22eaae8f252d4135d4d} 
@@ -245,13 +483,39 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00012}{12}} of file \mbox{\hy
 
 
 
+Pointer to the next stack frame (up the call stack) 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00000}{0}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+\Hypertarget{cpu_8h_a9fc1d0f743f4314f0b9083fa0b755e07}\label{cpu_8h_a9fc1d0f743f4314f0b9083fa0b755e07} 
+\index{cpu.h@{cpu.h}!p4\_table@{p4\_table}}
+\index{p4\_table@{p4\_table}!cpu.h@{cpu.h}}
+\doxysubsubsection{\texorpdfstring{p4\_table}{p4\_table}}
+{\footnotesize\ttfamily uint64\+\_\+t p4\+\_\+table}
+
+
+
+The physical address of the P4 page table. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00001}{1}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00548}{Max\+OS\+::system\+::\+CPU\+::init\+\_\+cores()}}, and \mbox{\hyperlink{physical_8cpp_source_l00948}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::unmap\+\_\+lower\+\_\+kernel()}}.
 
 \Hypertarget{cpu_8h_aed93283265f941dc1d2bf8d634164493}\label{cpu_8h_aed93283265f941dc1d2bf8d634164493} 
 \index{cpu.h@{cpu.h}!reserved0@{reserved0}}
 \index{reserved0@{reserved0}!cpu.h@{cpu.h}}
 \doxysubsubsection{\texorpdfstring{reserved0}{reserved0}}
 {\footnotesize\ttfamily uint32\+\_\+t reserved0}
+
+
+
+Unused, must be zero. 
 
 
 
@@ -265,6 +529,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00000}{0}} of file \mbox{\hyp
 
 
 
+Unused, must be zero. 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00004}{4}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 \Hypertarget{cpu_8h_a43927117f60a83134aaf449767b87b6c}\label{cpu_8h_a43927117f60a83134aaf449767b87b6c} 
@@ -272,6 +540,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00004}{4}} of file \mbox{\hyp
 \index{reserved2@{reserved2}!cpu.h@{cpu.h}}
 \doxysubsubsection{\texorpdfstring{reserved2}{reserved2}}
 {\footnotesize\ttfamily uint64\+\_\+t reserved2}
+
+
+
+Unused, must be zero. 
 
 
 
@@ -285,6 +557,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00005}{5}} of file \mbox{\hyp
 
 
 
+Unused, must be zero. 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00013}{13}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 \Hypertarget{cpu_8h_af9c80382144c72c09f80eb6458d5238e}\label{cpu_8h_af9c80382144c72c09f80eb6458d5238e} 
@@ -292,6 +568,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00013}{13}} of file \mbox{\hy
 \index{reserved4@{reserved4}!cpu.h@{cpu.h}}
 \doxysubsubsection{\texorpdfstring{reserved4}{reserved4}}
 {\footnotesize\ttfamily uint16\+\_\+t reserved4}
+
+
+
+Unused, must be zero. 
 
 
 
@@ -305,13 +585,25 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00014}{14}} of file \mbox{\hy
 
 
 
+The instruction pointer at this frame. 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00001}{1}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{symbols_8cpp_source_l00024}{Max\+OS\+::common\+::resolve\+\_\+symbol()}}.
 
 \Hypertarget{cpu_8h_a72b38046f765f14ce3d8f74ead10766b}\label{cpu_8h_a72b38046f765f14ce3d8f74ead10766b} 
 \index{cpu.h@{cpu.h}!rsp0@{rsp0}}
 \index{rsp0@{rsp0}!cpu.h@{cpu.h}}
 \doxysubsubsection{\texorpdfstring{rsp0}{rsp0}}
 {\footnotesize\ttfamily uint64\+\_\+t rsp0}
+
+
+
+Stack pointer for ring 0. 
 
 
 
@@ -325,6 +617,10 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00001}{1}} of file \mbox{\hyp
 
 
 
+Stack pointer for ring 1. 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00002}{2}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 \Hypertarget{cpu_8h_a15cb2c4ffbfbf962c70a94c7519ef51f}\label{cpu_8h_a15cb2c4ffbfbf962c70a94c7519ef51f} 
@@ -335,5 +631,27 @@ Definition at line \mbox{\hyperlink{cpu_8h_source_l00002}{2}} of file \mbox{\hyp
 
 
 
+Stack pointer for ring 2. 
+
+
+
 Definition at line \mbox{\hyperlink{cpu_8h_source_l00003}{3}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+\Hypertarget{cpu_8h_a1eed65db00a29bed626cd7e0a16cbd05}\label{cpu_8h_a1eed65db00a29bed626cd7e0a16cbd05} 
+\index{cpu.h@{cpu.h}!stack@{stack}}
+\index{stack@{stack}!cpu.h@{cpu.h}}
+\doxysubsubsection{\texorpdfstring{stack}{stack}}
+{\footnotesize\ttfamily uint64\+\_\+t stack}
+
+
+
+The stack pointer for the core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00000}{0}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{vfs_8cpp_source_l00368}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::delete\+\_\+directory()}}.
 

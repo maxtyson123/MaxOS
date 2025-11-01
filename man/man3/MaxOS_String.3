@@ -15,15 +15,19 @@ MaxOS::String \- Dynamically sized string with various operations\&.
 .ti -1c
 .RI "\fBString\fP ()"
 .br
+.RI "Construct a \fBString\fP, 0 length and only contains the null terminator\&. "
 .ti -1c
 .RI "\fBString\fP (char c)"
 .br
+.RI "Constructs a \fBString\fP from a single character\&. "
 .ti -1c
 .RI "\fBString\fP (char const *\fBstring\fP)"
 .br
+.RI "Constructs a \fBString\fP from a pointer to an array of chars\&. "
 .ti -1c
 .RI "\fBString\fP (uint8_t const *\fBstring\fP, int \fBlength\fP)"
 .br
+.RI "Constructs a string from a an array of bytes (doesnt have to be null terminated) "
 .ti -1c
 .RI "\fBString\fP (\fBString\fP const &other)"
 .br
@@ -31,16 +35,19 @@ MaxOS::String \- Dynamically sized string with various operations\&.
 .ti -1c
 .RI "\fBString\fP (int value)"
 .br
+.RI "Constructs a string from an integer (must be base 10) "
 .ti -1c
 .RI "\fBString\fP (uint64_t value)"
 .br
-.RI "Constructs a string from a hex value (Excludes 0x____) "
+.RI "Constructs a string from a hex value (Excludes 0x) "
 .ti -1c
 .RI "\fBString\fP (float value)"
 .br
+.RI "Constructs a \fBString\fP from a float\&. "
 .ti -1c
-.RI "\fB~String\fP ()"
+.RI "\fBString\fP (bool value)"
 .br
+.RI "Constructs a \fBString\fP from a boolean as 'true' or 'false'\&. "
 .ti -1c
 .RI "void \fBcopy\fP (\fBString\fP const &other)"
 .br
@@ -130,91 +137,134 @@ MaxOS::String \- Dynamically sized string with various operations\&.
 .br
 .RI "Returns the character at the specified index\&. "
 .in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBString\fP \fBformatted\fP (char const *format,\&.\&.\&.)"
+.br
+.RI "Creates a formated string\&. s = string, x = hex, d = decimal\&. "
+.ti -1c
+.RI "static \fBString\fP \fBformatted\fP (char const *format, va_list parameters)"
+.br
+.RI "Creates a formated string\&. s = string, x = hex, d = decimal\&. "
+.in -1c
 .SH "Detailed Description"
 .PP 
 Dynamically sized string with various operations\&. 
 .PP
-Definition at line \fB18\fP of file \fBstring\&.h\fP\&.
+Definition at line \fB26\fP of file \fBstring\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "String::String ()"
 
 .PP
-Definition at line \fB8\fP of file \fBstring\&.cpp\fP\&..PP
+Construct a \fBString\fP, 0 length and only contains the null terminator\&. 
+.PP
+Definition at line \fB16\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-8                {
-9 
-10     // String that only contains the null terminator
-11     allocate_self();
-12     m_string[0] = '\\0';
-13     m_length = 0;
-14 
-15 }
+16                {
+17 
+18     // String that only contains the null terminator
+19     allocate_self();
+20     m_string[0] = '\\0';
+21     m_length = 0;
+22 
+23 }
 .fi
 
 .SS "String::String (char c)\fC [explicit]\fP"
 
 .PP
-Definition at line \fB17\fP of file \fBstring\&.cpp\fP\&..PP
+Constructs a \fBString\fP from a single character\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIc\fP The character 
+.RE
+.PP
+
+.PP
+Definition at line \fB29\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-17                      {
-18 
-19     // Create the memory
-20     m_length = 1;
-21     allocate_self();
-22 
-23     // Store the char
-24     m_string[0] = c;
-25     m_string[m_length] = '\\0';
-26 
-27 
-28 }
+29                      {
+30 
+31     // Create the memory
+32     m_length = 1;
+33     allocate_self();
+34 
+35     // Store the char
+36     m_string[0] = c;
+37     m_string[m_length] = '\\0';
+38 
+39 
+40 }
 .fi
 
 .SS "String::String (char const * string)"
 
 .PP
-Definition at line \fB30\fP of file \fBstring\&.cpp\fP\&..PP
+Constructs a \fBString\fP from a pointer to an array of chars\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstring\fP An array of chars, must be null terminated and of length less than 10,000 
+.RE
+.PP
+
+.PP
+Definition at line \fB46\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-30                                  {
-31 
-32     // Get the length of the string, prevent longer than 10000 because this should mean something's gone wrong
-33     m_length = 0;
-34     while (string[m_length] != '\\0' && m_length <= 10000)
-35         m_length++;
-36     allocate_self();
-37 
-38     // Copy the string
-39     for (int i = 0; i < m_length; i++)
-40         m_string[i] = string[i];
-41 
-42     // If the length is more than 10,000 Replace the end with a warning incase future use actually requires that
-43     const char *warning = "MAXOS: String length exceeded 10000 \- might be a bug";
-44     if (m_length > 10000)
-45         for (int i = 0; i < 52; i++)
-46             m_string[m_length \- 52 + i] = warning[i];
+46                                  {
 47 
-48     m_string[m_length] = '\\0';
-49 }
+48     // Get the length of the string, prevent longer than 10000 because this should mean something's gone wrong
+49     m_length = 0;
+50     while (string[m_length] != '\\0' && m_length <= 10000)
+51         m_length++;
+52     allocate_self();
+53 
+54     // Copy the string
+55     for (int i = 0; i < m_length; i++)
+56         m_string[i] = string[i];
+57 
+58     // If the length is more than 10,000 Replace the end with a warning incase future use actually requires that
+59     const char *warning = "MAXOS: String length exceeded 10000 \- might be a bug";
+60     if (m_length > 10000)
+61         for (int i = 0; i < 52; i++)
+62             m_string[m_length \- 52 + i] = warning[i];
+63 
+64     m_string[m_length] = '\\0';
+65 }
 .fi
 
 .SS "String::String (uint8_t const * string, int length)"
 
 .PP
-Definition at line \fB51\fP of file \fBstring\&.cpp\fP\&..PP
+Constructs a string from a an array of bytes (doesnt have to be null terminated) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstring\fP The string bytes 
+.br
+\fIlength\fP How large the string byte buffer is 
+.RE
+.PP
+
+.PP
+Definition at line \fB73\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-51                                                 {
-52     // Allocate memory for the string (and null terminator)
-53     m_length = length;
-54     allocate_self();
-55 
-56     // Copy the string
-57     for (int i = 0; i < length; i++)
-58         m_string[i] = string[i];
-59 
-60     // Write the null terminator
-61     m_string[length] = '\\0';
-62 }
+73                                                 {
+74     // Allocate memory for the string (and null terminator)
+75     m_length = length;
+76     allocate_self();
+77 
+78     // Copy the string
+79     for (int i = 0; i < length; i++)
+80         m_string[i] = string[i];
+81 
+82     // Write the null terminator
+83     m_string[length] = '\\0';
+84 }
 .fi
 
 .PP
@@ -231,107 +281,149 @@ Copy constructor for the string\&.
 .PP
 
 .PP
-Definition at line \fB121\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB165\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-121                                   {
-122     copy(other);
-123 }
+165                                   {
+166     copy(other);
+167 }
 .fi
 
 .PP
 References \fBcopy()\fP\&.
-.SS "String::String (int value)"
+.SS "String::String (int value)\fC [explicit]\fP"
 
 .PP
-Definition at line \fB64\fP of file \fBstring\&.cpp\fP\&..PP
-.nf
-64                         {
-65 
-66     // Convert to a string
-67     const char *str = itoa(10, value);
-68     m_length = strlen(str);
-69 
-70     // Create space to store
-71     allocate_self();
-72 
-73     // Store the string
-74     for (int i = 0; i < m_length; i++)
-75         m_string[i] = str[i];
-76     m_string[m_length] = '\\0';
-77 
-78 }
-.fi
-
-.PP
-References \fBitoa()\fP, and \fBstrlen()\fP\&.
-.SS "String::String (uint64_t value)"
-
-.PP
-Constructs a string from a hex value (Excludes 0x____) 
+Constructs a string from an integer (must be base 10) 
 .PP
 \fBParameters\fP
 .RS 4
-\fIvalue\fP 
+\fIvalue\fP The integer value 
 .RE
 .PP
 
 .PP
-Definition at line \fB85\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB91\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-85                              {
-86 
-87     // Convert to a string
-88     const char *str = htoa(value);
-89     m_length = strlen(str);
-90 
-91     // Create space to store
-92     allocate_self();
-93 
-94     // Store the string
-95     for (int i = 0; i < m_length; i++)
-96         m_string[i] = str[i];
-97     m_string[m_length] = '\\0';
-98 }
+91                         {
+92 
+93     // Convert to a string
+94     const char *str = itoa(10, value);
+95     m_length = strlen(str);
+96 
+97     // Create space to store
+98     allocate_self();
+99 
+100     // Store the string
+101     for (int i = 0; i < m_length; i++)
+102         m_string[i] = str[i];
+103     m_string[m_length] = '\\0';
+104 
+105 }
+.fi
+
+.PP
+References \fBitoa()\fP, and \fBstrlen()\fP\&.
+.SS "String::String (uint64_t value)\fC [explicit]\fP"
+
+.PP
+Constructs a string from a hex value (Excludes 0x) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The hex value 
+.RE
+.PP
+
+.PP
+Definition at line \fB112\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+112                              {
+113 
+114     // Convert to a string
+115     const char *str = htoa(value);
+116     m_length = strlen(str);
+117 
+118     // Create space to store
+119     allocate_self();
+120 
+121     // Store the string
+122     for (int i = 0; i < m_length; i++)
+123         m_string[i] = str[i];
+124     m_string[m_length] = '\\0';
+125 }
 .fi
 
 .PP
 References \fBhtoa()\fP, and \fBstrlen()\fP\&.
-.SS "String::String (float value)"
+.SS "String::String (float value)\fC [explicit]\fP"
 
 .PP
-Definition at line \fB100\fP of file \fBstring\&.cpp\fP\&..PP
+Constructs a \fBString\fP from a float\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The float value 
+.RE
+.PP
+
+.PP
+Definition at line \fB131\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-100                           {
-101 
-102     // Convert to a string
-103     const char *str = ftoa(value);
-104     m_length = strlen(str);
-105 
-106     // Create space to store
-107     allocate_self();
-108 
-109     // Store the string
-110     for (int i = 0; i < m_length; i++)
-111         m_string[i] = str[i];
-112     m_string[m_length] = '\\0';
-113 
-114 }
+131                           {
+132 
+133     // Convert to a string
+134     const char *str = ftoa(value);
+135     m_length = strlen(str);
+136 
+137     // Create space to store
+138     allocate_self();
+139 
+140     // Store the string
+141     for (int i = 0; i < m_length; i++)
+142         m_string[i] = str[i];
+143     m_string[m_length] = '\\0';
+144 
+145 }
 .fi
 
 .PP
 References \fBftoa()\fP, and \fBstrlen()\fP\&.
+.SS "String::String (bool value)\fC [explicit]\fP"
+
+.PP
+Constructs a \fBString\fP from a boolean as 'true' or 'false'\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The bool value 
+.RE
+.PP
+
+.PP
+Definition at line \fB151\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+151                          {
+152 
+153     if(value)
+154         *this = string("true");
+155     else
+156         *this = string("false");
+157 
+158 }
+.fi
+
 .SS "String::~String ()"
 
 .PP
-Definition at line \fB126\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB170\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-126                 {
-127 
-128     // Free the memory
-129     if (!m_using_small)
-130         delete[] m_string;
-131 
-132 }
+170                 {
+171 
+172     // Free the memory
+173     if (!m_using_small)
+174         delete[] m_string;
+175 
+176 }
 .fi
 
 .SH "Member Function Documentation"
@@ -348,16 +440,16 @@ The char* string
 .PP
 
 .PP
-Definition at line \fB208\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB251\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-208                     {
-209 
-210     return m_string;
-211 }
+251                     {
+252 
+253     return m_string;
+254 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, \fBstrcmp()\fP, \fBstrcmp()\fP, \fBstrcmp()\fP, \fBstrncmp()\fP, \fBstrncmp()\fP, \fBstrncmp()\fP, and \fBMaxOS::processes::Process::~Process()\fP\&.
+Referenced by \fBstrcmp()\fP, \fBstrcmp()\fP, \fBstrcmp()\fP, \fBstrncmp()\fP, \fBstrncmp()\fP, and \fBstrncmp()\fP\&.
 .SS "const char * String::c_str () const"
 
 .PP
@@ -370,12 +462,12 @@ The string as an array of characters
 .PP
 
 .PP
-Definition at line \fB218\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB261\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-218                                 {
-219 
-220     return m_string;
-221 }
+261                                 {
+262 
+263     return m_string;
+264 }
 .fi
 
 .SS "\fBString\fP String::center (int width, char fill = \fC' '\fP) const"
@@ -397,35 +489,35 @@ The centered string
 .PP
 
 .PP
-Definition at line \fB537\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB580\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-537                                                 {
-538 
-539     // The number of characters to add
-540     int add = (width \- m_length) / 2;
-541 
-542     // The centered string
-543     String centered;
-544     centered\&.m_length = width;
-545     centered\&.allocate_self();
-546 
-547     // Fill the right side (before)
-548     for (int i = 0; i < add; i++)
-549         centered\&.m_string[i] = fill;
-550 
-551     // Copy the string (middle)
-552     for (int i = 0; i < m_length; i++)
-553         centered\&.m_string[add + i] = m_string[i];
-554 
-555     // Fill the left side (after)
-556     for (int i = add + m_length; i < width; i++)
-557         centered\&.m_string[i] = fill;
-558 
-559     // Write the null terminator
-560     centered\&.m_string[width] = '\\0';
-561 
-562     return centered;
-563 }
+580                                                 {
+581 
+582     // The number of characters to add
+583     int add = (width \- m_length) / 2;
+584 
+585     // The centered string
+586     String centered;
+587     centered\&.m_length = width;
+588     centered\&.allocate_self();
+589 
+590     // Fill the right side (before)
+591     for (int i = 0; i < add; i++)
+592         centered\&.m_string[i] = fill;
+593 
+594     // Copy the string (middle)
+595     for (int i = 0; i < m_length; i++)
+596         centered\&.m_string[add + i] = m_string[i];
+597 
+598     // Fill the left side (after)
+599     for (int i = add + m_length; i < width; i++)
+600         centered\&.m_string[i] = fill;
+601 
+602     // Write the null terminator
+603     centered\&.m_string[width] = '\\0';
+604 
+605     return centered;
+606 }
 .fi
 
 .SS "void String::copy (\fBString\fP const & other)"
@@ -440,28 +532,28 @@ Copies the other string\&.
 .PP
 
 .PP
-Definition at line \fB139\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB183\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-139                                      {
-140 
-141     // Allocate memory for the string (and null terminator)
-142     m_length = other\&.length();
-143     allocate_self();
-144 
-145     // Copy the string
-146     for (int i = 0; i < m_length; i++)
-147         m_string[i] = other[i];
-148 
-149     // Write the null terminator
-150     m_string[m_length] = '\\0';
-151 
-152 }
+183                                      {
+184 
+185     // Allocate memory for the string (and null terminator)
+186     m_length = other\&.length();
+187     allocate_self();
+188 
+189     // Copy the string
+190     for (int i = 0; i < m_length; i++)
+191         m_string[i] = other[i];
+192 
+193     // Write the null terminator
+194     m_string[m_length] = '\\0';
+195 
+196 }
 .fi
 
 .PP
 References \fBlength()\fP\&.
 .PP
-Referenced by \fBoperator+=()\fP, \fBoperator=()\fP, \fBString()\fP, \fBstrip()\fP, \fBMaxOS::gui::widgets::InputBox::update_text()\fP, and \fBMaxOS::gui::widgets::Text::update_text()\fP\&.
+Referenced by \fBoperator+=()\fP, \fBoperator=()\fP, \fBString()\fP, and \fBstrip()\fP\&.
 .SS "bool String::equals (\fBString\fP const & other) const"
 
 .PP
@@ -479,29 +571,128 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB349\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB392\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-349                                              {
-350 
-351     // Check if the lengths are equal
-352     if (m_length != other\&.length())
-353         return false;
-354 
-355     // Check if the characters are equal
-356     for (int i = 0; i < m_length; i++)
-357         if (m_string[i] != other[i])
-358             return false;
-359 
-360     // The strings are equal
-361     return true;
-362 
-363 }
+392                                              {
+393 
+394     // Check if the lengths are equal
+395     if (m_length != other\&.length())
+396         return false;
+397 
+398     // Check if the characters are equal
+399     for (int i = 0; i < m_length; i++)
+400         if (m_string[i] != other[i])
+401             return false;
+402 
+403     // The strings are equal
+404     return true;
+405 
+406 }
 .fi
 
 .PP
 References \fBlength()\fP\&.
 .PP
 Referenced by \fBoperator!=()\fP, and \fBoperator==()\fP\&.
+.SS "\fBString\fP String::formatted (char const * format, va_list parameters)\fC [static]\fP"
+
+.PP
+Creates a formated string\&. s = string, x = hex, d = decimal\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIformat\fP The string containing the format 
+.br
+\fIparameters\fP The arguments to format into the string
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The string with the arguments formated inside 
+.RE
+.PP
+
+.PP
+Definition at line \fB659\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+659                                                                {
+660 
+661     String out;
+662 
+663     // Loop through the format string
+664     for (; *format != '\\0'; format++) {
+665 
+666         // If it is not a %, print the character
+667         if (*format != '%') {
+668             out += (string)(char)(*format);
+669             continue;
+670         }
+671 
+672         // Move to the next character
+673         format++;
+674         switch (*format) {
+675             case 'd': {
+676                 // Print a decimal
+677                 int number = va_arg (parameters, int);
+678                 out += (string)(number);
+679                 break;
+680             }
+681             case 'x': {
+682                 // Print a hex
+683                 uint64_t number = va_arg (parameters, uint64_t);
+684                 out += (string)(number);
+685                 break;
+686             }
+687             case 's': {
+688                 // Print a string
+689                 char *str = va_arg (parameters, char*);
+690                 out += (string)(str);
+691                 break;
+692             }
+693         }
+694     }
+695 
+696     return out;
+697 
+698 }
+.fi
+
+.SS "\fBString\fP String::formatted (char const * format,  \&.\&.\&.)\fC [static]\fP"
+
+.PP
+Creates a formated string\&. s = string, x = hex, d = decimal\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIformat\fP The string containing the format 
+.br
+\fI\&.\&.\&.\fP The arguments to format into the string
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The string with the arguments formated inside 
+.RE
+.PP
+
+.PP
+Definition at line \fB641\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+641                                                 {
+642 
+643     // Create a pointer to the data
+644     va_list parameters;
+645     va_start(parameters, format);
+646 
+647     return formatted(format, parameters);
+648 
+649 }
+.fi
+
+.PP
+References \fBformatted()\fP\&.
+.PP
+Referenced by \fBLogger::ASSERT()\fP, \fBformatted()\fP, and \fBLogger::printf()\fP\&.
 .SS "int String::length (bool count_ansi = \fCtrue\fP) const"
 
 .PP
@@ -519,36 +710,36 @@ The length of the string
 .PP
 
 .PP
-Definition at line \fB318\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB361\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-318                                         {
-319 
-320     // If ansi characters are not to be counted
-321     if (count_ansi)
-322         return m_length;
-323 
-324     // Calculate the length of the string without ansi characters
-325     int total_length = 0;
-326     int clean_length = 0;
-327     while (m_string[total_length] != '\\0') {
-328 
-329         // If the character is an ansi character, skip it
-330         if (m_string[total_length] == '\\033')
-331             while (m_string[total_length] != 'm')
-332                 total_length++;
-333 
-334         // Increment the length
-335         clean_length++;
-336         total_length++;
-337     }
-338 
-339     // Return the length
-340     return clean_length;
-341 }
+361                                         {
+362 
+363     // If ansi characters are not to be counted
+364     if (count_ansi)
+365         return m_length;
+366 
+367     // Calculate the length of the string without ansi characters
+368     int total_length = 0;
+369     int clean_length = 0;
+370     while (m_string[total_length] != '\\0') {
+371 
+372         // If the character is an ansi character, skip it
+373         if (m_string[total_length] == '\\033')
+374             while (m_string[total_length] != 'm')
+375                 total_length++;
+376 
+377         // Increment the length
+378         clean_length++;
+379         total_length++;
+380     }
+381 
+382     // Return the length
+383     return clean_length;
+384 }
 .fi
 
 .PP
-Referenced by \fBcopy()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_file()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_subdirectory()\fP, \fBequals()\fP, \fBMaxOS::gui::Font::get_text_width()\fP, \fBMaxOS::gui::widgets::InputBox::on_key_down()\fP, \fBoperator+()\fP, \fBsplit()\fP, \fBstarts_with()\fP, and \fBMaxOS::gui::widgets::InputBox::update_text()\fP\&.
+Referenced by \fBcopy()\fP, \fBequals()\fP, \fBoperator+()\fP, \fBsplit()\fP, and \fBstarts_with()\fP\&.
 .SS "bool String::operator!= (\fBString\fP const & other) const"
 
 .PP
@@ -566,16 +757,16 @@ True if the strings are not equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB383\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB426\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-383                                                  {
-384 
-385     // Self assignment check
-386     if (*this == other)
-387         return false;
-388 
-389     return !equals(other);
-390 }
+426                                                    {
+427 
+428     // Self assignment check
+429     if (*this == other)
+430         return false;
+431 
+432     return !equals(other);
+433 }
 .fi
 
 .PP
@@ -597,27 +788,27 @@ The string repeated a number of times
 .PP
 
 .PP
-Definition at line \fB510\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB553\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-510                                         {
-511 
-512     // The repeated string
-513     String repeated;
-514     repeated\&.m_length = m_length * times;
-515     repeated\&.allocate_self();
-516 
-517     // Copy the string
-518     for (int i = 0; i < times; i++)
-519         for (int j = 0; j < m_length; j++)
-520             repeated\&.m_string[i * m_length + j] = m_string[j];
-521 
-522     // Write the null terminator
-523     repeated\&.m_string[repeated\&.m_length] = '\\0';
-524 
-525     // Return the repeated string
-526     return repeated;
-527 
-528 }
+553                                         {
+554 
+555     // The repeated string
+556     String repeated;
+557     repeated\&.m_length = m_length * times;
+558     repeated\&.allocate_self();
+559 
+560     // Copy the string
+561     for (int i = 0; i < times; i++)
+562         for (int j = 0; j < m_length; j++)
+563             repeated\&.m_string[i * m_length + j] = m_string[j];
+564 
+565     // Write the null terminator
+566     repeated\&.m_string[repeated\&.m_length] = '\\0';
+567 
+568     // Return the repeated string
+569     return repeated;
+570 
+571 }
 .fi
 
 .SS "\fBString\fP String::operator+ (\fBString\fP const & other) const"
@@ -637,29 +828,29 @@ The concatenated string
 .PP
 
 .PP
-Definition at line \fB446\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB489\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-446                                                   {
-447 
-448     // The concatenated string
-449     String concatenated;
-450     concatenated\&.m_length = m_length + other\&.length();
-451     concatenated\&.allocate_self();
-452 
-453     // Copy the first string
-454     for (int i = 0; i < m_length; i++)
-455         concatenated\&.m_string[i] = m_string[i];
-456 
-457     // Copy the second string
-458     for (int i = 0; i < other\&.length(); i++)
-459         concatenated\&.m_string[m_length + i] = other[i];
-460 
-461     // Write the null terminator
-462     concatenated\&.m_string[concatenated\&.m_length] = '\\0';
-463 
-464     // Return the concatenated string
-465     return concatenated;
-466 }
+489                                                     {
+490 
+491     // The concatenated string
+492     String concatenated;
+493     concatenated\&.m_length = m_length + other\&.length();
+494     concatenated\&.allocate_self();
+495 
+496     // Copy the first string
+497     for (int i = 0; i < m_length; i++)
+498         concatenated\&.m_string[i] = m_string[i];
+499 
+500     // Copy the second string
+501     for (int i = 0; i < other\&.length(); i++)
+502         concatenated\&.m_string[m_length + i] = other[i];
+503 
+504     // Write the null terminator
+505     concatenated\&.m_string[concatenated\&.m_length] = '\\0';
+506 
+507     // Return the concatenated string
+508     return concatenated;
+509 }
 .fi
 
 .PP
@@ -681,15 +872,15 @@ The concatenated string
 .PP
 
 .PP
-Definition at line \fB474\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB517\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-474                                               {
-475 
-476     // Add the other string to this string
-477     String concatenated = *this + other;
-478     copy(concatenated);
-479     return *this;
-480 }
+517                                               {
+518 
+519     // Add the other string to this string
+520     String concatenated = *this + other;
+521     copy(concatenated);
+522     return *this;
+523 }
 .fi
 
 .PP
@@ -711,13 +902,13 @@ True if the string is less than the other, false otherwise
 .PP
 
 .PP
-Definition at line \fB398\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB441\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-398                                                 {
-399 
-400     return lex_value(*this) < lex_value(other);
-401 
-402 }
+441                                                   {
+442 
+443     return lex_value(*this) < lex_value(other);
+444 
+445 }
 .fi
 
 .SS "bool String::operator<= (\fBString\fP const & other) const"
@@ -737,13 +928,13 @@ True if the string is less than or equal to the other, false otherwise
 .PP
 
 .PP
-Definition at line \fB422\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB465\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-422                                                  {
-423 
-424     return lex_value(*this) <= lex_value(other);
-425 
-426 }
+465                                                    {
+466 
+467     return lex_value(*this) <= lex_value(other);
+468 
+469 }
 .fi
 
 .SS "\fBString\fP & String::operator= (\fBString\fP const & other)"
@@ -763,18 +954,18 @@ Sets the string to the other string\&.
 .PP
 
 .PP
-Definition at line \fB192\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB235\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-192                                              {
-193 
-194     // Self assignment check
-195     if (this == &other)
-196         return *this;
-197 
-198     // Copy the other string
-199     copy(other);
-200     return *this;
-201 }
+235                                              {
+236 
+237     // Self assignment check
+238     if (this == &other)
+239         return *this;
+240 
+241     // Copy the other string
+242     copy(other);
+243     return *this;
+244 }
 .fi
 
 .PP
@@ -796,13 +987,13 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB371\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB414\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-371                                                  {
-372 
-373     // Check if the strings are equal
-374     return equals(other);
-375 }
+414                                                    {
+415 
+416     // Check if the strings are equal
+417     return equals(other);
+418 }
 .fi
 
 .PP
@@ -824,13 +1015,13 @@ True if the string is greater than the other, false otherwise
 .PP
 
 .PP
-Definition at line \fB410\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB453\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-410                                                 {
-411 
-412     return lex_value(*this) > lex_value(other);
-413 
-414 }
+453                                                   {
+454 
+455     return lex_value(*this) > lex_value(other);
+456 
+457 }
 .fi
 
 .SS "bool String::operator>= (\fBString\fP const & other) const"
@@ -850,13 +1041,13 @@ True if the string is greater than or equal to the other, false otherwise
 .PP
 
 .PP
-Definition at line \fB434\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB477\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-434                                                  {
-435 
-436     return lex_value(*this) >= lex_value(other);
-437 
-438 }
+477                                                    {
+478 
+479     return lex_value(*this) >= lex_value(other);
+480 
+481 }
 .fi
 
 .SS "char & String::operator[] (int index)"
@@ -876,11 +1067,11 @@ The character at the specified index
 .PP
 
 .PP
-Definition at line \fB489\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB532\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-489                                   {
-490     return m_string[index];
-491 }
+532                                   {
+533     return m_string[index];
+534 }
 .fi
 
 .SS "char & String::operator[] (int index) const"
@@ -900,11 +1091,11 @@ The character at the specified index
 .PP
 
 .PP
-Definition at line \fB500\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB543\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-500                                         {
-501     return m_string[index];
-502 }
+543                                         {
+544     return m_string[index];
+545 }
 .fi
 
 .SS "\fBcommon::Vector\fP< \fBString\fP > String::split (\fBString\fP const & delimiter) const"
@@ -924,37 +1115,37 @@ A vector of strings that were split by the delimiter
 .PP
 
 .PP
-Definition at line \fB282\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB325\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-282                                                                 {
-283     common::Vector<String> strings;
-284 
-285     // Go through the string and split it by the delimiter
-286     int start = 0;
-287     for (int i = 0; i <= m_length \- delimiter\&.length(); i++) {
-288 
-289         // Check if matches at this position
-290         bool matches = true;
-291         for (int j = 0; j < delimiter\&.length(); j++)
-292             if (m_string[i + j] != delimiter[j]) {
-293                 matches = false;
-294                 break;
-295             }
-296 
-297         if(!matches)
-298             continue;
-299 
-300         // Add the splice of the string
-301         strings\&.push_back(substring(start, i \- start));
-302         start = i + delimiter\&.length();
-303         i += delimiter\&.length() \- 1;
-304     }
-305 
-306     // Add the last string to the vector
-307     strings\&.push_back(substring(start, m_length \- start));
-308 
-309     return strings;
-310 }
+325                                                                 {
+326     common::Vector<String> strings;
+327 
+328     // Go through the string and split it by the delimiter
+329     int start = 0;
+330     for (int i = 0; i <= m_length \- delimiter\&.length(); i++) {
+331 
+332         // Check if matches at this position
+333         bool matches = true;
+334         for (int j = 0; j < delimiter\&.length(); j++)
+335             if (m_string[i + j] != delimiter[j]) {
+336                 matches = false;
+337                 break;
+338             }
+339 
+340         if(!matches)
+341             continue;
+342 
+343         // Add the splice of the string
+344         strings\&.push_back(substring(start, i \- start));
+345         start = i + delimiter\&.length();
+346         i += delimiter\&.length() \- 1;
+347     }
+348 
+349     // Add the last string to the vector
+350     strings\&.push_back(substring(start, m_length \- start));
+351 
+352     return strings;
+353 }
 .fi
 
 .PP
@@ -976,22 +1167,22 @@ True if the string starts with the other string, false otherwise
 .PP
 
 .PP
-Definition at line \fB229\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB272\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-229                                             {
-230 
-231     // Must at least be able to fit the other string
-232     if (m_length < other\&.length())
-233         return false;
-234 
-235     // Check if the string starts with the other string
-236     for (int i = 0; i < other\&.length(); i++)
-237         if (m_string[i] != other[i])
-238             return false;
-239 
-240     // No string left over to check so it must contain other
-241     return true;
-242 }
+272                                             {
+273 
+274     // Must at least be able to fit the other string
+275     if (m_length < other\&.length())
+276         return false;
+277 
+278     // Check if the string starts with the other string
+279     for (int i = 0; i < other\&.length(); i++)
+280         if (m_string[i] != other[i])
+281             return false;
+282 
+283     // No string left over to check so it must contain other
+284     return true;
+285 }
 .fi
 
 .PP
@@ -1013,32 +1204,30 @@ The stripped string (new string)
 .PP
 
 .PP
-Definition at line \fB571\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB614\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-571                                           {
-572 
-573     // The stripped string
-574     String stripped;
-575     stripped\&.copy(*this);
-576 
-577     // Search from the back for the earliest non\-whitespace character
-578     int end = m_length \- 1;
-579     while (end >= 0 && (m_string[end] == strip_char || m_string[end] == '\\n' || m_string[end] == '\\t'))
-580         end\-\-;
-581 
-582     // Make sure there is something to strip
-583     if (end < 0)
-584         return stripped;
-585 
-586     // Split the string to remove the end
-587     return stripped\&.substring(0, end + 1);
-588 }
+614                                           {
+615 
+616     // The stripped string
+617     String stripped;
+618     stripped\&.copy(*this);
+619 
+620     // Search from the back for the earliest non\-whitespace character
+621     int end = m_length \- 1;
+622     while (end >= 0 && (m_string[end] == strip_char || m_string[end] == '\\n' || m_string[end] == '\\t'))
+623         end\-\-;
+624 
+625     // Make sure there is something to strip
+626     if (end < 0)
+627         return stripped;
+628 
+629     // Split the string to remove the end
+630     return stripped\&.substring(0, end + 1);
+631 }
 .fi
 
 .PP
 References \fBcopy()\fP, and \fBsubstring()\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::format::Fat32Directory::read_from_disk()\fP\&.
 .SS "\fBString\fP String::substring (int start, int length) const"
 
 .PP
@@ -1058,32 +1247,32 @@ The substring or empty string if out of bounds
 .PP
 
 .PP
-Definition at line \fB251\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB294\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-251                                                     {
-252 
-253     // Ensure the start is within bounds
-254     if (start < 0 || start >= m_length)
-255         return {};
-256 
-257     // Ensure the length is within bounds
-258     if (length < 0 || start + length > m_length)
-259         return {};
-260 
-261     // Allocate memory for the substring (and null terminator)
-262     String substring;
-263     substring\&.m_length = length;
-264     substring\&.allocate_self();
-265 
-266     // Copy the substring
-267     for (int i = 0; i < length; i++)
-268         substring\&.m_string[i] = m_string[start + i];
-269 
-270     // Write the null terminator
-271     substring\&.m_string[length] = '\\0';
-272 
-273     return substring;
-274 }
+294                                                     {
+295 
+296     // Ensure the start is within bounds
+297     if (start < 0 || start >= m_length)
+298         return {};
+299 
+300     // Ensure the length is within bounds
+301     if (length < 0 || start + length > m_length)
+302         return {};
+303 
+304     // Allocate memory for the substring (and null terminator)
+305     String substring;
+306     substring\&.m_length = length;
+307     substring\&.allocate_self();
+308 
+309     // Copy the substring
+310     for (int i = 0; i < length; i++)
+311         substring\&.m_string[i] = m_string[start + i];
+312 
+313     // Write the null terminator
+314     substring\&.m_string[length] = '\\0';
+315 
+316     return substring;
+317 }
 .fi
 
 .PP

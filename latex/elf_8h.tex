@@ -1,5 +1,10 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/processes/elf.h File Reference}
 \hypertarget{elf_8h}{}\label{elf_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/elf.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/elf.h}}
+
+
+Defines structures and enums for handling ELF (Executable and Linkable Format) files in Max\+OS.  
+
+
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$stddef.\+h$>$}\newline
 {\ttfamily \#include $<$memory/memorymanagement.\+h$>$}\newline
@@ -7,111 +12,403 @@
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__header__t}{Max\+OS\+::processes\+::elf\+\_\+64\+\_\+header\+\_\+t}}
-\item 
-struct \mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__program__header__t}{Max\+OS\+::processes\+::elf\+\_\+64\+\_\+program\+\_\+header\+\_\+t}}
-\item 
-struct \mbox{\hyperlink{structMaxOS_1_1processes_1_1elf__64__section__header__t}{Max\+OS\+::processes\+::elf\+\_\+64\+\_\+section\+\_\+header\+\_\+t}}
-\item 
-class \mbox{\hyperlink{classMaxOS_1_1processes_1_1Elf64}{Max\+OS\+::processes\+::\+Elf64}}
+struct \mbox{\hyperlink{structMaxOS_1_1processes_1_1ELFHeader64}{Max\+OS\+::processes\+::\+ELFHeader64}}
+\begin{DoxyCompactList}\small\item\em The header of a 64-\/bit ELF file. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1processes_1_1ELFProgramHeader64}{Max\+OS\+::processes\+::\+ELFProgram\+Header64}}
+\begin{DoxyCompactList}\small\item\em The header for the program segments in a 64-\/bit ELF file. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMaxOS_1_1processes_1_1ELFSectionHeader64}{Max\+OS\+::processes\+::\+ELFSection\+Header64}}
+\begin{DoxyCompactList}\small\item\em The header for the sections in a 64-\/bit ELF file. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMaxOS_1_1processes_1_1ELF64}{Max\+OS\+::processes\+::\+ELF64}}
 \begin{DoxyCompactList}\small\item\em Handles the loading and parsing of 64-\/bit ELF files. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
+\doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
+\Hypertarget{elf_8h_aa311701fadc707152a8ba99b1a6e3364}\label{elf_8h_aa311701fadc707152a8ba99b1a6e3364} 
+typedef struct \mbox{\hyperlink{structMaxOS_1_1processes_1_1ELFHeader64}{Max\+OS\+::processes\+::\+ELFHeader64}} {\bfseries Max\+OS\+::processes\+::elf\+\_\+64\+\_\+header\+\_\+t}
 \item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1processes}{Max\+OS\+::processes}}
+\Hypertarget{elf_8h_aac35059aef5c7a19f7f1790ff55514af}\label{elf_8h_aac35059aef5c7a19f7f1790ff55514af} 
+typedef struct \mbox{\hyperlink{structMaxOS_1_1processes_1_1ELFProgramHeader64}{Max\+OS\+::processes\+::\+ELFProgram\+Header64}} {\bfseries Max\+OS\+::processes\+::elf\+\_\+64\+\_\+program\+\_\+header\+\_\+t}
+\item 
+\Hypertarget{elf_8h_a83ea270ed4f6db97740b955dac729b64}\label{elf_8h_a83ea270ed4f6db97740b955dac729b64} 
+typedef struct \mbox{\hyperlink{structMaxOS_1_1processes_1_1ELFSectionHeader64}{Max\+OS\+::processes\+::\+ELFSection\+Header64}} {\bfseries Max\+OS\+::processes\+::elf\+\_\+64\+\_\+section\+\_\+header\+\_\+t}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73}{Max\+OS\+::processes\+::\+Elf\+Identification}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73a876e622d37e7cb981dd044c5d60338bd}{Max\+OS\+::processes\+::\+Magic0}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73a898d5396a7be595711973b9ef2ffb419}{Max\+OS\+::processes\+::\+Magic1}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73af6a2990fb1b0eb9f124f663f970accea}{Max\+OS\+::processes\+::\+Magic2}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73aceff50ae93c38b2ab7f0a2b0c5354eb6}{Max\+OS\+::processes\+::\+Magic3}}
+enum class \mbox{\hyperlink{elf_8h_a93bce999d55435c1cefce4c0fbed2229}{Max\+OS\+::processes\+::\+ELFIdentification}} \{ \newline
+{\bfseries Magic0}
+, {\bfseries Magic1}
+, {\bfseries Magic2}
+, {\bfseries Magic3}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73a9bd81329febf6efe22788e03ddeaf0af}{Max\+OS\+::processes\+::\+Class}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73af6068daa29dbb05a7ead1e3b5a48bbee}{Max\+OS\+::processes\+::\+Data}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73a34b6cd75171affba6957e308dcbd92be}{Max\+OS\+::processes\+::\+Version}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73a5022bfc125523e1abaf2427212d4cef7}{Max\+OS\+::processes\+::\+OSABI}}
+{\bfseries Class}
+, {\bfseries Data}
+, {\bfseries Version}
+, {\bfseries OSABI}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73a3fe7734eaf1ba7c90c05860c1fc956a7}{Max\+OS\+::processes\+::\+ABIVersion}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a734e55c04254d19fb5117cd0d67ded73aa10443964156b9e87c95e74c8f9baf15}{Max\+OS\+::processes\+::\+Padding}}
+{\bfseries ABIVersion}
+, {\bfseries Padding}
  \}
-\begin{DoxyCompactList}\small\item\em Style Guide Note\+: ELF is consider as one of the more standard names so use that instead of Executable and Linkable Format. \end{DoxyCompactList}\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_a06110beb02e2bb6271a458e94d1e0a70}{Max\+OS\+::processes\+::\+Elf\+Class}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a06110beb02e2bb6271a458e94d1e0a70a4bbb8f967da6d1a610596d7257179c2b}{Max\+OS\+::processes\+::\+Invalid}} = 0
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a06110beb02e2bb6271a458e94d1e0a70a679d1f3ac1d9ed3e109b781a30020c98}{Max\+OS\+::processes\+::\+Bits32}} = 1
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a06110beb02e2bb6271a458e94d1e0a70a8092f0b8f17fd364c0804a39ae56f5de}{Max\+OS\+::processes\+::\+Bits64}} = 2
+\begin{DoxyCompactList}\small\item\em The indexes of the ELF identification array. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{elf_8h_af75820d94614aadd083f4b34ede3c6de}{Max\+OS\+::processes\+::\+ELFClass}} \{ {\bfseries Invalid}
+, {\bfseries Bits32}
+, {\bfseries Bits64}
  \}
+\begin{DoxyCompactList}\small\item\em The class of the ELF file (32-\/bit or 64-\/bit) \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{elf_8h_aa1ab258f98bbc202abb1ded2c90fd79a}{Max\+OS\+::processes\+::\+ELFData}} \{ {\bfseries Invalid\+Data}
+, {\bfseries Little\+Endian}
+, {\bfseries Big\+Endian}
+ \}
+\begin{DoxyCompactList}\small\item\em The data encoding of the ELF file (little-\/endian or big-\/endian) \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{elf_8h_a5ef699c81be4883849e492207cebf722}{Max\+OS\+::processes\+::\+ELFType}} \{ \newline
+{\bfseries None}
+, {\bfseries Relocatable}
+, {\bfseries Executable}
+, {\bfseries Shared}
+, \newline
+{\bfseries Core}
+, {\bfseries Processor\+Specific\+Low} = 0x\+FF0
+, {\bfseries Processor\+Specific\+High} = 0x\+FFF
+ \}
+\begin{DoxyCompactList}\small\item\em The type of the ELF file (executable, shared object, etc.) \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{elf_8h_a68156e7f3c9e428a1bf81cac33cf53ae}{Max\+OS\+::processes\+::\+ELFMachine}} \{ \newline
+{\bfseries No\+Machine}
+, {\bfseries ATn\+TWe32100}
+, {\bfseries SPARC}
+, {\bfseries x86}
+, \newline
+{\bfseries MIPS} = 0x8
+, {\bfseries Power\+PC} = 0x14
+, {\bfseries ARM} = 0x28
+, {\bfseries SuperH} = 0x2A
+, \newline
+{\bfseries IA\+\_\+64} = 0x32
+, {\bfseries x86\+\_\+64} = 0x3E
+, {\bfseries AArch64} = 0x\+B7
+, {\bfseries RISC\+\_\+V} = 0x\+F3
+ \}
+\begin{DoxyCompactList}\small\item\em The target architecture of the ELF file. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{elf_8h_acd12ef8df8d99f540800283fd134c483}{Max\+OS\+::processes\+::\+ELFVersion}} \{ {\bfseries Invalid}
+, {\bfseries Current}
+ \}
+\begin{DoxyCompactList}\small\item\em The version of the ELF file. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{elf_8h_a83adeee8bf15896cdc5e5e422b502367}{Max\+OS\+::processes\+::\+ELFProgram\+Type}} \{ \newline
+{\bfseries Null}
+, {\bfseries Load}
+, {\bfseries Dynamic}
+, {\bfseries Interpreter}
+, \newline
+{\bfseries Note}
+, {\bfseries Shared\+Library}
+, {\bfseries Header\+Table}
+, {\bfseries Table\+Processor\+Specific\+Low} = 0x70000000
+, \newline
+{\bfseries Table\+Processor\+Specific\+High} = 0x7\+FFFFFFF
+ \}
+\begin{DoxyCompactList}\small\item\em The type of a program header in the ELF file. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{elf_8h_a905456c16b7f6955cda5bd32cc77efa2}{Max\+OS\+::processes\+::\+ELFProgram\+Flags}} \{ {\bfseries ELFExecute} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 0)
+, {\bfseries ELFWrite} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 1)
+, {\bfseries ELFRead} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 2)
+ \}
+\begin{DoxyCompactList}\small\item\em The flags of a program header in the ELF file. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{elf_8h_a6f9ae701d0dd29e5c4d8d567ce812845}{Max\+OS\+::processes\+::\+ELFSection\+Type}} \{ \newline
+{\bfseries Null}
+, {\bfseries Program\+Bits}
+, {\bfseries Symbol\+Table}
+, {\bfseries String\+Table}
+, \newline
+{\bfseries Relocation\+Addends}
+, {\bfseries Symbol\+Hash\+Table}
+, {\bfseries Dynamic\+Linking\+Table}
+, {\bfseries Section\+Note}
+, \newline
+{\bfseries No\+Bits}
+ \}
+\begin{DoxyCompactList}\small\item\em The type of a section in the ELF file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_a464343547d01dc27b11ddda3139f260d}{Max\+OS\+::processes\+::\+Elf\+Data}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a464343547d01dc27b11ddda3139f260da3c4b6828f5a12280debdb5a12e0e72ba}{Max\+OS\+::processes\+::\+Invalid\+Data}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a464343547d01dc27b11ddda3139f260da3c0ba6b22b526d7fd50c3026435a8c02}{Max\+OS\+::processes\+::\+Little\+Endian}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a464343547d01dc27b11ddda3139f260da2ce7a92ae43763828ac4acb4560c2a5b}{Max\+OS\+::processes\+::\+Big\+Endian}}
- \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8f63cd8e5a34555b82702be420300163}{Max\+OS\+::processes\+::\+Elf\+Type}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_a8f63cd8e5a34555b82702be420300163a6adf97f83acf6453d4a6a4b1070f3754}{Max\+OS\+::processes\+::\+None}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8f63cd8e5a34555b82702be420300163acddf8d4eb16e0b171464dfa9c856f250}{Max\+OS\+::processes\+::\+Relocatable}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8f63cd8e5a34555b82702be420300163a38492e6b60e40c59a376e2151778e2c7}{Max\+OS\+::processes\+::\+Executable}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8f63cd8e5a34555b82702be420300163aa6156ea9d66fef24e87e841fbabf7cca}{Max\+OS\+::processes\+::\+Shared}}
-, \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_a8f63cd8e5a34555b82702be420300163a83168e6cb289d732cc78427b51f93153}{Max\+OS\+::processes\+::\+Core}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8f63cd8e5a34555b82702be420300163ab9e16ba789bbfe419be3272fb938ec09}{Max\+OS\+::processes\+::\+Processor\+Specific\+Low}} = 0x\+FF0
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8f63cd8e5a34555b82702be420300163a86602bdeb2d5b78186ded96ef3f14c16}{Max\+OS\+::processes\+::\+Processor\+Specific\+High}} = 0x\+FFF
- \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684b}{Max\+OS\+::processes\+::\+Elf\+Machine}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684baf1ae387f102104ce62d9cbff0cce7aec}{Max\+OS\+::processes\+::\+No\+Machine}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba47fa4cad227c1c297a206f2323a62ec1}{Max\+OS\+::processes\+::\+ATn\+TWe32100}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684baa940ec34170cc4c7600e0304fd7f841e}{Max\+OS\+::processes\+::\+SPARC}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba8a9da7865483c5fd359f3acef178d26d}{Max\+OS\+::processes\+::x86}}
-, \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba16c8e070f0f6edd7ac0ae016e9bf2997}{Max\+OS\+::processes\+::\+MIPS}} = 0x8
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba1c020c7b78f5c449ffbe479f3b1aaa82}{Max\+OS\+::processes\+::\+Power\+PC}} = 0x14
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba47f45e65244c17ec9fa8771a5c6d60e1}{Max\+OS\+::processes\+::\+ARM}} = 0x28
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba454e8e0c83cdeb2adb1da1ab1db9ac25}{Max\+OS\+::processes\+::\+SuperH}} = 0x2A
-, \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba60cfb94099098a1ecca39bf3ddb31b92}{Max\+OS\+::processes\+::\+IA\+\_\+64}} = 0x32
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba0027f42e1e5dfcb4fd5f8f9c6db89af3}{Max\+OS\+::processes\+::x86\+\_\+64}} = 0x3E
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684ba0f05bd9930180f42a54b2286d8f182e0}{Max\+OS\+::processes\+::\+AArch64}} = 0x\+B7
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac453fd96e7e31d6aa7a874864dfc684bae50ae008885a6b9256693b6df2c03811}{Max\+OS\+::processes\+::\+RISC\+\_\+V}} = 0x\+F3
- \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac1d3d25a34353241f191e2d7f9b308c2}{Max\+OS\+::processes\+::\+Elf\+Version}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac1d3d25a34353241f191e2d7f9b308c2a4bbb8f967da6d1a610596d7257179c2b}{Max\+OS\+::processes\+::\+Invalid}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac1d3d25a34353241f191e2d7f9b308c2a222a267cc5778206b253be35ee3ddab5}{Max\+OS\+::processes\+::\+Current}}
- \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9}{Max\+OS\+::processes\+::\+Elf\+Program\+Type}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9abbb93ef26e3c101ff11cdd21cab08a94}{Max\+OS\+::processes\+::\+Null}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9af19dbf2edb3a0bd74b0524d960ff21eb}{Max\+OS\+::processes\+::\+Load}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9a971fd8cc345d8bd9f92e9f7d88fdf20c}{Max\+OS\+::processes\+::\+Dynamic}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9adf608edb53fcc79c12759cdbdf58d9db}{Max\+OS\+::processes\+::\+Interpreter}}
-, \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9a3b0649c72650c313a357338dcdfb64ec}{Max\+OS\+::processes\+::\+Note}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9a8988989e16522c86d49619bbd7a09bd8}{Max\+OS\+::processes\+::\+Shared\+Library}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9ac2c946f8d4b9e1ed4b9d5620253cb3bd}{Max\+OS\+::processes\+::\+Header\+Table}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9a13e41dedf6bcecf43ac744a35c215fec}{Max\+OS\+::processes\+::\+Table\+Processor\+Specific\+Low}} = 0x70000000
-, \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_a8b365523b8175f412fca3855f329b6a9a1090f983068d1a6b4fac46e8424770d9}{Max\+OS\+::processes\+::\+Table\+Processor\+Specific\+High}} = 0x7\+FFFFFFF
- \}
-\begin{DoxyCompactList}\small\item\em Program Header. \end{DoxyCompactList}\item 
-enum \mbox{\hyperlink{namespaceMaxOS_1_1processes_a26e554e107e27bd8e0d15d6a80261f2d}{Max\+OS\+::processes\+::\+Elf\+Program\+Flags}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1processes_a26e554e107e27bd8e0d15d6a80261f2da435c91c59b56bddd448bc4c0880f0e76}{Max\+OS\+::processes\+::\+Elf\+Execute}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 0)
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a26e554e107e27bd8e0d15d6a80261f2da9b0db3e6d06c9d71fcee2cffa5138a9d}{Max\+OS\+::processes\+::\+Elf\+Write}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 1)
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_a26e554e107e27bd8e0d15d6a80261f2da9c4a0dc997809afd74d9934ca4fe6dc2}{Max\+OS\+::processes\+::\+Elf\+Read}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 2)
- \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44a}{Max\+OS\+::processes\+::\+Elf\+Section\+Type}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44aabbb93ef26e3c101ff11cdd21cab08a94}{Max\+OS\+::processes\+::\+Null}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44aa020202f2efc9cdd1f32f92cc937d7890}{Max\+OS\+::processes\+::\+Program\+Bits}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44aa92929e57f7adcd6cccb28eb6caaedb37}{Max\+OS\+::processes\+::\+Symbol\+Table}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44aafee465e31ac15d7b21d8ca9d6f5ac685}{Max\+OS\+::processes\+::\+String\+Table}}
-, \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44aaf3c1d0e8365af6861dfe8c5f3f5030e2}{Max\+OS\+::processes\+::\+Relocation\+Addends}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44aa98f46182bbef24e18844c8b61aef2229}{Max\+OS\+::processes\+::\+Symbol\+Hash\+Table}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44aa3f24de6943b9c33acb4036d45b2bb51d}{Max\+OS\+::processes\+::\+Dynamic\+Linking\+Table}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44aace22c174271c73655fdc9c245c210b2c}{Max\+OS\+::processes\+::\+Section\+Note}}
-, \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac16b15be8b33747a9c766b40a822d44aa001a9743d76a3414a16927ddb442c8ef}{Max\+OS\+::processes\+::\+No\+Bits}}
- \}
-\begin{DoxyCompactList}\small\item\em Section Header. \end{DoxyCompactList}\end{DoxyCompactItemize}
+constexpr char \mbox{\hyperlink{elf_8h_a60468c9b874171eb38c09df2673f64de}{Max\+OS\+::processes\+::\+ELF\+\_\+\+MAGIC}} \mbox{[}4\mbox{]} = \{ 0x7F, \textquotesingle{}E\textquotesingle{}, \textquotesingle{}L\textquotesingle{}, \textquotesingle{}F\textquotesingle{} \}
+\begin{DoxyCompactList}\small\item\em The expected ELF magic number at the start of the file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines structures and enums for handling ELF (Executable and Linkable Format) files in Max\+OS. 
+
+\begin{DoxyDate}{Date}
+21st March 2025 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{elf_8h_af75820d94614aadd083f4b34ede3c6de}\label{elf_8h_af75820d94614aadd083f4b34ede3c6de} 
+\index{elf.h@{elf.h}!ELFClass@{ELFClass}}
+\index{ELFClass@{ELFClass}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELFClass}{ELFClass}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{elf_8h_af75820d94614aadd083f4b34ede3c6de}{Max\+OS\+::processes\+::\+ELFClass}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The class of the ELF file (32-\/bit or 64-\/bit) 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00045}{45}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ Invalid,}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ Bits32,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ Bits64}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{elf_8h_aa1ab258f98bbc202abb1ded2c90fd79a}\label{elf_8h_aa1ab258f98bbc202abb1ded2c90fd79a} 
+\index{elf.h@{elf.h}!ELFData@{ELFData}}
+\index{ELFData@{ELFData}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELFData}{ELFData}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{elf_8h_aa1ab258f98bbc202abb1ded2c90fd79a}{Max\+OS\+::processes\+::\+ELFData}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The data encoding of the ELF file (little-\/endian or big-\/endian) 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00055}{55}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ InvalidData,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ LittleEndian,}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ BigEndian}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{elf_8h_a93bce999d55435c1cefce4c0fbed2229}\label{elf_8h_a93bce999d55435c1cefce4c0fbed2229} 
+\index{elf.h@{elf.h}!ELFIdentification@{ELFIdentification}}
+\index{ELFIdentification@{ELFIdentification}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELFIdentification}{ELFIdentification}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{elf_8h_a93bce999d55435c1cefce4c0fbed2229}{Max\+OS\+::processes\+::\+ELFIdentification}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The indexes of the ELF identification array. 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00028}{28}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ Magic0,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ Magic1,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ Magic2,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ Magic3,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ Class,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ Data,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ Version,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ OSABI,}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ ABIVersion,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ Padding,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{elf_8h_a68156e7f3c9e428a1bf81cac33cf53ae}\label{elf_8h_a68156e7f3c9e428a1bf81cac33cf53ae} 
+\index{elf.h@{elf.h}!ELFMachine@{ELFMachine}}
+\index{ELFMachine@{ELFMachine}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELFMachine}{ELFMachine}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{elf_8h_a68156e7f3c9e428a1bf81cac33cf53ae}{Max\+OS\+::processes\+::\+ELFMachine}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The target architecture of the ELF file. 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00079}{79}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ NoMachine,}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ ATnTWe32100,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ SPARC,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ x86,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ MIPS\ \ \ \ \ \ \ \ =\ 0x8,}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ PowerPC\ \ \ \ \ =\ 0x14,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ ARM\ \ \ \ \ \ \ \ \ =\ 0x28,}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ SuperH\ \ \ \ \ \ =\ 0x2A,}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ IA\_64\ \ \ \ \ \ \ =\ 0x32,}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ x86\_64\ \ \ \ \ \ =\ 0x3E,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ AArch64\ \ \ \ \ =\ 0xB7,}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ RISC\_V\ \ \ \ \ \ =\ 0xF3}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{elf_8h_a905456c16b7f6955cda5bd32cc77efa2}\label{elf_8h_a905456c16b7f6955cda5bd32cc77efa2} 
+\index{elf.h@{elf.h}!ELFProgramFlags@{ELFProgramFlags}}
+\index{ELFProgramFlags@{ELFProgramFlags}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELFProgramFlags}{ELFProgramFlags}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{elf_8h_a905456c16b7f6955cda5bd32cc77efa2}{Max\+OS\+::processes\+::\+ELFProgram\+Flags}}}
+
+
+
+The flags of a program header in the ELF file. 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00144}{144}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ ELFExecute\ \ =\ (1\ <<\ 0),}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ ELFWrite\ \ \ \ =\ (1\ <<\ 1),}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ ELFRead\ \ \ \ \ =\ (1\ <<\ 2)}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{elf_8h_a83adeee8bf15896cdc5e5e422b502367}\label{elf_8h_a83adeee8bf15896cdc5e5e422b502367} 
+\index{elf.h@{elf.h}!ELFProgramType@{ELFProgramType}}
+\index{ELFProgramType@{ELFProgramType}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELFProgramType}{ELFProgramType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{elf_8h_a83adeee8bf15896cdc5e5e422b502367}{Max\+OS\+::processes\+::\+ELFProgram\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The type of a program header in the ELF file. 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00128}{128}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ Null,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ Load,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ Dynamic,}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ Interpreter,}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ Note,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ SharedLibrary,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ HeaderTable,}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ TableProcessorSpecificLow\ =\ 0x70000000,}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ TableProcessorSpecificHigh\ =\ 0x7FFFFFFF}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{elf_8h_a6f9ae701d0dd29e5c4d8d567ce812845}\label{elf_8h_a6f9ae701d0dd29e5c4d8d567ce812845} 
+\index{elf.h@{elf.h}!ELFSectionType@{ELFSectionType}}
+\index{ELFSectionType@{ELFSectionType}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELFSectionType}{ELFSectionType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{elf_8h_a6f9ae701d0dd29e5c4d8d567ce812845}{Max\+OS\+::processes\+::\+ELFSection\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The type of a section in the ELF file. 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00169}{169}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ Null,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ ProgramBits,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ SymbolTable,}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ StringTable,}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ RelocationAddends,}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ SymbolHashTable,}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ DynamicLinkingTable,}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ SectionNote,}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ NoBits,}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{elf_8h_a5ef699c81be4883849e492207cebf722}\label{elf_8h_a5ef699c81be4883849e492207cebf722} 
+\index{elf.h@{elf.h}!ELFType@{ELFType}}
+\index{ELFType@{ELFType}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELFType}{ELFType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{elf_8h_a5ef699c81be4883849e492207cebf722}{Max\+OS\+::processes\+::\+ELFType}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The type of the ELF file (executable, shared object, etc.) 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00065}{65}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ None,}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ Relocatable,}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ Executable,}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ Shared,}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ Core,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ ProcessorSpecificLow\ =\ 0xFF0,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ ProcessorSpecificHigh\ =\ 0xFFF}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{elf_8h_acd12ef8df8d99f540800283fd134c483}\label{elf_8h_acd12ef8df8d99f540800283fd134c483} 
+\index{elf.h@{elf.h}!ELFVersion@{ELFVersion}}
+\index{ELFVersion@{ELFVersion}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELFVersion}{ELFVersion}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{elf_8h_acd12ef8df8d99f540800283fd134c483}{Max\+OS\+::processes\+::\+ELFVersion}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The version of the ELF file. 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00098}{98}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ Invalid,}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ Current}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{elf_8h_a60468c9b874171eb38c09df2673f64de}\label{elf_8h_a60468c9b874171eb38c09df2673f64de} 
+\index{elf.h@{elf.h}!ELF\_MAGIC@{ELF\_MAGIC}}
+\index{ELF\_MAGIC@{ELF\_MAGIC}!elf.h@{elf.h}}
+\doxysubsubsection{\texorpdfstring{ELF\_MAGIC}{ELF\_MAGIC}}
+{\footnotesize\ttfamily constexpr char Max\+OS\+::processes\+::\+ELF\+\_\+\+MAGIC\mbox{[}4\mbox{]} = \{ 0x7F, \textquotesingle{}E\textquotesingle{}, \textquotesingle{}L\textquotesingle{}, \textquotesingle{}F\textquotesingle{} \}\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+The expected ELF magic number at the start of the file. 
+
+
+
+Definition at line \mbox{\hyperlink{elf_8h_source_l00022}{22}} of file \mbox{\hyperlink{elf_8h_source}{elf.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00022\ \{\ 0x7F,\ \textcolor{charliteral}{'E'},\ \textcolor{charliteral}{'L'},\ \textcolor{charliteral}{'F'}\ \};}
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{elf_8cpp_source_l00098}{Max\+OS\+::processes\+::\+ELF64\+::is\+\_\+valid()}}.
+

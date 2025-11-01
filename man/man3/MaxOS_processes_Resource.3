@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::processes::Resource
+MaxOS::processes::Resource \- Represents a generic resource that can be opened, closed, read from and written to\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,17 +15,15 @@ Inherited by \fBMaxOS::filesystem::DirectoryResource\fP, \fBMaxOS::filesystem::F
 
 .in +1c
 .ti -1c
-.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t \fBflags\fP, \fBresource_type_t\fP \fBtype\fP)"
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t \fBflags\fP, resource_type_t \fBtype\fP)"
 .br
-.ti -1c
-.RI "virtual \fB~Resource\fP ()"
-.br
+.RI "Constructs a new \fBResource\fP object\&. "
 .ti -1c
 .RI "\fBstring\fP \fBname\fP ()"
 .br
 .RI "Gets the name of this resource\&. "
 .ti -1c
-.RI "\fBresource_type_t\fP \fBtype\fP ()"
+.RI "resource_type_t \fBtype\fP ()"
 .br
 .RI "Gets the type of this resource\&. "
 .ti -1c
@@ -46,22 +45,35 @@ Inherited by \fBMaxOS::filesystem::DirectoryResource\fP, \fBMaxOS::filesystem::F
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB21\fP of file \fBresource\&.h\fP\&.
+Represents a generic resource that can be opened, closed, read from and written to\&. 
+.PP
+Definition at line \fB29\fP of file \fBresource\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Resource::Resource (const \fBstring\fP & name, size_t flags, \fBresource_type_t\fP type)"
+.SS "Resource::Resource (const \fBstring\fP & name, size_t flags, resource_type_t type)"
 
 .PP
-Definition at line \fB9\fP of file \fBresource\&.cpp\fP\&..PP
-.nf
-10 : m_name(name),
-11   m_type(type)
-12 {
-13 
-14 }
-.fi
+Constructs a new \fBResource\fP object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource 
+.br
+\fIflags\fP The flags for the resource (unused by default but resource type specific) 
+.br
+\fItype\fP The type of the resource 
+.RE
+.PP
 
-.SS "Resource::~Resource ()\fC [virtual]\fP, \fC [default]\fP"
+.PP
+Definition at line \fB21\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+22 : m_name(name),
+23   m_type(type)
+24 {
+25 
+26 }
+.fi
 
 .SH "Member Function Documentation"
 .PP 
@@ -79,11 +91,11 @@ Closes the resource\&.
 .PP
 Reimplemented in \fBMaxOS::processes::SharedMemory\fP\&.
 .PP
-Definition at line \fB33\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB45\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-33                                  {
-34 
-35 }
+45                                  {
+46 
+47 }
 .fi
 
 .PP
@@ -100,11 +112,11 @@ The name
 .PP
 
 .PP
-Definition at line \fB67\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB79\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-67                       {
-68     return m_name;
-69 }
+79                       {
+80     return m_name;
+81 }
 .fi
 
 .PP
@@ -123,11 +135,11 @@ Opens the resource\&.
 .PP
 Reimplemented in \fBMaxOS::processes::SharedMemory\fP\&.
 .PP
-Definition at line \fB23\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB35\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-23                                 {
-24 
-25 }
+35                                 {
+36 
+37 }
 .fi
 
 .SS "int Resource::read (void * buffer, size_t size, size_t flags)\fC [virtual]\fP"
@@ -153,14 +165,14 @@ How many bytes were successfully read (negative can be used as errors)
 .PP
 Reimplemented in \fBMaxOS::filesystem::FileResource\fP, \fBMaxOS::filesystem::DirectoryResource\fP, \fBMaxOS::processes::SharedMemory\fP, and \fBMaxOS::processes::SharedMessageEndpoint\fP\&.
 .PP
-Definition at line \fB45\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB57\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-45                                                           {
-46     return 0;
-47 }
+57                                                           {
+58     return 0;
+59 }
 .fi
 
-.SS "\fBresource_type_t\fP Resource::type ()"
+.SS "resource_type_t Resource::type ()"
 
 .PP
 Gets the type of this resource\&. 
@@ -172,12 +184,12 @@ The type
 .PP
 
 .PP
-Definition at line \fB76\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB88\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-76                                {
-77 
-78     return m_type;
-79 }
+88                                {
+89 
+90     return m_type;
+91 }
 .fi
 
 .PP
@@ -205,12 +217,12 @@ How many bytes were successfully written
 .PP
 Reimplemented in \fBMaxOS::filesystem::FileResource\fP, \fBMaxOS::filesystem::DirectoryResource\fP, and \fBMaxOS::processes::SharedMessageEndpoint\fP\&.
 .PP
-Definition at line \fB57\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB69\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-57                                                                  {
-58 
-59     return 0;
-60 }
+69                                                                  {
+70 
+71     return 0;
+72 }
 .fi
 
 

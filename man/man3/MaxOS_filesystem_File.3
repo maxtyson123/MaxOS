@@ -15,12 +15,6 @@ Inherited by \fBMaxOS::filesystem::format::Fat32File\fP, and \fBMaxOS::filesyste
 
 .in +1c
 .ti -1c
-.RI "\fBFile\fP ()"
-.br
-.ti -1c
-.RI "virtual \fB~File\fP ()"
-.br
-.ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBwrite\fP (\fBconst\fP \fBcommon::buffer_t\fP *\fBdata\fP, \fBsize_t\fP \fBsize\fP)"
 .br
 .RI "Write data to the file\&. "
@@ -33,7 +27,7 @@ Inherited by \fBMaxOS::filesystem::format::Fat32File\fP, and \fBMaxOS::filesyste
 .br
 .RI "Flush the file to the disk\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBseek\fP (\fBSeekType\fP \fBseek_type\fP, \fBsize_t\fP offset)"
+.RI "\fBvoid\fP \fBseek\fP (SeekType \fBseek_type\fP, \fBsize_t\fP offset)"
 .br
 .RI "Seek to a position in the file\&. "
 .ti -1c
@@ -55,24 +49,21 @@ Inherited by \fBMaxOS::filesystem::format::Fat32File\fP, and \fBMaxOS::filesyste
 .ti -1c
 .RI "uint32_t \fBm_offset\fP"
 .br
+.RI "The current offset in the file\&. "
 .ti -1c
 .RI "\fBstring\fP \fBm_name\fP"
 .br
+.RI "The name of the file\&. "
 .ti -1c
 .RI "size_t \fBm_size\fP"
 .br
+.RI "The size of the file\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles file operations and information\&. 
 .PP
-Definition at line \fB28\fP of file \fBfilesystem\&.h\fP\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "File::File ()\fC [default]\fP"
-
-.SS "File::~File ()\fC [virtual]\fP, \fC [default]\fP"
-
+Definition at line \fB32\fP of file \fBfilesystem\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP File::flush ()\fC [virtual]\fP"
@@ -82,10 +73,10 @@ Flush the file to the disk\&.
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2File\fP, and \fBMaxOS::filesystem::format::Fat32File\fP\&.
 .PP
-Definition at line \fB37\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB41\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-37                  {
-38 }
+41                  {
+42 }
 .fi
 
 .PP
@@ -102,11 +93,11 @@ The name of the file
 .PP
 
 .PP
-Definition at line \fB78\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB82\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-78                   {
-79     return m_name;
-80 }
+82                   {
+83     return m_name;
+84 }
 .fi
 
 .PP
@@ -125,11 +116,11 @@ The current position in the file
 .PP
 
 .PP
-Definition at line \fB69\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB73\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-69                         {
-70     return m_offset;
-71 }
+73                         {
+74     return m_offset;
+75 }
 .fi
 
 .PP
@@ -145,22 +136,22 @@ Read data from the file\&.
 .RS 4
 \fIdata\fP The byte buffer to read into 
 .br
-\fIsize\fP The amount of data to read 
+\fIamount\fP The amount of data to read 
 .RE
 .PP
 
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2File\fP, and \fBMaxOS::filesystem::format::Fat32File\fP\&.
 .PP
-Definition at line \fB31\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB35\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-31                                                    {
-32 }
+35                                                    {
+36 }
 .fi
 
 .PP
 Referenced by \fBMaxOS::filesystem::FileResource::read()\fP\&.
-.SS "\fBvoid\fP File::seek (\fBSeekType\fP seek_type, \fBsize_t\fP offset)"
+.SS "\fBvoid\fP File::seek (SeekType seek_type, \fBsize_t\fP offset)"
 
 .PP
 Seek to a position in the file\&. 
@@ -174,25 +165,25 @@ Seek to a position in the file\&.
 .PP
 
 .PP
-Definition at line \fB46\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB50\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-46                                                  {
-47 
-48     // Seek based on the type
-49     switch (seek_type) {
-50         case SeekType::SET:
-51             m_offset = offset;
-52             break;
-53 
-54         case SeekType::CURRENT:
-55             m_offset += offset;
+50                                                  {
+51 
+52     // Seek based on the type
+53     switch (seek_type) {
+54         case SeekType::SET:
+55             m_offset = offset;
 56             break;
 57 
-58         case SeekType::END:
-59             m_offset = size() \- offset;
+58         case SeekType::CURRENT:
+59             m_offset += offset;
 60             break;
-61     }
-62 }
+61 
+62         case SeekType::END:
+63             m_offset = size() \- offset;
+64             break;
+65     }
+66 }
 .fi
 
 .PP
@@ -211,11 +202,11 @@ The size of the file (in bytes)
 .PP
 
 .PP
-Definition at line \fB87\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB91\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-87                   {
-88     return m_size;
-89 }
+91                   {
+92     return m_size;
+93 }
 .fi
 
 .PP
@@ -231,17 +222,17 @@ Write data to the file\&.
 .RS 4
 \fIdata\fP The byte buffer to write 
 .br
-\fIsize\fP The amount of data to write 
+\fIamount\fP The amount of data to write 
 .RE
 .PP
 
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2File\fP, and \fBMaxOS::filesystem::format::Fat32File\fP\&.
 .PP
-Definition at line \fB22\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB26\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-22                                                           {
-23 }
+26                                                           {
+27 }
 .fi
 
 .PP
@@ -251,19 +242,25 @@ Referenced by \fBMaxOS::filesystem::FileResource::write()\fP\&.
 .SS "\fBstring\fP MaxOS::filesystem::File::m_name\fC [protected]\fP"
 
 .PP
-Definition at line \fB33\fP of file \fBfilesystem\&.h\fP\&.
+The name of the file\&. 
+.PP
+Definition at line \fB37\fP of file \fBfilesystem\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::filesystem::format::ext2::Ext2File::Ext2File()\fP, \fBMaxOS::filesystem::format::Fat32File::Fat32File()\fP, and \fBname()\fP\&.
 .SS "uint32_t MaxOS::filesystem::File::m_offset\fC [protected]\fP"
 
 .PP
-Definition at line \fB32\fP of file \fBfilesystem\&.h\fP\&.
+The current offset in the file\&. 
+.PP
+Definition at line \fB36\fP of file \fBfilesystem\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::filesystem::format::Fat32File::Fat32File()\fP, \fBposition()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::read()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBseek()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP, and \fBMaxOS::filesystem::format::Fat32File::write()\fP\&.
 .SS "size_t MaxOS::filesystem::File::m_size\fC [protected]\fP"
 
 .PP
-Definition at line \fB34\fP of file \fBfilesystem\&.h\fP\&.
+The size of the file\&. 
+.PP
+Definition at line \fB38\fP of file \fBfilesystem\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::filesystem::format::ext2::Ext2File::Ext2File()\fP, \fBMaxOS::filesystem::format::Fat32File::Fat32File()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::read()\fP, \fBsize()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP, and \fBMaxOS::filesystem::format::Fat32File::write()\fP\&.
 

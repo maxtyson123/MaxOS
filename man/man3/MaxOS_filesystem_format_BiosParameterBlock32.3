@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::filesystem::format::BiosParameterBlock32
+MaxOS::filesystem::format::BiosParameterBlock32 \- Stores information about the FAT32 filesystem\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,198 +15,281 @@ MaxOS::filesystem::format::BiosParameterBlock32
 .ti -1c
 .RI "uint8_t \fBjump\fP [3]"
 .br
+.RI "Jump instruction to boot code\&. "
 .ti -1c
 .RI "uint8_t \fBOEM_name\fP [8]"
 .br
+.RI "OEM Name in ASCII\&. "
 .ti -1c
 .RI "uint16_t \fBbytes_per_sector\fP"
 .br
+.RI "Bytes per sector\&. "
 .ti -1c
 .RI "uint8_t \fBsectors_per_cluster\fP"
 .br
+.RI "Sectors per cluster\&. "
 .ti -1c
 .RI "uint16_t \fBreserved_sectors\fP"
 .br
+.RI "Number of reserved sectors\&. "
 .ti -1c
 .RI "uint8_t \fBtable_copies\fP"
 .br
+.RI "Number of FAT tables\&. "
 .ti -1c
 .RI "uint16_t \fBroot_entries\fP"
 .br
+.RI "Number of root directory entries\&. "
 .ti -1c
 .RI "uint16_t \fBtotal_sectors_16\fP"
 .br
+.RI "Total number of sectors (if zero, use total_sectors_32) "
 .ti -1c
 .RI "uint8_t \fBmedia_type\fP"
 .br
+.RI "Media descriptor\&. "
 .ti -1c
 .RI "uint16_t \fBfat_sector_count\fP"
 .br
+.RI "Sectors per FAT (FAT12/FAT16 only) "
 .ti -1c
 .RI "uint16_t \fBsectors_per_track\fP"
 .br
+.RI "Sectors per track\&. "
 .ti -1c
 .RI "uint16_t \fBhead_count\fP"
 .br
+.RI "Number of heads/sides\&. "
 .ti -1c
 .RI "uint32_t \fBhidden_sectors\fP"
 .br
+.RI "Number of hidden sectors (LBA of start of partition) "
 .ti -1c
 .RI "uint32_t \fBtotal_sectors_32\fP"
 .br
+.RI "Total number of sectors (if total_sectors_16 is zero) "
 .ti -1c
 .RI "uint32_t \fBtable_size_32\fP"
 .br
+.RI "Sectors per FAT (FAT32 only) "
 .ti -1c
 .RI "uint16_t \fBextended_flags\fP"
 .br
+.RI "Extended flags\&. "
 .ti -1c
 .RI "uint16_t \fBfat_version\fP"
 .br
+.RI "FAT version number (high byte major, low byte minor) "
 .ti -1c
 .RI "uint32_t \fBroot_cluster\fP"
 .br
+.RI "Cluster number of root directory start\&. "
 .ti -1c
 .RI "uint16_t \fBfat_info\fP"
 .br
+.RI "Sector number of \fBFSInfo\fP structure\&. "
 .ti -1c
 .RI "uint16_t \fBbackup_sector\fP"
 .br
+.RI "Sector number of backup boot sector\&. "
 .ti -1c
 .RI "uint8_t \fBreserved0\fP [12]"
 .br
+.RI "Should be zero\&. "
 .ti -1c
 .RI "uint8_t \fBdrive_number\fP"
 .br
+.RI "Drive number (must be identical to BIOS drive number) (0x00 = floppy, 0x80 = first hard disk) "
 .ti -1c
 .RI "uint8_t \fBreserved_1\fP"
 .br
+.RI "Reserved (used by Windows NT) "
 .ti -1c
 .RI "uint8_t \fBboot_signature\fP"
 .br
+.RI "Extended boot signature (0x28 or 0x29) "
 .ti -1c
-.RI "uint32_t \fBuint_32\fP"
+.RI "uint32_t \fBvolume_id\fP"
 .br
+.RI "Volume serial number\&. "
 .ti -1c
 .RI "uint8_t \fBvolume_label\fP [11]"
 .br
+.RI "Volume label in ASCII (spaces padded) "
 .ti -1c
 .RI "uint8_t \fBfile_system_type\fP [8]"
 .br
+.RI "System type in ASCII (not null-terminated) "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB49\fP of file \fBfat32\&.h\fP\&.
+Stores information about the FAT32 filesystem\&. 
+.PP
+Definition at line \fB28\fP of file \fBfat32\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::backup_sector"
 
 .PP
-Definition at line \fB71\fP of file \fBfat32\&.h\fP\&.
+Sector number of backup boot sector\&. 
+.PP
+Definition at line \fB50\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::boot_signature"
 
 .PP
-Definition at line \fB75\fP of file \fBfat32\&.h\fP\&.
+Extended boot signature (0x28 or 0x29) 
+.PP
+Definition at line \fB54\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::bytes_per_sector"
 
 .PP
-Definition at line \fB53\fP of file \fBfat32\&.h\fP\&.
+Bytes per sector\&. 
+.PP
+Definition at line \fB32\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::drive_number"
 
 .PP
-Definition at line \fB73\fP of file \fBfat32\&.h\fP\&.
+Drive number (must be identical to BIOS drive number) (0x00 = floppy, 0x80 = first hard disk) 
+.PP
+Definition at line \fB52\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::extended_flags"
 
 .PP
-Definition at line \fB67\fP of file \fBfat32\&.h\fP\&.
+Extended flags\&. 
+.PP
+Definition at line \fB46\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::fat_info"
 
 .PP
-Definition at line \fB70\fP of file \fBfat32\&.h\fP\&.
+Sector number of \fBFSInfo\fP structure\&. 
+.PP
+Definition at line \fB49\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::fat_sector_count"
 
 .PP
-Definition at line \fB60\fP of file \fBfat32\&.h\fP\&.
+Sectors per FAT (FAT12/FAT16 only) 
+.PP
+Definition at line \fB39\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::fat_version"
 
 .PP
-Definition at line \fB68\fP of file \fBfat32\&.h\fP\&.
+FAT version number (high byte major, low byte minor) 
+.PP
+Definition at line \fB47\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::file_system_type[8]"
 
 .PP
-Definition at line \fB78\fP of file \fBfat32\&.h\fP\&.
+System type in ASCII (not null-terminated) 
+.PP
+Definition at line \fB57\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::head_count"
 
 .PP
-Definition at line \fB62\fP of file \fBfat32\&.h\fP\&.
+Number of heads/sides\&. 
+.PP
+Definition at line \fB41\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::BiosParameterBlock32::hidden_sectors"
 
 .PP
-Definition at line \fB63\fP of file \fBfat32\&.h\fP\&.
+Number of hidden sectors (LBA of start of partition) 
+.PP
+Definition at line \fB42\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::jump[3]"
 
 .PP
-Definition at line \fB51\fP of file \fBfat32\&.h\fP\&.
+Jump instruction to boot code\&. 
+.PP
+Definition at line \fB30\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::media_type"
 
 .PP
-Definition at line \fB59\fP of file \fBfat32\&.h\fP\&.
+Media descriptor\&. 
+.PP
+Definition at line \fB38\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::OEM_name[8]"
 
 .PP
-Definition at line \fB52\fP of file \fBfat32\&.h\fP\&.
+OEM Name in ASCII\&. 
+.PP
+Definition at line \fB31\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::reserved0[12]"
 
 .PP
-Definition at line \fB72\fP of file \fBfat32\&.h\fP\&.
+Should be zero\&. 
+.PP
+Definition at line \fB51\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::reserved_1"
 
 .PP
-Definition at line \fB74\fP of file \fBfat32\&.h\fP\&.
+Reserved (used by Windows NT) 
+.PP
+Definition at line \fB53\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::reserved_sectors"
 
 .PP
-Definition at line \fB55\fP of file \fBfat32\&.h\fP\&.
+Number of reserved sectors\&. 
+.PP
+Definition at line \fB34\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::BiosParameterBlock32::root_cluster"
 
 .PP
-Definition at line \fB69\fP of file \fBfat32\&.h\fP\&.
+Cluster number of root directory start\&. 
+.PP
+Definition at line \fB48\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::root_entries"
 
 .PP
-Definition at line \fB57\fP of file \fBfat32\&.h\fP\&.
+Number of root directory entries\&. 
+.PP
+Definition at line \fB36\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::sectors_per_cluster"
 
 .PP
-Definition at line \fB54\fP of file \fBfat32\&.h\fP\&.
+Sectors per cluster\&. 
+.PP
+Definition at line \fB33\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::sectors_per_track"
 
 .PP
-Definition at line \fB61\fP of file \fBfat32\&.h\fP\&.
+Sectors per track\&. 
+.PP
+Definition at line \fB40\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::table_copies"
 
 .PP
-Definition at line \fB56\fP of file \fBfat32\&.h\fP\&.
+Number of FAT tables\&. 
+.PP
+Definition at line \fB35\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::BiosParameterBlock32::table_size_32"
 
 .PP
-Definition at line \fB66\fP of file \fBfat32\&.h\fP\&.
+Sectors per FAT (FAT32 only) 
+.PP
+Definition at line \fB45\fP of file \fBfat32\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::BiosParameterBlock32::total_sectors_16"
 
 .PP
-Definition at line \fB58\fP of file \fBfat32\&.h\fP\&.
+Total number of sectors (if zero, use total_sectors_32) 
+.PP
+Definition at line \fB37\fP of file \fBfat32\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::BiosParameterBlock32::total_sectors_32"
 
 .PP
-Definition at line \fB64\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t MaxOS::filesystem::format::BiosParameterBlock32::uint_32"
+Total number of sectors (if total_sectors_16 is zero) 
+.PP
+Definition at line \fB43\fP of file \fBfat32\&.h\fP\&.
+.SS "uint32_t MaxOS::filesystem::format::BiosParameterBlock32::volume_id"
 
 .PP
-Definition at line \fB76\fP of file \fBfat32\&.h\fP\&.
+Volume serial number\&. 
+.PP
+Definition at line \fB55\fP of file \fBfat32\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::BiosParameterBlock32::volume_label[11]"
 
 .PP
-Definition at line \fB77\fP of file \fBfat32\&.h\fP\&.
+Volume label in ASCII (spaces padded) 
+.PP
+Definition at line \fB56\fP of file \fBfat32\&.h\fP\&.
 
 .SH "Author"
 .PP 

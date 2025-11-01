@@ -1,5 +1,10 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/net/tcp.cpp File Reference}
 \hypertarget{tcp_8cpp}{}\label{tcp_8cpp}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/net/tcp.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/net/tcp.cpp}}
+
+
+Implementation of Transmission Control Protocol (TCP) classes and handlers.  
+
+
 {\ttfamily \#include $<$net/tcp.\+h$>$}\newline
 {\ttfamily \#include "{}net/udp.\+h"{}}\newline
 \doxysubsubsection*{Functions}
@@ -11,6 +16,21 @@
 \end{DoxyCompactItemize}
 
 
+\doxysubsection{Detailed Description}
+Implementation of Transmission Control Protocol (TCP) classes and handlers. 
+
+\begin{DoxyDate}{Date}
+26th March 2024 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{tcp_8cpp_source}{tcp.\+cpp}}.
+
+
+
 \doxysubsection{Function Documentation}
 \Hypertarget{tcp_8cpp_abfe30d4c4185706700ed78df8308a63e}\label{tcp_8cpp_abfe30d4c4185706700ed78df8308a63e} 
 \index{tcp.cpp@{tcp.cpp}!bigEndian16@{bigEndian16}}
@@ -20,20 +40,16 @@
 
 
 
-Definition at line \mbox{\hyperlink{tcp_8cpp_source_l00142}{142}} of file \mbox{\hyperlink{tcp_8cpp_source}{tcp.\+cpp}}.
+Definition at line \mbox{\hyperlink{tcp_8cpp_source_l00154}{154}} of file \mbox{\hyperlink{tcp_8cpp_source}{tcp.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00143\ \{}
-\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordflow}{return}\ ((x\ \&\ 0xFF00)\ >>\ 8)}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ |\ ((\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9dd4e461268c8034f5c8564e155c67a6}{x}}\ \&\ 0x00FF)\ <<\ 8);}
-\DoxyCodeLine{00146\ \}}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keywordflow}{return}\ ((x\ \&\ 0xFF00)\ >>\ 8)}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ |\ ((x\ \&\ 0x00FF)\ <<\ 8);}
+\DoxyCodeLine{00157\ \}}
 
 \end{DoxyCode}
-
-
-Referenced by \mbox{\hyperlink{tcp_8cpp_source_l00157}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, and \mbox{\hyperlink{tcp_8cpp_source_l00384}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}.
-
 \Hypertarget{tcp_8cpp_abb0f64c6581be532c99e657e200718a1}\label{tcp_8cpp_abb0f64c6581be532c99e657e200718a1} 
 \index{tcp.cpp@{tcp.cpp}!bigEndian32@{bigEndian32}}
 \index{bigEndian32@{bigEndian32}!tcp.cpp@{tcp.cpp}}
@@ -42,19 +58,15 @@ Referenced by \mbox{\hyperlink{tcp_8cpp_source_l00157}{Max\+OS\+::net\+::\+Trans
 
 
 
-Definition at line \mbox{\hyperlink{tcp_8cpp_source_l00134}{134}} of file \mbox{\hyperlink{tcp_8cpp_source}{tcp.\+cpp}}.
+Definition at line \mbox{\hyperlink{tcp_8cpp_source_l00147}{147}} of file \mbox{\hyperlink{tcp_8cpp_source}{tcp.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00135\ \{}
-\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordflow}{return}\ ((x\ \&\ 0xFF000000)\ >>\ 24)}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ |\ ((\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9dd4e461268c8034f5c8564e155c67a6}{x}}\ \&\ 0x00FF0000)\ >>\ 8)}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ |\ ((\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9dd4e461268c8034f5c8564e155c67a6}{x}}\ \&\ 0x0000FF00)\ <<\ 8)}
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ |\ ((\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9dd4e461268c8034f5c8564e155c67a6}{x}}\ \&\ 0x000000FF)\ <<\ 24);}
-\DoxyCodeLine{00140\ \}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordflow}{return}\ ((x\ \&\ 0xFF000000)\ >>\ 24)}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ |\ ((x\ \&\ 0x00FF0000)\ >>\ 8)}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ |\ ((x\ \&\ 0x0000FF00)\ <<\ 8)}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ |\ ((x\ \&\ 0x000000FF)\ <<\ 24);}
+\DoxyCodeLine{00152\ \}}
 
 \end{DoxyCode}
-
-
-Referenced by \mbox{\hyperlink{tcp_8cpp_source_l00157}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, and \mbox{\hyperlink{tcp_8cpp_source_l00384}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}.
-

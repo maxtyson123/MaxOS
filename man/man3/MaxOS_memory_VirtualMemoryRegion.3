@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::memory::VirtualMemoryRegion
+MaxOS::memory::VirtualMemoryRegion \- A region of virtual memory containing multiple chunks (should fit in one page)\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -12,25 +13,42 @@ MaxOS::memory::VirtualMemoryRegion
 
 .in +1c
 .ti -1c
-.RI "\fBvirtual_memory_chunk_t\fP \fBchunks\fP [(\fBPhysicalMemoryManager::s_page_size\fP/sizeof(\fBvirtual_memory_chunk_t\fP) \- 1)]"
+.RI "\fBvirtual_memory_chunk_t\fP \fBchunks\fP [CHUNKS_PER_PAGE]"
 .br
+.RI "The metadata for the chunks in this region\&. "
 .ti -1c
 .RI "struct \fBVirtualMemoryRegion\fP * \fBnext\fP"
 .br
+.RI "Pointer to the next region in the list\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB38\fP of file \fBvirtual\&.h\fP\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "\fBvirtual_memory_chunk_t\fP MaxOS::memory::VirtualMemoryRegion::chunks[(\fBPhysicalMemoryManager::s_page_size\fP/sizeof(\fBvirtual_memory_chunk_t\fP) \- 1)]"
+A region of virtual memory containing multiple chunks (should fit in one page)\&. 
+
 
 .PP
-Definition at line \fB39\fP of file \fBvirtual\&.h\fP\&.
+\fBNote\fP
+.RS 4
+This stores the metadata for the chunks, not the actual memory they represent\&. (ie chunks are not slices of this region) 
+.RE
+.PP
+
+.PP
+Definition at line \fB66\fP of file \fBvirtual\&.h\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBvirtual_memory_chunk_t\fP MaxOS::memory::VirtualMemoryRegion::chunks[CHUNKS_PER_PAGE]"
+
+.PP
+The metadata for the chunks in this region\&. 
+.PP
+Definition at line \fB67\fP of file \fBvirtual\&.h\fP\&.
 .SS "struct \fBVirtualMemoryRegion\fP* MaxOS::memory::VirtualMemoryRegion::next"
 
 .PP
-Definition at line \fB40\fP of file \fBvirtual\&.h\fP\&.
+Pointer to the next region in the list\&. 
+.PP
+Definition at line \fB68\fP of file \fBvirtual\&.h\fP\&.
 
 .SH "Author"
 .PP 

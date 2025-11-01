@@ -96,8 +96,6 @@ var ext2_8h =
       [ "MUST_REPLAY_JOURNAL", "ext2_8h.html#ab5a87b5588c3da6f5d309e505d6d192da0fefd02a686f795bd84e625438ef303c", null ],
       [ "JOURNAL_DEVICE", "ext2_8h.html#ab5a87b5588c3da6f5d309e505d6d192da966bd38b73bc23521e4529b9d5039632", null ]
     ] ],
-    [ "__attribute__", "ext2_8h.html#a68dfc5bb60aec213d463fb98170c9f5e", null ],
-    [ "__attribute__", "ext2_8h.html#af899cae92b6170fd1a745c390c469ea8", null ],
     [ "author_id", "ext2_8h.html#a3053eeb4c69267b6ae5092354620aa19", null ],
     [ "block_inode_bitmap", "ext2_8h.html#ac29f389aac135fbfb5a2a86ff3d92b19", null ],
     [ "block_pointers", "ext2_8h.html#aa88b958eedb58ecb5d2e9ff723cc680b", null ],

@@ -2,38 +2,38 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::net::AddressResolutionProtocol
+MaxOS::net::AddressResolutionProtocol \- Handles ARP requests and replies\&.  
+
 .SH SYNOPSIS
 .br
 .PP
 .PP
 \fC#include <arp\&.h>\fP
 .PP
-Inherits \fBMaxOS::net::EthernetFramePayloadHandler\fP, and \fBMaxOS::net::InternetProtocolAddressResolver\fP\&.
+Inherits \fBMaxOS::net::EthernetFramePayloadHandler\fP, and \fBMaxOS::net::IPV4AddressResolver\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "\fBAddressResolutionProtocol\fP (\fBEthernetFrameHandler\fP *\fBethernetFrameHandler\fP, \fBInternetProtocolHandler\fP *internetProtocolHandler, \fBcommon::OutputStream\fP *errorMessages)"
 .br
-.ti -1c
-.RI "\fB~AddressResolutionProtocol\fP ()"
-.br
+.RI "Constructs an \fBAddressResolutionProtocol\fP handler\&. "
 .ti -1c
 .RI "\fBbool\fP \fBhandleEthernetframePayload\fP (\fBuint8_t\fP *\fBdata\fP, \fBuint32_t\fP \fBsize\fP)"
 .br
 .RI "Called when an ARP packet is received\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBRequestMACAddress\fP (\fBInternetProtocolAddress\fP \fBaddress\fP)"
+.RI "\fBvoid\fP \fBRequestMACAddress\fP (InternetProtocolAddress address)"
 .br
 .RI "Request the MAC address of a given IP address\&. "
 .ti -1c
-.RI "\fBdrivers::ethernet::MediaAccessControlAddress\fP \fBResolve\fP (\fBInternetProtocolAddress\fP \fBaddress\fP) \fBfinal\fP"
+.RI "\fBdrivers::ethernet::MediaAccessControlAddress\fP \fBResolve\fP (InternetProtocolAddress address) \fBfinal\fP"
 .br
 .RI "Get the MAC address from an IP via ARP\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBStore\fP (\fBInternetProtocolAddress\fP \fBinternetProtocolAddress\fP, \fBdrivers::ethernet::MediaAccessControlAddress\fP \fBmediaAccessControlAddress\fP) \fBfinal\fP"
+.RI "\fBvoid\fP \fBStore\fP (InternetProtocolAddress \fBinternetProtocolAddress\fP, \fBdrivers::ethernet::MediaAccessControlAddress\fP \fBmediaAccessControlAddress\fP) \fBfinal\fP"
 .br
+.RI "Store a mapping of an IP address to a MAC address\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::net::EthernetFramePayloadHandler\fP
@@ -41,6 +41,7 @@ Public Member Functions inherited from \fBMaxOS::net::EthernetFramePayloadHandle
 .ti -1c
 .RI "\fBEthernetFramePayloadHandler\fP (\fBEthernetFrameHandler\fP *\fBframeHandler\fP, \fBuint16_t\fP \fBhandledType\fP)"
 .br
+.RI "Construct a new Ether Frame Payload Handler object\&. "
 .ti -1c
 .RI "\fB~EthernetFramePayloadHandler\fP ()"
 .br
@@ -51,15 +52,12 @@ Public Member Functions inherited from \fBMaxOS::net::EthernetFramePayloadHandle
 .RI "Send an packet via the backend driver\&. "
 .in -1c
 
-Public Member Functions inherited from \fBMaxOS::net::InternetProtocolAddressResolver\fP
+Public Member Functions inherited from \fBMaxOS::net::IPV4AddressResolver\fP
 .in +1c
 .ti -1c
-.RI "\fBInternetProtocolAddressResolver\fP (\fBInternetProtocolHandler\fP *internetProtocolHandler)"
+.RI "\fBIPV4AddressResolver\fP (\fBInternetProtocolHandler\fP *internetProtocolHandler)"
 .br
 .RI "\fBRESOLVER\fP/// "
-.ti -1c
-.RI "\fB~InternetProtocolAddressResolver\fP ()"
-.br
 .in -1c
 .SS "Additional Inherited Members"
 
@@ -69,29 +67,44 @@ Protected Attributes inherited from \fBMaxOS::net::EthernetFramePayloadHandler\f
 .ti -1c
 .RI "\fBEthernetFrameHandler\fP * \fBframeHandler\fP"
 .br
+.RI "The Ethernet frame handler this payload handler is connected to\&. "
 .ti -1c
 .RI "uint16_t \fBhandledType\fP"
 .br
+.RI "The Ethernet frame type this handler handles\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB34\fP of file \fBarp\&.h\fP\&.
+Handles ARP requests and replies\&. 
+.PP
+Definition at line \fB45\fP of file \fBarp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "net::AddressResolutionProtocol::AddressResolutionProtocol (\fBEthernetFrameHandler\fP * ethernetFrameHandler, \fBInternetProtocolHandler\fP * internetProtocolHandler, \fBcommon::OutputStream\fP * errorMessages)"
 
 .PP
-Definition at line \fB15\fP of file \fBarp\&.cpp\fP\&..PP
-.nf
-16 : EthernetFramePayloadHandler(ethernetFrameHandler, 0x0806),
-17   InternetProtocolAddressResolver(internetProtocolHandler)
-18 {
-19     this\->internetProtocolHandler = internetProtocolHandler;
-20     this\->errorMessages = errorMessages;
-21 }
-.fi
+Constructs an \fBAddressResolutionProtocol\fP handler\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIethernetFrameHandler\fP The Ethernet frame handler to use\&. 
+.br
+\fIinternetProtocolHandler\fP The Internet protocol handler to use\&. 
+.br
+\fIerrorMessages\fP The output stream to use for error messages\&. 
+.RE
+.PP
 
-.SS "net::AddressResolutionProtocol::~AddressResolutionProtocol ()\fC [default]\fP"
+.PP
+Definition at line \fB25\fP of file \fBarp\&.cpp\fP\&..PP
+.nf
+26 : EthernetFramePayloadHandler(ethernetFrameHandler, 0x0806),
+27   IPV4AddressResolver(internetProtocolHandler)
+28 {
+29     this\->internetProtocolHandler = internetProtocolHandler;
+30     this\->errorMessages = errorMessages;
+31 }
+.fi
 
 .SH "Member Function Documentation"
 .PP 
@@ -116,158 +129,172 @@ True if the device should send a response, false otherwise\&.
 .PP
 Reimplemented from \fBMaxOS::net::EthernetFramePayloadHandler\fP\&.
 .PP
-Definition at line \fB32\fP of file \fBarp\&.cpp\fP\&..PP
+Definition at line \fB42\fP of file \fBarp\&.cpp\fP\&..PP
 .nf
-32                                                                                                     {
-33 
-34     //Check if the size is correct
-35     if(size < sizeof(AddressResolutionProtocolMessage))
-36         return false;
-37 
-38     //Convert the payload to an ARP message
-39     AddressResolutionProtocolMessage* arpMessage = (AddressResolutionProtocolMessage*)etherframePayload;
-40 
-41     //Check if the message hardware type is Ethernet (BigEndian)
-42     if(arpMessage \-> hardwareType == 0x100){
+42                                                                                                     {
 43 
-44         if(arpMessage \-> protocol == 0x0008             //Check if the protocol is IPv4 (BigEndian)
-45         && arpMessage \-> hardwareAddressSize == 6
-46         && arpMessage \-> protocolAddressSize == 4
-47         && arpMessage \-> dstIP == internetProtocolHandler \-> GetInternetProtocolAddress())
-48         {
-49 
-50             switch (arpMessage \-> command) {
-51                 //Request
-52                 case 0x0100:
-53                     arpMessage \-> command = 0x0200;                                                                         //Set the command to reply
-54                     arpMessage \-> dstMAC = arpMessage \-> srcMAC;                                                            //Set the destination MAC to the source MAC
-55                     arpMessage \-> dstIP = arpMessage \-> srcIP;                                                              //Set the destination IP to the source IP
-56                     arpMessage \-> srcMAC = internetProtocolHandler \-> GetMediaAccessControlAddress();                      //Set the source MAC to this MAC
-57                     arpMessage \-> srcIP = internetProtocolHandler \-> GetInternetProtocolAddress();                         //Set the source IP to this IP
-58                     return true;
+44     //Check if the size is correct
+45     if(size < sizeof(ARPMessage))
+46         return false;
+47 
+48     //Convert the payload to an ARP message
+49     ARPMessage* arpMessage = (ARPMessage*)etherframePayload;
+50 
+51     //Check if the message hardware type is Ethernet (BigEndian)
+52     if(arpMessage \-> hardwareType == 0x100){
+53 
+54         if(arpMessage \-> protocol == 0x0008             //Check if the protocol is IPv4 (BigEndian)
+55         && arpMessage \-> hardwareAddressSize == 6
+56         && arpMessage \-> protocolAddressSize == 4
+57         && arpMessage \-> dstIP == internetProtocolHandler \-> GetInternetProtocolAddress())
+58         {
 59 
-60                 //Response
-61                 case 0x0200:
-62                     addressCache\&.insert((InternetProtocolAddress)arpMessage \-> srcIP, (MediaAccessControlAddress)arpMessage \-> srcMAC);     //Insert the MAC address into the cache
-63                     break;
-64 
-65                 default:
-66                     break;
-67 
-68             }
+60             switch (arpMessage \-> command) {
+61                 //Request
+62                 case 0x0100:
+63                     arpMessage \-> command = 0x0200;                                                                         //Set the command to reply
+64                     arpMessage \-> dstMAC = arpMessage \-> srcMAC;                                                            //Set the destination MAC to the source MAC
+65                     arpMessage \-> dstIP = arpMessage \-> srcIP;                                                              //Set the destination IP to the source IP
+66                     arpMessage \-> srcMAC = internetProtocolHandler \-> GetMediaAccessControlAddress();                      //Set the source MAC to this MAC
+67                     arpMessage \-> srcIP = internetProtocolHandler \-> GetInternetProtocolAddress();                         //Set the source IP to this IP
+68                     return true;
 69 
-70         }
-71 
-72     }
-73 
-74     //By default, don't send anything back
-75     return false;
-76 
+70                 //Response
+71                 case 0x0200:
+72                     addressCache\&.insert((InternetProtocolAddress)arpMessage \-> srcIP, (MediaAccessControlAddress)arpMessage \-> srcMAC);     //Insert the MAC address into the cache
+73                     break;
+74 
+75                 default:
+76                     break;
 77 
-78 }
+78             }
+79 
+80         }
+81 
+82     }
+83 
+84     //By default, don't send anything back
+85     return false;
+86 
+87 
+88 }
 .fi
 
 .PP
 References \fBcommand\fP, \fBdstIP\fP, \fBdstMAC\fP, \fBhardwareAddressSize\fP, \fBhardwareType\fP, \fBMaxOS::common::Map< Key, Value >::insert()\fP, \fBprotocol\fP, \fBprotocolAddressSize\fP, \fBsize\fP, \fBsrcIP\fP, and \fBsrcMAC\fP\&.
-.SS "\fBvoid\fP AddressResolutionProtocol::RequestMACAddress (\fBInternetProtocolAddress\fP address)"
+.SS "\fBvoid\fP AddressResolutionProtocol::RequestMACAddress (InternetProtocolAddress address)"
 
 .PP
 Request the MAC address of a given IP address\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIIP_BE\fP The IP address in BigEndian\&. 
+\fIaddress\fP The IP address in BigEndian\&. 
 .RE
 .PP
 
 .PP
-Definition at line \fB86\fP of file \fBarp\&.cpp\fP\&..PP
+Definition at line \fB96\fP of file \fBarp\&.cpp\fP\&..PP
 .nf
-86                                                                                  {
-87 
-88     //When a MAC address is requested, instantiate a new ARP message block on the stack
-89     AddressResolutionProtocolMessage arpMessage = {};
-90 
-91     //Set the message's values
-92     arpMessage\&.hardwareType = 0x0100;                                                   //Ethernet, encoded in BigEndian
-93     arpMessage\&.protocol = 0x0008;                                                       //IPv4, encoded in BigEndian
-94     arpMessage\&.hardwareAddressSize = 6;                                                 //MAC address size
-95     arpMessage\&.protocolAddressSize = 4;                                                 //IPv4 address size
-96     arpMessage\&.command = 0x0100;                                                        //Request, encoded in BigEndian
+96                                                                                  {
 97 
-98     //Set the message's source and destination
-99     arpMessage\&.srcMAC = frameHandler \-> getMAC();                                       //Set the source MAC address to the backend's MAC address
-100     arpMessage\&.srcIP = internetProtocolHandler \-> GetInternetProtocolAddress();        //Set the source IP address to the backend's IP address
-101     arpMessage\&.dstMAC = 0xFFFFFFFFFFFF;                                                 //Set the destination MAC address to broadcast
-102     arpMessage\&.dstIP = address;                                                           //Set the destination IP address to the requested IP address
-103 
-104     //Send the message
-105     this \-> Send(arpMessage\&.dstMAC, (uint8_t*)&arpMessage, sizeof(AddressResolutionProtocolMessage));
-106 
+98     //When a MAC address is requested, instantiate a new ARP message block on the stack
+99     ARPMessage arpMessage = {};
+100 
+101     //Set the message's values
+102     arpMessage\&.hardwareType = 0x0100;                                                   //Ethernet, encoded in BigEndian
+103     arpMessage\&.protocol = 0x0008;                                                       //IPv4, encoded in BigEndian
+104     arpMessage\&.hardwareAddressSize = 6;                                                 //MAC address size
+105     arpMessage\&.protocolAddressSize = 4;                                                 //IPv4 address size
+106     arpMessage\&.command = 0x0100;                                                        //Request, encoded in BigEndian
 107 
-108 }
+108     //Set the message's source and destination
+109     arpMessage\&.srcMAC = frameHandler \-> getMAC();                                       //Set the source MAC address to the backend's MAC address
+110     arpMessage\&.srcIP = internetProtocolHandler \-> GetInternetProtocolAddress();        //Set the source IP address to the backend's IP address
+111     arpMessage\&.dstMAC = 0xFFFFFFFFFFFF;                                                 //Set the destination MAC address to broadcast
+112     arpMessage\&.dstIP = address;                                                           //Set the destination IP address to the requested IP address
+113 
+114     //Send the message
+115     this \-> Send(arpMessage\&.dstMAC, (uint8_t*)&arpMessage, sizeof(ARPMessage));
+116 
+117 
+118 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBMaxOS::net::EthernetFramePayloadHandler::frameHandler\fP, and \fBMaxOS::net::EthernetFramePayloadHandler::Send()\fP\&.
+References \fBMaxOS::net::EthernetFramePayloadHandler::frameHandler\fP, and \fBMaxOS::net::EthernetFramePayloadHandler::Send()\fP\&.
 .PP
 Referenced by \fBResolve()\fP\&.
-.SS "\fBMediaAccessControlAddress\fP AddressResolutionProtocol::Resolve (\fBInternetProtocolAddress\fP address)\fC [final]\fP, \fC [virtual]\fP"
+.SS "MediaAccessControlAddress AddressResolutionProtocol::Resolve (InternetProtocolAddress address)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Get the MAC address from an IP via ARP\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIIP_BE\fP The IP address to get the MAC address from\&. 
+\fIaddress\fP The IP address to get the MAC address from\&. 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-The MAC address of the IP address\&. 
+The MAC address of the IP address\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Should have a timeout in case the address cannot be resolved and avoid infinite loops 
 .RE
 .PP
 
 .PP
-Reimplemented from \fBMaxOS::net::InternetProtocolAddressResolver\fP\&.
+Reimplemented from \fBMaxOS::net::IPV4AddressResolver\fP\&.
 .PP
-Definition at line \fB117\fP of file \fBarp\&.cpp\fP\&..PP
+Definition at line \fB129\fP of file \fBarp\&.cpp\fP\&..PP
 .nf
-117                                                                                             {
-118 
-119     volatile Map<InternetProtocolAddress, MediaAccessControlAddress>::iterator cacheIterator = addressCache\&.find(address); //Check if the MAC address is in the cache
-120 
-121     //If not, request it
-122     if(addressCache\&.end() == cacheIterator){
-123         RequestMACAddress(address);
-124     }
-125 
-126     //TODO: Add clock to wait
-127 
-128     //This isn't safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT
-129     while (cacheIterator == addressCache\&.end()) {                         //Wait until the MAC address is found
-130         cacheIterator = addressCache\&.find(address);
-131     }
+129                                                                                             {
+130 
+131     volatile Map<InternetProtocolAddress, MediaAccessControlAddress>::iterator cacheIterator = addressCache\&.find(address); //Check if the MAC address is in the cache
 132 
-133     //Return the MAC address
-134 
-135     return cacheIterator \-> second;
-136 
-137 }
+133     //If not, request it
+134     if(addressCache\&.end() == cacheIterator){
+135         RequestMACAddress(address);
+136     }
+137 
+138     //This isn't safe because the MAC address might not be in the cache yet or the machine may not be connected to the network (possible infinite loop) //TODO: TIMEOUT
+139     while (cacheIterator == addressCache\&.end()) {                         //Wait until the MAC address is found
+140         cacheIterator = addressCache\&.find(address);
+141     }
+142 
+143     //Return the MAC address
+144 
+145     return cacheIterator \-> second;
+146 
+147 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBMaxOS::common::Map< Key, Value >::end()\fP, \fBMaxOS::common::Map< Key, Value >::find()\fP, and \fBRequestMACAddress()\fP\&.
-.SS "\fBvoid\fP AddressResolutionProtocol::Store (\fBInternetProtocolAddress\fP internetProtocolAddress, \fBdrivers::ethernet::MediaAccessControlAddress\fP mediaAccessControlAddress)\fC [final]\fP, \fC [virtual]\fP"
+References \fBMaxOS::common::Map< Key, Value >::end()\fP, \fBMaxOS::common::Map< Key, Value >::find()\fP, and \fBRequestMACAddress()\fP\&.
+.SS "\fBvoid\fP AddressResolutionProtocol::Store (InternetProtocolAddress internetProtocolAddress, \fBdrivers::ethernet::MediaAccessControlAddress\fP mediaAccessControlAddress)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Reimplemented from \fBMaxOS::net::InternetProtocolAddressResolver\fP\&.
+Store a mapping of an IP address to a MAC address\&. 
 .PP
-Definition at line \fB139\fP of file \fBarp\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fIinternetProtocolAddress\fP The IP address\&. 
+.br
+\fImediaAccessControlAddress\fP The MAC address\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::net::IPV4AddressResolver\fP\&.
+.PP
+Definition at line \fB155\fP of file \fBarp\&.cpp\fP\&..PP
 .nf
-139                                                                                                                                           {
-140     addressCache\&.insert(internetProtocolAddress, mediaAccessControlAddress);
-141 }
+155                                                                                                                                           {
+156     addressCache\&.insert(internetProtocolAddress, mediaAccessControlAddress);
+157 }
 .fi
 
 .PP

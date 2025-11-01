@@ -1,0 +1,177 @@
+.TH "MaxOS::common::BlockingLock" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::BlockingLock \- Enables a resource to be used by only one instance at a time through a combination of spinning and queuing\&. When waiting enqueued, thread will sleep\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <spinlock\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBvoid\fP \fBlock\fP ()"
+.br
+.RI "Lock the spinlock once it is available, sleeping until other processes are done with it\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBunlock\fP ()"
+.br
+.RI "Unlock the spinlock\&. "
+.ti -1c
+.RI "\fBbool\fP \fBis_locked\fP () \fBconst\fP"
+.br
+.RI "Check if the spinlock is locked\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBacquire\fP ()"
+.br
+.RI "Acquire the spinlock, spin until the lock is available and sleeping the thread until marked as available\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBrelease\fP ()"
+.br
+.RI "Mark as unlocked, wake the next enqueued thread\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Enables a resource to be used by only one instance at a time through a combination of spinning and queuing\&. When waiting enqueued, thread will sleep\&. 
+
+
+.PP
+\fBNote\fP
+.RS 4
+Repeated API that could be made a class that isn't because lock types shouldn't be interchangeable 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBSpinlock\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB51\fP of file \fBspinlock\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBvoid\fP BlockingLock::acquire ()"
+
+.PP
+Acquire the spinlock, spin until the lock is available and sleeping the thread until marked as available\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Move the yielding logic into process/thread code so that it can be reused 
+.RE
+.PP
+
+.PP
+Definition at line \fB101\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+101                            {
+102 
+103     // Try to get the lock
+104     for (int i = 0; (i < BLOCKING_FAST_TRY_LIMIT || must_spin()); ++i)
+105         if(!__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE))
+106             return;
+107 
+108     // Add to the queue
+109     auto thread = GlobalScheduler::current_thread();
+110     thread\->thread_state = ThreadState::WAITING;
+111     m_queue\&.push_back(thread\->tid);
+112 
+113     thread\->save_cpu_state();
+114 
+115     // Guard against being resumed here
+116     if(thread\->thread_state == ThreadState::WAITING){
+117 
+118         // Yield to the next thread
+119         cpu_status_t* next = GlobalScheduler::core_scheduler()\->schedule_next(&thread\->execution_state);
+120         InterruptManager::ForceInterruptReturn(next);
+121     }
+122 
+123 
+124 }
+.fi
+
+.PP
+References \fBMaxOS::common::BLOCKING_FAST_TRY_LIMIT\fP, \fBMaxOS::processes::GlobalScheduler::core_scheduler()\fP, \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBMaxOS::hardwarecommunication::InterruptManager::ForceInterruptReturn()\fP, \fBnext\fP, and \fBMaxOS::common::Vector< Type >::push_back()\fP\&.
+.PP
+Referenced by \fBlock()\fP\&.
+.SS "\fBbool\fP BlockingLock::is_locked () const"
+
+.PP
+Check if the spinlock is locked\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if the spinlock is locked, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB92\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+92                                    {
+93     return m_locked;
+94 }
+.fi
+
+.SS "\fBvoid\fP BlockingLock::lock ()"
+
+.PP
+Lock the spinlock once it is available, sleeping until other processes are done with it\&. 
+.PP
+Definition at line \fB73\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+73                         {
+74     acquire();
+75     m_locked = true;
+76 }
+.fi
+
+.PP
+References \fBacquire()\fP\&.
+.SS "\fBvoid\fP BlockingLock::release ()"
+
+.PP
+Mark as unlocked, wake the next enqueued thread\&. 
+.PP
+Definition at line \fB129\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+129                            {
+130 
+131     // Next thread can be run
+132     if(!m_queue\&.empty()){
+133         auto tid = m_queue\&.pop_front();
+134         GlobalScheduler::get_thread(tid)\->thread_state = ThreadState::READY;
+135     }
+136 
+137     __atomic_clear(&m_locked, __ATOMIC_RELEASE);
+138 }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::empty()\fP, \fBMaxOS::processes::GlobalScheduler::get_thread()\fP, and \fBMaxOS::common::Vector< Type >::pop_front()\fP\&.
+.PP
+Referenced by \fBunlock()\fP\&.
+.SS "\fBvoid\fP BlockingLock::unlock ()"
+
+.PP
+Unlock the spinlock\&. 
+.PP
+Definition at line \fB81\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+81                           {
+82 
+83     m_locked = false;
+84     release();
+85 }
+.fi
+
+.PP
+References \fBrelease()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

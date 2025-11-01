@@ -9,5 +9,6 @@ var memorymanagement_8h =
     [ "operator new", "memorymanagement_8h.html#a160dcabc54bbecfc69484678cafadb81", null ],
     [ "operator new", "memorymanagement_8h.html#a80605d8a4681597c2e6213955382980f", null ],
     [ "operator new[]", "memorymanagement_8h.html#af2243bb4c2126b7b2b393e06090fbe59", null ],
-    [ "operator new[]", "memorymanagement_8h.html#a118c67097f2e09ea4838aab175fad149", null ]
+    [ "operator new[]", "memorymanagement_8h.html#a118c67097f2e09ea4838aab175fad149", null ],
+    [ "CHUNK_ALIGNMENT", "memorymanagement_8h.html#a61108789ebdcfe7fa66d8a20826fec14", null ]
 ];

@@ -1,7 +1,8 @@
 var string_8h =
 [
     [ "MaxOS::String", "classMaxOS_1_1String.html", "classMaxOS_1_1String" ],
-    [ "string", "string_8h.html#afa22b691550d34d82dd6a5e3f77b31cb", null ],
+    [ "MaxOS::StringBuilder", "classMaxOS_1_1StringBuilder.html", "classMaxOS_1_1StringBuilder" ],
+    [ "string", "string_8h.html#a4a6e5834af96b66d8015f5a24c09e1b3", null ],
     [ "ftoa", "string_8h.html#a67b7d920f0d5f6764f9d0a58f771a126", null ],
     [ "htoa", "string_8h.html#aa45db8c9bd3e58972f39d4a5e0defa44", null ],
     [ "itoa", "string_8h.html#a100df116078d0e34de582fc45d2e7df2", null ],
@@ -13,5 +14,6 @@ var string_8h =
     [ "strncmp", "string_8h.html#a9a382141e88fb589c55148c54fa45d64", null ],
     [ "strncmp", "string_8h.html#a13f6f6daf353fc8a2edf417dbb33f8de", null ],
     [ "strncmp", "string_8h.html#a1658b202b0b408580eca37b0bccf3cd0", null ],
-    [ "strncmp", "string_8h.html#a36ac87929eddbfa0c0ccbc3b14959511", null ]
+    [ "strncmp", "string_8h.html#a36ac87929eddbfa0c0ccbc3b14959511", null ],
+    [ "MAX_STRING_SMALL_STORAGE", "string_8h.html#a1044cf535cd081c1386c1aef42a0b395", null ]
 ];

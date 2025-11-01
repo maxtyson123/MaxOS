@@ -2,34 +2,26 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::processes::Scheduler \- Schedules processes to run on the CPU via their threads\&.  
+MaxOS::processes::Scheduler \- Schedules processes to run on the core via their threads\&.  
 
 .SH SYNOPSIS
 .br
 .PP
 .PP
 \fC#include <scheduler\&.h>\fP
-.PP
-Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBScheduler\fP (\fBsystem::Multiboot\fP &multiboot)"
+.RI "\fBScheduler\fP ()"
 .br
+.RI "Constructs a new \fBScheduler\fP object and creates the idle process\&. "
 .ti -1c
-.RI "\fB~Scheduler\fP ()"
-.br
-.ti -1c
-.RI "system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *\fBstatus\fP) final"
-.br
-.RI "Handles the interrupt 0x20\&. "
-.ti -1c
-.RI "system::cpu_status_t * \fBschedule\fP (system::cpu_status_t *\fBstatus\fP)"
+.RI "system::cpu_status_t * \fBschedule\fP (system::cpu_status_t *cpu_state)"
 .br
 .RI "Schedules the next thread to run\&. "
 .ti -1c
-.RI "system::cpu_status_t * \fBschedule_next\fP (system::cpu_status_t *\fBstatus\fP)"
+.RI "system::cpu_status_t * \fBschedule_next\fP (system::cpu_status_t *status)"
 .br
 .RI "Schedules the next thread to run\&. "
 .ti -1c
@@ -53,6 +45,30 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .br
 .RI "Adds a thread to the scheduler\&. "
 .ti -1c
+.RI "\fBProcess\fP * \fBcurrent_process\fP ()"
+.br
+.RI "Gets the current process\&. "
+.ti -1c
+.RI "\fBProcess\fP * \fBget_process\fP (uint64_t pid)"
+.br
+.RI "Gets a process by its PID\&. "
+.ti -1c
+.RI "uint64_t \fBprocess_amount\fP ()"
+.br
+.RI "Gets how processes are running on this scheduler\&. "
+.ti -1c
+.RI "\fBThread\fP * \fBcurrent_thread\fP ()"
+.br
+.RI "Gets the currently executing thread\&. "
+.ti -1c
+.RI "\fBThread\fP * \fBget_thread\fP (uint64_t tid)"
+.br
+.RI "Gets a thread by its TID\&. "
+.ti -1c
+.RI "uint64_t \fBthread_amount\fP ()"
+.br
+.RI "Gets how many threads are running on this scheduler\&. "
+.ti -1c
 .RI "uint64_t \fBticks\fP () const"
 .br
 .RI "Gets how long the system has been running for\&. "
@@ -65,113 +81,35 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .br
 .RI "Deactivates the scheduler\&. "
 .in -1c
-
-Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
-.in +1c
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBhandle_interrupt\fP ()"
-.br
-.RI "Handles an interrupt\&. "
-.in -1c
-.SS "Static Public Member Functions"
-
-.in +1c
-.ti -1c
-.RI "static \fBScheduler\fP * \fBsystem_scheduler\fP ()"
-.br
-.RI "Gets the system scheduler\&. "
-.ti -1c
-.RI "static \fBProcess\fP * \fBcurrent_process\fP ()"
-.br
-.RI "Gets the current process\&. "
-.ti -1c
-.RI "static \fBProcess\fP * \fBget_process\fP (uint64_t pid)"
-.br
-.RI "Gets a process by its PID\&. "
-.ti -1c
-.RI "static \fBThread\fP * \fBcurrent_thread\fP ()"
-.br
-.RI "Gets the currently executing thread\&. "
-.ti -1c
-.RI "static \fBThread\fP * \fBget_thread\fP (uint64_t tid)"
-.br
-.RI "Gets a thread by its TID\&. "
-.ti -1c
-.RI "static void \fBload_multiboot_elfs\fP (\fBsystem::Multiboot\fP *multiboot)"
-.br
-.RI "Loads any valid ELF files from the multiboot structure\&. "
-.in -1c
-.SS "Additional Inherited Members"
-
-
-Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
-.in +1c
-.ti -1c
-.RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
-.br
-.ti -1c
-.RI "\fB~InterruptHandler\fP ()"
-.br
-.in -1c
-
-Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
-.in +1c
-.ti -1c
-.RI "uint8_t \fBm_interrupt_number\fP"
-.br
-.in -1c
 .SH "Detailed Description"
 .PP 
-Schedules processes to run on the CPU via their threads\&. 
+Schedules processes to run on the core via their threads\&. 
 .PP
-Definition at line \fB23\fP of file \fBscheduler\&.h\fP\&.
+Definition at line \fB85\fP of file \fBscheduler\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Scheduler::Scheduler (\fBsystem::Multiboot\fP & multiboot)"
+.SS "Scheduler::Scheduler ()"
 
 .PP
-Definition at line \fB14\fP of file \fBscheduler\&.cpp\fP\&..PP
+Constructs a new \fBScheduler\fP object and creates the idle process\&. 
+.PP
+Definition at line \fB362\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-15 : InterruptHandler(0x20),
-16   m_current_thread_index(0),
-17   m_active(false),
-18   m_ticks(0),
-19   m_next_pid(\-1),
-20   m_next_tid(\-1),
-21   m_shared_memory_registry(resource_type_t::SHARED_MEMORY),
-22   m_shared_messages_registry(resource_type_t::MESSAGE_ENDPOINT)
-23 {
-24 
-25     // Set up the basic scheduler
-26     Logger::INFO() << "Setting up Scheduler \\n";
-27     s_instance = this;
-28 
-29     // Create the idle process
-30     auto* idle = new Process("kernelMain Idle", nullptr, nullptr, 0, true);
-31     idle\->memory_manager = MemoryManager::s_kernel_memory_manager;
-32     add_process(idle);
-33     idle\->set_pid(0);
-34 
-35     // Load the elfs
-36     load_multiboot_elfs(&multiboot);
-37 }
+363 : m_next_thread_index(0),
+364   m_active(false),
+365   m_ticks(0)
+366 {
+367 
+368     // Create this idle process
+369     auto* idle = new Process("Idle", nullptr, nullptr, 0, true);
+370     idle\->memory_manager = MemoryManager::s_kernel_memory_manager;
+371     idle\->set_pid(0);
+372     add_process(idle);
+373 }
 .fi
 
 .PP
-References \fBadd_process()\fP, \fBLogger::INFO()\fP, \fBload_multiboot_elfs()\fP, and \fBMaxOS::memory::MemoryManager::s_kernel_memory_manager\fP\&.
-.SS "Scheduler::~Scheduler ()"
-
-.PP
-Definition at line \fB39\fP of file \fBscheduler\&.cpp\fP\&..PP
-.nf
-39                       {
-40 
-41     // Deactivate this scheduler
-42     s_instance = nullptr;
-43     m_active = false;
-44 }
-.fi
-
+References \fBadd_process()\fP, and \fBMaxOS::memory::MemoryManager::s_kernel_memory_manager\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "void Scheduler::activate ()"
@@ -179,12 +117,12 @@ Definition at line \fB39\fP of file \fBscheduler\&.cpp\fP\&..PP
 .PP
 Activates the scheduler\&. 
 .PP
-Definition at line \fB234\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB568\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-234                          {
-235 
-236     m_active = true;
-237 }
+568                          {
+569 
+570     m_active = true;
+571 }
 .fi
 
 .SS "uint64_t Scheduler::add_process (\fBProcess\fP * process)"
@@ -199,31 +137,34 @@ Adds a process to the scheduler\&.
 .PP
 \fBReturns\fP
 .RS 4
-The process ID 
+The process ID (will be assigned during add) 
 .RE
 .PP
 
 .PP
-Definition at line \fB161\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB502\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-161                                                 {
-162 
-163     // Get the next process ID
-164     m_next_pid++;
-165 
-166     // Add the process to the list
-167     m_processes\&.push_back(process);
-168     Logger::DEBUG() << "Adding process " << m_next_pid << ": " << process\->name << "\\n";
-169 
-170     // Return the process ID
-171     return m_next_pid;
-172 }
+502                                                 {
+503 
+504     // Get the next process ID
+505     auto pid = GlobalScheduler::next_pid();
+506     process\->set_pid(pid);
+507 
+508     // Add the process to the list
+509     m_processes\&.push_back(process);
+510 
+511     // Add the threads to the list
+512     for(const auto& thread : process\->threads())
+513         thread\->tid = add_thread(thread);
+514 
+515     return pid;
+516 }
 .fi
 
 .PP
-References \fBLogger::DEBUG()\fP, and \fBMaxOS::processes::Process::name\fP\&.
+References \fBadd_thread()\fP, \fBMaxOS::processes::GlobalScheduler::next_pid()\fP, \fBMaxOS::processes::Process::set_pid()\fP, \fBMaxOS::processes::Process::threads()\fP, and \fBMaxOS::processes::Thread::tid\fP\&.
 .PP
-Referenced by \fBScheduler()\fP\&.
+Referenced by \fBMaxOS::processes::GlobalScheduler::add_process()\fP, and \fBScheduler()\fP\&.
 .SS "uint64_t Scheduler::add_thread (\fBThread\fP * thread)"
 
 .PP
@@ -241,25 +182,27 @@ The thread ID
 .PP
 
 .PP
-Definition at line \fB180\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB524\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-180                                              {
-181 
-182     // Get the next thread ID
-183     m_next_tid++;
-184 
-185     // Add the thread to the list
-186     m_threads\&.push_back(thread);
-187     Logger::DEBUG() << "Adding thread " << m_next_tid << " to process " << thread\->parent_pid << "\\n";
-188 
-189     // Return the thread ID
-190     return m_next_tid;
-191 }
+524                                              {
+525 
+526     // Get the next thread ID
+527     auto tid = GlobalScheduler::next_tid();
+528     thread\->tid = tid;
+529 
+530     // Add the thread to the list
+531     m_threads\&.push_back(thread);
+532 
+533     // Return the thread ID
+534     return tid;
+535 }
 .fi
 
 .PP
-References \fBLogger::DEBUG()\fP, and \fBMaxOS::processes::Thread::parent_pid\fP\&.
-.SS "\fBProcess\fP * Scheduler::current_process ()\fC [static]\fP"
+References \fBMaxOS::processes::GlobalScheduler::next_tid()\fP, and \fBMaxOS::processes::Thread::tid\fP\&.
+.PP
+Referenced by \fBadd_process()\fP, and \fBMaxOS::processes::GlobalScheduler::add_thread()\fP\&.
+.SS "\fBProcess\fP * Scheduler::current_process ()"
 
 .PP
 Gets the current process\&. 
@@ -271,32 +214,28 @@ The current process, or nullptr if not found
 .PP
 
 .PP
-Definition at line \fB309\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB642\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-309                                     {
-310 
-311     Process* current_process = nullptr;
-312 
-313     // Make sure there is something with process attached
-314     if (!s_instance)
-315         return nullptr;
-316 
-317     // Find the process that has the thread being executed
-318     for (auto process: s_instance\->m_processes)
-319         if (process\->pid() == current_thread()\->parent_pid) {
-320             current_process = process;
-321             break;
-322         }
-323 
-324     return current_process;
-325 }
+642                                     {
+643 
+644     Process* current_process = nullptr;
+645 
+646     // Find the process that has the thread being executed
+647     for (auto process: m_processes)
+648         if (process\->pid() == current_thread()\->parent_pid) {
+649             current_process = process;
+650             break;
+651         }
+652 
+653     return current_process;
+654 }
 .fi
 
 .PP
-References \fBcurrent_process()\fP, \fBcurrent_thread()\fP, and \fBMaxOS::processes::Thread::parent_pid\fP\&.
+References \fBcurrent_process()\fP, \fBcurrent_thread()\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBMaxOS::processes::Process::pid()\fP\&.
 .PP
-Referenced by \fBMaxOS::filesystem::VFSResourceRegistry::create_resource()\fP, \fBcurrent_process()\fP, \fBMaxOS::memory::VirtualMemoryManager::free()\fP, \fBMaxOS::filesystem::VFSResourceRegistry::get_resource()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::processes::SharedMemory::open()\fP, \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, \fBMaxOS::processes::SharedMemory::read()\fP, \fBschedule_next()\fP, \fBMaxOS::system::SyscallManager::syscall_close_process()\fP, \fBMaxOS::system::SyscallManager::syscall_klog()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_close()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_open()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_read()\fP, and \fBMaxOS::system::SyscallManager::syscall_resource_write()\fP\&.
-.SS "\fBThread\fP * Scheduler::current_thread ()\fC [static]\fP"
+Referenced by \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBcurrent_process()\fP, and \fBschedule_next()\fP\&.
+.SS "\fBThread\fP * Scheduler::current_thread ()"
 
 .PP
 Gets the currently executing thread\&. 
@@ -308,27 +247,27 @@ The currently executing thread
 .PP
 
 .PP
-Definition at line \fB350\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB686\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-350                                   {
-351 
-352     return s_instance\->m_threads[s_instance\->m_current_thread_index];
-353 }
+686                                   {
+687 
+688     return m_threads[m_next_thread_index];
+689 }
 .fi
 
 .PP
-Referenced by \fBcurrent_process()\fP, \fBforce_remove_process()\fP, \fBschedule()\fP, \fBschedule_next()\fP, \fBMaxOS::system::SyscallManager::syscall_klog()\fP, \fBMaxOS::system::SyscallManager::syscall_thread_close()\fP, \fBMaxOS::system::SyscallManager::syscall_thread_sleep()\fP, \fBMaxOS::system::SyscallManager::syscall_thread_yield()\fP, and \fByield()\fP\&.
+Referenced by \fBcurrent_process()\fP, \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBforce_remove_process()\fP, \fBschedule()\fP, \fBschedule_next()\fP, and \fByield()\fP\&.
 .SS "void Scheduler::deactivate ()"
 
 .PP
 Deactivates the scheduler\&. 
 .PP
-Definition at line \fB358\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB702\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-358                            {
-359 
-360     m_active = false;
-361 }
+702                            {
+703 
+704     m_active = false;
+705 }
 .fi
 
 .SS "cpu_status_t * Scheduler::force_remove_process (\fBProcess\fP * process)"
@@ -348,37 +287,35 @@ The status of the CPU for the next process to run or nullptr if the process was 
 .PP
 
 .PP
-Definition at line \fB281\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB614\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-281                                                               {
-282 
-283     // If there is no process, fail
-284     if (!process)
-285         return nullptr;
-286 
-287     // Remove all the threads
-288     for (auto thread: process\->threads()) {
-289 
-290         // Remove the thread from the scheduler
-291         int index = m_threads\&.find(thread) \- m_threads\&.begin();
-292         m_threads\&.erase(m_threads\&.begin() + index);
-293 
-294         // Delete the thread
-295         process\->remove_thread(thread\->tid);
-296 
-297     }
-298 
-299     // Process will be dead now so run the next process (don't care about the execution state being outdated as it is being
-300     // removed regardless)
-301     return schedule_next(current_thread()\->execution_state);
-302 }
+614                                                               {
+615 
+616     // If there is no process, fail
+617     if (!process)
+618         return nullptr;
+619 
+620     // Remove all the threads
+621     for (auto thread: process\->threads()) {
+622 
+623         // Remove the thread from the scheduler
+624         int index = m_threads\&.find(thread) \- m_threads\&.begin();
+625         m_threads\&.erase(m_threads\&.begin() + index);
+626 
+627         // Delete the thread
+628         process\->remove_thread(thread\->tid);
+629 
+630     }
+631 
+632     // Process will be dead now so run the next process (don't care about the execution state being outdated as it is being
+633     // removed regardless)
+634     return schedule_next(&current_thread()\->execution_state);
+635 }
 .fi
 
 .PP
-References \fBcurrent_thread()\fP, \fBMaxOS::processes::Process::remove_thread()\fP, \fBschedule_next()\fP, and \fBMaxOS::processes::Process::threads()\fP\&.
-.PP
-Referenced by \fBMaxOS::system::CPU::prepare_for_panic()\fP\&.
-.SS "\fBProcess\fP * Scheduler::get_process (uint64_t pid)\fC [static]\fP"
+References \fBcurrent_thread()\fP, \fBMaxOS::processes::Process::remove_thread()\fP, \fBschedule_next()\fP, \fBMaxOS::processes::Process::threads()\fP, and \fBMaxOS::processes::Thread::tid\fP\&.
+.SS "\fBProcess\fP * Scheduler::get_process (uint64_t pid)"
 
 .PP
 Gets a process by its PID\&. 
@@ -395,23 +332,23 @@ The process or nullptr if not found
 .PP
 
 .PP
-Definition at line \fB333\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB662\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-333                                             {
-334 
-335     // Try to find the process
-336     for (auto process: s_instance\->m_processes)
-337         if (process\->pid() == pid)
-338             return process;
-339 
-340     // Not found
-341     return nullptr;
-342 }
+662                                             {
+663 
+664     // Try to find the process
+665     for (auto process: m_processes)
+666         if (process\->pid() == pid)
+667             return process;
+668 
+669     // Not found
+670     return nullptr;
+671 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::system::SyscallManager::syscall_close_process()\fP, and \fBMaxOS::system::SyscallManager::syscall_thread_close()\fP\&.
-.SS "\fBThread\fP * Scheduler::get_thread (uint64_t tid)\fC [static]\fP"
+References \fBMaxOS::processes::Process::pid()\fP\&.
+.SS "\fBThread\fP * Scheduler::get_thread (uint64_t tid)"
 
 .PP
 Gets a thread by its TID\&. 
@@ -428,96 +365,42 @@ The thread or nullptr if not found
 .PP
 
 .PP
-Definition at line \fB401\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB713\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-401                                           {
-402 
-403     // Try to find the thread
-404     for (auto thread: s_instance\->m_threads)
-405         if (thread\->tid == tid)
-406             return thread;
-407 
-408     return nullptr;
-409 }
+713                                           {
+714 
+715     // Try to find the thread
+716     for (auto thread: m_threads)
+717         if (thread\->tid == tid)
+718             return thread;
+719 
+720     return nullptr;
+721 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::system::SyscallManager::syscall_thread_close()\fP\&.
-.SS "cpu_status_t * Scheduler::handle_interrupt (system::cpu_status_t * status)\fC [final]\fP, \fC [virtual]\fP"
+References \fBMaxOS::processes::Thread::tid\fP\&.
+.SS "uint64_t Scheduler::process_amount ()"
 
 .PP
-Handles the interrupt 0x20\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIstatus\fP The current CPU status 
-.RE
+Gets how processes are running on this scheduler\&. 
 .PP
 \fBReturns\fP
 .RS 4
-The new CPU status 
+The amount 
 .RE
 .PP
 
 .PP
-Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
-.PP
-Definition at line \fB52\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB677\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-52                                                               {
-53 
-54     return schedule(status);
-55 }
+677                                    {
+678     return m_processes\&.size();
+679 }
 .fi
 
 .PP
-References \fBschedule()\fP, and \fBstatus\fP\&.
-.SS "void Scheduler::load_multiboot_elfs (\fBsystem::Multiboot\fP * multiboot)\fC [static]\fP"
-
-.PP
-Loads any valid ELF files from the multiboot structure\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fImultiboot\fP The multiboot structure 
-.RE
-.PP
-
-.PP
-Definition at line \fB368\fP of file \fBscheduler\&.cpp\fP\&..PP
-.nf
-368                                                         {
-369 
-370     for (multiboot_tag* tag = multiboot\->start_tag(); tag\->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag\->size + 7) & ~7))) {
-371 
-372         // Tag is not an ELF
-373         if (tag\->type != MULTIBOOT_TAG_TYPE_MODULE)
-374             continue;
-375 
-376         // Try create the elf from the module
-377         auto* module = (struct multiboot_tag_module*) tag;
-378         auto* elf = new Elf64((uintptr_t) PhysicalMemoryManager::to_dm_region(module\->mod_start));
-379         if (!elf\->is_valid())
-380             continue;
-381 
-382         Logger::DEBUG() << "Creating process from multiboot module for " << module\->cmdline << " (at 0x" << (uint64_t) module\->mod_start << ")\\n";
-383 
-384         // Create an array of args for the process TODO: handle multiple args ("" & spaces)
-385         char* args[1] = {module\->cmdline};
-386 
-387         // Create the process
-388         auto* process = new Process(module\->cmdline, args, 1, elf);
-389 
-390         Logger::DEBUG() << "Elf loaded to pid " << process\->pid() << "\\n";
-391         delete elf;
-392     }
-393 }
-.fi
-
-.PP
-References \fBLogger::DEBUG()\fP, \fBMULTIBOOT_TAG_TYPE_END\fP, \fBMULTIBOOT_TAG_TYPE_MODULE\fP, \fBMaxOS::system::Multiboot::start_tag()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP\&.
-.PP
-Referenced by \fBScheduler()\fP\&.
+Referenced by \fBMaxOS::processes::GlobalScheduler::add_process()\fP\&.
 .SS "uint64_t Scheduler::remove_process (\fBProcess\fP * process)"
 
 .PP
@@ -526,8 +409,6 @@ Removes a process from the scheduler if the process has no threads, if it does t
 \fBParameters\fP
 .RS 4
 \fIprocess\fP The process to remove 
-.br
-\fIforce\fP If true, the process will be removed and so will all threads 
 .RE
 .PP
 \fBReturns\fP
@@ -537,41 +418,43 @@ Removes a process from the scheduler if the process has no threads, if it does t
 .PP
 
 .PP
-Definition at line \fB246\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB579\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-246                                                    {
-247 
-248     // Check if the process has no threads
-249     if (!process\->threads()\&.empty()) {
-250 
-251         // Set the threads to stopped or remove them if forced
-252         for (auto thread: process\->threads())
-253             thread\->thread_state = ThreadState::STOPPED;
-254 
-255         // Need to wait until the threads are stopped before removing the process (this will be called again when all threads are stopped)
-256         return \-1;
-257 
-258     }
-259 
-260     // Remove the process
-261     for (uint32_t i = 0; i < m_processes\&.size(); i++) {
-262         if (m_processes[i] == process) {
-263             m_processes\&.erase(m_processes\&.begin() + i);
-264 
-265             // Delete the process mem
-266             delete process;
-267             return 0;
-268         }
-269     }
-270 
-271     // Process not found
-272     return \-1;
-273 }
+579                                                    {
+580 
+581     // Check if the process has no threads
+582     if (!process\->threads()\&.empty()) {
+583 
+584         // Set the threads to stopped or remove them if forced
+585         for (auto thread: process\->threads())
+586             thread\->thread_state = ThreadState::STOPPED;
+587 
+588         // Need to wait until the threads are stopped before removing the process (this will be called again when all threads are stopped)
+589         return \-1;
+590 
+591     }
+592 
+593     // Remove the process
+594     for (uint32_t i = 0; i < m_processes\&.size(); i++) {
+595         if (m_processes[i] == process) {
+596             m_processes\&.erase(m_processes\&.begin() + i);
+597 
+598             // Delete the process mem
+599             delete process;
+600             return 0;
+601         }
+602     }
+603 
+604     // Process not found
+605     return \-1;
+606 }
 .fi
 
 .PP
-References \fBMaxOS::processes::STOPPED\fP, and \fBMaxOS::processes::Process::threads()\fP\&.
-.SS "cpu_status_t * Scheduler::schedule (system::cpu_status_t * status)"
+References \fBMaxOS::processes::Thread::thread_state\fP, and \fBMaxOS::processes::Process::threads()\fP\&.
+.PP
+Referenced by \fBschedule_next()\fP\&.
+.SS "cpu_status_t * Scheduler::schedule (system::cpu_status_t * cpu_state)"
 
 .PP
 Schedules the next thread to run\&. 
@@ -588,33 +471,34 @@ The next CPU state
 .PP
 
 .PP
-Definition at line \fB64\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB384\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-64                                                          {
-65 
-66     // Scheduler cant schedule anything
-67     if (m_threads\&.empty() || !m_active)
-68         return cpu_state;
-69 
-70     // Thread that we are dealing with
-71     Thread* current_thread = m_threads[m_current_thread_index];
-72 
-73     // Ticked
-74     m_ticks++;
-75     current_thread\->ticks++;
-76 
-77     // Wait for a bit so that the scheduler doesn't run too fast TODO: fix
-78     if (m_ticks % s_ticks_per_event != 0) return cpu_state;
-79 
-80     // Schedule the next thread
-81     return schedule_next(cpu_state);
-82 }
+384                                                          {
+385 
+386     // Scheduler cant schedule anything
+387     if (m_threads\&.empty() || !m_active)
+388         return cpu_state;
+389 
+390     // Thread that we are dealing with
+391     Thread* current_thread = m_threads[m_next_thread_index];
+392 
+393     // Ticked
+394     m_ticks++;
+395     current_thread\->ticks++;
+396 
+397     // Thread hasn't used its time slot yet
+398     if(current_thread\->ticks % TICKS_PER_EVENT)
+399         return cpu_state;
+400 
+401     // Schedule the next thread
+402     return schedule_next(cpu_state);
+403 }
 .fi
 
 .PP
-References \fBcurrent_thread()\fP, \fBschedule_next()\fP, and \fBMaxOS::processes::Thread::ticks\fP\&.
+References \fBcurrent_thread()\fP, \fBschedule_next()\fP, \fBMaxOS::processes::Thread::ticks\fP, and \fBMaxOS::processes::TICKS_PER_EVENT\fP\&.
 .PP
-Referenced by \fBhandle_interrupt()\fP\&.
+Referenced by \fBMaxOS::processes::GlobalScheduler::handle_interrupt()\fP\&.
 .SS "cpu_status_t * Scheduler::schedule_next (system::cpu_status_t * status)"
 
 .PP
@@ -627,104 +511,107 @@ Schedules the next thread to run\&.
 .PP
 \fBReturns\fP
 .RS 4
-The next CPU status 
+The next CPU status
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Remove by reference where possible 
 .RE
 .PP
 
 .PP
-Definition at line \fB90\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB413\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-90                                                               {
-91 
-92     // Get the thread that is executing right now
-93     Thread* current_thread = m_threads[m_current_thread_index];
-94 
-95     // Save its state
-96     current_thread\->execution_state = cpu_state;
-97     current_thread\->save_sse_state();
-98     if (current_thread\->thread_state == ThreadState::RUNNING)
-99         current_thread\->thread_state = ThreadState::READY;
-100 
-101     // Switch to the thread that will now run
-102     m_current_thread_index++;
-103     m_current_thread_index %= m_threads\&.size();
-104     current_thread = m_threads[m_current_thread_index];
-105 
-106     Process* owner_process = current_process();
-107 
-108     // Handle state changes
-109     switch (current_thread\->thread_state) {
-110 
-111         case ThreadState::NEW:
-112             current_thread\->thread_state = ThreadState::RUNNING;
-113             break;
-114 
-115         case ThreadState::SLEEPING:
-116 
-117             // If the wake\-up time hasn't occurred yet, run the next thread
-118             if (current_thread\->wakeup_time > m_ticks)
-119                 return schedule_next(current_thread\->execution_state);
-120 
-121             break;
-122 
-123         case ThreadState::STOPPED:
-124 
-125             // Find the process that has the thread and remove it
-126             for (auto thread: owner_process\->threads()) {
-127                 if (thread == current_thread) {
-128                     owner_process\->remove_thread(m_current_thread_index);
-129                     break;
-130                 }
-131             }
-132 
-133             // Remove the thread
-134             m_threads\&.erase(m_threads\&.begin() + m_current_thread_index);
-135 
-136             // Run the next thread
-137             return schedule_next(cpu_state);
-138 
-139         default:
-140             break;
-141     }
-142 
-143     // Prepare the next thread to run
-144     current_thread\->thread_state = ThreadState::RUNNING;
-145     current_thread\->restore_sse_state();
-146 
-147     // Load the thread's memory manager and task state
-148     MemoryManager::switch_active_memory_manager(owner_process\->memory_manager);
-149     CPU::tss\&.rsp0 = current_thread\->tss_pointer();
-150 
-151     return current_thread\->execution_state;
-152 }
+413                                                               {
+414 
+415     // Get the current state
+416     Thread* current_thread = m_threads[m_next_thread_index];
+417     Process* owner_process = current_process();
+418     auto old_tid = m_next_thread_index;
+419 
+420     // Save the executing thread state
+421     current_thread\->execution_state = *cpu_state;
+422     current_thread\->save_sse_state();
+423     if (current_thread\->thread_state == ThreadState::RUNNING)
+424         current_thread\->thread_state = ThreadState::READY;
+425 
+426     // Find a free thread to run
+427     while ((++m_next_thread_index) != old_tid){
+428         m_next_thread_index %= m_threads\&.size();
+429 
+430         // Get the current thread
+431         current_thread = m_threads[m_next_thread_index];
+432         owner_process = current_process();
+433 
+434         // Handle state changes
+435         switch (current_thread\->thread_state) {
+436 
+437             case ThreadState::SLEEPING:
+438 
+439                 // If the wake\-up time hasn't occurred yet, run the next thread
+440                 if (current_thread\->wakeup_time > TICKS_PER_EVENT){
+441                     current_thread\->wakeup_time \-= TICKS_PER_EVENT;
+442                     continue;
+443                 }
+444 
+445                 break;
+446 
+447             case ThreadState::STOPPED:
+448 
+449                 // Find the process that has the thread and remove it
+450                 for (auto thread: owner_process\->threads()) {
+451                     if (thread == current_thread) {
+452                         owner_process\->remove_thread(thread\->tid);
+453                         break;
+454                     }
+455                 }
+456 
+457                 // Remove the thread
+458                 m_threads\&.erase(m_threads\&.begin() + m_next_thread_index);
+459                 if(owner_process\->threads()\&.empty())
+460                     remove_process(owner_process);
+461                 continue;
+462 
+463             case ThreadState::WAITING:
+464                 continue;
+465 
+466             default:
+467                 break;
+468         }
+469         break;
+470     }
+471 
+472     // Load the thread's state
+473     return load_process(owner_process, current_thread);
+474 }
 .fi
 
 .PP
-References \fBcurrent_process()\fP, \fBcurrent_thread()\fP, \fBMaxOS::processes::Thread::execution_state\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::NEW\fP, \fBMaxOS::processes::READY\fP, \fBMaxOS::processes::Process::remove_thread()\fP, \fBMaxOS::processes::Thread::restore_sse_state()\fP, \fBMaxOS::processes::RUNNING\fP, \fBMaxOS::processes::Thread::save_sse_state()\fP, \fBschedule_next()\fP, \fBMaxOS::processes::SLEEPING\fP, \fBMaxOS::processes::STOPPED\fP, \fBMaxOS::memory::MemoryManager::switch_active_memory_manager()\fP, \fBMaxOS::processes::Thread::thread_state\fP, \fBMaxOS::processes::Process::threads()\fP, \fBMaxOS::system::CPU::tss\fP, \fBMaxOS::processes::Thread::tss_pointer()\fP, and \fBMaxOS::processes::Thread::wakeup_time\fP\&.
+References \fBcurrent_process()\fP, \fBcurrent_thread()\fP, \fBMaxOS::processes::Thread::execution_state\fP, \fBremove_process()\fP, \fBMaxOS::processes::Process::remove_thread()\fP, \fBMaxOS::processes::Thread::save_sse_state()\fP, \fBMaxOS::processes::Thread::thread_state\fP, \fBMaxOS::processes::Process::threads()\fP, \fBMaxOS::processes::TICKS_PER_EVENT\fP, and \fBMaxOS::processes::Thread::wakeup_time\fP\&.
 .PP
-Referenced by \fBforce_remove_process()\fP, \fBschedule()\fP, \fBschedule_next()\fP, and \fByield()\fP\&.
-.SS "\fBScheduler\fP * Scheduler::system_scheduler ()\fC [static]\fP"
+Referenced by \fBforce_remove_process()\fP, \fBschedule()\fP, and \fByield()\fP\&.
+.SS "uint64_t Scheduler::thread_amount ()"
 
 .PP
-Gets the system scheduler\&. 
+Gets how many threads are running on this scheduler\&. 
 .PP
 \fBReturns\fP
 .RS 4
-The system scheduler or nullptr if not found 
+The amount 
 .RE
 .PP
 
 .PP
-Definition at line \fB198\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB695\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-198                                        {
-199 
-200     return s_instance;
-201 }
+695                                  {
+696     return m_threads\&.size();
+697 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::common::Spinlock::acquire()\fP, \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, \fBMaxOS::processes::Process::Process()\fP, \fBMaxOS::processes::Process::remove_thread()\fP, \fBMaxOS::processes::Thread::sleep()\fP, \fBMaxOS::system::SyscallManager::syscall_close_process()\fP, \fBMaxOS::system::SyscallManager::syscall_thread_close()\fP, \fBMaxOS::system::SyscallManager::syscall_thread_yield()\fP, and \fBMaxOS::processes::Thread::Thread()\fP\&.
+Referenced by \fBMaxOS::processes::GlobalScheduler::add_thread()\fP\&.
 .SS "uint64_t Scheduler::ticks () const"
 
 .PP
@@ -737,41 +624,41 @@ The number of ticks
 .PP
 
 .PP
-Definition at line \fB208\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB542\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-208                                 {
-209 
-210     return m_ticks;
-211 }
+542                                 {
+543 
+544     return m_ticks;
+545 }
 .fi
 
-.PP
-Referenced by \fBMaxOS::system::CPU::PANIC()\fP\&.
 .SS "cpu_status_t * Scheduler::yield ()"
 
 .PP
 Pass execution to the next thread\&. 
 .PP
-Definition at line \fB216\fP of file \fBscheduler\&.cpp\fP\&..PP
+Definition at line \fB550\fP of file \fBscheduler\&.cpp\fP\&..PP
 .nf
-216                                {
-217 
-218     // If this is the only thread, can't yield
-219     if (m_threads\&.size() <= 1)
-220         return current_thread()\->execution_state;
-221 
-222     // Set the current thread to waiting if running
-223     if (m_threads[m_current_thread_index]\->thread_state == ThreadState::RUNNING)
-224         m_threads[m_current_thread_index]\->thread_state = ThreadState::READY;
-225 
-226 
-227     // Schedule the next thread
-228     return schedule_next(current_thread()\->execution_state);
-229 }
+550                                {
+551 
+552     // If this is the only thread, can't yield
+553     if (m_threads\&.size() <= 1)
+554         return &current_thread()\->execution_state;
+555 
+556     // Set the current thread to waiting if running
+557     auto thread = current_thread();
+558     if (thread\->thread_state == ThreadState::RUNNING)
+559         thread\->thread_state = ThreadState::READY;
+560 
+561     // Schedule the next thread
+562     return schedule_next(&thread\->execution_state);
+563 }
 .fi
 
 .PP
-References \fBcurrent_thread()\fP, \fBMaxOS::processes::Thread::execution_state\fP, \fBMaxOS::processes::READY\fP, \fBMaxOS::processes::RUNNING\fP, and \fBschedule_next()\fP\&.
+References \fBcurrent_thread()\fP, \fBMaxOS::processes::Thread::execution_state\fP, \fBschedule_next()\fP, and \fBMaxOS::processes::Thread::thread_state\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::GlobalScheduler::yield()\fP\&.
 
 .SH "Author"
 .PP 

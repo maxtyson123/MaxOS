@@ -2,40 +2,39 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::net::UserDatagramProtocolHandler
+MaxOS::net::UserDatagramProtocolHandler \- Handles the UDP protocol\&.  
+
 .SH SYNOPSIS
 .br
 .PP
 .PP
 \fC#include <udp\&.h>\fP
 .PP
-Inherits \fBMaxOS::net::InternetProtocolPayloadHandler\fP\&.
+Inherits \fBMaxOS::net::IPV4PayloadHandler\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "\fBUserDatagramProtocolHandler\fP (\fBInternetProtocolHandler\fP *\fBinternetProtocolHandler\fP, \fBcommon::OutputStream\fP *\fBerrorMessages\fP)"
 .br
+.RI "Construct a new User Datagram Protocol Handler object\&. "
 .ti -1c
-.RI "\fB~UserDatagramProtocolHandler\fP ()"
-.br
-.ti -1c
-.RI "\fBbool\fP \fBhandleInternetProtocolPayload\fP (\fBInternetProtocolAddress\fP \fBsourceIP\fP, \fBInternetProtocolAddress\fP \fBdestinationIP\fP, \fBuint8_t\fP *\fBpayloadData\fP, \fBuint32_t\fP \fBsize\fP) \fBoverride\fP"
+.RI "\fBbool\fP \fBhandleInternetProtocolPayload\fP (InternetProtocolAddress \fBsourceIP\fP, InternetProtocolAddress \fBdestinationIP\fP, \fBuint8_t\fP *\fBpayloadData\fP, \fBuint32_t\fP \fBsize\fP) \fBoverride\fP"
 .br
 .RI "Handle the recivement of an UDP packet\&. "
 .ti -1c
-.RI "\fBUserDatagramProtocolSocket\fP * \fBConnect\fP (\fBuint32_t\fP \fBip\fP, \fBuint16_t\fP \fBport\fP)"
+.RI "\fBUDPSocket\fP * \fBConnect\fP (\fBuint32_t\fP \fBip\fP, \fBuint16_t\fP \fBport\fP)"
 .br
 .ti -1c
-.RI "\fBUserDatagramProtocolSocket\fP * \fBListen\fP (\fBuint16_t\fP \fBport\fP)"
+.RI "\fBUDPSocket\fP * \fBListen\fP (\fBuint16_t\fP \fBport\fP)"
 .br
 .RI "Listens for incoming packets on the port\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBDisconnect\fP (\fBUserDatagramProtocolSocket\fP *socket)"
+.RI "\fBvoid\fP \fBDisconnect\fP (\fBUDPSocket\fP *socket)"
 .br
 .RI "Disconnects the socket from the remote IP and port\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBSend\fP (\fBUserDatagramProtocolSocket\fP *socket, \fBconst\fP \fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBSend\fP (\fBUDPSocket\fP *socket, \fBconst\fP \fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
 .br
 .RI "Sends a packet to the remote IP and port\&. "
 .in -1c
@@ -43,10 +42,11 @@ Inherits \fBMaxOS::net::InternetProtocolPayloadHandler\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBstatic\fP \fBUserDatagramProtocolSocket\fP * \fBConnect\fP (\fBconst\fP \fBstring\fP &\fBinternetProtocolAddressAndPort\fP)"
+.RI "\fBstatic\fP \fBUDPSocket\fP * \fBConnect\fP (\fBconst\fP \fBstring\fP &address)"
 .br
+.RI "Connects to a remote host through the UDP protocol\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBvoid\fP \fBBind\fP (\fBUserDatagramProtocolSocket\fP *socket, \fBUserDatagramProtocolPayloadHandler\fP *\fBuserDatagramProtocolPayloadHandler\fP)"
+.RI "\fBstatic\fP \fBvoid\fP \fBBind\fP (\fBUDPSocket\fP *socket, \fBUDPPayloadHandler\fP *\fBUDPPayloadHandler\fP)"
 .br
 .RI "Binds a handler to the socket\&. "
 .in -1c
@@ -54,43 +54,56 @@ Inherits \fBMaxOS::net::InternetProtocolPayloadHandler\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBcommon::Vector\fP< \fBUserDatagramProtocolSocket\fP * > \fBsockets\fP"
+.RI "\fBcommon::Vector\fP< \fBUDPSocket\fP * > \fBsockets\fP"
 .br
+.RI "The list of UDP sockets\&. "
 .ti -1c
 .RI "\fBcommon::OutputStream\fP * \fBerrorMessages\fP"
 .br
+.RI "Where to write error messages\&. "
 .in -1c
 .SS "Static Protected Attributes"
 
 .in +1c
 .ti -1c
-.RI "static \fBUserDatagramProtocolPort\fP \fBfreePorts\fP = 0x8000"
+.RI "static UserDatagramProtocolPort \fBfreePorts\fP = 0x8000"
 .br
-.RI "\fBProvider\fP "
+.RI "The next free port number\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB86\fP of file \fBudp\&.h\fP\&.
+Handles the UDP protocol\&. 
+.PP
+Definition at line \fB109\fP of file \fBudp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "UserDatagramProtocolHandler::UserDatagramProtocolHandler (\fBInternetProtocolHandler\fP * internetProtocolHandler, \fBcommon::OutputStream\fP * errorMessages)"
 
 .PP
-Definition at line \fB68\fP of file \fBudp\&.cpp\fP\&..PP
+Construct a new User Datagram Protocol Handler object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinternetProtocolHandler\fP The Internet protocol handler 
+.br
+\fIerrorMessages\fP Where to write error messages 
+.RE
+.PP
+
+.PP
+Definition at line \fB110\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-69 : InternetProtocolPayloadHandler(internetProtocolHandler, 0x11)    //0x11 is the UDP protocol number
-70 {
-71     this \-> errorMessages = errorMessages;
-72 }
+111 : IPV4PayloadHandler(internetProtocolHandler, 0x11)    //0x11 is the UDP protocol number
+112 {
+113     this \-> errorMessages = errorMessages;
+114 }
 .fi
 
 .PP
 References \fBerrorMessages\fP\&.
-.SS "UserDatagramProtocolHandler::~UserDatagramProtocolHandler ()\fC [default]\fP"
-
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBvoid\fP UserDatagramProtocolHandler::Bind (\fBUserDatagramProtocolSocket\fP * socket, \fBUserDatagramProtocolPayloadHandler\fP * userDatagramProtocolPayloadHandler)\fC [static]\fP"
+.SS "\fBvoid\fP UserDatagramProtocolHandler::Bind (\fBUDPSocket\fP * socket, \fBUDPPayloadHandler\fP * UDPPayloadHandler)\fC [static]\fP"
 
 .PP
 Binds a handler to the socket\&. 
@@ -99,37 +112,54 @@ Binds a handler to the socket\&.
 .RS 4
 \fIsocket\fP The socket to bind the handler to 
 .br
-\fIuserDatagramProtocolHandler\fP The handler to bind 
+\fI\fBUDPPayloadHandler\fP\fP The handler to bind 
 .RE
 .PP
 
 .PP
-Definition at line \fB256\fP of file \fBudp\&.cpp\fP\&..PP
+Definition at line \fB305\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-256                                                                                                                                                  {
-257 
-258   socket\->m_handlers\&.push_back(userDatagramProtocolPayloadHandler);                                                                //Set the handler of the socket to the handler that was passed in
-259 
-260 
-261 }
+305                                                                                               {
+306 
+307   socket\->m_handlers\&.push_back(UDPPayloadHandler);                                                                //Set the handler of the socket to the handler that was passed in
+308 
+309 
+310 }
 .fi
 
 .PP
 References \fBMaxOS::common::EventManager< EventType >::m_handlers\fP\&.
-.SS "\fBUserDatagramProtocolSocket\fP * UserDatagramProtocolHandler::Connect (\fBconst\fP \fBstring\fP & internetProtocolAddressAndPort)\fC [static]\fP"
+.SS "\fBUDPSocket\fP * UserDatagramProtocolHandler::Connect (\fBconst\fP \fBstring\fP & address)\fC [static]\fP"
 
 .PP
-Definition at line \fB157\fP of file \fBudp\&.cpp\fP\&..PP
+Connects to a remote host through the UDP protocol\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address to connect to in the form 'IP:PORT' 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The socket that is connected to the remote host, nullptr if it failed
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Implement string parsing to extract IP and port 
+.RE
+.PP
+
+.PP
+Definition at line \fB208\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-157                                                                               {
-158 
-159   //TODO NEW STRING PARSEING
-160 
-161   return nullptr;
-162 }
+208                                                                      {
+209 
+210   return nullptr;
+211 }
 .fi
 
-.SS "\fBUserDatagramProtocolSocket\fP * UserDatagramProtocolHandler::Connect (\fBuint32_t\fP ip, \fBuint16_t\fP port)"
+.SS "\fBUDPSocket\fP * UserDatagramProtocolHandler::Connect (\fBuint32_t\fP ip, \fBuint16_t\fP port)"
 Connects the socket to the remote IP and port 
 .PP
 \fBParameters\fP
@@ -146,34 +176,34 @@ The socket that was connected
 .PP
 
 .PP
-Definition at line \fB135\fP of file \fBudp\&.cpp\fP\&..PP
+Definition at line \fB178\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-135                                                                                            {
-136 
-137 
-138     auto* socket = (UserDatagramProtocolSocket*)MemoryManager::kmalloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
-139 
-140     if(socket != nullptr) //If the socket was created
-141     {
-142         new (socket) UserDatagramProtocolSocket();    //Create the socket
-143 
-144         //Configure the socket
-145         socket \-> remotePort = port;                                    //Port to that application wants to connect to
-146         socket \-> remoteIP = ip;                                        //IP to that application wants to connect to
-147         socket \-> localPort = freePorts++;                               //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
-148         socket \-> localIP = internetProtocolHandler \-> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
-149         socket \-> userDatagramProtocolHandler = this;                    //Set the UDP handler
-150 
-151         sockets\&.push_back(socket);                                       //Add the socket to the list of sockets
-152     }
-153 
-154     return socket;                                        //Return the socket
-155 }
+178                                                                           {
+179 
+180 
+181     auto* socket = (UDPSocket*)MemoryManager::kmalloc(sizeof(UDPSocket));   //Allocate memory for the socket
+182 
+183     if(socket != nullptr) //If the socket was created
+184     {
+185         new (socket) UDPSocket();    //Create the socket
+186 
+187         //Configure the socket
+188         socket \-> remotePort = port;                                    //Port to that application wants to connect to
+189         socket \-> remoteIP = ip;                                        //IP to that application wants to connect to
+190         socket \-> localPort = freePorts++;                               //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
+191         socket \-> localIP = internetProtocolHandler \-> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
+192         socket \-> userDatagramProtocolHandler = this;                    //Set the UDP handler
+193 
+194         sockets\&.push_back(socket);                                       //Add the socket to the list of sockets
+195     }
+196 
+197     return socket;                                        //Return the socket
+198 }
 .fi
 
 .PP
-References \fBfreePorts\fP, \fBMaxOS::net::InternetProtocolPayloadHandler::internetProtocolHandler\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, and \fBsockets\fP\&.
-.SS "\fBvoid\fP UserDatagramProtocolHandler::Disconnect (\fBUserDatagramProtocolSocket\fP * socket)"
+References \fBfreePorts\fP, \fBMaxOS::net::IPV4PayloadHandler::internetProtocolHandler\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, and \fBsockets\fP\&.
+.SS "\fBvoid\fP UserDatagramProtocolHandler::Disconnect (\fBUDPSocket\fP * socket)"
 
 .PP
 Disconnects the socket from the remote IP and port\&. 
@@ -185,39 +215,39 @@ Disconnects the socket from the remote IP and port\&.
 .PP
 
 .PP
-Definition at line \fB196\fP of file \fBudp\&.cpp\fP\&..PP
+Definition at line \fB245\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-196                                                                                {
-197 
-198 
-199     for(Vector<UserDatagramProtocolSocket*>::iterator currentSocket = sockets\&.begin(); currentSocket != sockets\&.end(); currentSocket++) {
-200         if((*currentSocket) == socket)                               //If the socket is the same as the socket that is being checked
-201         {
-202             sockets\&.erase(currentSocket);                            //Remove the socket from the list of sockets
-203             MemoryManager::kfree(socket);      //Free the socket
-204             break;                                                   //Break out of the loop
-205         }
-206     }
-207 
-208 }
+245                                                               {
+246 
+247 
+248     for(Vector<UDPSocket*>::iterator currentSocket = sockets\&.begin(); currentSocket != sockets\&.end(); currentSocket++) {
+249         if((*currentSocket) == socket)                               //If the socket is the same as the socket that is being checked
+250         {
+251             sockets\&.erase(currentSocket);                            //Remove the socket from the list of sockets
+252             MemoryManager::kfree(socket);      //Free the socket
+253             break;                                                   //Break out of the loop
+254         }
+255     }
+256 
+257 }
 .fi
 
 .PP
 References \fBMaxOS::memory::MemoryManager::kfree()\fP, and \fBsockets\fP\&.
 .PP
-Referenced by \fBMaxOS::net::UserDatagramProtocolSocket::Disconnect()\fP\&.
-.SS "\fBbool\fP UserDatagramProtocolHandler::handleInternetProtocolPayload (\fBInternetProtocolAddress\fP sourceIP, \fBInternetProtocolAddress\fP destinationIP, \fBuint8_t\fP * payloadData, \fBuint32_t\fP size)\fC [override]\fP, \fC [virtual]\fP"
+Referenced by \fBMaxOS::net::UDPSocket::Disconnect()\fP\&.
+.SS "\fBbool\fP UserDatagramProtocolHandler::handleInternetProtocolPayload (InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, \fBuint8_t\fP * payloadData, \fBuint32_t\fP size)\fC [override]\fP, \fC [virtual]\fP"
 
 .PP
 Handle the recivement of an UDP packet\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIsrcIP_BE\fP The source IP address in big endian 
+\fIsourceIP\fP The source IP address in big endian 
 .br
-\fIdstIP_BE\fP The destination IP address in big endian 
+\fIdestinationIP\fP The destination IP address in big endian 
 .br
-\fIinternetprotocolPayload\fP The UDP payload 
+\fIpayloadData\fP The UDP payload 
 .br
 \fIsize\fP The size of the UDP payload 
 .RE
@@ -229,59 +259,59 @@ True if the packet is to be sent back to the sender
 .PP
 
 .PP
-Reimplemented from \fBMaxOS::net::InternetProtocolPayloadHandler\fP\&.
+Reimplemented from \fBMaxOS::net::IPV4PayloadHandler\fP\&.
 .PP
-Definition at line \fB84\fP of file \fBudp\&.cpp\fP\&..PP
+Definition at line \fB127\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-84                                                                                                                                                                             {
-85 
-86     //Check the size
-87     if(size < sizeof(UserDatagramProtocolHeader)) {
-88         return false;
-89     }
-90 
-91     //Get the header
-92     auto* header = (UserDatagramProtocolHeader*)payloadData;
-93 
-94     //Set the local and remote ports
-95     uint16_t localPort = header \-> destinationPort;
-96     uint16_t remotePort = header \-> sourcePort;
-97 
-98     UserDatagramProtocolSocket* socket = nullptr;                     //The socket that will be used
-99     for(auto & currentSocket : sockets) {
-100         if(currentSocket\->localPort == localPort                  //If the local port (header dst, our port) is the same as the local port of the socket
-101         && currentSocket\->localIP == destinationIP                     //If the local IP (packet dst, our IP) is the same as the local IP of the socket
-102         && currentSocket\->listening)                              //If the socket is listening
-103         {
-104 
-105             socket = currentSocket;                               //Set the socket to the socket that is being checked
-106             socket\->listening = false;                         //Set the socket to not listening, as it is now in use
-107             socket\->remotePort = remotePort;                   //Set the remote port of the socket to the remote port of the packet
-108             socket\->remoteIP = sourceIP;                       //Set the remote IP of the socket to the remote IP of the packet
-109 
-110         }else if(currentSocket\->localPort == localPort            //If the local port (header dst, our port) is the same as the local port of the socket
-111               &&  currentSocket\->localIP == destinationIP              //If the local IP (packet dst, our IP) is the same as the local IP of the socket
-112               &&  currentSocket\->remotePort == remotePort         //If the remote port (header src, their port) is the same as the remote port of the socket
-113               &&  currentSocket\->remoteIP == sourceIP)            //If the remote IP (packet src, their IP) is the same as the remote IP of the socket
-114         {
-115             socket = currentSocket;                               //Set the socket to the current socket
-116         }
-117 
-118     }
-119 
-120     if(socket != nullptr) {                                          //If the socket is not null then pass the data to the socket
-121         socket\->handleUserDatagramProtocolPayload(payloadData + sizeof(UserDatagramProtocolHeader), size \- sizeof(UserDatagramProtocolHeader));
-122     }
-123 
-124     //UDP doesn't send back packets, so always return false
-125     return false;
-126 
-127 }
+127                                                                                                                                                                             {
+128 
+129     //Check the size
+130     if(size < sizeof(UDPHeader)) {
+131         return false;
+132     }
+133 
+134     //Get the header
+135     auto* header = (UDPHeader*)payloadData;
+136 
+137     //Set the local and remote ports
+138     uint16_t localPort = header \-> destinationPort;
+139     uint16_t remotePort = header \-> sourcePort;
+140 
+141     UDPSocket* socket = nullptr;                     //The socket that will be used
+142     for(auto & currentSocket : sockets) {
+143         if(currentSocket\->localPort == localPort                  //If the local port (header dst, our port) is the same as the local port of the socket
+144         && currentSocket\->localIP == destinationIP                     //If the local IP (packet dst, our IP) is the same as the local IP of the socket
+145         && currentSocket\->listening)                              //If the socket is listening
+146         {
+147 
+148             socket = currentSocket;                               //Set the socket to the socket that is being checked
+149             socket\->listening = false;                         //Set the socket to not listening, as it is now in use
+150             socket\->remotePort = remotePort;                   //Set the remote port of the socket to the remote port of the packet
+151             socket\->remoteIP = sourceIP;                       //Set the remote IP of the socket to the remote IP of the packet
+152 
+153         }else if(currentSocket\->localPort == localPort            //If the local port (header dst, our port) is the same as the local port of the socket
+154               &&  currentSocket\->localIP == destinationIP              //If the local IP (packet dst, our IP) is the same as the local IP of the socket
+155               &&  currentSocket\->remotePort == remotePort         //If the remote port (header src, their port) is the same as the remote port of the socket
+156               &&  currentSocket\->remoteIP == sourceIP)            //If the remote IP (packet src, their IP) is the same as the remote IP of the socket
+157         {
+158             socket = currentSocket;                               //Set the socket to the current socket
+159         }
+160 
+161     }
+162 
+163     if(socket != nullptr) {                                          //If the socket is not null then pass the data to the socket
+164         socket\->handleUserDatagramProtocolPayload(payloadData + sizeof(UDPHeader), size \- sizeof(UDPHeader));
+165     }
+166 
+167     //UDP doesn't send back packets, so always return false
+168     return false;
+169 
+170 }
 .fi
 
 .PP
-References \fBdestinationIP\fP, \fBdestinationPort\fP, \fBMaxOS::net::UserDatagramProtocolSocket::handleUserDatagramProtocolPayload()\fP, \fBheader\fP, \fBMaxOS::net::UserDatagramProtocolSocket::listening\fP, \fBMaxOS::net::UserDatagramProtocolSocket::remoteIP\fP, \fBMaxOS::net::UserDatagramProtocolSocket::remotePort\fP, \fBsize\fP, \fBsockets\fP, \fBsourceIP\fP, and \fBsourcePort\fP\&.
-.SS "\fBUserDatagramProtocolSocket\fP * UserDatagramProtocolHandler::Listen (\fBuint16_t\fP port)"
+References \fBdestinationIP\fP, \fBdestinationPort\fP, \fBMaxOS::net::UDPSocket::handleUserDatagramProtocolPayload()\fP, \fBheader\fP, \fBMaxOS::net::UDPSocket::listening\fP, \fBMaxOS::net::UDPSocket::remoteIP\fP, \fBMaxOS::net::UDPSocket::remotePort\fP, \fBsize\fP, \fBsockets\fP, \fBsourceIP\fP, and \fBsourcePort\fP\&.
+.SS "\fBUDPSocket\fP * UserDatagramProtocolHandler::Listen (\fBuint16_t\fP port)"
 
 .PP
 Listens for incoming packets on the port\&. 
@@ -298,33 +328,33 @@ The socket that is listening
 .PP
 
 .PP
-Definition at line \fB170\fP of file \fBudp\&.cpp\fP\&..PP
+Definition at line \fB219\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-170                                                                              {
-171 
-172     auto* socket = (UserDatagramProtocolSocket*)MemoryManager::kmalloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
-173 
-174     if(socket != nullptr) //If the socket was created
-175     {
-176         new (socket) UserDatagramProtocolSocket();    //Create the socket
-177 
-178         //Configure the socket
-179         socket \-> listening = true;                                     //Set the socket to listening
-180         socket \-> localPort = port;                                     //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
-181         socket \-> localIP = internetProtocolHandler \-> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
-182         socket \-> userDatagramProtocolHandler = this;                    //Set the UDP handler
-183 
-184         sockets\&.push_back(socket);                                       //Add the socket to the list of sockets
-185     }
-186 
-187     return socket;                                        //Return the socket
-188 
-189 }
+219                                                             {
+220 
+221     auto* socket = (UDPSocket*)MemoryManager::kmalloc(sizeof(UDPSocket));   //Allocate memory for the socket
+222 
+223     if(socket != nullptr) //If the socket was created
+224     {
+225         new (socket) UDPSocket();    //Create the socket
+226 
+227         //Configure the socket
+228         socket \-> listening = true;                                     //Set the socket to listening
+229         socket \-> localPort = port;                                     //Port that we will use to connect to the remote application  (note, local port doesnt have to be the same as remote)
+230         socket \-> localIP = internetProtocolHandler \-> GetInternetProtocolAddress();    //IP that we will use to connect to the remote application
+231         socket \-> userDatagramProtocolHandler = this;                    //Set the UDP handler
+232 
+233         sockets\&.push_back(socket);                                       //Add the socket to the list of sockets
+234     }
+235 
+236     return socket;                                        //Return the socket
+237 
+238 }
 .fi
 
 .PP
-References \fBMaxOS::net::InternetProtocolPayloadHandler::internetProtocolHandler\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, and \fBsockets\fP\&.
-.SS "\fBvoid\fP UserDatagramProtocolHandler::Send (\fBUserDatagramProtocolSocket\fP * socket, \fBconst\fP \fBuint8_t\fP * data, \fBuint16_t\fP size)"
+References \fBMaxOS::net::IPV4PayloadHandler::internetProtocolHandler\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, and \fBsockets\fP\&.
+.SS "\fBvoid\fP UserDatagramProtocolHandler::Send (\fBUDPSocket\fP * socket, \fBconst\fP \fBuint8_t\fP * data, \fBuint16_t\fP size)"
 
 .PP
 Sends a packet to the remote IP and port\&. 
@@ -340,64 +370,68 @@ Sends a packet to the remote IP and port\&.
 .PP
 
 .PP
-Definition at line \fB217\fP of file \fBudp\&.cpp\fP\&..PP
+Definition at line \fB266\fP of file \fBudp\&.cpp\fP\&..PP
 .nf
-217                                                                                                              {
-218 
-219     uint16_t totalSize = sizeof(UserDatagramProtocolHeader) + size;                                 //Get the total size of the packet
-220     auto* buffer = (uint8_t*)MemoryManager::kmalloc(totalSize);          //Allocate memory for the packet
-221     uint8_t* buffer2 = buffer + sizeof(UserDatagramProtocolHeader);                                 //Get the buffer that will be used to store the data
-222 
-223     auto* header = (UserDatagramProtocolHeader*)buffer;                       //Create the header of the packet
-224 
-225     //Set the header
-226     header \-> sourcePort = socket \-> localPort;                                                    //Set the source port to the local port of the socket    (this is the port that the packet will be sent from)
-227     header \-> destinationPort = socket \-> remotePort;                                              //Set the destination port to the remote port of the socket (this is the port that the packet will be sent to)
-228     header \-> length = ((totalSize & 0x00FF) << 8) | ((totalSize & 0xFF00) >> 8);                  //Set the length of the packet
-229 
-230     // Convert the ports into big endian
-231     header \-> sourcePort = ((header \-> sourcePort & 0x00FF) << 8) | ((header \-> sourcePort & 0xFF00) >> 8);
-232     header \-> destinationPort = ((header \-> destinationPort & 0x00FF) << 8) | ((header \-> destinationPort & 0xFF00) >> 8);
-233 
-234     //Copy the data to the buffer
-235     for (int i = 0; i < size; ++i) {                                                               //Loop through the data
-236         buffer2[i] = data[i];                                                                      //Copy the data to the buffer
-237     }
-238 
-239     //Set the checksum
-240     header \-> checksum = 0;                                                                        //Set the checksum to 0, this is becuase UDP doesnt have to have a checksum
-241 
-242     //Send the packet
-243     InternetProtocolPayloadHandler::Send(socket\->remoteIP, buffer, totalSize);
-244 
-245     //Free the buffer
-246     MemoryManager::kfree(buffer);
-247 
-248 }
+266                                                                                             {
+267 
+268     uint16_t totalSize = sizeof(UDPHeader) + size;                                 //Get the total size of the packet
+269     auto* buffer = (uint8_t*)MemoryManager::kmalloc(totalSize);          //Allocate memory for the packet
+270     uint8_t* buffer2 = buffer + sizeof(UDPHeader);                                 //Get the buffer that will be used to store the data
+271 
+272     auto* header = (UDPHeader*)buffer;                       //Create the header of the packet
+273 
+274     //Set the header
+275     header \-> sourcePort = socket \-> localPort;                                                    //Set the source port to the local port of the socket    (this is the port that the packet will be sent from)
+276     header \-> destinationPort = socket \-> remotePort;                                              //Set the destination port to the remote port of the socket (this is the port that the packet will be sent to)
+277     header \-> length = ((totalSize & 0x00FF) << 8) | ((totalSize & 0xFF00) >> 8);                  //Set the length of the packet
+278 
+279     // Convert the ports into big endian
+280     header \-> sourcePort = ((header \-> sourcePort & 0x00FF) << 8) | ((header \-> sourcePort & 0xFF00) >> 8);
+281     header \-> destinationPort = ((header \-> destinationPort & 0x00FF) << 8) | ((header \-> destinationPort & 0xFF00) >> 8);
+282 
+283     //Copy the data to the buffer
+284     for (int i = 0; i < size; ++i) {                                                               //Loop through the data
+285         buffer2[i] = data[i];                                                                      //Copy the data to the buffer
+286     }
+287 
+288     //Set the checksum
+289     header \-> checksum = 0;                                                                        //Set the checksum to 0, this is becuase UDP doesnt have to have a checksum
+290 
+291     //Send the packet
+292     IPV4PayloadHandler::Send(socket\->remoteIP, buffer, totalSize);
+293 
+294     //Free the buffer
+295     MemoryManager::kfree(buffer);
+296 
+297 }
 .fi
 
 .PP
-References \fBchecksum\fP, \fBdata\fP, \fBdestinationPort\fP, \fBheader\fP, \fBMaxOS::memory::MemoryManager::kfree()\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBlength\fP, \fBMaxOS::net::UserDatagramProtocolSocket::remoteIP\fP, \fBMaxOS::net::InternetProtocolPayloadHandler::Send()\fP, \fBsize\fP, and \fBsourcePort\fP\&.
+References \fBchecksum\fP, \fBdata\fP, \fBdestinationPort\fP, \fBheader\fP, \fBMaxOS::memory::MemoryManager::kfree()\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBlength\fP, \fBMaxOS::net::UDPSocket::remoteIP\fP, \fBMaxOS::net::IPV4PayloadHandler::Send()\fP, \fBsize\fP, and \fBsourcePort\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBcommon::OutputStream\fP* MaxOS::net::UserDatagramProtocolHandler::errorMessages\fC [protected]\fP"
 
 .PP
-Definition at line \fB91\fP of file \fBudp\&.h\fP\&.
+Where to write error messages\&. 
+.PP
+Definition at line \fB113\fP of file \fBudp\&.h\fP\&.
 .PP
 Referenced by \fBUserDatagramProtocolHandler()\fP\&.
-.SS "\fBUserDatagramProtocolPort\fP UserDatagramProtocolHandler::freePorts = 0x8000\fC [static]\fP, \fC [protected]\fP"
+.SS "UserDatagramProtocolPort UserDatagramProtocolHandler::freePorts = 0x8000\fC [static]\fP, \fC [protected]\fP"
 
 .PP
-\fBProvider\fP 
+The next free port number\&. \fBProvider\fP 
 .PP
-Definition at line \fB90\fP of file \fBudp\&.h\fP\&.
+Definition at line \fB112\fP of file \fBudp\&.h\fP\&.
 .PP
 Referenced by \fBConnect()\fP\&.
-.SS "\fBcommon::Vector\fP<\fBUserDatagramProtocolSocket\fP*> MaxOS::net::UserDatagramProtocolHandler::sockets\fC [protected]\fP"
+.SS "\fBcommon::Vector\fP<\fBUDPSocket\fP*> MaxOS::net::UserDatagramProtocolHandler::sockets\fC [protected]\fP"
 
 .PP
-Definition at line \fB89\fP of file \fBudp\&.h\fP\&.
+The list of UDP sockets\&. 
+.PP
+Definition at line \fB111\fP of file \fBudp\&.h\fP\&.
 .PP
 Referenced by \fBConnect()\fP, \fBDisconnect()\fP, \fBhandleInternetProtocolPayload()\fP, and \fBListen()\fP\&.
 

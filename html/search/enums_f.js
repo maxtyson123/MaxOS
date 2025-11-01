@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['userdatagramprotocolevents_0',['UserDatagramProtocolEvents',['../namespaceMaxOS_1_1net.html#a54bb405be88938f32007de4e24d992da',1,'MaxOS::net']]]
+  ['virtualflags_0',['VirtualFlags',['../virtual_8h.html#a12ca8e10f17e52d8375319daaaf6f380',1,'MaxOS::memory']]]
 ];

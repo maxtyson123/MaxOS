@@ -1,5 +1,10 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/processes/process.h File Reference}
 \hypertarget{process_8h}{}\label{process_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h}}
+
+
+Defines Process and Thread classes for managing processes and their execution contexts.  
+
+
 {\ttfamily \#include $<$system/cpu.\+h$>$}\newline
 {\ttfamily \#include $<$common/vector.\+h$>$}\newline
 {\ttfamily \#include $<$common/map.\+h$>$}\newline
@@ -17,28 +22,80 @@ class \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Max\+OS\+::processes\+
 \begin{DoxyCompactList}\small\item\em The execution context of a sub-\/process thread. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Max\+OS\+::processes\+::\+Process}}
 \begin{DoxyCompactList}\small\item\em A process that can be scheduled by the \doxylink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}, wraps \& manages threads as well as its own address space and resources. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1processes}{Max\+OS\+::processes}}
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef enum \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6}{Max\+OS\+::processes\+::\+Thread\+State}} \mbox{\hyperlink{namespaceMaxOS_1_1processes_a00379181a9892760100d025d5d9b6a90}{Max\+OS\+::processes\+::thread\+\_\+state\+\_\+t}}
+\Hypertarget{process_8h_a00379181a9892760100d025d5d9b6a90}\label{process_8h_a00379181a9892760100d025d5d9b6a90} 
+typedef enum Max\+OS\+::processes\+::\+Thread\+State {\bfseries Max\+OS\+::processes\+::thread\+\_\+state\+\_\+t}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6}{Max\+OS\+::processes\+::\+Thread\+State}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a24d459a81449d7210c8f9a86c2913034}{Max\+OS\+::processes\+::\+NEW}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a43491564ebcfd38568918efbd6e840fd}{Max\+OS\+::processes\+::\+RUNNING}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a2baa69eafc7204f3bd8648eba580c489}{Max\+OS\+::processes\+::\+READY}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a7850588c11fe6db41b8b2dd6c455f8f3}{Max\+OS\+::processes\+::\+SLEEPING}}
+enum class {\bfseries Thread\+State} \{ \newline
+{\bfseries NEW}
+, {\bfseries RUNNING}
+, {\bfseries READY}
+, {\bfseries SLEEPING}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a1869d56535e8b1449a6da54ff5e11f50}{Max\+OS\+::processes\+::\+WAITING}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1processes_ac30559a70f01633a1d96a916375bbcf6a09d4d696b4e935115b9313e3c412509a}{Max\+OS\+::processes\+::\+STOPPED}}
+{\bfseries WAITING}
+, {\bfseries STOPPED}
  \}
 \end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr size\+\_\+t \mbox{\hyperlink{process_8h_a11e53665102bf26b4c0a002efa4ed236}{Max\+OS\+::processes\+::\+STACK\+\_\+\+SIZE}} = 0x10000
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines Process and Thread classes for managing processes and their execution contexts. 
+
+\begin{DoxyDate}{Date}
+25th February 2025 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{process_8h_source}{process.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{process_8h_ac30559a70f01633a1d96a916375bbcf6}\label{process_8h_ac30559a70f01633a1d96a916375bbcf6} 
+\index{process.h@{process.h}!ThreadState@{ThreadState}}
+\index{ThreadState@{ThreadState}!process.h@{process.h}}
+\doxysubsubsection{\texorpdfstring{ThreadState}{ThreadState}}
+{\footnotesize\ttfamily enum class Max\+OS\+::processes\+::\+Thread\+State\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Definition at line \mbox{\hyperlink{process_8h_source_l00029}{29}} of file \mbox{\hyperlink{process_8h_source}{process.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ NEW,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ RUNNING,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ READY,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ SLEEPING,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ WAITING,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ STOPPED}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \}\ thread\_state\_t;}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{process_8h_a11e53665102bf26b4c0a002efa4ed236}\label{process_8h_a11e53665102bf26b4c0a002efa4ed236} 
+\index{process.h@{process.h}!STACK\_SIZE@{STACK\_SIZE}}
+\index{STACK\_SIZE@{STACK\_SIZE}!process.h@{process.h}}
+\doxysubsubsection{\texorpdfstring{STACK\_SIZE}{STACK\_SIZE}}
+{\footnotesize\ttfamily constexpr size\+\_\+t Max\+OS\+::processes\+::\+STACK\+\_\+\+SIZE = 0x10000\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Definition at line \mbox{\hyperlink{process_8h_source_l00041}{41}} of file \mbox{\hyperlink{process_8h_source}{process.\+h}}.
+

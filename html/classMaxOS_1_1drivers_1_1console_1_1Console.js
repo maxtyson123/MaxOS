@@ -1,7 +1,5 @@
 var classMaxOS_1_1drivers_1_1console_1_1Console =
 [
-    [ "Console", "classMaxOS_1_1drivers_1_1console_1_1Console.html#aba16cfd9f0894eb1312b1bc1155b6646", null ],
-    [ "~Console", "classMaxOS_1_1drivers_1_1console_1_1Console.html#a32e8c79c8579b1b076e53848c540d4e7", null ],
     [ "clear", "classMaxOS_1_1drivers_1_1console_1_1Console.html#a8b4ffaeabbea48e1f3aa1e535ee88ab8", null ],
     [ "clear", "classMaxOS_1_1drivers_1_1console_1_1Console.html#a80ad370d8d1a9eb0ce547ef9f08e0c92", null ],
     [ "get_background_color", "classMaxOS_1_1drivers_1_1console_1_1Console.html#a218478198147a9341918274d1da729a9", null ],

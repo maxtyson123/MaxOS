@@ -1,0 +1,98 @@
+\doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/common/symbols.cpp File Reference}
+\hypertarget{symbols_8cpp}{}\label{symbols_8cpp}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/common/symbols.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/common/symbols.cpp}}
+
+
+Implementation of symbol resolution for instruction pointers.  
+
+
+{\ttfamily \#include $<$common/symbols.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{const}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{char}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{symbols_8cpp_a4bfba91a61cfa3c1878b5c9861bbf05c}{Max\+OS\+::common\+::resolve\+\_\+symbol}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\+\_\+t}} \mbox{\hyperlink{cpu_8h_ad37248eb45d2509df75a205d8412ac65}{rip}}, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\+\_\+t}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{link\+\_\+base}}, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\+\_\+t}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{load\+\_\+base}})
+\begin{DoxyCompactList}\small\item\em Resolve an instruction pointer (rip) to a symbol name and optional offset. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation of symbol resolution for instruction pointers. 
+
+\begin{DoxyDate}{Date}
+10th September 2025 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{symbols_8cpp_source}{symbols.\+cpp}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{symbols_8cpp_a4bfba91a61cfa3c1878b5c9861bbf05c}\label{symbols_8cpp_a4bfba91a61cfa3c1878b5c9861bbf05c} 
+\index{symbols.cpp@{symbols.cpp}!resolve\_symbol@{resolve\_symbol}}
+\index{resolve\_symbol@{resolve\_symbol}!symbols.cpp@{symbols.cpp}}
+\doxysubsubsection{\texorpdfstring{resolve\_symbol()}{resolve\_symbol()}}
+{\footnotesize\ttfamily const char \texorpdfstring{$\ast$}{*} Max\+OS\+::common\+::resolve\+\_\+symbol (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\+\_\+t}}}]{rip,  }\item[{\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\+\_\+t}}}]{link\+\_\+base,  }\item[{\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\+\_\+t}}}]{load\+\_\+base }\end{DoxyParamCaption})}
+
+
+
+Resolve an instruction pointer (rip) to a symbol name and optional offset. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rip} & Instruction pointer \\
+\hline
+{\em link\+\_\+base} & Where the kernel is linked at \\
+\hline
+{\em load\+\_\+base} & Where the kernel is loaded at\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The symbol name 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{symbols_8cpp_source_l00024}{24}} of file \mbox{\hyperlink{symbols_8cpp_source}{symbols.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ No\ symbols}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (KERNEL\_SYMBOLS\_COUNT\ ==\ 0)}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Convert\ load\ to\ linked}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ uintptr\_t\ offset\ =\ 0;}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (load\_base\ >=\ link\_base)}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ offset\ =\ load\_base\ -\/\ link\_base;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ adjusted\ address}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ uintptr\_t\ adjusted\_address\ =\ \mbox{\hyperlink{cpu_8h_ad37248eb45d2509df75a205d8412ac65}{rip}};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{cpu_8h_ad37248eb45d2509df75a205d8412ac65}{rip}}\ >=\ offset)}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ adjusted\_address\ =\ \mbox{\hyperlink{cpu_8h_ad37248eb45d2509df75a205d8412ac65}{rip}}\ -\/\ offset;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Binary\ Search\ for\ symbol}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ left\ =\ 0;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ right\ =\ KERNEL\_SYMBOLS\_COUNT;}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (left\ <\ right)\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ middle\ =\ (left\ +\ right)\ >>\ 1;}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (kernel\_symbols[middle].address\ <=\ adjusted\_address)}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ left\ =\ middle\ +\ 1;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ right\ =\ middle;}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ left\ ==\ 0\ ?\ nullptr\ :\ kernel\_symbols[left\ -\/\ 1].name;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{symbols_8cpp_source_l00024}{Max\+OS\+::common\+::resolve\+\_\+symbol()}}, and \mbox{\hyperlink{cpu_8h_source_l00001}{rip}}.
+
+
+
+Referenced by \mbox{\hyperlink{symbols_8cpp_source_l00024}{Max\+OS\+::common\+::resolve\+\_\+symbol()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00411}{Max\+OS\+::system\+::\+CPU\+::stack\+\_\+trace()}}.
+

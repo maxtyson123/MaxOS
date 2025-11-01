@@ -1,0 +1,178 @@
+.TH "todo" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+todo \- Todo List 
+.PP
+
+.IP "\fBFile \fBamiga_font\&.h\fP \fP" 1c
+find source and add credit 
+.IP "\fBFile \fBdesktop\&.cpp\fP \fP" 1c
+Make a border class 
+.PP
+.PP
+Draw a proper mouse cursor 
+.PP
+.PP
+Draw a background image  
+.IP "\fBFile \fBethernetframe\&.h\fP \fP" 1c
+Make big endian helper functions and clairty (ie be_uint16_t etc)z  
+.IP "\fBFile \fBeventHandler\&.h\fP \fP" 1c
+Event doesnt need to be a class should be a struct 
+.PP
+.PP
+With moving to micro kernel this should be moved to a external lib as not needed  
+.IP "\fBFile \fBfat32\&.h\fP \fP" 1c
+BUG: Subdirectory seems to write to the disk this end but tools like fatcat complain the that the EOC isn't written (cluster 3037) 
+.PP
+.PP
+Implment: create/delete/rename files & directories  
+.IP "\fBMember \fBflags\fP \fP" 1c
+substruct this)  
+.IP "\fBMember \fBflagsAndOffset\fP \fP" 1c
+: bitfield struct?  
+.IP "\fBFile \fBfont\&.cpp\fP \fP" 1c
+Replace with a proper font format  
+.IP "\fBFile \fBinputStream\&.h\fP \fP" 1c
+Move tempalte implmentations to a cpp file  
+.IP "\fBFile \fBipc\&.cpp\fP \fP" 1c
+Import scheduler is a circular dependency, need to fix 
+.PP
+.PP
+Shouldnt have to specify type in resource constructor  
+.IP "\fBMember \fBMaxOS::common::BlockingLock::acquire\fP ()\fP" 1c
+Move the yielding logic into process/thread code so that it can be reused  
+.IP "\fBClass \fBMaxOS::common::Event< EventType >\fP \fP" 1c
+deprecate, things that should fire events should have their own event firer class and things that connect to it, dont have a class per event 
+.PP
+.PP
+events should be made on stack and passed as references not pointers for better perf 
+.PP
+.IP "\fBMember \fBMaxOS::common::GraphicsContext::m_colour_pallet\fP [256]\fP" 1c
+make const  
+.IP "\fBMember \fBMaxOS::drivers::disk::IntegratedDriveElectronicsController::IntegratedDriveElectronicsController\fP (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP *device_descriptor)\fP" 1c
+Use the device descriptor to get the port base and add the devices dynamically  
+.IP "\fBMember \fBMaxOS::drivers::ethernet::AMD_AM79C973::activate\fP () final\fP" 1c
+Re-implement this class  
+.IP "\fBMember \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read\fP (uint8_t scan_code) final\fP" 1c
+Probably a better way to do this (investigate when adding more keyboard layouts)  
+.IP "\fBClass \fBMaxOS::drivers::peripherals::KeyboardState\fP \fP" 1c
+Add functions like is_shift_pressed() and similar  
+.IP "\fBClass \fBMaxOS::filesystem::FileResource\fP \fP" 1c
+Should this free the memory of the file when the resource is done??  
+.IP "\fBStruct \fBMaxOS::filesystem::format::ext2::BlockGroupDescriptor\fP \fP" 1c
+Support updating directory_count when creating/deleting directories  
+.IP "\fBMember \fBMaxOS::filesystem::format::ext2::CreatorOS\fP \fP" 1c
+Add MaxOS  
+.IP "\fBMember \fBMaxOS::filesystem::format::ext2::EntryType\fP \fP" 1c
+Support more  
+.IP "\fBClass \fBMaxOS::filesystem::format::ext2::Ext2Volume\fP \fP" 1c
+Free blocks  
+.IP "\fBMember \fBMaxOS::filesystem::format::ext2::Ext2Volume::ext2_lock\fP \fP" 1c
+: remove public?)  
+.IP "\fBMember \fBMaxOS::filesystem::format::ext2::Ext2Volume::Ext2Volume\fP (\fBdrivers::disk::Disk\fP *disk, lba_t partition_offset)\fP" 1c
+Should lock per file and not expose volume lock  
+.IP "\fBMember \fBMaxOS::filesystem::format::ext2::InodeHandler::grow\fP (size_t amount, bool flush=true)\fP" 1c
+Should this return \fBsize()\fP instead?  
+.IP "\fBStruct \fBMaxOS::filesystem::format::ext2::InodeOS2Linux\fP \fP" 1c
+HURD, MASIX  
+.IP "\fBMember \fBMaxOS::filesystem::format::ext2::InodePermissionsDefaults\fP \fP" 1c
+Document these values  
+.IP "\fBMember \fBMaxOS::filesystem::format::Fat32File::write\fP (const \fBcommon::buffer_t\fP *data, size_t amount) final\fP" 1c
+When in userspace: save timestamps  
+.IP "\fBMember \fBMaxOS::filesystem::format::Fat32Volume::next_cluster\fP (uint32_t cluster)\fP" 1c
+The auto entry = uint32_t* '&' is weird, fix it  
+.IP "\fBMember \fBMaxOS::filesystem::format::Fat32Volume::set_next_cluster\fP (uint32_t cluster, uint32_t next_cluster)\fP" 1c
+when in userspace: For performance cache fat entirely, cache file data, cache cluster chains  
+.IP "\fBClass \fBMaxOS::filesystem::partition::MSDOSPartition\fP \fP" 1c
+Abstract some of this into a base class and use it for GPT and other partition tables  
+.IP "\fBClass \fBMaxOS::gui::Desktop\fP \fP" 1c
+It is not a good idea to hardcode the mouse into the desktop as a tablet or touch screen device won't have a mouse cursor  
+.IP "\fBMember \fBMaxOS::gui::Desktop::colour\fP \fP" 1c
+: replace with image, make priv)  
+.IP "\fBMember \fBMaxOS::gui::Widget::resize\fP (int32_t width, int32_t height)\fP" 1c
+Fix the invalidation so it only redraws the areas that need to be redrawn (right and bottom are always fully redrawn currently)  
+.IP "\fBClass \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController\fP \fP" 1c
+Should either handle all Local APICs or none (only boot core right now, others accessed per core directly which is inconsistent)  
+.IP "\fBClass \fBMaxOS::hardwarecommunication::BaseAddressRegister\fP \fP" 1c
+Should be a struct  
+.IP "\fBMember \fBMaxOS::hardwarecommunication::BaseAddressRegister::size\fP \fP" 1c
+Document Size of the address space  
+.IP "\fBMember \fBMaxOS::hardwarecommunication::DeliveryMode\fP \fP" 1c
+use this  
+.IP "\fBMember \fBMaxOS::hardwarecommunication::InterruptDescriptor::flags\fP \fP" 1c
+substruct this)  
+.IP "\fBClass \fBMaxOS::hardwarecommunication::InterruptManager\fP \fP" 1c
+Remove the max array of handler make vector, add static handlers for page faults and gpe\&. Make it so that multiple handlers can be registered for the same interrupt 
+.PP
+.PP
+Have a single stub so that we don't need to have 256 different functions for each interrupt  
+.IP "\fBStruct \fBMaxOS::hardwarecommunication::MADT_IO_APIC\fP \fP" 1c
+Rename for consistency  
+.IP "\fBClass \fBMaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP \fP" 1c
+Should be a struct aswell  
+.IP "\fBMember \fBMaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor::get_type\fP () const\fP" 1c
+See wiki for more types to add 
+.IP "\fBClass \fBMaxOS::memory::MemIO\fP \fP" 1c
+Not used, delete?  
+.IP "\fBMember \fBMaxOS::memory::PageFlags\fP \fP" 1c
+: fix\&. this is stupid\&. Leave as enum not enum class for bitwise operations  
+.IP "\fBClass \fBMaxOS::memory::PhysicalMemoryManager\fP \fP" 1c
+Global paging so dont have map in every process  
+.IP "\fBMember \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP \fP" 1c
+Make private with getter, maybe make mapping static?  
+.IP "\fBMember \fBMaxOS::net::AddressResolutionProtocol::Resolve\fP (InternetProtocolAddress address) final\fP" 1c
+Should have a timeout in case the address cannot be resolved and avoid infinite loops  
+.IP "\fBMember \fBMaxOS::net::EthernetFrameHandler::DataReceived\fP (uint8_t *data, uint32_t size) override\fP" 1c
+Future debugging me: the override is not being called in derived classes  
+.IP "\fBMember \fBMaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload\fP (InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t *payloadData, uint32_t size) final\fP" 1c
+Reply to ping requests 
+.PP
+.PP
+Implement the rest of the ICMP messages  
+.IP "\fBMember \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload\fP (uint8_t *ethernetframePayload, uint32_t size) override\fP" 1c
+Set the identifier when sending packets back  
+.IP "\fBMember \fBMaxOS::net::IPV4Header::flagsAndOffset\fP \fP" 1c
+: bitfield struct?  
+.IP "\fBMember \fBMaxOS::net::IPV4Header::protocol\fP \fP" 1c
+: enum  
+.IP "\fBMember \fBMaxOS::net::IPV4Header::typeOfService\fP \fP" 1c
+: enum  
+.IP "\fBMember \fBMaxOS::net::TCPHeader::options\fP \fP" 1c
+: make this a struct  
+.IP "\fBMember \fBMaxOS::net::TransmissionControlProtocolHandler::Connect\fP (const string &address)\fP" 1c
+Implement string parsing for address  
+.IP "\fBMember \fBMaxOS::net::UserDatagramProtocolHandler::Connect\fP (const string &address)\fP" 1c
+Implement string parsing to extract IP and port  
+.IP "\fBMember \fBMaxOS::processes::ELF64::is_valid\fP () const\fP" 1c
+Add support for maxOS ABI  
+.IP "\fBMember \fBMaxOS::processes::ELF64::load\fP ()\fP" 1c
+Error handling  
+.IP "\fBMember \fBMaxOS::processes::GlobalScheduler::balance\fP ()\fP" 1c
+Implement  
+.IP "\fBMember \fBMaxOS::processes::GlobalScheduler::load_multiboot_elfs\fP (\fBsystem::Multiboot\fP *multiboot)\fP" 1c
+Handle passing multiple args to the process  
+.IP "\fBMember \fBMaxOS::processes::Scheduler::schedule_next\fP (system::cpu_status_t *status)\fP" 1c
+Remove by reference where possible  
+.IP "\fBMember \fBMaxOS::system::Core::init_tss\fP ()\fP" 1c
+Implement IO bitmap when adding userspace drivers  
+.IP "\fBMember \fBMaxOS::system::Core::wake_up\fP (\fBCPU\fP *cpu)\fP" 1c
+Should handle core fails and not delay once we are in c++  
+.IP "\fBMember \fBMaxOS::system::CPU::find_cores\fP ()\fP" 1c
+Support for x2apic  
+.IP "\fBMember \fBMaxOS::system::syscall_func_t\fP )(syscall_args_t *args)\fP" 1c
+Could use a class based response but a single class might want multiple handlers e\&.g\&. fs  
+.IP "\fBClass \fBMaxOS::system::SyscallManager\fP \fP" 1c
+Very c style, should be made class based that automatically registers  
+.IP "\fBStruct \fBmultiboot_tag_framebuffer\fP \fP" 1c
+should use this to setup graphix context pallet?  
+.IP "\fBMember \fBoptions\fP \fP" 1c
+: make this a struct  
+.IP "\fBMember \fBprotocol\fP \fP" 1c
+: enum  
+.IP "\fBFile \fBsyscalls\&.h\fP \fP" 1c
+'<\fBsystem/syscalls\&.h\fP>' Rename / make clear that this references the system lib  
+.IP "\fBMember \fBtypeOfService\fP \fP" 1c
+: enum 
+.PP
+

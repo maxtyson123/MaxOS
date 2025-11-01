@@ -2,7 +2,7 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::filesystem::format::ext2::Ext2FileSystem \- Handles the \fBext2\fP filesystem operations\&.  
+MaxOS::filesystem::format::ext2::Ext2FileSystem \- Handles the ext2 filesystem operations\&.  
 
 .SH SYNOPSIS
 .br
@@ -17,19 +17,11 @@ Inherits \fBMaxOS::filesystem::FileSystem\fP\&.
 .ti -1c
 .RI "\fBExt2FileSystem\fP (\fBdrivers::disk::Disk\fP *disk, \fBuint32_t\fP partition_offset)"
 .br
-.ti -1c
-.RI "\fB~Ext2FileSystem\fP () \fBfinal\fP"
-.br
+.RI "Construct a new Ext2 \fBFile\fP System object\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::filesystem::FileSystem\fP
 .in +1c
-.ti -1c
-.RI "\fBFileSystem\fP ()"
-.br
-.ti -1c
-.RI "\fBvirtual\fP \fB~FileSystem\fP ()"
-.br
 .ti -1c
 .RI "\fBDirectory\fP * \fBroot_directory\fP ()"
 .br
@@ -51,26 +43,38 @@ Protected Attributes inherited from \fBMaxOS::filesystem::FileSystem\fP
 .ti -1c
 .RI "\fBDirectory\fP * \fBm_root_directory\fP"
 .br
+.RI "The fist directory in the file system (not be confused with the system root) "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Handles the \fBext2\fP filesystem operations\&. 
+Handles the ext2 filesystem operations\&. 
 .PP
-Definition at line \fB368\fP of file \fBext2\&.h\fP\&.
+Definition at line \fB442\fP of file \fBext2\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Ext2FileSystem::Ext2FileSystem (\fBdrivers::disk::Disk\fP * disk, \fBuint32_t\fP partition_offset)"
 
 .PP
-Definition at line \fB1125\fP of file \fBext2\&.cpp\fP\&..PP
+Construct a new Ext2 \fBFile\fP System object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdisk\fP The disk the filesystem exists on 
+.br
+\fIpartition_offset\fP The partition offset on the disk (in sectors) 
+.RE
+.PP
+
+.PP
+Definition at line \fB1166\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1126         : m_volume(disk, partition_offset) {
-1127 
-1128     // Create the root directory
-1129     m_root_directory = new Ext2Directory(&m_volume, 2, "/");
-1130     m_root_directory\->read_from_disk();
-1131 
-1132 }
+1167         : m_volume(disk, partition_offset) {
+1168 
+1169     // Create the root directory
+1170     m_root_directory = new Ext2Directory(&m_volume, 2, "/");
+1171     m_root_directory\->read_from_disk();
+1172 
+1173 }
 .fi
 
 .PP
@@ -78,15 +82,13 @@ References \fBMaxOS::filesystem::FileSystem::m_root_directory\fP, and \fBMaxOS::
 .SS "Ext2FileSystem::~Ext2FileSystem ()\fC [final]\fP"
 
 .PP
-Definition at line \fB1134\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB1175\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1134                                 {
-1135     delete m_root_directory;
-1136 }
+1175                                 {
+1176     delete m_root_directory;
+1177 }
 .fi
 
-.PP
-References \fBMaxOS::filesystem::FileSystem::m_root_directory\fP\&.
 
 .SH "Author"
 .PP 

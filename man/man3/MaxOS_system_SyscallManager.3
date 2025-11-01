@@ -15,12 +15,6 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBSyscallManager\fP ()"
-.br
-.ti -1c
-.RI "\fB~SyscallManager\fP ()"
-.br
-.ti -1c
 .RI "\fBcpu_status_t\fP * \fBhandle_interrupt\fP (\fBcpu_status_t\fP *\fBesp\fP) \fBfinal\fP"
 .br
 .RI "Loads the args from the registers and delegates the syscall to the relevant handler if defined\&. "
@@ -43,6 +37,7 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .ti -1c
 .RI "\fBstatic\fP \fBsyscall_args_t\fP * \fBsyscall_klog\fP (\fBsyscall_args_t\fP *\fBargs\fP)"
 .br
+.RI "System call to log a message to the kernel log\&. "
 .ti -1c
 .RI "\fBstatic\fP \fBsyscall_args_t\fP * \fBsyscall_allocate_memory\fP (\fBsyscall_args_t\fP *\fBargs\fP)"
 .br
@@ -84,55 +79,47 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .br
 .RI "System call to close a thread\&. "
 .in -1c
-.SS "Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "\fBsyscall_func_t\fP \fBm_syscall_handlers\fP [256] = {}"
-.br
-.ti -1c
-.RI "\fBsyscall_args_t\fP * \fBm_current_args\fP"
-.br
-.in -1c
 .SH "Detailed Description"
 .PP 
 Provides an API for userspace applications to interact with the kernel\&. 
+
+
 .PP
-Definition at line \fB42\fP of file \fBsyscalls\&.h\fP\&.
+\fBTodo\fP
+.RS 4
+Very c style, should be made class based that automatically registers 
+.RE
+.PP
+
+.PP
+Definition at line \fB53\fP of file \fBsyscalls\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "SyscallManager::SyscallManager ()"
 
 .PP
-Definition at line \fB17\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB21\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-18 : InterruptHandler(0x80)
-19 {
-20 
-21     // Clear the args
-22     Logger::INFO() << "Setting up Syscalls \\n";
-23     m_current_args = new syscall_args_t;
+22 : InterruptHandler(0x80)
+23 {
 24 
 25     // Register the handlers
-26     set_syscall_handler(SyscallType::CLOSE_PROCESS, syscall_close_process);
-27     set_syscall_handler(SyscallType::KLOG, syscall_klog);
-28     set_syscall_handler(SyscallType::ALLOCATE_MEMORY, syscall_allocate_memory);
-29     set_syscall_handler(SyscallType::FREE_MEMORY, syscall_free_memory);
-30     set_syscall_handler(SyscallType::RESOURCE_CREATE, syscall_resource_create);
-31     set_syscall_handler(SyscallType::RESOURCE_OPEN, syscall_resource_open);
-32     set_syscall_handler(SyscallType::RESOURCE_CLOSE, syscall_resource_close);
-33     set_syscall_handler(SyscallType::RESOURCE_WRITE, syscall_resource_write);
-34     set_syscall_handler(SyscallType::RESOURCE_READ, syscall_resource_read);
-35     set_syscall_handler(SyscallType::THREAD_YIELD, syscall_thread_yield);
-36     set_syscall_handler(SyscallType::THREAD_SLEEP, syscall_thread_sleep);
-37     set_syscall_handler(SyscallType::THREAD_CLOSE, syscall_thread_close);
-38 
-39 }
+26     Logger::INFO() << "Setting up Syscalls \\n";
+27     set_syscall_handler(SyscallType::CLOSE_PROCESS, syscall_close_process);
+28     set_syscall_handler(SyscallType::KLOG, syscall_klog);
+29     set_syscall_handler(SyscallType::ALLOCATE_MEMORY, syscall_allocate_memory);
+30     set_syscall_handler(SyscallType::FREE_MEMORY, syscall_free_memory);
+31     set_syscall_handler(SyscallType::RESOURCE_CREATE, syscall_resource_create);
+32     set_syscall_handler(SyscallType::RESOURCE_OPEN, syscall_resource_open);
+33     set_syscall_handler(SyscallType::RESOURCE_CLOSE, syscall_resource_close);
+34     set_syscall_handler(SyscallType::RESOURCE_WRITE, syscall_resource_write);
+35     set_syscall_handler(SyscallType::RESOURCE_READ, syscall_resource_read);
+36     set_syscall_handler(SyscallType::THREAD_YIELD, syscall_thread_yield);
+37     set_syscall_handler(SyscallType::THREAD_SLEEP, syscall_thread_sleep);
+38     set_syscall_handler(SyscallType::THREAD_CLOSE, syscall_thread_close);
+39 
+40 }
 .fi
-
-.PP
-References \fBLogger::INFO()\fP, \fBm_current_args\fP, \fBset_syscall_handler()\fP, \fBsyscall_allocate_memory()\fP, \fBsyscall_close_process()\fP, \fBsyscall_free_memory()\fP, \fBsyscall_klog()\fP, \fBsyscall_resource_close()\fP, \fBsyscall_resource_create()\fP, \fBsyscall_resource_open()\fP, \fBsyscall_resource_read()\fP, \fBsyscall_resource_write()\fP, \fBsyscall_thread_close()\fP, \fBsyscall_thread_sleep()\fP, and \fBsyscall_thread_yield()\fP\&.
-.SS "SyscallManager::~SyscallManager ()\fC [default]\fP"
 
 .SH "Member Function Documentation"
 .PP 
@@ -153,48 +140,48 @@ The cpu state (may be modified with return value in RAX or a new state by the ha
 .PP
 
 .PP
-Definition at line \fB49\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB50\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-49                                                                    {
-50 
-51     // Get the args from the cpu state
-52     m_current_args\->arg0 = status\->rdi;
-53     m_current_args\->arg1 = status\->rsi;
-54     m_current_args\->arg2 = status\->rdx;
-55     m_current_args\->arg3 = status\->r10;
-56     m_current_args\->arg4 = status\->r8;
-57     m_current_args\->arg5 = status\->r9;
-58     m_current_args\->return_value = 0;
-59     m_current_args\->return_state = status;
-60 
-61     // Call the handler
-62     uint64_t syscall = status\->rax;
-63     if (m_syscall_handlers[syscall] != nullptr)
-64         m_current_args = m_syscall_handlers[syscall](m_current_args);
-65     else
-66         Logger::ERROR() << "Syscall " << syscall << " not found\\n";
-67 
-68     // If there is a specific return state, use that
-69     if (m_current_args\->return_state != status)
-70         return m_current_args\->return_state;
-71 
-72     // Update the cpu state
-73     status\->rdi = m_current_args\->arg0;
-74     status\->rsi = m_current_args\->arg1;
-75     status\->rdx = m_current_args\->arg2;
-76     status\->r10 = m_current_args\->arg3;
-77     status\->r8 = m_current_args\->arg4;
-78     status\->r9 = m_current_args\->arg5;
-79     status\->rax = m_current_args\->return_value;
-80 
-81 
-82     // Return the status
-83     return status;
-84 }
+50                                                                    {
+51 
+52     // Get the args from the cpu state
+53     syscall_args_t args;
+54     args\&.arg0 = status\->rdi;
+55     args\&.arg1 = status\->rsi;
+56     args\&.arg2 = status\->rdx;
+57     args\&.arg3 = status\->r10;
+58     args\&.arg4 = status\->r8;
+59     args\&.arg5 = status\->r9;
+60     args\&.return_value = 0;
+61     args\&.return_state = status;
+62 
+63     // Call the handler
+64     uint64_t syscall = status\->rax;
+65     if (m_syscall_handlers[syscall] != nullptr)
+66         args = *(m_syscall_handlers[syscall](&args));
+67     else
+68         Logger::ERROR() << "Syscall " << syscall << " not found\\n";
+69 
+70     // If there is a specific return state, use that
+71     if (args\&.return_state != status)
+72         return args\&.return_state;
+73 
+74     // Update the cpu state
+75     status\->rdi = args\&.arg0;
+76     status\->rsi = args\&.arg1;
+77     status\->rdx = args\&.arg2;
+78     status\->r10 = args\&.arg3;
+79     status\->r8 = args\&.arg4;
+80     status\->r9 = args\&.arg5;
+81     status\->rax = args\&.return_value;
+82 
+83     // Return the status
+84     return status;
+85 }
 .fi
 
 .PP
-References \fBMaxOS::system::SyscallArguments::arg0\fP, \fBMaxOS::system::SyscallArguments::arg1\fP, \fBMaxOS::system::SyscallArguments::arg2\fP, \fBMaxOS::system::SyscallArguments::arg3\fP, \fBMaxOS::system::SyscallArguments::arg4\fP, \fBMaxOS::system::SyscallArguments::arg5\fP, \fBLogger::ERROR()\fP, \fBm_current_args\fP, \fBm_syscall_handlers\fP, \fBMaxOS::system::SyscallArguments::return_state\fP, \fBMaxOS::system::SyscallArguments::return_value\fP, and \fBstatus\fP\&.
+References \fBLogger::ERROR()\fP\&.
 .SS "\fBvoid\fP SyscallManager::remove_syscall_handler (::syscore::SyscallType syscall)"
 
 .PP
@@ -207,16 +194,14 @@ Removes a syscall handler from the manager\&.
 .PP
 
 .PP
-Definition at line \fB102\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB103\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-102                                                                {
-103 
-104     m_syscall_handlers[(uint8_t) syscall] = nullptr;
-105 }
+103                                                                {
+104 
+105     m_syscall_handlers[(uint8_t) syscall] = nullptr;
+106 }
 .fi
 
-.PP
-References \fBm_syscall_handlers\fP\&.
 .SS "\fBvoid\fP SyscallManager::set_syscall_handler (::syscore::SyscallType syscall, \fBsyscall_func_t\fP handler)"
 
 .PP
@@ -231,18 +216,14 @@ Loads a syscall handler into the manager\&.
 .PP
 
 .PP
-Definition at line \fB92\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB93\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-92                                                                                     {
-93 
-94     m_syscall_handlers[(uint8_t) syscall] = handler;
-95 }
+93                                                                                     {
+94 
+95     m_syscall_handlers[(uint8_t) syscall] = handler;
+96 }
 .fi
 
-.PP
-References \fBm_syscall_handlers\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_allocate_memory (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -260,24 +241,22 @@ The address of the memory block or null if failed
 .PP
 
 .PP
-Definition at line \fB151\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB162\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-151                                                                             {
-152 
-153     // Malloc the memory
-154     size_t size = args\->arg0;
-155     void* address = MemoryManager::malloc(size);
-156 
-157     // Return the address
-158     args\->return_value = (uint64_t)address;
-159     return args;
-160 }
+162                                                                             {
+163 
+164     // Malloc the memory
+165     size_t size = args\->arg0;
+166     void* address = MemoryManager::malloc(size);
+167 
+168     // Return the address
+169     args\->return_value = (uint64_t)address;
+170     return args;
+171 }
 .fi
 
 .PP
-References \fBaddress\fP, \fBMaxOS::memory::MemoryManager::malloc()\fP, and \fBsize\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBMaxOS::memory::MemoryManager::malloc()\fP, and \fBsize\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_close_process (\fBsystem::syscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -295,31 +274,29 @@ Nothing
 .PP
 
 .PP
-Definition at line \fB114\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB115\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-114                                                                                 {
-115 
-116     // Get the args
-117     uint64_t pid = args\->arg0;
-118     int exit_code = (int) args\->arg1;
-119 
-120     // Close the process
-121     Process* process = pid == 0 ? Scheduler::current_process() : Scheduler::get_process(pid);
-122     Scheduler::system_scheduler()\->remove_process(process);
-123 
-124     // Schedule the next process
-125     cpu_status_t* next_process = Scheduler::system_scheduler()\->schedule_next(args\->return_state);
-126     args\->return_state = next_process;
-127 
-128     // Done
-129     return args;
-130 }
+115                                                                                 {
+116 
+117     // Get the args
+118     uint64_t pid = args\->arg0;
+119     int exit_code = (int) args\->arg1;
+120 
+121     // Close the process
+122     Process* process = pid == 0 ? GlobalScheduler::current_process() : GlobalScheduler::get_process(pid);
+123     GlobalScheduler::system_scheduler()\->remove_process(process);
+124 
+125     // Schedule the next process
+126     cpu_status_t* next_process = GlobalScheduler::core_scheduler()\->schedule_next(args\->return_state);
+127     args\->return_state = next_process;
+128 
+129     // Done
+130     return args;
+131 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Scheduler::current_process()\fP, \fBMaxOS::processes::Scheduler::get_process()\fP, and \fBMaxOS::processes::Scheduler::system_scheduler()\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::core_scheduler()\fP, \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, and \fBMaxOS::processes::GlobalScheduler::system_scheduler()\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_free_memory (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -337,45 +314,59 @@ Nothing
 .PP
 
 .PP
-Definition at line \fB168\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB179\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-168                                                                         {
-169 
-170     // Free the memory
-171     void* address = (void*) args\->arg0;
-172     MemoryManager::free(address);
-173 
-174     return args;
-175 }
+179                                                                         {
+180 
+181     // Free the memory
+182     void* address = (void*) args\->arg0;
+183     MemoryManager::free(address);
+184 
+185     return args;
+186 }
 .fi
 
 .PP
-References \fBaddress\fP, and \fBMaxOS::memory::MemoryManager::free()\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBMaxOS::memory::MemoryManager::free()\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_klog (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
-Definition at line \fB132\fP of file \fBsyscalls\&.cpp\fP\&..PP
+System call to log a message to the kernel log\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIargs\fP Arg0 = message 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The same args structure 
+.RE
+.PP
+
+.PP
+Definition at line \fB139\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-132                                                                  {
-133 
-134     char* message = (char*) args\->arg0;
-135 
-136     // If the first two characters are %h then no header
-137     if (message[0] == '%' && message[1] == 'h')
-138         Logger::Out() << message + 2;
-139     else
-140         Logger::INFO() << ANSI_COLOURS[FG_Blue] << "(" << Scheduler::current_process()\->name\&.c_str() << ":" << Scheduler::current_thread()\->tid << "): " << ANSI_COLOURS[Reset] << message;
-141 
-142     return args;
-143 }
+139                                                                  {
+140 
+141     s_lock\&.lock();
+142 
+143     char* message = (char*) args\->arg0;
+144 
+145     // If the first two characters are %h then no header
+146     if (message[0] == '%' && message[1] == 'h')
+147         Logger::Out() << message + 2;
+148     else
+149         Logger::INFO() << message;
+150 
+151     s_lock\&.unlock();
+152 
+153     return args;
+154 }
 .fi
 
 .PP
-References \fBMaxOS::common::ANSI_COLOURS\fP, \fBMaxOS::processes::Scheduler::current_process()\fP, \fBMaxOS::processes::Scheduler::current_thread()\fP, \fBMaxOS::common::FG_Blue\fP, \fBLogger::INFO()\fP, \fBLogger::Out()\fP, and \fBMaxOS::common::Reset\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBLogger::INFO()\fP, and \fBLogger::Out()\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_resource_close (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -393,24 +384,22 @@ Nothing
 .PP
 
 .PP
-Definition at line \fB222\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB233\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-222                                                                            {
-223 
-224     // Parse params
-225     auto handle = (uint64_t )args\->arg0;
-226     auto flags  = (size_t)args\->arg1;
-227 
-228     // Close the resource
-229     Scheduler::current_process()\->resource_manager\&.close_resource(handle, flags);
-230     return args;
-231 }
+233                                                                            {
+234 
+235     // Parse params
+236     auto handle = (uint64_t )args\->arg0;
+237     auto flags  = (size_t)args\->arg1;
+238 
+239     // Close the resource
+240     GlobalScheduler::current_process()\->resource_manager\&.close_resource(handle, flags);
+241     return args;
+242 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Scheduler::current_process()\fP, and \fBflags\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, and \fBflags\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_resource_create (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -428,28 +417,26 @@ System call to create a resource\&.
 .PP
 
 .PP
-Definition at line \fB183\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB194\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-183                                                                             {
-184 
-185     // Parse params
-186     auto type   = (ResourceType)args\->arg0;
-187     auto name   = (char*)args\->arg1;
-188     auto flags  = (size_t)args\->arg2;
-189 
-190     // Try to create the resource
-191     auto resource = GlobalResourceRegistry::get_registry(type)\->create_resource(name, flags);
-192 
-193     // Handle response
-194     args\->return_value = resource ? 1 : 0;
-195     return args;
-196 }
+194                                                                             {
+195 
+196     // Parse params
+197     auto type   = (ResourceType)args\->arg0;
+198     auto name   = (char*)args\->arg1;
+199     auto flags  = (size_t)args\->arg2;
+200 
+201     // Try to create the resource
+202     auto resource = GlobalResourceRegistry::get_registry(type)\->create_resource(name, flags);
+203 
+204     // Handle response
+205     args\->return_value = resource ? 1 : 0;
+206     return args;
+207 }
 .fi
 
 .PP
 References \fBflags\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, \fBname\fP, and \fBtype\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_resource_open (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -467,25 +454,23 @@ The handle of the resource or 0 if failed
 .PP
 
 .PP
-Definition at line \fB204\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB215\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-204                                                                           {
-205 
-206     // Parse params
-207     auto type   = (ResourceType)args\->arg0;
-208     auto name   = (char*)args\->arg1;
-209     auto flags  = (size_t)args\->arg2;
-210 
-211     // Open the resource
-212     args\->return_value = Scheduler::current_process()\->resource_manager\&.open_resource(type, name, flags);
-213     return args;
-214 }
+215                                                                           {
+216 
+217     // Parse params
+218     auto type   = (ResourceType)args\->arg0;
+219     auto name   = (char*)args\->arg1;
+220     auto flags  = (size_t)args\->arg2;
+221 
+222     // Open the resource
+223     args\->return_value = GlobalScheduler::current_process()\->resource_manager\&.open_resource(type, name, flags);
+224     return args;
+225 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Scheduler::current_process()\fP, \fBflags\fP, \fBname\fP, and \fBtype\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBflags\fP, \fBname\fP, and \fBtype\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_resource_read (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -503,33 +488,31 @@ The number of bytes read or 0 if failed
 .PP
 
 .PP
-Definition at line \fB265\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB276\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-265                                                                           {
-266 
-267     // Parse params
-268     auto handle = (uint64_t )args\->arg0;
-269     auto buffer = (void*)args\->arg1;
-270     auto size   = (size_t)args\->arg2;
-271     auto flags  = (size_t)args\->arg3;
-272 
-273     // Open the resource
-274     auto resource = Scheduler::current_process()\->resource_manager\&.get_resource(handle);
-275     if(!resource){
-276         args\->return_value = 0;
-277         return args;
-278     }
-279 
-280     // Write to the resource
-281     args\->return_value = resource\->read(buffer,size,flags);
-282     return args;
-283 }
+276                                                                           {
+277 
+278     // Parse params
+279     auto handle = (uint64_t )args\->arg0;
+280     auto buffer = (void*)args\->arg1;
+281     auto size   = (size_t)args\->arg2;
+282     auto flags  = (size_t)args\->arg3;
+283 
+284     // Open the resource
+285     auto resource = GlobalScheduler::current_process()\->resource_manager\&.get_resource(handle);
+286     if(!resource){
+287         args\->return_value = 0;
+288         return args;
+289     }
+290 
+291     // Write to the resource
+292     args\->return_value = resource\->read(buffer,size,flags);
+293     return args;
+294 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Scheduler::current_process()\fP, \fBflags\fP, and \fBsize\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBflags\fP, and \fBsize\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_resource_write (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -547,33 +530,31 @@ The number of bytes written or 0 if failed
 .PP
 
 .PP
-Definition at line \fB239\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB250\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-239                                                                            {
-240 
-241     // Parse params
-242     auto handle = (uint64_t )args\->arg0;
-243     auto buffer = (void*)args\->arg1;
-244     auto size   = (size_t)args\->arg2;
-245     auto flags  = (size_t)args\->arg3;
-246 
-247     // Open the resource
-248     auto resource = Scheduler::current_process()\->resource_manager\&.get_resource(handle);
-249     if(!resource){
-250         args\->return_value = 0;
-251         return args;
-252     }
-253 
-254     // Write to the resource
-255     args\->return_value = resource\->write(buffer,size,flags);
-256     return args;
-257 }
+250                                                                            {
+251 
+252     // Parse params
+253     auto handle = (uint64_t )args\->arg0;
+254     auto buffer = (void*)args\->arg1;
+255     auto size   = (size_t)args\->arg2;
+256     auto flags  = (size_t)args\->arg3;
+257 
+258     // Open the resource
+259     auto resource = GlobalScheduler::current_process()\->resource_manager\&.get_resource(handle);
+260     if(!resource){
+261         args\->return_value = 0;
+262         return args;
+263     }
+264 
+265     // Write to the resource
+266     args\->return_value = resource\->write(buffer,size,flags);
+267     return args;
+268 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Scheduler::current_process()\fP, \fBflags\fP, and \fBsize\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBflags\fP, and \fBsize\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_thread_close (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -591,33 +572,31 @@ Nothing
 .PP
 
 .PP
-Definition at line \fB329\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB335\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-329                                                                          {
-330 
-331     // Get the args
-332     uint64_t tid = args\->arg0;
-333     int exit_code = (int) args\->arg1;
-334 
-335     // Get the thread if it is 0 then it is the current thread
-336     Thread* thread = tid == 0 ? Scheduler::current_thread() : Scheduler::get_thread(tid);
-337 
-338     // Close the thread
-339     Scheduler::get_process(thread\->parent_pid)\->remove_thread(tid);
+335                                                                          {
+336 
+337     // Get the args
+338     uint64_t tid = args\->arg0;
+339     int exit_code = (int) args\->arg1;
 340 
-341     // Schedule the next thread
-342     cpu_status_t* next_thread = Scheduler::system_scheduler()\->schedule_next(args\->return_state);
-343     args\->return_state = next_thread;
+341     // Get the thread if it is 0 then it is the current thread
+342     Thread* thread = tid == 0 ? GlobalScheduler::current_thread() : GlobalScheduler::get_thread(tid);
+343     thread\->thread_state = ThreadState::STOPPED;
 344 
-345     // Done
-346     return args;
-347 }
+345     // Schedule the next thread
+346     if(tid == 0){
+347         cpu_status_t* next_thread = GlobalScheduler::core_scheduler()\->schedule_next(args\->return_state);
+348         args\->return_state = next_thread;
+349     }
+350 
+351     // Done
+352     return args;
+353 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Scheduler::current_thread()\fP, \fBMaxOS::processes::Scheduler::get_process()\fP, \fBMaxOS::processes::Scheduler::get_thread()\fP, and \fBMaxOS::processes::Scheduler::system_scheduler()\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::core_scheduler()\fP, \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, and \fBMaxOS::processes::GlobalScheduler::get_thread()\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_thread_sleep (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -635,29 +614,24 @@ Nothing
 .PP
 
 .PP
-Definition at line \fB307\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB316\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-307                                                                          {
-308 
-309     // Get the milliseconds
-310     size_t milliseconds = args\->arg0;
-311 
-312     // Store the updated state in the thread as the scheduler will not have the updated state when switching to the next thread
-313     Scheduler::current_thread()\->execution_state = args\->return_state;
-314 
-315     // Sleep the thread
-316     cpu_status_t* next_thread = Scheduler::current_thread()\->sleep(milliseconds);
-317     args\->return_state = next_thread;
-318 
-319     // Done
-320     return args;
-321 }
+316                                                                          {
+317 
+318     // Get the milliseconds
+319     size_t milliseconds = args\->arg0;
+320 
+321     // Sleep the thread
+322     GlobalScheduler::current_thread()\->sleep(milliseconds);
+323     args\->return_state = GlobalScheduler::yield(args\->return_state);
+324 
+325     // Done
+326     return args;
+327 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Scheduler::current_thread()\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, and \fBMaxOS::processes::GlobalScheduler::yield()\fP\&.
 .SS "\fBsyscall_args_t\fP * SyscallManager::syscall_thread_yield (\fBsyscall_args_t\fP * args)\fC [static]\fP"
 
 .PP
@@ -675,41 +649,19 @@ Nothing
 .PP
 
 .PP
-Definition at line \fB291\fP of file \fBsyscalls\&.cpp\fP\&..PP
+Definition at line \fB302\fP of file \fBsyscalls\&.cpp\fP\&..PP
 .nf
-291                                                                          {
-292 
-293     // Yield
-294     Scheduler::current_thread()\->execution_state = args\->return_state;
-295     cpu_status_t* next_process = Scheduler::system_scheduler()\->yield();
-296     args\->return_state = next_process;
-297 
-298     return args;
-299 }
+302                                                                          {
+303 
+304     // Yield
+305     args\->return_state = GlobalScheduler::yield(args\->return_state);
+306 
+307     return args;
+308 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Scheduler::current_thread()\fP, and \fBMaxOS::processes::Scheduler::system_scheduler()\fP\&.
-.PP
-Referenced by \fBSyscallManager()\fP\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "\fBsyscall_args_t\fP* MaxOS::system::SyscallManager::m_current_args\fC [protected]\fP"
-
-.PP
-Definition at line \fB46\fP of file \fBsyscalls\&.h\fP\&.
-.PP
-Referenced by \fBhandle_interrupt()\fP, and \fBSyscallManager()\fP\&.
-.SS "\fBsyscall_func_t\fP MaxOS::system::SyscallManager::m_syscall_handlers[256] = {}\fC [protected]\fP"
-
-.PP
-Definition at line \fB45\fP of file \fBsyscalls\&.h\fP\&..PP
-.nf
-45 {};
-.fi
-
-.PP
-Referenced by \fBhandle_interrupt()\fP, \fBremove_syscall_handler()\fP, and \fBset_syscall_handler()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::yield()\fP\&.
 
 .SH "Author"
 .PP 

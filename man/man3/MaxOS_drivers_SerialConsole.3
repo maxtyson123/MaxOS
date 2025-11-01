@@ -17,9 +17,7 @@ Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::common::OutputStream\fP\&.
 .ti -1c
 .RI "\fBSerialConsole\fP (\fBLogger\fP *logger)"
 .br
-.ti -1c
-.RI "\fB~SerialConsole\fP ()"
-.br
+.RI "Constructs a new Serial Console object and initializes the serial port\&. "
 .ti -1c
 .RI "void \fBput_character\fP (char c)"
 .br
@@ -32,12 +30,6 @@ Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::common::OutputStream\fP\&.
 
 Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .in +1c
-.ti -1c
-.RI "\fBDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~Driver\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
 .br
@@ -67,13 +59,7 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 Public Member Functions inherited from \fBMaxOS::common::OutputStream\fP
 .in +1c
 .ti -1c
-.RI "\fBOutputStream\fP ()"
-.br
-.ti -1c
-.RI "\fB~OutputStream\fP ()"
-.br
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBlineFeed\fP ()"
+.RI "\fBvirtual\fP \fBvoid\fP \fBline_feed\fP ()"
 .br
 .RI "Writes a newline to the output stream\&. "
 .ti -1c
@@ -159,15 +145,19 @@ Public Member Functions inherited from \fBMaxOS::common::InputStreamProcessor< T
 .ti -1c
 .RI "\fBInputStreamProcessor\fP ()"
 .br
+.RI "Creates a new \fBInputStreamProcessor\fP\&. "
 .ti -1c
 .RI "\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *\fBgeneric_stream_event_handler\fP)"
 .br
+.RI "Creates a new \fBInputStreamProcessor\fP\&. "
 .ti -1c
 .RI "\fB~InputStreamProcessor\fP ()"
 .br
+.RI "Destroys the \fBInputStreamProcessor\fP\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBType\fP > *\fBstream\fP) \fBoverride\fP"
 .br
+.RI "Called when a stream has finished\&. Passes the event on to the handlers and then removes the stream from the array of streams\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
@@ -179,6 +169,7 @@ Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler
 .ti -1c
 .RI "\fB~InputStreamEventHandler\fP ()"
 .br
+.RI "Destroys the \fBInputStreamProcessor\fP and disconnects it from all streams\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< ProcessorType >\fP
@@ -186,18 +177,23 @@ Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< Pro
 .ti -1c
 .RI "\fBGenericInputStream\fP ()"
 .br
+.RI "Creates a new \fBGenericInputStream\fP\&. "
 .ti -1c
 .RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
 .br
+.RI "Creates a new \fBGenericInputStream\fP and connects it to the handler\&. "
 .ti -1c
 .RI "\fB~GenericInputStream\fP ()"
 .br
+.RI "Destroys the \fBGenericInputStream\fP and disconnects all handlers\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
 .br
+.RI "Adds a inputStreamEventHandler to the list of internetProtocolHandlers\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
 .br
+.RI "Removes a handler from the list of handlers\&. "
 .in -1c
 .SS "Additional Inherited Members"
 
@@ -207,6 +203,7 @@ Protected Attributes inherited from \fBMaxOS::common::InputStreamEventHandler< T
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< \fBType\fP > * > \fBm_generic_input_streams\fP"
 .br
+.RI "List of streams being observed by this handler\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< ProcessorType >\fP
@@ -214,64 +211,72 @@ Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< Proces
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< \fBProcessorType\fP > * > \fBm_input_stream_event_handlers\fP"
 .br
+.RI "List of streams being observed by this handler\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 A driver for the serial output\&. 
 .PP
-Definition at line \fB21\fP of file \fBserial\&.h\fP\&.
+Definition at line \fB25\fP of file \fBserial\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "SerialConsole::SerialConsole (\fBLogger\fP * logger)"
 
 .PP
-Definition at line \fB10\fP of file \fBserial\&.cpp\fP\&..PP
+Constructs a new Serial Console object and initializes the serial port\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlogger\fP The logger which will use this serial console as a log writer 
+.RE
+.PP
+
+.PP
+Definition at line \fB18\fP of file \fBserial\&.cpp\fP\&..PP
 .nf
-11 : m_data_port(0x3F8),
-12   m_interrupt_enable_port(0x3F9),
-13   m_fifo_control_port(0x3FA),
-14   m_line_control_port(0x3FB),
-15   m_modem_control_port(0x3FC),
-16   m_line_status_port(0x3FD)
-17 {
-18 
-19     // Disable all interrupts
-20     m_interrupt_enable_port\&.write(0x00);
-21 
-22     // Enable DLAB (set baud rate divisor)
-23     m_line_control_port\&.write(0x80);
-24 
-25     // Set divisor to 3
-26     m_data_port\&.write(0x03);
-27     m_interrupt_enable_port\&.write(0x00);
-28 
-29     // 8 bits, no parity, one stop bit
-30     m_line_control_port\&.write(0x03);
-31 
-32     // Enable FIFO, clear them, with 14\-byte threshold
-33     m_fifo_control_port\&.write(0xC7);
-34 
-35     // IRQs enabled, RTS/DSR set
-36     m_modem_control_port\&.write(0x0B);
-37 
-38     // Test serial chip
-39     m_modem_control_port\&.write(0x1E);
-40     m_data_port\&.write(0xAE);
-41     if (m_data_port\&.read() != 0xAE)
-42         return;
-43 
-44     // Enable serial chip
-45     m_modem_control_port\&.write(0x0F);
-46 
-47     // Set the active serial console
-48     logger\->add_log_writer(this);
-49 }
+19 : m_data_port(0x3F8),
+20   m_interrupt_enable_port(0x3F9),
+21   m_fifo_control_port(0x3FA),
+22   m_line_control_port(0x3FB),
+23   m_modem_control_port(0x3FC),
+24   m_line_status_port(0x3FD)
+25 {
+26 
+27     // Disable all interrupts
+28     m_interrupt_enable_port\&.write(0x00);
+29 
+30     // Enable DLAB (set baud rate divisor)
+31     m_line_control_port\&.write(0x80);
+32 
+33     // Set divisor to 3
+34     m_data_port\&.write(0x03);
+35     m_interrupt_enable_port\&.write(0x00);
+36 
+37     // 8 bits, no parity, one stop bit
+38     m_line_control_port\&.write(0x03);
+39 
+40     // Enable FIFO, clear them, with 14\-byte threshold
+41     m_fifo_control_port\&.write(0xC7);
+42 
+43     // IRQs enabled, RTS/DSR set
+44     m_modem_control_port\&.write(0x0B);
+45 
+46     // Test serial chip
+47     m_modem_control_port\&.write(0x1E);
+48     m_data_port\&.write(0xAE);
+49     if (m_data_port\&.read() != 0xAE)
+50         return;
+51 
+52     // Enable serial chip
+53     m_modem_control_port\&.write(0x0F);
+54 
+55     // Set the active serial console
+56     logger\->add_log_writer(this);
+57 }
 .fi
 
 .PP
 References \fBLogger::add_log_writer()\fP, \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
-.SS "SerialConsole::~SerialConsole ()\fC [default]\fP"
-
 .SH "Member Function Documentation"
 .PP 
 .SS "void SerialConsole::put_character (char c)"
@@ -286,17 +291,17 @@ Waits for the serial port to be ready, then writes a character to it\&.
 .PP
 
 .PP
-Definition at line \fB58\fP of file \fBserial\&.cpp\fP\&..PP
+Definition at line \fB66\fP of file \fBserial\&.cpp\fP\&..PP
 .nf
-58                                         {
-59 
-60     // Wait for the serial port to be ready
-61     while (0 == (m_line_status_port\&.read() & 0x20));
-62 
-63     // Write the character
-64     m_data_port\&.write(c);
-65 
-66 }
+66                                         {
+67 
+68     // Wait for the serial port to be ready
+69     while (0 == (m_line_status_port\&.read() & 0x20));
+70 
+71     // Write the character
+72     m_data_port\&.write(c);
+73 
+74 }
 .fi
 
 .PP
@@ -317,11 +322,11 @@ Writes a character to the output stream\&.
 .PP
 Reimplemented from \fBMaxOS::common::OutputStream\fP\&.
 .PP
-Definition at line \fB68\fP of file \fBserial\&.cpp\fP\&..PP
+Definition at line \fB76\fP of file \fBserial\&.cpp\fP\&..PP
 .nf
-68                                      {
-69     put_character(c);
-70 }
+76                                      {
+77     put_character(c);
+78 }
 .fi
 
 .PP

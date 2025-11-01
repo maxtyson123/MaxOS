@@ -1,9 +1,7 @@
 var arp_8h =
 [
-    [ "MaxOS::net::AddressResolutionProtocolMessage", "structMaxOS_1_1net_1_1AddressResolutionProtocolMessage.html", "structMaxOS_1_1net_1_1AddressResolutionProtocolMessage" ],
+    [ "MaxOS::net::ARPMessage", "structMaxOS_1_1net_1_1ARPMessage.html", "structMaxOS_1_1net_1_1ARPMessage" ],
     [ "MaxOS::net::AddressResolutionProtocol", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html", "classMaxOS_1_1net_1_1AddressResolutionProtocol" ],
-    [ "__attribute__", "arp_8h.html#a4d717afc44af4a0f81e760181db3ccd7", null ],
-    [ "__attribute__", "arp_8h.html#a4d91b32cf7866d911b58b12cf57766a8", null ],
     [ "command", "arp_8h.html#a4635796d5c7e7a2639b11dfe83718acc", null ],
     [ "dstIP", "arp_8h.html#a2287eab8c0183320980c7a0addb74a5a", null ],
     [ "dstMAC", "arp_8h.html#a71289944f99c52386724f566fe9624ce", null ],

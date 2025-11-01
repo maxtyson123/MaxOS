@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/src/memory/memorymanagement.cpp
+/home/runner/work/MaxOS/MaxOS/kernel/src/memory/memorymanagement.cpp \- Implementation of a Memory Manager for dynamic memory allocation\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -23,11 +24,11 @@
 .br
 .RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
 .ti -1c
-.RI "\fBvoid\fP * \fBoperator new\fP (\fBsize_t\fP, \fBvoid\fP *pointer)"
+.RI "\fBvoid\fP * \fBoperator new\fP (\fBsize_t\fP \fBsize\fP, \fBvoid\fP *pointer)"
 .br
 .RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
 .ti -1c
-.RI "\fBvoid\fP * \fBoperator new[]\fP (\fBsize_t\fP, \fBvoid\fP *pointer)"
+.RI "\fBvoid\fP * \fBoperator new[]\fP (\fBsize_t\fP \fBsize\fP, \fBvoid\fP *pointer)"
 .br
 .RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
 .ti -1c
@@ -43,10 +44,29 @@
 .br
 .RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBoperator delete[]\fP (\fBvoid\fP *pointer, \fBsize_t\fP)"
+.RI "\fBvoid\fP \fBoperator delete[]\fP (\fBvoid\fP *pointer, \fBsize_t\fP \fBsize\fP)"
 .br
 .RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Implementation of a Memory Manager for dynamic memory allocation\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+20th October 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBmemorymanagement\&.cpp\fP\&.
 .SH "Function Documentation"
 .PP 
 .SS "\fBvoid\fP \fBoperator\fP \fBdelete\fP (\fBvoid\fP * pointer)"
@@ -61,13 +81,13 @@ Overloaded delete operator, frees memory using the KERNEL memory manager\&.
 .PP
 
 .PP
-Definition at line \fB367\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB377\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-367                                     {
-368 
-369     // Handle the memory freeing
-370     return MaxOS::memory::MemoryManager::kfree(pointer);
-371 }
+377                                     {
+378 
+379     // Handle the memory freeing
+380     return MaxOS::memory::MemoryManager::kfree(pointer);
+381 }
 .fi
 
 .PP
@@ -86,13 +106,13 @@ Overloaded delete operator, frees memory using the KERNEL memory manager\&.
 .PP
 
 .PP
-Definition at line \fB390\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB400\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-390                                             {
-391 
-392     // Handle the memory freeing
-393     return MaxOS::memory::MemoryManager::kfree(pointer);
-394 }
+400                                             {
+401 
+402     // Handle the memory freeing
+403     return MaxOS::memory::MemoryManager::kfree(pointer);
+404 }
 .fi
 
 .PP
@@ -109,13 +129,13 @@ Overloaded delete operator, frees memory using the KERNEL memory manager\&.
 .PP
 
 .PP
-Definition at line \fB378\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB388\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-378                                       {
-379 
-380     // Handle the memory freeing
-381     return MaxOS::memory::MemoryManager::kfree(pointer);
-382 }
+388                                       {
+389 
+390     // Handle the memory freeing
+391     return MaxOS::memory::MemoryManager::kfree(pointer);
+392 }
 .fi
 
 .PP
@@ -128,17 +148,19 @@ Overloaded delete operator, frees memory using the KERNEL memory manager\&.
 \fBParameters\fP
 .RS 4
 \fIpointer\fP The pointer to the memory to free 
+.br
+\fIsize\fP The size of the memory to free - ignored in this implementation 
 .RE
 .PP
 
 .PP
-Definition at line \fB401\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB412\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-401                                               {
-402 
-403     // Handle the memory freeing
-404     return MaxOS::memory::MemoryManager::kfree(pointer);
-405 }
+412                                                    {
+413 
+414     // Handle the memory freeing
+415     return MaxOS::memory::MemoryManager::kfree(pointer);
+416 }
 .fi
 
 .PP
@@ -160,13 +182,13 @@ The pointer to the allocated memory
 .PP
 
 .PP
-Definition at line \fB320\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB329\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-320                                         {
-321 
-322     // Handle the memory allocation
-323     return MaxOS::memory::MemoryManager::kmalloc(size);
-324 }
+329                                         {
+330 
+331     // Handle the memory allocation
+332     return MaxOS::memory::MemoryManager::kmalloc(size);
+333 }
 .fi
 
 .PP
@@ -179,6 +201,8 @@ Overloaded new operator, allocates memory using the KERNEL memory manager\&.
 \fBParameters\fP
 .RS 4
 \fIpointer\fP The pointer to the memory to allocate 
+.br
+\fIsize\fP The size of the memory to free - ignored in this implementation 
 .RE
 .PP
 \fBReturns\fP
@@ -188,12 +212,12 @@ The pointer to the memory
 .PP
 
 .PP
-Definition at line \fB345\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB354\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-345                                           {
-346 
-347     return pointer;
-348 }
+354                                                {
+355 
+356     return pointer;
+357 }
 .fi
 
 .SS "\fBvoid\fP * \fBoperator\fP \fBnew\fP[] (\fBsize_t\fP size)"
@@ -213,14 +237,13 @@ The pointer to the allocated memory
 .PP
 
 .PP
-Definition at line \fB332\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB341\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-332                                           {
-333 
-334     // Handle the memory allocation
-335     void* p = MaxOS::memory::MemoryManager::kmalloc(size);
-336     return p;
-337 }
+341                                           {
+342 
+343     // Handle the memory allocation
+344     return  MaxOS::memory::MemoryManager::kmalloc(size);
+345 }
 .fi
 
 .PP
@@ -232,6 +255,8 @@ Overloaded new operator, allocates memory using the KERNEL memory manager\&.
 .PP
 \fBParameters\fP
 .RS 4
+\fIsize\fP The size of the memory to free - ignored in this implementation 
+.br
 \fIpointer\fP The pointer to the memory to allocate 
 .RE
 .PP
@@ -242,13 +267,13 @@ The pointer to the memory
 .PP
 
 .PP
-Definition at line \fB356\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB366\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-356                                             {
-357 
-358 
-359     return pointer;
-360 }
+366                                                  {
+367 
+368 
+369     return pointer;
+370 }
 .fi
 
 .SH "Author"

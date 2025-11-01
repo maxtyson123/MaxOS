@@ -1,5 +1,10 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/memory/memorymanagement.h File Reference}
 \hypertarget{memorymanagement_8h}{}\label{memorymanagement_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memorymanagement.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memorymanagement.h}}
+
+
+Defines a Memory\+Manager class for handling memory allocation and deallocation.  
+
+
 {\ttfamily \#include $<$stddef.\+h$>$}\newline
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$system/multiboot.\+h$>$}\newline
@@ -8,16 +13,9 @@
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1MemoryChunk}{Max\+OS\+::memory\+::\+Memory\+Chunk}}
-\begin{DoxyCompactList}\small\item\em Stores information about a memory chunk in the memory manager linked list. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em A span of memory in the heap, can be allocated or free. Used as a node in a doubly linked list. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{Max\+OS\+::memory\+::\+Memory\+Manager}}
 \begin{DoxyCompactList}\small\item\em Handles memory allocation and deallocation. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1memory}{Max\+OS\+::memory}}
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -37,6 +35,26 @@ namespace \mbox{\hyperlink{namespaceMaxOS_1_1memory}{Max\+OS\+::memory}}
 \begin{DoxyCompactList}\small\item\em Overloaded delete operator, frees memory using the KERNEL memory manager. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{memorymanagement_8h_a3906c3f0ff62331886289271f4235d7a}{operator delete\mbox{[}$\,$\mbox{]}}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \texorpdfstring{$\ast$}{*}pointer, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{size\+\_\+t}} \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})
 \begin{DoxyCompactList}\small\item\em Overloaded delete operator, frees memory using the KERNEL memory manager. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr size\+\_\+t \mbox{\hyperlink{memorymanagement_8h_a61108789ebdcfe7fa66d8a20826fec14}{Max\+OS\+::memory\+::\+CHUNK\+\_\+\+ALIGNMENT}} = 0x10
+\begin{DoxyCompactList}\small\item\em How many bytes the chunks should be a multiple of (round up to this) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines a Memory\+Manager class for handling memory allocation and deallocation. 
+
+\begin{DoxyDate}{Date}
+20th October 2022 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
+
 
 
 \doxysubsection{Function Documentation}
@@ -57,20 +75,20 @@ Overloaded delete operator, frees memory using the KERNEL memory manager.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00367}{367}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00377}{377}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00368\ }
-\DoxyCodeLine{00369\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ freeing}}
-\DoxyCodeLine{00370\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20}{MaxOS::memory::MemoryManager::kfree}}(pointer);}
-\DoxyCodeLine{00371\ \}}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ freeing}}
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20}{MaxOS::memory::MemoryManager::kfree}}(pointer);}
+\DoxyCodeLine{00381\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8cpp_source_l00161}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kfree()}}.
+References \mbox{\hyperlink{memorymanagement_8cpp_source_l00170}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kfree()}}.
 
 \Hypertarget{memorymanagement_8h_a104328316faddcc91b28e28f19d8b310}\label{memorymanagement_8h_a104328316faddcc91b28e28f19d8b310} 
 \index{memorymanagement.h@{memorymanagement.h}!operator delete@{operator delete}}
@@ -91,20 +109,20 @@ Overloaded delete operator, frees memory using the KERNEL memory manager.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00390}{390}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00400}{400}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00391\ }
-\DoxyCodeLine{00392\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ freeing}}
-\DoxyCodeLine{00393\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20}{MaxOS::memory::MemoryManager::kfree}}(pointer);}
-\DoxyCodeLine{00394\ \}}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00402\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ freeing}}
+\DoxyCodeLine{00403\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20}{MaxOS::memory::MemoryManager::kfree}}(pointer);}
+\DoxyCodeLine{00404\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8cpp_source_l00161}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kfree()}}.
+References \mbox{\hyperlink{memorymanagement_8cpp_source_l00170}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kfree()}}.
 
 \Hypertarget{memorymanagement_8h_a68d6173eacb62f3e746a04abc2cae1d9}\label{memorymanagement_8h_a68d6173eacb62f3e746a04abc2cae1d9} 
 \index{memorymanagement.h@{memorymanagement.h}!operator delete\mbox{[}\mbox{]}@{operator delete[]}}
@@ -123,20 +141,20 @@ Overloaded delete operator, frees memory using the KERNEL memory manager.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00378}{378}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00388}{388}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00379\ }
-\DoxyCodeLine{00380\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ freeing}}
-\DoxyCodeLine{00381\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20}{MaxOS::memory::MemoryManager::kfree}}(pointer);}
-\DoxyCodeLine{00382\ \}}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00389\ }
+\DoxyCodeLine{00390\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ freeing}}
+\DoxyCodeLine{00391\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20}{MaxOS::memory::MemoryManager::kfree}}(pointer);}
+\DoxyCodeLine{00392\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8cpp_source_l00161}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kfree()}}.
+References \mbox{\hyperlink{memorymanagement_8cpp_source_l00170}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kfree()}}.
 
 \Hypertarget{memorymanagement_8h_a3906c3f0ff62331886289271f4235d7a}\label{memorymanagement_8h_a3906c3f0ff62331886289271f4235d7a} 
 \index{memorymanagement.h@{memorymanagement.h}!operator delete\mbox{[}\mbox{]}@{operator delete[]}}
@@ -152,23 +170,25 @@ Overloaded delete operator, frees memory using the KERNEL memory manager.
 \begin{DoxyParams}{Parameters}
 {\em pointer} & The pointer to the memory to free \\
 \hline
+{\em size} & The size of the memory to free -\/ ignored in this implementation \\
+\hline
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00401}{401}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00412}{412}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00402\ }
-\DoxyCodeLine{00403\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ freeing}}
-\DoxyCodeLine{00404\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20}{MaxOS::memory::MemoryManager::kfree}}(pointer);}
-\DoxyCodeLine{00405\ \}}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00413\ }
+\DoxyCodeLine{00414\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ freeing}}
+\DoxyCodeLine{00415\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_abaa5e54c1428654efa1c81b69e12eb20}{MaxOS::memory::MemoryManager::kfree}}(pointer);}
+\DoxyCodeLine{00416\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8cpp_source_l00161}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kfree()}}.
+References \mbox{\hyperlink{memorymanagement_8cpp_source_l00170}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kfree()}}.
 
 \Hypertarget{memorymanagement_8h_a160dcabc54bbecfc69484678cafadb81}\label{memorymanagement_8h_a160dcabc54bbecfc69484678cafadb81} 
 \index{memorymanagement.h@{memorymanagement.h}!operator new@{operator new}}
@@ -190,20 +210,20 @@ The pointer to the allocated memory
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00320}{320}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00329}{329}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00321\ }
-\DoxyCodeLine{00322\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ allocation}}
-\DoxyCodeLine{00323\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a983c849ff604367f7c8a0e70172bb331}{MaxOS::memory::MemoryManager::kmalloc}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{00324\ \}}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ allocation}}
+\DoxyCodeLine{00332\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a983c849ff604367f7c8a0e70172bb331}{MaxOS::memory::MemoryManager::kmalloc}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{00333\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8cpp_source_l00074}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kmalloc()}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
+References \mbox{\hyperlink{memorymanagement_8cpp_source_l00083}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kmalloc()}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
 
 \Hypertarget{memorymanagement_8h_a80605d8a4681597c2e6213955382980f}\label{memorymanagement_8h_a80605d8a4681597c2e6213955382980f} 
 \index{memorymanagement.h@{memorymanagement.h}!operator new@{operator new}}
@@ -219,20 +239,22 @@ Overloaded new operator, allocates memory using the KERNEL memory manager.
 \begin{DoxyParams}{Parameters}
 {\em pointer} & The pointer to the memory to allocate \\
 \hline
+{\em size} & The size of the memory to free -\/ ignored in this implementation \\
+\hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 The pointer to the memory 
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00345}{345}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00354}{354}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00346\ }
-\DoxyCodeLine{00347\ \ \ \ \ \textcolor{keywordflow}{return}\ pointer;}
-\DoxyCodeLine{00348\ \}}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{keywordflow}{return}\ pointer;}
+\DoxyCodeLine{00357\ \}}
 
 \end{DoxyCode}
 \Hypertarget{memorymanagement_8h_af2243bb4c2126b7b2b393e06090fbe59}\label{memorymanagement_8h_af2243bb4c2126b7b2b393e06090fbe59} 
@@ -255,21 +277,20 @@ The pointer to the allocated memory
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00332}{332}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00341}{341}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00333\ }
-\DoxyCodeLine{00334\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ allocation}}
-\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a}{p}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a983c849ff604367f7c8a0e70172bb331}{MaxOS::memory::MemoryManager::kmalloc}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{00336\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a}{p}};}
-\DoxyCodeLine{00337\ \}}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \ \ \ \ \textcolor{comment}{//\ Handle\ the\ memory\ allocation}}
+\DoxyCodeLine{00344\ \ \ \ \ \textcolor{keywordflow}{return}\ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a983c849ff604367f7c8a0e70172bb331}{MaxOS::memory::MemoryManager::kmalloc}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
+\DoxyCodeLine{00345\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{memorymanagement_8cpp_source_l00074}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kmalloc()}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
+References \mbox{\hyperlink{memorymanagement_8cpp_source_l00083}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kmalloc()}}, and \mbox{\hyperlink{ext2_8h_source_l00001}{size}}.
 
 \Hypertarget{memorymanagement_8h_a118c67097f2e09ea4838aab175fad149}\label{memorymanagement_8h_a118c67097f2e09ea4838aab175fad149} 
 \index{memorymanagement.h@{memorymanagement.h}!operator new\mbox{[}\mbox{]}@{operator new[]}}
@@ -283,6 +304,8 @@ Overloaded new operator, allocates memory using the KERNEL memory manager.
 
 
 \begin{DoxyParams}{Parameters}
+{\em size} & The size of the memory to free -\/ ignored in this implementation \\
+\hline
 {\em pointer} & The pointer to the memory to allocate \\
 \hline
 \end{DoxyParams}
@@ -291,14 +314,35 @@ The pointer to the memory
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00356}{356}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
+Definition at line \mbox{\hyperlink{memorymanagement_8cpp_source_l00366}{366}} of file \mbox{\hyperlink{memorymanagement_8cpp_source}{memorymanagement.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00357\ }
-\DoxyCodeLine{00358\ }
-\DoxyCodeLine{00359\ \ \ \ \ \textcolor{keywordflow}{return}\ pointer;}
-\DoxyCodeLine{00360\ \}}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{keywordflow}{return}\ pointer;}
+\DoxyCodeLine{00370\ \}}
 
 \end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{memorymanagement_8h_a61108789ebdcfe7fa66d8a20826fec14}\label{memorymanagement_8h_a61108789ebdcfe7fa66d8a20826fec14} 
+\index{memorymanagement.h@{memorymanagement.h}!CHUNK\_ALIGNMENT@{CHUNK\_ALIGNMENT}}
+\index{CHUNK\_ALIGNMENT@{CHUNK\_ALIGNMENT}!memorymanagement.h@{memorymanagement.h}}
+\doxysubsubsection{\texorpdfstring{CHUNK\_ALIGNMENT}{CHUNK\_ALIGNMENT}}
+{\footnotesize\ttfamily constexpr size\+\_\+t Max\+OS\+::memory\+::\+CHUNK\+\_\+\+ALIGNMENT = 0x10\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+How many bytes the chunks should be a multiple of (round up to this) 
+
+
+
+Definition at line \mbox{\hyperlink{memorymanagement_8h_source_l00035}{35}} of file \mbox{\hyperlink{memorymanagement_8h_source}{memorymanagement.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00286}{Max\+OS\+::memory\+::\+Memory\+Manager\+::align()}}.
+

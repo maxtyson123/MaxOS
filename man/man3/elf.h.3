@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/processes/elf.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/processes/elf.h \- Defines structures and enums for handling ELF (Executable and Linkable Format) files in MaxOS\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -19,63 +20,275 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::processes::elf_64_header_t\fP"
+.RI "struct \fBMaxOS::processes::ELFHeader64\fP"
 .br
+.RI "The header of a 64-bit ELF file\&. "
 .ti -1c
-.RI "struct \fBMaxOS::processes::elf_64_program_header_t\fP"
+.RI "struct \fBMaxOS::processes::ELFProgramHeader64\fP"
 .br
+.RI "The header for the program segments in a 64-bit ELF file\&. "
 .ti -1c
-.RI "struct \fBMaxOS::processes::elf_64_section_header_t\fP"
+.RI "struct \fBMaxOS::processes::ELFSectionHeader64\fP"
 .br
+.RI "The header for the sections in a 64-bit ELF file\&. "
 .ti -1c
-.RI "class \fBMaxOS::processes::Elf64\fP"
+.RI "class \fBMaxOS::processes::ELF64\fP"
 .br
 .RI "Handles the loading and parsing of 64-bit ELF files\&. "
 .in -1c
-.SS "Namespaces"
+.SS "Typedefs"
 
 .in +1c
 .ti -1c
-.RI "namespace \fBMaxOS\fP"
+.RI "typedef struct \fBMaxOS::processes::ELFHeader64\fP \fBMaxOS::processes::elf_64_header_t\fP"
 .br
 .ti -1c
-.RI "namespace \fBMaxOS::processes\fP"
+.RI "typedef struct \fBMaxOS::processes::ELFProgramHeader64\fP \fBMaxOS::processes::elf_64_program_header_t\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBMaxOS::processes::ELFSectionHeader64\fP \fBMaxOS::processes::elf_64_section_header_t\fP"
 .br
 .in -1c
 .SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "enum class \fBMaxOS::processes::ElfIdentification\fP { \fBMaxOS::processes::Magic0\fP, \fBMaxOS::processes::Magic1\fP, \fBMaxOS::processes::Magic2\fP, \fBMaxOS::processes::Magic3\fP, \fBMaxOS::processes::Class\fP, \fBMaxOS::processes::Data\fP, \fBMaxOS::processes::Version\fP, \fBMaxOS::processes::OSABI\fP, \fBMaxOS::processes::ABIVersion\fP, \fBMaxOS::processes::Padding\fP }"
+.RI "enum class \fBMaxOS::processes::ELFIdentification\fP { \fBMagic0\fP, \fBMagic1\fP, \fBMagic2\fP, \fBMagic3\fP, \fBClass\fP, \fBData\fP, \fBVersion\fP, \fBOSABI\fP, \fBABIVersion\fP, \fBPadding\fP }"
 .br
-.RI "Style Guide Note: ELF is consider as one of the more standard names so use that instead of Executable and Linkable Format\&. "
+.RI "The indexes of the ELF identification array\&. "
 .ti -1c
-.RI "enum class \fBMaxOS::processes::ElfClass\fP { \fBMaxOS::processes::Invalid\fP = 0, \fBMaxOS::processes::Bits32\fP = 1, \fBMaxOS::processes::Bits64\fP = 2 }"
+.RI "enum class \fBMaxOS::processes::ELFClass\fP { \fBInvalid\fP, \fBBits32\fP, \fBBits64\fP }"
 .br
+.RI "The class of the ELF file (32-bit or 64-bit) "
 .ti -1c
-.RI "enum class \fBMaxOS::processes::ElfData\fP { \fBMaxOS::processes::InvalidData\fP, \fBMaxOS::processes::LittleEndian\fP, \fBMaxOS::processes::BigEndian\fP }"
+.RI "enum class \fBMaxOS::processes::ELFData\fP { \fBInvalidData\fP, \fBLittleEndian\fP, \fBBigEndian\fP }"
 .br
+.RI "The data encoding of the ELF file (little-endian or big-endian) "
 .ti -1c
-.RI "enum class \fBMaxOS::processes::ElfType\fP { \fBMaxOS::processes::None\fP, \fBMaxOS::processes::Relocatable\fP, \fBMaxOS::processes::Executable\fP, \fBMaxOS::processes::Shared\fP, \fBMaxOS::processes::Core\fP, \fBMaxOS::processes::ProcessorSpecificLow\fP = 0xFF0, \fBMaxOS::processes::ProcessorSpecificHigh\fP = 0xFFF }"
+.RI "enum class \fBMaxOS::processes::ELFType\fP { \fBNone\fP, \fBRelocatable\fP, \fBExecutable\fP, \fBShared\fP, \fBCore\fP, \fBProcessorSpecificLow\fP = 0xFF0, \fBProcessorSpecificHigh\fP = 0xFFF }"
 .br
+.RI "The type of the ELF file (executable, shared object, etc\&.) "
 .ti -1c
-.RI "enum class \fBMaxOS::processes::ElfMachine\fP { \fBMaxOS::processes::NoMachine\fP, \fBMaxOS::processes::ATnTWe32100\fP, \fBMaxOS::processes::SPARC\fP, \fBMaxOS::processes::x86\fP, \fBMaxOS::processes::MIPS\fP = 0x8, \fBMaxOS::processes::PowerPC\fP = 0x14, \fBMaxOS::processes::ARM\fP = 0x28, \fBMaxOS::processes::SuperH\fP = 0x2A, \fBMaxOS::processes::IA_64\fP = 0x32, \fBMaxOS::processes::x86_64\fP = 0x3E, \fBMaxOS::processes::AArch64\fP = 0xB7, \fBMaxOS::processes::RISC_V\fP = 0xF3 }"
+.RI "enum class \fBMaxOS::processes::ELFMachine\fP { \fBNoMachine\fP, \fBATnTWe32100\fP, \fBSPARC\fP, \fBx86\fP, \fBMIPS\fP = 0x8, \fBPowerPC\fP = 0x14, \fBARM\fP = 0x28, \fBSuperH\fP = 0x2A, \fBIA_64\fP = 0x32, \fBx86_64\fP = 0x3E, \fBAArch64\fP = 0xB7, \fBRISC_V\fP = 0xF3 }"
 .br
+.RI "The target architecture of the ELF file\&. "
 .ti -1c
-.RI "enum class \fBMaxOS::processes::ElfVersion\fP { \fBMaxOS::processes::Invalid\fP, \fBMaxOS::processes::Current\fP }"
+.RI "enum class \fBMaxOS::processes::ELFVersion\fP { \fBInvalid\fP, \fBCurrent\fP }"
 .br
+.RI "The version of the ELF file\&. "
 .ti -1c
-.RI "enum class \fBMaxOS::processes::ElfProgramType\fP { \fBMaxOS::processes::Null\fP, \fBMaxOS::processes::Load\fP, \fBMaxOS::processes::Dynamic\fP, \fBMaxOS::processes::Interpreter\fP, \fBMaxOS::processes::Note\fP, \fBMaxOS::processes::SharedLibrary\fP, \fBMaxOS::processes::HeaderTable\fP, \fBMaxOS::processes::TableProcessorSpecificLow\fP = 0x70000000, \fBMaxOS::processes::TableProcessorSpecificHigh\fP = 0x7FFFFFFF }"
+.RI "enum class \fBMaxOS::processes::ELFProgramType\fP { \fBNull\fP, \fBLoad\fP, \fBDynamic\fP, \fBInterpreter\fP, \fBNote\fP, \fBSharedLibrary\fP, \fBHeaderTable\fP, \fBTableProcessorSpecificLow\fP = 0x70000000, \fBTableProcessorSpecificHigh\fP = 0x7FFFFFFF }"
 .br
-.RI "Program Header\&. "
+.RI "The type of a program header in the ELF file\&. "
 .ti -1c
-.RI "enum \fBMaxOS::processes::ElfProgramFlags\fP { \fBMaxOS::processes::ElfExecute\fP = (1 << 0), \fBMaxOS::processes::ElfWrite\fP = (1 << 1), \fBMaxOS::processes::ElfRead\fP = (1 << 2) }"
+.RI "enum \fBMaxOS::processes::ELFProgramFlags\fP { \fBELFExecute\fP = (1 << 0), \fBELFWrite\fP = (1 << 1), \fBELFRead\fP = (1 << 2) }"
 .br
+.RI "The flags of a program header in the ELF file\&. "
 .ti -1c
-.RI "enum class \fBMaxOS::processes::ElfSectionType\fP { \fBMaxOS::processes::Null\fP, \fBMaxOS::processes::ProgramBits\fP, \fBMaxOS::processes::SymbolTable\fP, \fBMaxOS::processes::StringTable\fP, \fBMaxOS::processes::RelocationAddends\fP, \fBMaxOS::processes::SymbolHashTable\fP, \fBMaxOS::processes::DynamicLinkingTable\fP, \fBMaxOS::processes::SectionNote\fP, \fBMaxOS::processes::NoBits\fP }"
+.RI "enum class \fBMaxOS::processes::ELFSectionType\fP { \fBNull\fP, \fBProgramBits\fP, \fBSymbolTable\fP, \fBStringTable\fP, \fBRelocationAddends\fP, \fBSymbolHashTable\fP, \fBDynamicLinkingTable\fP, \fBSectionNote\fP, \fBNoBits\fP }"
 .br
-.RI "Section Header\&. "
+.RI "The type of a section in the ELF file\&. "
 .in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr char \fBMaxOS::processes::ELF_MAGIC\fP [4] = { 0x7F, 'E', 'L', 'F' }"
+.br
+.RI "The expected ELF magic number at the start of the file\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines structures and enums for handling ELF (Executable and Linkable Format) files in MaxOS\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+21st March 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBelf\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBMaxOS::processes::ELFClass\fP\fC [strong]\fP"
+
+.PP
+The class of the ELF file (32-bit or 64-bit) 
+.PP
+Definition at line \fB45\fP of file \fBelf\&.h\fP\&..PP
+.nf
+45                             {
+46             Invalid,
+47             Bits32,
+48             Bits64
+49         };
+.fi
+
+.SS "enum class \fBMaxOS::processes::ELFData\fP\fC [strong]\fP"
+
+.PP
+The data encoding of the ELF file (little-endian or big-endian) 
+.PP
+Definition at line \fB55\fP of file \fBelf\&.h\fP\&..PP
+.nf
+55                            {
+56             InvalidData,
+57             LittleEndian,
+58             BigEndian
+59         };
+.fi
+
+.SS "enum class \fBMaxOS::processes::ELFIdentification\fP\fC [strong]\fP"
+
+.PP
+The indexes of the ELF identification array\&. 
+.PP
+Definition at line \fB28\fP of file \fBelf\&.h\fP\&..PP
+.nf
+28                                      {
+29             Magic0,
+30             Magic1,
+31             Magic2,
+32             Magic3,
+33             Class,
+34             Data,
+35             Version,
+36             OSABI,
+37             ABIVersion,
+38             Padding,
+39         };
+.fi
+
+.SS "enum class \fBMaxOS::processes::ELFMachine\fP\fC [strong]\fP"
+
+.PP
+The target architecture of the ELF file\&. 
+.PP
+Definition at line \fB79\fP of file \fBelf\&.h\fP\&..PP
+.nf
+79                               {
+80             NoMachine,
+81             ATnTWe32100,
+82             SPARC,
+83             x86,
+84             MIPS        = 0x8,
+85             PowerPC     = 0x14,
+86             ARM         = 0x28,
+87             SuperH      = 0x2A,
+88             IA_64       = 0x32,
+89             x86_64      = 0x3E,
+90             AArch64     = 0xB7,
+91             RISC_V      = 0xF3
+92         };
+.fi
+
+.SS "enum \fBMaxOS::processes::ELFProgramFlags\fP"
+
+.PP
+The flags of a program header in the ELF file\&. 
+.PP
+Definition at line \fB144\fP of file \fBelf\&.h\fP\&..PP
+.nf
+144                              {
+145             ELFExecute  = (1 << 0),
+146             ELFWrite    = (1 << 1),
+147             ELFRead     = (1 << 2)
+148         };
+.fi
+
+.SS "enum class \fBMaxOS::processes::ELFProgramType\fP\fC [strong]\fP"
+
+.PP
+The type of a program header in the ELF file\&. 
+.PP
+Definition at line \fB128\fP of file \fBelf\&.h\fP\&..PP
+.nf
+128                                   {
+129             Null,
+130             Load,
+131             Dynamic,
+132             Interpreter,
+133             Note,
+134             SharedLibrary,
+135             HeaderTable,
+136             TableProcessorSpecificLow = 0x70000000,
+137             TableProcessorSpecificHigh = 0x7FFFFFFF
+138         };
+.fi
+
+.SS "enum class \fBMaxOS::processes::ELFSectionType\fP\fC [strong]\fP"
+
+.PP
+The type of a section in the ELF file\&. 
+.PP
+Definition at line \fB169\fP of file \fBelf\&.h\fP\&..PP
+.nf
+169                                   {
+170             Null,
+171             ProgramBits,
+172             SymbolTable,
+173             StringTable,
+174             RelocationAddends,
+175             SymbolHashTable,
+176             DynamicLinkingTable,
+177             SectionNote,
+178             NoBits,
+179         };
+.fi
+
+.SS "enum class \fBMaxOS::processes::ELFType\fP\fC [strong]\fP"
+
+.PP
+The type of the ELF file (executable, shared object, etc\&.) 
+.PP
+Definition at line \fB65\fP of file \fBelf\&.h\fP\&..PP
+.nf
+65                            {
+66             None,
+67             Relocatable,
+68             Executable,
+69             Shared,
+70             Core,
+71             ProcessorSpecificLow = 0xFF0,
+72             ProcessorSpecificHigh = 0xFFF
+73         };
+.fi
+
+.SS "enum class \fBMaxOS::processes::ELFVersion\fP\fC [strong]\fP"
+
+.PP
+The version of the ELF file\&. 
+.PP
+Definition at line \fB98\fP of file \fBelf\&.h\fP\&..PP
+.nf
+98                               {
+99             Invalid,
+100             Current
+101         };
+.fi
+
+.SH "Variable Documentation"
+.PP 
+.SS "constexpr char MaxOS::processes::ELF_MAGIC[4] = { 0x7F, 'E', 'L', 'F' }\fC [constexpr]\fP"
+
+.PP
+The expected ELF magic number at the start of the file\&. 
+.PP
+Definition at line \fB22\fP of file \fBelf\&.h\fP\&..PP
+.nf
+22 { 0x7F, 'E', 'L', 'F' };
+.fi
+
+.PP
+Referenced by \fBMaxOS::processes::ELF64::is_valid()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

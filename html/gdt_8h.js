@@ -1,6 +1,6 @@
 var gdt_8h =
 [
-    [ "MaxOS::system::GlobalDescriptorTableRegister", "structMaxOS_1_1system_1_1GlobalDescriptorTableRegister.html", "structMaxOS_1_1system_1_1GlobalDescriptorTableRegister" ],
+    [ "MaxOS::system::GDTRegister", "structMaxOS_1_1system_1_1GDTRegister.html", "structMaxOS_1_1system_1_1GDTRegister" ],
     [ "MaxOS::system::GlobalDescriptorTable", "classMaxOS_1_1system_1_1GlobalDescriptorTable.html", "classMaxOS_1_1system_1_1GlobalDescriptorTable" ],
     [ "DescriptorFlags", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0", [
       [ "Write", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0a1129c0e4d43f2d121652a7302712cff6", null ],
@@ -11,7 +11,6 @@ var gdt_8h =
       [ "Present", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0add058df87f5c88e3285a28ad7406a3c6", null ],
       [ "LongMode", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0ab389522a2e7fd91e3edf722ab20fe9ec", null ]
     ] ],
-    [ "__attribute__", "gdt_8h.html#a227f758b8466abedf2ebae3815d6fbeb", null ],
     [ "address", "gdt_8h.html#ab6b52376c1b9d81e6ea6f95a1225f832", null ],
     [ "size", "gdt_8h.html#aaba88b24a21a6c70c895c0d55f4a69a0", null ]
 ];

@@ -1,7 +1,6 @@
 var classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler =
 [
     [ "InodeHandler", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler.html#ac29a45d004af57007f4bbad18fc73b05", null ],
-    [ "~InodeHandler", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler.html#a196cd2cd62e14d17cfd0a56f88c0106f", null ],
     [ "free", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler.html#a16743eec6204b9871d97b80d163449e8", null ],
     [ "grow", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler.html#a4bab1e2c0a08c16d2395cf4d3da64b04", null ],
     [ "save", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler.html#ae90957a35d01a04fedf9fdbe1a8fbd49", null ],

@@ -17,9 +17,7 @@ Inherits \fBMaxOS::drivers::Driver\fP\&.
 .ti -1c
 .RI "\fBIntegratedDriveElectronicsController\fP (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP *device_descriptor)"
 .br
-.ti -1c
-.RI "\fB~IntegratedDriveElectronicsController\fP ()"
-.br
+.RI "Construct a new Integrated Drive Electronics Controller object\&. "
 .ti -1c
 .RI "void \fBinitialise\fP () final"
 .br
@@ -41,12 +39,6 @@ Inherits \fBMaxOS::drivers::Driver\fP\&.
 Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .in +1c
 .ti -1c
-.RI "\fBDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~Driver\fP ()"
-.br
-.ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
 .RI "deactivate the driver "
@@ -58,40 +50,44 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .SH "Detailed Description"
 .PP 
 \fBDriver\fP for the IDE controller, handles the creation and management of the IDE devices\&. 
-
-
-.IP "\(bu" 2
-
 .PP
-
-.PP
-Definition at line \fB25\fP of file \fBide\&.h\fP\&.
+Definition at line \fB29\fP of file \fBide\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "IntegratedDriveElectronicsController::IntegratedDriveElectronicsController (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP * device_descriptor)"
 
 .PP
-Definition at line \fB14\fP of file \fBide\&.cpp\fP\&..PP
-.nf
-16 {
-17     // TODO: Use the device descriptor to get the port base and add the devices dynamically
-18 
-19     // Primary
-20     auto primary_maser = new AdvancedTechnologyAttachment(0x1F0, true);
-21     auto primary_slave = new AdvancedTechnologyAttachment(0x1F0, false);
-22     devices\&.insert(primary_maser, true);
-23     devices\&.insert(primary_slave, false);
-24 
-25     // Secondary
-26     auto secondary_maser = new AdvancedTechnologyAttachment(0x170, true);
-27     auto secondary_slave = new AdvancedTechnologyAttachment(0x170, false);
-28     devices\&.insert(secondary_maser, true);
-29     devices\&.insert(secondary_slave, false);
-30 
-31 }
-.fi
+Construct a new Integrated Drive Electronics Controller object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdevice_descriptor\fP The PCI device descriptor for this controller 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Use the device descriptor to get the port base and add the devices dynamically 
+.RE
+.PP
 
-.SS "IntegratedDriveElectronicsController::~IntegratedDriveElectronicsController ()\fC [default]\fP"
+.PP
+Definition at line \fB25\fP of file \fBide\&.cpp\fP\&..PP
+.nf
+26 {
+27     // Primary
+28     auto primary_maser = new AdvancedTechnologyAttachment(0x1F0, true);
+29     auto primary_slave = new AdvancedTechnologyAttachment(0x1F0, false);
+30     devices\&.insert(primary_maser, true);
+31     devices\&.insert(primary_slave, false);
+32 
+33     // Secondary
+34     auto secondary_maser = new AdvancedTechnologyAttachment(0x170, true);
+35     auto secondary_slave = new AdvancedTechnologyAttachment(0x170, false);
+36     devices\&.insert(secondary_maser, true);
+37     devices\&.insert(secondary_slave, false);
+38 
+39 }
+.fi
 
 .SH "Member Function Documentation"
 .PP 
@@ -102,22 +98,22 @@ Activate the IDE controller by mounting the devices to the virtual file system\&
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB66\fP of file \fBide\&.cpp\fP\&..PP
+Definition at line \fB74\fP of file \fBide\&.cpp\fP\&..PP
 .nf
-66                                                     {
-67 
-68     // Loop through the devices and load the partitions
-69     for (auto &device: devices) {
-70 
-71         // Ensure there is a device and that it is the master
-72         if (device\&.first == nullptr || !device\&.second)
-73             continue;
-74 
-75         // Mount the device
-76         MSDOSPartition::mount_partitions(device\&.first);
-77 
-78     }
-79 }
+74                                                     {
+75 
+76     // Loop through the devices and load the partitions
+77     for (auto &device: devices) {
+78 
+79         // Ensure there is a device and that it is the master
+80         if (device\&.first == nullptr || !device\&.second)
+81             continue;
+82 
+83         // Mount the device
+84         MSDOSPartition::mount_partitions(device\&.first);
+85 
+86     }
+87 }
 .fi
 
 .PP
@@ -129,11 +125,11 @@ Get the device name\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB92\fP of file \fBide\&.cpp\fP\&..PP
+Definition at line \fB100\fP of file \fBide\&.cpp\fP\&..PP
 .nf
-92                                                          {
-93     return "PIIX4";
-94 }
+100                                                          {
+101     return "PIIX4";
+102 }
 .fi
 
 .SS "void IntegratedDriveElectronicsController::initialise ()\fC [final]\fP, \fC [virtual]\fP"
@@ -143,32 +139,32 @@ Initialise the IDE controller by identifying the devices\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB38\fP of file \fBide\&.cpp\fP\&..PP
+Definition at line \fB46\fP of file \fBide\&.cpp\fP\&..PP
 .nf
-38                                                       {
-39 
-40     // Loop through the devices and identify them
-41     for (auto &device: devices) {
-42 
-43         // Check if the device is present
-44         auto ata_device = device\&.first;
-45         if (ata_device == nullptr)
-46             continue;
+46                                                       {
 47 
-48         // Identify the device
-49         bool exists = ata_device\->identify();
+48     // Loop through the devices and identify them
+49     for (auto &device: devices) {
 50 
-51         // Remove the device if it does not exist
-52         if (!exists) {
-53             devices\&.erase(ata_device);
-54             delete ata_device;
-55             continue;
-56         }
-57     }
+51         // Check if the device is present
+52         auto ata_device = device\&.first;
+53         if (ata_device == nullptr)
+54             continue;
+55 
+56         // Identify the device
+57         bool exists = ata_device\->identify();
 58 
-59     // Log the init done
-60     Logger::DEBUG() << "IDE Controller: Initialised " << devices\&.size() << " devices\\n";
-61 }
+59         // Remove the device if it does not exist
+60         if (!exists) {
+61             devices\&.erase(ata_device);
+62             delete ata_device;
+63             continue;
+64         }
+65     }
+66 
+67     // Log the init done
+68     Logger::DEBUG() << "IDE Controller: Initialised " << devices\&.size() << " devices\\n";
+69 }
 .fi
 
 .PP
@@ -180,11 +176,11 @@ Get the vendor name\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB85\fP of file \fBide\&.cpp\fP\&..PP
+Definition at line \fB93\fP of file \fBide\&.cpp\fP\&..PP
 .nf
-85                                                          {
-86     return "Intel";
-87 }
+93                                                          {
+94     return "Intel";
+95 }
 .fi
 
 

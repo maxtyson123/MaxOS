@@ -1,5 +1,10 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/filesystem/format/ext2.h File Reference}
 \hypertarget{ext2_8h}{}\label{ext2_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/ext2.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/ext2.h}}
+
+
+Defines structures and enums for the Extended 2 (ext2) filesystem format and relevant Filesystem, Directory and File classes.  
+
+
 {\ttfamily \#include $<$drivers/disk/disk.\+h$>$}\newline
 {\ttfamily \#include $<$filesystem/filesystem.\+h$>$}\newline
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
@@ -10,324 +15,631 @@
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1SuperBlock}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Super\+Block}}
-\item 
+\begin{DoxyCompactList}\small\item\em The metadata of the ext2 filesystem. Found at an offset of 1024 bytes from the start of the partition. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1BlockGroupDescriptor}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Block\+Group\+Descriptor}}
-\item 
+\begin{DoxyCompactList}\small\item\em The metadata for a block group in ext2. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Inode}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode}}
-\item 
+\begin{DoxyCompactList}\small\item\em The metadata for a file or directory in ext2. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeOS2Linux}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+OS2\+Linux}}
-\item 
+\begin{DoxyCompactList}\small\item\em The OS specific data for Linux created ext2 inodes. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1DirectoryEntry}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Directory\+Entry}}
-\item 
+\begin{DoxyCompactList}\small\item\em An entry in a directory that points to a file or subdirectory (the name follows this struct) \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume}}
-\item 
+\begin{DoxyCompactList}\small\item\em Common operations for an ext2 volume that are used by both files \& directories (like block \& inode allocation) \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Handler}}
 \begin{DoxyCompactList}\small\item\em Simplfies the management of an inode \& its blocks. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File}}
-\begin{DoxyCompactList}\small\item\em Handles the file operations on the \doxylink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2}{ext2} filesystem. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Handles the file operations on the ext2 filesystem. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Directory}}
-\begin{DoxyCompactList}\small\item\em Handles the directory operations on the \doxylink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2}{ext2} filesystem. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Handles the directory operations on the ext2 filesystem. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+System}}
-\begin{DoxyCompactList}\small\item\em Handles the \doxylink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2}{ext2} filesystem operations. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1filesystem}{Max\+OS\+::filesystem}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format}{Max\+OS\+::filesystem\+::format}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2}{Max\+OS\+::filesystem\+::format\+::ext2}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Handles the ext2 filesystem operations. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_ae477bc2007f8a6c5d78fb4cdbf6fce42}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+File\+System\+State}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_ae477bc2007f8a6c5d78fb4cdbf6fce42aa88a6a0c276fd853999a1faedf19c00e}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+CLEAN}} = 1
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_ae477bc2007f8a6c5d78fb4cdbf6fce42abb1ca97ec761fc37101737ba0aa2e7c5}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+ERROR}} = 2
+enum class \mbox{\hyperlink{ext2_8h_ae477bc2007f8a6c5d78fb4cdbf6fce42}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+File\+System\+State}} \{ {\bfseries CLEAN} = 1
+, {\bfseries ERROR} = 2
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a4e752b7e8aba4506619abf4c1fac1dcf}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Error\+Operation}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a4e752b7e8aba4506619abf4c1fac1dcfaa2e843feab94ef623fea888f07c28696}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+IGNORE}} = 1
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a4e752b7e8aba4506619abf4c1fac1dcfa73a0c6eacfe5d72ee3a2f3409c21d239}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+REMOUNT}} = 2
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a4e752b7e8aba4506619abf4c1fac1dcfa98a11b6a207bf1c64618790847ab8055}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+PANIC}} = 3
+\begin{DoxyCompactList}\small\item\em The state of the filesystem. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_a4e752b7e8aba4506619abf4c1fac1dcf}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Error\+Operation}} \{ {\bfseries IGNORE} = 1
+, {\bfseries REMOUNT} = 2
+, {\bfseries PANIC} = 3
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a14eb0294ca61c16e1f1d1b944595d842}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Creator\+OS}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a14eb0294ca61c16e1f1d1b944595d842aee86602a23e7a9a5136f6b2138894aa5}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+LINUX}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a14eb0294ca61c16e1f1d1b944595d842a073f4748e354bc733f7fe51b819a829c}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+GNU\+\_\+\+HURD}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a14eb0294ca61c16e1f1d1b944595d842ae50097ab75757064b5999087fd99f456}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+MASIX}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a14eb0294ca61c16e1f1d1b944595d842a96479d53826b7610550185a32aac16b8}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+FREE\+\_\+\+BSD}}
+\begin{DoxyCompactList}\small\item\em What to do when an error occurs. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_a14eb0294ca61c16e1f1d1b944595d842}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Creator\+OS}} \{ \newline
+{\bfseries LINUX}
+, {\bfseries GNU\+\_\+\+HURD}
+, {\bfseries MASIX}
+, {\bfseries FREE\+\_\+\+BSD}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a14eb0294ca61c16e1f1d1b944595d842ada10364d4dd5c85cef92c91f2cfcd124}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+OTHER\+\_\+\+LITES}}
+{\bfseries OTHER\+\_\+\+LITES}
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a5938bd9fad7c305e304caf42b1a89872}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Optional\+Features}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a5938bd9fad7c305e304caf42b1a89872a18a190ef890b5c4b5729550afe2867c5}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+PREALLOCATE\+\_\+\+DIRECTORY}} = 0x1
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a5938bd9fad7c305e304caf42b1a89872a6355a5c002eec7995001f930dab9c6ff}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+AFS\+\_\+\+SERVER\+\_\+\+INODES}} = 0x2
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a5938bd9fad7c305e304caf42b1a89872ab4a595b5dd5a5a037f43e647d0626c9f}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+JOURNAL\+\_\+\+ENABLED}} = 0x4
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a5938bd9fad7c305e304caf42b1a89872a65b18c1cefcadfa27c66f299bcdccaad}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+ATTRIBUTES\+\_\+\+EXTENDED}} = 0x8
+\begin{DoxyCompactList}\small\item\em The OS which created the filesystem. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_a5938bd9fad7c305e304caf42b1a89872}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Optional\+Features}} \{ \newline
+{\bfseries PREALLOCATE\+\_\+\+DIRECTORY} = 0x1
+, {\bfseries AFS\+\_\+\+SERVER\+\_\+\+INODES} = 0x2
+, {\bfseries JOURNAL\+\_\+\+ENABLED} = 0x4
+, {\bfseries ATTRIBUTES\+\_\+\+EXTENDED} = 0x8
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a5938bd9fad7c305e304caf42b1a89872ab0bfed7de0b6fb6eca38af446129de56}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+RESIZEABLE}} = 0x10
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a5938bd9fad7c305e304caf42b1a89872ae9b85163711b748488e89a1ea85e43c8}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+HASH\+\_\+\+INDEXING}} = 0x20
+{\bfseries RESIZEABLE} = 0x10
+, {\bfseries HASH\+\_\+\+INDEXING} = 0x20
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_ab5a87b5588c3da6f5d309e505d6d192d}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Required\+Features}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_ab5a87b5588c3da6f5d309e505d6d192da8943d3c6321ab82bd787bf650934ba03}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+COMPRESSION}} = 0x1
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_ab5a87b5588c3da6f5d309e505d6d192da0a8ed2b0872841f622369e8adcdc952f}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+DIRECTORY\+\_\+\+HAS\+\_\+\+TYPE}} = 0x2
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_ab5a87b5588c3da6f5d309e505d6d192da0fefd02a686f795bd84e625438ef303c}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+MUST\+\_\+\+REPLAY\+\_\+\+JOURNAL}} = 0x4
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_ab5a87b5588c3da6f5d309e505d6d192da966bd38b73bc23521e4529b9d5039632}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+JOURNAL\+\_\+\+DEVICE}} = 0x8
+\begin{DoxyCompactList}\small\item\em What features that are optional are supported by this filesystem. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_ab5a87b5588c3da6f5d309e505d6d192d}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Required\+Features}} \{ {\bfseries COMPRESSION} = 0x1
+, {\bfseries DIRECTORY\+\_\+\+HAS\+\_\+\+TYPE} = 0x2
+, {\bfseries MUST\+\_\+\+REPLAY\+\_\+\+JOURNAL} = 0x4
+, {\bfseries JOURNAL\+\_\+\+DEVICE} = 0x8
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a54f6317b2c7967eedc9fa908df937b89}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Read\+Only\+Features}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a54f6317b2c7967eedc9fa908df937b89a5964902e60f661cc4a886324df031211}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+SPARSE\+\_\+\+SUPER\+\_\+\+BLOCKS}} = 0x1
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a54f6317b2c7967eedc9fa908df937b89aaad84536ddf27a1e3a33234204ccdb5f}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+FILES\+\_\+64\+\_\+\+BIT}} = 0x2
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a54f6317b2c7967eedc9fa908df937b89a802152793c72912d5a87cd7cc1897f63}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+BINARY\+\_\+\+TREE\+\_\+\+DIRECTORIES}} = 0x4
+\begin{DoxyCompactList}\small\item\em What features that are required are supported by this filesystem. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_a54f6317b2c7967eedc9fa908df937b89}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Read\+Only\+Features}} \{ {\bfseries SPARSE\+\_\+\+SUPER\+\_\+\+BLOCKS} = 0x1
+, {\bfseries FILES\+\_\+64\+\_\+\+BIT} = 0x2
+, {\bfseries BINARY\+\_\+\+TREE\+\_\+\+DIRECTORIES} = 0x4
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007b}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Type}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba696b031073e74bf2cb98e5ef201d4aa3}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+UNKNOWN}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007bac589858dbe1d06c46544266ae4cd2c6f}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+FIFO}} = 0x1000
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba866c09f8a4a398a980ce9c224fb0fc30}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+CHARACTER\+\_\+\+DEVICE}} = 0x2000
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba28766b4be065d0c806c2e9c9d914af48}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+DIRECTORY}} = 0x4000
+\begin{DoxyCompactList}\small\item\em What features that are only required in read-\/only mode. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_a1cb56516e5efe8eb3332d6a1d64e007b}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Type}} \{ \newline
+{\bfseries UNKNOWN}
+, {\bfseries FIFO} = 0x1000
+, {\bfseries CHARACTER\+\_\+\+DEVICE} = 0x2000
+, {\bfseries DIRECTORY} = 0x4000
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba7811381072d9d924e48421210afc36c3}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+BLOCK\+\_\+\+DEVICE}} = 0x6000
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba9fc5887c030f7a3e19821ebec457e719}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+FILE}} = 0x8000
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007bab184d952382160a26328dfb90613faf7}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+SYMBOLIC\+\_\+\+LINK}} = 0x\+A000
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a1cb56516e5efe8eb3332d6a1d64e007ba75fbea08c09e684e6b3f3961761354fa}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+SOCKET}} = 0x\+C000
+{\bfseries BLOCK\+\_\+\+DEVICE} = 0x6000
+, {\bfseries FILE} = 0x8000
+, {\bfseries SYMBOLIC\+\_\+\+LINK} = 0x\+A000
+, {\bfseries SOCKET} = 0x\+C000
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Permissions}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238a2739cbbfccea04121e13547854e599b5}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+OTHER\+\_\+\+EXECUTE}} = 0x1
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238a509d061761241df99fbc8cb2f30dc5bc}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+OTHER\+\_\+\+WRITE}} = 0x2
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238afafd7846b40b59b3c0daeea6d7ca4b39}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+OTHER\+\_\+\+READ}} = 0x4
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238aab1f21b2c36d59f9b294114065aeb518}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+GROUP\+\_\+\+EXECUTE}} = 0x8
+\begin{DoxyCompactList}\small\item\em The type of an inode. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_a09f7c48ee7cecf6e10cbccb4bc7ca238}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Permissions}} \{ \newline
+{\bfseries OTHER\+\_\+\+EXECUTE} = 0x1
+, {\bfseries OTHER\+\_\+\+WRITE} = 0x2
+, {\bfseries OTHER\+\_\+\+READ} = 0x4
+, {\bfseries GROUP\+\_\+\+EXECUTE} = 0x8
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238a5e908c83a4f4b276a60fa41ecdffa506}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+GROUP\+\_\+\+WRITE}} = 0x10
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238a18726f2e5a49abcf2f408ccf9e9940df}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+GROUP\+\_\+\+READ}} = 0x20
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238ab94d9a6f26101a4be866ae19e969e691}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+USER\+\_\+\+EXECUTE}} = 0x40
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238a7acc1b67e721bb7c38ccfc14a52de8bc}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+USER\+\_\+\+WRITE}} = 0x80
+{\bfseries GROUP\+\_\+\+WRITE} = 0x10
+, {\bfseries GROUP\+\_\+\+READ} = 0x20
+, {\bfseries USER\+\_\+\+EXECUTE} = 0x40
+, {\bfseries USER\+\_\+\+WRITE} = 0x80
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238a99b993a751e3d9cb8a12c725b2077be5}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+USER\+\_\+\+READ}} = 0x100
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238a27a5fc888f51915241ab4c1fa0ab8157}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+STICKY}} = 0x200
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238a860e643abf9378bb005b27c9aa2c0d85}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+GROUP\+\_\+\+ID}} = 0x400
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a09f7c48ee7cecf6e10cbccb4bc7ca238a1b9efbab658fbd15557cf1c43bb89ff2}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+USER\+\_\+\+ID}} = 0x800
+{\bfseries USER\+\_\+\+READ} = 0x100
+, {\bfseries STICKY} = 0x200
+, {\bfseries GROUP\+\_\+\+ID} = 0x400
+, {\bfseries USER\+\_\+\+ID} = 0x800
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a3e6abe2885e285bee96b1708ba14bac1}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Permissions\+Defaults}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a3e6abe2885e285bee96b1708ba14bac1a9fc5887c030f7a3e19821ebec457e719}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+FILE}} = 0x1\+A4
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a3e6abe2885e285bee96b1708ba14bac1a28766b4be065d0c806c2e9c9d914af48}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+DIRECTORY}} = 0x1\+ED
+\begin{DoxyCompactList}\small\item\em The permissions that an inode can have. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_a3e6abe2885e285bee96b1708ba14bac1}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Permissions\+Defaults}} \{ {\bfseries FILE} = 0x1\+A4
+, {\bfseries DIRECTORY} = 0x1\+ED
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Flags}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122a5ea871c5aba19d0deeb5eaa05f108791}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+SECURE\+\_\+\+DELETE}} = 0x1
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122a5ec11da5aac7e63cfb265408a6cc790b}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+KEEP\+\_\+\+DATA}} = 0x2
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122afc6f340d00d57ac319fd3876d8250074}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+FILE\+\_\+\+COMPRESSION}} = 0x4
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122a28558d5cc11b813a99722b8d3a1a3424}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+SYNC\+\_\+\+UPDATES}} = 0x8
+\begin{DoxyCompactList}\small\item\em The default permissions for files and directories. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_a258f9509e39ed03a2d919dc581fcf122}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Flags}} \{ \newline
+{\bfseries SECURE\+\_\+\+DELETE} = 0x1
+, {\bfseries KEEP\+\_\+\+DATA} = 0x2
+, {\bfseries FILE\+\_\+\+COMPRESSION} = 0x4
+, {\bfseries SYNC\+\_\+\+UPDATES} = 0x8
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122aaef27bcc968358ce9714479908f390db}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+FILE\+\_\+\+IMMUTABLE}} = 0x10
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122a06dbfbaf9bed15a8b8f05bf31003e8a6}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+APPEND\+\_\+\+ONLY}} = 0x20
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122a755a91646c3a333d9f21772f61696177}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+DONT\+\_\+\+DUMP}} = 0x40
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122a1345b8352c0ee890f610e087386f33ff}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+NO\+\_\+\+LAST\+\_\+\+ACCESS}} = 0x80
+{\bfseries FILE\+\_\+\+IMMUTABLE} = 0x10
+, {\bfseries APPEND\+\_\+\+ONLY} = 0x20
+, {\bfseries DONT\+\_\+\+DUMP} = 0x40
+, {\bfseries NO\+\_\+\+LAST\+\_\+\+ACCESS} = 0x80
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122abb35a54e93d60ca36b8eb5cf93bdc3d7}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+HASH\+\_\+\+INDEXED}} = 0x10000
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122a2bfc9ddacccaecc4b345ec59c46c0886}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+AFS\+\_\+\+DIRECTORY}} = 0x20000
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a258f9509e39ed03a2d919dc581fcf122ad8bf96593d459fa8bdbc9489a1ffdd2a}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+JOURNAL\+\_\+\+FILE\+\_\+\+DATA}} = 0x40000
+{\bfseries HASH\+\_\+\+INDEXED} = 0x10000
+, {\bfseries AFS\+\_\+\+DIRECTORY} = 0x20000
+, {\bfseries JOURNAL\+\_\+\+FILE\+\_\+\+DATA} = 0x40000
  \}
-\item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4e}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Entry\+Type}} \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea696b031073e74bf2cb98e5ef201d4aa3}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+UNKNOWN}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea9fc5887c030f7a3e19821ebec457e719}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+FILE}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea28766b4be065d0c806c2e9c9d914af48}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+DIRECTORY}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea866c09f8a4a398a980ce9c224fb0fc30}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+CHARACTER\+\_\+\+DEVICE}}
+\begin{DoxyCompactList}\small\item\em The flags that can be set on an inode. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{ext2_8h_a709285ce94200c1633a6f7baa9a30c4e}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Entry\+Type}} \{ \newline
+{\bfseries UNKNOWN}
+, {\bfseries FILE}
+, {\bfseries DIRECTORY}
+, {\bfseries CHARACTER\+\_\+\+DEVICE}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea7811381072d9d924e48421210afc36c3}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+BLOCK\+\_\+\+DEVICE}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4eac589858dbe1d06c46544266ae4cd2c6f}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+FIFO}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4ea75fbea08c09e684e6b3f3961761354fa}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+SOCKET}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a709285ce94200c1633a6f7baa9a30c4eab184d952382160a26328dfb90613faf7}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+SYMBOLIC\+\_\+\+LINK}}
+{\bfseries BLOCK\+\_\+\+DEVICE}
+, {\bfseries FIFO}
+, {\bfseries SOCKET}
+, {\bfseries SYMBOLIC\+\_\+\+LINK}
  \}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The type of a directory entry. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1SuperBlock}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Super\+Block}} \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_a68dfc5bb60aec213d463fb98170c9f5e}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed)) superblock\+\_\+t
+\Hypertarget{ext2_8h_a68dfc5bb60aec213d463fb98170c9f5e}\label{ext2_8h_a68dfc5bb60aec213d463fb98170c9f5e} 
+struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1SuperBlock}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Super\+Block}} {\bfseries Max\+OS\+::filesystem\+::format\+::ext2\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed)) superblock\+\_\+t
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_ad785ef7b9ea44002eef2288a63e44f03}{total\+\_\+inodes}}
-\item 
+\begin{DoxyCompactList}\small\item\em Total number of inodes. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a1f1755d869c8b24fae3b7390507302d5}{total\+\_\+blocks}}
-\item 
+\begin{DoxyCompactList}\small\item\em Total number of blocks. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_aebfbc9268bf3bb5385e049841cfaff76}{reserved\+\_\+blocks}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of reserved blocks for superuser. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a72a6233c401132cc17f2799f0c49fa24}{unallocated\+\_\+blocks}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of free blocks. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_aa3f310454f79cba7692c796728ca5719}{unallocated\+\_\+inodes}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of free inodes. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a0dc39e70ce9225428ac2fd3abb92efa5}{starting\+\_\+block}}
-\item 
+\begin{DoxyCompactList}\small\item\em Where the superblock starts (normally 0 but not always) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a9e3fb1e50a1c71b2337df296222d9553}{block\+\_\+size}}
-\item 
+\begin{DoxyCompactList}\small\item\em Block size (as a power of 2, so 1024 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} block\+\_\+size) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_ab56caf9f79132f4f83c89bd7883a6617}{fragment\+\_\+size}}
-\item 
+\begin{DoxyCompactList}\small\item\em Fragment size (as a power of 2, so 1024 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} fragment\+\_\+size) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_ae1372cda5c7033663dd3cd09337db20d}{blocks\+\_\+per\+\_\+group}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of blocks per group. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_ac39afd1ee01bdaae3b3cbda874c8d481}{fragments\+\_\+per\+\_\+group}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of fragments per group. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a06564c1dba755f9cf24eaecc32b00c67}{inodes\+\_\+per\+\_\+group}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of inodes per group. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a2decc0b35b8f684193336656dff2cc4e}{last\+\_\+mount\+\_\+time}}
-\item 
+\begin{DoxyCompactList}\small\item\em Last time the filesystem was mounted (in seconds since the epoch) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a7ec135744b30dd0a2bc025152108bc05}{late\+\_\+write\+\_\+time}}
-\item 
+\begin{DoxyCompactList}\small\item\em Last time a block was written to (in seconds since the epoch) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_ad8ae22aa3364b489899f862b0a8b89a5}{mounts\+\_\+since\+\_\+check}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of mounts since the last consistency check. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_ae3d36737de6230dcee265b2cea7668c7}{mounts\+\_\+until\+\_\+check}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of mounts allowed before a consistency check is needed (fsck) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a969f26a406a283e0b763d249c5c86bd8}{signature}}
-\item 
+\begin{DoxyCompactList}\small\item\em Filesystem magic signature (0x\+EF53) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_af4ea525e6f15623e4e9c6c6aa75f2077}{state}}
-\item 
+\begin{DoxyCompactList}\small\item\em The state of the filesystem (see File\+System\+State) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_ab9fc5bbc679f7caf34126d26b80f50f6}{error\+\_\+operation}}
-\item 
+\begin{DoxyCompactList}\small\item\em What to do when an error is detected (see Error\+Operation) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a166f22ce4b25488997425405d2a6e42d}{version\+\_\+minor}}
-\item 
+\begin{DoxyCompactList}\small\item\em Minor version number (combined with version\+\_\+major to make version number) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a7f889395adf7e30cd7d3a2e7b93d8e88}{last\+\_\+check\+\_\+time}}
-\item 
+\begin{DoxyCompactList}\small\item\em Time of last consistency check (in seconds since the epoch) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a647e98370e3db15747a48aaa6585cda9}{time\+\_\+until\+\_\+check}}
-\item 
+\begin{DoxyCompactList}\small\item\em Maximum time between checks (in seconds) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_ad5ae9ea9f10b30d0fee2bfa3a530bb56}{os\+\_\+id}}
-\item 
+\begin{DoxyCompactList}\small\item\em ID of the OS which created the filesystem (see Creator\+OS) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_ae6af13393bbb4dabcb65cc1d5f4e9cc8}{version\+\_\+major}}
-\item 
+\begin{DoxyCompactList}\small\item\em Major version number (combined with version\+\_\+minor to make version number) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_ab0cbc65296f5aae8d7286e84fea53496}{reserved\+\_\+user}}
-\item 
+\begin{DoxyCompactList}\small\item\em User ID that can use reserved blocks. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a9caf3d2450f45b4782cad6ce1616fba6}{reserved\+\_\+group}}
-\item 
+\begin{DoxyCompactList}\small\item\em Group ID that can use reserved blocks. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a0e1583fdd21f52560c18f9a5646e6c7e}{first\+\_\+inode}}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of the first non-\/reserved inode (version \texorpdfstring{$<$}{<} 1 this is 11) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a36cabbc5933f511854826eac24f1e638}{inode\+\_\+size}}
-\item 
+\begin{DoxyCompactList}\small\item\em Size of each inode structure (version \texorpdfstring{$<$}{<} 1 this is 128 bytes) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a6c7065a90a175e6482399aa988b2a94b}{superblock\+\_\+group}}
-\item 
+\begin{DoxyCompactList}\small\item\em If there is a backup superblock, which group it is stored in. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_ab5c74d09cbdc07961182032d07a9861e}{optional\+\_\+features}}
-\item 
+\begin{DoxyCompactList}\small\item\em Features that are not required for read/write support but can help performance (see Optional\+Features) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_ae0ef7a4d58a88644e09b37cc11b16665}{required\+\_\+features}}
-\item 
+\begin{DoxyCompactList}\small\item\em Features that must be present for read/write support (see Required\+Features) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_acae142832d0fb2050114a7f64ffa1079}{read\+\_\+only\+\_\+features}}
-\item 
+\begin{DoxyCompactList}\small\item\em Features that are only required in read-\/only mode (see Read\+Only\+Features) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{ext2_8h_a8ac66042ef54d2051d85d32def63b5af}{filesystem\+\_\+id}} \mbox{[}16\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em A unique identifier for the filesystem. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{ext2_8h_a246b0f1c7e3fc6cf67e5afe79d6eb64d}{volume\+\_\+name}} \mbox{[}16\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em The volume name (is null-\/terminated) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{ext2_8h_acfba8dc3dab72de60d09cccf69ab7063}{last\+\_\+mount\+\_\+path}} \mbox{[}64\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em The path where the filesystem was last mounted (is null-\/terminated) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_aa379ffab5097352ba49ec9358c38cf4e}{compression}}
-\item 
+\begin{DoxyCompactList}\small\item\em Compression algorithm used (0 = none, see Required\+Features) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{ext2_8h_a59db0a379569cc7971e6fe4e52f8e753}{file\+\_\+preallocation\+\_\+blocks}}
-\item 
+\begin{DoxyCompactList}\small\item\em How many blocks should be allocated when creating a file. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{ext2_8h_a8608fddbcf3c4cf64e22772111171af9}{directory\+\_\+preallocation\+\_\+blocks}}
-\item 
+\begin{DoxyCompactList}\small\item\em How many blocks should be allocated when creating a directory. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a69f7e996ff7ce0531e893a56c8515e6b}{unused}}
-\item 
+\begin{DoxyCompactList}\small\item\em Reserved. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{ext2_8h_ad56042752bdf1259a1cffc14f7f3c99b}{journal\+\_\+id}} \mbox{[}16\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em A unique identifier for the journal. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a198cc9f1e1c33e98ce7954f22974d427}{journal\+\_\+inode}}
-\item 
+\begin{DoxyCompactList}\small\item\em The inode number of the journal file. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a2f99a4899aee710d68fb1009129f3ce7}{journal\+\_\+device}}
-\item 
+\begin{DoxyCompactList}\small\item\em The device number of the journal file. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a253e273f8c1855442f8fb043f18d5ed0}{orphan\+\_\+inodes\+\_\+start}}
-\item 
+\begin{DoxyCompactList}\small\item\em The start of the list of inodes without a directory entry that need to be deleted. \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{ext2_8h_a047d6d6c3bceaea709fe00e953a0c52f}{free}} \mbox{[}276\mbox{]}
-\item 
-enum \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_ae477bc2007f8a6c5d78fb4cdbf6fce42}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+File\+System\+State}} \mbox{\hyperlink{namespaceMaxOS_1_1filesystem_1_1format_1_1ext2_af899cae92b6170fd1a745c390c469ea8}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Reserved for future expansion. \end{DoxyCompactList}\item 
+\Hypertarget{ext2_8h_af899cae92b6170fd1a745c390c469ea8}\label{ext2_8h_af899cae92b6170fd1a745c390c469ea8} 
+enum \mbox{\hyperlink{ext2_8h_ae477bc2007f8a6c5d78fb4cdbf6fce42}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+File\+System\+State}} {\bfseries Max\+OS\+::filesystem\+::format\+::ext2\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a3b7b70b5c8749826874e747886566395}{block\+\_\+usage\+\_\+bitmap}}
-\item 
+\begin{DoxyCompactList}\small\item\em The block address of the block usage bitmap. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_ac29f389aac135fbfb5a2a86ff3d92b19}{block\+\_\+inode\+\_\+bitmap}}
-\item 
+\begin{DoxyCompactList}\small\item\em The block address of the inode usage bitmap. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_aa495ee00944140f03bf63503d48a704e}{inode\+\_\+table\+\_\+address}}
-\item 
+\begin{DoxyCompactList}\small\item\em The starting block address of the inode table. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a46b8adeeefed1d348a063313271a3699}{free\+\_\+blocks}}
-\item 
+\begin{DoxyCompactList}\small\item\em How many free blocks are in this block group. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_ad585fbceeccf029d7364a9ca5f376b0d}{free\+\_\+inodes}}
-\item 
+\begin{DoxyCompactList}\small\item\em How many free inodes are in this block group. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a3fc915a20a03732668dfe0cfca1b237d}{directory\+\_\+count}}
-\item 
+\begin{DoxyCompactList}\small\item\em How many directories are in this block group. \end{DoxyCompactList}\item 
+\Hypertarget{ext2_8h_a484e0c4fba3ed3b682b5bc736bd7157e}\label{ext2_8h_a484e0c4fba3ed3b682b5bc736bd7157e} 
 \begin{tabbing}
 xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
 union \{\\
 \>uint16\_t \mbox{\hyperlink{ext2_8h_a34d922d20e5c221884b48c9b448d8395}{type\_permissions}}\\
+\>\>{\em The type and permissions of the inode. }\\
+\Hypertarget{union_0d5_ae2cd60c089ae3d41b0026fe08cefda74}\label{union_0d5_ae2cd60c089ae3d41b0026fe08cefda74} 
 \>struct \{\\
 \>\>uint16\_t \mbox{\hyperlink{ext2_8h_a41a1bf0b9ff78aecbc5d02ec7e6cf40b}{permissions}}: 12\\
+\>\>\>{\em The permissions of the inode. }\\
 \>\>uint16\_t \mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}: 4\\
+\>\>\>{\em The type of the inode. }\\
 \>\} \\
 \}; \\
 
 \end{tabbing}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a03a78dbd31a51afe6b572dc1d947ed05}{user\+\_\+id}}
-\item 
+\begin{DoxyCompactList}\small\item\em The ID of the user who owns the inode. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a49711b7602751ed002b3da58832abe39}{size\+\_\+lower}}
-\item 
+\begin{DoxyCompactList}\small\item\em The lower 32 bits of the size of the file in bytes. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a64908a0d4a8be2e27c6231dc30c87992}{last\+\_\+access\+\_\+time}}
-\item 
+\begin{DoxyCompactList}\small\item\em The seconds (since the epoch) of the last access time. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a771be5dc4df1bb9fdb13c40f38a7faf6}{creation\+\_\+time}}
-\item 
+\begin{DoxyCompactList}\small\item\em The seconds (since the epoch) of the time the inode was first allocated. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_abfa7660b71e1aa619a3451cd222bf6ba}{last\+\_\+modification\+\_\+time}}
-\item 
+\begin{DoxyCompactList}\small\item\em The seconds (since the epoch) of the last time the inode was written to. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_af09c874986422c379c12dfc569c2c83c}{deletion\+\_\+time}}
-\item 
+\begin{DoxyCompactList}\small\item\em The seconds (since the epoch) of the time the inode was marked as not used. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a481b549f83b7eb9f4ef26b2b5e4b708c}{group\+\_\+id}}
-\item 
+\begin{DoxyCompactList}\small\item\em The ID of the group who owns the inode. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a3c95ce441ebff90cb2b20cff4088ce23}{hard\+\_\+links}}
-\item 
+\begin{DoxyCompactList}\small\item\em How many directory entries point to this inode. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a52c855886016536a10c92d43c5759240}{sectors\+\_\+used}}
-\item 
+\begin{DoxyCompactList}\small\item\em How many 512 byte sectors are used by this inode (not blocks) (not including this struct or directory entries linked to it) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a773b39d480759f67926cb18ae2219281}{flags}}
-\item 
+\begin{DoxyCompactList}\small\item\em Flags for the inode (see Inode\+Flags) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a16064a01b3885e9826bd4980408ec693}{os\+\_\+1}}
-\item 
+\begin{DoxyCompactList}\small\item\em OS specific value (0 for Linux/\+HURD, \textquotesingle{}transaltor\textquotesingle{} for Masix) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_aa88b958eedb58ecb5d2e9ff723cc680b}{block\+\_\+pointers}} \mbox{[}12\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em Pointers to the blocks that store the file\textquotesingle{}s data (0 marks unused) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a0e4a7530b5c00c4162138e9f69ec92c2}{l1\+\_\+indirect}}
-\item 
+\begin{DoxyCompactList}\small\item\em Pointer to a block that contains more block pointers (see block\+\_\+pointers) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a09186e60ca554693d4d5f02ae9281915}{l2\+\_\+indirect}}
-\item 
+\begin{DoxyCompactList}\small\item\em Pointer to a block that contains more l1\+\_\+indirect pointers. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a2899aaacc6cfa3ac491d10b0ce5c802c}{l3\+\_\+indirect}}
-\item 
+\begin{DoxyCompactList}\small\item\em Pointer to a block that contains more l2\+\_\+indirect pointers. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a240945185669680bcfcd13289bd5376a}{generation}}
-\item 
+\begin{DoxyCompactList}\small\item\em File version (used by NFS) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a90ad4998de0e7e47ea714cc9d87f6d27}{extended\+\_\+attribute}}
-\item 
+\begin{DoxyCompactList}\small\item\em File extended attribute block (Access Control List) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a637fccb670960f8f422558e625a20a34}{size\+\_\+upper}}
-\item 
+\begin{DoxyCompactList}\small\item\em The upper 32 bits of the size of the file in bytes (for files larger than 4GB). If this is a directory, this is the Directory Access Control List. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a6ff7cdebde90282e972bdb54fb7a2019}{os\+\_\+2}} \mbox{[}3\mbox{]}
-\item 
+\begin{DoxyCompactList}\small\item\em Second OS specific value (see Inode\+OS2\+Linux, ...) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{ext2_8h_aca89aa1d873fab2cfa66087464e7be8d}{fragment}}
-\item 
+\begin{DoxyCompactList}\small\item\em The fragment number. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a7617a684a3cd573f8b2132adc056d6ab}{high\+\_\+type\+\_\+permissions}}
-\item 
+\begin{DoxyCompactList}\small\item\em The high bits of the type \& permissions. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a9dbed0128bb41d6a83aa85cf1f01ca47}{high\+\_\+user\+\_\+id}}
-\item 
+\begin{DoxyCompactList}\small\item\em The high bits of the user ID. \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_a71fb47fdf8a477f7f4302f2453b383a3}{high\+\_\+group\+\_\+id}}
-\item 
+\begin{DoxyCompactList}\small\item\em The high bits of the group ID. \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a3053eeb4c69267b6ae5092354620aa19}{author\+\_\+id}}
-\item 
+\begin{DoxyCompactList}\small\item\em The user who created the inode (0x\+FFFFFFFF if use UID/\+GID fields) \end{DoxyCompactList}\item 
 uint32\+\_\+t \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}
-\item 
+\begin{DoxyCompactList}\small\item\em The inode number this entry points to (0 = unused) \end{DoxyCompactList}\item 
 uint16\+\_\+t \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}
-\item 
+\begin{DoxyCompactList}\small\item\em The total size of this entry (including name) \end{DoxyCompactList}\item 
 uint8\+\_\+t \mbox{\hyperlink{ext2_8h_ad87d27198b33002522cebf927bcca1d0}{name\+\_\+length}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The length of the name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines structures and enums for the Extended 2 (ext2) filesystem format and relevant Filesystem, Directory and File classes. 
+
+\begin{DoxyDate}{Date}
+17th July 2025 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{ext2_8h_a14eb0294ca61c16e1f1d1b944595d842}\label{ext2_8h_a14eb0294ca61c16e1f1d1b944595d842} 
+\index{ext2.h@{ext2.h}!CreatorOS@{CreatorOS}}
+\index{CreatorOS@{CreatorOS}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{CreatorOS}{CreatorOS}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_a14eb0294ca61c16e1f1d1b944595d842}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Creator\+OS}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The OS which created the filesystem. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000006}{Todo}}]Add Max\+OS \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00102}{102}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX,}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GNU\_HURD,}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MASIX,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREE\_BSD,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OTHER\_LITES,}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_a709285ce94200c1633a6f7baa9a30c4e}\label{ext2_8h_a709285ce94200c1633a6f7baa9a30c4e} 
+\index{ext2.h@{ext2.h}!EntryType@{EntryType}}
+\index{EntryType@{EntryType}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{EntryType}{EntryType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_a709285ce94200c1633a6f7baa9a30c4e}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Entry\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The type of a directory entry. 
+
+\begin{DoxyWarning}{Warning}
+Max\+OS only supports FILE, DIRECTORY 
+\end{DoxyWarning}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000010}{Todo}}]Support more \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00291}{291}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNKNOWN,}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FILE,}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIRECTORY,}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CHARACTER\_DEVICE,}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BLOCK\_DEVICE,}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FIFO,}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SOCKET,}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SYMBOLIC\_LINK}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_a4e752b7e8aba4506619abf4c1fac1dcf}\label{ext2_8h_a4e752b7e8aba4506619abf4c1fac1dcf} 
+\index{ext2.h@{ext2.h}!ErrorOperation@{ErrorOperation}}
+\index{ErrorOperation@{ErrorOperation}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{ErrorOperation}{ErrorOperation}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_a4e752b7e8aba4506619abf4c1fac1dcf}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Error\+Operation}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+What to do when an error occurs. 
+
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00090}{90}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IGNORE\ \ =\ 1,}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ REMOUNT\ =\ 2,}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PANIC\ \ \ =\ 3,}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_ae477bc2007f8a6c5d78fb4cdbf6fce42}\label{ext2_8h_ae477bc2007f8a6c5d78fb4cdbf6fce42} 
+\index{ext2.h@{ext2.h}!FileSystemState@{FileSystemState}}
+\index{FileSystemState@{FileSystemState}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{FileSystemState}{FileSystemState}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_ae477bc2007f8a6c5d78fb4cdbf6fce42}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+File\+System\+State}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The state of the filesystem. 
+
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00081}{81}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CLEAN\ =\ 1,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ERROR\ =\ 2,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_a258f9509e39ed03a2d919dc581fcf122}\label{ext2_8h_a258f9509e39ed03a2d919dc581fcf122} 
+\index{ext2.h@{ext2.h}!InodeFlags@{InodeFlags}}
+\index{InodeFlags@{InodeFlags}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{InodeFlags}{InodeFlags}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_a258f9509e39ed03a2d919dc581fcf122}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Flags}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The flags that can be set on an inode. 
+
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00243}{243}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SECURE\_DELETE\ \ \ \ \ =\ 0x1,\ \ \textcolor{comment}{//\ Zero\ out\ data\ on\ deletion}}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KEEP\_DATA\ \ \ \ \ \ \ \ \ =\ 0x2,}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FILE\_COMPRESSION\ \ =\ 0x4,}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SYNC\_UPDATES\ \ \ \ \ \ =\ 0x8,}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FILE\_IMMUTABLE\ \ \ \ =\ 0x10,}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ APPEND\_ONLY\ \ \ \ \ \ \ =\ 0x20,}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DONT\_DUMP\ \ \ \ \ \ \ \ \ =\ 0x40,}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NO\_LAST\_ACCESS\ \ \ \ =\ 0x80,}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HASH\_INDEXED\ \ \ \ \ \ =\ 0x10000,}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AFS\_DIRECTORY\ \ \ \ \ =\ 0x20000,}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ JOURNAL\_FILE\_DATA\ =\ 0x40000,}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_a09f7c48ee7cecf6e10cbccb4bc7ca238}\label{ext2_8h_a09f7c48ee7cecf6e10cbccb4bc7ca238} 
+\index{ext2.h@{ext2.h}!InodePermissions@{InodePermissions}}
+\index{InodePermissions@{InodePermissions}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{InodePermissions}{InodePermissions}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_a09f7c48ee7cecf6e10cbccb4bc7ca238}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Permissions}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The permissions that an inode can have. 
+
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00213}{213}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OTHER\_EXECUTE\ =\ 0x1,}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OTHER\_WRITE\ \ \ =\ 0x2,}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OTHER\_READ\ \ \ \ =\ 0x4,}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GROUP\_EXECUTE\ =\ 0x8,}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GROUP\_WRITE\ \ \ =\ 0x10,}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GROUP\_READ\ \ \ \ =\ 0x20,}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ USER\_EXECUTE\ \ =\ 0x40,}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ USER\_WRITE\ \ \ \ =\ 0x80,}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ USER\_READ\ \ \ \ \ =\ 0x100,}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ STICKY\ \ \ \ \ \ \ \ =\ 0x200,}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GROUP\_ID\ \ \ \ \ \ =\ 0x400,}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ USER\_ID\ \ \ \ \ \ \ =\ 0x800,}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_a3e6abe2885e285bee96b1708ba14bac1}\label{ext2_8h_a3e6abe2885e285bee96b1708ba14bac1} 
+\index{ext2.h@{ext2.h}!InodePermissionsDefaults@{InodePermissionsDefaults}}
+\index{InodePermissionsDefaults@{InodePermissionsDefaults}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{InodePermissionsDefaults}{InodePermissionsDefaults}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_a3e6abe2885e285bee96b1708ba14bac1}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Permissions\+Defaults}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The default permissions for files and directories. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000008}{Todo}}]Document these values \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00234}{234}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FILE\ \ \ \ \ \ \ \ =\ 0x1A4,}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIRECTORY\ \ \ =\ 0x1ED,}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_a1cb56516e5efe8eb3332d6a1d64e007b}\label{ext2_8h_a1cb56516e5efe8eb3332d6a1d64e007b} 
+\index{ext2.h@{ext2.h}!InodeType@{InodeType}}
+\index{InodeType@{InodeType}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{InodeType}{InodeType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_a1cb56516e5efe8eb3332d6a1d64e007b}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The type of an inode. 
+
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00198}{198}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNKNOWN,}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FIFO\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x1000,}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CHARACTER\_DEVICE\ \ =\ 0x2000,}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIRECTORY\ \ \ \ \ \ \ \ \ =\ 0x4000,}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BLOCK\_DEVICE\ \ \ \ \ \ =\ 0x6000,}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FILE\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x8000,}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SYMBOLIC\_LINK\ \ \ \ \ =\ 0xA000,}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SOCKET\ \ \ \ \ \ \ \ \ \ \ \ =\ 0xC000,}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_a5938bd9fad7c305e304caf42b1a89872}\label{ext2_8h_a5938bd9fad7c305e304caf42b1a89872} 
+\index{ext2.h@{ext2.h}!OptionalFeatures@{OptionalFeatures}}
+\index{OptionalFeatures@{OptionalFeatures}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{OptionalFeatures}{OptionalFeatures}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_a5938bd9fad7c305e304caf42b1a89872}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Optional\+Features}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+What features that are optional are supported by this filesystem. 
+
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00114}{114}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PREALLOCATE\_DIRECTORY\ \ \ =\ 0x1,}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AFS\_SERVER\_INODES\ \ \ \ \ \ \ =\ 0x2,}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ JOURNAL\_ENABLED\ \ \ \ \ \ \ \ \ =\ 0x4,}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ATTRIBUTES\_EXTENDED\ \ \ \ \ =\ 0x8,}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESIZEABLE\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x10,}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HASH\_INDEXING\ \ \ \ \ \ \ \ \ \ \ =\ 0x20,}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_a54f6317b2c7967eedc9fa908df937b89}\label{ext2_8h_a54f6317b2c7967eedc9fa908df937b89} 
+\index{ext2.h@{ext2.h}!ReadOnlyFeatures@{ReadOnlyFeatures}}
+\index{ReadOnlyFeatures@{ReadOnlyFeatures}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{ReadOnlyFeatures}{ReadOnlyFeatures}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_a54f6317b2c7967eedc9fa908df937b89}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Read\+Only\+Features}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+What features that are only required in read-\/only mode. 
+
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00138}{138}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPARSE\_SUPER\_BLOCKS\ \ \ \ \ =\ 0x1,}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FILES\_64\_BIT\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x2,}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BINARY\_TREE\_DIRECTORIES\ =\ 0x4,}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{ext2_8h_ab5a87b5588c3da6f5d309e505d6d192d}\label{ext2_8h_ab5a87b5588c3da6f5d309e505d6d192d} 
+\index{ext2.h@{ext2.h}!RequiredFeatures@{RequiredFeatures}}
+\index{RequiredFeatures@{RequiredFeatures}!ext2.h@{ext2.h}}
+\doxysubsubsection{\texorpdfstring{RequiredFeatures}{RequiredFeatures}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{ext2_8h_ab5a87b5588c3da6f5d309e505d6d192d}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Required\+Features}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+What features that are required are supported by this filesystem. 
+
+
+
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00127}{127}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ COMPRESSION\ \ \ \ \ \ \ \ \ \ \ =\ 0x1,}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIRECTORY\_HAS\_TYPE\ \ \ \ =\ 0x2,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MUST\_REPLAY\_JOURNAL\ \ \ =\ 0x4,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ JOURNAL\_DEVICE\ \ \ \ \ \ \ \ =\ 0x8,}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
 
 
 \doxysubsection{Variable Documentation}
-\Hypertarget{ext2_8h_a484e0c4fba3ed3b682b5bc736bd7157e}\label{ext2_8h_a484e0c4fba3ed3b682b5bc736bd7157e} 
-\doxysubsubsection{\texorpdfstring{[union]}{[union]}}
-{\footnotesize\ttfamily union  \{ ... \} }
-
 \Hypertarget{ext2_8h_a3053eeb4c69267b6ae5092354620aa19}\label{ext2_8h_a3053eeb4c69267b6ae5092354620aa19} 
 \index{ext2.h@{ext2.h}!author\_id@{author\_id}}
 \index{author\_id@{author\_id}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{author\_id}{author\_id}}
 {\footnotesize\ttfamily uint32\+\_\+t author\+\_\+id}
+
+
+
+The user who created the inode (0x\+FFFFFFFF if use UID/\+GID fields) 
 
 
 
@@ -341,6 +653,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00005}{5}} of file \mbox{\hy
 
 
 
+The block address of the inode usage bitmap. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00001}{1}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_aa88b958eedb58ecb5d2e9ff723cc680b}\label{ext2_8h_aa88b958eedb58ecb5d2e9ff723cc680b} 
@@ -348,6 +664,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00001}{1}} of file \mbox{\hy
 \index{block\_pointers@{block\_pointers}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{block\_pointers}{block\_pointers}}
 {\footnotesize\ttfamily uint32\+\_\+t block\+\_\+pointers\mbox{[}12\mbox{]}}
+
+
+
+Pointers to the blocks that store the file\textquotesingle{}s data (0 marks unused) 
 
 
 
@@ -361,17 +681,25 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00018}{18}} of file \mbox{\h
 
 
 
+Block size (as a power of 2, so 1024 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} block\+\_\+size) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00006}{6}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{ext2_8cpp_source_l00769}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+::read()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00715}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+::write()}}.
+Referenced by \mbox{\hyperlink{ext2_8cpp_source_l00794}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+::read()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00740}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+::write()}}.
 
 \Hypertarget{ext2_8h_a3b7b70b5c8749826874e747886566395}\label{ext2_8h_a3b7b70b5c8749826874e747886566395} 
 \index{ext2.h@{ext2.h}!block\_usage\_bitmap@{block\_usage\_bitmap}}
 \index{block\_usage\_bitmap@{block\_usage\_bitmap}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{block\_usage\_bitmap}{block\_usage\_bitmap}}
 {\footnotesize\ttfamily uint32\+\_\+t block\+\_\+usage\+\_\+bitmap}
+
+
+
+The block address of the block usage bitmap. 
 
 
 
@@ -385,6 +713,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00000}{0}} of file \mbox{\hy
 
 
 
+Number of blocks per group. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00008}{8}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_aa379ffab5097352ba49ec9358c38cf4e}\label{ext2_8h_aa379ffab5097352ba49ec9358c38cf4e} 
@@ -392,6 +724,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00008}{8}} of file \mbox{\hy
 \index{compression@{compression}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{compression}{compression}}
 {\footnotesize\ttfamily uint32\+\_\+t compression}
+
+
+
+Compression algorithm used (0 = none, see Required\+Features) 
 
 
 
@@ -405,6 +741,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00036}{36}} of file \mbox{\h
 
 
 
+The seconds (since the epoch) of the time the inode was first allocated. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00010}{10}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_af09c874986422c379c12dfc569c2c83c}\label{ext2_8h_af09c874986422c379c12dfc569c2c83c} 
@@ -412,6 +752,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00010}{10}} of file \mbox{\h
 \index{deletion\_time@{deletion\_time}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{deletion\_time}{deletion\_time}}
 {\footnotesize\ttfamily uint32\+\_\+t deletion\+\_\+time}
+
+
+
+The seconds (since the epoch) of the time the inode was marked as not used. 
 
 
 
@@ -425,6 +769,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00012}{12}} of file \mbox{\h
 
 
 
+How many directories are in this block group. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00005}{5}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a8608fddbcf3c4cf64e22772111171af9}\label{ext2_8h_a8608fddbcf3c4cf64e22772111171af9} 
@@ -432,6 +780,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00005}{5}} of file \mbox{\hy
 \index{directory\_preallocation\_blocks@{directory\_preallocation\_blocks}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{directory\_preallocation\_blocks}{directory\_preallocation\_blocks}}
 {\footnotesize\ttfamily uint8\+\_\+t directory\+\_\+preallocation\+\_\+blocks}
+
+
+
+How many blocks should be allocated when creating a directory. 
 
 
 
@@ -445,6 +797,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00038}{38}} of file \mbox{\h
 
 
 
+What to do when an error is detected (see Error\+Operation) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00017}{17}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a90ad4998de0e7e47ea714cc9d87f6d27}\label{ext2_8h_a90ad4998de0e7e47ea714cc9d87f6d27} 
@@ -452,6 +808,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00017}{17}} of file \mbox{\h
 \index{extended\_attribute@{extended\_attribute}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{extended\_attribute}{extended\_attribute}}
 {\footnotesize\ttfamily uint32\+\_\+t extended\+\_\+attribute}
+
+
+
+File extended attribute block (Access Control List) 
 
 
 
@@ -465,6 +825,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00023}{23}} of file \mbox{\h
 
 
 
+How many blocks should be allocated when creating a file. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00037}{37}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a8ac66042ef54d2051d85d32def63b5af}\label{ext2_8h_a8ac66042ef54d2051d85d32def63b5af} 
@@ -472,6 +836,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00037}{37}} of file \mbox{\h
 \index{filesystem\_id@{filesystem\_id}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{filesystem\_id}{filesystem\_id}}
 {\footnotesize\ttfamily uint8\+\_\+t filesystem\+\_\+id\mbox{[}16\mbox{]}}
+
+
+
+A unique identifier for the filesystem. 
 
 
 
@@ -485,6 +853,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00033}{33}} of file \mbox{\h
 
 
 
+Number of the first non-\/reserved inode (version \texorpdfstring{$<$}{<} 1 this is 11) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00027}{27}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a773b39d480759f67926cb18ae2219281}\label{ext2_8h_a773b39d480759f67926cb18ae2219281} 
@@ -492,6 +864,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00027}{27}} of file \mbox{\h
 \index{flags@{flags}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{flags}{flags}}
 {\footnotesize\ttfamily uint32\+\_\+t flags}
+
+
+
+Flags for the inode (see Inode\+Flags) 
 
 
 
@@ -505,6 +881,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00016}{16}} of file \mbox{\h
 
 
 
+The fragment number. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00000}{0}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_ab56caf9f79132f4f83c89bd7883a6617}\label{ext2_8h_ab56caf9f79132f4f83c89bd7883a6617} 
@@ -515,6 +895,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00000}{0}} of file \mbox{\hy
 
 
 
+Fragment size (as a power of 2, so 1024 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} fragment\+\_\+size) 
+
+How many 1024 byte fragments are in the file. 
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00007}{7}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_ac39afd1ee01bdaae3b3cbda874c8d481}\label{ext2_8h_ac39afd1ee01bdaae3b3cbda874c8d481} 
@@ -522,6 +906,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00007}{7}} of file \mbox{\hy
 \index{fragments\_per\_group@{fragments\_per\_group}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{fragments\_per\_group}{fragments\_per\_group}}
 {\footnotesize\ttfamily uint32\+\_\+t fragments\+\_\+per\+\_\+group}
+
+
+
+Number of fragments per group. 
 
 
 
@@ -535,6 +923,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00009}{9}} of file \mbox{\hy
 
 
 
+Reserved for future expansion. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00044}{44}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a46b8adeeefed1d348a063313271a3699}\label{ext2_8h_a46b8adeeefed1d348a063313271a3699} 
@@ -545,17 +937,25 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00044}{44}} of file \mbox{\h
 
 
 
+How many free blocks are in this block group. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00003}{3}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{ext2_8cpp_source_l00175}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::allocate\+\_\+blocks()}}.
+Referenced by \mbox{\hyperlink{ext2_8cpp_source_l00185}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::allocate\+\_\+blocks()}}.
 
 \Hypertarget{ext2_8h_ad585fbceeccf029d7364a9ca5f376b0d}\label{ext2_8h_ad585fbceeccf029d7364a9ca5f376b0d} 
 \index{ext2.h@{ext2.h}!free\_inodes@{free\_inodes}}
 \index{free\_inodes@{free\_inodes}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{free\_inodes}{free\_inodes}}
 {\footnotesize\ttfamily uint16\+\_\+t free\+\_\+inodes}
+
+
+
+How many free inodes are in this block group. 
 
 
 
@@ -569,6 +969,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00004}{4}} of file \mbox{\hy
 
 
 
+File version (used by NFS) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00022}{22}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a481b549f83b7eb9f4ef26b2b5e4b708c}\label{ext2_8h_a481b549f83b7eb9f4ef26b2b5e4b708c} 
@@ -576,6 +980,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00022}{22}} of file \mbox{\h
 \index{group\_id@{group\_id}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{group\_id}{group\_id}}
 {\footnotesize\ttfamily uint16\+\_\+t group\+\_\+id}
+
+
+
+The ID of the group who owns the inode. 
 
 
 
@@ -589,6 +997,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00013}{13}} of file \mbox{\h
 
 
 
+How many directory entries point to this inode. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00014}{14}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a71fb47fdf8a477f7f4302f2453b383a3}\label{ext2_8h_a71fb47fdf8a477f7f4302f2453b383a3} 
@@ -596,6 +1008,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00014}{14}} of file \mbox{\h
 \index{high\_group\_id@{high\_group\_id}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{high\_group\_id}{high\_group\_id}}
 {\footnotesize\ttfamily uint16\+\_\+t high\+\_\+group\+\_\+id}
+
+
+
+The high bits of the group ID. 
 
 
 
@@ -609,6 +1025,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00004}{4}} of file \mbox{\hy
 
 
 
+The high bits of the type \& permissions. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00002}{2}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a9dbed0128bb41d6a83aa85cf1f01ca47}\label{ext2_8h_a9dbed0128bb41d6a83aa85cf1f01ca47} 
@@ -616,6 +1036,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00002}{2}} of file \mbox{\hy
 \index{high\_user\_id@{high\_user\_id}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{high\_user\_id}{high\_user\_id}}
 {\footnotesize\ttfamily uint16\+\_\+t high\+\_\+user\+\_\+id}
+
+
+
+The high bits of the user ID. 
 
 
 
@@ -629,17 +1053,25 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00003}{3}} of file \mbox{\hy
 
 
 
+The inode number this entry points to (0 = unused) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00000}{0}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{ext2_8cpp_source_l01048}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Directory\+::create\+\_\+file()}}, \mbox{\hyperlink{ext2_8cpp_source_l00357}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::create\+\_\+inode()}}, \mbox{\hyperlink{ext2_8cpp_source_l01086}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Directory\+::create\+\_\+subdirectory()}}, \mbox{\hyperlink{ext2_8cpp_source_l00421}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::free\+\_\+inode()}}, \mbox{\hyperlink{ext2_8cpp_source_l00136}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::read\+\_\+inode()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00090}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::write\+\_\+inode()}}.
+Referenced by \mbox{\hyperlink{ext2_8cpp_source_l01083}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Directory\+::create\+\_\+file()}}, \mbox{\hyperlink{ext2_8cpp_source_l00367}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::create\+\_\+inode()}}, \mbox{\hyperlink{ext2_8cpp_source_l01121}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Directory\+::create\+\_\+subdirectory()}}, \mbox{\hyperlink{ext2_8cpp_source_l00431}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::free\+\_\+inode()}}, \mbox{\hyperlink{ext2_8cpp_source_l00146}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::read\+\_\+inode()}}, and \mbox{\hyperlink{ext2_8cpp_source_l00100}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::write\+\_\+inode()}}.
 
 \Hypertarget{ext2_8h_a36cabbc5933f511854826eac24f1e638}\label{ext2_8h_a36cabbc5933f511854826eac24f1e638} 
 \index{ext2.h@{ext2.h}!inode\_size@{inode\_size}}
 \index{inode\_size@{inode\_size}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{inode\_size}{inode\_size}}
 {\footnotesize\ttfamily uint16\+\_\+t inode\+\_\+size}
+
+
+
+Size of each inode structure (version \texorpdfstring{$<$}{<} 1 this is 128 bytes) 
 
 
 
@@ -653,6 +1085,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00028}{28}} of file \mbox{\h
 
 
 
+The starting block address of the inode table. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00002}{2}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a06564c1dba755f9cf24eaecc32b00c67}\label{ext2_8h_a06564c1dba755f9cf24eaecc32b00c67} 
@@ -660,6 +1096,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00002}{2}} of file \mbox{\hy
 \index{inodes\_per\_group@{inodes\_per\_group}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{inodes\_per\_group}{inodes\_per\_group}}
 {\footnotesize\ttfamily uint32\+\_\+t inodes\+\_\+per\+\_\+group}
+
+
+
+Number of inodes per group. 
 
 
 
@@ -673,6 +1113,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00010}{10}} of file \mbox{\h
 
 
 
+The device number of the journal file. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00042}{42}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_ad56042752bdf1259a1cffc14f7f3c99b}\label{ext2_8h_ad56042752bdf1259a1cffc14f7f3c99b} 
@@ -680,6 +1124,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00042}{42}} of file \mbox{\h
 \index{journal\_id@{journal\_id}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{journal\_id}{journal\_id}}
 {\footnotesize\ttfamily uint8\+\_\+t journal\+\_\+id\mbox{[}16\mbox{]}}
+
+
+
+A unique identifier for the journal. 
 
 
 
@@ -693,6 +1141,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00040}{40}} of file \mbox{\h
 
 
 
+The inode number of the journal file. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00041}{41}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a0e4a7530b5c00c4162138e9f69ec92c2}\label{ext2_8h_a0e4a7530b5c00c4162138e9f69ec92c2} 
@@ -700,6 +1152,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00041}{41}} of file \mbox{\h
 \index{l1\_indirect@{l1\_indirect}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{l1\_indirect}{l1\_indirect}}
 {\footnotesize\ttfamily uint32\+\_\+t l1\+\_\+indirect}
+
+
+
+Pointer to a block that contains more block pointers (see block\+\_\+pointers) 
 
 
 
@@ -713,6 +1169,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00019}{19}} of file \mbox{\h
 
 
 
+Pointer to a block that contains more l1\+\_\+indirect pointers. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00020}{20}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a2899aaacc6cfa3ac491d10b0ce5c802c}\label{ext2_8h_a2899aaacc6cfa3ac491d10b0ce5c802c} 
@@ -720,6 +1180,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00020}{20}} of file \mbox{\h
 \index{l3\_indirect@{l3\_indirect}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{l3\_indirect}{l3\_indirect}}
 {\footnotesize\ttfamily uint32\+\_\+t l3\+\_\+indirect}
+
+
+
+Pointer to a block that contains more l2\+\_\+indirect pointers. 
 
 
 
@@ -733,6 +1197,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00021}{21}} of file \mbox{\h
 
 
 
+The seconds (since the epoch) of the last access time. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00009}{9}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a7f889395adf7e30cd7d3a2e7b93d8e88}\label{ext2_8h_a7f889395adf7e30cd7d3a2e7b93d8e88} 
@@ -740,6 +1208,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00009}{9}} of file \mbox{\hy
 \index{last\_check\_time@{last\_check\_time}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{last\_check\_time}{last\_check\_time}}
 {\footnotesize\ttfamily uint32\+\_\+t last\+\_\+check\+\_\+time}
+
+
+
+Time of last consistency check (in seconds since the epoch) 
 
 
 
@@ -753,6 +1225,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00019}{19}} of file \mbox{\h
 
 
 
+The seconds (since the epoch) of the last time the inode was written to. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00011}{11}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_acfba8dc3dab72de60d09cccf69ab7063}\label{ext2_8h_acfba8dc3dab72de60d09cccf69ab7063} 
@@ -760,6 +1236,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00011}{11}} of file \mbox{\h
 \index{last\_mount\_path@{last\_mount\_path}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{last\_mount\_path}{last\_mount\_path}}
 {\footnotesize\ttfamily uint8\+\_\+t last\+\_\+mount\+\_\+path\mbox{[}64\mbox{]}}
+
+
+
+The path where the filesystem was last mounted (is null-\/terminated) 
 
 
 
@@ -773,6 +1253,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00035}{35}} of file \mbox{\h
 
 
 
+Last time the filesystem was mounted (in seconds since the epoch) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00011}{11}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a7ec135744b30dd0a2bc025152108bc05}\label{ext2_8h_a7ec135744b30dd0a2bc025152108bc05} 
@@ -780,6 +1264,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00011}{11}} of file \mbox{\h
 \index{late\_write\_time@{late\_write\_time}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{late\_write\_time}{late\_write\_time}}
 {\footnotesize\ttfamily uint32\+\_\+t late\+\_\+write\+\_\+time}
+
+
+
+Last time a block was written to (in seconds since the epoch) 
 
 
 
@@ -793,6 +1281,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00012}{12}} of file \mbox{\h
 
 
 
+Number of mounts since the last consistency check. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00013}{13}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_ae3d36737de6230dcee265b2cea7668c7}\label{ext2_8h_ae3d36737de6230dcee265b2cea7668c7} 
@@ -800,6 +1292,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00013}{13}} of file \mbox{\h
 \index{mounts\_until\_check@{mounts\_until\_check}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{mounts\_until\_check}{mounts\_until\_check}}
 {\footnotesize\ttfamily uint16\+\_\+t mounts\+\_\+until\+\_\+check}
+
+
+
+Number of mounts allowed before a consistency check is needed (fsck) 
 
 
 
@@ -813,6 +1309,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00014}{14}} of file \mbox{\h
 
 
 
+The length of the name. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00002}{2}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_ab5c74d09cbdc07961182032d07a9861e}\label{ext2_8h_ab5c74d09cbdc07961182032d07a9861e} 
@@ -820,6 +1320,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00002}{2}} of file \mbox{\hy
 \index{optional\_features@{optional\_features}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{optional\_features}{optional\_features}}
 {\footnotesize\ttfamily uint32\+\_\+t optional\+\_\+features}
+
+
+
+Features that are not required for read/write support but can help performance (see Optional\+Features) 
 
 
 
@@ -833,6 +1337,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00030}{30}} of file \mbox{\h
 
 
 
+The start of the list of inodes without a directory entry that need to be deleted. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00043}{43}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a16064a01b3885e9826bd4980408ec693}\label{ext2_8h_a16064a01b3885e9826bd4980408ec693} 
@@ -840,6 +1348,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00043}{43}} of file \mbox{\h
 \index{os\_1@{os\_1}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{os\_1}{os\_1}}
 {\footnotesize\ttfamily uint32\+\_\+t os\+\_\+1}
+
+
+
+OS specific value (0 for Linux/\+HURD, \textquotesingle{}transaltor\textquotesingle{} for Masix) 
 
 
 
@@ -853,6 +1365,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00017}{17}} of file \mbox{\h
 
 
 
+Second OS specific value (see Inode\+OS2\+Linux, ...) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00025}{25}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_ad5ae9ea9f10b30d0fee2bfa3a530bb56}\label{ext2_8h_ad5ae9ea9f10b30d0fee2bfa3a530bb56} 
@@ -860,6 +1376,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00025}{25}} of file \mbox{\h
 \index{os\_id@{os\_id}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{os\_id}{os\_id}}
 {\footnotesize\ttfamily uint32\+\_\+t os\+\_\+id}
+
+
+
+ID of the OS which created the filesystem (see Creator\+OS) 
 
 
 
@@ -873,6 +1393,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00021}{21}} of file \mbox{\h
 
 
 
+The permissions of the inode. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00003}{3}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_acae142832d0fb2050114a7f64ffa1079}\label{ext2_8h_acae142832d0fb2050114a7f64ffa1079} 
@@ -880,6 +1404,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00003}{3}} of file \mbox{\hy
 \index{read\_only\_features@{read\_only\_features}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{read\_only\_features}{read\_only\_features}}
 {\footnotesize\ttfamily uint16\+\_\+t read\+\_\+only\+\_\+features}
+
+
+
+Features that are only required in read-\/only mode (see Read\+Only\+Features) 
 
 
 
@@ -893,6 +1421,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00032}{32}} of file \mbox{\h
 
 
 
+Features that must be present for read/write support (see Required\+Features) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00031}{31}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_aebfbc9268bf3bb5385e049841cfaff76}\label{ext2_8h_aebfbc9268bf3bb5385e049841cfaff76} 
@@ -900,6 +1432,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00031}{31}} of file \mbox{\h
 \index{reserved\_blocks@{reserved\_blocks}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{reserved\_blocks}{reserved\_blocks}}
 {\footnotesize\ttfamily uint32\+\_\+t reserved\+\_\+blocks}
+
+
+
+Number of reserved blocks for superuser. 
 
 
 
@@ -913,6 +1449,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00002}{2}} of file \mbox{\hy
 
 
 
+Group ID that can use reserved blocks. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00024}{24}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_ab0cbc65296f5aae8d7286e84fea53496}\label{ext2_8h_ab0cbc65296f5aae8d7286e84fea53496} 
@@ -920,6 +1460,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00024}{24}} of file \mbox{\h
 \index{reserved\_user@{reserved\_user}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{reserved\_user}{reserved\_user}}
 {\footnotesize\ttfamily uint16\+\_\+t reserved\+\_\+user}
+
+
+
+User ID that can use reserved blocks. 
 
 
 
@@ -933,6 +1477,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00023}{23}} of file \mbox{\h
 
 
 
+How many 512 byte sectors are used by this inode (not blocks) (not including this struct or directory entries linked to it) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00015}{15}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a969f26a406a283e0b763d249c5c86bd8}\label{ext2_8h_a969f26a406a283e0b763d249c5c86bd8} 
@@ -943,11 +1491,15 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00015}{15}} of file \mbox{\h
 
 
 
+Filesystem magic signature (0x\+EF53) 
+
+The signature that identifies the type of the table. 
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00015}{15}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00106}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}.
+Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00160}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}.
 
 \Hypertarget{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}\label{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0} 
 \index{ext2.h@{ext2.h}!size@{size}}
@@ -957,17 +1509,25 @@ Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00106}{Max\+OS\+::hardwarecommu
 
 
 
+The total size of this entry (including name) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00001}{1}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00277}{Max\+OS\+::memory\+::\+Memory\+Manager\+::align()}}, \mbox{\hyperlink{physical_8cpp_source_l00778}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+direct\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{physical_8cpp_source_l00140}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{physical_8cpp_source_l00152}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+up\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{virtual_8cpp_source_l00111}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate()}}, \mbox{\hyperlink{virtual_8cpp_source_l00125}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate()}}, \mbox{\hyperlink{physical_8cpp_source_l00257}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+area()}}, \mbox{\hyperlink{buffer_8cpp_source_l00015}{Max\+OS\+::common\+::\+Buffer\+::\+Buffer()}}, \mbox{\hyperlink{buffer_8cpp_source_l00031}{Max\+OS\+::common\+::\+Buffer\+::\+Buffer()}}, \mbox{\hyperlink{physical_8cpp_source_l00163}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::check\+\_\+aligned()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00078}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Data\+Received()}}, \mbox{\hyperlink{amd__am79c973_8cpp_source_l00207}{Max\+OS\+::drivers\+::ethernet\+::\+AMD\+\_\+\+AM79\+C973\+::\+Do\+Send()}}, \mbox{\hyperlink{intel__i217_8cpp_source_l00348}{Max\+OS\+::drivers\+::ethernet\+::intel\+\_\+i217\+::\+Do\+Send()}}, \mbox{\hyperlink{ethernet_8cpp_source_l00103}{Max\+OS\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Fire\+Data\+Received()}}, \mbox{\hyperlink{ethernet_8cpp_source_l00130}{Max\+OS\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Fire\+Data\+Sent()}}, \mbox{\hyperlink{physical_8cpp_source_l00326}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+area()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00089}{Max\+OS\+::memory\+::\+Memory\+Manager\+::handle\+\_\+malloc()}}, \mbox{\hyperlink{arp_8cpp_source_l00032}{Max\+OS\+::net\+::\+Address\+Resolution\+Protocol\+::handle\+Ethernetframe\+Payload()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00107}{Max\+OS\+::net\+::\+Internet\+Protocol\+Handler\+::handle\+Ethernetframe\+Payload()}}, \mbox{\hyperlink{icmp_8cpp_source_l00031}{Max\+OS\+::net\+::\+Internet\+Control\+Message\+Protocol\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{tcp_8cpp_source_l00157}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{udp_8cpp_source_l00084}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{tcp_8cpp_source_l00074}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Socket\+::handle\+Transmission\+Control\+Protocol\+Payload()}}, \mbox{\hyperlink{udp_8cpp_source_l00043}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Socket\+::handle\+User\+Datagram\+Protocol\+Payload()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00074}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kmalloc()}}, \mbox{\hyperlink{virtual_8cpp_source_l00447}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+physical\+\_\+into\+\_\+address\+\_\+space()}}, \mbox{\hyperlink{virtual_8cpp_source_l00429}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00059}{Max\+OS\+::memory\+::\+Memory\+Manager\+::malloc()}}, \mbox{\hyperlink{ethernet_8cpp_source_l00035}{Max\+OS\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+Event\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{tcp_8cpp_source_l00034}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Payload\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{udp_8cpp_source_l00018}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Payload\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00320}{operator new()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00332}{operator new\mbox{[}$\,$\mbox{]}()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00029}{Max\+OS\+::filesystem\+::\+File\+Resource\+::read()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00211}{Max\+OS\+::filesystem\+::\+Directory\+Resource\+::read()}}, \mbox{\hyperlink{ipc_8cpp_source_l00118}{Max\+OS\+::processes\+::\+Shared\+Message\+Endpoint\+::read()}}, \mbox{\hyperlink{physical_8cpp_source_l00807}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}, \mbox{\hyperlink{buffer_8cpp_source_l00097}{Max\+OS\+::common\+::\+Buffer\+::resize()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00076}{Max\+OS\+::net\+::\+Internet\+Protocol\+Payload\+Handler\+::\+Send()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00048}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Payload\+Handler\+::\+Send()}}, \mbox{\hyperlink{ethernet_8cpp_source_l00081}{Max\+OS\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Send()}}, \mbox{\hyperlink{tcp_8cpp_source_l00088}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Socket\+::\+Send()}}, \mbox{\hyperlink{udp_8cpp_source_l00052}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Socket\+::\+Send()}}, \mbox{\hyperlink{udp_8cpp_source_l00217}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00153}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00166}{Max\+OS\+::net\+::\+Internet\+Protocol\+Handler\+::send\+Internet\+Protocol\+Packet()}}, \mbox{\hyperlink{tcp_8cpp_source_l00384}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}, \mbox{\hyperlink{physical_8cpp_source_l00129}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::size\+\_\+to\+\_\+frames()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00151}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+allocate\+\_\+memory()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00265}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+read()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00239}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+write()}}, \mbox{\hyperlink{vector_8h_source_l00099}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::\+Vector()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00068}{Max\+OS\+::filesystem\+::\+File\+Resource\+::write()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00243}{Max\+OS\+::filesystem\+::\+Directory\+Resource\+::write()}}, and \mbox{\hyperlink{ipc_8cpp_source_l00139}{Max\+OS\+::processes\+::\+Shared\+Message\+Endpoint\+::write()}}.
+Referenced by \mbox{\hyperlink{memorymanagement_8cpp_source_l00286}{Max\+OS\+::memory\+::\+Memory\+Manager\+::align()}}, \mbox{\hyperlink{physical_8cpp_source_l00748}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+direct\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{physical_8cpp_source_l00154}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{physical_8cpp_source_l00166}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+up\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{virtual_8cpp_source_l00115}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate()}}, \mbox{\hyperlink{virtual_8cpp_source_l00129}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate()}}, \mbox{\hyperlink{physical_8cpp_source_l00262}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+area()}}, \mbox{\hyperlink{buffer_8cpp_source_l00020}{Max\+OS\+::common\+::\+Buffer\+::\+Buffer()}}, \mbox{\hyperlink{buffer_8cpp_source_l00036}{Max\+OS\+::common\+::\+Buffer\+::\+Buffer()}}, \mbox{\hyperlink{physical_8cpp_source_l00177}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::check\+\_\+aligned()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00104}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Data\+Received()}}, \mbox{\hyperlink{amd__am79c973_8cpp_source_l00205}{Max\+OS\+::drivers\+::ethernet\+::\+AMD\+\_\+\+AM79\+C973\+::\+Do\+Send()}}, \mbox{\hyperlink{intel__i217_8cpp_source_l00352}{Max\+OS\+::drivers\+::ethernet\+::\+Intel\+I217\+::\+Do\+Send()}}, \mbox{\hyperlink{ethernet_8cpp_source_l00110}{Max\+OS\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Fire\+Data\+Received()}}, \mbox{\hyperlink{ethernet_8cpp_source_l00136}{Max\+OS\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Fire\+Data\+Sent()}}, \mbox{\hyperlink{physical_8cpp_source_l00331}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+area()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00098}{Max\+OS\+::memory\+::\+Memory\+Manager\+::handle\+\_\+malloc()}}, \mbox{\hyperlink{arp_8cpp_source_l00042}{Max\+OS\+::net\+::\+Address\+Resolution\+Protocol\+::handle\+Ethernetframe\+Payload()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00128}{Max\+OS\+::net\+::\+Internet\+Protocol\+Handler\+::handle\+Ethernetframe\+Payload()}}, \mbox{\hyperlink{icmp_8cpp_source_l00043}{Max\+OS\+::net\+::\+Internet\+Control\+Message\+Protocol\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{tcp_8cpp_source_l00168}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{udp_8cpp_source_l00127}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{tcp_8cpp_source_l00078}{Max\+OS\+::net\+::\+TCPSocket\+::handle\+Transmission\+Control\+Protocol\+Payload()}}, \mbox{\hyperlink{udp_8cpp_source_l00070}{Max\+OS\+::net\+::\+UDPSocket\+::handle\+User\+Datagram\+Protocol\+Payload()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00083}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kmalloc()}}, \mbox{\hyperlink{virtual_8cpp_source_l00451}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+physical\+\_\+into\+\_\+address\+\_\+space()}}, \mbox{\hyperlink{virtual_8cpp_source_l00433}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00068}{Max\+OS\+::memory\+::\+Memory\+Manager\+::malloc()}}, \mbox{\hyperlink{ethernet_8cpp_source_l00048}{Max\+OS\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+Event\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{tcp_8cpp_source_l00040}{Max\+OS\+::net\+::\+TCPPayload\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{udp_8cpp_source_l00039}{Max\+OS\+::net\+::\+UDPPayload\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00329}{operator new()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00341}{operator new\mbox{[}$\,$\mbox{]}()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00041}{Max\+OS\+::filesystem\+::\+File\+Resource\+::read()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00230}{Max\+OS\+::filesystem\+::\+Directory\+Resource\+::read()}}, \mbox{\hyperlink{ipc_8cpp_source_l00133}{Max\+OS\+::processes\+::\+Shared\+Message\+Endpoint\+::read()}}, \mbox{\hyperlink{physical_8cpp_source_l00770}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}, \mbox{\hyperlink{buffer_8cpp_source_l00101}{Max\+OS\+::common\+::\+Buffer\+::resize()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00090}{Max\+OS\+::net\+::\+IPV4\+Payload\+Handler\+::\+Send()}}, \mbox{\hyperlink{udp_8cpp_source_l00266}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00062}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Payload\+Handler\+::\+Send()}}, \mbox{\hyperlink{ethernet_8cpp_source_l00090}{Max\+OS\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+::\+Send()}}, \mbox{\hyperlink{tcp_8cpp_source_l00091}{Max\+OS\+::net\+::\+TCPSocket\+::\+Send()}}, \mbox{\hyperlink{udp_8cpp_source_l00085}{Max\+OS\+::net\+::\+UDPSocket\+::\+Send()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00181}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}, \mbox{\hyperlink{ipv4_8cpp_source_l00185}{Max\+OS\+::net\+::\+Internet\+Protocol\+Handler\+::send\+Internet\+Protocol\+Packet()}}, \mbox{\hyperlink{tcp_8cpp_source_l00385}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::send\+Transmission\+Control\+Protocol\+Packet()}}, \mbox{\hyperlink{physical_8cpp_source_l00143}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::size\+\_\+to\+\_\+frames()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00162}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+allocate\+\_\+memory()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00276}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+read()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00250}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+write()}}, \mbox{\hyperlink{vector_8h_source_l00105}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::\+Vector()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00080}{Max\+OS\+::filesystem\+::\+File\+Resource\+::write()}}, \mbox{\hyperlink{vfsresource_8cpp_source_l00262}{Max\+OS\+::filesystem\+::\+Directory\+Resource\+::write()}}, and \mbox{\hyperlink{ipc_8cpp_source_l00155}{Max\+OS\+::processes\+::\+Shared\+Message\+Endpoint\+::write()}}.
 
 \Hypertarget{ext2_8h_a49711b7602751ed002b3da58832abe39}\label{ext2_8h_a49711b7602751ed002b3da58832abe39} 
 \index{ext2.h@{ext2.h}!size\_lower@{size\_lower}}
 \index{size\_lower@{size\_lower}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{size\_lower}{size\_lower}}
 {\footnotesize\ttfamily uint32\+\_\+t size\+\_\+lower}
+
+
+
+The lower 32 bits of the size of the file in bytes. 
 
 
 
@@ -981,6 +1541,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00008}{8}} of file \mbox{\hy
 
 
 
+The upper 32 bits of the size of the file in bytes (for files larger than 4GB). If this is a directory, this is the Directory Access Control List. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00024}{24}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a0dc39e70ce9225428ac2fd3abb92efa5}\label{ext2_8h_a0dc39e70ce9225428ac2fd3abb92efa5} 
@@ -988,6 +1552,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00024}{24}} of file \mbox{\h
 \index{starting\_block@{starting\_block}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{starting\_block}{starting\_block}}
 {\footnotesize\ttfamily uint32\+\_\+t starting\+\_\+block}
+
+
+
+Where the superblock starts (normally 0 but not always) 
 
 
 
@@ -1001,17 +1569,25 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00005}{5}} of file \mbox{\hy
 
 
 
+The state of the filesystem (see File\+System\+State) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00016}{16}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{tcp_8cpp_source_l00449}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Connect()}}, \mbox{\hyperlink{tcp_8cpp_source_l00497}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Disconnect()}}, \mbox{\hyperlink{tcp_8cpp_source_l00157}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{tcp_8cpp_source_l00511}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Handler\+::\+Listen()}}, and \mbox{\hyperlink{keyboard_8cpp_source_l00126}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Interpreter\+::on\+\_\+key\+\_\+read()}}.
+Referenced by \mbox{\hyperlink{keyboard_8cpp_source_l00137}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Interpreter\+::on\+\_\+key\+\_\+read()}}.
 
 \Hypertarget{ext2_8h_a6c7065a90a175e6482399aa988b2a94b}\label{ext2_8h_a6c7065a90a175e6482399aa988b2a94b} 
 \index{ext2.h@{ext2.h}!superblock\_group@{superblock\_group}}
 \index{superblock\_group@{superblock\_group}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{superblock\_group}{superblock\_group}}
 {\footnotesize\ttfamily uint16\+\_\+t superblock\+\_\+group}
+
+
+
+If there is a backup superblock, which group it is stored in. 
 
 
 
@@ -1025,6 +1601,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00029}{29}} of file \mbox{\h
 
 
 
+Maximum time between checks (in seconds) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00020}{20}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a1f1755d869c8b24fae3b7390507302d5}\label{ext2_8h_a1f1755d869c8b24fae3b7390507302d5} 
@@ -1032,6 +1612,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00020}{20}} of file \mbox{\h
 \index{total\_blocks@{total\_blocks}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{total\_blocks}{total\_blocks}}
 {\footnotesize\ttfamily uint32\+\_\+t total\+\_\+blocks}
+
+
+
+Total number of blocks. 
 
 
 
@@ -1045,6 +1629,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00001}{1}} of file \mbox{\hy
 
 
 
+Total number of inodes. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00000}{0}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}\label{ext2_8h_a1d127017fb298b889f4ba24752d08b8e} 
@@ -1055,17 +1643,25 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00000}{0}} of file \mbox{\hy
 
 
 
+The type of the inode. 
+
+The type of the entry (see Entry\+Type) (only if the high bit of the superblock\textquotesingle{}s optional\+\_\+features is set) 
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00004}{4}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{resource_8cpp_source_l00207}{Max\+OS\+::processes\+::\+Global\+Resource\+Registry\+::add\+\_\+registry()}}, \mbox{\hyperlink{eventHandler_8h_source_l00076}{Max\+OS\+::common\+::\+Event$<$ Event\+Type $>$\+::\+Event()}}, \mbox{\hyperlink{resource_8cpp_source_l00192}{Max\+OS\+::processes\+::\+Global\+Resource\+Registry\+::get\+\_\+registry()}}, \mbox{\hyperlink{icmp_8cpp_source_l00031}{Max\+OS\+::net\+::\+Internet\+Control\+Message\+Protocol\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{elf_8cpp_source_l00091}{Max\+OS\+::processes\+::\+Elf64\+::is\+\_\+valid()}}, \mbox{\hyperlink{ethernet_8cpp_source_l00035}{Max\+OS\+::drivers\+::ethernet\+::\+Ethernet\+Driver\+Event\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{tcp_8cpp_source_l00034}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Payload\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{udp_8cpp_source_l00018}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Payload\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{keyboard_8cpp_source_l00149}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Interpreter\+EN\+\_\+\+US\+::on\+\_\+stream\+\_\+read()}}, \mbox{\hyperlink{resource_8cpp_source_l00264}{Max\+OS\+::processes\+::\+Resource\+Manager\+::open\+\_\+resource()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00153}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00183}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+create()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00204}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+open()}}, and \mbox{\hyperlink{elf_8cpp_source_l00164}{Max\+OS\+::processes\+::\+Elf64\+::to\+\_\+vmm\+\_\+flags()}}.
+Referenced by \mbox{\hyperlink{resource_8cpp_source_l00223}{Max\+OS\+::processes\+::\+Global\+Resource\+Registry\+::add\+\_\+registry()}}, \mbox{\hyperlink{eventHandler_8h_source_l00084}{Max\+OS\+::common\+::\+Event$<$ Event\+Type $>$\+::\+Event()}}, \mbox{\hyperlink{apic_8cpp_source_l00258}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::get\+\_\+madt\+\_\+item()}}, \mbox{\hyperlink{resource_8cpp_source_l00208}{Max\+OS\+::processes\+::\+Global\+Resource\+Registry\+::get\+\_\+registry()}}, \mbox{\hyperlink{icmp_8cpp_source_l00043}{Max\+OS\+::net\+::\+Internet\+Control\+Message\+Protocol\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{elf_8cpp_source_l00098}{Max\+OS\+::processes\+::\+ELF64\+::is\+\_\+valid()}}, \mbox{\hyperlink{udp_8cpp_source_l00039}{Max\+OS\+::net\+::\+UDPPayload\+Handler\+::on\+\_\+event()}}, \mbox{\hyperlink{keyboard_8cpp_source_l00162}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Interpreter\+EN\+\_\+\+US\+::on\+\_\+stream\+\_\+read()}}, \mbox{\hyperlink{resource_8cpp_source_l00280}{Max\+OS\+::processes\+::\+Resource\+Manager\+::open\+\_\+resource()}}, \mbox{\hyperlink{physical_8cpp_source_l00770}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}, \mbox{\hyperlink{ethernetframe_8cpp_source_l00181}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00194}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+create()}}, \mbox{\hyperlink{syscalls_8cpp_source_l00215}{Max\+OS\+::system\+::\+Syscall\+Manager\+::syscall\+\_\+resource\+\_\+open()}}, and \mbox{\hyperlink{elf_8cpp_source_l00171}{Max\+OS\+::processes\+::\+ELF64\+::to\+\_\+vmm\+\_\+flags()}}.
 
 \Hypertarget{ext2_8h_a34d922d20e5c221884b48c9b448d8395}\label{ext2_8h_a34d922d20e5c221884b48c9b448d8395} 
 \index{ext2.h@{ext2.h}!type\_permissions@{type\_permissions}}
 \index{type\_permissions@{type\_permissions}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{type\_permissions}{type\_permissions}}
 {\footnotesize\ttfamily uint16\+\_\+t type\+\_\+permissions}
+
+
+
+The type and permissions of the inode. 
 
 
 
@@ -1079,6 +1675,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00001}{1}} of file \mbox{\hy
 
 
 
+Number of free blocks. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00003}{3}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_aa3f310454f79cba7692c796728ca5719}\label{ext2_8h_aa3f310454f79cba7692c796728ca5719} 
@@ -1086,6 +1686,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00003}{3}} of file \mbox{\hy
 \index{unallocated\_inodes@{unallocated\_inodes}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{unallocated\_inodes}{unallocated\_inodes}}
 {\footnotesize\ttfamily uint32\+\_\+t unallocated\+\_\+inodes}
+
+
+
+Number of free inodes. 
 
 
 
@@ -1099,6 +1703,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00004}{4}} of file \mbox{\hy
 
 
 
+Reserved. 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00039}{39}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a03a78dbd31a51afe6b572dc1d947ed05}\label{ext2_8h_a03a78dbd31a51afe6b572dc1d947ed05} 
@@ -1106,6 +1714,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00039}{39}} of file \mbox{\h
 \index{user\_id@{user\_id}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{user\_id}{user\_id}}
 {\footnotesize\ttfamily uint16\+\_\+t user\+\_\+id}
+
+
+
+The ID of the user who owns the inode. 
 
 
 
@@ -1119,6 +1731,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00007}{7}} of file \mbox{\hy
 
 
 
+Major version number (combined with version\+\_\+minor to make version number) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00022}{22}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a166f22ce4b25488997425405d2a6e42d}\label{ext2_8h_a166f22ce4b25488997425405d2a6e42d} 
@@ -1129,6 +1745,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00022}{22}} of file \mbox{\h
 
 
 
+Minor version number (combined with version\+\_\+major to make version number) 
+
+
+
 Definition at line \mbox{\hyperlink{ext2_8h_source_l00018}{18}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 \Hypertarget{ext2_8h_a246b0f1c7e3fc6cf67e5afe79d6eb64d}\label{ext2_8h_a246b0f1c7e3fc6cf67e5afe79d6eb64d} 
@@ -1136,6 +1756,10 @@ Definition at line \mbox{\hyperlink{ext2_8h_source_l00018}{18}} of file \mbox{\h
 \index{volume\_name@{volume\_name}!ext2.h@{ext2.h}}
 \doxysubsubsection{\texorpdfstring{volume\_name}{volume\_name}}
 {\footnotesize\ttfamily uint8\+\_\+t volume\+\_\+name\mbox{[}16\mbox{]}}
+
+
+
+The volume name (is null-\/terminated) 
 
 
 

@@ -15,12 +15,6 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP, \fBMaxOS::drivers
 
 .in +1c
 .ti -1c
-.RI "\fBKeyboardDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~KeyboardDriver\fP ()"
-.br
-.ti -1c
 .RI "\fBvoid\fP \fBhandle_interrupt\fP () \fBfinal\fP"
 .br
 .RI "deactivate the keyboard driver "
@@ -37,19 +31,13 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP, \fBMaxOS::drivers
 Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *\fBstatus\fP)"
+.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .in +1c
-.ti -1c
-.RI "\fBDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~Driver\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
@@ -73,42 +61,23 @@ Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< uin
 .ti -1c
 .RI "\fBGenericInputStream\fP ()"
 .br
+.RI "Creates a new \fBGenericInputStream\fP\&. "
 .ti -1c
 .RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< \fBuint8_t\fP > *)"
 .br
+.RI "Creates a new \fBGenericInputStream\fP and connects it to the handler\&. "
 .ti -1c
 .RI "\fB~GenericInputStream\fP ()"
 .br
+.RI "Destroys the \fBGenericInputStream\fP and disconnects all handlers\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBuint8_t\fP > *)"
 .br
+.RI "Adds a inputStreamEventHandler to the list of internetProtocolHandlers\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBuint8_t\fP > *)"
 .br
-.in -1c
-.SS "Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_data_port\fP"
-.br
-.ti -1c
-.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_command_port\fP"
-.br
-.in -1c
-
-Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
-.in +1c
-.ti -1c
-.RI "uint8_t \fBm_interrupt_number\fP"
-.br
-.in -1c
-
-Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< uint8_t >\fP
-.in +1c
-.ti -1c
-.RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< \fBuint8_t\fP > * > \fBm_input_stream_event_handlers\fP"
-.br
+.RI "Removes a handler from the list of handlers\&. "
 .in -1c
 .SS "Additional Inherited Members"
 
@@ -118,32 +87,44 @@ Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::Inter
 .ti -1c
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
 .ti -1c
-.RI "\fB~InterruptHandler\fP ()"
+.RI "uint8_t \fBm_interrupt_number\fP"
 .br
+.RI "The interrupt number this handler handles\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< uint8_t >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< \fBuint8_t\fP > * > \fBm_input_stream_event_handlers\fP"
+.br
+.RI "List of streams being observed by this handler\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 \fBDriver\fP for the Keyboard Controller, manages the events and the keyboard state\&. 
 .PP
-Definition at line \fB427\fP of file \fBkeyboard\&.h\fP\&.
+Definition at line \fB436\fP of file \fBkeyboard\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "KeyboardDriver::KeyboardDriver ()"
 
 .PP
-Definition at line \fB60\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB64\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-61 : InterruptHandler(0x21, 0x1, 0x12),
-62   m_data_port(0x60),
-63   m_command_port(0x64)
-64 {
-65 
-66 
-67 }
+65 : InterruptHandler(0x21, 0x1, 0x12),
+66   m_data_port(0x60),
+67   m_command_port(0x64)
+68 {
+69 
+70 
+71 }
 .fi
-
-.SS "KeyboardDriver::~KeyboardDriver ()\fC [default]\fP"
 
 .SH "Member Function Documentation"
 .PP 
@@ -154,32 +135,32 @@ activate the keyboard driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB74\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB78\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-74                               {
-75 
-76     // Wait for user to stop pressing key (this is for the start\-up key e\&.g\&. hold 'F12' for boot menu or hold 'del' for bios )
-77     while (m_command_port\&.read() & 0x1)
-78         m_data_port\&.read();
+78                               {
 79 
-80     // Enable keyboard interrupts
-81     m_command_port\&.write(0xAE);
-82 
-83     // Get the current state of the keyboard
-84     m_command_port\&.write(0x20);
-85     uint8_t status = (m_data_port\&.read() | 1) & ~0x10;
+80     // Wait for user to stop pressing key (this is for the start\-up key e\&.g\&. hold 'F12' for boot menu or hold 'del' for bios )
+81     while (m_command_port\&.read() & 0x1)
+82         m_data_port\&.read();
+83 
+84     // Enable keyboard interrupts
+85     m_command_port\&.write(0xAE);
 86 
-87     // Reset the keyboard
-88     m_command_port\&.write(0x60);
-89     m_data_port\&.write(status);
+87     // Get the current state of the keyboard
+88     m_command_port\&.write(0x20);
+89     uint8_t status = (m_data_port\&.read() | 1) & ~0x10;
 90 
-91     // Activate the keyboard
-92     m_data_port\&.write(0xF4);
-93 }
+91     // Reset the keyboard
+92     m_command_port\&.write(0x60);
+93     m_data_port\&.write(status);
+94 
+95     // Activate the keyboard
+96     m_data_port\&.write(0xF4);
+97 }
 .fi
 
 .PP
-References \fBm_command_port\fP, \fBm_data_port\fP, \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, \fBstatus\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
+References \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
 .SS "\fBstring\fP KeyboardDriver::device_name ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -194,11 +175,11 @@ The device name
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB110\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB114\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-110                                    {
-111     return "Keyboard";
-112 }
+114                                    {
+115     return "Keyboard";
+116 }
 .fi
 
 .SS "\fBvoid\fP KeyboardDriver::handle_interrupt ()\fC [final]\fP, \fC [virtual]\fP"
@@ -208,33 +189,19 @@ deactivate the keyboard driver
 .PP
 Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .PP
-Definition at line \fB98\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB102\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-98                                       {
-99 
-100     // Pass the scan code to the m_handlers
-101     uint8_t key = m_data_port\&.read();
-102     for (auto &handler: m_input_stream_event_handlers)
-103         handler\->on_stream_read(key);
-104 }
+102                                       {
+103 
+104     // Pass the scan code to the m_handlers
+105     uint8_t key = m_data_port\&.read();
+106     for (auto &handler: m_input_stream_event_handlers)
+107         handler\->on_stream_read(key);
+108 }
 .fi
 
 .PP
-References \fBm_data_port\fP, \fBMaxOS::common::GenericInputStream< uint8_t >::m_input_stream_event_handlers\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::peripherals::KeyboardDriver::m_command_port\fC [protected]\fP"
-
-.PP
-Definition at line \fB431\fP of file \fBkeyboard\&.h\fP\&.
-.PP
-Referenced by \fBactivate()\fP\&.
-.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::peripherals::KeyboardDriver::m_data_port\fC [protected]\fP"
-
-.PP
-Definition at line \fB430\fP of file \fBkeyboard\&.h\fP\&.
-.PP
-Referenced by \fBactivate()\fP, and \fBhandle_interrupt()\fP\&.
+References \fBMaxOS::common::GenericInputStream< uint8_t >::m_input_stream_event_handlers\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP\&.
 
 .SH "Author"
 .PP 

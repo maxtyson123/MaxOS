@@ -1,7 +1,5 @@
 var classMaxOS_1_1filesystem_1_1File =
 [
-    [ "File", "classMaxOS_1_1filesystem_1_1File.html#ae039af5807fc385f41b60644725d15d0", null ],
-    [ "~File", "classMaxOS_1_1filesystem_1_1File.html#ac704ebdf5f57d7a1c5ddf409d797fb69", null ],
     [ "flush", "classMaxOS_1_1filesystem_1_1File.html#af87fa862de707575b8badd044a5af80e", null ],
     [ "name", "classMaxOS_1_1filesystem_1_1File.html#ada67576556e0415df8bf213d0ce50991", null ],
     [ "position", "classMaxOS_1_1filesystem_1_1File.html#aae991c597c0bc4c5eb44c1f3b06a21ec", null ],

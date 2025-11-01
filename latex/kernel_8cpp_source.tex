@@ -2,94 +2,112 @@
 \hypertarget{kernel_8cpp_source}{}\label{kernel_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/kernel.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/kernel.cpp}}
 \mbox{\hyperlink{kernel_8cpp}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logger_8h}{common/logger.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{interrupts_8h}{hardwarecommunication/interrupts.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{serial_8h}{drivers/console/serial.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vesaboot_8h}{drivers/console/vesaboot.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{driver_8h}{drivers/driver.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vesa_8h}{drivers/video/vesa.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{desktop_8h}{gui/desktop.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{scheduler_8h}{processes/scheduler.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{cpu_8h}{system/cpu.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{syscalls_8h}{system/syscalls.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{memorymanagement_8h}{memory/memorymanagement.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{physical_8h}{memory/physical.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{virtual_8h}{memory/virtual.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vfs_8h}{filesystem/vfs.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00016}00016\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vfsresource_8h}{filesystem/vfsresource.h}}>}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00017}00017\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00018}00018\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00019}00019\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1common}{MaxOS::common}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00020}00020\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers}{MaxOS::drivers}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00021}00021\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals}{MaxOS::drivers::peripherals}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00022}00022\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1video}{MaxOS::drivers::video}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00023}00023\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1clock}{MaxOS::drivers::clock}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00024}00024\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1console}{MaxOS::drivers::console}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00025}00025\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication}{MaxOS::hardwarecommunication}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00026}00026\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1gui}{MaxOS::gui}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00027}00027\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1processes}{MaxOS::processes}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00028}00028\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1system}{MaxOS::system}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00029}00029\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1memory}{MaxOS::memory}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00030}00030\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1filesystem}{MaxOS::filesystem}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00031}00031\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00032}00032\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kernel_8cpp_ac75524df0a1ac9de83987acf487c0150}{call\_constructors}}();}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00033}\mbox{\hyperlink{kernel_8cpp_a5b3569dcd47463ac1cea04841fa25c53}{00033}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ [[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{noreturn}}]]\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kernel_8cpp_a5b3569dcd47463ac1cea04841fa25c53}{kernel\_main}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ addr,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}{magic}})\ \{}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00034}00034\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00035}00035\ \ \ \ \ \mbox{\hyperlink{kernel_8cpp_ac75524df0a1ac9de83987acf487c0150}{call\_constructors}}();}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00036}00036\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00037}00037\ \ \ \ \ \textcolor{comment}{//\ Initialise\ the\ logger}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00038}00038\ \ \ \ \ \mbox{\hyperlink{classLogger}{Logger}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logger}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00039}00039\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole}{SerialConsole}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{serial\_console}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logger}});}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00040}00040\ \ \ \ \ \mbox{\hyperlink{classLogger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}MaxOS\ Booted\ Successfully\ \(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00041}00041\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00042}00042\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1\}:\ System\ Initialisation\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00043}00043\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}(addr,\ \mbox{\hyperlink{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}{magic}});}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00044}00044\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{gdt}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00045}00045\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupts}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00046}00046\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00047}00047\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1.1\}:\ Memory\ Initialisation\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00048}00048\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{PhysicalMemoryManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pmm}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}});}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00049}00049\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{VirtualMemoryManager}}\ vmm;}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00050}00050\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{MemoryManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{memoryManager}}(\&vmm);}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logger_8h}{common/logger.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{interrupts_8h}{hardwarecommunication/interrupts.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{serial_8h}{drivers/console/serial.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vesaboot_8h}{drivers/console/vesaboot.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{driver_8h}{drivers/driver.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vesa_8h}{drivers/video/vesa.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00016}00016\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{desktop_8h}{gui/desktop.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00017}00017\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{scheduler_8h}{processes/scheduler.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00018}00018\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{cpu_8h}{system/cpu.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00019}00019\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{syscalls_8h}{system/syscalls.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00020}00020\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{memorymanagement_8h}{memory/memorymanagement.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00021}00021\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{physical_8h}{memory/physical.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00022}00022\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{virtual_8h}{memory/virtual.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00023}00023\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vfs_8h}{filesystem/vfs.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00024}00024\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vfsresource_8h}{filesystem/vfsresource.h}}>}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00026}00026\ \textcolor{keyword}{using\ namespace\ }MaxOS;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00027}00027\ \textcolor{keyword}{using\ namespace\ }MaxOS::common;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00028}00028\ \textcolor{keyword}{using\ namespace\ }MaxOS::drivers;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00029}00029\ \textcolor{keyword}{using\ namespace\ }MaxOS::drivers::peripherals;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00030}00030\ \textcolor{keyword}{using\ namespace\ }MaxOS::drivers::video;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00031}00031\ \textcolor{keyword}{using\ namespace\ }MaxOS::drivers::clock;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00032}00032\ \textcolor{keyword}{using\ namespace\ }MaxOS::drivers::console;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00033}00033\ \textcolor{keyword}{using\ namespace\ }MaxOS::hardwarecommunication;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00034}00034\ \textcolor{keyword}{using\ namespace\ }MaxOS::gui;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00035}00035\ \textcolor{keyword}{using\ namespace\ }MaxOS::processes;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00036}00036\ \textcolor{keyword}{using\ namespace\ }MaxOS::system;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00037}00037\ \textcolor{keyword}{using\ namespace\ }MaxOS::memory;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00038}00038\ \textcolor{keyword}{using\ namespace\ }MaxOS::filesystem;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00040}00040\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kernel_8cpp_ac75524df0a1ac9de83987acf487c0150}{call\_constructors}}();\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00041}\mbox{\hyperlink{kernel_8cpp_a32bfa49e87f9c5c8e4b07eb74f8fcca9}{00041}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{kernel_8cpp_a32bfa49e87f9c5c8e4b07eb74f8fcca9}{core\_boot\_info}}[];\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00046}\mbox{\hyperlink{kernel_8cpp_afa3328ea994a9f1d5d394a3f883cac43}{00046}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ [[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{noreturn}}]]\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kernel_8cpp_afa3328ea994a9f1d5d394a3f883cac43}{core\_main}}()\{}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00048}00048\ \ \ \ \ \textcolor{keyword}{auto}\ info\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core\_boot\_info\_t}}*)(\mbox{\hyperlink{kernel_8cpp_a32bfa49e87f9c5c8e4b07eb74f8fcca9}{core\_boot\_info}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00049}00049\ \ \ \ \ info\ -\/>\ \mbox{\hyperlink{cpu_8h_a73e9fa0c3543560192f38a8ab6a78c47}{activated}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00050}00050\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core}}\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{CPU::executing\_core}}();}
 \DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00051}00051\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00052}00052\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1.2\}:\ Console\ Initialisation\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00053}00053\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation}{VideoElectronicsStandardsAssociation}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vesa}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}.framebuffer());}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00054}00054\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole}{VESABootConsole}}\ console(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vesa}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00052}00052\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ correct\ core\ is\ being\ setup}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00053}00053\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(info-\/>id\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core}}-\/>id,\ \textcolor{stringliteral}{"{}Current\ setup\ core\ isn't\ the\ core\ expected"{}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00054}00054\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Core\ "{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core}}-\/>id\ <<\ \textcolor{stringliteral}{"{}\ now\ in\ higher\ half\ \(\backslash\)n"{}};}
 \DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00055}00055\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00056}00056\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{2\}:\ Hardware\ Initialisation\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00057}00057\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem}{VirtualFileSystem}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00058}00058\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{gdt}},\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}});}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00059}00059\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}.apic,\ 1);}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00060}00060\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager}{DriverManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00061}00061\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.add\_driver(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}});}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00062}00062\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.find\_drivers();}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00063}00063\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reset\_wait\_time}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.reset\_devices();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00056}00056\ \ \ \ \ \textcolor{comment}{//\ Set\ up\ the\ core}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00057}00057\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core}}\ -\/>\ init();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00058}00058\ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}sti"{}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00060}00060\ \ \ \ \ \textcolor{comment}{//\ Wait\ to\ be\ scheduled}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00061}00061\ \ \ \ \ \textcolor{keywordflow}{while}\ (\textcolor{keyword}{true})}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}nop"{}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00063}00063\ \}}
 \DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00064}00064\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00065}00065\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{3\}:\ Device\ Finalisation\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00066}00066\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupts}}.activate();}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00067}00067\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}}.calibrate();}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00068}00068\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}}.delay(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reset\_wait\_time}});}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00069}00069\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.initialise\_drivers();}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00070}00070\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.activate\_drivers();}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00071}00071\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00072}00072\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{4\}:\ System\ Finalisation\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00073}00073\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{scheduler}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}});}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00074}00074\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry}{VFSResourceRegistry}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs\_registry}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}});}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00075}00075\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager}{SyscallManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{syscalls}};}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00076}00076\ \ \ \ \ console.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a002ec47ccd9ddb93f441bc00142d21a8}{finish}}();}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00077}00077\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{scheduler}}.activate();}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00078}00078\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00079}00079\ \ \ \ \ \textcolor{comment}{//\ Idle\ loop\ \ (read\ Idle.md)}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00080}00080\ \ \ \ \ \textcolor{keywordflow}{while}\ (\textcolor{keyword}{true})}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00081}00081\ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}nop"{}});}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00082}00082\ \}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00083}00083\ }
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00084}00084\ \textcolor{comment}{//\ TODO:}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00085}00085\ \textcolor{comment}{//\ \ -\/\ SMP}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00086}00086\ \textcolor{comment}{//\ \ -\/\ Test\ suite\ of\ common\ functions\ \&\ other\ statics\ (paths)}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00087}00087\ \textcolor{comment}{//\ \ -\/\ Class\ \&\ Struct\ docstrings}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00088}00088\ \textcolor{comment}{//\ \ -\/\ Logo\ on\ fail\ in\ center}}
-\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00089}00089\ \textcolor{comment}{//\ \ -\/\ Sanitize\ syscall\ input}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00071}\mbox{\hyperlink{kernel_8cpp_a5b3569dcd47463ac1cea04841fa25c53}{00071}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ [[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{noreturn}}]]\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kernel_8cpp_a5b3569dcd47463ac1cea04841fa25c53}{kernel\_main}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ addr,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}{magic}})\ \{}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00073}00073\ \ \ \ \ \mbox{\hyperlink{kernel_8cpp_ac75524df0a1ac9de83987acf487c0150}{call\_constructors}}();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00075}00075\ \ \ \ \ \textcolor{comment}{//\ Initialise\ the\ logger}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00076}00076\ \ \ \ \ \mbox{\hyperlink{classLogger}{Logger}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logger}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00077}00077\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole}{SerialConsole}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{serial\_console}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logger}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00078}00078\ \ \ \ \ \mbox{\hyperlink{classLogger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}MaxOS\ Booted\ Successfully\ 0x\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00080}00080\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1\}:\ System\ Initialisation\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00081}00081\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}(addr,\ \mbox{\hyperlink{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}{magic}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00082}00082\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}\ gdt;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00083}00083\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupts}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00085}00085\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1.1\}:\ Memory\ Initialisation\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00086}00086\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{PhysicalMemoryManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pmm}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00087}00087\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{VirtualMemoryManager}}\ vmm;}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00088}00088\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{MemoryManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{memoryManager}}(\&vmm);}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00090}00090\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1.2\}:\ Console\ Initialisation\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00091}00091\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation}{VideoElectronicsStandardsAssociation}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vesa}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}.framebuffer());}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00092}00092\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole}{VESABootConsole}}\ console(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vesa}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00094}00094\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{2\}:\ Hardware\ Initialisation\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00095}00095\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem}{VirtualFileSystem}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00096}00096\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}(\&gdt,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00097}00097\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}.apic,\ 1);}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00098}00098\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager}{DriverManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00099}00099\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.add\_driver(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00100}00100\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.find\_drivers();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00101}00101\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reset\_wait\_time}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.reset\_devices();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00103}00103\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{3\}:\ Device\ Finalisation\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00104}00104\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupts}}.activate();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00105}00105\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}}.calibrate();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00106}00106\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}}.delay(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reset\_wait\_time}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00107}00107\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.initialise\_drivers();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00108}00108\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.activate\_drivers();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00109}00109\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}.init\_cores();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00111}00111\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{4\}:\ System\ Finalisation\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00112}00112\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler}{GlobalScheduler}}\ scheduler(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00113}00113\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry}{VFSResourceRegistry}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs\_registry}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00114}00114\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager}{SyscallManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{syscalls}};}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00115}00115\ \ \ \ \ console.\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a002ec47ccd9ddb93f441bc00142d21a8}{finish}}();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00116}00116\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac257db7eb13dd4daca113e43a4623900}{GlobalScheduler::activate}}();}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00118}00118\ \ \ \ \ \textcolor{comment}{//\ Idle\ loop\ \ (read\ Idle.md)}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00119}00119\ \ \ \ \ \textcolor{keywordflow}{while}\ (\textcolor{keyword}{true})}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00120}00120\ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}hlt"{}});}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00122}00122\ \}}
+\DoxyCodeLine{\Hypertarget{kernel_8cpp_source_l00123}00123\ }
 
 \end{DoxyCode}

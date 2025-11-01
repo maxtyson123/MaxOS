@@ -17,12 +17,6 @@ Inherited by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, 
 
 .in +1c
 .ti -1c
-.RI "\fBVideoDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~VideoDriver\fP ()"
-.br
-.ti -1c
 .RI "\fBvirtual\fP \fBbool\fP \fBsupports_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolor_depth\fP)"
 .br
 .RI "Check if the video driver supports a certain mode\&. "
@@ -34,12 +28,6 @@ Inherited by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, 
 
 Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .in +1c
-.ti -1c
-.RI "\fBDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~Driver\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
 .br
@@ -69,12 +57,6 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 .in +1c
 .ti -1c
-.RI "\fBGraphicsContext\fP ()"
-.br
-.ti -1c
-.RI "\fB~GraphicsContext\fP ()"
-.br
-.ti -1c
 .RI "\fBuint32_t\fP \fBcolour_to_int\fP (\fBconst\fP \fBColour\fP &)"
 .br
 .RI "Converts a colour to an integer value based on the current color depth\&. "
@@ -93,6 +75,7 @@ Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 .ti -1c
 .RI "\fBuint32_t\fP \fBcolor_depth\fP () \fBconst\fP"
 .br
+.RI "Gets the current color depth (bits per pixel) "
 .ti -1c
 .RI "\fBuint64_t\fP * \fBframebuffer_address\fP ()"
 .br
@@ -214,33 +197,33 @@ Protected Attributes inherited from \fBMaxOS::common::GraphicsContext\fP
 .ti -1c
 .RI "\fBbool\fP \fBmirror_y_axis\fP { \fBfalse\fP }"
 .br
+.RI "Should the y axis be mirrored (0,0 is top left if false, bottom left if true) "
 .ti -1c
 .RI "\fBint32_t\fP \fBm_width\fP { 0 }"
 .br
+.RI "The width of the screen in pixels\&. "
 .ti -1c
 .RI "\fBint32_t\fP \fBm_height\fP { 0 }"
 .br
+.RI "The height of the screen in pixels\&. "
 .ti -1c
 .RI "\fBuint32_t\fP \fBm_color_depth\fP { 0 }"
 .br
+.RI "The color depth of the screen in bits per pixel\&. "
 .ti -1c
 .RI "\fBColour\fP \fBm_colour_pallet\fP [256]"
 .br
+.RI "The colour pallet for 8 bit color depth\&. "
 .ti -1c
 .RI "\fBuint64_t\fP * \fBm_framebuffer_address\fP { \fBnullptr\fP }"
 .br
+.RI "The address of the framebuffer\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 \fBDriver\fP for the video controller, handles the setting of the video mode\&. 
 .PP
-Definition at line \fB22\fP of file \fBvideo\&.h\fP\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "VideoDriver::VideoDriver ()\fC [default]\fP"
-
-.SS "VideoDriver::~VideoDriver ()\fC [default]\fP"
-
+Definition at line \fB26\fP of file \fBvideo\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBbool\fP VideoDriver::internal_set_mode (\fBuint32_t\fP width, \fBuint32_t\fP height, \fBuint32_t\fP color_depth)\fC [protected]\fP, \fC [virtual]\fP"
@@ -264,18 +247,16 @@ true If the mode was set successfully false otherwise
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::drivers::video::VideoGraphicsArray\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP\&.
-.PP
-Definition at line \fB22\fP of file \fBvideo\&.cpp\fP\&..PP
+Definition at line \fB29\fP of file \fBvideo\&.cpp\fP\&..PP
 .nf
-22                                                                 {
-23     return false;
-24 }
+29                                                                 {
+30     return false;
+31 }
 .fi
 
 .PP
 Referenced by \fBset_mode()\fP\&.
-.SS "\fBbool\fP VideoDriver::set_mode (\fBuint32_t\fP width, \fBuint32_t\fP height, \fBuint32_t\fP colorDepth)"
+.SS "\fBbool\fP VideoDriver::set_mode (\fBuint32_t\fP width, \fBuint32_t\fP height, \fBuint32_t\fP color_depth)"
 
 .PP
 Set the mode of the video driver\&. 
@@ -296,28 +277,28 @@ true If the mode was set successfully (and the screen was updated) false otherwi
 .PP
 
 .PP
-Definition at line \fB46\fP of file \fBvideo\&.cpp\fP\&..PP
+Definition at line \fB53\fP of file \fBvideo\&.cpp\fP\&..PP
 .nf
-46                                                                                {
-47 
-48     // Cant set it if not supported
-49     if(!supports_mode(width, height, colorDepth))
-50         return false;
-51 
-52     // Try set the mode
-53     if(!internal_set_mode(width, height, colorDepth))
-54         return false;
-55 
-56     // Store the mode
-57     m_width = width;
-58     m_height = height;
-59     m_color_depth = colorDepth;
-60     return true;
-61 }
+53                                                                                 {
+54 
+55     // Cant set it if not supported
+56     if(!supports_mode(width, height, color_depth))
+57         return false;
+58 
+59     // Try set the mode
+60     if(!internal_set_mode(width, height, color_depth))
+61         return false;
+62 
+63     // Store the mode
+64     m_width = width;
+65     m_height = height;
+66     m_color_depth = color_depth;
+67     return true;
+68 }
 .fi
 
 .PP
-References \fBMaxOS::common::GraphicsContext::height()\fP, \fBinternal_set_mode()\fP, \fBMaxOS::common::GraphicsContext::m_color_depth\fP, \fBMaxOS::common::GraphicsContext::m_height\fP, \fBMaxOS::common::GraphicsContext::m_width\fP, \fBsupports_mode()\fP, and \fBMaxOS::common::GraphicsContext::width()\fP\&.
+References \fBMaxOS::common::GraphicsContext::color_depth()\fP, \fBMaxOS::common::GraphicsContext::height()\fP, \fBinternal_set_mode()\fP, \fBMaxOS::common::GraphicsContext::m_color_depth\fP, \fBMaxOS::common::GraphicsContext::m_height\fP, \fBMaxOS::common::GraphicsContext::m_width\fP, \fBsupports_mode()\fP, and \fBMaxOS::common::GraphicsContext::width()\fP\&.
 .PP
 Referenced by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
 .SS "\fBbool\fP VideoDriver::supports_mode (\fBuint32_t\fP width, \fBuint32_t\fP height, \fBuint32_t\fP color_depth)\fC [virtual]\fP"
@@ -343,11 +324,11 @@ true If the mode is supported, false otherwise
 .PP
 Reimplemented in \fBMaxOS::drivers::video::VideoGraphicsArray\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP\&.
 .PP
-Definition at line \fB34\fP of file \fBvideo\&.cpp\fP\&..PP
+Definition at line \fB41\fP of file \fBvideo\&.cpp\fP\&..PP
 .nf
-34                                                             {
-35     return false;
-36 }
+41                                                             {
+42     return false;
+43 }
 .fi
 
 .PP

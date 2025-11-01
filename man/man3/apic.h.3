@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/apic.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/apic.h \- Defines classes and structures for handling the Advanced Programmable Interrupt Controller (APIC) in a multiprocessor system\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -19,53 +20,71 @@
 .ti -1c
 .RI "class \fBMaxOS::hardwarecommunication::LocalAPIC\fP"
 .br
+.RI "Handles the local APIC for the current core\&. "
 .ti -1c
 .RI "struct \fBMaxOS::hardwarecommunication::MADT\fP"
 .br
+.RI "Multiple APIC Description Table (\fBMADT\fP) (ACPI 2 or higher)\&. Provides information about the APICs in the system\&. Following this header are multiple entries describing the APICs (see \fBMADTEntry\fP)\&. "
 .ti -1c
-.RI "struct \fBMaxOS::hardwarecommunication::MADT_Item\fP"
+.RI "struct \fBMaxOS::hardwarecommunication::MADTEntry\fP"
 .br
+.RI "An item in the \fBMADT\fP table\&. "
 .ti -1c
-.RI "struct \fBMaxOS::hardwarecommunication::MADT_IOAPIC\fP"
+.RI "struct \fBMaxOS::hardwarecommunication::MADT_IO_APIC\fP"
 .br
+.RI "An entry in the \fBMADT\fP table describing an IO APIC\&. "
 .ti -1c
-.RI "union \fBMaxOS::hardwarecommunication::RedirectionEntry\fP"
+.RI "struct \fBMaxOS::hardwarecommunication::MADT_PROCESSOR_APIC\fP"
 .br
+.RI "An entry in the \fBMADT\fP table describing a processor local APIC\&. "
+.ti -1c
+.RI "struct \fBMaxOS::hardwarecommunication::RedirectionEntry\fP"
+.br
+.RI "An IO APIC redirection entry\&. Describes how an interrupt is routed\&. "
 .ti -1c
 .RI "struct \fBMaxOS::hardwarecommunication::InterruptRedirect\fP"
 .br
+.RI "Defines how an interrupt input is redirected to a specific processor via the I/O APIC\&. "
 .ti -1c
 .RI "struct \fBMaxOS::hardwarecommunication::Override\fP"
 .br
+.RI "Specifies how a specific interrupt source is mapped to a global system interrupt\&. "
 .ti -1c
 .RI "class \fBMaxOS::hardwarecommunication::IOAPIC\fP"
 .br
+.RI "Handles the IO APIC in the system (one per system) "
 .ti -1c
 .RI "class \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController\fP"
 .br
-.in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::hardwarecommunication\fP"
-.br
+.RI "Handles both the Local APIC (boot core) and IO APIC\&. "
 .in -1c
 .SS "Typedefs"
 
 .in +1c
 .ti -1c
+.RI "typedef union \fBMaxOS::hardwarecommunication::RedirectionEntry\fP \fBMaxOS::hardwarecommunication::redirection_entry_t\fP"
+.br
+.ti -1c
 .RI "typedef struct \fBMaxOS::hardwarecommunication::InterruptRedirect\fP \fBMaxOS::hardwarecommunication::interrupt_redirect_t\fP"
 .br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::hardwarecommunication::MADT_TYPE\fP { \fBPROCESSOR_APIC\fP, \fBIO_APIC\fP, \fBINTERRUPT_SOURCE_OVERRIDE\fP, \fBNMI_SOURCE\fP, \fBAPIC_NMIS\fP, \fBAPIC_ADDRESS_OVERRIDE\fP, \fBPROCESSOR_X2APIC\fP }"
+.br
+.RI "The types of MADT entries\&. "
+.ti -1c
+.RI "enum \fBMaxOS::hardwarecommunication::DeliveryMode\fP { \fBFIXED\fP = 0, \fBLOWEST_PRIORITY\fP = 1, \fBSMI\fP = 2, \fBNMI\fP = 4, \fBINIT\fP = 5, \fBEXTINT\fP = 7 }"
+.br
+.RI "How the interrupt should be delivered (can it override others etc)\&. Set fixed/lowest priority for normal interrupts\&. "
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::hardwarecommunication::RSDPDescriptor\fP \fBMaxOS::hardwarecommunication::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::hardwarecommunication::RSDPDescriptor\fP \fBMaxOS::hardwarecommunication::__attribute__\fP ((packed)) rsdp_descriptor_t"
 .br
 .in -1c
 .SS "Variables"
@@ -74,71 +93,176 @@
 .ti -1c
 .RI "ACPISDTHeader \fBheader\fP"
 .br
+.RI "Common ACPI SDT header\&. "
 .ti -1c
 .RI "uint32_t \fBlocal_apic_address\fP"
 .br
+.RI "The physical address of the local APIC\&. "
 .ti -1c
 .RI "uint32_t \fBflags\fP"
 .br
+.RI "Flags indicating the capabilities of the system (1 = Legacy PICs are present) "
 .ti -1c
 .RI "uint8_t \fBtype\fP"
 .br
+.RI "The type of the MADT entry (see MADT_TYPE) "
 .ti -1c
 .RI "uint8_t \fBlength\fP"
+.br
+.RI "How many bytes this entry takes up (including the type and length fields) "
+.ti -1c
+.RI "enum \fBMaxOS::hardwarecommunication::MADT_TYPE\fP \fBMaxOS::hardwarecommunication::__attribute__\fP"
 .br
 .ti -1c
 .RI "uint8_t \fBio_apic_id\fP"
 .br
+.RI "The ID of the IO APIC\&. "
 .ti -1c
 .RI "uint8_t \fBreserved\fP"
 .br
+.RI "Reserved\&. "
 .ti -1c
 .RI "uint32_t \fBio_apic_address\fP"
 .br
+.RI "The physical address of the IO APIC\&. "
 .ti -1c
 .RI "uint32_t \fBglobal_system_interrupt_base\fP"
 .br
+.RI "The first GSI number that this IO APIC handles\&. "
+.ti -1c
+.RI "uint8_t \fBprocessor_id\fP"
+.br
+.RI "The ID for the core\&. "
+.ti -1c
+.RI "uint8_t \fBapic_id\fP"
+.br
+.RI "The ID for the APIC that the core uses\&. "
 .ti -1c
 .RI "uint64_t \fBvector\fP"
 .br
+.RI "The interrupt that will be triggered when this redirection entry is used\&. "
 .ti -1c
 .RI "uint64_t \fBdelivery_mode\fP"
 .br
+.RI "How the interrupt will be delvied to the core(s) (see DeliveryMode) "
 .ti -1c
 .RI "uint64_t \fBdestination_mode\fP"
 .br
+.RI "How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores) "
 .ti -1c
 .RI "uint64_t \fBdelivery_status\fP"
 .br
+.RI "Indicates whether, when setting this entry, the interrupt is still being sent\&. "
 .ti -1c
 .RI "uint64_t \fBpin_polarity\fP"
 .br
+.RI "Defines the electrical signal that indicates an active interrupt line (0 = high active, 1 = low active) (must match the MADT override flags) "
 .ti -1c
 .RI "uint64_t \fBremote_irr\fP"
 .br
+.RI "? "
 .ti -1c
 .RI "uint64_t \fBtrigger_mode\fP"
 .br
+.RI "How the electrical signal is interpreted (0 = edge triggered, 1 = level triggered) (must match the MADT override flags) "
 .ti -1c
 .RI "uint64_t \fBmask\fP"
 .br
+.RI "Whether the interrupt is disabled or not\&. "
 .ti -1c
 .RI "uint64_t \fBdestination\fP"
 .br
+.RI "The core(s) the interrupt should be sent to (interpreted based on destination_mode) "
 .ti -1c
 .RI "uint8_t \fBbus\fP"
 .br
+.RI "Identifies the hardware bus the interrupt comes from (0 = ISA, 1 = PCI) "
 .ti -1c
 .RI "uint8_t \fBsource\fP"
 .br
+.RI "The interrupt source number on the specified bus\&. "
 .ti -1c
 .RI "uint32_t \fBglobal_system_interrupt\fP"
 .br
+.RI "The global system interrupt that the source is mapped to\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines classes and structures for handling the Advanced Programmable Interrupt Controller (APIC) in a multiprocessor system\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+18th January 2024 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBapic\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBMaxOS::hardwarecommunication::DeliveryMode\fP"
+
+.PP
+How the interrupt should be delivered (can it override others etc)\&. Set fixed/lowest priority for normal interrupts\&. 
+.PP
+\fBTodo\fP
+.RS 4
+use this 
+.RE
+.PP
+
+.PP
+Definition at line \fB130\fP of file \fBapic\&.h\fP\&..PP
+.nf
+130                           {
+131             FIXED           = 0,
+132             LOWEST_PRIORITY = 1,
+133             SMI             = 2,
+134             NMI             = 4,
+135             INIT            = 5,
+136             EXTINT          = 7,
+137         };
+.fi
+
+.SS "enum class \fBMaxOS::hardwarecommunication::MADT_TYPE\fP\fC [strong]\fP"
+
+.PP
+The types of MADT entries\&. 
+.PP
+Definition at line \fB70\fP of file \fBapic\&.h\fP\&..PP
+.nf
+70                              {
+71             PROCESSOR_APIC,
+72             IO_APIC,
+73             INTERRUPT_SOURCE_OVERRIDE,
+74             NMI_SOURCE,
+75             APIC_NMIS,
+76             APIC_ADDRESS_OVERRIDE,
+77             PROCESSOR_X2APIC,
+78         };
+.fi
+
 .SH "Variable Documentation"
 .PP 
+.SS "uint8_t apic_id"
+
+.PP
+The ID for the APIC that the core uses\&. 
+.PP
+Definition at line \fB1\fP of file \fBapic\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::hardwarecommunication::LocalAPIC::send_init()\fP, and \fBMaxOS::hardwarecommunication::LocalAPIC::send_startup()\fP\&.
 .SS "uint8_t bus"
 
+.PP
+Identifies the hardware bus the interrupt comes from (0 = ISA, 1 = PCI) 
 .PP
 Definition at line \fB0\fP of file \fBapic\&.h\fP\&.
 .PP
@@ -146,13 +270,19 @@ Referenced by \fBMaxOS::hardwarecommunication::PeripheralComponentInterconnectCo
 .SS "uint64_t delivery_mode"
 
 .PP
+How the interrupt will be delvied to the core(s) (see DeliveryMode) 
+.PP
 Definition at line \fB1\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t delivery_status"
 
 .PP
+Indicates whether, when setting this entry, the interrupt is still being sent\&. 
+.PP
 Definition at line \fB3\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t destination"
 
+.PP
+The core(s) the interrupt should be sent to (interpreted based on destination_mode) 
 .PP
 Definition at line \fB9\fP of file \fBapic\&.h\fP\&.
 .PP
@@ -160,21 +290,33 @@ Referenced by \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::common::Buffer::
 .SS "uint64_t destination_mode"
 
 .PP
+How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores) 
+.PP
 Definition at line \fB2\fP of file \fBapic\&.h\fP\&.
 .SS "uint16_t flags"
 
+.PP
+Flags indicating the capabilities of the system (1 = Legacy PICs are present) Flags describing the polarity and trigger mode of the interrupt source (see MADT override flags)
+.PP
+Flags indicating the status of the core (bit 0 = core enabled, bit 1 = can be enabled) 
 .PP
 Definition at line \fB2\fP of file \fBapic\&.h\fP\&.
 .SS "uint32_t global_system_interrupt"
 
 .PP
+The global system interrupt that the source is mapped to\&. 
+.PP
 Definition at line \fB2\fP of file \fBapic\&.h\fP\&.
 .SS "uint32_t global_system_interrupt_base"
 
 .PP
+The first GSI number that this IO APIC handles\&. 
+.PP
 Definition at line \fB3\fP of file \fBapic\&.h\fP\&.
 .SS "ACPISDTHeader header"
 
+.PP
+Common ACPI SDT header\&. 
 .PP
 Definition at line \fB0\fP of file \fBapic\&.h\fP\&.
 .PP
@@ -182,21 +324,31 @@ Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInte
 .SS "uint32_t io_apic_address"
 
 .PP
+The physical address of the IO APIC\&. 
+.PP
 Definition at line \fB2\fP of file \fBapic\&.h\fP\&.
 .SS "uint8_t io_apic_id"
 
+.PP
+The ID of the IO APIC\&. 
 .PP
 Definition at line \fB0\fP of file \fBapic\&.h\fP\&.
 .SS "uint8_t length"
 
 .PP
+How many bytes this entry takes up (including the type and length fields) 
+.PP
 Definition at line \fB1\fP of file \fBapic\&.h\fP\&.
 .SS "uint32_t local_apic_address"
 
 .PP
+The physical address of the local APIC\&. 
+.PP
 Definition at line \fB1\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t mask"
 
+.PP
+Whether the interrupt is disabled or not\&. 
 .PP
 Definition at line \fB7\fP of file \fBapic\&.h\fP\&.
 .PP
@@ -204,17 +356,31 @@ Referenced by \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect_mask()\fP\&.
 .SS "uint64_t pin_polarity"
 
 .PP
+Defines the electrical signal that indicates an active interrupt line (0 = high active, 1 = low active) (must match the MADT override flags) 
+.PP
 Definition at line \fB4\fP of file \fBapic\&.h\fP\&.
+.SS "uint8_t processor_id"
+
+.PP
+The ID for the core\&. 
+.PP
+Definition at line \fB0\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t remote_irr"
 
+.PP
+? 
 .PP
 Definition at line \fB5\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t reserved"
 
 .PP
+Reserved\&. Reserved bits (should be zero) 
+.PP
 Definition at line \fB1\fP of file \fBapic\&.h\fP\&.
 .SS "uint8_t source"
 
+.PP
+The interrupt source number on the specified bus\&. 
 .PP
 Definition at line \fB1\fP of file \fBapic\&.h\fP\&.
 .PP
@@ -222,15 +388,23 @@ Referenced by \fBMaxOS::common::Buffer::Buffer()\fP, \fBMaxOS::common::Buffer::c
 .SS "uint64_t trigger_mode"
 
 .PP
+How the electrical signal is interpreted (0 = edge triggered, 1 = level triggered) (must match the MADT override flags) 
+.PP
 Definition at line \fB6\fP of file \fBapic\&.h\fP\&.
 .SS "uint8_t type"
 
+.PP
+The type of the MADT entry (see MADT_TYPE) 
 .PP
 Definition at line \fB0\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t vector"
 
 .PP
+The interrupt that will be triggered when this redirection entry is used\&. 
+.PP
 Definition at line \fB0\fP of file \fBapic\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::hardwarecommunication::LocalAPIC::send_startup()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

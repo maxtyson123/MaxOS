@@ -13,12 +13,6 @@ MaxOS::common::EventManager< EventType > \- Manages the m_handlers for a type of
 
 .in +1c
 .ti -1c
-.RI "\fBEventManager\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventManager\fP ()"
-.br
-.ti -1c
 .RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< \fBEventType\fP > *\fBhandler\fP)"
 .br
 .RI "Connect an event handler to the event manager if it is not already connected\&. "
@@ -47,6 +41,12 @@ class MaxOS::common::EventManager< EventType >"Manages the m_handlers for a type
 
 
 .PP
+\fBDeprecated\fP
+.RS 4
+Will Remove Soon
+.RE
+.PP
+.PP
 \fBTemplate Parameters\fP
 .RS 4
 \fIEventType\fP The type of event 
@@ -54,13 +54,7 @@ class MaxOS::common::EventManager< EventType >"Manages the m_handlers for a type
 .PP
 
 .PP
-Definition at line \fB61\fP of file \fBeventHandler\&.h\fP\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "template<\fBtypename\fP \fBEventType\fP > \fBMaxOS::common::EventManager\fP< \fBEventType\fP >::EventManager ()\fC [default]\fP"
-
-.SS "template<\fBtypename\fP \fBEventType\fP > \fBMaxOS::common::EventManager\fP< \fBEventType\fP >::~\fBEventManager\fP ()\fC [default]\fP"
-
+Definition at line \fB69\fP of file \fBeventHandler\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "template<\fBtypename\fP \fBEventType\fP > \fBvoid\fP \fBMaxOS::common::EventManager\fP< \fBEventType\fP >::connect_event_handler (\fBEventHandler\fP< \fBEventType\fP > * handler)"
@@ -80,17 +74,17 @@ Connect an event handler to the event manager if it is not already connected\&.
 .PP
 
 .PP
-Definition at line \fB109\fP of file \fBeventHandler\&.h\fP\&..PP
+Definition at line \fB117\fP of file \fBeventHandler\&.h\fP\&..PP
 .nf
-109                                                                                                                          {
-110             // If the handler is already connected, return
-111             if(m_handlers\&.find(handler) != m_handlers\&.end()) {
-112                 return;
-113             }
-114 
-115             m_handlers\&.push_back(handler);
-116 
-117         }
+117                                                                                                                          {
+118             // If the handler is already connected, return
+119             if(m_handlers\&.find(handler) != m_handlers\&.end()) {
+120                 return;
+121             }
+122 
+123             m_handlers\&.push_back(handler);
+124 
+125         }
 .fi
 
 .PP
@@ -112,16 +106,16 @@ Disconnect an event handler from the event manager if it is connected\&.
 .PP
 
 .PP
-Definition at line \fB125\fP of file \fBeventHandler\&.h\fP\&..PP
+Definition at line \fB133\fP of file \fBeventHandler\&.h\fP\&..PP
 .nf
-125                                                                                                                             {
-126             // If the handler is not connected, return
-127             if(m_handlers\&.find(handler) == m_handlers\&.end()) {
-128                 return;
-129             }
-130 
-131             m_handlers\&.erase(handler);
-132         }
+133                                                                                                                             {
+134             // If the handler is not connected, return
+135             if(m_handlers\&.find(handler) == m_handlers\&.end()) {
+136                 return;
+137             }
+138 
+139             m_handlers\&.erase(handler);
+140         }
 .fi
 
 .SS "template<\fBtypename\fP \fBEventType\fP > \fBVector\fP< \fBEvent\fP< \fBEventType\fP > * > \fBMaxOS::common::EventManager\fP< \fBEventType\fP >::raise_event (\fBEvent\fP< \fBEventType\fP > * event)"
@@ -146,22 +140,22 @@ A list of the results of the event m_handlers
 .PP
 
 .PP
-Definition at line \fB141\fP of file \fBeventHandler\&.h\fP\&..PP
+Definition at line \fB149\fP of file \fBeventHandler\&.h\fP\&..PP
 .nf
-141                                                                                                                             {
-142 
-143 
-144             // Store a list of the results of the event handlers
-145             Vector<Event<EventType>*> results;
-146             for(auto& handler : m_handlers) {
-147                 results\&.push_back(handler\->on_event(event));
-148             }
-149 
-150             // Free the memory used by the event
-151             delete event;
-152 
-153             return results;
-154         }
+149                                                                                                                             {
+150 
+151 
+152             // Store a list of the results of the event handlers
+153             Vector<Event<EventType>*> results;
+154             for(auto& handler : m_handlers) {
+155                 results\&.push_back(handler\->on_event(event));
+156             }
+157 
+158             // Free the memory used by the event
+159             delete event;
+160 
+161             return results;
+162         }
 .fi
 
 .PP
@@ -171,7 +165,14 @@ References \fBMaxOS::common::Vector< Type >::push_back()\fP\&.
 .SS "template<\fBtypename\fP \fBEventType\fP > \fBVector\fP<\fBEventHandler\fP<\fBEventType\fP>*> \fBMaxOS::common::EventManager\fP< \fBEventType\fP >::m_handlers\fC [protected]\fP"
 
 .PP
-Definition at line \fB64\fP of file \fBeventHandler\&.h\fP\&.
+\fBDeprecated\fP
+.RS 4
+WRS 
+.RE
+.PP
+
+.PP
+Definition at line \fB72\fP of file \fBeventHandler\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::net::UserDatagramProtocolHandler::Bind()\fP\&.
 

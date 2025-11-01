@@ -1,47 +1,91 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/system/gdt.h File Reference}
 \hypertarget{gdt_8h}{}\label{gdt_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h}}
+
+
+Defines a Global Descriptor Table (GDT) for setting up memory segments in protected mode.  
+
+
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$system/multiboot.\+h$>$}\newline
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1system_1_1GlobalDescriptorTableRegister}{Max\+OS\+::system\+::\+Global\+Descriptor\+Table\+Register}}
+struct \mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister}{Max\+OS\+::system\+::\+GDTRegister}}
 \begin{DoxyCompactList}\small\item\em How the \doxylink{classMaxOS_1_1system_1_1CPU}{CPU} stores the GDT. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{Max\+OS\+::system\+::\+Global\+Descriptor\+Table}}
 \begin{DoxyCompactList}\small\item\em Sets up the GDT in the \doxylink{classMaxOS_1_1system_1_1CPU}{CPU}. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1system}{Max\+OS\+::system}}
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0}{Max\+OS\+::system\+::\+Descriptor\+Flags}} \+: uint64\+\_\+t \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a1129c0e4d43f2d121652a7302712cff6}{Max\+OS\+::system\+::\+Write}} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 41)
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a40cd014b7b6251e3a22e6a45a73a64e1}{Max\+OS\+::system\+::\+Execute}} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 43)
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0aa43d8a8f0415d770ad9cef1d31ef03d5}{Max\+OS\+::system\+::\+Code\+Or\+Data\+Segment}} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 44)
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a22ff80c5103d46f7dd26d3b3bb5599a9}{Max\+OS\+::system\+::\+Grow\+Down}} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 45)
+enum class \mbox{\hyperlink{gdt_8h_a9939ce6f20f93eab7ad3ae6ee5d164c0}{Max\+OS\+::system\+::\+Descriptor\+Flags}} \+: uint64\+\_\+t \{ \newline
+{\bfseries Write} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 41)
+, {\bfseries Execute} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 43)
+, {\bfseries Code\+Or\+Data\+Segment} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 44)
+, {\bfseries Grow\+Down} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 45)
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0a3983b708674e3b09e525f99759cd9566}{Max\+OS\+::system\+::\+Conform\+From\+Lower}} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 46)
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0add058df87f5c88e3285a28ad7406a3c6}{Max\+OS\+::system\+::\+Present}} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 47)
-, \mbox{\hyperlink{namespaceMaxOS_1_1system_a9939ce6f20f93eab7ad3ae6ee5d164c0ab389522a2e7fd91e3edf722ab20fe9ec}{Max\+OS\+::system\+::\+Long\+Mode}} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 53)
+{\bfseries Conform\+From\+Lower} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 46)
+, {\bfseries Present} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 47)
+, {\bfseries Long\+Mode} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 53)
  \}
 \begin{DoxyCompactList}\small\item\em Flags for the GDT entries. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structMaxOS_1_1system_1_1GlobalDescriptorTableRegister}{Max\+OS\+::system\+::\+Global\+Descriptor\+Table\+Register}} \mbox{\hyperlink{namespaceMaxOS_1_1system_a227f758b8466abedf2ebae3815d6fbeb}{Max\+OS\+::system\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed)) gdtr\+\_\+t
+\Hypertarget{gdt_8h_a10bff877fe5c5c2229aa61a6fe906e30}\label{gdt_8h_a10bff877fe5c5c2229aa61a6fe906e30} 
+struct \mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister}{Max\+OS\+::system\+::\+GDTRegister}} {\bfseries Max\+OS\+::system\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed)) gdtr\+\_\+t
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 uint16\+\_\+t \mbox{\hyperlink{gdt_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}
-\item 
+\begin{DoxyCompactList}\small\item\em The size of the GDT. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{gdt_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The address of the GDT. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines a Global Descriptor Table (GDT) for setting up memory segments in protected mode. 
+
+\begin{DoxyDate}{Date}
+3rd October 2022 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{gdt_8h_source}{gdt.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{gdt_8h_a9939ce6f20f93eab7ad3ae6ee5d164c0}\label{gdt_8h_a9939ce6f20f93eab7ad3ae6ee5d164c0} 
+\index{gdt.h@{gdt.h}!DescriptorFlags@{DescriptorFlags}}
+\index{DescriptorFlags@{DescriptorFlags}!gdt.h@{gdt.h}}
+\doxysubsubsection{\texorpdfstring{DescriptorFlags}{DescriptorFlags}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{gdt_8h_a9939ce6f20f93eab7ad3ae6ee5d164c0}{Max\+OS\+::system\+::\+Descriptor\+Flags}} \+: uint64\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Flags for the GDT entries. 
+
+Descriptor\+Flags 
+
+Definition at line \mbox{\hyperlink{gdt_8h_source_l00023}{23}} of file \mbox{\hyperlink{gdt_8h_source}{gdt.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ uint64\_t\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ Write\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 41),}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ Execute\ \ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 43),}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ CodeOrDataSegment\ \ \ =\ (1ULL\ <<\ 44),}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ GrowDown\ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 45),}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ ConformFromLower\ \ \ \ =\ (1ULL\ <<\ 46),}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ Present\ \ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 47),}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ LongMode\ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 53),}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
 
 
 \doxysubsection{Variable Documentation}
@@ -53,6 +97,10 @@ uint64\+\_\+t \mbox{\hyperlink{gdt_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{address
 
 
 
+The address of the GDT. 
+
+
+
 Definition at line \mbox{\hyperlink{gdt_8h_source_l00001}{1}} of file \mbox{\hyperlink{gdt_8h_source}{gdt.\+h}}.
 
 \Hypertarget{gdt_8h_aaba88b24a21a6c70c895c0d55f4a69a0}\label{gdt_8h_aaba88b24a21a6c70c895c0d55f4a69a0} 
@@ -60,6 +108,10 @@ Definition at line \mbox{\hyperlink{gdt_8h_source_l00001}{1}} of file \mbox{\hyp
 \index{size@{size}!gdt.h@{gdt.h}}
 \doxysubsubsection{\texorpdfstring{size}{size}}
 {\footnotesize\ttfamily uint16\+\_\+t size}
+
+
+
+The size of the GDT. 
 
 
 

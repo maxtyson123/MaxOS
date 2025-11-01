@@ -17,9 +17,7 @@ Inherits \fBMaxOS::gui::Widget\fP\&.
 .ti -1c
 .RI "\fBText\fP (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height, \fBconst\fP \fBstring\fP &text)"
 .br
-.ti -1c
-.RI "\fB~Text\fP ()"
-.br
+.RI "Construct a new \fBText\fP object at a specific position and size with text\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBdraw\fP (\fBcommon::GraphicsContext\fP *\fBgc\fP, \fBcommon::Rectangle\fP< \fBint32_t\fP > &\fBarea\fP) \fBoverride\fP"
 .br
@@ -33,14 +31,9 @@ Inherits \fBMaxOS::gui::Widget\fP\&.
 Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .in +1c
 .ti -1c
-.RI "\fBWidget\fP ()"
-.br
-.ti -1c
 .RI "\fBWidget\fP (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height)"
 .br
-.ti -1c
-.RI "\fB~Widget\fP ()"
-.br
+.RI "Construct a new \fBWidget\fP object at a specific position and size\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBinvalidate\fP ()"
 .br
@@ -56,6 +49,7 @@ Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .ti -1c
 .RI "\fBvirtual\fP \fBcommon::Coordinates\fP \fBabsolute_coordinates\fP (\fBcommon::Coordinates\fP \fBcoordinates\fP)"
 .br
+.RI "Get the absolute coordinates of the widget (relative to the screen) "
 .ti -1c
 .RI "\fBvirtual\fP \fBbool\fP \fBcontains_coordinate\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
 .br
@@ -113,13 +107,7 @@ Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 Public Member Functions inherited from \fBMaxOS::drivers::peripherals::KeyboardEventHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBKeyboardEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~KeyboardEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fBcommon::Event\fP< \fBKeyboardEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBKeyboardEvents\fP > *) \fBoverride\fP"
+.RI "\fBcommon::Event\fP< KeyboardEvents > * \fBon_event\fP (\fBcommon::Event\fP< KeyboardEvents > *) \fBoverride\fP"
 .br
 .RI "Handle the trigger of an event\&. "
 .ti -1c
@@ -135,12 +123,6 @@ Public Member Functions inherited from \fBMaxOS::drivers::peripherals::KeyboardE
 Public Member Functions inherited from \fBMaxOS::common::EventHandler< KeyboardEvents >\fP
 .in +1c
 .ti -1c
-.RI "\fBEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventHandler\fP ()"
-.br
-.ti -1c
 .RI "\fBvirtual\fP \fBEvent\fP< KeyboardEvents > * \fBon_event\fP (\fBEvent\fP< KeyboardEvents > *\fBevent\fP)"
 .br
 .RI "This function is called when an event is raised\&. "
@@ -151,41 +133,15 @@ Public Member Functions inherited from \fBMaxOS::common::EventHandler< KeyboardE
 .ti -1c
 .RI "\fBgui::Font\fP \fBfont\fP"
 .br
+.RI "The font to use for the text\&. "
 .ti -1c
 .RI "\fBcommon::Colour\fP \fBforeground_colour\fP"
 .br
+.RI "The colour of the text characters\&. "
 .ti -1c
 .RI "\fBcommon::Colour\fP \fBbackground_colour\fP"
 .br
-.in -1c
-.SS "Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "\fBstring\fP \fBm_widget_text\fP"
-.br
-.in -1c
-
-Protected Attributes inherited from \fBMaxOS::gui::Widget\fP
-.in +1c
-.ti -1c
-.RI "\fBWidget\fP * \fBm_parent\fP { nullptr }"
-.br
-.ti -1c
-.RI "bool \fBm_valid\fP { false }"
-.br
-.ti -1c
-.RI "uint32_t \fBm_min_width\fP { 5 }"
-.br
-.ti -1c
-.RI "uint32_t \fBm_min_height\fP { 5 }"
-.br
-.ti -1c
-.RI "uint32_t \fBm_max_width\fP { 0x8FFFFFFF }"
-.br
-.ti -1c
-.RI "uint32_t \fBm_max_height\fP { 0x8FFFFFFF }"
-.br
+.RI "The colour to draw behind the text characters\&. "
 .in -1c
 .SS "Additional Inherited Members"
 
@@ -201,33 +157,80 @@ Protected Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .br
 .RI "Brings a specific widget to the front of the screen\&. "
 .in -1c
+
+Protected Attributes inherited from \fBMaxOS::gui::Widget\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Rectangle\fP< int32_t > \fBm_position\fP"
+.br
+.RI "The position and size of the widget (relative to its parent) "
+.ti -1c
+.RI "\fBWidget\fP * \fBm_parent\fP { nullptr }"
+.br
+.RI "The widget that owns this widget\&. "
+.ti -1c
+.RI "bool \fBm_valid\fP { false }"
+.br
+.RI "Is the widget drawn to the screen and up to date\&. "
+.ti -1c
+.RI "uint32_t \fBm_min_width\fP { 5 }"
+.br
+.RI "The smallest m_width the widget can be resized to\&. "
+.ti -1c
+.RI "uint32_t \fBm_min_height\fP { 5 }"
+.br
+.RI "The smallest m_height the widget can be resized to\&. "
+.ti -1c
+.RI "uint32_t \fBm_max_width\fP { 0x8FFFFFFF }"
+.br
+.RI "The largest m_width the widget can be resized to\&. "
+.ti -1c
+.RI "uint32_t \fBm_max_height\fP { 0x8FFFFFFF }"
+.br
+.RI "The largest m_height the widget can be resized to\&. "
+.in -1c
 .SH "Detailed Description"
 .PP 
 A box that can be used to display text\&. 
 .PP
-Definition at line \fB23\fP of file \fBtext\&.h\fP\&.
+Definition at line \fB27\fP of file \fBtext\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Text::Text (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height, \fBconst\fP \fBstring\fP & text)"
 
 .PP
-Definition at line \fB13\fP of file \fBtext\&.cpp\fP\&..PP
+Construct a new \fBText\fP object at a specific position and size with text\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIleft\fP How many pixels from the left of the parent widget the text is 
+.br
+\fItop\fP How many pixels from the top of the parent widget the text is 
+.br
+\fIwidth\fP How many pixels wide the text area is 
+.br
+\fIheight\fP How many pixels tall the text area is 
+.br
+\fItext\fP The text to display 
+.RE
+.PP
+
+.PP
+Definition at line \fB26\fP of file \fBtext\&.cpp\fP\&..PP
 .nf
-14 : Widget(left, top, width, height),
-15   font((uint8_t*) AMIGA_FONT),
-16   foreground_colour(Colour(0, 0, 0)),
-17   background_colour(Colour(255, 255, 255))
-18 {
-19 
-20     // Set the text
-21     update_text(text);
-22 }
+27 : Widget(left, top, width, height),
+28   font((uint8_t*) AMIGA_FONT),
+29   foreground_colour(Colour(0, 0, 0)),
+30   background_colour(Colour(255, 255, 255))
+31 {
+32 
+33     // Set the text
+34     update_text(text);
+35 }
 .fi
 
 .PP
 References \fBupdate_text()\fP\&.
-.SS "Text::~Text ()\fC [default]\fP"
-
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP Text::draw (\fBcommon::GraphicsContext\fP * gc, \fBcommon::Rectangle\fP< \fBint32_t\fP > & area)\fC [override]\fP, \fC [virtual]\fP"
@@ -246,31 +249,31 @@ Draw the text on the screen\&.
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line \fB32\fP of file \fBtext\&.cpp\fP\&..PP
+Definition at line \fB45\fP of file \fBtext\&.cpp\fP\&..PP
 .nf
-32                                                              {
-33 
-34     // Default Draw Operation
-35     Widget::draw(gc, area);
-36 
-37     // Get the absolute m_position of the text
-38     Coordinates textCoordinates = absolute_coordinates(Coordinates(0, 0));
-39     Rectangle<int32_t> textPosition = position();
-40 
-41     // Get the x and y m_position of the text
-42     int32_t x = textCoordinates\&.first;
-43     int32_t y = textCoordinates\&.second;
-44 
-45     // Draw the background (as the text might not fill the entire area)
-46     gc\->fill_rectangle(x + area\&.left, y + area\&.top, x + area\&.left + area\&.width, y + area\&.top + area\&.height, background_colour);
-47 
-48     // Draw the text
-49     this\->font\&.draw_text(x, y, foreground_colour, background_colour, gc, m_widget_text, area);
-50 }
+45                                                              {
+46 
+47     // Default Draw Operation
+48     Widget::draw(gc, area);
+49 
+50     // Get the absolute m_position of the text
+51     Coordinates textCoordinates = absolute_coordinates(Coordinates(0, 0));
+52     Rectangle<int32_t> textPosition = position();
+53 
+54     // Get the x and y m_position of the text
+55     int32_t x = textCoordinates\&.first;
+56     int32_t y = textCoordinates\&.second;
+57 
+58     // Draw the background (as the text might not fill the entire area)
+59     gc\->fill_rectangle(x + area\&.left, y + area\&.top, x + area\&.left + area\&.width, y + area\&.top + area\&.height, background_colour);
+60 
+61     // Draw the text
+62     this\->font\&.draw_text(x, y, foreground_colour, background_colour, gc, m_widget_text, area);
+63 }
 .fi
 
 .PP
-References \fBMaxOS::gui::Widget::absolute_coordinates()\fP, \fBbackground_colour\fP, \fBMaxOS::gui::Widget::draw()\fP, \fBMaxOS::gui::Font::draw_text()\fP, \fBfont\fP, \fBforeground_colour\fP, \fBMaxOS::common::Rectangle< Type >::height\fP, \fBMaxOS::common::Rectangle< Type >::left\fP, \fBm_widget_text\fP, \fBMaxOS::gui::Widget::position()\fP, \fBMaxOS::common::Rectangle< Type >::top\fP, and \fBMaxOS::common::Rectangle< Type >::width\fP\&.
+References \fBMaxOS::gui::Widget::absolute_coordinates()\fP, \fBbackground_colour\fP, \fBMaxOS::gui::Widget::draw()\fP, \fBMaxOS::gui::Font::draw_text()\fP, \fBfont\fP, \fBforeground_colour\fP, \fBMaxOS::common::Rectangle< Type >::height\fP, \fBMaxOS::common::Rectangle< Type >::left\fP, \fBMaxOS::gui::Widget::position()\fP, \fBMaxOS::common::Rectangle< Type >::top\fP, and \fBMaxOS::common::Rectangle< Type >::width\fP\&.
 .SS "\fBvoid\fP Text::update_text (\fBconst\fP \fBstring\fP & new_text)"
 
 .PP
@@ -283,19 +286,19 @@ Update the text of the widget\&.
 .PP
 
 .PP
-Definition at line \fB56\fP of file \fBtext\&.cpp\fP\&..PP
+Definition at line \fB69\fP of file \fBtext\&.cpp\fP\&..PP
 .nf
-56                                              {
-57 
-58     // Set the text
-59     m_widget_text\&.copy(new_text);
-60     invalidate();
-61 
-62 }
+69                                              {
+70 
+71     // Set the text
+72     m_widget_text\&.copy(new_text);
+73     invalidate();
+74 
+75 }
 .fi
 
 .PP
-References \fBMaxOS::String::copy()\fP, \fBMaxOS::gui::Widget::invalidate()\fP, and \fBm_widget_text\fP\&.
+References \fBMaxOS::gui::Widget::invalidate()\fP\&.
 .PP
 Referenced by \fBText()\fP\&.
 .SH "Member Data Documentation"
@@ -303,27 +306,27 @@ Referenced by \fBText()\fP\&.
 .SS "\fBcommon::Colour\fP MaxOS::gui::widgets::Text::background_colour"
 
 .PP
-Definition at line \fB33\fP of file \fBtext\&.h\fP\&.
+The colour to draw behind the text characters\&. 
+.PP
+Definition at line \fB37\fP of file \fBtext\&.h\fP\&.
 .PP
 Referenced by \fBdraw()\fP, \fBMaxOS::gui::Window::Window()\fP, and \fBMaxOS::gui::Window::Window()\fP\&.
 .SS "\fBgui::Font\fP MaxOS::gui::widgets::Text::font"
 
 .PP
-Definition at line \fB30\fP of file \fBtext\&.h\fP\&.
+The font to use for the text\&. 
+.PP
+Definition at line \fB34\fP of file \fBtext\&.h\fP\&.
 .PP
 Referenced by \fBdraw()\fP\&.
 .SS "\fBcommon::Colour\fP MaxOS::gui::widgets::Text::foreground_colour"
 
 .PP
-Definition at line \fB32\fP of file \fBtext\&.h\fP\&.
+The colour of the text characters\&. 
+.PP
+Definition at line \fB36\fP of file \fBtext\&.h\fP\&.
 .PP
 Referenced by \fBdraw()\fP, \fBMaxOS::gui::Window::Window()\fP, and \fBMaxOS::gui::Window::Window()\fP\&.
-.SS "\fBstring\fP MaxOS::gui::widgets::Text::m_widget_text\fC [protected]\fP"
-
-.PP
-Definition at line \fB26\fP of file \fBtext\&.h\fP\&.
-.PP
-Referenced by \fBdraw()\fP, and \fBupdate_text()\fP\&.
 
 .SH "Author"
 .PP 

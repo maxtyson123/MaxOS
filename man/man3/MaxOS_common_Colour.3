@@ -13,23 +13,21 @@ MaxOS::common::Colour \- Stores the red, green, blue and alpha values of a colou
 
 .in +1c
 .ti -1c
-.RI "\fBColour\fP ()"
-.br
-.ti -1c
 .RI "\fBColour\fP (\fBConsoleColour\fP colour)"
 .br
+.RI "Constructs a \fBColour\fP from the the console equivalent\&. "
 .ti -1c
 .RI "\fBColour\fP (\fBstring\fP \fBstring\fP)"
 .br
+.RI "Constructs a \fBColour\fP from a string\&. If it starts with a '#' will be treated as a hex code otherwise, a ansi code\&. "
 .ti -1c
 .RI "\fBColour\fP (\fBuint8_t\fP \fBred\fP, \fBuint8_t\fP \fBgreen\fP, \fBuint8_t\fP \fBblue\fP)"
 .br
+.RI "Constructs a \fBColour\fP from a set of RGB values\&. Alpha defaults to 255\&. "
 .ti -1c
 .RI "\fBColour\fP (\fBuint8_t\fP \fBred\fP, \fBuint8_t\fP \fBgreen\fP, \fBuint8_t\fP \fBblue\fP, \fBuint8_t\fP \fBalpha\fP)"
 .br
-.ti -1c
-.RI "\fB~Colour\fP ()"
-.br
+.RI "Constructs a \fBColour\fP from a set of RGBA values\&. "
 .ti -1c
 .RI "\fBConsoleColour\fP \fBto_console_colour\fP () \fBconst\fP"
 .br
@@ -41,76 +39,124 @@ MaxOS::common::Colour \- Stores the red, green, blue and alpha values of a colou
 .ti -1c
 .RI "\fBuint8_t\fP \fBred\fP { 0 }"
 .br
+.RI "The amount of red 0-255\&. "
 .ti -1c
 .RI "\fBuint8_t\fP \fBgreen\fP { 0 }"
 .br
+.RI "The amount of green 0-255\&. "
 .ti -1c
 .RI "\fBuint8_t\fP \fBblue\fP { 0 }"
 .br
+.RI "The amount of blue 0-255\&. "
 .ti -1c
 .RI "\fBuint8_t\fP \fBalpha\fP { 0 }"
 .br
+.RI "The amount of alpha 0-255 (0 is visible, 255 is invisible) todo: confirm\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Stores the red, green, blue and alpha values of a colour\&. Can be parsed from a hex string, an ANSI string or a ConsoleColour\&. 
 .PP
-Definition at line \fB82\fP of file \fBcolour\&.h\fP\&.
+Definition at line \fB92\fP of file \fBcolour\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Colour::Colour ()\fC [default]\fP"
-
 .SS "Colour::Colour (\fBConsoleColour\fP colour)"
 
 .PP
-Definition at line \fB28\fP of file \fBcolour\&.cpp\fP\&..PP
+Constructs a \fBColour\fP from the the console equivalent\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIcolour\fP The console colour to convert 
+.RE
+.PP
+
+.PP
+Definition at line \fB21\fP of file \fBcolour\&.cpp\fP\&..PP
 .nf
-28                                    {
-29     parse_console_colour(colour);
-30 }
+21                                    {
+22     parse_console_colour(colour);
+23 }
 .fi
 
 .SS "Colour::Colour (\fBstring\fP string)"
 
 .PP
-Definition at line \fB32\fP of file \fBcolour\&.cpp\fP\&..PP
+Constructs a \fBColour\fP from a string\&. If it starts with a '#' will be treated as a hex code otherwise, a ansi code\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstring\fP The string to parse, must be either a hex code or an ANSI escape code 
+.RE
+.PP
+
+.PP
+Definition at line \fB30\fP of file \fBcolour\&.cpp\fP\&..PP
 .nf
-32                             {
-33 
-34     if (string[0] == '#')
-35         parse_hex_string(string);
-36     else
-37         parse_ansi_string(string);
-38 
-39 }
+30                             {
+31 
+32     if (string[0] == '#')
+33         parse_hex_string(string);
+34     else
+35         parse_ansi_string(string);
+36 
+37 }
 .fi
 
 .SS "Colour::Colour (\fBuint8_t\fP red, \fBuint8_t\fP green, \fBuint8_t\fP blue)"
 
 .PP
-Definition at line \fB11\fP of file \fBcolour\&.cpp\fP\&..PP
+Constructs a \fBColour\fP from a set of RGB values\&. Alpha defaults to 255\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIred\fP The amount of red 0-255 
+.br
+\fIgreen\fP The amount of green 0-255 
+.br
+\fIblue\fP The amount of blue 0-255 
+.RE
+.PP
+
+.PP
+Definition at line \fB46\fP of file \fBcolour\&.cpp\fP\&..PP
 .nf
-12         : red(red),
-13           green(green),
-14           blue(blue) {
-15 
-16 }
+47 : red(red),
+48   green(green),
+49   blue(blue)
+50 {
+51 
+52 }
 .fi
 
 .SS "Colour::Colour (\fBuint8_t\fP red, \fBuint8_t\fP green, \fBuint8_t\fP blue, \fBuint8_t\fP alpha)"
 
 .PP
-Definition at line \fB18\fP of file \fBcolour\&.cpp\fP\&..PP
-.nf
-19         : red(red),
-20           green(green),
-21           blue(blue),
-22           alpha(alpha) {
-23 
-24 }
-.fi
+Constructs a \fBColour\fP from a set of RGBA values\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIred\fP The amount of red 0-255 
+.br
+\fIgreen\fP The amount of green 0-255 
+.br
+\fIblue\fP The amount of blue 0-255 
+.br
+\fIalpha\fP The amount of alpha 0-255 
+.RE
+.PP
 
-.SS "Colour::~Colour ()\fC [default]\fP"
+.PP
+Definition at line \fB62\fP of file \fBcolour\&.cpp\fP\&..PP
+.nf
+63 : red(red),
+64   green(green),
+65   blue(blue),
+66   alpha(alpha)
+67 {
+68 
+69 }
+.fi
 
 .SH "Member Function Documentation"
 .PP 
@@ -126,66 +172,66 @@ The console colour
 .PP
 
 .PP
-Definition at line \fB229\fP of file \fBcolour\&.cpp\fP\&..PP
+Definition at line \fB261\fP of file \fBcolour\&.cpp\fP\&..PP
 .nf
-229                                               {
-230 
-231 
-232     if (red == 0 && green == 0 && blue == 0)
-233         return ConsoleColour::Black;
-234 
-235     if (red == 0 && green == 128 && blue == 253)
-236         return ConsoleColour::Blue;
-237 
-238     if (red == 0 && green == 170 && blue == 0)
-239         return ConsoleColour::Green;
-240 
-241     if (red == 0 && green == 170 && blue == 170)
-242         return ConsoleColour::Cyan;
-243 
-244     if (red == 170 && green == 0 && blue == 0)
-245         return ConsoleColour::Red;
-246 
-247     if (red == 170 && green == 0 && blue == 170)
-248         return ConsoleColour::Magenta;
-249 
-250     if (red == 170 && green == 85 && blue == 0)
-251         return ConsoleColour::Brown;
-252 
-253     if (red == 170 && green == 170 && blue == 170)
-254         return ConsoleColour::LightGrey;
-255 
-256     if (red == 85 && green == 85 && blue == 85)
-257         return ConsoleColour::DarkGrey;
-258 
-259     if (red == 85 && green == 85 && blue == 255)
-260         return ConsoleColour::LightBlue;
-261 
-262     if (red == 85 && green == 255 && blue == 85)
-263         return ConsoleColour::LightGreen;
-264 
-265     if (red == 85 && green == 255 && blue == 255)
-266         return ConsoleColour::LightCyan;
-267 
-268     if (red == 255 && green == 85 && blue == 85)
-269         return ConsoleColour::LightRed;
-270 
-271     if (red == 255 && green == 85 && blue == 255)
-272         return ConsoleColour::LightMagenta;
-273 
-274     if (red == 0x96 && green == 0x82 && blue == 0x0E)
-275         return ConsoleColour::Yellow;
-276 
-277     if (red == 255 && green == 255 && blue == 255)
-278         return ConsoleColour::White;
-279 
-280     // Return a default value in case no match is found
-281     return ConsoleColour::Black;
-282 }
+261                                               {
+262 
+263 
+264     if (red == 0 && green == 0 && blue == 0)
+265         return ConsoleColour::Black;
+266 
+267     if (red == 0 && green == 128 && blue == 253)
+268         return ConsoleColour::Blue;
+269 
+270     if (red == 0 && green == 170 && blue == 0)
+271         return ConsoleColour::Green;
+272 
+273     if (red == 0 && green == 170 && blue == 170)
+274         return ConsoleColour::Cyan;
+275 
+276     if (red == 170 && green == 0 && blue == 0)
+277         return ConsoleColour::Red;
+278 
+279     if (red == 170 && green == 0 && blue == 170)
+280         return ConsoleColour::Magenta;
+281 
+282     if (red == 170 && green == 85 && blue == 0)
+283         return ConsoleColour::Brown;
+284 
+285     if (red == 170 && green == 170 && blue == 170)
+286         return ConsoleColour::LightGrey;
+287 
+288     if (red == 85 && green == 85 && blue == 85)
+289         return ConsoleColour::DarkGrey;
+290 
+291     if (red == 85 && green == 85 && blue == 255)
+292         return ConsoleColour::LightBlue;
+293 
+294     if (red == 85 && green == 255 && blue == 85)
+295         return ConsoleColour::LightGreen;
+296 
+297     if (red == 85 && green == 255 && blue == 255)
+298         return ConsoleColour::LightCyan;
+299 
+300     if (red == 255 && green == 85 && blue == 85)
+301         return ConsoleColour::LightRed;
+302 
+303     if (red == 255 && green == 85 && blue == 255)
+304         return ConsoleColour::LightMagenta;
+305 
+306     if (red == 0x96 && green == 0x82 && blue == 0x0E)
+307         return ConsoleColour::Yellow;
+308 
+309     if (red == 255 && green == 255 && blue == 255)
+310         return ConsoleColour::White;
+311 
+312     // Return a default value in case no match is found
+313     return ConsoleColour::Black;
+314 }
 .fi
 
 .PP
-References \fBMaxOS::common::Black\fP, \fBMaxOS::common::Blue\fP, \fBblue\fP, \fBMaxOS::common::Brown\fP, \fBMaxOS::common::Cyan\fP, \fBMaxOS::common::DarkGrey\fP, \fBMaxOS::common::Green\fP, \fBgreen\fP, \fBMaxOS::common::LightBlue\fP, \fBMaxOS::common::LightCyan\fP, \fBMaxOS::common::LightGreen\fP, \fBMaxOS::common::LightGrey\fP, \fBMaxOS::common::LightMagenta\fP, \fBMaxOS::common::LightRed\fP, \fBMaxOS::common::Magenta\fP, \fBMaxOS::common::Red\fP, \fBred\fP, \fBMaxOS::common::White\fP, and \fBMaxOS::common::Yellow\fP\&.
+References \fBblue\fP, \fBgreen\fP, and \fBred\fP\&.
 .PP
 Referenced by \fBMaxOS::drivers::console::VESABootConsole::put_character()\fP\&.
 .SH "Member Data Documentation"
@@ -193,9 +239,11 @@ Referenced by \fBMaxOS::drivers::console::VESABootConsole::put_character()\fP\&.
 .SS "\fBuint8_t\fP MaxOS::common::Colour::alpha { 0 }"
 
 .PP
-Definition at line \fB94\fP of file \fBcolour\&.h\fP\&..PP
+The amount of alpha 0-255 (0 is visible, 255 is invisible) todo: confirm\&. 
+.PP
+Definition at line \fB103\fP of file \fBcolour\&.h\fP\&..PP
 .nf
-94 { 0 };
+103 { 0 };  
 .fi
 
 .PP
@@ -203,9 +251,11 @@ Referenced by \fBMaxOS::common::GraphicsContext::colour_to_int()\fP\&.
 .SS "\fBuint8_t\fP MaxOS::common::Colour::blue { 0 }"
 
 .PP
-Definition at line \fB93\fP of file \fBcolour\&.h\fP\&..PP
+The amount of blue 0-255\&. 
+.PP
+Definition at line \fB102\fP of file \fBcolour\&.h\fP\&..PP
 .nf
-93 { 0 };
+102 { 0 };  
 .fi
 
 .PP
@@ -213,9 +263,11 @@ Referenced by \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBMaxOS::c
 .SS "\fBuint8_t\fP MaxOS::common::Colour::green { 0 }"
 
 .PP
-Definition at line \fB92\fP of file \fBcolour\&.h\fP\&..PP
+The amount of green 0-255\&. 
+.PP
+Definition at line \fB101\fP of file \fBcolour\&.h\fP\&..PP
 .nf
-92 { 0 };
+101 { 0 };  
 .fi
 
 .PP
@@ -223,9 +275,11 @@ Referenced by \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBMaxOS::c
 .SS "\fBuint8_t\fP MaxOS::common::Colour::red { 0 }"
 
 .PP
-Definition at line \fB91\fP of file \fBcolour\&.h\fP\&..PP
+The amount of red 0-255\&. 
+.PP
+Definition at line \fB100\fP of file \fBcolour\&.h\fP\&..PP
 .nf
-91 { 0 };
+100 { 0 };  
 .fi
 
 .PP

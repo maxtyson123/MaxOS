@@ -19,21 +19,12 @@ Inherits \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 .br
 .RI "________________________________Tempaltes________________________________/// "
 .ti -1c
-.RI "\fB~WidgetMoverResizer\fP ()"
-.br
-.ti -1c
 .RI "void \fBon_mouse_move_event\fP (int8_t x, int8_t y) override"
 .br
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::drivers::peripherals::MouseEventHandler\fP
 .in +1c
-.ti -1c
-.RI "\fBMouseEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~MouseEventHandler\fP ()"
-.br
 .ti -1c
 .RI "\fBcommon::Event\fP< \fBMouseEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBMouseEvents\fP > *) \fBoverride\fP"
 .br
@@ -51,22 +42,9 @@ Public Member Functions inherited from \fBMaxOS::drivers::peripherals::MouseEven
 Public Member Functions inherited from \fBMaxOS::common::EventHandler< MouseEvents >\fP
 .in +1c
 .ti -1c
-.RI "\fBEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventHandler\fP ()"
-.br
-.ti -1c
 .RI "\fBvirtual\fP \fBEvent\fP< MouseEvents > * \fBon_event\fP (\fBEvent\fP< MouseEvents > *\fBevent\fP)"
 .br
 .RI "This function is called when an event is raised\&. "
-.in -1c
-.SS "Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "\fBWidget\fP * \fBtargetedWidget\fP"
-.br
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -90,7 +68,7 @@ class MaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >"A template clas
 .PP
 
 .PP
-Definition at line \fB123\fP of file \fBwidget\&.h\fP\&.
+Definition at line \fB126\fP of file \fBwidget\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<int Left, int Top, int Width, int Height> \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::WidgetMoverResizer (\fBWidget\fP * target)"
@@ -116,15 +94,13 @@ ________________________________Tempaltes________________________________/// \fB
 .PP
 
 .PP
-Definition at line \fB159\fP of file \fBwidget\&.h\fP\&..PP
+Definition at line \fB163\fP of file \fBwidget\&.h\fP\&..PP
 .nf
-160                 : drivers::peripherals::MouseEventHandler()
-161         {
-162             this \->targetedWidget = target;
-163         }
+164                 : drivers::peripherals::MouseEventHandler()
+165         {
+166             this \->targetedWidget = target;
+167         }
 .fi
-
-.SS "template<int Left, int Top, int Width, int Height> \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::~\fBWidgetMoverResizer\fP ()\fC [default]\fP"
 
 .SH "Member Function Documentation"
 .PP 
@@ -142,32 +118,26 @@ OnMouseMoved is called when the mouse is moved\&. Resizes and moves the widget w
 .PP
 Reimplemented from \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 .PP
-Definition at line \fB173\fP of file \fBwidget\&.h\fP\&..PP
+Definition at line \fB177\fP of file \fBwidget\&.h\fP\&..PP
 .nf
-174         {
-175 
-176             Widget* targ = this\->targetedWidget;
-177 
-178             // If there is actually a size of the widget to change
-179             if(Left != 0 || Top != 0)
-180                 // Move the widget to the left or right, and up or down
-181                 targ \-> move(targ \->m_position\&.left + Left * x, targ \->m_position\&.top + Top * y);
-182 
-183             // If there is actually a size of the widget to change
-184             if(Width != 0 || Height != 0)
-185                 // Resize the widget to the left or right, and up or down
-186                 targ \-> resize( targ \->m_position\&.width + Width*x, targ \->m_position\&.height + Height*y);
-187         }
+178         {
+179 
+180             Widget* targ = this\->targetedWidget;
+181 
+182             // If there is actually a size of the widget to change
+183             if(Left != 0 || Top != 0)
+184                 // Move the widget to the left or right, and up or down
+185                 targ \-> move(targ \->m_position\&.left + Left * x, targ \->m_position\&.top + Top * y);
+186 
+187             // If there is actually a size of the widget to change
+188             if(Width != 0 || Height != 0)
+189                 // Resize the widget to the left or right, and up or down
+190                 targ \-> resize( targ \->m_position\&.width + Width*x, targ \->m_position\&.height + Height*y);
+191         }
 .fi
 
 .PP
-References \fBMaxOS::common::Rectangle< Type >::height\fP, and \fBMaxOS::common::Rectangle< Type >::top\fP\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "template<int Left, int Top, int Width, int Height> \fBWidget\fP* \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::targetedWidget\fC [protected]\fP"
-
-.PP
-Definition at line \fB125\fP of file \fBwidget\&.h\fP\&.
+References \fBMaxOS::common::Rectangle< Type >::height\fP, \fBMaxOS::gui::Widget::m_position\fP, and \fBMaxOS::common::Rectangle< Type >::top\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,0 +1,102 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/common/symbols.cpp" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/src/common/symbols.cpp \- Implementation of symbol resolution for instruction pointers\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <common/symbols\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBconst\fP \fBchar\fP * \fBMaxOS::common::resolve_symbol\fP (\fBuintptr_t\fP \fBrip\fP, \fBuintptr_t\fP \fBlink_base\fP, \fBuintptr_t\fP \fBload_base\fP)"
+.br
+.RI "Resolve an instruction pointer (rip) to a symbol name and optional offset\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Implementation of symbol resolution for instruction pointers\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+10th September 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBsymbols\&.cpp\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "const char * MaxOS::common::resolve_symbol (\fBuintptr_t\fP rip, \fBuintptr_t\fP link_base, \fBuintptr_t\fP load_base)"
+
+.PP
+Resolve an instruction pointer (rip) to a symbol name and optional offset\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrip\fP Instruction pointer 
+.br
+\fIlink_base\fP Where the kernel is linked at 
+.br
+\fIload_base\fP Where the kernel is loaded at
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The symbol name 
+.RE
+.PP
+
+.PP
+Definition at line \fB24\fP of file \fBsymbols\&.cpp\fP\&..PP
+.nf
+25         {
+26 
+27             // No symbols
+28             if (KERNEL_SYMBOLS_COUNT == 0)
+29                 return nullptr;
+30 
+31             // Convert load to linked
+32             uintptr_t offset = 0;
+33             if (load_base >= link_base)
+34                 offset = load_base \- link_base;
+35 
+36             // Get the adjusted address
+37             uintptr_t adjusted_address = rip;
+38             if (rip >= offset)
+39                 adjusted_address = rip \- offset;
+40 
+41             // Binary Search for symbol
+42             size_t left = 0;
+43             size_t right = KERNEL_SYMBOLS_COUNT;
+44             while (left < right) {
+45                 size_t middle = (left + right) >> 1;
+46                 if (kernel_symbols[middle]\&.address <= adjusted_address)
+47                     left = middle + 1;
+48                 else
+49                     right = middle;
+50             }
+51 
+52             return left == 0 ? nullptr : kernel_symbols[left \- 1]\&.name;
+53         }
+.fi
+
+.PP
+References \fBMaxOS::common::resolve_symbol()\fP, and \fBrip\fP\&.
+.PP
+Referenced by \fBMaxOS::common::resolve_symbol()\fP, and \fBMaxOS::system::CPU::stack_trace()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

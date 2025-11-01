@@ -8,5 +8,7 @@ var logger_8h =
       [ "HEADER", "logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce", null ],
       [ "INFO", "logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3", null ],
       [ "DEBUG", "logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15", null ]
-    ] ]
+    ] ],
+    [ "MAX_LOG_LEVEL", "logger_8h.html#a48d28a459e93f33fb3840a0d5e7a3b33", null ],
+    [ "MAX_LOG_WRITERS", "logger_8h.html#a28ef57769ee0016c46a1426fe48e9523", null ]
 ];

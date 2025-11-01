@@ -1,7 +1,6 @@
 var classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973 =
 [
     [ "AMD_AM79C973", "classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973.html#a08afe3edf22e71249b94731a0d3e7fad", null ],
-    [ "~AMD_AM79C973", "classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973.html#af625f7f64ef62f0429ca030aeaca40ab", null ],
     [ "activate", "classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973.html#a53c3ac082e5eab68d8543b9b90cc21bd", null ],
     [ "deactivate", "classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973.html#af71695cfd40bf9bc49ac865521264fd9", null ],
     [ "device_name", "classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973.html#a426beb375fff8d28dbc4aee45a0c71b5", null ],

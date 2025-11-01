@@ -34,6 +34,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
    </div>
@@ -107,88 +108,82 @@ $(document).ready(function(){initNavTree('serial_8cpp_source.html',''); initResi
   <div class="headertitle"><div class="title">serial.cpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="serial_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// Created by 98max on 15/01/2024.</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;<a class="code" href="serial_8h.html">drivers/console/serial.h</a>&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespaceMaxOS.html">MaxOS</a>;</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespaceMaxOS_1_1drivers.html">MaxOS::drivers</a>;</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="foldopen" id="foldopen00010" data-start="{" data-end="}">
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="classMaxOS_1_1drivers_1_1SerialConsole.html#ac9044542781fa68c9ee8ce65b6588e8e">   10</a></span><a class="code hl_function" href="classMaxOS_1_1drivers_1_1SerialConsole.html#ac9044542781fa68c9ee8ce65b6588e8e">SerialConsole::SerialConsole</a>(<a class="code hl_class" href="classLogger.html">Logger</a> *logger)</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>: m_data_port(0x3F8),</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>  m_interrupt_enable_port(0x3F9),</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>  m_fifo_control_port(0x3FA),</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>  m_line_control_port(0x3FB),</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  m_modem_control_port(0x3FC),</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  m_line_status_port(0x3FD)</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>{</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="comment">// Disable all interrupts</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    m_interrupt_enable_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x00);</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="comment">// Enable DLAB (set baud rate divisor)</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    m_line_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x80);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="comment">// Set divisor to 3</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    m_data_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x03);</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    m_interrupt_enable_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x00);</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="comment">// 8 bits, no parity, one stop bit</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    m_line_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x03);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="comment">// Enable FIFO, clear them, with 14-byte threshold</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    m_fifo_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0xC7);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="comment">// IRQs enabled, RTS/DSR set</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    m_modem_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x0B);</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="comment">// Test serial chip</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    m_modem_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x1E);</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    m_data_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0xAE);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordflow">if</span> (m_data_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3">read</a>() != 0xAE)</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="comment">// Enable serial chip</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    m_modem_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x0F);</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="comment">// Set the active serial console</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    logger-&gt;<a class="code hl_function" href="classLogger.html#a678fdff0e20fc719317669dee1928947">add_log_writer</a>(<span class="keyword">this</span>);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>}</div>
+<a href="serial_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;<a class="code" href="serial_8h.html">drivers/console/serial.h</a>&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">using namespace </span>MaxOS;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">using namespace </span>MaxOS::drivers;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="}">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classMaxOS_1_1drivers_1_1SerialConsole.html#ac9044542781fa68c9ee8ce65b6588e8e">   18</a></span><a class="code hl_function" href="classMaxOS_1_1drivers_1_1SerialConsole.html#ac9044542781fa68c9ee8ce65b6588e8e">SerialConsole::SerialConsole</a>(<a class="code hl_class" href="classLogger.html">Logger</a>* logger)</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>: m_data_port(0x3F8),</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  m_interrupt_enable_port(0x3F9),</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  m_fifo_control_port(0x3FA),</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  m_line_control_port(0x3FB),</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  m_modem_control_port(0x3FC),</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  m_line_status_port(0x3FD)</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>{</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="comment">// Disable all interrupts</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    m_interrupt_enable_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x00);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="comment">// Enable DLAB (set baud rate divisor)</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    m_line_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x80);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="comment">// Set divisor to 3</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    m_data_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x03);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    m_interrupt_enable_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x00);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="comment">// 8 bits, no parity, one stop bit</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    m_line_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x03);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="comment">// Enable FIFO, clear them, with 14-byte threshold</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    m_fifo_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0xC7);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="comment">// IRQs enabled, RTS/DSR set</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    m_modem_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x0B);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="comment">// Test serial chip</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    m_modem_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x1E);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    m_data_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0xAE);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordflow">if</span> (m_data_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3">read</a>() != 0xAE)</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="comment">// Enable serial chip</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    m_modem_control_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(0x0F);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="comment">// Set the active serial console</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    logger-&gt;<a class="code hl_function" href="classLogger.html#a678fdff0e20fc719317669dee1928947">add_log_writer</a>(<span class="keyword">this</span>);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>}</div>
 </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><a class="code hl_function" href="classMaxOS_1_1drivers_1_1SerialConsole.html#aeb344bf3928b27a436e625132d34a455">SerialConsole::~SerialConsole</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="foldopen" id="foldopen00058" data-start="{" data-end="}">
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a5c5630d60b1b9a3635a684cc82a289d2">   58</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a5c5630d60b1b9a3635a684cc82a289d2">SerialConsole::put_character</a>(<span class="keywordtype">char</span> c) {</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="comment">// Wait for the serial port to be ready</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordflow">while</span> (0 == (m_line_status_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3">read</a>() &amp; 0x20));</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="comment">// Write the character</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    m_data_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(c);</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>}</div>
-</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>SerialConsole::~SerialConsole() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="foldopen" id="foldopen00066" data-start="{" data-end="}">
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a5c5630d60b1b9a3635a684cc82a289d2">   66</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a5c5630d60b1b9a3635a684cc82a289d2">SerialConsole::put_character</a>(<span class="keywordtype">char</span> c) {</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="foldopen" id="foldopen00068" data-start="{" data-end="}">
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a264ce5c8e63dbe240606c635a0980f23">   68</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a264ce5c8e63dbe240606c635a0980f23">SerialConsole::write_char</a>(<span class="keywordtype">char</span> c) {</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <a class="code hl_function" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a5c5630d60b1b9a3635a684cc82a289d2">put_character</a>(c);</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>}</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="comment">// Wait for the serial port to be ready</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordflow">while</span> (0 == (m_line_status_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3">read</a>() &amp; 0x20));</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="comment">// Write the character</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    m_data_port.<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(c);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>}</div>
 </div>
-<div class="ttc" id="aclassLogger_html"><div class="ttname"><a href="classLogger.html">Logger</a></div><div class="ttdoc">A class that handles logging messages to the console and files.</div><div class="ttdef"><b>Definition</b> <a href="logger_8h_source.html#l00031">logger.h:32</a></div></div>
-<div class="ttc" id="aclassLogger_html_a678fdff0e20fc719317669dee1928947"><div class="ttname"><a href="classLogger.html#a678fdff0e20fc719317669dee1928947">Logger::add_log_writer</a></div><div class="ttdeci">void add_log_writer(OutputStream *log_writer)</div><div class="ttdoc">Adds an output stream to the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00036">logger.cpp:36</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1drivers_1_1SerialConsole_html_a264ce5c8e63dbe240606c635a0980f23"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1SerialConsole.html#a264ce5c8e63dbe240606c635a0980f23">MaxOS::drivers::SerialConsole::write_char</a></div><div class="ttdeci">void write_char(char c) final</div><div class="ttdoc">Writes a character to the output stream.</div><div class="ttdef"><b>Definition</b> <a href="serial_8cpp_source.html#l00068">serial.cpp:68</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1drivers_1_1SerialConsole_html_a5c5630d60b1b9a3635a684cc82a289d2"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1SerialConsole.html#a5c5630d60b1b9a3635a684cc82a289d2">MaxOS::drivers::SerialConsole::put_character</a></div><div class="ttdeci">void put_character(char c)</div><div class="ttdoc">Waits for the serial port to be ready, then writes a character to it.</div><div class="ttdef"><b>Definition</b> <a href="serial_8cpp_source.html#l00058">serial.cpp:58</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1drivers_1_1SerialConsole_html_ac9044542781fa68c9ee8ce65b6588e8e"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1SerialConsole.html#ac9044542781fa68c9ee8ce65b6588e8e">MaxOS::drivers::SerialConsole::SerialConsole</a></div><div class="ttdeci">SerialConsole(Logger *logger)</div><div class="ttdef"><b>Definition</b> <a href="serial_8cpp_source.html#l00010">serial.cpp:10</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1drivers_1_1SerialConsole_html_aeb344bf3928b27a436e625132d34a455"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1SerialConsole.html#aeb344bf3928b27a436e625132d34a455">MaxOS::drivers::SerialConsole::~SerialConsole</a></div><div class="ttdeci">~SerialConsole()</div></div>
-<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1Port8Bit_html_a425297307d64cb5d9889b32767f8fdc3"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3">MaxOS::hardwarecommunication::Port8Bit::read</a></div><div class="ttdeci">virtual uint8_t read()</div><div class="ttdoc">read a byte from the port</div><div class="ttdef"><b>Definition</b> <a href="port_8cpp_source.html#l00037">port.cpp:37</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1Port8Bit_html_a6ede8fba6ba7e26c5982a91a3d5ffa72"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">MaxOS::hardwarecommunication::Port8Bit::write</a></div><div class="ttdeci">virtual void write(uint8_t data)</div><div class="ttdoc">write a byte to the port</div><div class="ttdef"><b>Definition</b> <a href="port_8cpp_source.html#l00027">port.cpp:27</a></div></div>
-<div class="ttc" id="anamespaceMaxOS_1_1drivers_html"><div class="ttname"><a href="namespaceMaxOS_1_1drivers.html">MaxOS::drivers</a></div><div class="ttdef"><b>Definition</b> <a href="clock_8h_source.html#l00018">clock.h:18</a></div></div>
-<div class="ttc" id="anamespaceMaxOS_html"><div class="ttname"><a href="namespaceMaxOS.html">MaxOS</a></div><div class="ttdef"><b>Definition</b> <a href="buffer_8h_source.html#l00013">buffer.h:13</a></div></div>
-<div class="ttc" id="aserial_8h_html"><div class="ttname"><a href="serial_8h.html">serial.h</a></div></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="foldopen" id="foldopen00076" data-start="{" data-end="}">
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a264ce5c8e63dbe240606c635a0980f23">   76</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a264ce5c8e63dbe240606c635a0980f23">SerialConsole::write_char</a>(<span class="keywordtype">char</span> c) {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <a class="code hl_function" href="classMaxOS_1_1drivers_1_1SerialConsole.html#a5c5630d60b1b9a3635a684cc82a289d2">put_character</a>(c);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>}</div>
+</div>
+<div class="ttc" id="aclassLogger_html"><div class="ttname"><a href="classLogger.html">Logger</a></div><div class="ttdoc">A class that handles logging messages to the console and files.</div><div class="ttdef"><b>Definition</b> <a href="logger_8h_source.html#l00039">logger.h:40</a></div></div>
+<div class="ttc" id="aclassLogger_html_a678fdff0e20fc719317669dee1928947"><div class="ttname"><a href="classLogger.html#a678fdff0e20fc719317669dee1928947">Logger::add_log_writer</a></div><div class="ttdeci">void add_log_writer(OutputStream *log_writer)</div><div class="ttdoc">Adds an output stream to the logger.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00044">logger.cpp:44</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1drivers_1_1SerialConsole_html_a264ce5c8e63dbe240606c635a0980f23"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1SerialConsole.html#a264ce5c8e63dbe240606c635a0980f23">MaxOS::drivers::SerialConsole::write_char</a></div><div class="ttdeci">void write_char(char c) final</div><div class="ttdoc">Writes a character to the output stream.</div><div class="ttdef"><b>Definition</b> <a href="serial_8cpp_source.html#l00076">serial.cpp:76</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1drivers_1_1SerialConsole_html_a5c5630d60b1b9a3635a684cc82a289d2"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1SerialConsole.html#a5c5630d60b1b9a3635a684cc82a289d2">MaxOS::drivers::SerialConsole::put_character</a></div><div class="ttdeci">void put_character(char c)</div><div class="ttdoc">Waits for the serial port to be ready, then writes a character to it.</div><div class="ttdef"><b>Definition</b> <a href="serial_8cpp_source.html#l00066">serial.cpp:66</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1drivers_1_1SerialConsole_html_ac9044542781fa68c9ee8ce65b6588e8e"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1SerialConsole.html#ac9044542781fa68c9ee8ce65b6588e8e">MaxOS::drivers::SerialConsole::SerialConsole</a></div><div class="ttdeci">SerialConsole(Logger *logger)</div><div class="ttdoc">Constructs a new Serial Console object and initializes the serial port.</div><div class="ttdef"><b>Definition</b> <a href="serial_8cpp_source.html#l00018">serial.cpp:18</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1Port8Bit_html_a425297307d64cb5d9889b32767f8fdc3"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3">MaxOS::hardwarecommunication::Port8Bit::read</a></div><div class="ttdeci">virtual uint8_t read()</div><div class="ttdoc">read a byte from the port</div><div class="ttdef"><b>Definition</b> <a href="port_8cpp_source.html#l00051">port.cpp:51</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1Port8Bit_html_a6ede8fba6ba7e26c5982a91a3d5ffa72"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">MaxOS::hardwarecommunication::Port8Bit::write</a></div><div class="ttdeci">virtual void write(uint8_t data)</div><div class="ttdoc">write a byte to the port</div><div class="ttdef"><b>Definition</b> <a href="port_8cpp_source.html#l00041">port.cpp:41</a></div></div>
+<div class="ttc" id="aserial_8h_html"><div class="ttname"><a href="serial_8h.html">serial.h</a></div><div class="ttdoc">Defines a SerialConsole driver for serial output.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

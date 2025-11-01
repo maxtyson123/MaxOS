@@ -1,9 +1,8 @@
 var classMaxOS_1_1system_1_1CPU =
 [
     [ "CPU", "classMaxOS_1_1system_1_1CPU.html#a204bdeba5377411c3d04a02fb19c6719", null ],
-    [ "~CPU", "classMaxOS_1_1system_1_1CPU.html#aa32e0ed85bebabb167ace09050d20707", null ],
-    [ "init_sse", "classMaxOS_1_1system_1_1CPU.html#a4e427bdc14ceb1fff5f62e069da7e539", null ],
-    [ "init_tss", "classMaxOS_1_1system_1_1CPU.html#aa3c4f30f3ad296d252e3bdf8c46c4031", null ],
-    [ "acpi", "classMaxOS_1_1system_1_1CPU.html#ae985c5b4d4cabf64e9fb832dddfe4ea5", null ],
-    [ "apic", "classMaxOS_1_1system_1_1CPU.html#a82c6fd43e4680f39425643ea63099d99", null ]
+    [ "find_cores", "classMaxOS_1_1system_1_1CPU.html#a794ab2a2883fab58ce204299a3ec556f", null ],
+    [ "init_cores", "classMaxOS_1_1system_1_1CPU.html#a599edada5a85faa0bcd689b8cff3f2ba", null ],
+    [ "acpi", "classMaxOS_1_1system_1_1CPU.html#a13d3b45c5ca62bf96e425e40ca113663", null ],
+    [ "apic", "classMaxOS_1_1system_1_1CPU.html#a7fef57a79ba623497c26b04e34cfedf6", null ]
 ];

@@ -8,6 +8,7 @@ var searchData=
   ['spinlock_2eh_5',['spinlock.h',['../spinlock_8h.html',1,'']]],
   ['string_2ecpp_6',['string.cpp',['../string_8cpp.html',1,'']]],
   ['string_2eh_7',['string.h',['../string_8h.html',1,'']]],
-  ['syscalls_2ecpp_8',['syscalls.cpp',['../syscalls_8cpp.html',1,'']]],
-  ['syscalls_2eh_9',['syscalls.h',['../syscalls_8h.html',1,'']]]
+  ['symbols_2ecpp_8',['symbols.cpp',['../symbols_8cpp.html',1,'']]],
+  ['syscalls_2ecpp_9',['syscalls.cpp',['../syscalls_8cpp.html',1,'']]],
+  ['syscalls_2eh_10',['syscalls.h',['../syscalls_8h.html',1,'']]]
 ];

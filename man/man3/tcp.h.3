@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/net/tcp.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/net/tcp.h \- Defines the Transmission Control Protocol (TCP) structures and classes for handling TCP sockets and payloads\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -17,39 +18,37 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::net::TransmissionControlProtocolHeader\fP"
+.RI "struct \fBMaxOS::net::TCPHeader\fP"
 .br
+.RI "The header of a TCP packet\&. "
 .ti -1c
-.RI "struct \fBMaxOS::net::TransmissionControlProtocolPseudoHeader\fP"
+.RI "struct \fBMaxOS::net::TCPPseudoHeader\fP"
 .br
+.RI "The pseudo header used for TCP checksum calculation\&. "
 .ti -1c
 .RI "class \fBMaxOS::net::DataReceivedEvent\fP"
 .br
+.RI "Event for when data is received on a TCP socket\&. "
 .ti -1c
 .RI "class \fBMaxOS::net::ConnectedEvent\fP"
 .br
+.RI "Event for when a TCP socket is connected\&. "
 .ti -1c
 .RI "class \fBMaxOS::net::DisconnectedEvent\fP"
 .br
+.RI "Event for when a TCP socket is disconnected\&. "
 .ti -1c
-.RI "class \fBMaxOS::net::TransmissionControlProtocolPayloadHandler\fP"
+.RI "class \fBMaxOS::net::TCPPayloadHandler\fP"
 .br
+.RI "Handler for TCP payloads\&. "
 .ti -1c
-.RI "class \fBMaxOS::net::TransmissionControlProtocolSocket\fP"
+.RI "class \fBMaxOS::net::TCPSocket\fP"
 .br
+.RI "A TCP socket\&. Allows for sending and receiving data over TCP at a port\&. "
 .ti -1c
 .RI "class \fBMaxOS::net::TransmissionControlProtocolHandler\fP"
 .br
-.in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::net\fP"
-.br
+.RI "Handles TCP packets and manages TCP sockets\&. "
 .in -1c
 .SS "Typedefs"
 
@@ -62,20 +61,23 @@
 
 .in +1c
 .ti -1c
-.RI "enum class \fBMaxOS::net::TCPSocketState\fP { \fBMaxOS::net::CLOSED\fP, \fBMaxOS::net::LISTEN\fP, \fBMaxOS::net::SYN_SENT\fP, \fBMaxOS::net::SYN_RECEIVED\fP, \fBMaxOS::net::ESTABLISHED\fP, \fBMaxOS::net::FIN_WAIT1\fP, \fBMaxOS::net::FIN_WAIT2\fP, \fBMaxOS::net::CLOSING\fP, \fBMaxOS::net::TIME_WAIT\fP, \fBMaxOS::net::CLOSE_WAIT\fP, \fBMaxOS::net::LAST_ACK\fP }"
+.RI "enum class \fBMaxOS::net::TCPSocketState\fP { \fBCLOSED\fP, \fBLISTEN\fP, \fBSYN_SENT\fP, \fBSYN_RECEIVED\fP, \fBESTABLISHED\fP, \fBFIN_WAIT1\fP, \fBFIN_WAIT2\fP, \fBCLOSING\fP, \fBTIME_WAIT\fP, \fBCLOSE_WAIT\fP, \fBLAST_ACK\fP }"
 .br
+.RI "The state of a TCP socket\&. "
 .ti -1c
-.RI "enum class \fBMaxOS::net::TCPFlag\fP { \fBMaxOS::net::FIN\fP = 1, \fBMaxOS::net::SYN\fP = 2, \fBMaxOS::net::RST\fP = 4, \fBMaxOS::net::PSH\fP = 8, \fBMaxOS::net::ACK\fP = 16, \fBMaxOS::net::URG\fP = 32, \fBMaxOS::net::ECE\fP = 64, \fBMaxOS::net::CWR\fP = 128, \fBMaxOS::net::NS\fP = 256 }"
+.RI "enum class \fBMaxOS::net::TCPFlag\fP { \fBFIN\fP = 1, \fBSYN\fP = 2, \fBRST\fP = 4, \fBPSH\fP = 8, \fBACK\fP = 16, \fBURG\fP = 32, \fBECE\fP = 64, \fBCWR\fP = 128, \fBNS\fP = 256 }"
 .br
+.RI "The flags in a TCP header\&. "
 .ti -1c
-.RI "enum class \fBMaxOS::net::TransmissionControlProtocolPayloadHandlerEvents\fP { \fBMaxOS::net::CONNECTED\fP, \fBMaxOS::net::DISCONNECTED\fP, \fBMaxOS::net::DATA_RECEIVED\fP }"
+.RI "enum class \fBMaxOS::net::TCPPayloadHandlerEvents\fP { \fBCONNECTED\fP, \fBDISCONNECTED\fP, \fBDATA_RECEIVED\fP }"
 .br
+.RI "Events for the TCPPayloadHandler\&. "
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::net::AddressResolutionProtocolMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::net::ARPMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
 .br
 .in -1c
 .SS "Variables"
@@ -84,127 +86,249 @@
 .ti -1c
 .RI "uint16_t \fBsrcPort\fP"
 .br
+.RI "The port of the sender\&. "
 .ti -1c
 .RI "uint16_t \fBdstPort\fP"
 .br
+.RI "The port of the receiver\&. "
 .ti -1c
 .RI "uint32_t \fBsequenceNumber\fP"
 .br
+.RI "Where this packet's data fits in the overall order of the data stream\&. "
 .ti -1c
 .RI "uint32_t \fBacknowledgementNumber\fP"
 .br
+.RI "The next expected sequence number from the sender (used by the receiver to request the next data) "
 .ti -1c
 .RI "uint8_t \fBreserved\fP"
 .br
+.RI "Unused, must be 0\&. "
 .ti -1c
 .RI "uint8_t \fBheaderSize32\fP"
 .br
+.RI "The size of the header in 32-bit words\&. "
 .ti -1c
 .RI "uint8_t \fBflags\fP"
 .br
+.RI "The flags of the TCP packet (see TCPFlag enum) "
 .ti -1c
 .RI "uint16_t \fBwindowSize\fP"
 .br
+.RI "How many bytes the sender is willing to receive\&. "
 .ti -1c
 .RI "uint16_t \fBchecksum\fP"
 .br
+.RI "The checksum of the header\&. "
 .ti -1c
 .RI "uint16_t \fBurgentPtr\fP"
 .br
+.RI "Where in the data the urgent data \fIends\fP (if the URG flag is set) "
 .ti -1c
 .RI "uint32_t \fBoptions\fP"
 .br
+.RI "The options for the TCP packet (MSS, Window Scale, SACK Permitted) "
 .ti -1c
 .RI "uint32_t \fBsrcIP\fP"
 .br
+.RI "The IP address of the sender\&. "
 .ti -1c
 .RI "uint32_t \fBdstIP\fP"
 .br
+.RI "The IP address of the receiver\&. "
 .ti -1c
 .RI "uint16_t \fBprotocol\fP"
 .br
+.RI "The protocol (set to 6 for TCP) "
 .ti -1c
 .RI "uint16_t \fBtotalLength\fP"
 .br
+.RI "The total length of the TCP header and data\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines the Transmission Control Protocol (TCP) structures and classes for handling TCP sockets and payloads\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+12th September 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBtcp\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef uint16_t \fBMaxOS::net::TransmissionControlProtocolPort\fP"
+
+.PP
+Definition at line \fB20\fP of file \fBtcp\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBMaxOS::net::TCPFlag\fP\fC [strong]\fP"
+
+.PP
+The flags in a TCP header\&. 
+.PP
+Definition at line \fB47\fP of file \fBtcp\&.h\fP\&..PP
+.nf
+47                            {
+48             FIN = 1,
+49             SYN = 2,
+50             RST = 4,
+51             PSH = 8,
+52             ACK = 16,
+53             URG = 32,
+54             ECE = 64,
+55             CWR = 128,
+56             NS = 256
+57         };
+.fi
+
+.SS "enum class \fBMaxOS::net::TCPPayloadHandlerEvents\fP\fC [strong]\fP"
+
+.PP
+Events for the TCPPayloadHandler\&. 
+.PP
+Definition at line \fB103\fP of file \fBtcp\&.h\fP\&..PP
+.nf
+103                                            {
+104             CONNECTED,
+105             DISCONNECTED,
+106             DATA_RECEIVED
+107         };
+.fi
+
+.SS "enum class \fBMaxOS::net::TCPSocketState\fP\fC [strong]\fP"
+
+.PP
+The state of a TCP socket\&. 
+.PP
+Definition at line \fB26\fP of file \fBtcp\&.h\fP\&..PP
+.nf
+26                                   {
+27             CLOSED,
+28             LISTEN,
+29             SYN_SENT,
+30             SYN_RECEIVED,
+31 
+32             ESTABLISHED,
+33 
+34             FIN_WAIT1,
+35             FIN_WAIT2,
+36             CLOSING,
+37             TIME_WAIT,
+38 
+39             CLOSE_WAIT,
+40             LAST_ACK
+41         };
+.fi
+
 .SH "Variable Documentation"
 .PP 
 .SS "uint32_t acknowledgementNumber"
 
 .PP
-Definition at line \fB3\fP of file \fBtcp\&.h\fP\&.
+The next expected sequence number from the sender (used by the receiver to request the next data) 
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Definition at line \fB3\fP of file \fBtcp\&.h\fP\&.
 .SS "uint16_t checksum"
 
+.PP
+The checksum of the header\&. 
 .PP
 Definition at line \fB10\fP of file \fBtcp\&.h\fP\&.
 .SS "uint32_t dstIP"
 
 .PP
+The IP address of the receiver\&. 
+.PP
 Definition at line \fB1\fP of file \fBtcp\&.h\fP\&.
 .SS "uint16_t dstPort"
 
 .PP
-Definition at line \fB1\fP of file \fBtcp\&.h\fP\&.
+The port of the receiver\&. 
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Definition at line \fB1\fP of file \fBtcp\&.h\fP\&.
 .SS "uint8_t flags"
 
+.PP
+The flags of the TCP packet (see TCPFlag enum) 
 .PP
 Definition at line \fB7\fP of file \fBtcp\&.h\fP\&.
 .SS "uint8_t headerSize32"
 
 .PP
-Definition at line \fB6\fP of file \fBtcp\&.h\fP\&.
+The size of the header in 32-bit words\&. 
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Definition at line \fB6\fP of file \fBtcp\&.h\fP\&.
 .SS "uint32_t options"
 
 .PP
-Definition at line \fB13\fP of file \fBtcp\&.h\fP\&.
+The options for the TCP packet (MSS, Window Scale, SACK Permitted) 
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+\fBTodo\fP
+.RS 4
+: make this a struct 
+.RE
+.PP
+
+.PP
+Definition at line \fB13\fP of file \fBtcp\&.h\fP\&.
 .SS "uint16_t protocol"
 
+.PP
+The protocol (set to 6 for TCP) 
 .PP
 Definition at line \fB2\fP of file \fBtcp\&.h\fP\&.
 .SS "uint8_t reserved"
 
 .PP
+Unused, must be 0\&. 
+.PP
 Definition at line \fB5\fP of file \fBtcp\&.h\fP\&.
 .SS "uint32_t sequenceNumber"
 
 .PP
-Definition at line \fB2\fP of file \fBtcp\&.h\fP\&.
+Where this packet's data fits in the overall order of the data stream\&. 
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::Connect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::Disconnect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Definition at line \fB2\fP of file \fBtcp\&.h\fP\&.
 .SS "uint32_t srcIP"
 
+.PP
+The IP address of the sender\&. 
 .PP
 Definition at line \fB0\fP of file \fBtcp\&.h\fP\&.
 .SS "uint16_t srcPort"
 
 .PP
-Definition at line \fB0\fP of file \fBtcp\&.h\fP\&.
+The port of the sender\&. 
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Definition at line \fB0\fP of file \fBtcp\&.h\fP\&.
 .SS "uint16_t totalLength"
 
+.PP
+The total length of the TCP header and data\&. 
 .PP
 Definition at line \fB3\fP of file \fBtcp\&.h\fP\&.
 .SS "uint16_t urgentPtr"
 
 .PP
-Definition at line \fB11\fP of file \fBtcp\&.h\fP\&.
+Where in the data the urgent data \fIends\fP (if the URG flag is set) 
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Definition at line \fB11\fP of file \fBtcp\&.h\fP\&.
 .SS "uint16_t windowSize"
 
 .PP
-Definition at line \fB9\fP of file \fBtcp\&.h\fP\&.
+How many bytes the sender is willing to receive\&. 
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Definition at line \fB9\fP of file \fBtcp\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

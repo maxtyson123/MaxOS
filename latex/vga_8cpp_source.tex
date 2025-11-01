@@ -2,156 +2,151 @@
 \hypertarget{vga_8cpp_source}{}\label{vga_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/drivers/video/vga.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/drivers/video/vga.cpp}}
 \mbox{\hyperlink{vga_8cpp}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00001}00001\ \textcolor{comment}{//}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ Tyson\ on\ 14/10/2022.}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00003}00003\ \textcolor{comment}{//}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00004}00004\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vga_8h}{drivers/video/vga.h}}>}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00006}00006\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00007}00007\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00008}00008\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers}{MaxOS::drivers}};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00009}00009\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1video}{MaxOS::drivers::video}};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00010}00010\ \textcolor{keyword}{using\ namespace\ }\mbox{\hyperlink{namespaceMaxOS_1_1hardwarecommunication}{MaxOS::hardwarecommunication}};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00011}00011\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00012}00012\ \textcolor{comment}{//\ http://files.osdev.org/mirrors/geezer/osd/graphics/modes.c\ -\/\ helpful\ so\ thanks}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00013}00013\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00014}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_af56f99edfcf3b470c90d57af39ffe5ca}{00014}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_af56f99edfcf3b470c90d57af39ffe5ca}{VideoGraphicsArray::VideoGraphicsArray}}()}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00015}00015\ :\ m\_misc\_port(0x3C2),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00016}00016\ \ \ m\_crtc\_index\_port(0x3D4),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00017}00017\ \ \ crtc\_data\_port(0x3D5),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00018}00018\ \ \ m\_sequence\_index\_port(0x3C4),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00019}00019\ \ \ m\_sequence\_data\_port(0x3C5),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00020}00020\ \ \ m\_graphics\_controller\_index\_port(0x3CE),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00021}00021\ \ \ m\_graphics\_controller\_data\_port(0x3CF),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00022}00022\ \ \ m\_attribute\_controller\_index\_port(0x3C0),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00023}00023\ \ \ m\_attribute\_controller\_read\_port(0x3C1),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00024}00024\ \ \ m\_attribute\_controller\_write\_port(0x3C0),}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00025}00025\ \ \ m\_attribute\_controller\_reset\_port(0x3DA)}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00026}00026\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00027}00027\ \}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00028}00028\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00029}00029\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a48e532fb7fb42a05de7810788aac5e91}{VideoGraphicsArray::\string~VideoGraphicsArray}}()\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00030}00030\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00036}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a6d0d52bda1a5fe60d6168291a66223b1}{00036}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a6d0d52bda1a5fe60d6168291a66223b1}{VideoGraphicsArray::write\_registers}}(uint8\_t\ *registers)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00037}00037\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00038}00038\ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ register}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00039}00039\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_af5c22c97d89428623323b5af281c8f44}{m\_misc\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00040}00040\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00041}00041\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ sequencer\ registers}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00042}00042\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 5;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_aba6f23ced8c74df2374033e8691e0e09}{m\_sequence\_index\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(i);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a7c6574df267fdf041a06dbf3f1a2d0dd}{m\_sequence\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00045}00045\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00046}00046\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00047}00047\ \ \ \ \ \textcolor{comment}{//\ Clear\ protection\ bit\ to\ enable\ writing\ to\ CR0-\/7}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00048}00048\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_ac0355b7fead75de1fdc4a02854a9c824}{m\_crtc\_index\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x03);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00049}00049\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a7f6415980080727ef29fb401a7dba1d1}{crtc\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a7f6415980080727ef29fb401a7dba1d1}{crtc\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}()\ |\ 0x80);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00050}00050\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_ac0355b7fead75de1fdc4a02854a9c824}{m\_crtc\_index\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x11);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00051}00051\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a7f6415980080727ef29fb401a7dba1d1}{crtc\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a7f6415980080727ef29fb401a7dba1d1}{crtc\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}()\ |\ \string~0x80);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00052}00052\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00053}00053\ \ \ \ \ \textcolor{comment}{//\ Ensure\ protection\ bit\ is\ set}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00054}00054\ \ \ \ \ registers[0x03]\ =\ registers[0x03]\ |\ 0x80;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00055}00055\ \ \ \ \ registers[0x11]\ =\ registers[0x11]\ \&\ \string~0x80;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vga_8h}{drivers/video/vga.h}}>}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00013}00013\ \textcolor{keyword}{using\ namespace\ }MaxOS;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00014}00014\ \textcolor{keyword}{using\ namespace\ }MaxOS::drivers;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00015}00015\ \textcolor{keyword}{using\ namespace\ }MaxOS::drivers::video;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00016}00016\ \textcolor{keyword}{using\ namespace\ }MaxOS::hardwarecommunication;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00018}00018\ VideoGraphicsArray::VideoGraphicsArray()}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00019}00019\ :\ m\_misc\_port(0x3C2),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00020}00020\ \ \ m\_crtc\_index\_port(0x3D4),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00021}00021\ \ \ crtc\_data\_port(0x3D5),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00022}00022\ \ \ m\_sequence\_index\_port(0x3C4),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00023}00023\ \ \ m\_sequence\_data\_port(0x3C5),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00024}00024\ \ \ m\_graphics\_controller\_index\_port(0x3CE),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00025}00025\ \ \ m\_graphics\_controller\_data\_port(0x3CF),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00026}00026\ \ \ m\_attribute\_controller\_index\_port(0x3C0),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00027}00027\ \ \ m\_attribute\_controller\_read\_port(0x3C1),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00028}00028\ \ \ m\_attribute\_controller\_write\_port(0x3C0),}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00029}00029\ \ \ m\_attribute\_controller\_reset\_port(0x3DA)}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00030}00030\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00031}00031\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00033}00033\ VideoGraphicsArray::\string~VideoGraphicsArray()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00040}00040\ \textcolor{keywordtype}{void}\ VideoGraphicsArray::write\_registers(uint8\_t\ *registers)\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00042}00042\ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ register}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00043}00043\ \ \ \ \ m\_misc\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00045}00045\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ sequencer\ registers}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00046}00046\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 5;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ m\_sequence\_index\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(i);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ m\_sequence\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00049}00049\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{comment}{//\ Clear\ protection\ bit\ to\ enable\ writing\ to\ CR0-\/7}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00052}00052\ \ \ \ \ m\_crtc\_index\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x03);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00053}00053\ \ \ \ \ crtc\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(crtc\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}()\ |\ 0x80);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00054}00054\ \ \ \ \ m\_crtc\_index\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x11);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00055}00055\ \ \ \ \ crtc\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(crtc\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}()\ |\ \string~0x80);}
 \DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00056}00056\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00057}00057\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ CRTC\ registers}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00058}00058\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 25;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00059}00059\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_ac0355b7fead75de1fdc4a02854a9c824}{m\_crtc\_index\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(i);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00060}00060\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a7f6415980080727ef29fb401a7dba1d1}{crtc\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00061}00061\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00062}00062\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00063}00063\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ graphics\ controller\ registers}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00064}00064\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 9;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00065}00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a898b9134c93f6a081abe7bf77f47d576}{m\_graphics\_controller\_index\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(i);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00066}00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_ab337af6313d4d22debd619935c05b8ac}{m\_graphics\_controller\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00067}00067\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00068}00068\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00069}00069\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ attribute\ controller\ registers}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00070}00070\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 21;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00071}00071\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a37b0b309771fbc097675092781b8c05e}{m\_attribute\_controller\_reset\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a1b8edca5868901c47d0bd9afbcd67924}{m\_attribute\_controller\_index\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(i);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00073}00073\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a494d33cc3591cdd585dc2297e23dbad8}{m\_attribute\_controller\_write\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00074}00074\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00075}00075\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00076}00076\ \ \ \ \ \textcolor{comment}{//\ Re-\/Lock\ CRTC\ and\ unblank\ display}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00077}00077\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a37b0b309771fbc097675092781b8c05e}{m\_attribute\_controller\_reset\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00078}00078\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a1b8edca5868901c47d0bd9afbcd67924}{m\_attribute\_controller\_index\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x20);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00057}00057\ \ \ \ \ \textcolor{comment}{//\ Ensure\ protection\ bit\ is\ set}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00058}00058\ \ \ \ \ registers[0x03]\ =\ registers[0x03]\ |\ 0x80;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00059}00059\ \ \ \ \ registers[0x11]\ =\ registers[0x11]\ \&\ \string~0x80;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00061}00061\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ CRTC\ registers}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00062}00062\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 25;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00063}00063\ \ \ \ \ \ \ \ \ m\_crtc\_index\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(i);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00064}00064\ \ \ \ \ \ \ \ \ crtc\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00065}00065\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00067}00067\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ graphics\ controller\ registers}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00068}00068\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 9;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00069}00069\ \ \ \ \ \ \ \ \ m\_graphics\_controller\_index\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(i);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00070}00070\ \ \ \ \ \ \ \ \ m\_graphics\_controller\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00071}00071\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00073}00073\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ attribute\ controller\ registers}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00074}00074\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 21;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00075}00075\ \ \ \ \ \ \ \ \ m\_attribute\_controller\_reset\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00076}00076\ \ \ \ \ \ \ \ \ m\_attribute\_controller\_index\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(i);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00077}00077\ \ \ \ \ \ \ \ \ m\_attribute\_controller\_write\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(*(registers++));}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00078}00078\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00079}00079\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00080}00080\ \}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00081}00081\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00087}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a4fc96a7842d5e64a4b34cdb071f0bfae}{00087}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a4fc96a7842d5e64a4b34cdb071f0bfae}{VideoGraphicsArray::supports\_mode}}(uint32\_t\ width,\ uint32\_t\ height,\ uint32\_t\ colour\_depth)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00088}00088\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_a7ea0e7254339856902899fcd26985f5c}{width}}\ ==\ 320\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_ac76669533010b9893b46d5e5cca61de4}{height}}\ ==\ 200\ \&\&\ colour\_depth\ ==\ 8;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00089}00089\ \}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00090}00090\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00100}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_af6c3511046a049a78594f945f92e0faa}{00100}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_af6c3511046a049a78594f945f92e0faa}{VideoGraphicsArray::internal\_set\_mode}}(uint32\_t\ width,\ uint32\_t\ height,\ uint32\_t\ colour\_depth)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00101}00101\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00102}00102\ \ \ \ \ \textcolor{comment}{//Values\ from\ osdev\ /\ modes.c}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00103}00103\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ g\_320x200x256[]\ =}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ MISC}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x63,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ SEQ}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x03,\ 0x01,\ 0x0F,\ 0x00,\ 0x0E,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00109}00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CRTC}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x5F,\ 0x4F,\ 0x50,\ 0x82,\ 0x54,\ 0x80,\ 0xBF,\ 0x1F,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x00,\ 0x41,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x9C,\ 0x0E,\ 0x8F,\ 0x28,\ 0x40,\ 0x96,\ 0xB9,\ 0xA3,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00113}00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0xFF,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GC}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x40,\ 0x05,\ 0x0F,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00116}00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0xFF,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00117}00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ AC}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x00,\ 0x01,\ 0x02,\ 0x03,\ 0x04,\ 0x05,\ 0x06,\ 0x07,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00119}00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x08,\ 0x09,\ 0x0A,\ 0x0B,\ 0x0C,\ 0x0D,\ 0x0E,\ 0x0F,}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00120}00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x41,\ 0x00,\ 0x0F,\ 0x00,\ 0x00}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00121}00121\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00122}00122\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00123}00123\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a6d0d52bda1a5fe60d6168291a66223b1}{write\_registers}}(g\_320x200x256);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00124}00124\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00125}00125\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00080}00080\ \ \ \ \ \textcolor{comment}{//\ Re-\/Lock\ CRTC\ and\ unblank\ display}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00081}00081\ \ \ \ \ m\_attribute\_controller\_reset\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}();}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00082}00082\ \ \ \ \ m\_attribute\_controller\_index\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x20);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00084}00084\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00091}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a4fc96a7842d5e64a4b34cdb071f0bfae}{00091}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a4fc96a7842d5e64a4b34cdb071f0bfae}{VideoGraphicsArray::supports\_mode}}(uint32\_t\ width,\ uint32\_t\ height,\ uint32\_t\ colour\_depth)\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00092}00092\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_a7ea0e7254339856902899fcd26985f5c}{width}}\ ==\ 320\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext_ac76669533010b9893b46d5e5cca61de4}{height}}\ ==\ 200\ \&\&\ colour\_depth\ ==\ 8;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00093}00093\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00104}00104\ \textcolor{keywordtype}{bool}\ VideoGraphicsArray::internal\_set\_mode(uint32\_t\ width,\ uint32\_t\ height,\ uint32\_t\ colour\_depth)\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00106}00106\ \ \ \ \ \textcolor{comment}{//Values\ from\ osdev\ /\ modes.c}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00107}00107\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ g\_320x200x256[]\ =}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00109}00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ MISC}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x63,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ SEQ}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x03,\ 0x01,\ 0x0F,\ 0x00,\ 0x0E,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00113}00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CRTC}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x5F,\ 0x4F,\ 0x50,\ 0x82,\ 0x54,\ 0x80,\ 0xBF,\ 0x1F,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x00,\ 0x41,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00116}00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x9C,\ 0x0E,\ 0x8F,\ 0x28,\ 0x40,\ 0x96,\ 0xB9,\ 0xA3,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00117}00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0xFF,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GC}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00119}00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x40,\ 0x05,\ 0x0F,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00120}00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0xFF,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00121}00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ AC}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00122}00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x00,\ 0x01,\ 0x02,\ 0x03,\ 0x04,\ 0x05,\ 0x06,\ 0x07,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00123}00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x08,\ 0x09,\ 0x0A,\ 0x0B,\ 0x0C,\ 0x0D,\ 0x0E,\ 0x0F,}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00124}00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x41,\ 0x00,\ 0x0F,\ 0x00,\ 0x00}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00125}00125\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
 \DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00126}00126\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00132}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_aab76bf38ff6fa82317a0261a173d7c54}{00132}}\ uint8\_t\ *\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_aab76bf38ff6fa82317a0261a173d7c54}{VideoGraphicsArray::get\_frame\_buffer\_segment}}()\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00133}00133\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00134}00134\ \ \ \ \ \textcolor{comment}{//\ Optimise\ so\ that\ don't\ have\ to\ read\ and\ write\ to\ the\ port\ every\ time}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00135}00135\ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ 0xA0000;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00136}00136\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00137}00137\ \ \ \ \ \textcolor{comment}{//read\ data\ from\ index\ number\ 6}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00138}00138\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a898b9134c93f6a081abe7bf77f47d576}{m\_graphics\_controller\_index\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x06);}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00139}00139\ \ \ \ \ uint8\_t\ segmentNumber\ =}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_ab337af6313d4d22debd619935c05b8ac}{m\_graphics\_controller\_data\_port}}.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}()\ \&}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ (3\ <<\ 2);\ \textcolor{comment}{//Shift\ by\ 2\ as\ only\ interested\ in\ bits\ 3\ \&\ 4\ (\&\ 3\ so\ all\ the\ other\ bits\ are\ removed)}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00142}00142\ \ \ \ \ \textcolor{keywordflow}{switch}\ (segmentNumber)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0\ <<\ 2:}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00146}00146\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1\ <<\ 2:}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ 0xA0000;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00148}00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2\ <<\ 2:}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00149}00149\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ 0xB0000;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00150}00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3\ <<\ 2:}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00151}00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ 0xB8000;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00152}00152\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00153}00153\ \}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00154}00154\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00162}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a581850c3e105a2bc0863d04aebae7c44}{00162}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a581850c3e105a2bc0863d04aebae7c44}{VideoGraphicsArray::render\_pixel\_8\_bit}}(uint32\_t\ x,\ uint32\_t\ y,\ uint8\_t\ colour)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00163}00163\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00164}00164\ \ \ \ \ uint8\_t\ *pixel\_address\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_aab76bf38ff6fa82317a0261a173d7c54}{get\_frame\_buffer\_segment}}()\ +\ 320\ *\ y\ +\ x;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00165}00165\ \ \ \ \ *pixel\_address\ =\ colour;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00166}00166\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00127}00127\ \ \ \ \ write\_registers(g\_320x200x256);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00128}00128\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00129}00129\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00136}00136\ uint8\_t\ *VideoGraphicsArray::get\_frame\_buffer\_segment()\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00138}00138\ \ \ \ \ \textcolor{comment}{//\ Optimise\ so\ that\ don't\ have\ to\ read\ and\ write\ to\ the\ port\ every\ time}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00139}00139\ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ 0xA0000;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00141}00141\ \ \ \ \ \textcolor{comment}{//read\ data\ from\ index\ number\ 6}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00142}00142\ \ \ \ \ m\_graphics\_controller\_index\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a6ede8fba6ba7e26c5982a91a3d5ffa72}{write}}(0x06);}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00143}00143\ \ \ \ \ uint8\_t\ segmentNumber\ =}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ m\_graphics\_controller\_data\_port.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit_a425297307d64cb5d9889b32767f8fdc3}{read}}()\ \&}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ \ \ \ \ (3\ <<\ 2);\ \textcolor{comment}{//Shift\ by\ 2\ as\ only\ interested\ in\ bits\ 3\ \&\ 4\ (\&\ 3\ so\ all\ the\ other\ bits\ are\ removed)}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00146}00146\ \ \ \ \ \textcolor{keywordflow}{switch}\ (segmentNumber)\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00148}00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0\ <<\ 2:}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00149}00149\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00150}00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1\ <<\ 2:}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00151}00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ 0xA0000;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00152}00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2\ <<\ 2:}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ 0xB0000;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00154}00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3\ <<\ 2:}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (uint8\_t\ *)\ 0xB8000;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00156}00156\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00157}00157\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00166}00166\ \textcolor{keywordtype}{void}\ VideoGraphicsArray::render\_pixel\_8\_bit(uint32\_t\ x,\ uint32\_t\ y,\ uint8\_t\ colour)\ \{}
 \DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00167}00167\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00175}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a75a5996ab60e742ff59d82fe62f93582}{00175}}\ uint8\_t\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a75a5996ab60e742ff59d82fe62f93582}{VideoGraphicsArray::get\_rendered\_pixel\_8\_bit}}(uint32\_t\ x,\ uint32\_t\ y)\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00176}00176\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00177}00177\ \ \ \ \ uint8\_t\ *pixel\_address\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_aab76bf38ff6fa82317a0261a173d7c54}{get\_frame\_buffer\_segment}}()\ +\ 320\ *\ y\ +\ x;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00178}00178\ \ \ \ \ \textcolor{keywordflow}{return}\ *pixel\_address;}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00179}00179\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00168}00168\ \ \ \ \ uint8\_t\ *pixel\_address\ =\ get\_frame\_buffer\_segment()\ +\ 320\ *\ y\ +\ x;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00169}00169\ \ \ \ \ *pixel\_address\ =\ colour;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00170}00170\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00179}00179\ uint8\_t\ VideoGraphicsArray::get\_rendered\_pixel\_8\_bit(uint32\_t\ x,\ uint32\_t\ y)\ \{}
 \DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00180}00180\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00186}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a1f69e8f6edf9d0e1e838870d701983d0}{00186}}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a1f69e8f6edf9d0e1e838870d701983d0}{VideoGraphicsArray::vendor\_name}}()\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00187}00187\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00188}00188\ \ \ \ \ \textcolor{comment}{//\ VGA\ was\ made\ by\ IBM}}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00189}00189\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}IBM"{}};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00190}00190\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00181}00181\ \ \ \ \ uint8\_t\ *pixel\_address\ =\ get\_frame\_buffer\_segment()\ +\ 320\ *\ y\ +\ x;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00182}00182\ \ \ \ \ \textcolor{keywordflow}{return}\ *pixel\_address;}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00183}00183\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00184}00184\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00190}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a1f69e8f6edf9d0e1e838870d701983d0}{00190}}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a1f69e8f6edf9d0e1e838870d701983d0}{VideoGraphicsArray::vendor\_name}}()\ \{}
 \DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00191}00191\ }
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00197}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a85f98d69d31a9fd817ccc737e23d8998}{00197}}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a85f98d69d31a9fd817ccc737e23d8998}{VideoGraphicsArray::device\_name}}()\ \{}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00198}00198\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VGA\ compatible\ graphics\ card"{}};}
-\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00199}00199\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00192}00192\ \ \ \ \ \textcolor{comment}{//\ VGA\ was\ made\ by\ IBM}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00193}00193\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}IBM"{}};}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00194}00194\ \}}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00201}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a85f98d69d31a9fd817ccc737e23d8998}{00201}}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray_a85f98d69d31a9fd817ccc737e23d8998}{VideoGraphicsArray::device\_name}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00202}00202\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}VGA\ compatible\ graphics\ card"{}};}
+\DoxyCodeLine{\Hypertarget{vga_8cpp_source_l00203}00203\ \}}
 
 \end{DoxyCode}

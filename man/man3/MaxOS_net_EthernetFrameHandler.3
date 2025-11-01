@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::net::EthernetFrameHandler
+MaxOS::net::EthernetFrameHandler \- Handles incoming Ethernet Frames and routes them to the appropriate payload handlers\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,14 +15,13 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriverEventHandler\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBEthernetFrameHandler\fP (\fBdrivers::ethernet::EthernetDriver\fP *\fBethernetDriver\fP, \fBcommon::OutputStream\fP *\fBerrorMessages\fP)"
+.RI "\fBEthernetFrameHandler\fP (\fBdrivers::ethernet::EthernetDriver\fP *\fBdriver\fP, \fBcommon::OutputStream\fP *\fBerrorMessages\fP)"
 .br
-.ti -1c
-.RI "\fB~EthernetFrameHandler\fP ()"
-.br
+.RI "Construct a new Ether Frame Handler object\&. "
 .ti -1c
 .RI "\fBdrivers::ethernet::MediaAccessControlAddress\fP \fBgetMAC\fP ()"
 .br
+.RI "Get the MAC address of this device\&. "
 .ti -1c
 .RI "\fBbool\fP \fBDataReceived\fP (\fBuint8_t\fP *\fBdata\fP, \fBuint32_t\fP \fBsize\fP) \fBoverride\fP"
 .br
@@ -29,6 +29,7 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriverEventHandler\fP\&.
 .ti -1c
 .RI "\fBvoid\fP \fBconnectHandler\fP (\fBEthernetFramePayloadHandler\fP *\fBhandler\fP)"
 .br
+.RI "Connect a handler to the frame handler\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBsendEthernetFrame\fP (\fBuint64_t\fP \fBdestinationMAC\fP, \fBuint16_t\fP \fBframeType\fP, \fBuint8_t\fP *\fBdata\fP, \fBuint32_t\fP \fBsize\fP)"
 .br
@@ -42,27 +43,21 @@ Public Member Functions inherited from \fBMaxOS::drivers::ethernet::EthernetDriv
 .br
 .RI "__EVENT HANDLER___ "
 .ti -1c
-.RI "\fB~EthernetDriverEventHandler\fP ()"
-.br
-.ti -1c
 .RI "\fBvirtual\fP \fBcommon::Event\fP< \fBEthernetDriverEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBEthernetDriverEvents\fP > *\fBevent\fP) \fBoverride\fP"
 .br
+.RI "Handle an event\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBBeforeSend\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
 .br
+.RI "Handle before send event\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBDataSent\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
 .br
+.RI "Handle data sent event\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::EventHandler< EthernetDriverEvents >\fP
 .in +1c
-.ti -1c
-.RI "\fBEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventHandler\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBEvent\fP< EthernetDriverEvents > * \fBon_event\fP (\fBEvent\fP< EthernetDriverEvents > *\fBevent\fP)"
 .br
@@ -74,54 +69,77 @@ Public Member Functions inherited from \fBMaxOS::common::EventHandler< EthernetD
 .ti -1c
 .RI "\fBcommon::Map\fP< uint16_t, \fBEthernetFramePayloadHandler\fP * > \fBframeHandlers\fP"
 .br
+.RI "The map of frame handlers by type\&. "
 .ti -1c
 .RI "\fBdrivers::ethernet::EthernetDriver\fP * \fBethernetDriver\fP"
 .br
+.RI "The driver this frame handler is using\&. "
 .ti -1c
 .RI "\fBcommon::OutputStream\fP * \fBerrorMessages\fP"
 .br
+.RI "The output stream for error messages\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB50\fP of file \fBethernetframe\&.h\fP\&.
+Handles incoming Ethernet Frames and routes them to the appropriate payload handlers\&. 
+.PP
+Definition at line \fB69\fP of file \fBethernetframe\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "EthernetFrameHandler::EthernetFrameHandler (\fBdrivers::ethernet::EthernetDriver\fP * ethernetDriver, \fBcommon::OutputStream\fP * errorMessages)"
+.SS "EthernetFrameHandler::EthernetFrameHandler (\fBdrivers::ethernet::EthernetDriver\fP * driver, \fBcommon::OutputStream\fP * errorMessages)"
 
 .PP
-Definition at line \fB54\fP of file \fBethernetframe\&.cpp\fP\&..PP
+Construct a new Ether Frame Handler object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdriver\fP The backend ethernet driver 
+.br
+\fIerrorMessages\fP The output stream for error messages 
+.RE
+.PP
+
+.PP
+Definition at line \fB73\fP of file \fBethernetframe\&.cpp\fP\&..PP
 .nf
-55 : EthernetDriverEventHandler()
-56 {
-57 
-58     this \-> ethernetDriver = driver;
-59     this \-> errorMessages = errorMessages;
-60 
-61     driver\->connect_event_handler(this);
-62 
-63 }
+74 : EthernetDriverEventHandler()
+75 {
+76 
+77     this \-> ethernetDriver = driver;
+78     this \-> errorMessages = errorMessages;
+79 
+80     driver\->connect_event_handler(this);
+81 
+82 }
 .fi
 
 .PP
 References \fBerrorMessages\fP, and \fBethernetDriver\fP\&.
-.SS "EthernetFrameHandler::~EthernetFrameHandler ()\fC [default]\fP"
-
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP EthernetFrameHandler::connectHandler (\fBEthernetFramePayloadHandler\fP * handler)"
 
 .PP
-Definition at line \fB135\fP of file \fBethernetframe\&.cpp\fP\&..PP
+Connect a handler to the frame handler\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandler\fP The handler to connect 
+.RE
+.PP
+
+.PP
+Definition at line \fB163\fP of file \fBethernetframe\&.cpp\fP\&..PP
 .nf
-135                                                                               {
-136 
-137     // Convert the protocol type to big endian
-138     uint16_t frameType_BE = ((handler\->handledType >> 8) & 0xFF) | ((handler\->handledType << 8) & 0xFF00);
-139 
-140     // Add the handler to the list
-141     frameHandlers\&.insert(frameType_BE, handler);
-142 
-143 }
+163                                                                               {
+164 
+165     // Convert the protocol type to big endian
+166     uint16_t frameType_BE = ((handler\->handledType >> 8) & 0xFF) | ((handler\->handledType << 8) & 0xFF00);
+167 
+168     // Add the handler to the list
+169     frameHandlers\&.insert(frameType_BE, handler);
+170 
+171 }
 .fi
 
 .PP
@@ -137,71 +155,73 @@ Handle the received packet\&.
 .RS 4
 \fIbuffer\fP the buffer with the received data 
 .br
-\fIsize\fP the size of the received data 
+\fIsize\fP the size of the received data
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Future debugging me: the override is not being called in derived classes 
 .RE
 .PP
 
 .PP
 Reimplemented from \fBMaxOS::drivers::ethernet::EthernetDriverEventHandler\fP\&.
 .PP
-Definition at line \fB78\fP of file \fBethernetframe\&.cpp\fP\&..PP
+Definition at line \fB104\fP of file \fBethernetframe\&.cpp\fP\&..PP
 .nf
-78                                                                       {
-79 
-80     errorMessages \-> write("EFH: Data received\\n");
-81 
-82 
-83     //Check if the size is big enough to contain an ethernet frame
-84     if(size < sizeof(EthernetFrameHeader))
-85         return false;
-86 
-87     //Convert to struct for easier use
-88     auto* frame = (EthernetFrameHeader*)buffer;
-89     bool sendBack = false;
-90 
-91     //Only handle if it is for this device
-92     if(frame\->destinationMAC == 0xFFFFFFFFFFFF                                          //If it is a broadcast
-93     || frame\->destinationMAC == ethernetDriver \-> GetMediaAccessControlAddress())      //If it is for this device
-94     {
-95 
-96         // Find the handler for the protocol
-97         Map<uint16_t , EthernetFramePayloadHandler*>::iterator handlerIterator = frameHandlers\&.find(frame\->type);
-98 
-99         // If the handler is found
-100         if(handlerIterator != frameHandlers\&.end()) {
-101 
-102 
-103             //TODO: The override is not being called (IDK WHY)
-104 
-105             //Handle the data
-106             errorMessages \-> write("EFH: Handling ethernet frame payload\\n");
-107             sendBack = handlerIterator\->second\->handleEthernetframePayload(buffer + sizeof(EthernetFrameHeader), size \- sizeof(EthernetFrameHeader));
-108             errorMessages \-> write("\&.\&.DONE\\n");
-109 
-110         } else {
-111 
-112             //If the handler is not found, print an error message
-113             errorMessages \-> write("EFH: Unhandled ethernet frame type 0x");
-114             errorMessages\->write_hex(frame\->type);
-115             errorMessages \-> write("\\n");
+104                                                                       {
+105 
+106     errorMessages \-> write("EFH: Data received\\n");
+107 
+108 
+109     //Check if the size is big enough to contain an ethernet frame
+110     if(size < sizeof(EthernetFrameHeader))
+111         return false;
+112 
+113     //Convert to struct for easier use
+114     auto* frame = (EthernetFrameHeader*)buffer;
+115     bool sendBack = false;
 116 
-117         }
-118     }
-119 
-120     //If the data is to be sent back again
-121     if(sendBack){
-122 
-123         errorMessages \-> write("EFH: Sending back\\n");
+117     //Only handle if it is for this device
+118     if(frame\->destinationMAC == 0xFFFFFFFFFFFF                                          //If it is a broadcast
+119     || frame\->destinationMAC == ethernetDriver \-> GetMediaAccessControlAddress())      //If it is for this device
+120     {
+121 
+122         // Find the handler for the protocol
+123         Map<uint16_t , EthernetFramePayloadHandler*>::iterator handlerIterator = frameHandlers\&.find(frame\->type);
 124 
-125         frame \-> destinationMAC = frame \-> sourceMAC;                             //Set the new destination to be the device the data was received from
-126         frame \-> sourceMAC = ethernetDriver\->GetMediaAccessControlAddress();      //Set the new source to be this device's MAC address
+125         // If the handler is found
+126         if(handlerIterator != frameHandlers\&.end()) {
 127 
-128     }
-129 
-130     //Return if the data is to be sent back
-131     return sendBack;
+128             //Handle the data
+129             errorMessages \-> write("EFH: Handling ethernet frame payload\\n");
+130             sendBack = handlerIterator\->second\->handleEthernetframePayload(buffer + sizeof(EthernetFrameHeader), size \- sizeof(EthernetFrameHeader));
+131             errorMessages \-> write("\&.\&.DONE\\n");
 132 
-133 }
+133         } else {
+134 
+135             //If the handler is not found, print an error message
+136             errorMessages \-> write("EFH: Unhandled ethernet frame type 0x");
+137             errorMessages\->write_hex(frame\->type);
+138             errorMessages \-> write("\\n");
+139 
+140         }
+141     }
+142 
+143     //If the data is to be sent back again
+144     if(sendBack){
+145 
+146         errorMessages \-> write("EFH: Sending back\\n");
+147 
+148         frame \-> destinationMAC = frame \-> sourceMAC;                             //Set the new destination to be the device the data was received from
+149         frame \-> sourceMAC = ethernetDriver\->GetMediaAccessControlAddress();      //Set the new source to be this device's MAC address
+150 
+151     }
+152 
+153     //Return if the data is to be sent back
+154     return sendBack;
+155 
+156 }
 .fi
 
 .PP
@@ -209,11 +229,20 @@ References \fBdestinationMAC\fP, \fBerrorMessages\fP, \fBethernetDriver\fP, \fBf
 .SS "\fBdrivers::ethernet::MediaAccessControlAddress\fP EthernetFrameHandler::getMAC ()"
 
 .PP
-Definition at line \fB67\fP of file \fBethernetframe\&.cpp\fP\&..PP
+Get the MAC address of this device\&. 
+.PP
+\fBReturns\fP
+.RS 4
+MediaAccessControlAddress The MAC address 
+.RE
+.PP
+
+.PP
+Definition at line \fB91\fP of file \fBethernetframe\&.cpp\fP\&..PP
 .nf
-67                                                                       {
-68     return ethernetDriver \-> GetMediaAccessControlAddress();
-69 }
+91                                                                       {
+92     return ethernetDriver \-> GetMediaAccessControlAddress();
+93 }
 .fi
 
 .PP
@@ -225,45 +254,45 @@ Send an packet via the backend driver\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIdstMAC_BE\fP the destination MAC address 
+\fIdestinationMAC\fP the destination MAC address 
 .br
-\fIetherType_BE\fP the type of the protocol 
+\fIframeType\fP the type of the protocol 
 .br
-\fIbuffer\fP the data to send 
+\fIdata\fP the data to send 
 .br
 \fIsize\fP the size of the payload 
 .RE
 .PP
 
 .PP
-Definition at line \fB153\fP of file \fBethernetframe\&.cpp\fP\&..PP
+Definition at line \fB181\fP of file \fBethernetframe\&.cpp\fP\&..PP
 .nf
-153                                                                                                                       {
-154 
-155     errorMessages\->write("EFH: Sending frame\&.\&.\&.");
-156 
-157     //Allocate memory for the buffer
-158     auto* buffer = (uint8_t*)MemoryManager::kmalloc(size + sizeof(EthernetFrameHeader));
-159     auto* frame = (EthernetFrameHeader*)buffer;
-160 
-161     //Put data in the header
-162     frame \-> destinationMAC = destinationMAC;
-163     frame \-> sourceMAC = ethernetDriver \-> GetMediaAccessControlAddress();
-164     frame \-> type = (frameType >> 8) | (frameType << 8);                        //Convert to big endian
-165 
-166     //Copy the data
-167     for(uint8_t *src = data + size \- 1, *dst = buffer+sizeof(EthernetFrameHeader)+size\-1; src >= data; \-\-src, \-\-dst)
-168         *dst = *src;
-169 
-170     //Send the data
-171     ethernetDriver \-> Send(buffer, size + sizeof(EthernetFrameHeader));
-172 
-173     errorMessages\->write("Done\\n");
-174 
-175 
-176     //Free the buffer
-177     MemoryManager::kfree(buffer);
-178 }
+181                                                                                                                       {
+182 
+183     errorMessages\->write("EFH: Sending frame\&.\&.\&.");
+184 
+185     //Allocate memory for the buffer
+186     auto* buffer = (uint8_t*)MemoryManager::kmalloc(size + sizeof(EthernetFrameHeader));
+187     auto* frame = (EthernetFrameHeader*)buffer;
+188 
+189     //Put data in the header
+190     frame \-> destinationMAC = destinationMAC;
+191     frame \-> sourceMAC = ethernetDriver \-> GetMediaAccessControlAddress();
+192     frame \-> type = (frameType >> 8) | (frameType << 8);                        //Convert to big endian
+193 
+194     //Copy the data
+195     for(uint8_t *src = data + size \- 1, *dst = buffer+sizeof(EthernetFrameHeader)+size\-1; src >= data; \-\-src, \-\-dst)
+196         *dst = *src;
+197 
+198     //Send the data
+199     ethernetDriver \-> Send(buffer, size + sizeof(EthernetFrameHeader));
+200 
+201     errorMessages\->write("Done\\n");
+202 
+203 
+204     //Free the buffer
+205     MemoryManager::kfree(buffer);
+206 }
 .fi
 
 .PP
@@ -273,19 +302,25 @@ References \fBdata\fP, \fBdestinationMAC\fP, \fBerrorMessages\fP, \fBethernetDri
 .SS "\fBcommon::OutputStream\fP* MaxOS::net::EthernetFrameHandler::errorMessages\fC [protected]\fP"
 
 .PP
-Definition at line \fB57\fP of file \fBethernetframe\&.h\fP\&.
+The output stream for error messages\&. 
+.PP
+Definition at line \fB75\fP of file \fBethernetframe\&.h\fP\&.
 .PP
 Referenced by \fBDataReceived()\fP, \fBEthernetFrameHandler()\fP, and \fBsendEthernetFrame()\fP\&.
 .SS "\fBdrivers::ethernet::EthernetDriver\fP* MaxOS::net::EthernetFrameHandler::ethernetDriver\fC [protected]\fP"
 
 .PP
-Definition at line \fB56\fP of file \fBethernetframe\&.h\fP\&.
+The driver this frame handler is using\&. 
+.PP
+Definition at line \fB74\fP of file \fBethernetframe\&.h\fP\&.
 .PP
 Referenced by \fBDataReceived()\fP, \fBEthernetFrameHandler()\fP, \fBgetMAC()\fP, and \fBsendEthernetFrame()\fP\&.
-.SS "\fBcommon::Map\fP<uint16_t , \fBEthernetFramePayloadHandler\fP*> MaxOS::net::EthernetFrameHandler::frameHandlers\fC [protected]\fP"
+.SS "\fBcommon::Map\fP<uint16_t, \fBEthernetFramePayloadHandler\fP*> MaxOS::net::EthernetFrameHandler::frameHandlers\fC [protected]\fP"
 
 .PP
-Definition at line \fB54\fP of file \fBethernetframe\&.h\fP\&.
+The map of frame handlers by type\&. 
+.PP
+Definition at line \fB72\fP of file \fBethernetframe\&.h\fP\&.
 .PP
 Referenced by \fBconnectHandler()\fP, and \fBDataReceived()\fP\&.
 

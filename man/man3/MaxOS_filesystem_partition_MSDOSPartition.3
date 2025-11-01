@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::filesystem::partition::MSDOSPartition
+MaxOS::filesystem::partition::MSDOSPartition \- Handles mounting of partitions documented in an MSDOS partition table\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -18,7 +19,18 @@ MaxOS::filesystem::partition::MSDOSPartition
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB338\fP of file \fBmsdos\&.h\fP\&.
+Handles mounting of partitions documented in an MSDOS partition table\&. 
+
+
+.PP
+\fBTodo\fP
+.RS 4
+Abstract some of this into a base class and use it for GPT and other partition tables 
+.RE
+.PP
+
+.PP
+Definition at line \fB348\fP of file \fBmsdos\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP MSDOSPartition::mount_partitions (\fBdrivers::disk::Disk\fP * disk)\fC [static]\fP"
@@ -28,64 +40,64 @@ read the partition table of a given hard disk
 .PP
 \fBParameters\fP
 .RS 4
-\fIhd\fP The hard disk to read the partition table from 
+\fIdisk\fP The hard disk to read the partition table from 
 .RE
 .PP
 
 .PP
-Definition at line \fB19\fP of file \fBmsdos\&.cpp\fP\&..PP
+Definition at line \fB23\fP of file \fBmsdos\&.cpp\fP\&..PP
 .nf
-19                                               {
-20 
-21     // Read the MBR from the hard disk
-22     MasterBootRecord mbr = {};
-23     buffer_t mbr_buffer(&mbr, sizeof(MasterBootRecord));
-24     hd\->read(0, &mbr_buffer);
-25 
-26     // Check if the magic number is correct
-27     if (mbr\&.magic != 0xAA55) {
-28         Logger::WARNING() << "Could not find valid MBR on disk 0x" << (uint64_t) hd << "\\n";
-29         return;
-30     }
-31 
-32     // Get the VFS
-33     VirtualFileSystem *vfs = VirtualFileSystem::current_file_system();
-34 
-35     // Loop through the primary partitions
-36     for (auto &entry: mbr\&.primary_partition) {
-37 
-38         // Empty entry
-39         if (entry\&.type == 0)
-40             continue;
+23                                                 {
+24 
+25     // Read the MBR from the hard disk
+26     MasterBootRecord mbr = {};
+27     buffer_t mbr_buffer(&mbr, sizeof(MasterBootRecord));
+28     disk\->read(0, &mbr_buffer);
+29 
+30     // Check if the magic number is correct
+31     if (mbr\&.magic != 0xAA55) {
+32         Logger::WARNING() << "Could not find valid MBR on disk 0x" << (uint64_t) disk << "\\n";
+33         return;
+34     }
+35 
+36     // Get the VFS
+37     VirtualFileSystem *vfs = VirtualFileSystem::current_file_system();
+38 
+39     // Loop through the primary partitions
+40     for (auto &entry: mbr\&.primary_partition) {
 41 
-42         Logger::DEBUG() << "Partition 0x" << (uint64_t) entry\&.type << " at 0x" << (uint64_t) entry\&.start_LBA << ": ";
-43 
-44         // Create a file system for the partition
-45         switch ((PartitionType) entry\&.type) {
-46             case PartitionType::EMPTY:
-47                 Logger::Out() << "Empty partition\\n";
-48                 break;
-49 
-50             case PartitionType::FAT32:
-51                 Logger::Out() << "FAT32 partition\\n";
-52                 vfs\->mount_filesystem(new Fat32FileSystem(hd, entry\&.start_LBA));
-53                 break;
-54 
-55             case PartitionType::LINUX_EXT2:
-56                 Logger::Out() << "EXT2 partition\\n";
-57                 vfs\->mount_filesystem(new ext2::Ext2FileSystem(hd, entry\&.start_LBA));
-58                 break;
-59 
-60             default:
-61                 Logger::Out() << "Unknown or unimplemented partition type: 0x" << (uint64_t) entry\&.type << "\\n";
-62 
-63         }
-64     }
-65 }
+42         // Empty entry
+43         if (entry\&.type == 0)
+44             continue;
+45 
+46         Logger::DEBUG() << "Partition 0x" << (uint64_t) entry\&.type << " at 0x" << (uint64_t) entry\&.start_LBA << ": ";
+47 
+48         // Create a file system for the partition
+49         switch ((PartitionType) entry\&.type) {
+50             case PartitionType::EMPTY:
+51                 Logger::Out() << "Empty partition\\n";
+52                 break;
+53 
+54             case PartitionType::FAT32:
+55                 Logger::Out() << "FAT32 partition\\n";
+56                 vfs\->mount_filesystem(new Fat32FileSystem(disk, entry\&.start_LBA));
+57                 break;
+58 
+59             case PartitionType::LINUX_EXT2:
+60                 Logger::Out() << "EXT2 partition\\n";
+61                 vfs\->mount_filesystem(new ext2::Ext2FileSystem(disk, entry\&.start_LBA));
+62                 break;
+63 
+64             default:
+65                 Logger::Out() << "Unknown or unimplemented partition type: 0x" << (uint64_t) entry\&.type << "\\n";
+66 
+67         }
+68     }
+69 }
 .fi
 
 .PP
-References \fBMaxOS::filesystem::VirtualFileSystem::current_file_system()\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::filesystem::partition::EMPTY\fP, \fBMaxOS::filesystem::partition::FAT32\fP, \fBMaxOS::filesystem::partition::LINUX_EXT2\fP, \fBLogger::Out()\fP, and \fBLogger::WARNING()\fP\&.
+References \fBMaxOS::filesystem::VirtualFileSystem::current_file_system()\fP, \fBLogger::DEBUG()\fP, \fBLogger::Out()\fP, \fBMaxOS::drivers::disk::Disk::read()\fP, and \fBLogger::WARNING()\fP\&.
 .PP
 Referenced by \fBMaxOS::drivers::disk::IntegratedDriveElectronicsController::activate()\fP\&.
 

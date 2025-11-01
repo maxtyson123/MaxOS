@@ -1,8 +1,6 @@
 var classMaxOS_1_1gui_1_1CompositeWidget =
 [
-    [ "CompositeWidget", "classMaxOS_1_1gui_1_1CompositeWidget.html#afabc87b8588164677fe3cb98585d99a6", null ],
     [ "CompositeWidget", "classMaxOS_1_1gui_1_1CompositeWidget.html#a1ee36a5b6bf3003f2199d050a81e2022", null ],
-    [ "~CompositeWidget", "classMaxOS_1_1gui_1_1CompositeWidget.html#a0b60487df74ab9fb5781448778275087", null ],
     [ "add_child", "classMaxOS_1_1gui_1_1CompositeWidget.html#a971347347276a0f3c031adbbfec27214", null ],
     [ "draw", "classMaxOS_1_1gui_1_1CompositeWidget.html#abf136f354b2994d83be0a0e4cea933f1", null ],
     [ "draw", "classMaxOS_1_1gui_1_1CompositeWidget.html#aa28704c620373a250a3f238c7a741779", null ],

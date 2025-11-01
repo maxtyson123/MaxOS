@@ -1,8 +1,6 @@
 var classMaxOS_1_1gui_1_1Widget =
 [
-    [ "Widget", "classMaxOS_1_1gui_1_1Widget.html#ab0f05949f1fa8ca233137fc4119c7401", null ],
     [ "Widget", "classMaxOS_1_1gui_1_1Widget.html#a0a618860844ba536a30d30a2617a529b", null ],
-    [ "~Widget", "classMaxOS_1_1gui_1_1Widget.html#aa24f66bcbaaec6d458b0980e8c8eae65", null ],
     [ "absolute_coordinates", "classMaxOS_1_1gui_1_1Widget.html#ac136baa8c136bac3721492dfd19fd7ed", null ],
     [ "add_child", "classMaxOS_1_1gui_1_1Widget.html#ac71cba5f4df6fabed084b488a978877e", null ],
     [ "bring_to_front", "classMaxOS_1_1gui_1_1Widget.html#aa5487a1a19d6010ea3b7ba764c325b6b", null ],
@@ -23,12 +21,11 @@ var classMaxOS_1_1gui_1_1Widget =
     [ "position", "classMaxOS_1_1gui_1_1Widget.html#a7ca01364da49cccb4b22327d049c96bc", null ],
     [ "resize", "classMaxOS_1_1gui_1_1Widget.html#a81cf691e5d7015855a9647de15bc709c", null ],
     [ "set_focus", "classMaxOS_1_1gui_1_1Widget.html#aceee9eec5dea49b9aad29de3380b2a1b", null ],
-    [ "CompositeWidget", "classMaxOS_1_1gui_1_1Widget.html#ad5ad8d24640bea39af9bc0e4b2895636", null ],
-    [ "WidgetMoverResizer", "classMaxOS_1_1gui_1_1Widget.html#a291268ec0644a8b300e3214c02411101", null ],
     [ "m_max_height", "classMaxOS_1_1gui_1_1Widget.html#a668cb55e6cc5d9158a5efb214d383df5", null ],
     [ "m_max_width", "classMaxOS_1_1gui_1_1Widget.html#a2dc8222cd970b1d053806a631c4c699d", null ],
     [ "m_min_height", "classMaxOS_1_1gui_1_1Widget.html#a8d4c40fe122803c160641a626e80a093", null ],
     [ "m_min_width", "classMaxOS_1_1gui_1_1Widget.html#a0258d0aa9e3218e5c55a57ccaffe6290", null ],
     [ "m_parent", "classMaxOS_1_1gui_1_1Widget.html#ad9edf41bbce8fe661a8f1a7f295364a6", null ],
+    [ "m_position", "classMaxOS_1_1gui_1_1Widget.html#a9f78bb66a7f7e9cdcd9cbf59641b59df", null ],
     [ "m_valid", "classMaxOS_1_1gui_1_1Widget.html#a7ee27019d27b574792c547d098f13039", null ]
 ];

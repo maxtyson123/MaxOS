@@ -2,54 +2,52 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::net::DataReceivedEvent
+MaxOS::net::DataReceivedEvent \- Event for when data is received on a TCP socket\&.  
+
 .SH SYNOPSIS
 .br
 .PP
 .PP
 \fC#include <tcp\&.h>\fP
 .PP
-Inherits \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP\&.
+Inherits \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBDataReceivedEvent\fP (\fBTransmissionControlProtocolSocket\fP *\fBsocket\fP, \fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
+.RI "\fBDataReceivedEvent\fP (\fBTCPSocket\fP *\fBsocket\fP, \fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
 .br
 .RI "___ EVENTS ___ /// "
-.ti -1c
-.RI "\fB~DataReceivedEvent\fP ()"
-.br
 .in -1c
 
-Public Member Functions inherited from \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP
+Public Member Functions inherited from \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP
 .in +1c
 .ti -1c
-.RI "\fBEvent\fP (TransmissionControlProtocolPayloadHandlerEvents \fBtype\fP)"
+.RI "\fBEvent\fP (TCPPayloadHandlerEvents \fBtype\fP)"
 .br
 .RI "___________________________ Template Implementation ___________________________ "
-.ti -1c
-.RI "\fB~Event\fP ()"
-.br
 .in -1c
 .SS "Public Attributes"
 
 .in +1c
 .ti -1c
-.RI "\fBTransmissionControlProtocolSocket\fP * \fBsocket\fP"
+.RI "\fBTCPSocket\fP * \fBsocket\fP"
 .br
+.RI "The socket that received the data\&. "
 .ti -1c
 .RI "uint8_t * \fBdata\fP"
 .br
+.RI "The data received\&. "
 .ti -1c
 .RI "uint16_t \fBsize\fP"
 .br
+.RI "The size of the data received\&. "
 .in -1c
 
-Public Attributes inherited from \fBMaxOS::common::Event< TransmissionControlProtocolPayloadHandlerEvents >\fP
+Public Attributes inherited from \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP
 .in +1c
 .ti -1c
-.RI "TransmissionControlProtocolPayloadHandlerEvents \fBtype\fP"
+.RI "TCPPayloadHandlerEvents \fBtype\fP"
 .br
 .ti -1c
 .RI "\fBuint8_t\fP * \fBbufferValue\fP"
@@ -78,46 +76,51 @@ Public Attributes inherited from \fBMaxOS::common::Event< TransmissionControlPro
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB89\fP of file \fBtcp\&.h\fP\&.
+Event for when data is received on a TCP socket\&. 
+.PP
+Definition at line \fB113\fP of file \fBtcp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "DataReceivedEvent::DataReceivedEvent (\fBTransmissionControlProtocolSocket\fP * socket, \fBuint8_t\fP * data, \fBuint16_t\fP size)"
+.SS "DataReceivedEvent::DataReceivedEvent (\fBTCPSocket\fP * socket, \fBuint8_t\fP * data, \fBuint16_t\fP size)"
 
 .PP
 ___ EVENTS ___ /// 
 .PP
-Definition at line \fB550\fP of file \fBtcp\&.cpp\fP\&..PP
+Definition at line \fB553\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-551 : Event(TransmissionControlProtocolPayloadHandlerEvents::DATA_RECEIVED)
-552 {
-553     this \-> socket = socket;
-554     this \-> data = data;
-555     this \-> size = size;
-556 }
+554         : Event(TCPPayloadHandlerEvents::DATA_RECEIVED) {
+555     this\->socket = socket;
+556     this\->data = data;
+557     this\->size = size;
+558 }
 .fi
 
 .PP
 References \fBdata\fP, \fBsize\fP, and \fBsocket\fP\&.
-.SS "DataReceivedEvent::~DataReceivedEvent ()\fC [default]\fP"
-
 .SH "Member Data Documentation"
 .PP 
 .SS "uint8_t* MaxOS::net::DataReceivedEvent::data"
 
 .PP
-Definition at line \fB93\fP of file \fBtcp\&.h\fP\&.
+The data received\&. 
+.PP
+Definition at line \fB116\fP of file \fBtcp\&.h\fP\&.
 .PP
 Referenced by \fBDataReceivedEvent()\fP\&.
 .SS "uint16_t MaxOS::net::DataReceivedEvent::size"
 
 .PP
-Definition at line \fB94\fP of file \fBtcp\&.h\fP\&.
+The size of the data received\&. 
+.PP
+Definition at line \fB117\fP of file \fBtcp\&.h\fP\&.
 .PP
 Referenced by \fBDataReceivedEvent()\fP\&.
-.SS "\fBTransmissionControlProtocolSocket\fP* MaxOS::net::DataReceivedEvent::socket"
+.SS "\fBTCPSocket\fP* MaxOS::net::DataReceivedEvent::socket"
 
 .PP
-Definition at line \fB92\fP of file \fBtcp\&.h\fP\&.
+The socket that received the data\&. 
+.PP
+Definition at line \fB115\fP of file \fBtcp\&.h\fP\&.
 .PP
 Referenced by \fBDataReceivedEvent()\fP\&.
 

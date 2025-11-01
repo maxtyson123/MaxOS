@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memoryIO.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/memory/memoryIO.h \- Defines classes for memory input and output operations of various bit widths (8, 16, 32, 64 bits)\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -35,16 +36,6 @@
 .br
 .RI "Handles 64 bit memory IO\&. "
 .in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::memory\fP"
-.br
-.in -1c
 .SS "Functions"
 
 .in +1c
@@ -65,6 +56,25 @@
 .br
 .RI "Compares two blocks of memory\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines classes for memory input and output operations of various bit widths (8, 16, 32, 64 bits)\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+29th November 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBmemoryIO\&.h\fP\&.
 .SH "Function Documentation"
 .PP 
 .SS "int memcmp (const void * ptr1, const void * ptr2, uint64_t num)"
@@ -88,24 +98,24 @@ Compares two blocks of memory\&.
 .PP
 
 .PP
-Definition at line \fB216\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+Definition at line \fB265\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-216                                                              {
-217 
-218     // Make sure the pointers exist
-219     if (ptr1 == nullptr || ptr2 == nullptr)
-220         return 0;
-221 
-222     const auto* p1 = (const unsigned char*) ptr1;
-223     const auto* p2 = (const unsigned char*) ptr2;
-224     for (size_t i = 0; i < num; i++) {
-225         if (p1[i] < p2[i])
-226             return \-1;
-227         if (p1[i] > p2[i])
-228             return 1;
-229     }
-230     return 0;
-231 }
+265                                                              {
+266 
+267     // Make sure the pointers exist
+268     if (ptr1 == nullptr || ptr2 == nullptr)
+269         return 0;
+270 
+271     const auto* p1 = (const unsigned char*) ptr1;
+272     const auto* p2 = (const unsigned char*) ptr2;
+273     for (size_t i = 0; i < num; i++) {
+274         if (p1[i] < p2[i])
+275             return \-1;
+276         if (p1[i] > p2[i])
+277             return 1;
+278     }
+279     return 0;
+280 }
 .fi
 
 .SS "void * memcpy (void * destination, const void * source, uint64_t num)"
@@ -134,29 +144,29 @@ The destination
 .PP
 
 .PP
-Definition at line \fB136\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+Definition at line \fB165\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-136                                                                   {
-137 
-138     // Make sure the source and destination are not the same
-139     if (destination == source)
-140         return destination;
-141 
-142     // Make sure they exist
-143     if (destination == nullptr || source == nullptr)
-144         return destination;
-145 
-146     // Get the source and destination
-147     auto* dst = (unsigned char*) destination;
-148     const auto* src = (const unsigned char*) source;
-149 
-150     // Copy the data
-151     for (size_t i = 0; i < num; i++)
-152         dst[i] = src[i];
-153 
-154     // Usefully for easier code writing
-155     return destination;
-156 }
+165                                                                   {
+166 
+167     // Make sure the source and destination are not the same
+168     if (destination == source)
+169         return destination;
+170 
+171     // Make sure they exist
+172     if (destination == nullptr || source == nullptr)
+173         return destination;
+174 
+175     // Get the source and destination
+176     auto* dst = (unsigned char*) destination;
+177     const auto* src = (const unsigned char*) source;
+178 
+179     // Copy the data
+180     for (size_t i = 0; i < num; i++)
+181         dst[i] = src[i];
+182 
+183     // Usefully for easier code writing
+184     return destination;
+185 }
 .fi
 
 .PP
@@ -184,29 +194,29 @@ The destination
 .PP
 
 .PP
-Definition at line \fB186\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+Definition at line \fB235\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-186                                                                    {
-187 
-188     // Make sure the source and destination are not the same
-189     if (destination == source)
-190         return destination;
-191 
-192     // Make sure they exist
-193     if (destination == nullptr || source == nullptr)
-194         return destination;
-195 
-196     auto* dst = (unsigned char*) destination;
-197     const auto* src = (const unsigned char*) source;
-198     if (dst < src) {
-199         for (size_t i = 0; i < num; i++)
-200             dst[i] = src[i];
-201     } else {
-202         for (size_t i = num; i != 0; i\-\-)
-203             dst[i \- 1] = src[i \- 1];
-204     }
-205     return destination;
-206 }
+235                                                                    {
+236 
+237     // Make sure the source and destination are not the same
+238     if (destination == source)
+239         return destination;
+240 
+241     // Make sure they exist
+242     if (destination == nullptr || source == nullptr)
+243         return destination;
+244 
+245     auto* dst = (unsigned char*) destination;
+246     const auto* src = (const unsigned char*) source;
+247     if (dst < src) {
+248         for (size_t i = 0; i < num; i++)
+249             dst[i] = src[i];
+250     } else {
+251         for (size_t i = num; i != 0; i\-\-)
+252             dst[i \- 1] = src[i \- 1];
+253     }
+254     return destination;
+255 }
 .fi
 
 .PP
@@ -234,23 +244,23 @@ The pointer to the block of memory
 .PP
 
 .PP
-Definition at line \fB166\fP of file \fBmemoryIO\&.cpp\fP\&..PP
+Definition at line \fB215\fP of file \fBmemoryIO\&.cpp\fP\&..PP
 .nf
-166                                                       {
-167 
-168     // Make sure the pointer exists
-169     if (ptr == nullptr)
-170         return ptr;
-171 
-172     auto* dst = (unsigned char*) ptr;
-173     for (size_t i = 0; i < num; i++)
-174         dst[i] = (unsigned char) value;
-175     return ptr;
-176 }
+215                                                       {
+216 
+217     // Make sure the pointer exists
+218     if (ptr == nullptr)
+219         return ptr;
+220 
+221     auto* dst = (uint32_t*) ptr;
+222     for (size_t i = 0; i < num; i++)
+223         dst[i] = value;
+224     return ptr;
+225 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::common::Buffer::clear()\fP, and \fBMaxOS::common::Buffer::full()\fP\&.
+Referenced by \fBMaxOS::common::Buffer::clear()\fP, \fBMaxOS::common::Buffer::full()\fP, and \fBMaxOS::drivers::console::VESABootConsole::print_logo()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

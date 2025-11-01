@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::hardwarecommunication::RedirectionEntry
+MaxOS::hardwarecommunication::RedirectionEntry \- An IO APIC redirection entry\&. Describes how an interrupt is routed\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -17,36 +18,47 @@ MaxOS::hardwarecommunication::RedirectionEntry
 .ti -1c
 .RI "   uint64_t \fBvector\fP: 8"
 .br
+.RI "The interrupt that will be triggered when this redirection entry is used\&. "
 .ti -1c
 .RI "   uint64_t \fBdelivery_mode\fP: 3"
 .br
+.RI "How the interrupt will be delvied to the core(s) (see DeliveryMode) "
 .ti -1c
 .RI "   uint64_t \fBdestination_mode\fP: 1"
 .br
+.RI "How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores) "
 .ti -1c
 .RI "   uint64_t \fBdelivery_status\fP: 1"
 .br
+.RI "Indicates whether, when setting this entry, the interrupt is still being sent\&. "
 .ti -1c
 .RI "   uint64_t \fBpin_polarity\fP: 1"
 .br
+.RI "Defines the electrical signal that indicates an active interrupt line (0 = high active, 1 = low active) (must match the \fBMADT\fP override flags) "
 .ti -1c
 .RI "   uint64_t \fBremote_irr\fP: 1"
 .br
+.RI "? "
 .ti -1c
 .RI "   uint64_t \fBtrigger_mode\fP: 1"
 .br
+.RI "How the electrical signal is interpreted (0 = edge triggered, 1 = level triggered) (must match the \fBMADT\fP override flags) "
 .ti -1c
 .RI "   uint64_t \fBmask\fP: 1"
 .br
+.RI "Whether the interrupt is disabled or not\&. "
 .ti -1c
 .RI "   uint64_t \fBreserved\fP: 39"
 .br
+.RI "Reserved bits (should be zero) "
 .ti -1c
 .RI "   uint64_t \fBdestination\fP: 8"
 .br
+.RI "The core(s) the interrupt should be sent to (interpreted based on destination_mode) "
 .ti -1c
 .RI "} \fB__attribute__\fP ((packed))"
 .br
+.RI "Packed because the bitfields should be one uint64_t together\&. "
 .in -1c
 .SS "Public Attributes"
 
@@ -54,70 +66,91 @@ MaxOS::hardwarecommunication::RedirectionEntry
 .ti -1c
 .RI "uint64_t \fBraw\fP"
 .br
+.RI "The raw 64-bit value of the redirection entry\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB56\fP of file \fBapic\&.h\fP\&.
-.SH "Member Function Documentation"
-.PP 
-.SS "struct MaxOS::hardwarecommunication::RedirectionEntry::@9 MaxOS::hardwarecommunication::RedirectionEntry::__attribute__ ((packed))"
-
+An IO APIC redirection entry\&. Describes how an interrupt is routed\&. 
+.PP
+Definition at line \fB107\fP of file \fBapic\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::delivery_mode"
 
 .PP
-Definition at line \fB59\fP of file \fBapic\&.h\fP\&.
+How the interrupt will be delvied to the core(s) (see DeliveryMode) 
+.PP
+Definition at line \fB110\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::delivery_status"
 
 .PP
-Definition at line \fB61\fP of file \fBapic\&.h\fP\&.
+Indicates whether, when setting this entry, the interrupt is still being sent\&. 
+.PP
+Definition at line \fB112\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::destination"
 
 .PP
-Definition at line \fB67\fP of file \fBapic\&.h\fP\&.
+The core(s) the interrupt should be sent to (interpreted based on destination_mode) 
+.PP
+Definition at line \fB118\fP of file \fBapic\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect()\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::destination_mode"
 
 .PP
-Definition at line \fB60\fP of file \fBapic\&.h\fP\&.
+How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores) 
+.PP
+Definition at line \fB111\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::mask"
 
 .PP
-Definition at line \fB65\fP of file \fBapic\&.h\fP\&.
+Whether the interrupt is disabled or not\&. 
+.PP
+Definition at line \fB116\fP of file \fBapic\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect()\fP, and \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect_mask()\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::pin_polarity"
 
 .PP
-Definition at line \fB62\fP of file \fBapic\&.h\fP\&.
+Defines the electrical signal that indicates an active interrupt line (0 = high active, 1 = low active) (must match the \fBMADT\fP override flags) 
+.PP
+Definition at line \fB113\fP of file \fBapic\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect()\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::raw"
 
 .PP
-Definition at line \fB70\fP of file \fBapic\&.h\fP\&.
+The raw 64-bit value of the redirection entry\&. 
+.PP
+Definition at line \fB121\fP of file \fBapic\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect()\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::remote_irr"
 
 .PP
-Definition at line \fB63\fP of file \fBapic\&.h\fP\&.
+? 
+.PP
+Definition at line \fB114\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::reserved"
 
 .PP
-Definition at line \fB66\fP of file \fBapic\&.h\fP\&.
+Reserved bits (should be zero) 
+.PP
+Definition at line \fB117\fP of file \fBapic\&.h\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::trigger_mode"
 
 .PP
-Definition at line \fB64\fP of file \fBapic\&.h\fP\&.
+How the electrical signal is interpreted (0 = edge triggered, 1 = level triggered) (must match the \fBMADT\fP override flags) 
+.PP
+Definition at line \fB115\fP of file \fBapic\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect()\fP\&.
 .SS "uint64_t MaxOS::hardwarecommunication::RedirectionEntry::vector"
 
 .PP
-Definition at line \fB58\fP of file \fBapic\&.h\fP\&.
+The interrupt that will be triggered when this redirection entry is used\&. 
+.PP
+Definition at line \fB109\fP of file \fBapic\&.h\fP\&.
 
 .SH "Author"
 .PP 

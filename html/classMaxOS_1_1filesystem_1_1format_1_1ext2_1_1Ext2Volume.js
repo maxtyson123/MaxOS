@@ -1,7 +1,6 @@
 var classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume =
 [
     [ "Ext2Volume", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a4d627232293c978be4f587224170dc9b", null ],
-    [ "~Ext2Volume", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a85af61d689225472c2c26f8a330f2f6c", null ],
     [ "allocate_block", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#ae2440f7c00021606ee91f68983abf206", null ],
     [ "allocate_blocks", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#acf68810ccb0f9cdb2b9491c077710205", null ],
     [ "bytes_to_blocks", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#af9769f68d14aa0c2c44b9313c151eafc", null ],
@@ -16,14 +15,12 @@ var classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume =
     [ "block_group_descriptor_table_size", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a7e8c97da6e5a645d3c69ec277b9f9a2e", null ],
     [ "block_groups", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a28e53f409de30340066785e5a0d94993", null ],
     [ "block_size", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a10014d7b0ae0cc94ea281d0e6ca56500", null ],
-    [ "blocks_per_inode_table", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a7ddfbe5a0d61831f3ee40ebb6c5f2cde", null ],
     [ "disk", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#af92c050fd33ce1edb06897b9c5fe0862", null ],
     [ "ext2_lock", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a07e488e15a650d14870a5d9654b23193", null ],
     [ "inodes_per_block", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#abc67bb9fb290354dca9c09c4ca5ff43d", null ],
     [ "partition_offset", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a7436ecf891301b9a4c9edb52212151db", null ],
     [ "pointers_per_block", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a6a06e6d63e1762b1921e67931e6bd3c7", null ],
     [ "sectors_per_block", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#aa2fb31420bd869e0f42e672e6ede97b2", null ],
-    [ "sectors_per_inode_table", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a27730d8b9c0f817d5b08531121e393eb", null ],
     [ "superblock", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#a95e333eca8856f08ba4bc1724541a4b7", null ],
     [ "total_block_groups", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume.html#ac5a90acfd7dd067a9fa54e4a1ea0e707", null ]
 ];

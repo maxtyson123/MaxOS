@@ -49,15 +49,19 @@ Public Member Functions inherited from \fBMaxOS::common::InputStreamProcessor< T
 .ti -1c
 .RI "\fBInputStreamProcessor\fP ()"
 .br
+.RI "Creates a new \fBInputStreamProcessor\fP\&. "
 .ti -1c
 .RI "\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *\fBgeneric_stream_event_handler\fP)"
 .br
+.RI "Creates a new \fBInputStreamProcessor\fP\&. "
 .ti -1c
 .RI "\fB~InputStreamProcessor\fP ()"
 .br
+.RI "Destroys the \fBInputStreamProcessor\fP\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBType\fP > *\fBstream\fP) \fBoverride\fP"
 .br
+.RI "Called when a stream has finished\&. Passes the event on to the handlers and then removes the stream from the array of streams\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
@@ -69,6 +73,7 @@ Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler
 .ti -1c
 .RI "\fB~InputStreamEventHandler\fP ()"
 .br
+.RI "Destroys the \fBInputStreamProcessor\fP and disconnects it from all streams\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< Type >\fP
@@ -76,18 +81,23 @@ Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< Typ
 .ti -1c
 .RI "\fBGenericInputStream\fP ()"
 .br
+.RI "Creates a new \fBGenericInputStream\fP\&. "
 .ti -1c
 .RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
 .br
+.RI "Creates a new \fBGenericInputStream\fP and connects it to the handler\&. "
 .ti -1c
 .RI "\fB~GenericInputStream\fP ()"
 .br
+.RI "Destroys the \fBGenericInputStream\fP and disconnects all handlers\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
 .br
+.RI "Adds a inputStreamEventHandler to the list of internetProtocolHandlers\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBType\fP > *)"
 .br
+.RI "Removes a handler from the list of handlers\&. "
 .in -1c
 .SS "Additional Inherited Members"
 
@@ -97,6 +107,7 @@ Protected Attributes inherited from \fBMaxOS::common::InputStreamEventHandler< T
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< \fBType\fP > * > \fBm_generic_input_streams\fP"
 .br
+.RI "List of streams being observed by this handler\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< Type >\fP
@@ -104,6 +115,7 @@ Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< Type >
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< \fBType\fP > * > \fBm_input_stream_event_handlers\fP"
 .br
+.RI "List of streams being observed by this handler\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -121,7 +133,7 @@ class MaxOS::common::GenericOutputStream< Type >"A stream that can be written to
 .PP
 
 .PP
-Definition at line \fB22\fP of file \fBoutputStream\&.h\fP\&.
+Definition at line \fB26\fP of file \fBoutputStream\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::GenericOutputStream ()\fC [default]\fP"
@@ -160,11 +172,11 @@ Close the stream\&.
 .PP
 
 .PP
-Definition at line \fB136\fP of file \fBoutputStream\&.h\fP\&..PP
+Definition at line \fB139\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-136                                                                    {
-137 
-138         }
+139                                                                    {
+140 
+141         }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::on_end_of_stream (\fBGenericInputStream\fP< \fBType\fP > * stream)\fC [override]\fP, \fC [virtual]\fP"
@@ -186,21 +198,21 @@ Close the stream and remove it from the list of streams when the end of the stre
 .PP
 Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
 .PP
-Definition at line \fB107\fP of file \fBoutputStream\&.h\fP\&..PP
+Definition at line \fB111\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-107                                                                                                               {
-108 
-109             // Close the stream\&.
-110             close();
-111 
-112             // Pass the event to any handlers
-113             for(auto& input_stream_event_handler : this \->m_input_stream_event_handlers)
-114                 input_stream_event_handler\->on_end_of_stream(stream);
+111                                                                                                               {
+112 
+113             // Close the stream\&.
+114             close();
 115 
-116             // Remove the stream from the list of streams\&.
-117             InputStreamProcessor<Type, Type>::on_end_of_stream(stream);
-118 
-119         }
+116             // Pass the event to any handlers
+117             for(auto& input_stream_event_handler : this \->m_input_stream_event_handlers)
+118                 input_stream_event_handler\->on_end_of_stream(stream);
+119 
+120             // Remove the stream from the list of streams\&.
+121             InputStreamProcessor<Type, Type>::on_end_of_stream(stream);
+122 
+123         }
 .fi
 
 .PP
@@ -224,19 +236,19 @@ Writes the date that was read from the input stream to the output stream\&.
 .PP
 Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
 .PP
-Definition at line \fB89\fP of file \fBoutputStream\&.h\fP\&..PP
+Definition at line \fB93\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-89                                                                                              {
-90 
-91             // When something is read from the input stream, it is written to the output stream\&.
-92             write(read_element);
-93 
-94             // Pass the element to any handlers
-95             for(auto& input_stream_event_handler : this \->m_input_stream_event_handlers)
-96               input_stream_event_handler\->on_stream_read(read_element);
+93                                                                                              {
+94 
+95             // When something is read from the input stream, it is written to the output stream\&.
+96             write(read_element);
 97 
-98 
-99         }
+98             // Pass the element to any handlers
+99             for(auto& input_stream_event_handler : this \->m_input_stream_event_handlers)
+100               input_stream_event_handler\->on_stream_read(read_element);
+101 
+102 
+103         }
 .fi
 
 .PP
@@ -263,16 +275,16 @@ The stream
 .PP
 
 .PP
-Definition at line \fB136\fP of file \fBoutputStream\&.h\fP\&..PP
+Definition at line \fB139\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-147                                                                                                                   {
-148 
-149             // write the element to the stream\&.
-150             write(write_element);
+150                                                                                                                   {
 151 
-152             // Return the stream\&.
-153             return *this;
-154         }
+152             // write the element to the stream\&.
+153             write(write_element);
+154 
+155             // Return the stream\&.
+156             return *this;
+157         }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::GenericOutputStream\fP< \fBType\fP >::write (\fBType\fP)\fC [virtual]\fP"
@@ -285,18 +297,13 @@ write an element to the stream\&.
 \fIType\fP The type of the elements that will be written to the stream\&. 
 .RE
 .PP
-\fBParameters\fP
-.RS 4
-\fIwrite_element\fP The element that will be written to the stream\&. 
-.RE
-.PP
 
 .PP
-Definition at line \fB127\fP of file \fBoutputStream\&.h\fP\&..PP
+Definition at line \fB130\fP of file \fBoutputStream\&.h\fP\&..PP
 .nf
-127                                                                        {
-128 
-129         }
+130                                                                        {
+131 
+132         }
 .fi
 
 

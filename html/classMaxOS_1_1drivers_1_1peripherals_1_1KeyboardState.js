@@ -1,7 +1,5 @@
 var classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState =
 [
-    [ "KeyboardState", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html#a408807475b344a15e75e56757d7715d7", null ],
-    [ "~KeyboardState", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html#a60c1698a5feb61e40a7352e65d135fa7", null ],
     [ "caps_lock", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html#abf24f0324f16ffec09cb0398892ea03d", null ],
     [ "left_alt", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html#adb4eb1a26bae79a707ae642ee442301b", null ],
     [ "left_control", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html#a123776001c04064fcf16634a6823acb2", null ],

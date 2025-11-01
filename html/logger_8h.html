@@ -34,6 +34,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
    </div>
@@ -102,12 +103,17 @@ $(document).ready(function(){initNavTree('logger_8h.html',''); initResizable(); 
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">logger.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines a <a class="el" href="classLogger.html" title="A class that handles logging messages to the console and files.">Logger</a> class for logging messages with different severity levels to multiple output streams.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;<a class="el" href="outputStream_8h_source.html">common/outputStream.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="colour_8h_source.html">common/colour.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="spinlock_8h_source.html">common/spinlock.h</a>&gt;</code><br />
 </div>
 <p><a href="logger_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -126,18 +132,33 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:aca1fd1d8935433e6ba2e3918214e07f9" id="r_aca1fd1d8935433e6ba2e3918214e07f9"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">LogLevel</a> { <br />
-&#160;&#160;<a class="el" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b">WARNING</a>
-, <a class="el" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>
-, <a class="el" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce">HEADER</a>
-, <a class="el" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>
+&#160;&#160;<b>WARNING</b>
+, <b>ERROR</b>
+, <b>HEADER</b>
+, <b>INFO</b>
 , <br />
-&#160;&#160;<a class="el" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15">DEBUG</a>
+&#160;&#160;<b>DEBUG</b>
 <br />
  }</td></tr>
 <tr class="memdesc:aca1fd1d8935433e6ba2e3918214e07f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority levels for logging messages. Different levels may be used to filter messages based on their importance depending on build type.  <a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">More...</a><br /></td></tr>
 <tr class="separator:aca1fd1d8935433e6ba2e3918214e07f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a28ef57769ee0016c46a1426fe48e9523" id="r_a28ef57769ee0016c46a1426fe48e9523"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logger_8h.html#a28ef57769ee0016c46a1426fe48e9523">MAX_LOG_WRITERS</a> = 5</td></tr>
+<tr class="memdesc:a28ef57769ee0016c46a1426fe48e9523"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum number of log writers that can be added to the logger.  <br /></td></tr>
+<tr class="separator:a28ef57769ee0016c46a1426fe48e9523"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48d28a459e93f33fb3840a0d5e7a3b33" id="r_a48d28a459e93f33fb3840a0d5e7a3b33"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">LogLevel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="logger_8h.html#a48d28a459e93f33fb3840a0d5e7a3b33">MAX_LOG_LEVEL</a> = LogLevel::DEBUG</td></tr>
+<tr class="memdesc:a48d28a459e93f33fb3840a0d5e7a3b33"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum log level for this build (messages above this level will not be logged)  <br /></td></tr>
+<tr class="separator:a48d28a459e93f33fb3840a0d5e7a3b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines a <a class="el" href="classLogger.html" title="A class that handles logging messages to the console and files.">Logger</a> class for logging messages with different severity levels to multiple output streams. </p>
+<dl class="section date"><dt>Date</dt><dd>4th April 2025 </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Max Tyson </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="logger_8h_source.html">logger.h</a>.</p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="adf7b5d69e4c25995b3211b91b27f33b6" name="adf7b5d69e4c25995b3211b91b27f33b6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adf7b5d69e4c25995b3211b91b27f33b6">&#9670;&#160;</a></span>ASSERT</h2>
 
@@ -182,7 +203,7 @@ Enumerations</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classLogger.html#acd76d224ed130aaf9b8e68d0560d34d3" title="Puts the system into a panic state if the condition is false, printing the message first.">Logger::ASSERT</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="logger_8h_source.html#l00089">89</a> of file <a class="el" href="logger_8h_source.html">logger.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger_8h_source.html#l00095">95</a> of file <a class="el" href="logger_8h_source.html">logger.h</a>.</p>
 
 </div>
 </div>
@@ -208,28 +229,73 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Priority levels for logging messages. Different levels may be used to filter messages based on their importance depending on build type. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b" name="aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b"></a>WARNING&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5" name="aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5"></a>ERROR&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce" name="aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce"></a>HEADER&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3" name="aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3"></a>INFO&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15" name="aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15"></a>DEBUG&#160;</td><td class="fielddoc"></td></tr>
-</table>
 
-<p class="definition">Definition at line <a class="el" href="logger_8h_source.html#l00017">17</a> of file <a class="el" href="logger_8h_source.html">logger.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   18</span>         {</div>
-<div class="line"><span class="lineno">   19</span>             <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b">WARNING</a>,</div>
-<div class="line"><span class="lineno">   20</span>             <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">ERROR</a>,</div>
-<div class="line"><span class="lineno">   21</span>             <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce">HEADER</a>,</div>
-<div class="line"><span class="lineno">   22</span>             <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">INFO</a>,</div>
-<div class="line"><span class="lineno">   23</span>             <a class="code hl_enumvalue" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15">DEBUG</a>,</div>
-<div class="line"><span class="lineno">   24</span>         };</div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a059e9861e0400dfbe05c98a841f3f96b">LogLevel::WARNING</a></div><div class="ttdeci">@ WARNING</div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a551b723eafd6a31d444fcb2f5920fbd3">LogLevel::INFO</a></div><div class="ttdeci">@ INFO</div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9a7ad4905b4543ab4a1637dd23c50e36ce">LogLevel::HEADER</a></div><div class="ttdeci">@ HEADER</div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9abb1ca97ec761fc37101737ba0aa2e7c5">LogLevel::ERROR</a></div><div class="ttdeci">@ ERROR</div></div>
-<div class="ttc" id="alogger_8h_html_aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15"><div class="ttname"><a href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9adc30ec20708ef7b0f641ef78b7880a15">LogLevel::DEBUG</a></div><div class="ttdeci">@ DEBUG</div></div>
+<p class="definition">Definition at line <a class="el" href="logger_8h_source.html#l00022">22</a> of file <a class="el" href="logger_8h_source.html">logger.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   23</span>         {</div>
+<div class="line"><span class="lineno">   24</span>             WARNING,</div>
+<div class="line"><span class="lineno">   25</span>             ERROR,</div>
+<div class="line"><span class="lineno">   26</span>             HEADER,</div>
+<div class="line"><span class="lineno">   27</span>             INFO,</div>
+<div class="line"><span class="lineno">   28</span>             DEBUG,</div>
+<div class="line"><span class="lineno">   29</span>         };</div>
 </div><!-- fragment -->
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a48d28a459e93f33fb3840a0d5e7a3b33" name="a48d28a459e93f33fb3840a0d5e7a3b33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48d28a459e93f33fb3840a0d5e7a3b33">&#9670;&#160;</a></span>MAX_LOG_LEVEL</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="logger_8h.html#aca1fd1d8935433e6ba2e3918214e07f9">LogLevel</a> MAX_LOG_LEVEL = LogLevel::DEBUG</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The maximum log level for this build (messages above this level will not be logged) </p>
+
+<p class="definition">Definition at line <a class="el" href="logger_8h_source.html#l00033">33</a> of file <a class="el" href="logger_8h_source.html">logger.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="logger_8cpp_source.html#l00127">Logger::write_char()</a>.</p>
+
+</div>
+</div>
+<a id="a28ef57769ee0016c46a1426fe48e9523" name="a28ef57769ee0016c46a1426fe48e9523"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28ef57769ee0016c46a1426fe48e9523">&#9670;&#160;</a></span>MAX_LOG_WRITERS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t MAX_LOG_WRITERS = 5</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The maximum number of log writers that can be added to the logger. </p>
+
+<p class="definition">Definition at line <a class="el" href="logger_8h_source.html#l00032">32</a> of file <a class="el" href="logger_8h_source.html">logger.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="logger_8cpp_source.html#l00044">Logger::add_log_writer()</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->

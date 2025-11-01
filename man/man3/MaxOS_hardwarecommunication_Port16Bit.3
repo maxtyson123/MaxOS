@@ -17,9 +17,7 @@ Inherits \fBMaxOS::hardwarecommunication::Port\fP\&.
 .ti -1c
 .RI "\fBPort16Bit\fP (uint16_t port_number)"
 .br
-.ti -1c
-.RI "\fB~Port16Bit\fP ()"
-.br
+.RI "Construct a new \fBPort\fP object for ports handling 16 bit read/writes\&. "
 .ti -1c
 .RI "virtual void \fBwrite\fP (uint16_t \fBdata\fP)"
 .br
@@ -37,9 +35,7 @@ Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::Port\
 .ti -1c
 .RI "\fBPort\fP (uint16_t port_number)"
 .br
-.ti -1c
-.RI "\fB~Port\fP ()"
-.br
+.RI "Construct a new \fBPort\fP object\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::hardwarecommunication::Port\fP
@@ -47,24 +43,32 @@ Protected Attributes inherited from \fBMaxOS::hardwarecommunication::Port\fP
 .ti -1c
 .RI "uint16_t \fBm_port_number\fP"
 .br
+.RI "The port to write to / read from\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles 16 bit ports\&. 
 .PP
-Definition at line \fB53\fP of file \fBport\&.h\fP\&.
+Definition at line \fB57\fP of file \fBport\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Port16Bit::Port16Bit (uint16_t port_number)"
 
 .PP
-Definition at line \fB61\fP of file \fBport\&.cpp\fP\&..PP
-.nf
-62 : Port(port_number) {
-63 }
-.fi
+Construct a new \fBPort\fP object for ports handling 16 bit read/writes\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIport_number\fP The IO port number 
+.RE
+.PP
 
-.SS "Port16Bit::~Port16Bit ()\fC [default]\fP"
+.PP
+Definition at line \fB84\fP of file \fBport\&.cpp\fP\&..PP
+.nf
+85 : Port(port_number) {
+86 }
+.fi
 
 .SH "Member Function Documentation"
 .PP 
@@ -80,14 +84,14 @@ the word read
 .PP
 
 .PP
-Definition at line \fB82\fP of file \fBport\&.cpp\fP\&..PP
+Definition at line \fB105\fP of file \fBport\&.cpp\fP\&..PP
 .nf
-82                          {
-83 
-84     uint16_t result;
-85     asm volatile("inw %1, %0" : "=a" (result) : "Nd" (m_port_number));
-86     return result;
-87 }
+105                          {
+106 
+107     uint16_t result;
+108     asm volatile("inw %1, %0" : "=a" (result) : "Nd" (m_port_number));
+109     return result;
+110 }
 .fi
 
 .PP
@@ -106,12 +110,12 @@ write a word to the port
 .PP
 
 .PP
-Definition at line \fB72\fP of file \fBport\&.cpp\fP\&..PP
+Definition at line \fB95\fP of file \fBport\&.cpp\fP\&..PP
 .nf
-72                                    {
-73 
-74     asm volatile("outw %0, %1" : : "a" (data), "Nd" (m_port_number));
-75 }
+95                                    {
+96 
+97     asm volatile("outw %0, %1" : : "a" (data), "Nd" (m_port_number));
+98 }
 .fi
 
 .PP

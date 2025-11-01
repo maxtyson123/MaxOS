@@ -1,7 +1,5 @@
 var classMaxOS_1_1common_1_1GraphicsContext =
 [
-    [ "GraphicsContext", "classMaxOS_1_1common_1_1GraphicsContext.html#ad40a8e479ca7f377ea6d4adfed3ba3e7", null ],
-    [ "~GraphicsContext", "classMaxOS_1_1common_1_1GraphicsContext.html#adf561cc173ce8824f27854c04ee0effc", null ],
     [ "color_depth", "classMaxOS_1_1common_1_1GraphicsContext.html#af48d84397f5f1522bf0157b7df75244f", null ],
     [ "colour_to_int", "classMaxOS_1_1common_1_1GraphicsContext.html#a3212ba2de7c790a487ef85517d8d29bb", null ],
     [ "draw_circle", "classMaxOS_1_1common_1_1GraphicsContext.html#a0ea5687267711e6a6ba99625d09f6f97", null ],

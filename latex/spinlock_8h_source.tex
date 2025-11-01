@@ -2,40 +2,64 @@
 \hypertarget{spinlock_8h_source}{}\label{spinlock_8h_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/common/spinlock.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/common/spinlock.h}}
 \mbox{\hyperlink{spinlock_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00001}00001\ \textcolor{comment}{//}}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 24/02/2025.}}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00003}00003\ \textcolor{comment}{//}}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00004}00004\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00005}00005\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_COMMON\_SPINLOCK\_H}}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00006}00006\ \textcolor{preprocessor}{\#define\ MAXOS\_COMMON\_SPINLOCK\_H}}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00007}00007\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00008}00008\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceMaxOS}{MaxOS}}\{}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00009}00009\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00010}00010\ \ \ \textcolor{keyword}{namespace\ }common\{}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00009}00009\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_COMMON\_SPINLOCK\_H}}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00010}00010\ \textcolor{preprocessor}{\#define\ MAXOS\_COMMON\_SPINLOCK\_H}}
 \DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00011}00011\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00016}\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock}{00016}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock}{Spinlock}}}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00017}00017\ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00018}00018\ \ \ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00019}00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_locked\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00020}00020\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_should\_yield;}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00021}00021\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00022}00022\ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00023}00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock}{Spinlock}}(\textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{should\_yield}}\ =\ \textcolor{keyword}{false});}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00024}\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a6ed28d5235616487585e102214c6a0c4}{00024}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a6ed28d5235616487585e102214c6a0c4}{\string~Spinlock}}();}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00025}00025\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00026}00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00027}00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00028}00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a9632d6c0ad743f60bd0d515556220d32}{is\_locked}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00029}00029\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_aa107bfcf0d1345cea3f97cdb993321aa}{acquire}}();}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a50cca0412a4d430ea09b64bf6266b626}{release}}();}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00032}00032\ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vector_8h}{common/vector.h}}>}}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00014}00014\ \textcolor{keyword}{namespace\ }MaxOS\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00016}00016\ \ \ \ \ \textcolor{keyword}{namespace\ }common\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00022}\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock}{00022}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock}{Spinlock}}\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00024}00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00025}00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_locked\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00027}00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00028}00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock}{Spinlock}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock}{\string~Spinlock}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00033}00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a9632d6c0ad743f60bd0d515556220d32}{is\_locked}}()\ \textcolor{keyword}{const};}
 \DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00034}00034\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00035}00035\ \ \ \}}
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00036}00036\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00037}00037\ \}}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_aa107bfcf0d1345cea3f97cdb993321aa}{acquire}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a50cca0412a4d430ea09b64bf6266b626}{release}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00037}00037\ \ \ \ \ \ \ \ \ \};}
 \DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00038}00038\ }
-\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00039}00039\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MAXOS\_COMMON\_SPINLOCK\_H}}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00042}\mbox{\hyperlink{spinlock_8h_aa5083a6f45ee82c0f5f8ebfbb741aae7}{00042}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{spinlock_8h_aa5083a6f45ee82c0f5f8ebfbb741aae7}{BLOCKING\_FAST\_TRY\_LIMIT}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{UINT8\_MAX}};}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00051}\mbox{\hyperlink{classMaxOS_1_1common_1_1BlockingLock}{00051}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1common_1_1BlockingLock}{BlockingLock}}\ \{}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_locked\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Vector<uint64\_t>}}\ m\_queue;}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ must\_spin();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1BlockingLock}{BlockingLock}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1BlockingLock}{\string~BlockingLock}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1BlockingLock_a3fec6b869fbd73076b49eb2a0b3fae76}{lock}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1BlockingLock_a974725bf2e5c5974dbe1f6c26afe4cd5}{unlock}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1BlockingLock_a9b29279b6e3937039de90a28bc929fcb}{is\_locked}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1BlockingLock_a24c5d9622cba654d5fe9f0847dc69e6a}{acquire}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1BlockingLock_a4788428e37a15a97720b44719e238c49}{release}}();}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00070}00070\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00074}00074\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00076}00076\ \}}
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{spinlock_8h_source_l00078}00078\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MAXOS\_COMMON\_SPINLOCK\_H}}
 
 \end{DoxyCode}

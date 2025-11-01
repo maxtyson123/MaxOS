@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/acpi.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/acpi.h \- Defines an Advanced Configuration And Power Interface (ACPI class for handling ACPI table parsing and retrieval\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -16,6 +17,8 @@
 .br
 \fC#include <memory/memorymanagement\&.h>\fP
 .br
+\fC#include <memory/memoryIO\&.h>\fP
+.br
 \fC#include <memory/physical\&.h>\fP
 .br
 
@@ -25,37 +28,43 @@
 .ti -1c
 .RI "struct \fBMaxOS::hardwarecommunication::RSDPDescriptor\fP"
 .br
+.RI "Root System Description Pointer (RSDP) structure for ACPI 1\&. Ide\&. "
 .ti -1c
 .RI "struct \fBMaxOS::hardwarecommunication::RSDPDescriptor2\fP"
 .br
+.RI "Root System Description Pointer (RSDP) structure for ACPI 2 and above\&. "
 .ti -1c
 .RI "struct \fBMaxOS::hardwarecommunication::ACPISDTHeader\fP"
 .br
+.RI "Common header for all ACPI System Description Tables (SDTs) "
 .ti -1c
 .RI "struct \fBMaxOS::hardwarecommunication::RSDT\fP"
 .br
+.RI "Root System Description Table (\fBRSDT\fP) structure for ACPI 1\&. Contains the header and an array of pointers to other SDTs\&. "
 .ti -1c
 .RI "struct \fBMaxOS::hardwarecommunication::XSDT\fP"
 .br
+.RI "Extended System Description Table (\fBXSDT\fP) structure for ACPI 2 and above\&. Contains the header and an array of pointers to other SDTs\&. "
 .ti -1c
 .RI "class \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface\fP"
 .br
+.RI "Handles ACPI table parsing and retrieval\&. "
 .in -1c
-.SS "Namespaces"
+.SS "Typedefs"
 
 .in +1c
 .ti -1c
-.RI "namespace \fBMaxOS\fP"
+.RI "typedef struct \fBMaxOS::hardwarecommunication::RSDT\fP \fBMaxOS::hardwarecommunication::rsdt_t\fP"
 .br
 .ti -1c
-.RI "namespace \fBMaxOS::hardwarecommunication\fP"
+.RI "typedef struct \fBMaxOS::hardwarecommunication::XSDT\fP \fBMaxOS::hardwarecommunication::xsdt_t\fP"
 .br
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::hardwarecommunication::RSDPDescriptor\fP \fBMaxOS::hardwarecommunication::__attribute__\fP ((packed))"
+.RI "struct \fBMaxOS::hardwarecommunication::RSDPDescriptor\fP \fBMaxOS::hardwarecommunication::__attribute__\fP ((packed)) rsdp_descriptor_t"
 .br
 .in -1c
 .SS "Variables"
@@ -64,112 +73,180 @@
 .ti -1c
 .RI "char \fBsignature\fP [8]"
 .br
+.RI "Indicates a valid RSDP structure if it contains 'RSD PTR ' (null-terminated) "
 .ti -1c
 .RI "uint8_t \fBchecksum\fP"
 .br
+.RI "This byte added to all bytes in the table must equal zero for the table to be valid\&. "
 .ti -1c
 .RI "char \fBOEMID\fP [6]"
 .br
+.RI "A string supplied by the OEM to identify the OEM\&. "
 .ti -1c
 .RI "uint8_t \fBrevision\fP"
 .br
+.RI "The version of the ACPI specification that is supported (higher means more features and is backwards compatible) "
 .ti -1c
 .RI "uint32_t \fBrsdt_address\fP"
 .br
+.RI "The physical address of the RSDT (\&. "
 .ti -1c
-.RI "RSDPDescriptor \fBfirstPart\fP"
+.RI "RSDPDescriptor \fBversion_1_info\fP"
 .br
+.RI "The ACPI 1 RSDP structure (see rsdp_descriptor_t) "
 .ti -1c
 .RI "uint32_t \fBlength\fP"
 .br
+.RI "The total length of the RSDP structure (including the version 1 part) "
 .ti -1c
 .RI "uint64_t \fBxsdt_address\fP"
 .br
+.RI "The physical address of the XSDT\&. "
 .ti -1c
 .RI "uint8_t \fBextended_checksum\fP"
 .br
+.RI "This byte added to all bytes in the table must equal zero for the table to be valid (including the version 1 part) "
 .ti -1c
 .RI "uint8_t \fBreserved\fP [3]"
 .br
+.RI "Reserved, must be zero\&. "
 .ti -1c
 .RI "char \fBOEM_id\fP [6]"
 .br
+.RI "A string supplied by the OEM to identify the OEM\&. "
 .ti -1c
 .RI "char \fBOEM_table_id\fP [8]"
 .br
+.RI "A string supplied by the OEM to identify the particular table\&. "
 .ti -1c
 .RI "uint32_t \fBOEM_revision\fP"
 .br
+.RI "The revision number of the table as supplied by the OEM\&. "
 .ti -1c
 .RI "uint32_t \fBcreator_id\fP"
 .br
+.RI "A vendor ID of the utility that created the table\&. "
 .ti -1c
 .RI "uint32_t \fBcreator_revision\fP"
 .br
-.ti -1c
-.RI "struct \fBMaxOS::hardwarecommunication::RSDT\fP \fBMaxOS::hardwarecommunication::__attribute__\fP"
-.br
+.RI "The revision number of the utility that created the table\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines an Advanced Configuration And Power Interface (ACPI class for handling ACPI table parsing and retrieval\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+18th January 2024 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBacpi\&.h\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "uint8_t checksum"
 
 .PP
+This byte added to all bytes in the table must equal zero for the table to be valid\&. This byte added to all bytes in the table must equal zero mod 0x100 for the table to be valid (including the header) 
+.PP
 Definition at line \fB1\fP of file \fBacpi\&.h\fP\&.
 .SS "uint32_t creator_id"
 
+.PP
+A vendor ID of the utility that created the table\&. 
 .PP
 Definition at line \fB7\fP of file \fBacpi\&.h\fP\&.
 .SS "uint32_t creator_revision"
 
 .PP
+The revision number of the utility that created the table\&. 
+.PP
 Definition at line \fB8\fP of file \fBacpi\&.h\fP\&.
 .SS "uint8_t extended_checksum"
 
 .PP
-Definition at line \fB3\fP of file \fBacpi\&.h\fP\&.
-.SS "RSDPDescriptor firstPart"
-
+This byte added to all bytes in the table must equal zero for the table to be valid (including the version 1 part) 
 .PP
-Definition at line \fB0\fP of file \fBacpi\&.h\fP\&.
+Definition at line \fB3\fP of file \fBacpi\&.h\fP\&.
 .SS "uint32_t length"
 
+.PP
+The total length of the RSDP structure (including the version 1 part) The size of the entire table, including the header, in bytes\&. 
 .PP
 Definition at line \fB1\fP of file \fBacpi\&.h\fP\&.
 .SS "char OEM_id[6]"
 
 .PP
+A string supplied by the OEM to identify the OEM\&. 
+.PP
 Definition at line \fB4\fP of file \fBacpi\&.h\fP\&.
 .SS "uint32_t OEM_revision"
 
+.PP
+The revision number of the table as supplied by the OEM\&. 
 .PP
 Definition at line \fB6\fP of file \fBacpi\&.h\fP\&.
 .SS "char OEM_table_id[8]"
 
 .PP
+A string supplied by the OEM to identify the particular table\&. 
+.PP
 Definition at line \fB5\fP of file \fBacpi\&.h\fP\&.
 .SS "char OEMID[6]"
 
+.PP
+A string supplied by the OEM to identify the OEM\&. 
 .PP
 Definition at line \fB2\fP of file \fBacpi\&.h\fP\&.
 .SS "uint8_t reserved[3]"
 
 .PP
+Reserved, must be zero\&. 
+.PP
 Definition at line \fB4\fP of file \fBacpi\&.h\fP\&.
 .SS "uint8_t revision"
 
 .PP
+The version of the ACPI specification that is supported (higher means more features and is backwards compatible) 
+.PP
 Definition at line \fB3\fP of file \fBacpi\&.h\fP\&.
 .SS "uint32_t rsdt_address"
+
+.PP
+The physical address of the RSDT (\&. 
+.PP
+\fBDeprecated\fP
+.RS 4
+in ACPI 2 and above) 
+.RE
+.PP
 
 .PP
 Definition at line \fB4\fP of file \fBacpi\&.h\fP\&.
 .SS "char signature[4]"
 
 .PP
+Indicates a valid RSDP structure if it contains 'RSD PTR ' (null-terminated) The signature that identifies the type of the table\&. 
+.PP
+Definition at line \fB0\fP of file \fBacpi\&.h\fP\&.
+.SS "RSDPDescriptor version_1_info"
+
+.PP
+The ACPI 1 RSDP structure (see rsdp_descriptor_t) 
+.PP
 Definition at line \fB0\fP of file \fBacpi\&.h\fP\&.
 .SS "uint64_t xsdt_address"
 
+.PP
+The physical address of the XSDT\&. 
 .PP
 Definition at line \fB2\fP of file \fBacpi\&.h\fP\&.
 .SH "Author"

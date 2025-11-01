@@ -15,12 +15,6 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP, \fBMaxOS::drivers
 
 .in +1c
 .ti -1c
-.RI "\fBMouseDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~MouseDriver\fP ()"
-.br
-.ti -1c
 .RI "\fBvoid\fP \fBactivate\fP () \fBfinal\fP"
 .br
 .RI "activate the mouse "
@@ -33,19 +27,13 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP, \fBMaxOS::drivers
 Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *\fBstatus\fP)"
+.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .in +1c
-.ti -1c
-.RI "\fBDriver\fP ()"
-.br
-.ti -1c
-.RI "\fB~Driver\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
@@ -67,12 +55,6 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 Public Member Functions inherited from \fBMaxOS::common::EventManager< MouseEvents >\fP
 .in +1c
 .ti -1c
-.RI "\fBEventManager\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventManager\fP ()"
-.br
-.ti -1c
 .RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< MouseEvents > *\fBhandler\fP)"
 .br
 .RI "Connect an event handler to the event manager if it is not already connected\&. "
@@ -93,9 +75,7 @@ Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::Inter
 .ti -1c
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
-.ti -1c
-.RI "\fB~InterruptHandler\fP ()"
-.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
@@ -103,6 +83,7 @@ Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHa
 .ti -1c
 .RI "uint8_t \fBm_interrupt_number\fP"
 .br
+.RI "The interrupt number this handler handles\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::common::EventManager< MouseEvents >\fP
@@ -115,23 +96,21 @@ Protected Attributes inherited from \fBMaxOS::common::EventManager< MouseEvents 
 .PP 
 \fBDriver\fP for the PS/2 mouse, manages the mouse and triggers events when the mouse moves or a button is pressed\&. 
 .PP
-Definition at line \fB83\fP of file \fBmouse\&.h\fP\&.
+Definition at line \fB91\fP of file \fBmouse\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "MouseDriver::MouseDriver ()"
 
 .PP
-Definition at line \fB72\fP of file \fBmouse\&.cpp\fP\&..PP
+Definition at line \fB76\fP of file \fBmouse\&.cpp\fP\&..PP
 .nf
-73 : InterruptHandler(0x2C, 0xC, 0x28),
-74   data_port(0x60),
-75   command_port(0x64)
-76 {
-77 
-78 }
+77 : InterruptHandler(0x2C, 0xC, 0x28),
+78   data_port(0x60),
+79   command_port(0x64)
+80 {
+81 
+82 }
 .fi
-
-.SS "MouseDriver::~MouseDriver ()\fC [default]\fP"
 
 .SH "Member Function Documentation"
 .PP 
@@ -142,30 +121,30 @@ activate the mouse
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB85\fP of file \fBmouse\&.cpp\fP\&..PP
+Definition at line \fB89\fP of file \fBmouse\&.cpp\fP\&..PP
 .nf
-85                            {
-86 
-87     //  Get the current state of the mouse
-88     command_port\&.write(0x20);
-89     uint8_t status = (data_port\&.read() | 2);
+89                            {
 90 
-91     // Write the new state
-92     command_port\&.write(0x60);
-93     data_port\&.write(status);
+91     //  Get the current state of the mouse
+92     command_port\&.write(0x20);
+93     uint8_t status = (data_port\&.read() | 2);
 94 
-95     // Tell the PIC to start listening to the mouse
-96     command_port\&.write(0xAB);
-97 
-98     // Activate the mouse
-99     command_port\&.write(0xD4);
-100     data_port\&.write(0xF4);
-101     data_port\&.read();
-102 }
+95     // Write the new state
+96     command_port\&.write(0x60);
+97     data_port\&.write(status);
+98 
+99     // Tell the PIC to start listening to the mouse
+100     command_port\&.write(0xAB);
+101 
+102     // Activate the mouse
+103     command_port\&.write(0xD4);
+104     data_port\&.write(0xF4);
+105     data_port\&.read();
+106 }
 .fi
 
 .PP
-References \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, \fBstatus\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
+References \fBMaxOS::hardwarecommunication::Port8Bit::read()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
 .SS "\fBstring\fP MouseDriver::device_name ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -180,11 +159,11 @@ The name of the device
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB149\fP of file \fBmouse\&.cpp\fP\&..PP
+Definition at line \fB153\fP of file \fBmouse\&.cpp\fP\&..PP
 .nf
-149                                 {
-150     return "Mouse";
-151 }
+153                                 {
+154     return "Mouse";
+155 }
 .fi
 
 

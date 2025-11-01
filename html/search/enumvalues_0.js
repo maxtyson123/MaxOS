@@ -1,26 +1,4 @@
 var searchData=
 [
-  ['a_0',['a',['../classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a345f23d5e9acfe6791e344b9595bc12ba7fc56270e7a70fa81a5935b72eacbe29',1,'MaxOS::drivers::peripherals::KeyboardInterpreterEN_US::A'],['../namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca7fc56270e7a70fa81a5935b72eacbe29',1,'MaxOS::drivers::peripherals::A'],['../namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca0cc175b9c0f1b6a831c399e269772661',1,'MaxOS::drivers::peripherals::a']]],
-  ['aarch64_1',['AArch64',['../namespaceMaxOS_1_1processes.html#ac453fd96e7e31d6aa7a874864dfc684ba0f05bd9930180f42a54b2286d8f182e0',1,'MaxOS::processes']]],
-  ['abiversion_2',['ABIVersion',['../namespaceMaxOS_1_1processes.html#a734e55c04254d19fb5117cd0d67ded73a3fe7734eaf1ba7c90c05860c1fc956a7',1,'MaxOS::processes']]],
-  ['accessed_3',['Accessed',['../namespaceMaxOS_1_1memory.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebad0ebc4bf82b25d2ba050127787514d37',1,'MaxOS::memory']]],
-  ['ack_4',['ACK',['../namespaceMaxOS_1_1net.html#ab016e1ccae4de3d81a67e8eeef0ba1f5a0fc437bc317835cad5faafc12a83fad5',1,'MaxOS::net']]],
-  ['acpi_5',['ACPI',['../namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba970d747229841c61b3c063fb45baa9e7',1,'MaxOS::system']]],
-  ['adaos_6',['ADAOS',['../namespaceMaxOS_1_1filesystem_1_1partition.html#a2e4fb19c764ea277199e32724975df93a8850d5a578a367edf3be119ae0d43702',1,'MaxOS::filesystem::partition']]],
-  ['aes_7',['AES',['../namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a76b7593457e2ab50befe2dcd63cf388f',1,'MaxOS::system']]],
-  ['afs_5fdirectory_8',['AFS_DIRECTORY',['../namespaceMaxOS_1_1filesystem_1_1format_1_1ext2.html#a258f9509e39ed03a2d919dc581fcf122a2bfc9ddacccaecc4b345ec59c46c0886',1,'MaxOS::filesystem::format::ext2']]],
-  ['afs_5fserver_5finodes_9',['AFS_SERVER_INODES',['../namespaceMaxOS_1_1filesystem_1_1format_1_1ext2.html#a5938bd9fad7c305e304caf42b1a89872a6355a5c002eec7995001f930dab9c6ff',1,'MaxOS::filesystem::format::ext2']]],
-  ['aix_5fdata_10',['AIX_DATA',['../namespaceMaxOS_1_1filesystem_1_1partition.html#a2e4fb19c764ea277199e32724975df93a1e6d2332d6a8040f9cbfe6c416012929',1,'MaxOS::filesystem::partition']]],
-  ['amoeba_5fbad_5fblock_11',['AMOEBA_BAD_BLOCK',['../namespaceMaxOS_1_1filesystem_1_1partition.html#a2e4fb19c764ea277199e32724975df93a611b5184c6b6752f607ed831bc8e225f',1,'MaxOS::filesystem::partition']]],
-  ['andsign_12',['andSign',['../namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebcac4b9716d3da6fde9e25c57e02516895e',1,'MaxOS::drivers::peripherals']]],
-  ['apic_13',['APIC',['../namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abaa545e1cb82e5b040d4cd6afe0e0cea62',1,'MaxOS::system']]],
-  ['apostrophe_14',['apostrophe',['../classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a345f23d5e9acfe6791e344b9595bc12ba5bb3d7fe3608daf56c6301d00c582897',1,'MaxOS::drivers::peripherals::KeyboardInterpreterEN_US::apostrophe'],['../namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca5bb3d7fe3608daf56c6301d00c582897',1,'MaxOS::drivers::peripherals::apostrophe']]],
-  ['append_5fonly_15',['APPEND_ONLY',['../namespaceMaxOS_1_1filesystem_1_1format_1_1ext2.html#a258f9509e39ed03a2d919dc581fcf122a06dbfbaf9bed15a8b8f05bf31003e8a6',1,'MaxOS::filesystem::format::ext2']]],
-  ['archive_16',['ARCHIVE',['../namespaceMaxOS_1_1filesystem_1_1format.html#a7507baa8014895f34c2e559bb7ab38eba71f01f32e90440fd6039511dde69e995',1,'MaxOS::filesystem::format']]],
-  ['arm_17',['ARM',['../namespaceMaxOS_1_1processes.html#ac453fd96e7e31d6aa7a874864dfc684ba47f45e65244c17ec9fa8771a5c6d60e1',1,'MaxOS::processes']]],
-  ['ast_5fsmart_5fsleep_18',['AST_SMART_SLEEP',['../namespaceMaxOS_1_1filesystem_1_1partition.html#a2e4fb19c764ea277199e32724975df93a025feaf4bb173debdd195ed0d261fbec',1,'MaxOS::filesystem::partition']]],
-  ['atntwe32100_19',['ATnTWe32100',['../namespaceMaxOS_1_1processes.html#ac453fd96e7e31d6aa7a874864dfc684ba47fa4cad227c1c297a206f2323a62ec1',1,'MaxOS::processes']]],
-  ['atsign_20',['atSign',['../namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca69dc05146df06f1ddc958a369b4651c9',1,'MaxOS::drivers::peripherals']]],
-  ['attributes_5fextended_21',['ATTRIBUTES_EXTENDED',['../namespaceMaxOS_1_1filesystem_1_1format_1_1ext2.html#a5938bd9fad7c305e304caf42b1a89872a65b18c1cefcadfa27c66f299bcdccaad',1,'MaxOS::filesystem::format::ext2']]],
-  ['avx_22',['AVX',['../namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a4863502abea45861b9ed022e66d66cb2',1,'MaxOS::system']]]
+  ['accessed_0',['ACCESSED',['../physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebae1a6e2c7dbcb7e2396a9ace3cd0f6719',1,'MaxOS::memory']]]
 ];

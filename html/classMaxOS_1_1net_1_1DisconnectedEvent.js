@@ -1,6 +1,5 @@
 var classMaxOS_1_1net_1_1DisconnectedEvent =
 [
-    [ "DisconnectedEvent", "classMaxOS_1_1net_1_1DisconnectedEvent.html#a773480e5ca1f7806febfca805d60d8b2", null ],
-    [ "~DisconnectedEvent", "classMaxOS_1_1net_1_1DisconnectedEvent.html#a7f0b8b321573179207b808f371177061", null ],
-    [ "socket", "classMaxOS_1_1net_1_1DisconnectedEvent.html#ae5883bbc5e14a8edd577a838460204bd", null ]
+    [ "DisconnectedEvent", "classMaxOS_1_1net_1_1DisconnectedEvent.html#ad72f4d8f3f152a7836743ad9799b3c52", null ],
+    [ "socket", "classMaxOS_1_1net_1_1DisconnectedEvent.html#a655d1866ebe52d319eae4c3b58ea7230", null ]
 ];

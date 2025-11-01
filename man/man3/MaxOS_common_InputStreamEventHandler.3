@@ -21,12 +21,15 @@ Inherited by \fBMaxOS::common::InputStreamProcessor< Type, Type >\fP, \fBMaxOS::
 .ti -1c
 .RI "\fB~InputStreamEventHandler\fP ()"
 .br
+.RI "Destroys the \fBInputStreamProcessor\fP and disconnects it from all streams\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBon_stream_read\fP (\fBType\fP)"
 .br
+.RI "Called when data is read from a stream (overridden by subclasses) "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBType\fP > *)"
 .br
+.RI "Called when a stream has finished\&. Removes the stream from the array of streams\&. "
 .in -1c
 .SS "Protected Attributes"
 
@@ -34,6 +37,7 @@ Inherited by \fBMaxOS::common::InputStreamProcessor< Type, Type >\fP, \fBMaxOS::
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< \fBType\fP > * > \fBm_generic_input_streams\fP"
 .br
+.RI "List of streams being observed by this handler\&. "
 .in -1c
 .SS "Friends"
 
@@ -58,13 +62,13 @@ class MaxOS::common::InputStreamEventHandler< Type >"Handles read and end of str
 .PP
 
 .PP
-Definition at line \fB25\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB31\fP of file \fBinputStream\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamEventHandler\fP< \fBType\fP >::InputStreamEventHandler ()\fC [default]\fP"
 
 .PP
-_______________________________________________TEMPLATES_________________________________________________________________/// @breif Creates a new \fBInputStreamProcessor\fP
+_______________________________________________TEMPLATES_________________________________________________________________/// Creates a new \fBInputStreamProcessor\fP
 .PP
 \fBTemplate Parameters\fP
 .RS 4
@@ -73,7 +77,9 @@ _______________________________________________TEMPLATES________________________
 .PP
 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamEventHandler\fP< \fBType\fP >::~\fBInputStreamEventHandler\fP ()"
-@breif Destroys the \fBInputStreamProcessor\fP and disconnects it from all streams
+
+.PP
+Destroys the \fBInputStreamProcessor\fP and disconnects it from all streams\&. 
 .PP
 \fBTemplate Parameters\fP
 .RS 4
@@ -82,21 +88,23 @@ _______________________________________________TEMPLATES________________________
 .PP
 
 .PP
-Definition at line \fB148\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB168\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-148                                                                                      {
-149 
-150             // Disconnect the handler from all streams
-151             while(!m_generic_input_streams\&.empty())
-152               (*m_generic_input_streams\&.begin()) \-> disconnect_input_stream_event_handler(this);
-153 
-154         }
+168                                                                                      {
+169 
+170             // Disconnect the handler from all streams
+171             while(!m_generic_input_streams\&.empty())
+172               (*m_generic_input_streams\&.begin()) \-> disconnect_input_stream_event_handler(this);
+173 
+174         }
 .fi
 
 .SH "Member Function Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::InputStreamEventHandler\fP< \fBType\fP >::on_end_of_stream (\fBGenericInputStream\fP< \fBType\fP > * stream)\fC [virtual]\fP"
-@breif Called when a stream has finished\&. Removes the stream from the array of streams
+
+.PP
+Called when a stream has finished\&. Removes the stream from the array of streams\&. 
 .PP
 \fBTemplate Parameters\fP
 .RS 4
@@ -112,39 +120,36 @@ Definition at line \fB148\fP of file \fBinputStream\&.h\fP\&..PP
 .PP
 Reimplemented in \fBMaxOS::common::GenericOutputStream< string >\fP, \fBMaxOS::common::InputStreamProcessor< string, string >\fP, \fBMaxOS::common::InputStreamBuffer< Type >\fP, \fBMaxOS::common::GenericOutputStream< Type >\fP, \fBMaxOS::common::InputStreamProcessor< Type, ProcessorType >\fP, \fBMaxOS::common::InputStreamProcessor< Type, Type * >\fP, and \fBMaxOS::common::InputStreamProcessor< Type, Type >\fP\&.
 .PP
-Definition at line \fB172\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB191\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-172                                                                                                                   {
-173 
-174             // Remove the stream
-175             m_generic_input_streams\&.erase(stream);
-176         }
+191                                                                                                                   {
+192 
+193             // Remove the stream
+194             m_generic_input_streams\&.erase(stream);
+195         }
 .fi
 
 .PP
 Referenced by \fBMaxOS::common::GenericInputStream< Type >::disconnect_input_stream_event_handler()\fP, and \fBMaxOS::common::InputStreamProcessor< Type, ProcessorType >::on_end_of_stream()\fP\&.
 .SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::InputStreamEventHandler\fP< \fBType\fP >::on_stream_read (\fBType\fP)\fC [virtual]\fP"
-@breif Called when data is read from a stream (overridden by subclasses)
+
+.PP
+Called when data is read from a stream (overridden by subclasses) 
 .PP
 \fBTemplate Parameters\fP
 .RS 4
 \fIType\fP the type of data the stream is handling 
 .RE
 .PP
-\fBParameters\fP
-.RS 4
-\fIread_element\fP The element that was read from the stream 
-.RE
-.PP
 
 .PP
 Reimplemented in \fBMaxOS::common::GenericOutputStream< string >\fP, \fBMaxOS::common::InputStreamSocket< Type >\fP, \fBMaxOS::common::InputStreamBuffer< Type >\fP, and \fBMaxOS::common::GenericOutputStream< Type >\fP\&.
 .PP
-Definition at line \fB162\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB181\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-162                                                                                     {
-163 
-164         }
+181                                                                                     {
+182 
+183         }
 .fi
 
 .PP
@@ -154,13 +159,15 @@ Referenced by \fBMaxOS::common::InputStreamBuffer< Type >::flush()\fP\&.
 .SS "template<\fBclass\fP \fBType\fP > \fBfriend\fP \fBclass\fP \fBGenericInputStream\fP< \fBType\fP >\fC [friend]\fP"
 
 .PP
-Definition at line \fB408\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB427\fP of file \fBinputStream\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBcommon::Vector\fP<\fBGenericInputStream\fP<\fBType\fP>*> \fBMaxOS::common::InputStreamEventHandler\fP< \fBType\fP >::m_generic_input_streams\fC [protected]\fP"
 
 .PP
-Definition at line \fB30\fP of file \fBinputStream\&.h\fP\&.
+List of streams being observed by this handler\&. 
+.PP
+Definition at line \fB36\fP of file \fBinputStream\&.h\fP\&.
 
 .SH "Author"
 .PP 

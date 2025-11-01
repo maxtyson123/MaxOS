@@ -15,12 +15,6 @@ Inherited by \fBMaxOS::filesystem::format::Fat32FileSystem\fP, and \fBMaxOS::fil
 
 .in +1c
 .ti -1c
-.RI "\fBFileSystem\fP ()"
-.br
-.ti -1c
-.RI "\fBvirtual\fP \fB~FileSystem\fP ()"
-.br
-.ti -1c
 .RI "\fBDirectory\fP * \fBroot_directory\fP ()"
 .br
 .RI "Get the directory at '/'\&. "
@@ -39,31 +33,28 @@ Inherited by \fBMaxOS::filesystem::format::Fat32FileSystem\fP, and \fBMaxOS::fil
 .ti -1c
 .RI "\fBDirectory\fP * \fBm_root_directory\fP"
 .br
+.RI "The fist directory in the file system (not be confused with the system root) "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles the disk operations and file system information\&. 
 .PP
-Definition at line \fB96\fP of file \fBfilesystem\&.h\fP\&.
+Definition at line \fB100\fP of file \fBfilesystem\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "FileSystem::FileSystem ()\fC [default]\fP"
-
 .SS "FileSystem::~FileSystem ()\fC [virtual]\fP"
 
 .PP
-Definition at line \fB275\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB279\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-275                         {
-276 
-277     // Free the root directory
-278     delete m_root_directory;
-279 
-280 };
+279                         {
+280 
+281     // Free the root directory
+282     delete m_root_directory;
+283 
+284 };
 .fi
 
-.PP
-References \fBm_root_directory\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBbool\fP FileSystem::exists (\fBconst\fP \fBstring\fP & path)"
@@ -83,22 +74,22 @@ True if the path exists, false otherwise
 .PP
 
 .PP
-Definition at line \fB332\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB336\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-332                                           {
-333 
-334     // Get the directory at the path
-335     string directory_path = Path::file_path(path);
-336     Directory* directory = get_directory(directory_path);
+336                                           {
 337 
-338     // Check if the directory exists
-339     if (!directory)
-340         return false;
+338     // Get the directory at the path
+339     string directory_path = Path::file_path(path);
+340     Directory* directory = get_directory(directory_path);
 341 
-342     // Check if the file exists
-343     const string file_name = Path::file_name(path);
-344     return directory\->open_file(file_name) != nullptr;
-345 }
+342     // Check if the directory exists
+343     if (!directory)
+344         return false;
+345 
+346     // Check if the file exists
+347     const string file_name = Path::file_name(path);
+348     return directory\->open_file(file_name) != nullptr;
+349 }
 .fi
 
 .PP
@@ -120,36 +111,36 @@ The directory object or null if it could not be opened
 .PP
 
 .PP
-Definition at line \fB297\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB301\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-297                                                        {
-298 
-299     // Check if the path is the root
-300     if (path == "/")
-301         return root_directory();
+301                                                        {
 302 
-303     // Recursively open the directory
-304     Directory* directory = root_directory();
-305     string directory_path = path;
-306     while (directory_path\&.length() > 0) {
-307 
-308         // Get the name of the directory
-309         string directory_name = Path::top_directory(directory_path);
-310 
-311         // Open the directory
-312         Directory* subdirectory = directory\->open_subdirectory(directory_name);
-313         if (!subdirectory)
-314             return nullptr;
-315 
-316         // Set the new directory
-317         directory = subdirectory;
-318 
-319         // Get the path to the next directory
-320         directory_path = directory_path\&.substring(directory_name\&.length() + 1, directory_path\&.length() \- directory_name\&.length() \- 1);
-321     }
+303     // Check if the path is the root
+304     if (path == "/")
+305         return root_directory();
+306 
+307     // Recursively open the directory
+308     Directory* directory = root_directory();
+309     string directory_path = path;
+310     while (directory_path\&.length() > 0) {
+311 
+312         // Get the name of the directory
+313         string directory_name = Path::top_directory(directory_path);
+314 
+315         // Open the directory
+316         Directory* subdirectory = directory\->open_subdirectory(directory_name);
+317         if (!subdirectory)
+318             return nullptr;
+319 
+320         // Set the new directory
+321         directory = subdirectory;
 322 
-323     return directory;
-324 }
+323         // Get the path to the next directory
+324         directory_path = directory_path\&.substring(directory_name\&.length() + 1, directory_path\&.length() \- directory_name\&.length() \- 1);
+325     }
+326 
+327     return directory;
+328 }
 .fi
 
 .PP
@@ -168,11 +159,11 @@ The root directory of the filesystem
 .PP
 
 .PP
-Definition at line \fB287\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB291\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-287                                       {
-288     return m_root_directory;
-289 }
+291                                       {
+292     return m_root_directory;
+293 }
 .fi
 
 .PP
@@ -184,9 +175,11 @@ Referenced by \fBget_directory()\fP\&.
 .SS "\fBDirectory\fP* MaxOS::filesystem::FileSystem::m_root_directory\fC [protected]\fP"
 
 .PP
-Definition at line \fB99\fP of file \fBfilesystem\&.h\fP\&.
+The fist directory in the file system (not be confused with the system root) 
 .PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2FileSystem::Ext2FileSystem()\fP, \fBMaxOS::filesystem::format::Fat32FileSystem::Fat32FileSystem()\fP, \fBroot_directory()\fP, \fBMaxOS::filesystem::format::ext2::Ext2FileSystem::~Ext2FileSystem()\fP, and \fB~FileSystem()\fP\&.
+Definition at line \fB103\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2FileSystem::Ext2FileSystem()\fP, \fBMaxOS::filesystem::format::Fat32FileSystem::Fat32FileSystem()\fP, and \fBroot_directory()\fP\&.
 
 .SH "Author"
 .PP 

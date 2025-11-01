@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController
+MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController \- Handles both the Local APIC (boot core) and IO APIC\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,9 +15,7 @@ MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController
 .ti -1c
 .RI "\fBAdvancedProgrammableInterruptController\fP (\fBAdvancedConfigurationAndPowerInterface\fP *acpi)"
 .br
-.ti -1c
-.RI "\fB~AdvancedProgrammableInterruptController\fP ()"
-.br
+.RI "Construct a new Advanced Programmable Interrupt Controller object and initialises the Local APIC and IO APIC, disabling the legacy PIC\&. "
 .ti -1c
 .RI "\fBLocalAPIC\fP * \fBlocal_apic\fP () const"
 .br
@@ -26,124 +25,77 @@ MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController
 .br
 .RI "Get the io apic\&. "
 .in -1c
-.SS "Protected Member Functions"
-
-.in +1c
-.ti -1c
-.RI "void \fBdisable_pic\fP ()"
-.br
-.RI "Disable the legacy PIC to prevent it from sending interrupts\&. "
-.in -1c
-.SS "Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "\fBLocalAPIC\fP * \fBm_local_apic\fP"
-.br
-.ti -1c
-.RI "\fBIOAPIC\fP * \fBm_io_apic\fP"
-.br
-.ti -1c
-.RI "\fBPort8BitSlow\fP \fBm_pic_master_command_port\fP"
-.br
-.ti -1c
-.RI "\fBPort8BitSlow\fP \fBm_pic_master_data_port\fP"
-.br
-.ti -1c
-.RI "\fBPort8BitSlow\fP \fBm_pic_slave_command_port\fP"
-.br
-.ti -1c
-.RI "\fBPort8BitSlow\fP \fBm_pic_slave_data_port\fP"
-.br
-.in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB120\fP of file \fBapic\&.h\fP\&.
+Handles both the Local APIC (boot core) and IO APIC\&. 
+
+
+.PP
+\fBTodo\fP
+.RS 4
+Should either handle all Local APICs or none (only boot core right now, others accessed per core directly which is inconsistent) 
+.RE
+.PP
+
+.PP
+Definition at line \fB203\fP of file \fBapic\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController (\fBAdvancedConfigurationAndPowerInterface\fP * acpi)"
 
 .PP
-Definition at line \fB332\fP of file \fBapic\&.cpp\fP\&..PP
+Construct a new Advanced Programmable Interrupt Controller object and initialises the Local APIC and IO APIC, disabling the legacy PIC\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIacpi\fP The ACPI interface to get the \fBMADT\fP from 
+.RE
+.PP
+
+.PP
+Definition at line \fB412\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-333 : m_pic_master_command_port(0x20),
-334   m_pic_master_data_port(0x21),
-335   m_pic_slave_command_port(0xA0),
-336   m_pic_slave_data_port(0xA1)
-337 {
-338 
-339     // Register this APIC
-340     Logger::INFO() << "Setting up APIC\\n";
-341     InterruptManager::active_interrupt_manager()\->set_apic(this);
-342 
-343     // Init the Local APIC
-344     Logger::DEBUG() << "Initialising Local APIC\\n";
-345     m_local_apic = new LocalAPIC();
-346 
-347     // Disable the legacy mode PIC
-348     Logger::DEBUG() << "Disabling PIC\\n";
-349     disable_pic();
-350 
-351     // Init the IO APIC
-352     Logger::DEBUG() << "Initialising IO APIC\\n";
-353     m_io_apic = new IOAPIC(acpi);
-354 }
+413 : m_pic_master_command_port(0x20),
+414   m_pic_master_data_port(0x21),
+415   m_pic_slave_command_port(0xA0),
+416   m_pic_slave_data_port(0xA1)
+417 {
+418 
+419     // Register this APIC
+420     Logger::INFO() << "Setting up APIC\\n";
+421     InterruptManager::active_interrupt_manager()\->set_apic(this);
+422 
+423     // Init the Local APIC
+424     Logger::DEBUG() << "Initialising Local APIC\\n";
+425     m_local_apic = new LocalAPIC();
+426 
+427     // Disable the legacy mode PIC
+428     Logger::DEBUG() << "Disabling PIC\\n";
+429     disable_pic();
+430 
+431     // Init the IO APIC
+432     Logger::DEBUG() << "Initialising IO APIC\\n";
+433     m_io_apic = new IOAPIC(acpi);
+434 }
 .fi
 
 .PP
-References \fBMaxOS::hardwarecommunication::InterruptManager::active_interrupt_manager()\fP, \fBLogger::DEBUG()\fP, \fBdisable_pic()\fP, \fBLogger::INFO()\fP, \fBm_io_apic\fP, \fBm_local_apic\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::set_apic()\fP\&.
+References \fBMaxOS::hardwarecommunication::InterruptManager::active_interrupt_manager()\fP, \fBLogger::DEBUG()\fP, \fBLogger::INFO()\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::set_apic()\fP\&.
 .SS "AdvancedProgrammableInterruptController::~AdvancedProgrammableInterruptController ()"
 
 .PP
-Definition at line \fB356\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB436\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-356                                                                                   {
-357 
-358     // Free the memory
-359     delete m_local_apic;
-360     delete m_io_apic;
-361 }
+436                                                                                   {
+437 
+438     // Free the memory
+439     delete m_local_apic;
+440     delete m_io_apic;
+441 }
 .fi
 
-.PP
-References \fBm_io_apic\fP, and \fBm_local_apic\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "void AdvancedProgrammableInterruptController::disable_pic ()\fC [protected]\fP"
-
-.PP
-Disable the legacy PIC to prevent it from sending interrupts\&. 
-.PP
-Definition at line \fB366\fP of file \fBapic\&.cpp\fP\&..PP
-.nf
-366                                                           {
-367 
-368     // Initialise the PIC
-369     m_pic_master_command_port\&.write(0x11);
-370     m_pic_slave_command_port\&.write(0x11);
-371 
-372     // Set the offsets
-373     m_pic_master_data_port\&.write(0x20);
-374     m_pic_slave_data_port\&.write(0x28);
-375 
-376     // Set the slave/master relationships
-377     m_pic_master_data_port\&.write(0x04);
-378     m_pic_slave_data_port\&.write(0x02);
-379 
-380     // Set the modes (8086/8086)
-381     m_pic_master_data_port\&.write(0x01);
-382     m_pic_slave_data_port\&.write(0x01);
-383 
-384     // Mask the interrupts
-385     m_pic_master_data_port\&.write(0xFF);
-386     m_pic_slave_data_port\&.write(0xFF);
-387 }
-.fi
-
-.PP
-References \fBm_pic_master_command_port\fP, \fBm_pic_master_data_port\fP, \fBm_pic_slave_command_port\fP, \fBm_pic_slave_data_port\fP, and \fBMaxOS::hardwarecommunication::Port8BitSlow::write()\fP\&.
-.PP
-Referenced by \fBAdvancedProgrammableInterruptController()\fP\&.
 .SS "\fBIOAPIC\fP * AdvancedProgrammableInterruptController::io_apic () const"
 
 .PP
@@ -156,16 +108,16 @@ The io apic
 .PP
 
 .PP
-Definition at line \fB404\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB484\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-404                                                                {
-405 
-406     return m_io_apic;
-407 }
+484                                                                {
+485 
+486     return m_io_apic;
+487 }
 .fi
 
 .PP
-References \fBm_io_apic\fP\&.
+Referenced by \fBMaxOS::system::CPU::find_cores()\fP\&.
 .SS "\fBLocalAPIC\fP * AdvancedProgrammableInterruptController::local_apic () const"
 
 .PP
@@ -178,56 +130,16 @@ The local apic
 .PP
 
 .PP
-Definition at line \fB394\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB474\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-394                                                                      {
-395 
-396     return m_local_apic;
-397 }
+474                                                                      {
+475 
+476     return m_local_apic;
+477 }
 .fi
 
 .PP
-References \fBm_local_apic\fP\&.
-.PP
-Referenced by \fBMaxOS::drivers::clock::Clock::calibrate()\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\fP\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "\fBIOAPIC\fP* MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::m_io_apic\fC [protected]\fP"
-
-.PP
-Definition at line \fB124\fP of file \fBapic\&.h\fP\&.
-.PP
-Referenced by \fBAdvancedProgrammableInterruptController()\fP, \fBio_apic()\fP, and \fB~AdvancedProgrammableInterruptController()\fP\&.
-.SS "\fBLocalAPIC\fP* MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::m_local_apic\fC [protected]\fP"
-
-.PP
-Definition at line \fB123\fP of file \fBapic\&.h\fP\&.
-.PP
-Referenced by \fBAdvancedProgrammableInterruptController()\fP, \fBlocal_apic()\fP, and \fB~AdvancedProgrammableInterruptController()\fP\&.
-.SS "\fBPort8BitSlow\fP MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::m_pic_master_command_port\fC [protected]\fP"
-
-.PP
-Definition at line \fB126\fP of file \fBapic\&.h\fP\&.
-.PP
-Referenced by \fBdisable_pic()\fP\&.
-.SS "\fBPort8BitSlow\fP MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::m_pic_master_data_port\fC [protected]\fP"
-
-.PP
-Definition at line \fB127\fP of file \fBapic\&.h\fP\&.
-.PP
-Referenced by \fBdisable_pic()\fP\&.
-.SS "\fBPort8BitSlow\fP MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::m_pic_slave_command_port\fC [protected]\fP"
-
-.PP
-Definition at line \fB128\fP of file \fBapic\&.h\fP\&.
-.PP
-Referenced by \fBdisable_pic()\fP\&.
-.SS "\fBPort8BitSlow\fP MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::m_pic_slave_data_port\fC [protected]\fP"
-
-.PP
-Definition at line \fB129\fP of file \fBapic\&.h\fP\&.
-.PP
-Referenced by \fBdisable_pic()\fP\&.
+Referenced by \fBMaxOS::drivers::clock::Clock::calibrate()\fP, and \fBMaxOS::system::CPU::CPU()\fP\&.
 
 .SH "Author"
 .PP 

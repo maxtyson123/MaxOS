@@ -34,6 +34,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
    </div>
@@ -104,6 +105,9 @@ $(document).ready(function(){initNavTree('memoryIO_8cpp.html',''); initResizable
   <div class="headertitle"><div class="title">memoryIO.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implementation of memory-mapped I/O operations.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;<a class="el" href="memoryIO_8h_source.html">memory/memoryIO.h</a>&gt;</code><br />
 </div>
 <p><a href="memoryIO_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -113,6 +117,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a5d860365491e432b125606a6f8e464bc" id="r_a5d860365491e432b125606a6f8e464bc"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memoryIO_8cpp.html#a5d860365491e432b125606a6f8e464bc">memcpy</a> (void *<a class="el" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>, const void *<a class="el" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a>, uint64_t num)</td></tr>
 <tr class="memdesc:a5d860365491e432b125606a6f8e464bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a block of memory from one location to another.  <br /></td></tr>
 <tr class="separator:a5d860365491e432b125606a6f8e464bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1b3e3155ea52fab09024ec46abeb6d9" id="r_ae1b3e3155ea52fab09024ec46abeb6d9"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memoryIO_8cpp.html#ae1b3e3155ea52fab09024ec46abeb6d9">memset</a> (void *ptr, unsigned char value, uint64_t num)</td></tr>
+<tr class="memdesc:ae1b3e3155ea52fab09024ec46abeb6d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills a block of memory with a specified value.  <br /></td></tr>
+<tr class="separator:ae1b3e3155ea52fab09024ec46abeb6d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af609697d85ef5a91e8be47ffa4c20f94" id="r_af609697d85ef5a91e8be47ffa4c20f94"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memoryIO_8cpp.html#af609697d85ef5a91e8be47ffa4c20f94">memset</a> (void *ptr, uint32_t value, uint64_t num)</td></tr>
 <tr class="memdesc:af609697d85ef5a91e8be47ffa4c20f94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills a block of memory with a specified value.  <br /></td></tr>
 <tr class="separator:af609697d85ef5a91e8be47ffa4c20f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,7 +130,13 @@ Functions</h2></td></tr>
 <tr class="memdesc:a72ee1a94489c3ecc654b0d9d4a70a0d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two blocks of memory.  <br /></td></tr>
 <tr class="separator:a72ee1a94489c3ecc654b0d9d4a70a0d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implementation of memory-mapped I/O operations. </p>
+<dl class="section date"><dt>Date</dt><dd>29th November 2022 </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Max Tyson </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a72ee1a94489c3ecc654b0d9d4a70a0d1" name="a72ee1a94489c3ecc654b0d9d4a70a0d1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a72ee1a94489c3ecc654b0d9d4a70a0d1">&#9670;&#160;</a></span>memcmp()</h2>
 
@@ -167,24 +180,23 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if the blocks of memory are equal, -1 if ptr1 &lt; ptr2, 1 if ptr1 &gt; ptr2 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="memoryIO_8cpp_source.html#l00216">216</a> of file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  216</span>                                                             {</div>
-<div class="line"><span class="lineno">  217</span> </div>
-<div class="line"><span class="lineno">  218</span>    <span class="comment">// Make sure the pointers exist</span></div>
-<div class="line"><span class="lineno">  219</span>    <span class="keywordflow">if</span> (ptr1 == <span class="keyword">nullptr</span> || ptr2 == <span class="keyword">nullptr</span>)</div>
-<div class="line"><span class="lineno">  220</span>        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><span class="lineno">  221</span> </div>
-<div class="line"><span class="lineno">  222</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* p1 = (<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) ptr1;</div>
-<div class="line"><span class="lineno">  223</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* p2 = (<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) ptr2;</div>
-<div class="line"><span class="lineno">  224</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> &lt; num; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>++) {</div>
-<div class="line"><span class="lineno">  225</span>        <span class="keywordflow">if</span> (p1[i] &lt; p2[i])</div>
-<div class="line"><span class="lineno">  226</span>            <span class="keywordflow">return</span> -1;</div>
-<div class="line"><span class="lineno">  227</span>        <span class="keywordflow">if</span> (p1[i] &gt; p2[i])</div>
-<div class="line"><span class="lineno">  228</span>            <span class="keywordflow">return</span> 1;</div>
-<div class="line"><span class="lineno">  229</span>    }</div>
-<div class="line"><span class="lineno">  230</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><span class="lineno">  231</span>}</div>
-<div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">MaxOS::drivers::peripherals::KeyCode::i</a></div><div class="ttdeci">@ i</div></div>
+<p class="definition">Definition at line <a class="el" href="memoryIO_8cpp_source.html#l00265">265</a> of file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  265</span>                                                             {</div>
+<div class="line"><span class="lineno">  266</span> </div>
+<div class="line"><span class="lineno">  267</span>    <span class="comment">// Make sure the pointers exist</span></div>
+<div class="line"><span class="lineno">  268</span>    <span class="keywordflow">if</span> (ptr1 == <span class="keyword">nullptr</span> || ptr2 == <span class="keyword">nullptr</span>)</div>
+<div class="line"><span class="lineno">  269</span>        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><span class="lineno">  270</span> </div>
+<div class="line"><span class="lineno">  271</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* p1 = (<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) ptr1;</div>
+<div class="line"><span class="lineno">  272</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* p2 = (<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) ptr2;</div>
+<div class="line"><span class="lineno">  273</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; num; i++) {</div>
+<div class="line"><span class="lineno">  274</span>        <span class="keywordflow">if</span> (p1[i] &lt; p2[i])</div>
+<div class="line"><span class="lineno">  275</span>            <span class="keywordflow">return</span> -1;</div>
+<div class="line"><span class="lineno">  276</span>        <span class="keywordflow">if</span> (p1[i] &gt; p2[i])</div>
+<div class="line"><span class="lineno">  277</span>            <span class="keywordflow">return</span> 1;</div>
+<div class="line"><span class="lineno">  278</span>    }</div>
+<div class="line"><span class="lineno">  279</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><span class="lineno">  280</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -232,34 +244,34 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The destination </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="memoryIO_8cpp_source.html#l00136">136</a> of file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  136</span>                                                                  {</div>
-<div class="line"><span class="lineno">  137</span> </div>
-<div class="line"><span class="lineno">  138</span>    <span class="comment">// Make sure the source and destination are not the same</span></div>
-<div class="line"><span class="lineno">  139</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a> == <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a>)</div>
-<div class="line"><span class="lineno">  140</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
-<div class="line"><span class="lineno">  141</span> </div>
-<div class="line"><span class="lineno">  142</span>    <span class="comment">// Make sure they exist</span></div>
-<div class="line"><span class="lineno">  143</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a> == <span class="keyword">nullptr</span> || <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a> == <span class="keyword">nullptr</span>)</div>
-<div class="line"><span class="lineno">  144</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
-<div class="line"><span class="lineno">  145</span> </div>
-<div class="line"><span class="lineno">  146</span>    <span class="comment">// Get the source and destination</span></div>
-<div class="line"><span class="lineno">  147</span>    <span class="keyword">auto</span>* dst = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
-<div class="line"><span class="lineno">  148</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* src = (<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a>;</div>
-<div class="line"><span class="lineno">  149</span> </div>
-<div class="line"><span class="lineno">  150</span>    <span class="comment">// Copy the data</span></div>
-<div class="line"><span class="lineno">  151</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> &lt; num; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>++)</div>
-<div class="line"><span class="lineno">  152</span>        dst[i] = src[i];</div>
-<div class="line"><span class="lineno">  153</span> </div>
-<div class="line"><span class="lineno">  154</span>    <span class="comment">// Usefully for easier code writing</span></div>
-<div class="line"><span class="lineno">  155</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
-<div class="line"><span class="lineno">  156</span>}</div>
-<div class="ttc" id="aapic_8h_html_a36a99c772ae64e186f5264a662834eef"><div class="ttname"><a href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a></div><div class="ttdeci">uint8_t source</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00001">apic.h:1</a></div></div>
-<div class="ttc" id="aapic_8h_html_a59b2eeb879f61d30d114944a05683844"><div class="ttname"><a href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a></div><div class="ttdeci">uint64_t destination</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00009">apic.h:9</a></div></div>
+<p class="definition">Definition at line <a class="el" href="memoryIO_8cpp_source.html#l00165">165</a> of file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  165</span>                                                                  {</div>
+<div class="line"><span class="lineno">  166</span> </div>
+<div class="line"><span class="lineno">  167</span>    <span class="comment">// Make sure the source and destination are not the same</span></div>
+<div class="line"><span class="lineno">  168</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a> == <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a>)</div>
+<div class="line"><span class="lineno">  169</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
+<div class="line"><span class="lineno">  170</span> </div>
+<div class="line"><span class="lineno">  171</span>    <span class="comment">// Make sure they exist</span></div>
+<div class="line"><span class="lineno">  172</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a> == <span class="keyword">nullptr</span> || <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a> == <span class="keyword">nullptr</span>)</div>
+<div class="line"><span class="lineno">  173</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
+<div class="line"><span class="lineno">  174</span> </div>
+<div class="line"><span class="lineno">  175</span>    <span class="comment">// Get the source and destination</span></div>
+<div class="line"><span class="lineno">  176</span>    <span class="keyword">auto</span>* dst = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
+<div class="line"><span class="lineno">  177</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* src = (<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a>;</div>
+<div class="line"><span class="lineno">  178</span> </div>
+<div class="line"><span class="lineno">  179</span>    <span class="comment">// Copy the data</span></div>
+<div class="line"><span class="lineno">  180</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; num; i++)</div>
+<div class="line"><span class="lineno">  181</span>        dst[i] = src[i];</div>
+<div class="line"><span class="lineno">  182</span> </div>
+<div class="line"><span class="lineno">  183</span>    <span class="comment">// Usefully for easier code writing</span></div>
+<div class="line"><span class="lineno">  184</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
+<div class="line"><span class="lineno">  185</span>}</div>
+<div class="ttc" id="aapic_8h_html_a36a99c772ae64e186f5264a662834eef"><div class="ttname"><a href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a></div><div class="ttdeci">uint8_t source</div><div class="ttdoc">The interrupt source number on the specified bus.</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00001">apic.h:1</a></div></div>
+<div class="ttc" id="aapic_8h_html_a59b2eeb879f61d30d114944a05683844"><div class="ttname"><a href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a></div><div class="ttdeci">uint64_t destination</div><div class="ttdoc">The core(s) the interrupt should be sent to (interpreted based on destination_mode)</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00009">apic.h:9</a></div></div>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="apic_8h_source.html#l00009">destination</a>, and <a class="el" href="apic_8h_source.html#l00001">source</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="buffer_8cpp_source.html#l00244">MaxOS::common::Buffer::copy_from()</a>, <a class="el" href="buffer_8cpp_source.html#l00259">MaxOS::common::Buffer::copy_from()</a>, <a class="el" href="buffer_8cpp_source.html#l00333">MaxOS::common::Buffer::copy_to()</a>, <a class="el" href="buffer_8cpp_source.html#l00349">MaxOS::common::Buffer::copy_to()</a>, <a class="el" href="ext2_8cpp_source.html#l00015">MaxOS::filesystem::format::ext2::Ext2Volume::Ext2Volume()</a>, <a class="el" href="ipc_8cpp_source.html#l00118">MaxOS::processes::SharedMessageEndpoint::read()</a>, <a class="el" href="buffer_8cpp_source.html#l00097">MaxOS::common::Buffer::resize()</a>, and <a class="el" href="process_8cpp_source.html#l00018">MaxOS::processes::Thread::Thread()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="buffer_8cpp_source.html#l00247">MaxOS::common::Buffer::copy_from()</a>, <a class="el" href="buffer_8cpp_source.html#l00262">MaxOS::common::Buffer::copy_from()</a>, <a class="el" href="buffer_8cpp_source.html#l00336">MaxOS::common::Buffer::copy_to()</a>, <a class="el" href="buffer_8cpp_source.html#l00352">MaxOS::common::Buffer::copy_to()</a>, <a class="el" href="ext2_8cpp_source.html#l00027">MaxOS::filesystem::format::ext2::Ext2Volume::Ext2Volume()</a>, <a class="el" href="ipc_8cpp_source.html#l00133">MaxOS::processes::SharedMessageEndpoint::read()</a>, <a class="el" href="buffer_8cpp_source.html#l00101">MaxOS::common::Buffer::resize()</a>, and <a class="el" href="process_8cpp_source.html#l00021">MaxOS::processes::Thread::Thread()</a>.</p>
 
 </div>
 </div>
@@ -306,37 +318,37 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The destination </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="memoryIO_8cpp_source.html#l00186">186</a> of file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  186</span>                                                                   {</div>
-<div class="line"><span class="lineno">  187</span> </div>
-<div class="line"><span class="lineno">  188</span>    <span class="comment">// Make sure the source and destination are not the same</span></div>
-<div class="line"><span class="lineno">  189</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a> == <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a>)</div>
-<div class="line"><span class="lineno">  190</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
-<div class="line"><span class="lineno">  191</span> </div>
-<div class="line"><span class="lineno">  192</span>    <span class="comment">// Make sure they exist</span></div>
-<div class="line"><span class="lineno">  193</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a> == <span class="keyword">nullptr</span> || <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a> == <span class="keyword">nullptr</span>)</div>
-<div class="line"><span class="lineno">  194</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
-<div class="line"><span class="lineno">  195</span> </div>
-<div class="line"><span class="lineno">  196</span>    <span class="keyword">auto</span>* dst = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
-<div class="line"><span class="lineno">  197</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* src = (<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a>;</div>
-<div class="line"><span class="lineno">  198</span>    <span class="keywordflow">if</span> (dst &lt; src) {</div>
-<div class="line"><span class="lineno">  199</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> &lt; num; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>++)</div>
-<div class="line"><span class="lineno">  200</span>            dst[i] = src[i];</div>
-<div class="line"><span class="lineno">  201</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><span class="lineno">  202</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = num; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> != 0; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>--)</div>
-<div class="line"><span class="lineno">  203</span>            dst[i - 1] = src[i - 1];</div>
-<div class="line"><span class="lineno">  204</span>    }</div>
-<div class="line"><span class="lineno">  205</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
-<div class="line"><span class="lineno">  206</span>}</div>
+<p class="definition">Definition at line <a class="el" href="memoryIO_8cpp_source.html#l00235">235</a> of file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  235</span>                                                                   {</div>
+<div class="line"><span class="lineno">  236</span> </div>
+<div class="line"><span class="lineno">  237</span>    <span class="comment">// Make sure the source and destination are not the same</span></div>
+<div class="line"><span class="lineno">  238</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a> == <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a>)</div>
+<div class="line"><span class="lineno">  239</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
+<div class="line"><span class="lineno">  240</span> </div>
+<div class="line"><span class="lineno">  241</span>    <span class="comment">// Make sure they exist</span></div>
+<div class="line"><span class="lineno">  242</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a> == <span class="keyword">nullptr</span> || <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a> == <span class="keyword">nullptr</span>)</div>
+<div class="line"><span class="lineno">  243</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
+<div class="line"><span class="lineno">  244</span> </div>
+<div class="line"><span class="lineno">  245</span>    <span class="keyword">auto</span>* dst = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
+<div class="line"><span class="lineno">  246</span>    <span class="keyword">const</span> <span class="keyword">auto</span>* src = (<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) <a class="code hl_variable" href="apic_8h.html#a36a99c772ae64e186f5264a662834eef">source</a>;</div>
+<div class="line"><span class="lineno">  247</span>    <span class="keywordflow">if</span> (dst &lt; src) {</div>
+<div class="line"><span class="lineno">  248</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; num; i++)</div>
+<div class="line"><span class="lineno">  249</span>            dst[i] = src[i];</div>
+<div class="line"><span class="lineno">  250</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><span class="lineno">  251</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = num; i != 0; i--)</div>
+<div class="line"><span class="lineno">  252</span>            dst[i - 1] = src[i - 1];</div>
+<div class="line"><span class="lineno">  253</span>    }</div>
+<div class="line"><span class="lineno">  254</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="apic_8h.html#a59b2eeb879f61d30d114944a05683844">destination</a>;</div>
+<div class="line"><span class="lineno">  255</span>}</div>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="apic_8h_source.html#l00009">destination</a>, and <a class="el" href="apic_8h_source.html#l00001">source</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="vesaboot_8cpp_source.html#l00277">MaxOS::drivers::console::VESABootConsole::scroll_up()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="vesaboot_8cpp_source.html#l00294">MaxOS::drivers::console::VESABootConsole::scroll_up()</a>.</p>
 
 </div>
 </div>
 <a id="af609697d85ef5a91e8be47ffa4c20f94" name="af609697d85ef5a91e8be47ffa4c20f94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af609697d85ef5a91e8be47ffa4c20f94">&#9670;&#160;</a></span>memset()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af609697d85ef5a91e8be47ffa4c20f94">&#9670;&#160;</a></span>memset() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -378,21 +390,79 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The pointer to the block of memory </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="memoryIO_8cpp_source.html#l00166">166</a> of file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  166</span>                                                      {</div>
-<div class="line"><span class="lineno">  167</span> </div>
-<div class="line"><span class="lineno">  168</span>    <span class="comment">// Make sure the pointer exists</span></div>
-<div class="line"><span class="lineno">  169</span>    <span class="keywordflow">if</span> (ptr == <span class="keyword">nullptr</span>)</div>
-<div class="line"><span class="lineno">  170</span>        <span class="keywordflow">return</span> ptr;</div>
-<div class="line"><span class="lineno">  171</span> </div>
-<div class="line"><span class="lineno">  172</span>    <span class="keyword">auto</span>* dst = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) ptr;</div>
-<div class="line"><span class="lineno">  173</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> &lt; num; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>++)</div>
-<div class="line"><span class="lineno">  174</span>        dst[i] = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>) value;</div>
-<div class="line"><span class="lineno">  175</span>    <span class="keywordflow">return</span> ptr;</div>
-<div class="line"><span class="lineno">  176</span>}</div>
+<p class="definition">Definition at line <a class="el" href="memoryIO_8cpp_source.html#l00215">215</a> of file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  215</span>                                                      {</div>
+<div class="line"><span class="lineno">  216</span> </div>
+<div class="line"><span class="lineno">  217</span>    <span class="comment">// Make sure the pointer exists</span></div>
+<div class="line"><span class="lineno">  218</span>    <span class="keywordflow">if</span> (ptr == <span class="keyword">nullptr</span>)</div>
+<div class="line"><span class="lineno">  219</span>        <span class="keywordflow">return</span> ptr;</div>
+<div class="line"><span class="lineno">  220</span> </div>
+<div class="line"><span class="lineno">  221</span>    <span class="keyword">auto</span>* dst = (uint32_t*) ptr;</div>
+<div class="line"><span class="lineno">  222</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; num; i++)</div>
+<div class="line"><span class="lineno">  223</span>        dst[i] = value;</div>
+<div class="line"><span class="lineno">  224</span>    <span class="keywordflow">return</span> ptr;</div>
+<div class="line"><span class="lineno">  225</span>}</div>
 </div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="buffer_8cpp_source.html#l00061">MaxOS::common::Buffer::clear()</a>, and <a class="el" href="buffer_8cpp_source.html#l00074">MaxOS::common::Buffer::full()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="buffer_8cpp_source.html#l00065">MaxOS::common::Buffer::clear()</a>, <a class="el" href="buffer_8cpp_source.html#l00078">MaxOS::common::Buffer::full()</a>, and <a class="el" href="vesaboot_8cpp_source.html#l00249">MaxOS::drivers::console::VESABootConsole::print_logo()</a>.</p>
 
+</div>
+</div>
+<a id="ae1b3e3155ea52fab09024ec46abeb6d9" name="ae1b3e3155ea52fab09024ec46abeb6d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1b3e3155ea52fab09024ec46abeb6d9">&#9670;&#160;</a></span>memset() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void * memset </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>num</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fills a block of memory with a specified value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>The pointer to the block of memory </td></tr>
+    <tr><td class="paramname">value</td><td>The value to fill the block of memory with </td></tr>
+    <tr><td class="paramname">num</td><td>The number of bytes to fill </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pointer to the block of memory </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="memoryIO_8cpp_source.html#l00195">195</a> of file <a class="el" href="memoryIO_8cpp_source.html">memoryIO.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  195</span>                                                           {</div>
+<div class="line"><span class="lineno">  196</span> </div>
+<div class="line"><span class="lineno">  197</span>    <span class="comment">// Make sure the pointer exists</span></div>
+<div class="line"><span class="lineno">  198</span>    <span class="keywordflow">if</span> (ptr == <span class="keyword">nullptr</span>)</div>
+<div class="line"><span class="lineno">  199</span>        <span class="keywordflow">return</span> ptr;</div>
+<div class="line"><span class="lineno">  200</span> </div>
+<div class="line"><span class="lineno">  201</span>    <span class="keyword">auto</span>* dst = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*) ptr;</div>
+<div class="line"><span class="lineno">  202</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; num; i++)</div>
+<div class="line"><span class="lineno">  203</span>        dst[i] = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>) value;</div>
+<div class="line"><span class="lineno">  204</span>    <span class="keywordflow">return</span> ptr;</div>
+<div class="line"><span class="lineno">  205</span>}</div>
+</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->

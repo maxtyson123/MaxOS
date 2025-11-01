@@ -1,5 +1,10 @@
 \doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/drivers/peripherals/keyboard.h File Reference}
 \hypertarget{keyboard_8h}{}\label{keyboard_8h}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/peripherals/keyboard.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/peripherals/keyboard.h}}
+
+
+Defines a Keyboard and related classes for handling keyboard input.  
+
+
 {\ttfamily \#include $<$common/map.\+h$>$}\newline
 {\ttfamily \#include $<$common/event\+Handler.\+h$>$}\newline
 {\ttfamily \#include $<$common/input\+Stream.\+h$>$}\newline
@@ -27,225 +32,459 @@ class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpret
 \begin{DoxyCompactList}\small\item\em Interprets the scan codes from the keyboard for the EN\+\_\+\+US keyboard layout. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Driver}}
 \begin{DoxyCompactList}\small\item\em \doxylink{classMaxOS_1_1drivers_1_1Driver}{Driver} for the Keyboard Controller, manages the events and the keyboard state. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Namespaces}
-\begin{DoxyCompactItemize}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS}{Max\+OS}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1drivers}{Max\+OS\+::drivers}}
-\item 
-namespace \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals}{Max\+OS\+::drivers\+::peripherals}}
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a58fa1d0fe070a3f55e3ba46c44a7680e}{Max\+OS\+::drivers\+::peripherals\+::\+Scan\+Code\+Type}} \+: int \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a58fa1d0fe070a3f55e3ba46c44a7680ea820ead78f0fa32544c7ba38fe7ff53d9}{Max\+OS\+::drivers\+::peripherals\+::\+REGULAR}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a58fa1d0fe070a3f55e3ba46c44a7680ea137134e62b2c971eba88c77734c14658}{Max\+OS\+::drivers\+::peripherals\+::\+EXTENDED}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a58fa1d0fe070a3f55e3ba46c44a7680ea30b293c78bc61bb66120d71d54f1661b}{Max\+OS\+::drivers\+::peripherals\+::\+EXTENDED\+\_\+\+BUFFER}}
+enum class {\bfseries Scan\+Code\+Type} \+: int \{ {\bfseries REGULAR}
+, {\bfseries EXTENDED}
+, {\bfseries EXTENDED\+\_\+\+BUFFER}
  \}
 \item 
-enum class \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebc}{Max\+OS\+::drivers\+::peripherals\+::\+Key\+Code}} \+: uint16\+\_\+t \{ \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca7fc56270e7a70fa81a5935b72eacbe29}{Max\+OS\+::drivers\+::peripherals\+::A}} = \textquotesingle{}A\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca0cc175b9c0f1b6a831c399e269772661}{Max\+OS\+::drivers\+::peripherals\+::a}} = \textquotesingle{}a\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9d5ed678fe57bcca610140957afab571}{Max\+OS\+::drivers\+::peripherals\+::B}} = \textquotesingle{}B\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca92eb5ffee6ae2fec3ad71c777531578f}{Max\+OS\+::drivers\+::peripherals\+::b}} = \textquotesingle{}b\textquotesingle{}
+enum class \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{Max\+OS\+::drivers\+::peripherals\+::\+Key\+Code}} \+: uint16\+\_\+t \{ \newline
+{\bfseries A} = \textquotesingle{}A\textquotesingle{}
+, {\bfseries a} = \textquotesingle{}a\textquotesingle{}
+, {\bfseries B} = \textquotesingle{}B\textquotesingle{}
+, {\bfseries b} = \textquotesingle{}b\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca0d61f8370cad1d412f80b84d143e1257}{Max\+OS\+::drivers\+::peripherals\+::C}} = \textquotesingle{}C\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca4a8a08f09d37b73795649038408b5f33}{Max\+OS\+::drivers\+::peripherals\+::c}} = \textquotesingle{}c\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf623e75af30e62bbd73d6df5b50bb7b5}{Max\+OS\+::drivers\+::peripherals\+::D}} = \textquotesingle{}D\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca8277e0910d750195b448797616e091ad}{Max\+OS\+::drivers\+::peripherals\+::d}} = \textquotesingle{}d\textquotesingle{}
+{\bfseries C} = \textquotesingle{}C\textquotesingle{}
+, {\bfseries c} = \textquotesingle{}c\textquotesingle{}
+, {\bfseries D} = \textquotesingle{}D\textquotesingle{}
+, {\bfseries d} = \textquotesingle{}d\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca3a3ea00cfc35332cedf6e5e9a32e94da}{Max\+OS\+::drivers\+::peripherals\+::E}} = \textquotesingle{}E\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcae1671797c52e15f763380b45e841ec32}{Max\+OS\+::drivers\+::peripherals\+::e}} = \textquotesingle{}e\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca800618943025315f869e4e1f09471012}{Max\+OS\+::drivers\+::peripherals\+::F}} = \textquotesingle{}F\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca8fa14cdd754f91cc6554c9e71929cce7}{Max\+OS\+::drivers\+::peripherals\+::f}} = \textquotesingle{}f\textquotesingle{}
+{\bfseries E} = \textquotesingle{}E\textquotesingle{}
+, {\bfseries e} = \textquotesingle{}e\textquotesingle{}
+, {\bfseries F} = \textquotesingle{}F\textquotesingle{}
+, {\bfseries f} = \textquotesingle{}f\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcadfcf28d0734569a6a693bc8194de62bf}{Max\+OS\+::drivers\+::peripherals\+::G}} = \textquotesingle{}G\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcab2f5ff47436671b6e533d8dc3614845d}{Max\+OS\+::drivers\+::peripherals\+::g}} = \textquotesingle{}g\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcac1d9f50f86825a1a2302ec2449c17196}{Max\+OS\+::drivers\+::peripherals\+::H}} = \textquotesingle{}H\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca2510c39011c5be704182423e3a695e91}{Max\+OS\+::drivers\+::peripherals\+::h}} = \textquotesingle{}h\textquotesingle{}
+{\bfseries G} = \textquotesingle{}G\textquotesingle{}
+, {\bfseries g} = \textquotesingle{}g\textquotesingle{}
+, {\bfseries H} = \textquotesingle{}H\textquotesingle{}
+, {\bfseries h} = \textquotesingle{}h\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcadd7536794b63bf90eccfd37f9b147d7f}{Max\+OS\+::drivers\+::peripherals\+::I}} = \textquotesingle{}I\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741}{Max\+OS\+::drivers\+::peripherals\+::i}} = \textquotesingle{}i\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaff44570aca8241914870afbc310cdb85}{Max\+OS\+::drivers\+::peripherals\+::J}} = \textquotesingle{}J\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca363b122c528f54df4a0446b6bab05515}{Max\+OS\+::drivers\+::peripherals\+::j}} = \textquotesingle{}j\textquotesingle{}
+{\bfseries I} = \textquotesingle{}I\textquotesingle{}
+, {\bfseries i} = \textquotesingle{}i\textquotesingle{}
+, {\bfseries J} = \textquotesingle{}J\textquotesingle{}
+, {\bfseries j} = \textquotesingle{}j\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa5f3c6a11b03839d46af9fb43c97c188}{Max\+OS\+::drivers\+::peripherals\+::K}} = \textquotesingle{}K\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca8ce4b16b22b58894aa86c421e8759df3}{Max\+OS\+::drivers\+::peripherals\+::k}} = \textquotesingle{}k\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcad20caec3b48a1eef164cb4ca81ba2587}{Max\+OS\+::drivers\+::peripherals\+::L}} = \textquotesingle{}L\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca2db95e8e1a9267b7a1188556b2013b33}{Max\+OS\+::drivers\+::peripherals\+::l}} = \textquotesingle{}l\textquotesingle{}
+{\bfseries K} = \textquotesingle{}K\textquotesingle{}
+, {\bfseries k} = \textquotesingle{}k\textquotesingle{}
+, {\bfseries L} = \textquotesingle{}L\textquotesingle{}
+, {\bfseries l} = \textquotesingle{}l\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69691c7bdcc3ce6d5d8a1361f22d04ac}{Max\+OS\+::drivers\+::peripherals\+::M}} = \textquotesingle{}M\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca6f8f57715090da2632453988d9a1501b}{Max\+OS\+::drivers\+::peripherals\+::m}} = \textquotesingle{}m\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca8d9c307cb7f3c4a32822a51922d1ceaa}{Max\+OS\+::drivers\+::peripherals\+::N}} = \textquotesingle{}N\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca7b8b965ad4bca0e41ab51de7b31363a1}{Max\+OS\+::drivers\+::peripherals\+::n}} = \textquotesingle{}n\textquotesingle{}
+{\bfseries M} = \textquotesingle{}M\textquotesingle{}
+, {\bfseries m} = \textquotesingle{}m\textquotesingle{}
+, {\bfseries N} = \textquotesingle{}N\textquotesingle{}
+, {\bfseries n} = \textquotesingle{}n\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf186217753c37b9b9f958d906208506e}{Max\+OS\+::drivers\+::peripherals\+::O}} = \textquotesingle{}O\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcad95679752134a2d9eb61dbd7b91c4bcc}{Max\+OS\+::drivers\+::peripherals\+::o}} = \textquotesingle{}o\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca44c29edb103a2872f519ad0c9a0fdaaa}{Max\+OS\+::drivers\+::peripherals\+::P}} = \textquotesingle{}P\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a}{Max\+OS\+::drivers\+::peripherals\+::p}} = \textquotesingle{}p\textquotesingle{}
+{\bfseries O} = \textquotesingle{}O\textquotesingle{}
+, {\bfseries o} = \textquotesingle{}o\textquotesingle{}
+, {\bfseries P} = \textquotesingle{}P\textquotesingle{}
+, {\bfseries p} = \textquotesingle{}p\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf09564c9ca56850d4cd6b3319e541aee}{Max\+OS\+::drivers\+::peripherals\+::Q}} = \textquotesingle{}Q\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca7694f4a66316e53c8cdd9d9954bd611d}{Max\+OS\+::drivers\+::peripherals\+::q}} = \textquotesingle{}q\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcae1e1d3d40573127e9ee0480caf1283d6}{Max\+OS\+::drivers\+::peripherals\+::R}} = \textquotesingle{}R\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca4b43b0aee35624cd95b910189b3dc231}{Max\+OS\+::drivers\+::peripherals\+::r}} = \textquotesingle{}r\textquotesingle{}
+{\bfseries Q} = \textquotesingle{}Q\textquotesingle{}
+, {\bfseries q} = \textquotesingle{}q\textquotesingle{}
+, {\bfseries R} = \textquotesingle{}R\textquotesingle{}
+, {\bfseries r} = \textquotesingle{}r\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5dbc98dcc983a70728bd082d1a47546e}{Max\+OS\+::drivers\+::peripherals\+::S}} = \textquotesingle{}S\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca03c7c0ace395d80182db07ae2c30f034}{Max\+OS\+::drivers\+::peripherals\+::s}} = \textquotesingle{}s\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcab9ece18c950afbfa6b0fdbfa4ff731d3}{Max\+OS\+::drivers\+::peripherals\+::T}} = \textquotesingle{}T\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcae358efa489f58062f10dd7316b65649e}{Max\+OS\+::drivers\+::peripherals\+::t}} = \textquotesingle{}t\textquotesingle{}
+{\bfseries S} = \textquotesingle{}S\textquotesingle{}
+, {\bfseries s} = \textquotesingle{}s\textquotesingle{}
+, {\bfseries T} = \textquotesingle{}T\textquotesingle{}
+, {\bfseries t} = \textquotesingle{}t\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca4c614360da93c0a041b22e537de151eb}{Max\+OS\+::drivers\+::peripherals\+::U}} = \textquotesingle{}U\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca7b774effe4a349c6dd82ad4f4f21d34c}{Max\+OS\+::drivers\+::peripherals\+::u}} = \textquotesingle{}u\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5206560a306a2e085a437fd258eb57ce}{Max\+OS\+::drivers\+::peripherals\+::V}} = \textquotesingle{}V\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9e3669d19b675bd57058fd4664205d2a}{Max\+OS\+::drivers\+::peripherals\+::v}} = \textquotesingle{}v\textquotesingle{}
+{\bfseries U} = \textquotesingle{}U\textquotesingle{}
+, {\bfseries u} = \textquotesingle{}u\textquotesingle{}
+, {\bfseries V} = \textquotesingle{}V\textquotesingle{}
+, {\bfseries v} = \textquotesingle{}v\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca61e9c06ea9a85a5088a499df6458d276}{Max\+OS\+::drivers\+::peripherals\+::W}} = \textquotesingle{}W\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf1290186a5d0b1ceab27f4e77c0c5d68}{Max\+OS\+::drivers\+::peripherals\+::w}} = \textquotesingle{}w\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca02129bb861061d1a052c592e2dc6b383}{Max\+OS\+::drivers\+::peripherals\+::X}} = \textquotesingle{}X\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9dd4e461268c8034f5c8564e155c67a6}{Max\+OS\+::drivers\+::peripherals\+::x}} = \textquotesingle{}x\textquotesingle{}
+{\bfseries W} = \textquotesingle{}W\textquotesingle{}
+, {\bfseries w} = \textquotesingle{}w\textquotesingle{}
+, {\bfseries X} = \textquotesingle{}X\textquotesingle{}
+, {\bfseries x} = \textquotesingle{}x\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca57cec4137b614c87cb4e24a3d003a3e0}{Max\+OS\+::drivers\+::peripherals\+::Y}} = \textquotesingle{}Y\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca415290769594460e2e485922904f345d}{Max\+OS\+::drivers\+::peripherals\+::y}} = \textquotesingle{}y\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca21c2e59531c8710156d34a3c30ac81d5}{Max\+OS\+::drivers\+::peripherals\+::Z}} = \textquotesingle{}Z\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcafbade9e36a3f36d3d676c1b808451dd7}{Max\+OS\+::drivers\+::peripherals\+::z}} = \textquotesingle{}z\textquotesingle{}
+{\bfseries Y} = \textquotesingle{}Y\textquotesingle{}
+, {\bfseries y} = \textquotesingle{}y\textquotesingle{}
+, {\bfseries Z} = \textquotesingle{}Z\textquotesingle{}
+, {\bfseries z} = \textquotesingle{}z\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcad02c4c4cde7ae76252540d116a40f23a}{Max\+OS\+::drivers\+::peripherals\+::zero}} = \textquotesingle{}0\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf97c5d29941bfb1b2fdab0874906ab82}{Max\+OS\+::drivers\+::peripherals\+::one}} = \textquotesingle{}1\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcab8a9f715dbb64fd5c56e7783c6820a61}{Max\+OS\+::drivers\+::peripherals\+::two}} = \textquotesingle{}2\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca35d6d33467aae9a2e3dccb4b6b027878}{Max\+OS\+::drivers\+::peripherals\+::three}} = \textquotesingle{}3\textquotesingle{}
+{\bfseries zero} = \textquotesingle{}0\textquotesingle{}
+, {\bfseries one} = \textquotesingle{}1\textquotesingle{}
+, {\bfseries two} = \textquotesingle{}2\textquotesingle{}
+, {\bfseries three} = \textquotesingle{}3\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca8cbad96aced40b3838dd9f07f6ef5772}{Max\+OS\+::drivers\+::peripherals\+::four}} = \textquotesingle{}4\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca30056e1cab7a61d256fc8edd970d14f5}{Max\+OS\+::drivers\+::peripherals\+::five}} = \textquotesingle{}5\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf52b5e449a2303c031a0c3a1109360bf}{Max\+OS\+::drivers\+::peripherals\+::six}} = \textquotesingle{}6\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcabb3aec0fdcdbc2974890f805c585d432}{Max\+OS\+::drivers\+::peripherals\+::seven}} = \textquotesingle{}7\textquotesingle{}
+{\bfseries four} = \textquotesingle{}4\textquotesingle{}
+, {\bfseries five} = \textquotesingle{}5\textquotesingle{}
+, {\bfseries six} = \textquotesingle{}6\textquotesingle{}
+, {\bfseries seven} = \textquotesingle{}7\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca24d27c169c2c881eb09a065116f2aa5c}{Max\+OS\+::drivers\+::peripherals\+::eight}} = \textquotesingle{}8\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcac785e1ed2950e3e36b1e2ca01f299a54}{Max\+OS\+::drivers\+::peripherals\+::nine}} = \textquotesingle{}9\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcab6d00dc1ba038e5901cd6c06b2daa192}{Max\+OS\+::drivers\+::peripherals\+::comma}} = \textquotesingle{},\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca45bd42bef8c1ddf7bd43be9549bcf232}{Max\+OS\+::drivers\+::peripherals\+::full\+Stop}} = \textquotesingle{}.\textquotesingle{}
+{\bfseries eight} = \textquotesingle{}8\textquotesingle{}
+, {\bfseries nine} = \textquotesingle{}9\textquotesingle{}
+, {\bfseries comma} = \textquotesingle{},\textquotesingle{}
+, {\bfseries full\+Stop} = \textquotesingle{}.\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca0fdde37ae817f7e8eed6687c55d991c4}{Max\+OS\+::drivers\+::peripherals\+::exclamation\+Mark}} = \textquotesingle{}!\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcae74cb12e5379c7272a2c177ba198a950}{Max\+OS\+::drivers\+::peripherals\+::question\+Mark}} = \textquotesingle{}?\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcadb019455fe43ff3f05f835addb30ab28}{Max\+OS\+::drivers\+::peripherals\+::quotation\+Mark}} = \textquotesingle{}\textbackslash{}"{}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca77b7e24bb3642a4b9d3081d393785273}{Max\+OS\+::drivers\+::peripherals\+::semicolon}} = \textquotesingle{};\textquotesingle{}
+{\bfseries exclamation\+Mark} = \textquotesingle{}!\textquotesingle{}
+, {\bfseries question\+Mark} = \textquotesingle{}?\textquotesingle{}
+, {\bfseries quotation\+Mark} = \textquotesingle{}\textbackslash{}"{}\textquotesingle{}
+, {\bfseries semicolon} = \textquotesingle{};\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcacd474d96b7d33934e9dc47b57cb4c445}{Max\+OS\+::drivers\+::peripherals\+::colon}} = \textquotesingle{}\+:\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5bb3d7fe3608daf56c6301d00c582897}{Max\+OS\+::drivers\+::peripherals\+::apostrophe}} = \textquotesingle{}\textbackslash{}\textquotesingle{}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcadb0664a0676d63682ae538f0fe30bc2b}{Max\+OS\+::drivers\+::peripherals\+::slanted\+Apostrophe}} = \textquotesingle{}\`{}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaeb105d772a64870d7e8c094540b55f33}{Max\+OS\+::drivers\+::peripherals\+::power\+Sign}} = \textquotesingle{}\texorpdfstring{$^\wedge$}{\string^}\textquotesingle{}
+{\bfseries colon} = \textquotesingle{}\+:\textquotesingle{}
+, {\bfseries apostrophe} = \textquotesingle{}\textbackslash{}\textquotesingle{}\textquotesingle{}
+, {\bfseries slanted\+Apostrophe} = \textquotesingle{}\`{}\textquotesingle{}
+, {\bfseries power\+Sign} = \textquotesingle{}\texorpdfstring{$^\wedge$}{\string^}\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca6f71e873db400ef8a3a087a6f8d70af8}{Max\+OS\+::drivers\+::peripherals\+::dollar\+Sign}} = \textquotesingle{}\$\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf3b0d7eb99acc93ea58a2751b70b1fe0}{Max\+OS\+::drivers\+::peripherals\+::percent\+Sign}} = \textquotesingle{}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcac4b9716d3da6fde9e25c57e02516895e}{Max\+OS\+::drivers\+::peripherals\+::and\+Sign}} = \textquotesingle{}\&\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca69dc05146df06f1ddc958a369b4651c9}{Max\+OS\+::drivers\+::peripherals\+::at\+Sign}} = \textquotesingle{}@\textquotesingle{}
+{\bfseries dollar\+Sign} = \textquotesingle{}\$\textquotesingle{}
+, {\bfseries percent\+Sign} = \textquotesingle{}\textquotesingle{}
+, {\bfseries and\+Sign} = \textquotesingle{}\&\textquotesingle{}
+, {\bfseries at\+Sign} = \textquotesingle{}@\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcab81453378a0c6e5389111178cf249c11}{Max\+OS\+::drivers\+::peripherals\+::underscore}} = \textquotesingle{}\+\_\+\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca45cbd0d5c1769250caebe9ba67c3e822}{Max\+OS\+::drivers\+::peripherals\+::line\+Thing}} = \textquotesingle{}\texorpdfstring{$\vert$}{|}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca0800fc577294c34e0b28ad2839435945}{Max\+OS\+::drivers\+::peripherals\+::hash}} = \textquotesingle{}\#\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcac57aeddaffce62fead6be61022eb1340}{Max\+OS\+::drivers\+::peripherals\+::backslash}} = \textquotesingle{}\textbackslash{}\textbackslash{}\textquotesingle{}
+{\bfseries underscore} = \textquotesingle{}\+\_\+\textquotesingle{}
+, {\bfseries line\+Thing} = \textquotesingle{}\texorpdfstring{$\vert$}{|}\textquotesingle{}
+, {\bfseries hash} = \textquotesingle{}\#\textquotesingle{}
+, {\bfseries backslash} = \textquotesingle{}\textbackslash{}\textbackslash{}\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca28f1b3c66ddc7fc42d44c108179d79ad}{Max\+OS\+::drivers\+::peripherals\+::forward\+Slash}} = \textquotesingle{}/\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaeb16e67a97f7f742f5bac0bb41d18b2c}{Max\+OS\+::drivers\+::peripherals\+::squiggly\+Line}} = \textquotesingle{}\texorpdfstring{$\sim$}{\string~}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcad7d18cfb3a0d8293e2f5d94ea30e04d2}{Max\+OS\+::drivers\+::peripherals\+::plus}} = \textquotesingle{}+\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcadabe6e597b70e5760826aea1dcc564f7}{Max\+OS\+::drivers\+::peripherals\+::minus}} = \textquotesingle{}-\/\textquotesingle{}
+{\bfseries forward\+Slash} = \textquotesingle{}/\textquotesingle{}
+, {\bfseries squiggly\+Line} = \textquotesingle{}\texorpdfstring{$\sim$}{\string~}\textquotesingle{}
+, {\bfseries plus} = \textquotesingle{}+\textquotesingle{}
+, {\bfseries minus} = \textquotesingle{}-\/\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca51c3f59625962b899c03595d6cdfb284}{Max\+OS\+::drivers\+::peripherals\+::equals}} = \textquotesingle{}=\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca0fbe41b549bb236aabadebd7924379fd}{Max\+OS\+::drivers\+::peripherals\+::multiply}} = \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca780e005c3e913bb8e9c250ac38c3a3f6}{Max\+OS\+::drivers\+::peripherals\+::less\+Than}} = \textquotesingle{}\texorpdfstring{$<$}{<}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca6d86bbcbc6646e952e3b0b2829ad6a23}{Max\+OS\+::drivers\+::peripherals\+::greater\+Than}} = \textquotesingle{}\texorpdfstring{$>$}{>}\textquotesingle{}
+{\bfseries equals} = \textquotesingle{}=\textquotesingle{}
+, {\bfseries multiply} = \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}
+, {\bfseries less\+Than} = \textquotesingle{}\texorpdfstring{$<$}{<}\textquotesingle{}
+, {\bfseries greater\+Than} = \textquotesingle{}\texorpdfstring{$>$}{>}\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf5007c2af95d7f69ddc7d1ed96b401a0}{Max\+OS\+::drivers\+::peripherals\+::open\+Bracket}} = \textquotesingle{}(\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca6ea711d0f6083729a1386418551aed70}{Max\+OS\+::drivers\+::peripherals\+::close\+Bracket}} = \textquotesingle{})\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5dc447d9646bf416ba31c9173113afca}{Max\+OS\+::drivers\+::peripherals\+::open\+Square\+Bracket}} = \textquotesingle{}\mbox{[}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca216501d4faeadf45b136319d2e2caf5c}{Max\+OS\+::drivers\+::peripherals\+::close\+Square\+Bracket}} = \textquotesingle{}\mbox{]}\textquotesingle{}
+{\bfseries open\+Bracket} = \textquotesingle{}(\textquotesingle{}
+, {\bfseries close\+Bracket} = \textquotesingle{})\textquotesingle{}
+, {\bfseries open\+Square\+Bracket} = \textquotesingle{}\mbox{[}\textquotesingle{}
+, {\bfseries close\+Square\+Bracket} = \textquotesingle{}\mbox{]}\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca2fcfa5304a6eef088b6856ba86a4c0d5}{Max\+OS\+::drivers\+::peripherals\+::open\+Curly\+Bracket}} = \textquotesingle{}\{\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca3c673e4cc8d616de0d868f4c353a73fb}{Max\+OS\+::drivers\+::peripherals\+::close\+Curly\+Bracket}} = \textquotesingle{}\}\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaff2364a0be3d20e46cc69efb36afe9a5}{Max\+OS\+::drivers\+::peripherals\+::space}} = \textquotesingle{} \textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcae7f8cbd87d347be881cba92dad128518}{Max\+OS\+::drivers\+::peripherals\+::tab}} = \textquotesingle{}\textbackslash{}t\textquotesingle{}
+{\bfseries open\+Curly\+Bracket} = \textquotesingle{}\{\textquotesingle{}
+, {\bfseries close\+Curly\+Bracket} = \textquotesingle{}\}\textquotesingle{}
+, {\bfseries space} = \textquotesingle{} \textquotesingle{}
+, {\bfseries tab} = \textquotesingle{}\textbackslash{}t\textquotesingle{}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcae2a7106f1cc8bb1e1318df70aa0a3540}{Max\+OS\+::drivers\+::peripherals\+::enter}} = \textquotesingle{}\textbackslash{}n\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5528770f4bce9c9b0ce9bbb8645aef45}{Max\+OS\+::drivers\+::peripherals\+::backspace}} = \textquotesingle{}\textbackslash{}b\textquotesingle{}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}{Max\+OS\+::drivers\+::peripherals\+::f1}} = 1000
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca3667f6a0c97490758d7dc9659d01ea34}{Max\+OS\+::drivers\+::peripherals\+::f2}}
+{\bfseries enter} = \textquotesingle{}\textbackslash{}n\textquotesingle{}
+, {\bfseries backspace} = \textquotesingle{}\textbackslash{}b\textquotesingle{}
+, \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}{f1}} = 1000
+, {\bfseries f2}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca1779cf3aa50c413afc7e05adb7e1b0de}{Max\+OS\+::drivers\+::peripherals\+::f3}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca6e1fcd704528ad8bf6d6bbedb9210096}{Max\+OS\+::drivers\+::peripherals\+::f4}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca74ce2e1a498f2fa27b5542040be774dc}{Max\+OS\+::drivers\+::peripherals\+::f5}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca64e4cda19b3f3ea4a7a56b5ba8cc33ca}{Max\+OS\+::drivers\+::peripherals\+::f6}}
+{\bfseries f3}
+, {\bfseries f4}
+, {\bfseries f5}
+, {\bfseries f6}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca6c664eeed34d9c29a711bdb374831b49}{Max\+OS\+::drivers\+::peripherals\+::f7}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca581c3010417303e1ee4c0657d76318d0}{Max\+OS\+::drivers\+::peripherals\+::f8}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca6506f0388343a1f09fd708fb15c5ade9}{Max\+OS\+::drivers\+::peripherals\+::f9}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca82b5f6802b727b0d948d38cbccd48904}{Max\+OS\+::drivers\+::peripherals\+::f10}}
+{\bfseries f7}
+, {\bfseries f8}
+, {\bfseries f9}
+, {\bfseries f10}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf344a40a52a94ab7903e6b35896b543e}{Max\+OS\+::drivers\+::peripherals\+::f11}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca8039b4e0e6fe78bee7d3e5cfbfa343f0}{Max\+OS\+::drivers\+::peripherals\+::f12}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcae0ebc3c409070d07f1df0f2f4132509e}{Max\+OS\+::drivers\+::peripherals\+::escape}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaacdb7ecd4c6bead64b03c1c7a5f32ae0}{Max\+OS\+::drivers\+::peripherals\+::print\+Screen}}
+{\bfseries f11}
+, {\bfseries f12}
+, {\bfseries escape}
+, {\bfseries print\+Screen}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaabed0c7b8d4f1f9ef5ee4a98d79fd966}{Max\+OS\+::drivers\+::peripherals\+::scroll\+Lock}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca6b667f24d1eea95d4faab496851a4fdf}{Max\+OS\+::drivers\+::peripherals\+::pause\+Break}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca7dda0fb14261325841bc3140841ecfec}{Max\+OS\+::drivers\+::peripherals\+::up\+Arrow}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca749574394f2fe8de9a7494d04785eb05}{Max\+OS\+::drivers\+::peripherals\+::down\+Arrow}}
+{\bfseries scroll\+Lock}
+, {\bfseries pause\+Break}
+, {\bfseries up\+Arrow}
+, {\bfseries down\+Arrow}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca07fb9bf7b5ce76ce6cb6b8097385223f}{Max\+OS\+::drivers\+::peripherals\+::left\+Arrow}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca279ed35099b07322cf4fb6cd9b03c5ec}{Max\+OS\+::drivers\+::peripherals\+::right\+Arrow}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcae0df5f3dfd2650ae5be9993434e2b2c0}{Max\+OS\+::drivers\+::peripherals\+::insert}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca106a6c241b8797f52e1e77317b96a201}{Max\+OS\+::drivers\+::peripherals\+::home}}
+{\bfseries left\+Arrow}
+, {\bfseries right\+Arrow}
+, {\bfseries insert}
+, {\bfseries home}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca725be9ed7b9356d3524cc5ace7c5edbe}{Max\+OS\+::drivers\+::peripherals\+::page\+Up}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcade65f38fcef790828f767ccae8131ae9}{Max\+OS\+::drivers\+::peripherals\+::delete\+Key}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca7f021a1415b86f2d013b2618fb31ae53}{Max\+OS\+::drivers\+::peripherals\+::end}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca438e8b22399eb4fbebef92e978708eab}{Max\+OS\+::drivers\+::peripherals\+::page\+Down}}
+{\bfseries page\+Up}
+, {\bfseries delete\+Key}
+, {\bfseries end}
+, {\bfseries page\+Down}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca7de458398d470d70483d4313f169d808}{Max\+OS\+::drivers\+::peripherals\+::caps\+Lock}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca98db250f900ce3cb56c7443c8e551acf}{Max\+OS\+::drivers\+::peripherals\+::left\+Shift}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca2c11d27214b2b923705a9085cc05b497}{Max\+OS\+::drivers\+::peripherals\+::left\+Control}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca8edeabc5990f7cc7e7967d7b7f7df51b}{Max\+OS\+::drivers\+::peripherals\+::left\+OS}}
+{\bfseries caps\+Lock}
+, {\bfseries left\+Shift}
+, {\bfseries left\+Control}
+, {\bfseries left\+OS}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca6d48226d32af430641eb3bfc76310a5c}{Max\+OS\+::drivers\+::peripherals\+::left\+Alt}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca16ad622e3d5cb16a9a9254a5e0edc492}{Max\+OS\+::drivers\+::peripherals\+::right\+Alt}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca3a74d13ed24405b375a4f083b4604309}{Max\+OS\+::drivers\+::peripherals\+::function\+Key}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9c3cd155974fe8246ff10dcd4318ca27}{Max\+OS\+::drivers\+::peripherals\+::right\+Control}}
+{\bfseries left\+Alt}
+, {\bfseries right\+Alt}
+, {\bfseries function\+Key}
+, {\bfseries right\+Control}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca0c0bc12d401652c550b80b27512b7adf}{Max\+OS\+::drivers\+::peripherals\+::right\+Shift}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca601ce6b026972064a8e661b29ed1610a}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Lock}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaa98f28205e0261e52933f2fbfdd19383}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Forward\+Slash}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca08e837f864266a5299001a7315507004}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Multiply}}
+{\bfseries right\+Shift}
+, {\bfseries number\+Pad\+Lock}
+, {\bfseries number\+Pad\+Forward\+Slash}
+, {\bfseries number\+Pad\+Multiply}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca5ca0a884578a95a7838b3d4e765171f9}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Minus}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca0db74708231063296ce7407c71f73e11}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Plus}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca9dc666580385371b51628789d1566e97}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Enter}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca504697f0f167e467834d1ddc472beb41}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Zero}}
+{\bfseries number\+Pad\+Minus}
+, {\bfseries number\+Pad\+Plus}
+, {\bfseries number\+Pad\+Enter}
+, {\bfseries number\+Pad\+Zero}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf1159f1e540862b74264fb9376ec77e3}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+One}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcad14db271e93db93230108bec259acec7}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Two}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca3afcf1ada27bb30cd35e0183fe930700}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Three}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca7eba5df8df38680bc03d1096030ce712}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Four}}
+{\bfseries number\+Pad\+One}
+, {\bfseries number\+Pad\+Two}
+, {\bfseries number\+Pad\+Three}
+, {\bfseries number\+Pad\+Four}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcad5ee0c8212cadccc48bef3900270249b}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Five}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcabc7341f486aa4280fcc873a1919dd043}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Six}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca0e25c922e7238959d0167f5a09432ff5}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Seven}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaf76851e85b207523e35c48f0cd941c5b}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Eight}}
+{\bfseries number\+Pad\+Five}
+, {\bfseries number\+Pad\+Six}
+, {\bfseries number\+Pad\+Seven}
+, {\bfseries number\+Pad\+Eight}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca73f77cd9aafbc6b22b52bbcf1702569e}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Nine}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcad4bbe4f11d708b29f95a3801a000e8fc}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Full\+Stop}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca65eabd4ef57e333ef62138e9e58fa399}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Home}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcad10316995a81ac2790fb155300bcb1ea}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Page\+Down}}
+{\bfseries number\+Pad\+Nine}
+, {\bfseries number\+Pad\+Full\+Stop}
+, {\bfseries number\+Pad\+Home}
+, {\bfseries number\+Pad\+Page\+Down}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca12f420adef62048e220d49b5e3c8b86f}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Page\+Up}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcadc5938c88f5d1f8ed5f613d11d7bb295}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+End}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcaeb2f5009a35b4394c531d47eefa290c1}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Insert}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca0e3e46f0fe9f2ba103576830203063e6}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Up\+Arrow}}
+{\bfseries number\+Pad\+Page\+Up}
+, {\bfseries number\+Pad\+End}
+, {\bfseries number\+Pad\+Insert}
+, {\bfseries number\+Pad\+Up\+Arrow}
 , \newline
-\mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebca88e13245ab5150093db5eefc8e9e005f}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Down\+Arrow}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcadba659a4e9aa9c1a519a3f50daea4ce4}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Left\+Arrow}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_a891861cdf457ecedb7e3a5fa56515ebcab1202cae38e22d08a1b71c24e296f978}{Max\+OS\+::drivers\+::peripherals\+::number\+Pad\+Right\+Arrow}}
+{\bfseries number\+Pad\+Down\+Arrow}
+, {\bfseries number\+Pad\+Left\+Arrow}
+, {\bfseries number\+Pad\+Right\+Arrow}
  \}
 \item 
-enum \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_add731b6c5a9b8a0f34a4d129d9767554}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Events}} \{ \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_add731b6c5a9b8a0f34a4d129d9767554a2193fd2a05dd69466a012d3b6ea00b43}{Max\+OS\+::drivers\+::peripherals\+::\+KEYDOWN}}
-, \mbox{\hyperlink{namespaceMaxOS_1_1drivers_1_1peripherals_add731b6c5a9b8a0f34a4d129d9767554a0f3fb78dab3d8d32a1c72d3e0798536d}{Max\+OS\+::drivers\+::peripherals\+::\+KEYUP}}
+enum {\bfseries Keyboard\+Events} \{ {\bfseries KEYDOWN}
+, {\bfseries KEYUP}
  \}
 \end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines a Keyboard and related classes for handling keyboard input. 
+
+\begin{DoxyDate}{Date}
+9th October 2022 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{keyboard_8h_add731b6c5a9b8a0f34a4d129d9767554}\label{keyboard_8h_add731b6c5a9b8a0f34a4d129d9767554} 
+\index{keyboard.h@{keyboard.h}!KeyboardEvents@{KeyboardEvents}}
+\index{KeyboardEvents@{KeyboardEvents}!keyboard.h@{keyboard.h}}
+\doxysubsubsection{\texorpdfstring{KeyboardEvents}{KeyboardEvents}}
+{\footnotesize\ttfamily enum Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Events}
+
+
+
+Definition at line \mbox{\hyperlink{keyboard_8h_source_l00229}{229}} of file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KEYDOWN,}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KEYUP}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}\label{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc} 
+\index{keyboard.h@{keyboard.h}!KeyCode@{KeyCode}}
+\index{KeyCode@{KeyCode}!keyboard.h@{keyboard.h}}
+\doxysubsubsection{\texorpdfstring{KeyCode}{KeyCode}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{Max\+OS\+::drivers\+::peripherals\+::\+Key\+Code}} \+: uint16\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{f1@{f1}!keyboard.h@{keyboard.h}}\index{keyboard.h@{keyboard.h}!f1@{f1}}}\Hypertarget{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}\label{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645} 
+f1&OTHER CODES THAT ARE NOT CHARACTERS ///. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line \mbox{\hyperlink{keyboard_8h_source_l00034}{34}} of file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ uint16\_t\ \{}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Alphabet}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ A\ =\ \textcolor{charliteral}{'A'},\ a\ =\ \textcolor{charliteral}{'a'},}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ B\ =\ \textcolor{charliteral}{'B'},\ b\ =\ \textcolor{charliteral}{'b'},}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ C\ =\ \textcolor{charliteral}{'C'},\ c\ =\ \textcolor{charliteral}{'c'},}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ D\ =\ \textcolor{charliteral}{'D'},\ d\ =\ \textcolor{charliteral}{'d'},}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ E\ =\ \textcolor{charliteral}{'E'},\ e\ =\ \textcolor{charliteral}{'e'},}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ =\ \textcolor{charliteral}{'F'},\ f\ =\ \textcolor{charliteral}{'f'},}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ G\ =\ \textcolor{charliteral}{'G'},\ g\ =\ \textcolor{charliteral}{'g'},}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\ =\ \textcolor{charliteral}{'H'},\ h\ =\ \textcolor{charliteral}{'h'},}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ I\ =\ \textcolor{charliteral}{'I'},\ i\ =\ \textcolor{charliteral}{'i'},}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ J\ =\ \textcolor{charliteral}{'J'},\ j\ =\ \textcolor{charliteral}{'j'},}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ K\ =\ \textcolor{charliteral}{'K'},\ k\ =\ \textcolor{charliteral}{'k'},}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ L\ =\ \textcolor{charliteral}{'L'},\ l\ =\ \textcolor{charliteral}{'l'},}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ M\ =\ \textcolor{charliteral}{'M'},\ m\ =\ \textcolor{charliteral}{'m'},}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ N\ =\ \textcolor{charliteral}{'N'},\ n\ =\ \textcolor{charliteral}{'n'},}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ O\ =\ \textcolor{charliteral}{'O'},\ o\ =\ \textcolor{charliteral}{'o'},}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ P\ =\ \textcolor{charliteral}{'P'},\ p\ =\ \textcolor{charliteral}{'p'},}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Q\ =\ \textcolor{charliteral}{'Q'},\ q\ =\ \textcolor{charliteral}{'q'},}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ R\ =\ \textcolor{charliteral}{'R'},\ r\ =\ \textcolor{charliteral}{'r'},}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ S\ =\ \textcolor{charliteral}{'S'},\ s\ =\ \textcolor{charliteral}{'s'},}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ =\ \textcolor{charliteral}{'T'},\ t\ =\ \textcolor{charliteral}{'t'},}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ U\ =\ \textcolor{charliteral}{'U'},\ u\ =\ \textcolor{charliteral}{'u'},}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V\ =\ \textcolor{charliteral}{'V'},\ v\ =\ \textcolor{charliteral}{'v'},}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ W\ =\ \textcolor{charliteral}{'W'},\ w\ =\ \textcolor{charliteral}{'w'},}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ X\ =\ \textcolor{charliteral}{'X'},\ x\ =\ \textcolor{charliteral}{'x'},}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Y\ =\ \textcolor{charliteral}{'Y'},\ y\ =\ \textcolor{charliteral}{'y'},}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Z\ =\ \textcolor{charliteral}{'Z'},\ z\ =\ \textcolor{charliteral}{'z'},}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Numbers}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa}{zero}}\ =\ \textcolor{charliteral}{'0'},}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ one\ =\ \textcolor{charliteral}{'1'},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ two\ =\ \textcolor{charliteral}{'2'},}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ three\ =\ \textcolor{charliteral}{'3'},}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ four\ =\ \textcolor{charliteral}{'4'},}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ five\ =\ \textcolor{charliteral}{'5'},}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ six\ =\ \textcolor{charliteral}{'6'},}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ seven\ =\ \textcolor{charliteral}{'7'},}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eight\ =\ \textcolor{charliteral}{'8'},}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nine\ =\ \textcolor{charliteral}{'9'},}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Symbols}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ comma\ =\ \textcolor{charliteral}{','},}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fullStop\ =\ \textcolor{charliteral}{'.'},}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ exclamationMark\ =\ \textcolor{charliteral}{'!'},}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ questionMark\ =\ \textcolor{charliteral}{'?'},}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ quotationMark\ =\ \textcolor{charliteral}{'\(\backslash\)"{}'},}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ semicolon\ =\ \textcolor{charliteral}{';'},}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ colon\ =\ \textcolor{charliteral}{':'},}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ apostrophe\ =\ \textcolor{charliteral}{'\(\backslash\)''},}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ slantedApostrophe\ =\ \textcolor{charliteral}{'`'},}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Signs}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ powerSign\ =\ \textcolor{charliteral}{'\string^'},}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dollarSign\ =\ \textcolor{charliteral}{'\$'},}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ percentSign\ =\ \textcolor{charliteral}{'\%'},}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ andSign\ =\ \textcolor{charliteral}{'\&'},}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ atSign\ =\ \textcolor{charliteral}{'@'},}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Special\ Characters}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ underscore\ =\ \textcolor{charliteral}{'\_'},}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lineThing\ =\ \textcolor{charliteral}{'|'},}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hash\ =\ \textcolor{charliteral}{'\#'},}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backslash\ =\ \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'},}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ forwardSlash\ =\ \textcolor{charliteral}{'/'},}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ squigglyLine\ =\ \textcolor{charliteral}{'\string~'},}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Math\ Symbols}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ plus\ =\ \textcolor{charliteral}{'+'},}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ minus\ =\ \textcolor{charliteral}{'-\/'},}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ equals\ =\ \textcolor{charliteral}{'='},}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ multiply\ =\ \textcolor{charliteral}{'*'},}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lessThan\ =\ \textcolor{charliteral}{'<'},}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ greaterThan\ =\ \textcolor{charliteral}{'>'},}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Brackets}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openBracket\ =\ \textcolor{charliteral}{'('},}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeBracket\ =\ \textcolor{charliteral}{')'},}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openSquareBracket\ =\ \textcolor{charliteral}{'['},}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeSquareBracket\ =\ \textcolor{charliteral}{']'},}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openCurlyBracket\ =\ \textcolor{charliteral}{'\{'},}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeCurlyBracket\ =\ \textcolor{charliteral}{'\}'},}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Writing}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ space\ =\ \textcolor{charliteral}{'\ '},}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tab\ =\ \textcolor{charliteral}{'\(\backslash\)t'},}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ enter\ =\ \textcolor{charliteral}{'\(\backslash\)n'},}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backspace\ =\ \textcolor{charliteral}{'\(\backslash\)b'},}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Functions}}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}{f1}}\ =\ 1000,\ \ \ \ \ \ \textcolor{comment}{//force\ it\ to\ start\ at\ 1000\ so\ it\ doesn't\ conflict\ with\ ascii}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f2,}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f3,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f4,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f5,}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f6,}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f7,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f8,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f9,}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f10,}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f11,}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f12,}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Top\ Row}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ escape,}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printScreen,}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ scrollLock,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pauseBreak,}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Arrow\ s}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ upArrow,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ downArrow,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftArrow,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightArrow,}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Keys\ Above\ Arrows}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ insert,}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ home,}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageUp,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ deleteKey,}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ end,}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageDown,}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Left\ Side}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ capsLock,}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftShift,}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftControl,}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//weird\ ass\ Windows\ key\ or\ command\ on\ Mac}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftAlt,}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Right\ Side}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightAlt,}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ functionKey,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightControl,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightShift,}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadLock,}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadForwardSlash,}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMultiply,}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMinus,}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPlus,}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEnter,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadZero,}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadOne,}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadTwo,}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadThree,}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFour,}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFive,}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSix,}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSeven,}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEight,}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadNine,}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFullStop,}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad\ (Non\ Number\ Lock)}}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadHome,}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPageDown,}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPageUp,}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEnd,}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadInsert,}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadUpArrow,}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadDownArrow,}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadLeftArrow,}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadRightArrow,}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+\Hypertarget{keyboard_8h_a58fa1d0fe070a3f55e3ba46c44a7680e}\label{keyboard_8h_a58fa1d0fe070a3f55e3ba46c44a7680e} 
+\index{keyboard.h@{keyboard.h}!ScanCodeType@{ScanCodeType}}
+\index{ScanCodeType@{ScanCodeType}!keyboard.h@{keyboard.h}}
+\doxysubsubsection{\texorpdfstring{ScanCodeType}{ScanCodeType}}
+{\footnotesize\ttfamily enum class Max\+OS\+::drivers\+::peripherals\+::\+Scan\+Code\+Type \+: int\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Definition at line \mbox{\hyperlink{keyboard_8h_source_l00028}{28}} of file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \textcolor{keywordtype}{int}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ REGULAR,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EXTENDED,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EXTENDED\_BUFFER}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}

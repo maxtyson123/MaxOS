@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/ubsan.cpp
+/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/ubsan.cpp \- Implementation of the Undefined Behavior Sanitizer (UBSan) handler\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -57,127 +58,122 @@
 .RI "void \fB__ubsan_handle_vla_bound_not_positive\fP (\fBvla_bound_not_positive_info_t\fP *info)"
 .br
 .in -1c
+.SH "Detailed Description"
+.PP 
+Implementation of the Undefined Behavior Sanitizer (UBSan) handler\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+30th December 2024 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBubsan\&.cpp\fP\&.
 .SH "Function Documentation"
 .PP 
 .SS "void __ubsan_handle_add_overflow (\fBoverflow_info_t\fP * info)"
 
 .PP
-Definition at line \fB106\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB102\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-106                                                                    {
-107 
-108     Logger::DEBUG() << "UBSan: Addition overflow\\n";
-109     UBSanHandler::handle(info\->location);
-110 
-111 }
+102                                                                    {
+103 
+104     UBSanHandler::handle(info\->location, "Addition overflow");
+105 
+106 }
 .fi
 
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::overflow_info::location\fP\&.
 .SS "void __ubsan_handle_builtin_unreachable (\fBlocation_only_info_t\fP * info)"
-
-.PP
-Definition at line \fB127\fP of file \fBubsan\&.cpp\fP\&..PP
-.nf
-127                                                                                {
-128 
-129     Logger::DEBUG() << "UBSan: Unreachable code\\n";
-130     UBSanHandler::handle(info\->location);
-131 
-132 }
-.fi
-
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::location_only_info::location\fP\&.
-.SS "void __ubsan_handle_divrem_overflow (\fBoverflow_info_t\fP * info)"
-
-.PP
-Definition at line \fB113\fP of file \fBubsan\&.cpp\fP\&..PP
-.nf
-113                                                                       {
-114 
-115     Logger::DEBUG() << "UBSan: Division overflow\\n";
-116     UBSanHandler::handle(info\->location);
-117 
-118 }
-.fi
-
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::overflow_info::location\fP\&.
-.SS "void __ubsan_handle_load_invalid_value (\fBinvalid_value_info_t\fP * info)"
-
-.PP
-Definition at line \fB141\fP of file \fBubsan\&.cpp\fP\&..PP
-.nf
-141                                                                               {
-142 
-143     Logger::DEBUG() << "UBSan: Load of invalid value\\n";
-144     UBSanHandler::handle(info\->location);
-145 
-146 }
-.fi
-
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::invalid_value_info::location\fP\&.
-.SS "void __ubsan_handle_missing_return (\fBlocation_only_info_t\fP * info)"
-
-.PP
-Definition at line \fB148\fP of file \fBubsan\&.cpp\fP\&..PP
-.nf
-148                                                                           {
-149 
-150     Logger::DEBUG() << "UBSan: Missing return\\n";
-151     UBSanHandler::handle(info\->location);
-152 }
-.fi
-
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::location_only_info::location\fP\&.
-.SS "void __ubsan_handle_mul_overflow (\fBoverflow_info_t\fP * info)"
-
-.PP
-Definition at line \fB134\fP of file \fBubsan\&.cpp\fP\&..PP
-.nf
-134                                                                    {
-135 
-136     Logger::DEBUG() << "UBSan: Multiplication overflow\\n";
-137     UBSanHandler::handle(info\->location);
-138 
-139 }
-.fi
-
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::overflow_info::location\fP\&.
-.SS "void __ubsan_handle_negate_overflow (\fBoverflow_info_t\fP * info)"
 
 .PP
 Definition at line \fB120\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-120                                                                       {
+120                                                                                {
 121 
-122     Logger::DEBUG() << "UBSan: Negation overflow\\n";
-123     UBSanHandler::handle(info\->location);
-124 
-125 }
+122     UBSanHandler::handle(info\->location, "Unreachable code");
+123 
+124 }
 .fi
 
+.SS "void __ubsan_handle_divrem_overflow (\fBoverflow_info_t\fP * info)"
+
 .PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::overflow_info::location\fP\&.
+Definition at line \fB108\fP of file \fBubsan\&.cpp\fP\&..PP
+.nf
+108                                                                       {
+109 
+110     UBSanHandler::handle(info\->location, "Division overflow");
+111 
+112 }
+.fi
+
+.SS "void __ubsan_handle_load_invalid_value (\fBinvalid_value_info_t\fP * info)"
+
+.PP
+Definition at line \fB132\fP of file \fBubsan\&.cpp\fP\&..PP
+.nf
+132                                                                               {
+133 
+134     UBSanHandler::handle(info\->location, "Load of invalid value");
+135 
+136 }
+.fi
+
+.SS "void __ubsan_handle_missing_return (\fBlocation_only_info_t\fP * info)"
+
+.PP
+Definition at line \fB138\fP of file \fBubsan\&.cpp\fP\&..PP
+.nf
+138                                                                           {
+139 
+140     UBSanHandler::handle(info\->location, "Missing return");
+141 }
+.fi
+
+.SS "void __ubsan_handle_mul_overflow (\fBoverflow_info_t\fP * info)"
+
+.PP
+Definition at line \fB126\fP of file \fBubsan\&.cpp\fP\&..PP
+.nf
+126                                                                    {
+127 
+128     UBSanHandler::handle(info\->location, "Multiplication overflow");
+129 
+130 }
+.fi
+
+.SS "void __ubsan_handle_negate_overflow (\fBoverflow_info_t\fP * info)"
+
+.PP
+Definition at line \fB114\fP of file \fBubsan\&.cpp\fP\&..PP
+.nf
+114                                                                       {
+115 
+116     UBSanHandler::handle(info\->location, "Negation overflow");
+117 
+118 }
+.fi
+
 .SS "void __ubsan_handle_out_of_bounds (\fBout_of_bounds_info_t\fP * info)"
 
 .PP
-Definition at line \fB99\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB96\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-99                                                                          {
-100 
-101     Logger::DEBUG() << "UBSan: Array out of bounds\\n";
-102     UBSanHandler::handle(info\->location);
-103 
-104 }
+96                                                                          {
+97 
+98     UBSanHandler::handle(info\->location, "Array out of bounds");
+99 
+100 }
 .fi
 
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::out_of_bounds_info::location\fP\&.
 .SS "void __ubsan_handle_pointer_overflow (\fBoverflow_info_t\fP * info)"
 
 .PP
@@ -185,85 +181,67 @@ Definition at line \fB79\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
 79                                                                        {
 80 
-81     Logger::DEBUG() << "UBSan: Pointer overflow\\n";
-82     UBSanHandler::handle(info\->location);
-83 
-84 }
+81     UBSanHandler::handle(info\->location, "Pointer overflow");
+82 
+83 }
 .fi
 
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::overflow_info::location\fP\&.
 .SS "void __ubsan_handle_shift_out_of_bounds (\fBshift_out_of_bounds_info_t\fP * info)"
 
 .PP
-Definition at line \fB93\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB91\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-93                                                                                      {
-94 
-95     Logger::DEBUG() << "UBSan: Shift out of bounds\\n";
-96     UBSanHandler::handle(info\->location);
-97 }
+91                                                                                      {
+92 
+93     UBSanHandler::handle(info\->location, "Shift out of bounds");
+94 }
 .fi
 
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::shift_out_of_bounds_info::location\fP\&.
 .SS "void __ubsan_handle_sub_overflow (\fBoverflow_info_t\fP * info)"
 
 .PP
-Definition at line \fB86\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB85\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-86                                                                    {
-87 
-88     Logger::DEBUG() << "UBSan: Subtraction overflow\\n";
-89     UBSanHandler::handle(info\->location);
-90 
-91 }
+85                                                                    {
+86 
+87     UBSanHandler::handle(info\->location, "Subtraction overflow");
+88 
+89 }
 .fi
 
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::overflow_info::location\fP\&.
 .SS "void __ubsan_handle_type_mismatch (\fBtype_mismatch_info_t\fP * info, uintptr_t ptr)"
 
 .PP
-Definition at line \fB67\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB69\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-67                                                                                         {
-68 
-69     UBSanHandler::print_type_mismatch(info, ptr);
-70     UBSanHandler::handle(info\->location);
-71 }
+69                                                                                         {
+70 
+71     UBSanHandler::print_type_mismatch(info, ptr);
+72 }
 .fi
 
-.PP
-References \fBMaxOS::runtime::UBSanHandler::handle()\fP, \fBMaxOS::runtime::type_mismatch_info::location\fP, and \fBMaxOS::runtime::UBSanHandler::print_type_mismatch()\fP\&.
 .SS "void __ubsan_handle_type_mismatch_v1 (\fBtype_mismatch_info_v1_t\fP * info, uintptr_t ptr)"
 
 .PP
-Definition at line \fB73\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB74\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-73                                                                                               {
-74 
-75     UBSanHandler::print_type_mismatch_v1(info, ptr);
-76     UBSanHandler::handle(info\->location);
+74                                                                                               {
+75 
+76     UBSanHandler::print_type_mismatch_v1(info, ptr);
 77 }
 .fi
 
-.PP
-References \fBMaxOS::runtime::UBSanHandler::handle()\fP, \fBMaxOS::runtime::type_mismatch_info_v1::location\fP, and \fBMaxOS::runtime::UBSanHandler::print_type_mismatch_v1()\fP\&.
 .SS "void __ubsan_handle_vla_bound_not_positive (\fBvla_bound_not_positive_info_t\fP * info)"
 
 .PP
-Definition at line \fB154\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB143\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-154                                                                                            {
-155 
-156     Logger::DEBUG() << "UBSan: VLA bound not positive\\n";
-157     UBSanHandler::handle(info\->location);
-158 }
+143                                                                                            {
+144 
+145     UBSanHandler::handle(info\->location,  "VLA bound not positive");
+146 }
 .fi
 
-.PP
-References \fBLogger::DEBUG()\fP, \fBMaxOS::runtime::UBSanHandler::handle()\fP, and \fBMaxOS::runtime::vla_bound_not_positive_info::location\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

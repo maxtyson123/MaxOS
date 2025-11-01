@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/peripherals/keyboard.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/peripherals/keyboard.h \- Defines a Keyboard and related classes for handling keyboard input\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -59,32 +60,244 @@
 .br
 .RI "\fBDriver\fP for the Keyboard Controller, manages the events and the keyboard state\&. "
 .in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::drivers\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::drivers::peripherals\fP"
-.br
-.in -1c
 .SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "enum class \fBMaxOS::drivers::peripherals::ScanCodeType\fP : int { \fBMaxOS::drivers::peripherals::REGULAR\fP, \fBMaxOS::drivers::peripherals::EXTENDED\fP, \fBMaxOS::drivers::peripherals::EXTENDED_BUFFER\fP }"
+.RI "enum class \fBScanCodeType\fP : int { \fBREGULAR\fP, \fBEXTENDED\fP, \fBEXTENDED_BUFFER\fP }"
 .br
 .ti -1c
-.RI "enum class \fBMaxOS::drivers::peripherals::KeyCode\fP : uint16_t { \fBMaxOS::drivers::peripherals::A\fP = 'A', \fBMaxOS::drivers::peripherals::a\fP = 'a', \fBMaxOS::drivers::peripherals::B\fP = 'B', \fBMaxOS::drivers::peripherals::b\fP = 'b', \fBMaxOS::drivers::peripherals::C\fP = 'C', \fBMaxOS::drivers::peripherals::c\fP = 'c', \fBMaxOS::drivers::peripherals::D\fP = 'D', \fBMaxOS::drivers::peripherals::d\fP = 'd', \fBMaxOS::drivers::peripherals::E\fP = 'E', \fBMaxOS::drivers::peripherals::e\fP = 'e', \fBMaxOS::drivers::peripherals::F\fP = 'F', \fBMaxOS::drivers::peripherals::f\fP = 'f', \fBMaxOS::drivers::peripherals::G\fP = 'G', \fBMaxOS::drivers::peripherals::g\fP = 'g', \fBMaxOS::drivers::peripherals::H\fP = 'H', \fBMaxOS::drivers::peripherals::h\fP = 'h', \fBMaxOS::drivers::peripherals::I\fP = 'I', \fBMaxOS::drivers::peripherals::i\fP = 'i', \fBMaxOS::drivers::peripherals::J\fP = 'J', \fBMaxOS::drivers::peripherals::j\fP = 'j', \fBMaxOS::drivers::peripherals::K\fP = 'K', \fBMaxOS::drivers::peripherals::k\fP = 'k', \fBMaxOS::drivers::peripherals::L\fP = 'L', \fBMaxOS::drivers::peripherals::l\fP = 'l', \fBMaxOS::drivers::peripherals::M\fP = 'M', \fBMaxOS::drivers::peripherals::m\fP = 'm', \fBMaxOS::drivers::peripherals::N\fP = 'N', \fBMaxOS::drivers::peripherals::n\fP = 'n', \fBMaxOS::drivers::peripherals::O\fP = 'O', \fBMaxOS::drivers::peripherals::o\fP = 'o', \fBMaxOS::drivers::peripherals::P\fP = 'P', \fBMaxOS::drivers::peripherals::p\fP = 'p', \fBMaxOS::drivers::peripherals::Q\fP = 'Q', \fBMaxOS::drivers::peripherals::q\fP = 'q', \fBMaxOS::drivers::peripherals::R\fP = 'R', \fBMaxOS::drivers::peripherals::r\fP = 'r', \fBMaxOS::drivers::peripherals::S\fP = 'S', \fBMaxOS::drivers::peripherals::s\fP = 's', \fBMaxOS::drivers::peripherals::T\fP = 'T', \fBMaxOS::drivers::peripherals::t\fP = 't', \fBMaxOS::drivers::peripherals::U\fP = 'U', \fBMaxOS::drivers::peripherals::u\fP = 'u', \fBMaxOS::drivers::peripherals::V\fP = 'V', \fBMaxOS::drivers::peripherals::v\fP = 'v', \fBMaxOS::drivers::peripherals::W\fP = 'W', \fBMaxOS::drivers::peripherals::w\fP = 'w', \fBMaxOS::drivers::peripherals::X\fP = 'X', \fBMaxOS::drivers::peripherals::x\fP = 'x', \fBMaxOS::drivers::peripherals::Y\fP = 'Y', \fBMaxOS::drivers::peripherals::y\fP = 'y', \fBMaxOS::drivers::peripherals::Z\fP = 'Z', \fBMaxOS::drivers::peripherals::z\fP = 'z', \fBMaxOS::drivers::peripherals::zero\fP = '0', \fBMaxOS::drivers::peripherals::one\fP = '1', \fBMaxOS::drivers::peripherals::two\fP = '2', \fBMaxOS::drivers::peripherals::three\fP = '3', \fBMaxOS::drivers::peripherals::four\fP = '4', \fBMaxOS::drivers::peripherals::five\fP = '5', \fBMaxOS::drivers::peripherals::six\fP = '6', \fBMaxOS::drivers::peripherals::seven\fP = '7', \fBMaxOS::drivers::peripherals::eight\fP = '8', \fBMaxOS::drivers::peripherals::nine\fP = '9', \fBMaxOS::drivers::peripherals::comma\fP = ',', \fBMaxOS::drivers::peripherals::fullStop\fP = '\&.', \fBMaxOS::drivers::peripherals::exclamationMark\fP = '!', \fBMaxOS::drivers::peripherals::questionMark\fP = '?', \fBMaxOS::drivers::peripherals::quotationMark\fP = '\\"', \fBMaxOS::drivers::peripherals::semicolon\fP = ';', \fBMaxOS::drivers::peripherals::colon\fP = ':', \fBMaxOS::drivers::peripherals::apostrophe\fP = '\\'', \fBMaxOS::drivers::peripherals::slantedApostrophe\fP = '`', \fBMaxOS::drivers::peripherals::powerSign\fP = '^', \fBMaxOS::drivers::peripherals::dollarSign\fP = '$', \fBMaxOS::drivers::peripherals::percentSign\fP = '', \fBMaxOS::drivers::peripherals::andSign\fP = '&', \fBMaxOS::drivers::peripherals::atSign\fP = '@', \fBMaxOS::drivers::peripherals::underscore\fP = '_', \fBMaxOS::drivers::peripherals::lineThing\fP = '|', \fBMaxOS::drivers::peripherals::hash\fP = '#', \fBMaxOS::drivers::peripherals::backslash\fP = '\\\\', \fBMaxOS::drivers::peripherals::forwardSlash\fP = '/', \fBMaxOS::drivers::peripherals::squigglyLine\fP = '~', \fBMaxOS::drivers::peripherals::plus\fP = '+', \fBMaxOS::drivers::peripherals::minus\fP = '-', \fBMaxOS::drivers::peripherals::equals\fP = '=', \fBMaxOS::drivers::peripherals::multiply\fP = '*', \fBMaxOS::drivers::peripherals::lessThan\fP = '<', \fBMaxOS::drivers::peripherals::greaterThan\fP = '>', \fBMaxOS::drivers::peripherals::openBracket\fP = '(', \fBMaxOS::drivers::peripherals::closeBracket\fP = ')', \fBMaxOS::drivers::peripherals::openSquareBracket\fP = '[', \fBMaxOS::drivers::peripherals::closeSquareBracket\fP = ']', \fBMaxOS::drivers::peripherals::openCurlyBracket\fP = '{', \fBMaxOS::drivers::peripherals::closeCurlyBracket\fP = '}', \fBMaxOS::drivers::peripherals::space\fP = ' ', \fBMaxOS::drivers::peripherals::tab\fP = '\\t', \fBMaxOS::drivers::peripherals::enter\fP = '\\n', \fBMaxOS::drivers::peripherals::backspace\fP = '\\b', \fBMaxOS::drivers::peripherals::f1\fP = 1000, \fBMaxOS::drivers::peripherals::f2\fP, \fBMaxOS::drivers::peripherals::f3\fP, \fBMaxOS::drivers::peripherals::f4\fP, \fBMaxOS::drivers::peripherals::f5\fP, \fBMaxOS::drivers::peripherals::f6\fP, \fBMaxOS::drivers::peripherals::f7\fP, \fBMaxOS::drivers::peripherals::f8\fP, \fBMaxOS::drivers::peripherals::f9\fP, \fBMaxOS::drivers::peripherals::f10\fP, \fBMaxOS::drivers::peripherals::f11\fP, \fBMaxOS::drivers::peripherals::f12\fP, \fBMaxOS::drivers::peripherals::escape\fP, \fBMaxOS::drivers::peripherals::printScreen\fP, \fBMaxOS::drivers::peripherals::scrollLock\fP, \fBMaxOS::drivers::peripherals::pauseBreak\fP, \fBMaxOS::drivers::peripherals::upArrow\fP, \fBMaxOS::drivers::peripherals::downArrow\fP, \fBMaxOS::drivers::peripherals::leftArrow\fP, \fBMaxOS::drivers::peripherals::rightArrow\fP, \fBMaxOS::drivers::peripherals::insert\fP, \fBMaxOS::drivers::peripherals::home\fP, \fBMaxOS::drivers::peripherals::pageUp\fP, \fBMaxOS::drivers::peripherals::deleteKey\fP, \fBMaxOS::drivers::peripherals::end\fP, \fBMaxOS::drivers::peripherals::pageDown\fP, \fBMaxOS::drivers::peripherals::capsLock\fP, \fBMaxOS::drivers::peripherals::leftShift\fP, \fBMaxOS::drivers::peripherals::leftControl\fP, \fBMaxOS::drivers::peripherals::leftOS\fP, \fBMaxOS::drivers::peripherals::leftAlt\fP, \fBMaxOS::drivers::peripherals::rightAlt\fP, \fBMaxOS::drivers::peripherals::functionKey\fP, \fBMaxOS::drivers::peripherals::rightControl\fP, \fBMaxOS::drivers::peripherals::rightShift\fP, \fBMaxOS::drivers::peripherals::numberPadLock\fP, \fBMaxOS::drivers::peripherals::numberPadForwardSlash\fP, \fBMaxOS::drivers::peripherals::numberPadMultiply\fP, \fBMaxOS::drivers::peripherals::numberPadMinus\fP, \fBMaxOS::drivers::peripherals::numberPadPlus\fP, \fBMaxOS::drivers::peripherals::numberPadEnter\fP, \fBMaxOS::drivers::peripherals::numberPadZero\fP, \fBMaxOS::drivers::peripherals::numberPadOne\fP, \fBMaxOS::drivers::peripherals::numberPadTwo\fP, \fBMaxOS::drivers::peripherals::numberPadThree\fP, \fBMaxOS::drivers::peripherals::numberPadFour\fP, \fBMaxOS::drivers::peripherals::numberPadFive\fP, \fBMaxOS::drivers::peripherals::numberPadSix\fP, \fBMaxOS::drivers::peripherals::numberPadSeven\fP, \fBMaxOS::drivers::peripherals::numberPadEight\fP, \fBMaxOS::drivers::peripherals::numberPadNine\fP, \fBMaxOS::drivers::peripherals::numberPadFullStop\fP, \fBMaxOS::drivers::peripherals::numberPadHome\fP, \fBMaxOS::drivers::peripherals::numberPadPageDown\fP, \fBMaxOS::drivers::peripherals::numberPadPageUp\fP, \fBMaxOS::drivers::peripherals::numberPadEnd\fP, \fBMaxOS::drivers::peripherals::numberPadInsert\fP, \fBMaxOS::drivers::peripherals::numberPadUpArrow\fP, \fBMaxOS::drivers::peripherals::numberPadDownArrow\fP, \fBMaxOS::drivers::peripherals::numberPadLeftArrow\fP, \fBMaxOS::drivers::peripherals::numberPadRightArrow\fP }"
+.RI "enum class \fBMaxOS::drivers::peripherals::KeyCode\fP : uint16_t { \fBA\fP = 'A', \fBa\fP = 'a', \fBB\fP = 'B', \fBb\fP = 'b', \fBC\fP = 'C', \fBc\fP = 'c', \fBD\fP = 'D', \fBd\fP = 'd', \fBE\fP = 'E', \fBe\fP = 'e', \fBF\fP = 'F', \fBf\fP = 'f', \fBG\fP = 'G', \fBg\fP = 'g', \fBH\fP = 'H', \fBh\fP = 'h', \fBI\fP = 'I', \fBi\fP = 'i', \fBJ\fP = 'J', \fBj\fP = 'j', \fBK\fP = 'K', \fBk\fP = 'k', \fBL\fP = 'L', \fBl\fP = 'l', \fBM\fP = 'M', \fBm\fP = 'm', \fBN\fP = 'N', \fBn\fP = 'n', \fBO\fP = 'O', \fBo\fP = 'o', \fBP\fP = 'P', \fBp\fP = 'p', \fBQ\fP = 'Q', \fBq\fP = 'q', \fBR\fP = 'R', \fBr\fP = 'r', \fBS\fP = 'S', \fBs\fP = 's', \fBT\fP = 'T', \fBt\fP = 't', \fBU\fP = 'U', \fBu\fP = 'u', \fBV\fP = 'V', \fBv\fP = 'v', \fBW\fP = 'W', \fBw\fP = 'w', \fBX\fP = 'X', \fBx\fP = 'x', \fBY\fP = 'Y', \fBy\fP = 'y', \fBZ\fP = 'Z', \fBz\fP = 'z', \fBzero\fP = '0', \fBone\fP = '1', \fBtwo\fP = '2', \fBthree\fP = '3', \fBfour\fP = '4', \fBfive\fP = '5', \fBsix\fP = '6', \fBseven\fP = '7', \fBeight\fP = '8', \fBnine\fP = '9', \fBcomma\fP = ',', \fBfullStop\fP = '\&.', \fBexclamationMark\fP = '!', \fBquestionMark\fP = '?', \fBquotationMark\fP = '\\"', \fBsemicolon\fP = ';', \fBcolon\fP = ':', \fBapostrophe\fP = '\\'', \fBslantedApostrophe\fP = '`', \fBpowerSign\fP = '^', \fBdollarSign\fP = '$', \fBpercentSign\fP = '', \fBandSign\fP = '&', \fBatSign\fP = '@', \fBunderscore\fP = '_', \fBlineThing\fP = '|', \fBhash\fP = '#', \fBbackslash\fP = '\\\\', \fBforwardSlash\fP = '/', \fBsquigglyLine\fP = '~', \fBplus\fP = '+', \fBminus\fP = '-', \fBequals\fP = '=', \fBmultiply\fP = '*', \fBlessThan\fP = '<', \fBgreaterThan\fP = '>', \fBopenBracket\fP = '(', \fBcloseBracket\fP = ')', \fBopenSquareBracket\fP = '[', \fBcloseSquareBracket\fP = ']', \fBopenCurlyBracket\fP = '{', \fBcloseCurlyBracket\fP = '}', \fBspace\fP = ' ', \fBtab\fP = '\\t', \fBenter\fP = '\\n', \fBbackspace\fP = '\\b', \fBf1\fP = 1000, \fBf2\fP, \fBf3\fP, \fBf4\fP, \fBf5\fP, \fBf6\fP, \fBf7\fP, \fBf8\fP, \fBf9\fP, \fBf10\fP, \fBf11\fP, \fBf12\fP, \fBescape\fP, \fBprintScreen\fP, \fBscrollLock\fP, \fBpauseBreak\fP, \fBupArrow\fP, \fBdownArrow\fP, \fBleftArrow\fP, \fBrightArrow\fP, \fBinsert\fP, \fBhome\fP, \fBpageUp\fP, \fBdeleteKey\fP, \fBend\fP, \fBpageDown\fP, \fBcapsLock\fP, \fBleftShift\fP, \fBleftControl\fP, \fBleftOS\fP, \fBleftAlt\fP, \fBrightAlt\fP, \fBfunctionKey\fP, \fBrightControl\fP, \fBrightShift\fP, \fBnumberPadLock\fP, \fBnumberPadForwardSlash\fP, \fBnumberPadMultiply\fP, \fBnumberPadMinus\fP, \fBnumberPadPlus\fP, \fBnumberPadEnter\fP, \fBnumberPadZero\fP, \fBnumberPadOne\fP, \fBnumberPadTwo\fP, \fBnumberPadThree\fP, \fBnumberPadFour\fP, \fBnumberPadFive\fP, \fBnumberPadSix\fP, \fBnumberPadSeven\fP, \fBnumberPadEight\fP, \fBnumberPadNine\fP, \fBnumberPadFullStop\fP, \fBnumberPadHome\fP, \fBnumberPadPageDown\fP, \fBnumberPadPageUp\fP, \fBnumberPadEnd\fP, \fBnumberPadInsert\fP, \fBnumberPadUpArrow\fP, \fBnumberPadDownArrow\fP, \fBnumberPadLeftArrow\fP, \fBnumberPadRightArrow\fP }"
 .br
 .ti -1c
-.RI "enum \fBMaxOS::drivers::peripherals::KeyboardEvents\fP { \fBMaxOS::drivers::peripherals::KEYDOWN\fP, \fBMaxOS::drivers::peripherals::KEYUP\fP }"
+.RI "enum \fBKeyboardEvents\fP { \fBKEYDOWN\fP, \fBKEYUP\fP }"
 .br
 .in -1c
+.SH "Detailed Description"
+.PP 
+Defines a Keyboard and related classes for handling keyboard input\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+9th October 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBkeyboard\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum MaxOS::drivers::peripherals::KeyboardEvents"
+
+.PP
+Definition at line \fB229\fP of file \fBkeyboard\&.h\fP\&..PP
+.nf
+229                                 {
+230                 KEYDOWN,
+231                 KEYUP
+232             };
+.fi
+
+.SS "enum class \fBMaxOS::drivers::peripherals::KeyCode\fP : uint16_t\fC [strong]\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIf1 \fP\fP
+OTHER CODES THAT ARE NOT CHARACTERS ///\&. 
+.PP
+Definition at line \fB34\fP of file \fBkeyboard\&.h\fP\&..PP
+.nf
+34                                : uint16_t {
+35 
+36                 // Alphabet
+37                 A = 'A', a = 'a',
+38                 B = 'B', b = 'b',
+39                 C = 'C', c = 'c',
+40                 D = 'D', d = 'd',
+41                 E = 'E', e = 'e',
+42                 F = 'F', f = 'f',
+43                 G = 'G', g = 'g',
+44                 H = 'H', h = 'h',
+45                 I = 'I', i = 'i',
+46                 J = 'J', j = 'j',
+47                 K = 'K', k = 'k',
+48                 L = 'L', l = 'l',
+49                 M = 'M', m = 'm',
+50                 N = 'N', n = 'n',
+51                 O = 'O', o = 'o',
+52                 P = 'P', p = 'p',
+53                 Q = 'Q', q = 'q',
+54                 R = 'R', r = 'r',
+55                 S = 'S', s = 's',
+56                 T = 'T', t = 't',
+57                 U = 'U', u = 'u',
+58                 V = 'V', v = 'v',
+59                 W = 'W', w = 'w',
+60                 X = 'X', x = 'x',
+61                 Y = 'Y', y = 'y',
+62                 Z = 'Z', z = 'z',
+63 
+64                 // Numbers
+65                 zero = '0',
+66                 one = '1',
+67                 two = '2',
+68                 three = '3',
+69                 four = '4',
+70                 five = '5',
+71                 six = '6',
+72                 seven = '7',
+73                 eight = '8',
+74                 nine = '9',
+75 
+76                 // Symbols
+77                 comma = ',',
+78                 fullStop = '\&.',
+79                 exclamationMark = '!',
+80                 questionMark = '?',
+81                 quotationMark = '\\"',
+82                 semicolon = ';',
+83                 colon = ':',
+84                 apostrophe = '\\'',
+85                 slantedApostrophe = '`',
+86 
+87                 // Signs
+88                 powerSign = '^',
+89                 dollarSign = '$',
+90                 percentSign = '%',
+91                 andSign = '&',
+92                 atSign = '@',
+93 
+94                 // Special Characters
+95                 underscore = '_',
+96                 lineThing = '|',
+97                 hash = '#',
+98                 backslash = '\\\\',
+99                 forwardSlash = '/',
+100                 squigglyLine = '~',
+101 
+102                 // Math Symbols
+103                 plus = '+',
+104                 minus = '\-',
+105                 equals = '=',
+106                 multiply = '*',
+107                 lessThan = '<',
+108                 greaterThan = '>',
+109 
+110                 // Brackets
+111                 openBracket = '(',
+112                 closeBracket = ')',
+113                 openSquareBracket = '[',
+114                 closeSquareBracket = ']',
+115                 openCurlyBracket = '{',
+116                 closeCurlyBracket = '}',
+117 
+118                 // Writing
+119                 space = ' ',
+120                 tab = '\\t',
+121                 enter = '\\n',
+122                 backspace = '\\b',
+123 
+125 
+126                 // Functions
+127                 f1 = 1000,      //force it to start at 1000 so it doesn't conflict with ascii
+128                 f2,
+129                 f3,
+130                 f4,
+131                 f5,
+132                 f6,
+133                 f7,
+134                 f8,
+135                 f9,
+136                 f10,
+137                 f11,
+138                 f12,
+139 
+140                 // Top Row
+141                 escape,
+142                 printScreen,
+143                 scrollLock,
+144                 pauseBreak,
+145 
+146                 // Arrow s
+147                 upArrow,
+148                 downArrow,
+149                 leftArrow,
+150                 rightArrow,
+151 
+152                 // Keys Above Arrows
+153                 insert,
+154                 home,
+155                 pageUp,
+156                 deleteKey,
+157                 end,
+158                 pageDown,
+159 
+160                 // Left Side
+161                 capsLock,
+162                 leftShift,
+163                 leftControl,
+164                 leftOS,                 //weird ass Windows key or command on Mac
+165                 leftAlt,
+166 
+167                 // Right Side
+168                 rightAlt,
+169                 functionKey,
+170                 rightControl,
+171                 rightShift,
+172 
+173                 // Number Pad
+174                 numberPadLock,
+175                 numberPadForwardSlash,
+176                 numberPadMultiply,
+177                 numberPadMinus,
+178                 numberPadPlus,
+179                 numberPadEnter,
+180                 numberPadZero,
+181                 numberPadOne,
+182                 numberPadTwo,
+183                 numberPadThree,
+184                 numberPadFour,
+185                 numberPadFive,
+186                 numberPadSix,
+187                 numberPadSeven,
+188                 numberPadEight,
+189                 numberPadNine,
+190                 numberPadFullStop,
+191 
+192                 // Number Pad (Non Number Lock)
+193                 numberPadHome,
+194                 numberPadPageDown,
+195                 numberPadPageUp,
+196                 numberPadEnd,
+197                 numberPadInsert,
+198                 numberPadUpArrow,
+199                 numberPadDownArrow,
+200                 numberPadLeftArrow,
+201                 numberPadRightArrow,
+202             };
+.fi
+
+.SS "enum class MaxOS::drivers::peripherals::ScanCodeType : int\fC [strong]\fP"
+
+.PP
+Definition at line \fB28\fP of file \fBkeyboard\&.h\fP\&..PP
+.nf
+28                                     : int {
+29                 REGULAR,
+30                 EXTENDED,
+31                 EXTENDED_BUFFER
+32             };
+.fi
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

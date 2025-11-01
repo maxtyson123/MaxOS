@@ -1,0 +1,661 @@
+\doxysection{Max\+OS\+::system\+::Core Class Reference}
+\hypertarget{classMaxOS_1_1system_1_1Core}{}\label{classMaxOS_1_1system_1_1Core}\index{MaxOS::system::Core@{MaxOS::system::Core}}
+
+
+Represents a \doxylink{classMaxOS_1_1system_1_1CPU}{CPU} core in the system.  
+
+
+
+
+{\ttfamily \#include $<$cpu.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a90d6cc7600f3bab70e74da24f124d0b2}{Core}} (hardwarecommunication\+::madt\+\_\+processor\+\_\+apic\+\_\+t \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{madt\+\_\+item}})
+\begin{DoxyCompactList}\small\item\em Constructs a new \doxylink{classMaxOS_1_1system_1_1Core}{Core} object from the MADT entry. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a35cbdbb9c1e6716be75f57256c508333}{wake\+\_\+up}} (\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}})
+\begin{DoxyCompactList}\small\item\em Wakes up the core by sending the appropriate IPIs. (see core\+\_\+loader.\+s for startup code) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a95b5c90a86bd4f1dec37edb1f32a6406}{init}} ()
+\begin{DoxyCompactList}\small\item\em Initialises the core by setting up the GDT, IDT, TSS, SSE and APIC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317}{xsave\+\_\+enabled}} = false
+\begin{DoxyCompactList}\small\item\em Whether XSAVE is enabled. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e}{avx\+\_\+enabled}} = false
+\begin{DoxyCompactList}\small\item\em Whether AVX is enabled. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8}{id}}
+\begin{DoxyCompactList}\small\item\em The ID of this core. \end{DoxyCompactList}\item 
+tss\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}} = \{ \}
+\begin{DoxyCompactList}\small\item\em The Task State Segment for this core. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ee72f36a1713b39bd328ab6a59f71e5}{active}} = false
+\begin{DoxyCompactList}\small\item\em Whether this core is active. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication\+::\+Local\+APIC}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aa217d5bc27a175b3533c223b7dd4136a}{local\+\_\+apic}}
+\begin{DoxyCompactList}\small\item\em The local APIC for this core. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{Global\+Descriptor\+Table}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}{gdt}}
+\begin{DoxyCompactList}\small\item\em The GDT for this core. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{processes\+::\+Scheduler}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ab5f2cccadb50ecefe94cbb95eebea371}{scheduler}}
+\begin{DoxyCompactList}\small\item\em The scheduler for this core. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4b3368da0cb3321587d4b9623fad2250}{init\+\_\+tss}} ()
+\begin{DoxyCompactList}\small\item\em Initialises the task state segment for this core. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a84092a638e6f4dba8cd08d109cf1649f}{init\+\_\+sse}} ()
+\begin{DoxyCompactList}\small\item\em Initialises the SSE instructions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+hardwarecommunication\+::madt\+\_\+processor\+\_\+apic\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{m\+\_\+madt}}
+\begin{DoxyCompactList}\small\item\em The MADT entry for this core. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad919e4f6d0f47e60695127f2896e2bef}{m\+\_\+enabled}} = false
+\begin{DoxyCompactList}\small\item\em Whether the core is enabled. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc6b3209c6549a4778c3be339c6f1d62}{m\+\_\+can\+\_\+enable}} = false
+\begin{DoxyCompactList}\small\item\em Whether the core can be enabled. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a51cfe856f4f9c002fa0789dbc03741c3}{m\+\_\+bsp}} = false
+\begin{DoxyCompactList}\small\item\em Whether this core is the bootstrap processor. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{m\+\_\+apic\+\_\+id}}
+\begin{DoxyCompactList}\small\item\em The ID of the apic for this core. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca}{m\+\_\+stack}}
+\begin{DoxyCompactList}\small\item\em The stack pointer for this core. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a421a70ac7bb7c7b4eed0fc44b76802d3}{CPU}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a \doxylink{classMaxOS_1_1system_1_1CPU}{CPU} core in the system. 
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00188}{188}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classMaxOS_1_1system_1_1Core_a90d6cc7600f3bab70e74da24f124d0b2}\label{classMaxOS_1_1system_1_1Core_a90d6cc7600f3bab70e74da24f124d0b2} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!Core@{Core}}
+\index{Core@{Core}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{Core()}{Core()}}
+{\footnotesize\ttfamily Core\+::\+Core (\begin{DoxyParamCaption}\item[{hardwarecommunication\+::madt\+\_\+processor\+\_\+apic\+\_\+t \texorpdfstring{$\ast$}{*}}]{madt\+\_\+item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructs a new \doxylink{classMaxOS_1_1system_1_1Core}{Core} object from the MADT entry. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em madt\+\_\+item} & The MADT entry for this core \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{cpu_8cpp_source_l00037}{37}} of file \mbox{\hyperlink{cpu_8cpp_source}{cpu.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00038\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{m\_madt}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{madt\_item}})}
+\DoxyCodeLine{00039\ \{}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{id}\ \ \ \ \ \ \ \ \ \ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{m\_madt}}-\/>processor\_id;}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{m\_apic\_id}}\ \ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{m\_madt}}-\/>apic\_id;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad919e4f6d0f47e60695127f2896e2bef}{m\_enabled}}\ \ \ \ \ \ =\ (\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{m\_madt}}-\/>flags\ \&\ 0x1)\ !=\ 0;}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc6b3209c6549a4778c3be339c6f1d62}{m\_can\_enable}}\ \ \ \ =\ (\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{m\_madt}}-\/>flags\ \&\ 0x2)\ !=\ 0;}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Found\ CPU\ ID:\ "{}}\ <<\ \textcolor{keywordtype}{id}\ <<\ \textcolor{stringliteral}{"{}\ with\ APIC\ ID:\ "{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{m\_apic\_id}}\ <<\ \textcolor{stringliteral}{"{}\ (enabled\ =\ "{}}\ <<\ (\mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}})\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad919e4f6d0f47e60695127f2896e2bef}{m\_enabled}}\ <<\ \textcolor{stringliteral}{"{},\ can\ be\ enabled\ =\ "{}}\ <<\ \ (\textcolor{keywordtype}{string})\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc6b3209c6549a4778c3be339c6f1d62}{m\_can\_enable}}\ \ <<\ \textcolor{stringliteral}{"{})\(\backslash\)n"{}};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{logger_8cpp_source_l00178}{Logger\+::\+DEBUG()}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classMaxOS_1_1system_1_1Core_a95b5c90a86bd4f1dec37edb1f32a6406}\label{classMaxOS_1_1system_1_1Core_a95b5c90a86bd4f1dec37edb1f32a6406} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!init@{init}}
+\index{init@{init}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} Core\+::init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Initialises the core by setting up the GDT, IDT, TSS, SSE and APIC. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8cpp_source_l00228}{228}} of file \mbox{\hyperlink{cpu_8cpp_source}{cpu.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ kernel\ IDT\ \&\ GDT}}
+\DoxyCodeLine{00231\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}{gdt}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}();}
+\DoxyCodeLine{00232\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a720bf113b68015bab5e1b2b05bd7a80a}{InterruptManager::load\_current}}();}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{comment}{//\ Setup\ this\ core's\ clock}}
+\DoxyCodeLine{00235\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aa217d5bc27a175b3533c223b7dd4136a}{local\_apic}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{LocalAPIC}};}
+\DoxyCodeLine{00236\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{Clock::active\_clock}}()-\/>setup\_apic\_clock(\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aa217d5bc27a175b3533c223b7dd4136a}{local\_apic}});}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{comment}{//\ Delegate\ large\ initiation}}
+\DoxyCodeLine{00239\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a84092a638e6f4dba8cd08d109cf1649f}{init\_sse}}();}
+\DoxyCodeLine{00240\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4b3368da0cb3321587d4b9623fad2250}{init\_tss}}();}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ee72f36a1713b39bd328ab6a59f71e5}{active}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00243\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{cpu_8h_source_l00217}{active}}, \mbox{\hyperlink{clock_8cpp_source_l00208}{Max\+OS\+::drivers\+::clock\+::\+Clock\+::active\+\_\+clock()}}, \mbox{\hyperlink{cpu_8h_source_l00220}{gdt}}, \mbox{\hyperlink{cpu_8cpp_source_l00167}{init\+\_\+sse()}}, \mbox{\hyperlink{cpu_8cpp_source_l00110}{init\+\_\+tss()}}, \mbox{\hyperlink{interrupts_8cpp_source_l00182}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::load\+\_\+current()}}, and \mbox{\hyperlink{cpu_8h_source_l00219}{local\+\_\+apic}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_a84092a638e6f4dba8cd08d109cf1649f}\label{classMaxOS_1_1system_1_1Core_a84092a638e6f4dba8cd08d109cf1649f} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!init\_sse@{init\_sse}}
+\index{init\_sse@{init\_sse}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{init\_sse()}{init\_sse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} Core\+::init\+\_\+sse (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Initialises the SSE instructions. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8cpp_source_l00167}{167}} of file \mbox{\hyperlink{cpu_8cpp_source}{cpu.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ CR0\ register}}
+\DoxyCodeLine{00170\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr0}};}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%\%cr0,\ \%0"{}}\ :\ \textcolor{stringliteral}{"{}=r"{}}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr0}}));}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ CR4\ register}}
+\DoxyCodeLine{00174\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr4}};}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%\%cr4,\ \%0"{}}\ :\ \textcolor{stringliteral}{"{}=r"{}}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr4}}));}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ FPU\ is\ supported}}
+\DoxyCodeLine{00178\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a77b778d7ddb80332c33d4f2a14432230}{CPU::check\_cpu\_feature}}(CPU\_FEATURE\_EDX::FPU),\ \textcolor{stringliteral}{"{}FPU\ not\ supported\ -\/\ needed\ for\ SSE"{}});}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ emulation\ flag,\ task\ switch\ flags\ and\ enable\ the\ monitor\ coprocessor,\ native\ exception\ bits}}
+\DoxyCodeLine{00181\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr0}}\ |=\ (1\ <<\ 1);}
+\DoxyCodeLine{00182\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr0}}\ \&=\ \string~(1\ <<\ 2);}
+\DoxyCodeLine{00183\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr0}}\ \&=\ \string~(1\ <<\ 3);}
+\DoxyCodeLine{00184\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr0}}\ |=\ (1\ <<\ 5);}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%cr0"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr0}}));}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{comment}{//\ Enable\ the\ FPU}}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}fninit"{}});}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ SSE\ is\ supported}}
+\DoxyCodeLine{00191\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a77b778d7ddb80332c33d4f2a14432230}{CPU::check\_cpu\_feature}}(CPU\_FEATURE\_EDX::SSE),\ \textcolor{stringliteral}{"{}SSE\ not\ supported"{}});}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{comment}{//\ Enable\ FSAVE,\ FSTORE\ and\ SSE\ instructions}}
+\DoxyCodeLine{00194\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr4}}\ |=\ (1\ <<\ 9);}
+\DoxyCodeLine{00195\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr4}}\ |=\ (1\ <<\ 10);}
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%cr4"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr4}}));}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ XSAVE\ is\ supported}}
+\DoxyCodeLine{00199\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317}{xsave\_enabled}}\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a77b778d7ddb80332c33d4f2a14432230}{CPU::check\_cpu\_feature}}(CPU\_FEATURE\_ECX::XSAVE)\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a77b778d7ddb80332c33d4f2a14432230}{CPU::check\_cpu\_feature}}(CPU\_FEATURE\_ECX::OSXSAVE);}
+\DoxyCodeLine{00200\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}XSAVE:\ "{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317}{xsave\_enabled}}\ ?\ \textcolor{stringliteral}{"{}Supported"{}}\ :\ \textcolor{stringliteral}{"{}Not\ Supported"{}})\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317}{xsave\_enabled}})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{comment}{//\ Enable\ the\ XSAVE\ and\ XRESTORE\ instructions}}
+\DoxyCodeLine{00204\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr4}}\ |=\ (1\ <<\ 18);}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%cr4"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr4}}));}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ SSE\ and\ x87\ bits}}
+\DoxyCodeLine{00208\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{xcr0}};}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}xgetbv"{}}\ :\ \textcolor{stringliteral}{"{}=a"{}}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{xcr0}})\ :\ \textcolor{stringliteral}{"{}c"{}}\ (0));}
+\DoxyCodeLine{00210\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{xcr0}}\ |=\ 0x7;}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}xsetbv"{}}\ :\ :\ \textcolor{stringliteral}{"{}c"{}}\ (0),\ \textcolor{stringliteral}{"{}a"{}}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{xcr0}}));}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ AVX\ is\ supported}}
+\DoxyCodeLine{00214\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e}{avx\_enabled}}\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a77b778d7ddb80332c33d4f2a14432230}{CPU::check\_cpu\_feature}}(CPU\_FEATURE\_ECX::AVX);}
+\DoxyCodeLine{00215\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}AVX:\ "{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e}{avx\_enabled}}\ ?\ \textcolor{stringliteral}{"{}Supported"{}}\ :\ \textcolor{stringliteral}{"{}Not\ Supported"{}})\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e}{avx\_enabled}})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{comment}{//\ Enable\ the\ AVX\ instructions}}
+\DoxyCodeLine{00219\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr4}}\ |=\ (1\ <<\ 14);}
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%cr4"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cr4}}));}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}SSE\ Enabled\(\backslash\)n"{}};}
+\DoxyCodeLine{00223\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{cpu_8h_source_l00210}{avx\+\_\+enabled}}, \mbox{\hyperlink{cpu_8cpp_source_l00572}{Max\+OS\+::system\+::\+CPU\+::check\+\_\+cpu\+\_\+feature()}}, \mbox{\hyperlink{logger_8cpp_source_l00178}{Logger\+::\+DEBUG()}}, and \mbox{\hyperlink{cpu_8h_source_l00209}{xsave\+\_\+enabled}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00228}{init()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_a4b3368da0cb3321587d4b9623fad2250}\label{classMaxOS_1_1system_1_1Core_a4b3368da0cb3321587d4b9623fad2250} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!init\_tss@{init\_tss}}
+\index{init\_tss@{init\_tss}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{init\_tss()}{init\_tss()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} Core\+::init\+\_\+tss (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Initialises the task state segment for this core. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000076}{Todo}}]Implement IO bitmap when adding userspace drivers \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{cpu_8cpp_source_l00110}{110}} of file \mbox{\hyperlink{cpu_8cpp_source}{cpu.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{comment}{//\ The\ reserved\ have\ to\ be\ 0}}
+\DoxyCodeLine{00113\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.reserved0\ =\ 0;}
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.reserved1\ =\ 0;}
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.reserved2\ =\ 0;}
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.reserved3\ =\ 0;}
+\DoxyCodeLine{00117\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.reserved4\ =\ 0;}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{//\ The\ stacks}}
+\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.rsp0\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca}{m\_stack}}\ +\ BOOT\_STACK\_SIZE;\ \ \ \ \ \ \ \textcolor{comment}{//\ Kernel\ stack\ (scheduler\ will\ set\ the\ threads\ stack)}}
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.rsp1\ =\ 0;}
+\DoxyCodeLine{00122\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.rsp2\ =\ 0;}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{//\ Interrupt\ stacks\ can\ all\ be\ 0}}
+\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.ist1\ =\ 0;}
+\DoxyCodeLine{00126\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.ist2\ =\ 0;}
+\DoxyCodeLine{00127\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.ist3\ =\ 0;}
+\DoxyCodeLine{00128\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.ist4\ =\ 0;}
+\DoxyCodeLine{00129\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.ist5\ =\ 0;}
+\DoxyCodeLine{00130\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.ist6\ =\ 0;}
+\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.ist7\ =\ 0;}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{comment}{//\ Ports}}
+\DoxyCodeLine{00134\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}.io\_bitmap\_offset\ =\ 0;}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{//\ Split\ the\ base\ into\ 4\ parts\ (16\ bits,\ 8\ bits,\ 8\ bits,\ 32\ bits)}}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \&\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}};}
+\DoxyCodeLine{00138\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{base\_1}}\ =\ \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}}\ \&\ 0xFFFF;}
+\DoxyCodeLine{00139\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{base\_2}}\ =\ (\mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}}\ >>\ 16)\ \&\ 0xFF;}
+\DoxyCodeLine{00140\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{base\_3}}\ =\ (\mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}}\ >>\ 24)\ \&\ 0xFF;}
+\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{base\_4}}\ =\ (\mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}}\ >>\ 32)\ \&\ 0xFFFFFFFF;}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{limit\_low}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}})\ -\/\ 1);}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{//\ Flags:\ 1\ -\/\ Type\ =\ 0x9,\ Descriptor\ Privilege\ Level\ =\ 0,\ Present\ =\ 1,\ 2\ -\/\ Available\ =\ 0,\ Granularity\ =\ 0}}
+\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{flags\_1}}\ =\ 0x89;}
+\DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{flags\_2}}\ =\ 0;}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ TSS\ descriptors}}
+\DoxyCodeLine{00150\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tss\_descriptor\_low}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{base\_3}}\ <<\ 56\ |\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{flags\_2}}\ <<\ 48\ |\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{flags\_1}}\ <<\ 40\ |\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{base\_2}}\ <<\ 32\ |\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{base\_1}}\ <<\ 16\ |\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{limit\_low}};}
+\DoxyCodeLine{00151\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tss\_descriptor\_high}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{base\_4}};}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{//\ Store\ in\ the\ GDT}}
+\DoxyCodeLine{00154\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}{gdt}}\ -\/>\ table[5]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tss\_descriptor\_low}};}
+\DoxyCodeLine{00155\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}{gdt}}\ -\/>\ table[6]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tss\_descriptor\_high}};}
+\DoxyCodeLine{00156\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}{gdt}}\ -\/>\ load();}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ TSS}}
+\DoxyCodeLine{00159\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Loading\ TSS:\ 0x0"{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tss\_descriptor\_low}}\ <<\ \textcolor{stringliteral}{"{}\ 0x0"{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{tss\_descriptor\_high}}\ <<\ \textcolor{stringliteral}{"{}\ at\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \&\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}ltr\ \%\%ax"{}}\ :\ :\ \textcolor{stringliteral}{"{}a"{}}\ (0x28));}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{interrupts_8h_source_l00001}{base}}, \mbox{\hyperlink{cpu_8h_source_l00180}{Max\+OS\+::system\+::\+BOOT\+\_\+\+STACK\+\_\+\+SIZE}}, \mbox{\hyperlink{logger_8cpp_source_l00178}{Logger\+::\+DEBUG()}}, \mbox{\hyperlink{cpu_8h_source_l00220}{gdt}}, \mbox{\hyperlink{cpu_8h_source_l00200}{m\+\_\+stack}}, and \mbox{\hyperlink{cpu_8h_source_l00216}{tss}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00228}{init()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_a35cbdbb9c1e6716be75f57256c508333}\label{classMaxOS_1_1system_1_1Core_a35cbdbb9c1e6716be75f57256c508333} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!wake\_up@{wake\_up}}
+\index{wake\_up@{wake\_up}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{wake\_up()}{wake\_up()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} Core\+::wake\+\_\+up (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}} \texorpdfstring{$\ast$}{*}}]{cpu }\end{DoxyParamCaption})}
+
+
+
+Wakes up the core by sending the appropriate IPIs. (see core\+\_\+loader.\+s for startup code) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cpu} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000075}{Todo}}]Should handle core fails and not delay once we are in c++ \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{cpu_8cpp_source_l00059}{59}} of file \mbox{\hyperlink{cpu_8cpp_source}{cpu.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{//\ Boot\ core\ is\ already\ setup}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a51cfe856f4f9c002fa0789dbc03741c3}{m\_bsp}})\{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}BSP\ Already\ setup\(\backslash\)n"{}};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Starting\ core:\ "{}}\ <<\ \textcolor{keywordtype}{id}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca}{m\_stack}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a983c849ff604367f7c8a0e70172bb331}{MemoryManager::kmalloc}}(BOOT\_STACK\_SIZE);}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{//\ Core\ specific\ boot\ info}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{auto}\ info\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core\_boot\_info\_t}}*)(\mbox{\hyperlink{kernel_8cpp_a32bfa49e87f9c5c8e4b07eb74f8fcca9}{core\_boot\_info}});}
+\DoxyCodeLine{00072\ \ \ \ \ info-\/>activated\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00073\ \ \ \ \ info-\/>id\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8}{id}};}
+\DoxyCodeLine{00074\ \ \ \ \ info-\/>stack\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca}{m\_stack}}\ +\ \mbox{\hyperlink{cpu_8h_a0cdb341b2d45114c2d033ec00bc3b356}{BOOT\_STACK\_SIZE}};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//\ Send\ init\ IPI}}
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}-\/>apic.local\_apic()-\/>send\_init(\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{m\_apic\_id}},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//\ Send\ de-\/assert\ IPI}}
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}-\/>apic.local\_apic()-\/>send\_init(\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{m\_apic\_id}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{Clock::active\_clock}}()-\/>delay(10);}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//\ Send\ tow\ SIPIs}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ 2;\ ++i)\ \{}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Send\ the\ start\ up\ IPI}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}-\/>apic.local\_apic()-\/>send\_startup(\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{m\_apic\_id}},\ 0x8);}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{Clock::active\_clock}}()-\/>delay(200);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ core\ started}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(info-\/>activated)\{}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ full\ init}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(!\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ee72f36a1713b39bd328ab6a59f71e5}{active}})}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}nop"{}});}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Core\ "{}}\ <<\ \textcolor{keywordtype}{id}\ <<\ \textcolor{stringliteral}{"{}\ started\ successfully\ \(\backslash\)n"{}};}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00100\ \ \ \ \ \}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}Failed\ to\ start\ core:\ "{}}\ <<\ \textcolor{keywordtype}{id}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00103\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{cpu_8h_source_l00217}{active}}, \mbox{\hyperlink{clock_8cpp_source_l00208}{Max\+OS\+::drivers\+::clock\+::\+Clock\+::active\+\_\+clock()}}, \mbox{\hyperlink{cpu_8h_source_l00180}{Max\+OS\+::system\+::\+BOOT\+\_\+\+STACK\+\_\+\+SIZE}}, \mbox{\hyperlink{kernel_8cpp_source_l00041}{core\+\_\+boot\+\_\+info}}, \mbox{\hyperlink{logger_8cpp_source_l00178}{Logger\+::\+DEBUG()}}, \mbox{\hyperlink{cpu_8h_source_l00215}{id}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00083}{Max\+OS\+::memory\+::\+Memory\+Manager\+::kmalloc()}}, \mbox{\hyperlink{cpu_8h_source_l00199}{m\+\_\+apic\+\_\+id}}, \mbox{\hyperlink{cpu_8h_source_l00197}{m\+\_\+bsp}}, \mbox{\hyperlink{cpu_8h_source_l00200}{m\+\_\+stack}}, and \mbox{\hyperlink{logger_8cpp_source_l00190}{Logger\+::\+WARNING()}}.
+
+
+
+\doxysubsection{Friends And Related Symbol Documentation}
+\Hypertarget{classMaxOS_1_1system_1_1Core_a421a70ac7bb7c7b4eed0fc44b76802d3}\label{classMaxOS_1_1system_1_1Core_a421a70ac7bb7c7b4eed0fc44b76802d3} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!CPU@{CPU}}
+\index{CPU@{CPU}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{CPU}{CPU}}
+{\footnotesize\ttfamily friend class \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00190}{190}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classMaxOS_1_1system_1_1Core_a9ee72f36a1713b39bd328ab6a59f71e5}\label{classMaxOS_1_1system_1_1Core_a9ee72f36a1713b39bd328ab6a59f71e5} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!active@{active}}
+\index{active@{active}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{active}{active}}
+{\footnotesize\ttfamily bool Max\+OS\+::system\+::\+Core\+::active = false}
+
+
+
+Whether this core is active. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00217}{217}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00228}{init()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00059}{wake\+\_\+up()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e}\label{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!avx\_enabled@{avx\_enabled}}
+\index{avx\_enabled@{avx\_enabled}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{avx\_enabled}{avx\_enabled}}
+{\footnotesize\ttfamily bool Max\+OS\+::system\+::\+Core\+::avx\+\_\+enabled = false}
+
+
+
+Whether AVX is enabled. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00210}{210}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00167}{init\+\_\+sse()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}\label{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!gdt@{gdt}}
+\index{gdt@{gdt}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{gdt}{gdt}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{Global\+Descriptor\+Table}}\texorpdfstring{$\ast$}{*} Max\+OS\+::system\+::\+Core\+::gdt}
+
+
+
+The GDT for this core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00220}{220}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00228}{init()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00110}{init\+\_\+tss()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8}\label{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!id@{id}}
+\index{id@{id}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily uint8\+\_\+t Max\+OS\+::system\+::\+Core\+::id}
+
+
+
+The ID of this core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00215}{215}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00165}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::print\+\_\+running\+\_\+header()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00059}{wake\+\_\+up()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_aa217d5bc27a175b3533c223b7dd4136a}\label{classMaxOS_1_1system_1_1Core_aa217d5bc27a175b3533c223b7dd4136a} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!local\_apic@{local\_apic}}
+\index{local\_apic@{local\_apic}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{local\_apic}{local\_apic}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication\+::\+Local\+APIC}}\texorpdfstring{$\ast$}{*} Max\+OS\+::system\+::\+Core\+::local\+\_\+apic}
+
+
+
+The local APIC for this core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00219}{219}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00228}{init()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}\label{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!m\_apic\_id@{m\_apic\_id}}
+\index{m\_apic\_id@{m\_apic\_id}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{m\_apic\_id}{m\_apic\_id}}
+{\footnotesize\ttfamily uint8\+\_\+t Max\+OS\+::system\+::\+Core\+::m\+\_\+apic\+\_\+id\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The ID of the apic for this core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00199}{199}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00059}{wake\+\_\+up()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_a51cfe856f4f9c002fa0789dbc03741c3}\label{classMaxOS_1_1system_1_1Core_a51cfe856f4f9c002fa0789dbc03741c3} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!m\_bsp@{m\_bsp}}
+\index{m\_bsp@{m\_bsp}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{m\_bsp}{m\_bsp}}
+{\footnotesize\ttfamily bool Max\+OS\+::system\+::\+Core\+::m\+\_\+bsp = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Whether this core is the bootstrap processor. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00197}{197}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00059}{wake\+\_\+up()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_adc6b3209c6549a4778c3be339c6f1d62}\label{classMaxOS_1_1system_1_1Core_adc6b3209c6549a4778c3be339c6f1d62} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!m\_can\_enable@{m\_can\_enable}}
+\index{m\_can\_enable@{m\_can\_enable}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{m\_can\_enable}{m\_can\_enable}}
+{\footnotesize\ttfamily bool Max\+OS\+::system\+::\+Core\+::m\+\_\+can\+\_\+enable = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Whether the core can be enabled. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00196}{196}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_ad919e4f6d0f47e60695127f2896e2bef}\label{classMaxOS_1_1system_1_1Core_ad919e4f6d0f47e60695127f2896e2bef} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!m\_enabled@{m\_enabled}}
+\index{m\_enabled@{m\_enabled}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{m\_enabled}{m\_enabled}}
+{\footnotesize\ttfamily bool Max\+OS\+::system\+::\+Core\+::m\+\_\+enabled = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Whether the core is enabled. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00195}{195}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}\label{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!m\_madt@{m\_madt}}
+\index{m\_madt@{m\_madt}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{m\_madt}{m\_madt}}
+{\footnotesize\ttfamily hardwarecommunication\+::madt\+\_\+processor\+\_\+apic\+\_\+t\texorpdfstring{$\ast$}{*} Max\+OS\+::system\+::\+Core\+::m\+\_\+madt\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The MADT entry for this core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00193}{193}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca}\label{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!m\_stack@{m\_stack}}
+\index{m\_stack@{m\_stack}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{m\_stack}{m\_stack}}
+{\footnotesize\ttfamily uint64\+\_\+t Max\+OS\+::system\+::\+Core\+::m\+\_\+stack\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The stack pointer for this core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00200}{200}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00110}{init\+\_\+tss()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00059}{wake\+\_\+up()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_ab5f2cccadb50ecefe94cbb95eebea371}\label{classMaxOS_1_1system_1_1Core_ab5f2cccadb50ecefe94cbb95eebea371} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!scheduler@{scheduler}}
+\index{scheduler@{scheduler}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{scheduler}{scheduler}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{processes\+::\+Scheduler}}\texorpdfstring{$\ast$}{*} Max\+OS\+::system\+::\+Core\+::scheduler}
+
+
+
+The scheduler for this core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00221}{221}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{scheduler_8cpp_source_l00346}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::core\+\_\+scheduler()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}\label{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!tss@{tss}}
+\index{tss@{tss}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{tss}{tss}}
+{\footnotesize\ttfamily tss\+\_\+t Max\+OS\+::system\+::\+Core\+::tss = \{ \}}
+
+
+
+The Task State Segment for this core. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00216}{216}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00216\ \{\ \};\ \ \ \ \ \ \ \ \ \ \ \ }
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00110}{init\+\_\+tss()}}.
+
+\Hypertarget{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317}\label{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317} 
+\index{MaxOS::system::Core@{MaxOS::system::Core}!xsave\_enabled@{xsave\_enabled}}
+\index{xsave\_enabled@{xsave\_enabled}!MaxOS::system::Core@{MaxOS::system::Core}}
+\doxysubsubsection{\texorpdfstring{xsave\_enabled}{xsave\_enabled}}
+{\footnotesize\ttfamily bool Max\+OS\+::system\+::\+Core\+::xsave\+\_\+enabled = false}
+
+
+
+Whether XSAVE is enabled. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00209}{209}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00167}{init\+\_\+sse()}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/system/\mbox{\hyperlink{cpu_8h}{cpu.\+h}}\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/system/\mbox{\hyperlink{cpu_8cpp}{cpu.\+cpp}}\end{DoxyCompactItemize}

@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::filesystem::format::ext2::SuperBlock
+MaxOS::filesystem::format::ext2::SuperBlock \- The metadata of the ext2 filesystem\&. Found at an offset of 1024 bytes from the start of the partition\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,310 +15,441 @@ MaxOS::filesystem::format::ext2::SuperBlock
 .ti -1c
 .RI "uint32_t \fBtotal_inodes\fP"
 .br
+.RI "Total number of inodes\&. "
 .ti -1c
 .RI "uint32_t \fBtotal_blocks\fP"
 .br
+.RI "Total number of blocks\&. "
 .ti -1c
 .RI "uint32_t \fBreserved_blocks\fP"
 .br
+.RI "Number of reserved blocks for superuser\&. "
 .ti -1c
 .RI "uint32_t \fBunallocated_blocks\fP"
 .br
+.RI "Number of free blocks\&. "
 .ti -1c
 .RI "uint32_t \fBunallocated_inodes\fP"
 .br
+.RI "Number of free inodes\&. "
 .ti -1c
 .RI "uint32_t \fBstarting_block\fP"
 .br
+.RI "Where the superblock starts (normally 0 but not always) "
 .ti -1c
 .RI "uint32_t \fBblock_size\fP"
 .br
+.RI "Block size (as a power of 2, so 1024 << block_size) "
 .ti -1c
 .RI "uint32_t \fBfragment_size\fP"
 .br
+.RI "Fragment size (as a power of 2, so 1024 << fragment_size) "
 .ti -1c
 .RI "uint32_t \fBblocks_per_group\fP"
 .br
+.RI "Number of blocks per group\&. "
 .ti -1c
 .RI "uint32_t \fBfragments_per_group\fP"
 .br
+.RI "Number of fragments per group\&. "
 .ti -1c
 .RI "uint32_t \fBinodes_per_group\fP"
 .br
+.RI "Number of inodes per group\&. "
 .ti -1c
 .RI "uint32_t \fBlast_mount_time\fP"
 .br
+.RI "Last time the filesystem was mounted (in seconds since the epoch) "
 .ti -1c
 .RI "uint32_t \fBlate_write_time\fP"
 .br
+.RI "Last time a block was written to (in seconds since the epoch) "
 .ti -1c
 .RI "uint16_t \fBmounts_since_check\fP"
 .br
+.RI "Number of mounts since the last consistency check\&. "
 .ti -1c
 .RI "uint16_t \fBmounts_until_check\fP"
 .br
+.RI "Number of mounts allowed before a consistency check is needed (fsck) "
 .ti -1c
 .RI "uint16_t \fBsignature\fP"
 .br
+.RI "Filesystem magic signature (0xEF53) "
 .ti -1c
 .RI "uint16_t \fBstate\fP"
 .br
+.RI "The state of the filesystem (see FileSystemState) "
 .ti -1c
 .RI "uint16_t \fBerror_operation\fP"
 .br
+.RI "What to do when an error is detected (see ErrorOperation) "
 .ti -1c
 .RI "uint16_t \fBversion_minor\fP"
 .br
+.RI "Minor version number (combined with version_major to make version number) "
 .ti -1c
 .RI "uint32_t \fBlast_check_time\fP"
 .br
+.RI "Time of last consistency check (in seconds since the epoch) "
 .ti -1c
 .RI "uint32_t \fBtime_until_check\fP"
 .br
+.RI "Maximum time between checks (in seconds) "
 .ti -1c
 .RI "uint32_t \fBos_id\fP"
 .br
+.RI "ID of the OS which created the filesystem (see CreatorOS) "
 .ti -1c
 .RI "uint32_t \fBversion_major\fP"
 .br
+.RI "Major version number (combined with version_minor to make version number) "
 .ti -1c
 .RI "uint16_t \fBreserved_user\fP"
 .br
+.RI "User ID that can use reserved blocks\&. "
 .ti -1c
 .RI "uint16_t \fBreserved_group\fP"
 .br
+.RI "Group ID that can use reserved blocks\&. "
 .ti -1c
 .RI "uint32_t \fBfirst_inode\fP"
 .br
+.RI "Number of the first non-reserved inode (version < 1 this is 11) "
 .ti -1c
 .RI "uint16_t \fBinode_size\fP"
 .br
+.RI "Size of each inode structure (version < 1 this is 128 bytes) "
 .ti -1c
 .RI "uint16_t \fBsuperblock_group\fP"
 .br
+.RI "If there is a backup superblock, which group it is stored in\&. "
 .ti -1c
 .RI "uint32_t \fBoptional_features\fP"
 .br
+.RI "Features that are not required for read/write support but can help performance (see OptionalFeatures) "
 .ti -1c
 .RI "uint32_t \fBrequired_features\fP"
 .br
+.RI "Features that must be present for read/write support (see RequiredFeatures) "
 .ti -1c
 .RI "uint16_t \fBread_only_features\fP"
 .br
+.RI "Features that are only required in read-only mode (see ReadOnlyFeatures) "
 .ti -1c
 .RI "uint8_t \fBfilesystem_id\fP [16]"
 .br
+.RI "A unique identifier for the filesystem\&. "
 .ti -1c
 .RI "uint8_t \fBvolume_name\fP [16]"
 .br
+.RI "The volume name (is null-terminated) "
 .ti -1c
 .RI "uint8_t \fBlast_mount_path\fP [64]"
 .br
+.RI "The path where the filesystem was last mounted (is null-terminated) "
 .ti -1c
 .RI "uint32_t \fBcompression\fP"
 .br
+.RI "Compression algorithm used (0 = none, see RequiredFeatures) "
 .ti -1c
 .RI "uint8_t \fBfile_preallocation_blocks\fP"
 .br
+.RI "How many blocks should be allocated when creating a file\&. "
 .ti -1c
 .RI "uint8_t \fBdirectory_preallocation_blocks\fP"
 .br
+.RI "How many blocks should be allocated when creating a directory\&. "
 .ti -1c
 .RI "uint16_t \fBunused\fP"
 .br
+.RI "Reserved\&. "
 .ti -1c
 .RI "uint8_t \fBjournal_id\fP [16]"
 .br
+.RI "A unique identifier for the journal\&. "
 .ti -1c
 .RI "uint32_t \fBjournal_inode\fP"
 .br
+.RI "The inode number of the journal file\&. "
 .ti -1c
 .RI "uint32_t \fBjournal_device\fP"
 .br
+.RI "The device number of the journal file\&. "
 .ti -1c
 .RI "uint32_t \fBorphan_inodes_start\fP"
 .br
+.RI "The start of the list of inodes without a directory entry that need to be deleted\&. "
 .ti -1c
 .RI "uint8_t \fBfree\fP [276]"
 .br
+.RI "Reserved for future expansion\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB21\fP of file \fBext2\&.h\fP\&.
+The metadata of the ext2 filesystem\&. Found at an offset of 1024 bytes from the start of the partition\&. 
+.PP
+Definition at line \fB28\fP of file \fBext2\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::block_size"
 
 .PP
-Definition at line \fB28\fP of file \fBext2\&.h\fP\&.
+Block size (as a power of 2, so 1024 << block_size) 
+.PP
+Definition at line \fB35\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::blocks_per_group"
 
 .PP
-Definition at line \fB30\fP of file \fBext2\&.h\fP\&.
+Number of blocks per group\&. 
+.PP
+Definition at line \fB37\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::compression"
 
 .PP
-Definition at line \fB58\fP of file \fBext2\&.h\fP\&.
+Compression algorithm used (0 = none, see RequiredFeatures) 
+.PP
+Definition at line \fB65\fP of file \fBext2\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::ext2::SuperBlock::directory_preallocation_blocks"
 
 .PP
-Definition at line \fB60\fP of file \fBext2\&.h\fP\&.
+How many blocks should be allocated when creating a directory\&. 
+.PP
+Definition at line \fB67\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::error_operation"
 
 .PP
-Definition at line \fB39\fP of file \fBext2\&.h\fP\&.
+What to do when an error is detected (see ErrorOperation) 
+.PP
+Definition at line \fB46\fP of file \fBext2\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::ext2::SuperBlock::file_preallocation_blocks"
 
 .PP
-Definition at line \fB59\fP of file \fBext2\&.h\fP\&.
+How many blocks should be allocated when creating a file\&. 
+.PP
+Definition at line \fB66\fP of file \fBext2\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::ext2::SuperBlock::filesystem_id[16]"
 
 .PP
-Definition at line \fB55\fP of file \fBext2\&.h\fP\&.
+A unique identifier for the filesystem\&. 
+.PP
+Definition at line \fB62\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::first_inode"
 
 .PP
-Definition at line \fB49\fP of file \fBext2\&.h\fP\&.
+Number of the first non-reserved inode (version < 1 this is 11) 
+.PP
+Definition at line \fB56\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::fragment_size"
 
 .PP
-Definition at line \fB29\fP of file \fBext2\&.h\fP\&.
+Fragment size (as a power of 2, so 1024 << fragment_size) 
+.PP
+Definition at line \fB36\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::fragments_per_group"
 
 .PP
-Definition at line \fB31\fP of file \fBext2\&.h\fP\&.
+Number of fragments per group\&. 
+.PP
+Definition at line \fB38\fP of file \fBext2\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::ext2::SuperBlock::free[276]"
 
 .PP
-Definition at line \fB66\fP of file \fBext2\&.h\fP\&.
+Reserved for future expansion\&. 
+.PP
+Definition at line \fB73\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::inode_size"
 
 .PP
-Definition at line \fB50\fP of file \fBext2\&.h\fP\&.
+Size of each inode structure (version < 1 this is 128 bytes) 
+.PP
+Definition at line \fB57\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::inodes_per_group"
 
 .PP
-Definition at line \fB32\fP of file \fBext2\&.h\fP\&.
+Number of inodes per group\&. 
+.PP
+Definition at line \fB39\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::journal_device"
 
 .PP
-Definition at line \fB64\fP of file \fBext2\&.h\fP\&.
+The device number of the journal file\&. 
+.PP
+Definition at line \fB71\fP of file \fBext2\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::ext2::SuperBlock::journal_id[16]"
 
 .PP
-Definition at line \fB62\fP of file \fBext2\&.h\fP\&.
+A unique identifier for the journal\&. 
+.PP
+Definition at line \fB69\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::journal_inode"
 
 .PP
-Definition at line \fB63\fP of file \fBext2\&.h\fP\&.
+The inode number of the journal file\&. 
+.PP
+Definition at line \fB70\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::last_check_time"
 
 .PP
-Definition at line \fB41\fP of file \fBext2\&.h\fP\&.
+Time of last consistency check (in seconds since the epoch) 
+.PP
+Definition at line \fB48\fP of file \fBext2\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::ext2::SuperBlock::last_mount_path[64]"
 
 .PP
-Definition at line \fB57\fP of file \fBext2\&.h\fP\&.
+The path where the filesystem was last mounted (is null-terminated) 
+.PP
+Definition at line \fB64\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::last_mount_time"
 
 .PP
-Definition at line \fB33\fP of file \fBext2\&.h\fP\&.
+Last time the filesystem was mounted (in seconds since the epoch) 
+.PP
+Definition at line \fB40\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::late_write_time"
 
 .PP
-Definition at line \fB34\fP of file \fBext2\&.h\fP\&.
+Last time a block was written to (in seconds since the epoch) 
+.PP
+Definition at line \fB41\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::mounts_since_check"
 
 .PP
-Definition at line \fB35\fP of file \fBext2\&.h\fP\&.
+Number of mounts since the last consistency check\&. 
+.PP
+Definition at line \fB42\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::mounts_until_check"
 
 .PP
-Definition at line \fB36\fP of file \fBext2\&.h\fP\&.
+Number of mounts allowed before a consistency check is needed (fsck) 
+.PP
+Definition at line \fB43\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::optional_features"
 
 .PP
-Definition at line \fB52\fP of file \fBext2\&.h\fP\&.
+Features that are not required for read/write support but can help performance (see OptionalFeatures) 
+.PP
+Definition at line \fB59\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::orphan_inodes_start"
 
 .PP
-Definition at line \fB65\fP of file \fBext2\&.h\fP\&.
+The start of the list of inodes without a directory entry that need to be deleted\&. 
+.PP
+Definition at line \fB72\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::os_id"
 
 .PP
-Definition at line \fB43\fP of file \fBext2\&.h\fP\&.
+ID of the OS which created the filesystem (see CreatorOS) 
+.PP
+Definition at line \fB50\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::read_only_features"
 
 .PP
-Definition at line \fB54\fP of file \fBext2\&.h\fP\&.
+Features that are only required in read-only mode (see ReadOnlyFeatures) 
+.PP
+Definition at line \fB61\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::required_features"
 
 .PP
-Definition at line \fB53\fP of file \fBext2\&.h\fP\&.
+Features that must be present for read/write support (see RequiredFeatures) 
+.PP
+Definition at line \fB60\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::reserved_blocks"
 
 .PP
-Definition at line \fB24\fP of file \fBext2\&.h\fP\&.
+Number of reserved blocks for superuser\&. 
+.PP
+Definition at line \fB31\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::reserved_group"
 
 .PP
-Definition at line \fB46\fP of file \fBext2\&.h\fP\&.
+Group ID that can use reserved blocks\&. 
+.PP
+Definition at line \fB53\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::reserved_user"
 
 .PP
-Definition at line \fB45\fP of file \fBext2\&.h\fP\&.
+User ID that can use reserved blocks\&. 
+.PP
+Definition at line \fB52\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::signature"
 
 .PP
-Definition at line \fB37\fP of file \fBext2\&.h\fP\&.
+Filesystem magic signature (0xEF53) 
+.PP
+Definition at line \fB44\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::starting_block"
 
 .PP
-Definition at line \fB27\fP of file \fBext2\&.h\fP\&.
+Where the superblock starts (normally 0 but not always) 
+.PP
+Definition at line \fB34\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::state"
 
 .PP
-Definition at line \fB38\fP of file \fBext2\&.h\fP\&.
+The state of the filesystem (see FileSystemState) 
+.PP
+Definition at line \fB45\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::superblock_group"
 
 .PP
-Definition at line \fB51\fP of file \fBext2\&.h\fP\&.
+If there is a backup superblock, which group it is stored in\&. 
+.PP
+Definition at line \fB58\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::time_until_check"
 
 .PP
-Definition at line \fB42\fP of file \fBext2\&.h\fP\&.
+Maximum time between checks (in seconds) 
+.PP
+Definition at line \fB49\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::total_blocks"
 
 .PP
-Definition at line \fB23\fP of file \fBext2\&.h\fP\&.
+Total number of blocks\&. 
+.PP
+Definition at line \fB30\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::total_inodes"
 
 .PP
-Definition at line \fB22\fP of file \fBext2\&.h\fP\&.
+Total number of inodes\&. 
+.PP
+Definition at line \fB29\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::unallocated_blocks"
 
 .PP
-Definition at line \fB25\fP of file \fBext2\&.h\fP\&.
+Number of free blocks\&. 
+.PP
+Definition at line \fB32\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::unallocated_inodes"
 
 .PP
-Definition at line \fB26\fP of file \fBext2\&.h\fP\&.
+Number of free inodes\&. 
+.PP
+Definition at line \fB33\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::unused"
 
 .PP
-Definition at line \fB61\fP of file \fBext2\&.h\fP\&.
+Reserved\&. 
+.PP
+Definition at line \fB68\fP of file \fBext2\&.h\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::SuperBlock::version_major"
 
 .PP
-Definition at line \fB44\fP of file \fBext2\&.h\fP\&.
+Major version number (combined with version_minor to make version number) 
+.PP
+Definition at line \fB51\fP of file \fBext2\&.h\fP\&.
 .SS "uint16_t MaxOS::filesystem::format::ext2::SuperBlock::version_minor"
 
 .PP
-Definition at line \fB40\fP of file \fBext2\&.h\fP\&.
+Minor version number (combined with version_major to make version number) 
+.PP
+Definition at line \fB47\fP of file \fBext2\&.h\fP\&.
 .SS "uint8_t MaxOS::filesystem::format::ext2::SuperBlock::volume_name[16]"
 
 .PP
-Definition at line \fB56\fP of file \fBext2\&.h\fP\&.
+The volume name (is null-terminated) 
+.PP
+Definition at line \fB63\fP of file \fBext2\&.h\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,0 +1,509 @@
+.TH "MaxOS::system::Core" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::system::Core \- Represents a \fBCPU\fP core in the system\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <cpu\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCore\fP (hardwarecommunication::madt_processor_apic_t *\fBmadt_item\fP)"
+.br
+.RI "Constructs a new \fBCore\fP object from the MADT entry\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBwake_up\fP (\fBCPU\fP *\fBcpu\fP)"
+.br
+.RI "Wakes up the core by sending the appropriate IPIs\&. (see core_loader\&.s for startup code) "
+.ti -1c
+.RI "\fBvoid\fP \fBinit\fP ()"
+.br
+.RI "Initialises the core by setting up the GDT, IDT, TSS, SSE and APIC\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBxsave_enabled\fP = false"
+.br
+.RI "Whether XSAVE is enabled\&. "
+.ti -1c
+.RI "bool \fBavx_enabled\fP = false"
+.br
+.RI "Whether AVX is enabled\&. "
+.ti -1c
+.RI "uint8_t \fBid\fP"
+.br
+.RI "The ID of this core\&. "
+.ti -1c
+.RI "tss_t \fBtss\fP = { }"
+.br
+.RI "The Task State Segment for this core\&. "
+.ti -1c
+.RI "bool \fBactive\fP = false"
+.br
+.RI "Whether this core is active\&. "
+.ti -1c
+.RI "\fBhardwarecommunication::LocalAPIC\fP * \fBlocal_apic\fP"
+.br
+.RI "The local APIC for this core\&. "
+.ti -1c
+.RI "\fBGlobalDescriptorTable\fP * \fBgdt\fP"
+.br
+.RI "The GDT for this core\&. "
+.ti -1c
+.RI "\fBprocesses::Scheduler\fP * \fBscheduler\fP"
+.br
+.RI "The scheduler for this core\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBvoid\fP \fBinit_tss\fP ()"
+.br
+.RI "Initialises the task state segment for this core\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBinit_sse\fP ()"
+.br
+.RI "Initialises the SSE instructions\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "hardwarecommunication::madt_processor_apic_t * \fBm_madt\fP"
+.br
+.RI "The MADT entry for this core\&. "
+.ti -1c
+.RI "bool \fBm_enabled\fP = false"
+.br
+.RI "Whether the core is enabled\&. "
+.ti -1c
+.RI "bool \fBm_can_enable\fP = false"
+.br
+.RI "Whether the core can be enabled\&. "
+.ti -1c
+.RI "bool \fBm_bsp\fP = false"
+.br
+.RI "Whether this core is the bootstrap processor\&. "
+.ti -1c
+.RI "uint8_t \fBm_apic_id\fP"
+.br
+.RI "The ID of the apic for this core\&. "
+.ti -1c
+.RI "uint64_t \fBm_stack\fP"
+.br
+.RI "The stack pointer for this core\&. "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBCPU\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Represents a \fBCPU\fP core in the system\&. 
+.PP
+Definition at line \fB188\fP of file \fBcpu\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Core::Core (hardwarecommunication::madt_processor_apic_t * madt_item)\fC [explicit]\fP"
+
+.PP
+Constructs a new \fBCore\fP object from the MADT entry\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImadt_item\fP The MADT entry for this core 
+.RE
+.PP
+
+.PP
+Definition at line \fB37\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+38 : m_madt(madt_item)
+39 {
+40 
+41     id          = m_madt\->processor_id;
+42     m_apic_id   = m_madt\->apic_id;
+43 
+44     m_enabled       = (m_madt\->flags & 0x1) != 0;
+45     m_can_enable    = (m_madt\->flags & 0x2) != 0;
+46 
+47     Logger::DEBUG() << "Found CPU ID: " << id << " with APIC ID: " << m_apic_id << " (enabled = " << (string)m_enabled << ", can be enabled = " <<  (string)m_can_enable  << ")\\n";
+48 
+49 }
+.fi
+
+.PP
+References \fBLogger::DEBUG()\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBvoid\fP Core::init ()"
+
+.PP
+Initialises the core by setting up the GDT, IDT, TSS, SSE and APIC\&. 
+.PP
+Definition at line \fB228\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+228                 {
+229 
+230     // Load the kernel IDT & GDT
+231     gdt = new GlobalDescriptorTable();
+232     InterruptManager::load_current();
+233 
+234     // Setup this core's clock
+235     local_apic = new LocalAPIC;
+236     Clock::active_clock()\->setup_apic_clock(local_apic);
+237 
+238     // Delegate large initiation
+239     init_sse();
+240     init_tss();
+241 
+242     active = true;
+243 }
+.fi
+
+.PP
+References \fBactive\fP, \fBMaxOS::drivers::clock::Clock::active_clock()\fP, \fBgdt\fP, \fBinit_sse()\fP, \fBinit_tss()\fP, \fBMaxOS::hardwarecommunication::InterruptManager::load_current()\fP, and \fBlocal_apic\fP\&.
+.SS "\fBvoid\fP Core::init_sse ()\fC [protected]\fP"
+
+.PP
+Initialises the SSE instructions\&. 
+.PP
+Definition at line \fB167\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+167                     {
+168 
+169     // Get the CR0 register
+170     uint64_t cr0;
+171     asm volatile("mov %%cr0, %0" : "=r" (cr0));
+172 
+173     // Get the CR4 register
+174     uint64_t cr4;
+175     asm volatile("mov %%cr4, %0" : "=r" (cr4));
+176 
+177     // Check if FPU is supported
+178     ASSERT(CPU::check_cpu_feature(CPU_FEATURE_EDX::FPU), "FPU not supported \- needed for SSE");
+179 
+180     // Clear the emulation flag, task switch flags and enable the monitor coprocessor, native exception bits
+181     cr0 |= (1 << 1);
+182     cr0 &= ~(1 << 2);
+183     cr0 &= ~(1 << 3);
+184     cr0 |= (1 << 5);
+185     asm volatile("mov %0, %%cr0" : : "r" (cr0));
+186 
+187     // Enable the FPU
+188     asm volatile("fninit");
+189 
+190     // Check if SSE is supported
+191     ASSERT(CPU::check_cpu_feature(CPU_FEATURE_EDX::SSE), "SSE not supported");
+192 
+193     // Enable FSAVE, FSTORE and SSE instructions
+194     cr4 |= (1 << 9);
+195     cr4 |= (1 << 10);
+196     asm volatile("mov %0, %%cr4" : : "r" (cr4));
+197 
+198     // Check if XSAVE is supported
+199     xsave_enabled = CPU::check_cpu_feature(CPU_FEATURE_ECX::XSAVE) && CPU::check_cpu_feature(CPU_FEATURE_ECX::OSXSAVE);
+200     Logger::DEBUG() << "XSAVE: " << (xsave_enabled ? "Supported" : "Not Supported") << "\\n";
+201     if (!xsave_enabled) return;
+202 
+203     // Enable the XSAVE and XRESTORE instructions
+204     cr4 |= (1 << 18);
+205     asm volatile("mov %0, %%cr4" : : "r" (cr4));
+206 
+207     // Set the SSE and x87 bits
+208     uint64_t xcr0;
+209     asm volatile("xgetbv" : "=a" (xcr0) : "c" (0));
+210     xcr0 |= 0x7;
+211     asm volatile("xsetbv" : : "c" (0), "a" (xcr0));
+212 
+213     // Check if AVX is supported
+214     avx_enabled = CPU::check_cpu_feature(CPU_FEATURE_ECX::AVX);
+215     Logger::DEBUG() << "AVX: " << (avx_enabled ? "Supported" : "Not Supported") << "\\n";
+216     if (!avx_enabled) return;
+217 
+218     // Enable the AVX instructions
+219     cr4 |= (1 << 14);
+220     asm volatile("mov %0, %%cr4" : : "r" (cr4));
+221 
+222     Logger::DEBUG() << "SSE Enabled\\n";
+223 }
+.fi
+
+.PP
+References \fBASSERT\fP, \fBavx_enabled\fP, \fBMaxOS::system::CPU::check_cpu_feature()\fP, \fBLogger::DEBUG()\fP, and \fBxsave_enabled\fP\&.
+.PP
+Referenced by \fBinit()\fP\&.
+.SS "\fBvoid\fP Core::init_tss ()\fC [protected]\fP"
+
+.PP
+Initialises the task state segment for this core\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Implement IO bitmap when adding userspace drivers 
+.RE
+.PP
+
+.PP
+Definition at line \fB110\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+110                     {
+111 
+112     // The reserved have to be 0
+113     tss\&.reserved0 = 0;
+114     tss\&.reserved1 = 0;
+115     tss\&.reserved2 = 0;
+116     tss\&.reserved3 = 0;
+117     tss\&.reserved4 = 0;
+118 
+119     // The stacks
+120     tss\&.rsp0 = (uint64_t)m_stack + BOOT_STACK_SIZE;       // Kernel stack (scheduler will set the threads stack)
+121     tss\&.rsp1 = 0;
+122     tss\&.rsp2 = 0;
+123 
+124     // Interrupt stacks can all be 0
+125     tss\&.ist1 = 0;
+126     tss\&.ist2 = 0;
+127     tss\&.ist3 = 0;
+128     tss\&.ist4 = 0;
+129     tss\&.ist5 = 0;
+130     tss\&.ist6 = 0;
+131     tss\&.ist7 = 0;
+132 
+133     // Ports
+134     tss\&.io_bitmap_offset = 0;
+135 
+136     // Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
+137     auto base = (uint64_t) &tss;
+138     uint16_t base_1 = base & 0xFFFF;
+139     uint8_t base_2 = (base >> 16) & 0xFF;
+140     uint8_t base_3 = (base >> 24) & 0xFF;
+141     uint32_t base_4 = (base >> 32) & 0xFFFFFFFF;
+142 
+143     uint16_t limit_low = (uint16_t)(sizeof(tss) \- 1);
+144 
+145     // Flags: 1 \- Type = 0x9, Descriptor Privilege Level = 0, Present = 1, 2 \- Available = 0, Granularity = 0
+146     uint8_t flags_1 = 0x89;
+147     uint8_t flags_2 = 0;
+148 
+149     // Create the TSS descriptors
+150     uint64_t tss_descriptor_low = (uint64_t) base_3 << 56 | (uint64_t) flags_2 << 48 | (uint64_t) flags_1 << 40 | (uint64_t) base_2 << 32 | (uint64_t) base_1 << 16 | (uint64_t) limit_low;
+151     uint64_t tss_descriptor_high = base_4;
+152 
+153     // Store in the GDT
+154     gdt \-> table[5] = tss_descriptor_low;
+155     gdt \-> table[6] = tss_descriptor_high;
+156     gdt \-> load();
+157 
+158     // Load the TSS
+159     Logger::DEBUG() << "Loading TSS: 0x0" << tss_descriptor_low << " 0x0" << tss_descriptor_high << " at 0x" << (uint64_t) &tss << "\\n";
+160     asm volatile("ltr %%ax" : : "a" (0x28));
+161 
+162 }
+.fi
+
+.PP
+References \fBbase\fP, \fBMaxOS::system::BOOT_STACK_SIZE\fP, \fBLogger::DEBUG()\fP, \fBgdt\fP, \fBm_stack\fP, and \fBtss\fP\&.
+.PP
+Referenced by \fBinit()\fP\&.
+.SS "\fBvoid\fP Core::wake_up (\fBCPU\fP * cpu)"
+
+.PP
+Wakes up the core by sending the appropriate IPIs\&. (see core_loader\&.s for startup code) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIcpu\fP 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Should handle core fails and not delay once we are in c++ 
+.RE
+.PP
+
+.PP
+Definition at line \fB59\fP of file \fBcpu\&.cpp\fP\&..PP
+.nf
+59                            {
+60 
+61     // Boot core is already setup
+62     if(m_bsp){
+63         Logger::DEBUG() << "BSP Already setup\\n";
+64         return;
+65     }
+66 
+67     Logger::DEBUG() << "Starting core: " << id << "\\n";
+68     m_stack = (uint64_t)MemoryManager::kmalloc(BOOT_STACK_SIZE);
+69 
+70     // Core specific boot info
+71     auto info = (core_boot_info_t*)(core_boot_info);
+72     info\->activated = false;
+73     info\->id = id;
+74     info\->stack = m_stack + BOOT_STACK_SIZE;
+75 
+76     // Send init IPI
+77     cpu\->apic\&.local_apic()\->send_init(m_apic_id, true);
+78 
+79     // Send de\-assert IPI
+80     cpu\->apic\&.local_apic()\->send_init(m_apic_id, false);
+81     Clock::active_clock()\->delay(10);
+82 
+83     // Send tow SIPIs
+84     for (int i = 0; i < 2; ++i) {
+85 
+86         // Send the start up IPI
+87         cpu\->apic\&.local_apic()\->send_startup(m_apic_id, 0x8);
+88         Clock::active_clock()\->delay(200);
+89 
+90         // Check if core started
+91         if(info\->activated){
+92 
+93             // Wait for full init
+94             while(!active)
+95                 asm("nop");
+96 
+97             Logger::DEBUG() << "Core " << id << " started successfully \\n";
+98             return;
+99         }
+100     }
+101 
+102     Logger::WARNING() << "Failed to start core: " << id << "\\n";
+103 }
+.fi
+
+.PP
+References \fBactive\fP, \fBMaxOS::drivers::clock::Clock::active_clock()\fP, \fBMaxOS::system::BOOT_STACK_SIZE\fP, \fBcore_boot_info\fP, \fBLogger::DEBUG()\fP, \fBid\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBm_apic_id\fP, \fBm_bsp\fP, \fBm_stack\fP, and \fBLogger::WARNING()\fP\&.
+.SH "Friends And Related Symbol Documentation"
+.PP 
+.SS "friend class \fBCPU\fP\fC [friend]\fP"
+
+.PP
+Definition at line \fB190\fP of file \fBcpu\&.h\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "bool MaxOS::system::Core::active = false"
+
+.PP
+Whether this core is active\&. 
+.PP
+Definition at line \fB217\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBinit()\fP, and \fBwake_up()\fP\&.
+.SS "bool MaxOS::system::Core::avx_enabled = false"
+
+.PP
+Whether AVX is enabled\&. 
+.PP
+Definition at line \fB210\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBinit_sse()\fP\&.
+.SS "\fBGlobalDescriptorTable\fP* MaxOS::system::Core::gdt"
+
+.PP
+The GDT for this core\&. 
+.PP
+Definition at line \fB220\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBinit()\fP, and \fBinit_tss()\fP\&.
+.SS "uint8_t MaxOS::system::Core::id"
+
+.PP
+The ID of this core\&. 
+.PP
+Definition at line \fB215\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::GlobalScheduler::print_running_header()\fP, and \fBwake_up()\fP\&.
+.SS "\fBhardwarecommunication::LocalAPIC\fP* MaxOS::system::Core::local_apic"
+
+.PP
+The local APIC for this core\&. 
+.PP
+Definition at line \fB219\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBinit()\fP\&.
+.SS "uint8_t MaxOS::system::Core::m_apic_id\fC [protected]\fP"
+
+.PP
+The ID of the apic for this core\&. 
+.PP
+Definition at line \fB199\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBwake_up()\fP\&.
+.SS "bool MaxOS::system::Core::m_bsp = false\fC [protected]\fP"
+
+.PP
+Whether this core is the bootstrap processor\&. 
+.PP
+Definition at line \fB197\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBwake_up()\fP\&.
+.SS "bool MaxOS::system::Core::m_can_enable = false\fC [protected]\fP"
+
+.PP
+Whether the core can be enabled\&. 
+.PP
+Definition at line \fB196\fP of file \fBcpu\&.h\fP\&.
+.SS "bool MaxOS::system::Core::m_enabled = false\fC [protected]\fP"
+
+.PP
+Whether the core is enabled\&. 
+.PP
+Definition at line \fB195\fP of file \fBcpu\&.h\fP\&.
+.SS "hardwarecommunication::madt_processor_apic_t* MaxOS::system::Core::m_madt\fC [protected]\fP"
+
+.PP
+The MADT entry for this core\&. 
+.PP
+Definition at line \fB193\fP of file \fBcpu\&.h\fP\&.
+.SS "uint64_t MaxOS::system::Core::m_stack\fC [protected]\fP"
+
+.PP
+The stack pointer for this core\&. 
+.PP
+Definition at line \fB200\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBinit_tss()\fP, and \fBwake_up()\fP\&.
+.SS "\fBprocesses::Scheduler\fP* MaxOS::system::Core::scheduler"
+
+.PP
+The scheduler for this core\&. 
+.PP
+Definition at line \fB221\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::GlobalScheduler::core_scheduler()\fP\&.
+.SS "tss_t MaxOS::system::Core::tss = { }"
+
+.PP
+The Task State Segment for this core\&. 
+.PP
+Definition at line \fB216\fP of file \fBcpu\&.h\fP\&..PP
+.nf
+216 { };            
+.fi
+
+.PP
+Referenced by \fBinit_tss()\fP\&.
+.SS "bool MaxOS::system::Core::xsave_enabled = false"
+
+.PP
+Whether XSAVE is enabled\&. 
+.PP
+Definition at line \fB209\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBinit_sse()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/clock/clock.h
+/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/clock/clock.h \- Defines drivers for the Programmable Interval Timer (PIT) and APIC Clock\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -25,16 +26,9 @@
 
 .in +1c
 .ti -1c
-.RI "class \fBMaxOS::drivers::clock::TimeEvent\fP"
-.br
-.RI "Event that is triggered when the clock ticks, holds the current time\&. "
-.ti -1c
-.RI "class \fBMaxOS::drivers::clock::ClockEventHandler\fP"
-.br
-.RI "Handles the events triggered by the clock\&. "
-.ti -1c
 .RI "struct \fBMaxOS::drivers::clock::PITCommand\fP"
 .br
+.RI "The command byte to send to the \fBPIT\fP, specifies the channel, access mode, operating mode and BCD mode\&. "
 .ti -1c
 .RI "class \fBMaxOS::drivers::clock::PIT\fP"
 .br
@@ -43,19 +37,6 @@
 .RI "class \fBMaxOS::drivers::clock::Clock\fP"
 .br
 .RI "\fBDriver\fP for the APIC clock\&. "
-.in -1c
-.SS "Namespaces"
-
-.in +1c
-.ti -1c
-.RI "namespace \fBMaxOS\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::drivers\fP"
-.br
-.ti -1c
-.RI "namespace \fBMaxOS::drivers::clock\fP"
-.br
 .in -1c
 .SS "Typedefs"
 
@@ -68,21 +49,125 @@
 
 .in +1c
 .ti -1c
-.RI "enum class \fBMaxOS::drivers::clock::ClockEvents\fP { \fBMaxOS::drivers::clock::TIME\fP }"
+.RI "enum class \fBMaxOS::drivers::clock::Channel\fP { \fBINTERRUPT\fP, \fBDRAM_REFRESH\fP, \fBSPEAKER\fP }"
 .br
+.RI "Where should the PIT raise an event to\&. "
 .ti -1c
-.RI "enum class \fBMaxOS::drivers::clock::Channel\fP { \fBMaxOS::drivers::clock::INTERRUPT\fP, \fBMaxOS::drivers::clock::DRAM_REFRESH\fP, \fBMaxOS::drivers::clock::SPEAKER\fP }"
+.RI "enum class \fBMaxOS::drivers::clock::AccessMode\fP { \fBLATCH_COUNT\fP, \fBLOW_BYTE\fP, \fBHIGH_BYTE\fP, \fBLOW_HIGH_BYTE\fP }"
 .br
+.RI "What mode should the PIT use for the selected channel\&. "
 .ti -1c
-.RI "enum class \fBMaxOS::drivers::clock::AccessMode\fP { \fBMaxOS::drivers::clock::LATCH_COUNT\fP, \fBMaxOS::drivers::clock::LOW_BYTE\fP, \fBMaxOS::drivers::clock::HIGH_BYTE\fP, \fBMaxOS::drivers::clock::LOW_HIGH_BYTE\fP }"
+.RI "enum class \fBMaxOS::drivers::clock::OperatingMode\fP { \fBINTERRUPT_ON_TERMINAL_COUNT\fP, \fBONE_SHOT\fP, \fBRATE_GENERATOR\fP, \fBSQUARE_WAVE\fP, \fBSOFTWARE_STROBE\fP, \fBHARDWARE_STROBE\fP }"
 .br
+.RI "What should the PIT do\&. "
 .ti -1c
-.RI "enum class \fBMaxOS::drivers::clock::OperatingMode\fP { \fBMaxOS::drivers::clock::INTERRUPT_ON_TERMINAL_COUNT\fP, \fBMaxOS::drivers::clock::ONE_SHOT\fP, \fBMaxOS::drivers::clock::RATE_GENERATOR\fP, \fBMaxOS::drivers::clock::SQUARE_WAVE\fP, \fBMaxOS::drivers::clock::SOFTWARE_STROBE\fP, \fBMaxOS::drivers::clock::HARDWARE_STROBE\fP }"
+.RI "enum class \fBMaxOS::drivers::clock::BCDMode\fP { \fBBINARY\fP, \fBBCD\fP }"
 .br
-.ti -1c
-.RI "enum class \fBMaxOS::drivers::clock::BCDMode\fP { \fBMaxOS::drivers::clock::BINARY\fP, \fBMaxOS::drivers::clock::BCD\fP }"
-.br
+.RI "Specifies the data encoding mode used by the PIT\&. "
 .in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr uint16_t \fBMaxOS::drivers::clock::TICK_CALIBRATE_LENGTH\fP = 10"
+.br
+.RI "How many loops to spin for calibration\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines drivers for the Programmable Interval Timer (PIT) and APIC Clock\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+10th April 2023 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBclock\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBMaxOS::drivers::clock::AccessMode\fP\fC [strong]\fP"
+
+.PP
+What mode should the PIT use for the selected channel\&. 
+.PP
+Definition at line \fB42\fP of file \fBclock\&.h\fP\&..PP
+.nf
+42                                   {
+43                 LATCH_COUNT,
+44                 LOW_BYTE,
+45                 HIGH_BYTE,
+46                 LOW_HIGH_BYTE,
+47             };
+.fi
+
+.SS "enum class \fBMaxOS::drivers::clock::BCDMode\fP\fC [strong]\fP"
+
+.PP
+Specifies the data encoding mode used by the PIT\&. 
+.PP
+Definition at line \fB66\fP of file \fBclock\&.h\fP\&..PP
+.nf
+66                                {
+67                 BINARY,
+68                 BCD,
+69             };
+.fi
+
+.SS "enum class \fBMaxOS::drivers::clock::Channel\fP\fC [strong]\fP"
+
+.PP
+Where should the PIT raise an event to\&. 
+.PP
+\fBWarning\fP
+.RS 4
+DRAM_REFRESH may not exist on all systems 
+.RE
+.PP
+
+.PP
+Definition at line \fB32\fP of file \fBclock\&.h\fP\&..PP
+.nf
+32                                {
+33                 INTERRUPT,
+34                 DRAM_REFRESH,
+35                 SPEAKER,
+36             };
+.fi
+
+.SS "enum class \fBMaxOS::drivers::clock::OperatingMode\fP\fC [strong]\fP"
+
+.PP
+What should the PIT do\&. 
+.PP
+Definition at line \fB53\fP of file \fBclock\&.h\fP\&..PP
+.nf
+53                                      {
+54                 INTERRUPT_ON_TERMINAL_COUNT,
+55                 ONE_SHOT,
+56                 RATE_GENERATOR,
+57                 SQUARE_WAVE,
+58                 SOFTWARE_STROBE,
+59                 HARDWARE_STROBE,
+60             };
+.fi
+
+.SH "Variable Documentation"
+.PP 
+.SS "constexpr uint16_t MaxOS::drivers::clock::TICK_CALIBRATE_LENGTH = 10\fC [constexpr]\fP"
+
+.PP
+How many loops to spin for calibration\&. 
+.PP
+Definition at line \fB87\fP of file \fBclock\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

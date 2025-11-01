@@ -17,12 +17,6 @@ Inherited by \fBMaxOS::gui::WidgetMoverResizer< 1, 1, 0, 0 >\fP, \fBMaxOS::gui::
 
 .in +1c
 .ti -1c
-.RI "\fBMouseEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~MouseEventHandler\fP ()"
-.br
-.ti -1c
 .RI "\fBcommon::Event\fP< \fBMouseEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBMouseEvents\fP > *) \fBoverride\fP"
 .br
 .RI "Handles the triggered event and calls the appropriate function\&. "
@@ -35,19 +29,13 @@ Inherited by \fBMaxOS::gui::WidgetMoverResizer< 1, 1, 0, 0 >\fP, \fBMaxOS::gui::
 .br
 .RI "Called when the mouse is released\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_move_event\fP (\fBint8_t\fP \fBx\fP, \fBint8_t\fP \fBy\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_move_event\fP (\fBint8_t\fP x, \fBint8_t\fP y)"
 .br
 .RI "Called when the mouse is moved\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::EventHandler< MouseEvents >\fP
 .in +1c
-.ti -1c
-.RI "\fBEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventHandler\fP ()"
-.br
 .ti -1c
 .RI "\fBvirtual\fP \fBEvent\fP< MouseEvents > * \fBon_event\fP (\fBEvent\fP< MouseEvents > *\fBevent\fP)"
 .br
@@ -57,13 +45,7 @@ Public Member Functions inherited from \fBMaxOS::common::EventHandler< MouseEven
 .PP 
 Handles events that are triggered by the mouse driver\&. 
 .PP
-Definition at line \fB65\fP of file \fBmouse\&.h\fP\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "MouseEventHandler::MouseEventHandler ()\fC [default]\fP"
-
-.SS "MouseEventHandler::~MouseEventHandler ()\fC [default]\fP"
-
+Definition at line \fB73\fP of file \fBmouse\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBEvent\fP< \fBMouseEvents\fP > * MouseEventHandler::on_event (\fBcommon::Event\fP< \fBMouseEvents\fP > * event)\fC [override]\fP"
@@ -83,32 +65,32 @@ The event that was triggered with the modified data
 .PP
 
 .PP
-Definition at line \fB21\fP of file \fBmouse\&.cpp\fP\&..PP
+Definition at line \fB25\fP of file \fBmouse\&.cpp\fP\&..PP
 .nf
-21                                                                          {
-22     switch (event\->type) {
-23 
-24         case MouseEvents::MOVE:
-25             this\->on_mouse_move_event(((MouseMoveEvent *) event)\->x,
-26                                       ((MouseMoveEvent *) event)\->y);
-27             break;
-28 
-29         case MouseEvents::DOWN:
-30             this\->on_mouse_down_event(((MouseDownEvent *) event)\->button);
+25                                                                          {
+26     switch (event\->type) {
+27 
+28         case MouseEvents::MOVE:
+29             this\->on_mouse_move_event(((MouseMoveEvent *) event)\->x,
+30                                       ((MouseMoveEvent *) event)\->y);
 31             break;
 32 
-33         case MouseEvents::UP:
-34             this\->on_mouse_up_event(((MouseUpEvent *) event)\->button);
+33         case MouseEvents::DOWN:
+34             this\->on_mouse_down_event(((MouseDownEvent *) event)\->button);
 35             break;
 36 
-37     }
-38 
-39     return event;
-40 }
+37         case MouseEvents::UP:
+38             this\->on_mouse_up_event(((MouseUpEvent *) event)\->button);
+39             break;
+40 
+41     }
+42 
+43     return event;
+44 }
 .fi
 
 .PP
-References \fBMaxOS::drivers::peripherals::DOWN\fP, \fBMaxOS::drivers::peripherals::MOVE\fP, \fBon_mouse_down_event()\fP, \fBon_mouse_move_event()\fP, \fBon_mouse_up_event()\fP, \fBMaxOS::drivers::peripherals::UP\fP, \fBMaxOS::drivers::peripherals::x\fP, and \fBMaxOS::drivers::peripherals::y\fP\&.
+References \fBon_mouse_down_event()\fP, \fBon_mouse_move_event()\fP, and \fBon_mouse_up_event()\fP\&.
 .SS "\fBvoid\fP MouseEventHandler::on_mouse_down_event (\fBuint8_t\fP button)\fC [virtual]\fP"
 
 .PP
@@ -123,11 +105,11 @@ Called when the mouse is pressed\&.
 .PP
 Reimplemented in \fBMaxOS::gui::Desktop\fP\&.
 .PP
-Definition at line \fB47\fP of file \fBmouse\&.cpp\fP\&..PP
+Definition at line \fB51\fP of file \fBmouse\&.cpp\fP\&..PP
 .nf
-47                                                    {
-48 
-49 }
+51                                                    {
+52 
+53 }
 .fi
 
 .PP
@@ -148,11 +130,11 @@ Called when the mouse is moved\&.
 .PP
 Reimplemented in \fBMaxOS::gui::Desktop\fP, \fBMaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 0, 0, 1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 0, 1, 0 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 0, 1, 1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 1, 0, \-1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 0, 1, 1, \-1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 0, \-1, 0 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 0, \-1, 1 >\fP, \fBMaxOS::gui::WidgetMoverResizer< 1, 1, \-1, \-1 >\fP, and \fBMaxOS::gui::WidgetMoverResizer< 1, 1, 0, 0 >\fP\&.
 .PP
-Definition at line \fB66\fP of file \fBmouse\&.cpp\fP\&..PP
+Definition at line \fB70\fP of file \fBmouse\&.cpp\fP\&..PP
 .nf
-66                                                           {
-67 
-68 }
+70                                                           {
+71 
+72 }
 .fi
 
 .PP
@@ -171,11 +153,11 @@ Called when the mouse is released\&.
 .PP
 Reimplemented in \fBMaxOS::gui::Desktop\fP\&.
 .PP
-Definition at line \fB56\fP of file \fBmouse\&.cpp\fP\&..PP
+Definition at line \fB60\fP of file \fBmouse\&.cpp\fP\&..PP
 .nf
-56                                                  {
-57 
-58 }
+60                                                  {
+61 
+62 }
 .fi
 
 .PP

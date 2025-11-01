@@ -34,6 +34,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
    </div>
@@ -101,174 +102,430 @@ $(document).ready(function(){initNavTree('cpu_8h.html',''); initResizable(); });
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">cpu.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Defines Central Processing Unit (CPU) structures and functions for managing CPU state and features.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cpuid.h&gt;</code><br />
 <code>#include &lt;stddef.h&gt;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &lt;<a class="el" href="gdt_8h_source.html">system/gdt.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="acpi_8h_source.html">hardwarecommunication/acpi.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="apic_8h_source.html">hardwarecommunication/apic.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="physical_8h_source.html">memory/physical.h</a>&gt;</code><br />
 </div>
 <p><a href="cpu_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1system_1_1____attribute____.html">MaxOS::system::__attribute__</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Style Guide Note: <a class="el" href="classMaxOS_1_1system_1_1CPU.html">CPU</a> abbreviation is preferred over Central Processing Unit.  <a href="structMaxOS_1_1system_1_1____attribute____.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The state of the <a class="el" href="classMaxOS_1_1system_1_1CPU.html" title="Manages the CPU and its cores.">CPU</a> when an interrupt occurs (must align with the interrupt handler assembly code)  <a href="structMaxOS_1_1system_1_1____attribute____.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1system_1_1tss.html">MaxOS::system::tss</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1system_1_1TaskStateSegment.html">MaxOS::system::TaskStateSegment</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task State Segment (TSS) structure for x86_64.  <a href="structMaxOS_1_1system_1_1TaskStateSegment.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1system_1_1StackFrame.html">MaxOS::system::StackFrame</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A snapshot of the a frame in the call stack.  <a href="structMaxOS_1_1system_1_1StackFrame.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1system_1_1CoreBootInfo.html">MaxOS::system::CoreBootInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Information needed when booting a core.  <a href="structMaxOS_1_1system_1_1CoreBootInfo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1system_1_1Core.html">MaxOS::system::Core</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a <a class="el" href="classMaxOS_1_1system_1_1CPU.html" title="Manages the CPU and its cores.">CPU</a> core in the system.  <a href="classMaxOS_1_1system_1_1Core.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1system_1_1CPU.html">MaxOS::system::CPU</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespaceMaxOS" id="r_namespaceMaxOS"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS.html">MaxOS</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceMaxOS_1_1system" id="r_namespaceMaxOS_1_1system"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1system.html">MaxOS::system</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages the <a class="el" href="classMaxOS_1_1system_1_1CPU.html" title="Manages the CPU and its cores.">CPU</a> and its cores.  <a href="classMaxOS_1_1system_1_1CPU.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a955509bd4aa295b6038a6812bf689200" id="r_a955509bd4aa295b6038a6812bf689200"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200">MaxOS::system::CPU_FEATURE_ECX</a> : int32_t { <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200ac6603310b6588e97789264110f6e9101">MaxOS::system::SSE3</a> = 1 &lt;&lt; 0
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a6032723e90ef0acd47ce885772cb659b">MaxOS::system::PCLMUL</a> = 1 &lt;&lt; 1
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200aa2f8d2fa2331eb9766b32b3dc626eeec">MaxOS::system::DTES64</a> = 1 &lt;&lt; 2
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200aff3e179b3cc64393841107ccba0d6e48">MaxOS::system::MONITOR</a> = 1 &lt;&lt; 3
+<tr class="memitem:a955509bd4aa295b6038a6812bf689200" id="r_a955509bd4aa295b6038a6812bf689200"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a955509bd4aa295b6038a6812bf689200">MaxOS::system::CPU_FEATURE_ECX</a> : int32_t { <br />
+&#160;&#160;<b>SSE3</b> = 1 &lt;&lt; 0
+, <b>PCLMUL</b> = 1 &lt;&lt; 1
+, <b>DTES64</b> = 1 &lt;&lt; 2
+, <b>MONITOR</b> = 1 &lt;&lt; 3
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a6e21d9cd5cb8b15cd0068f5c69b7ecb8">MaxOS::system::DS_CPL</a> = 1 &lt;&lt; 4
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200ab21819f000ff3fd488fe20c783df0402">MaxOS::system::VMX</a> = 1 &lt;&lt; 5
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200acad386640202b01915001cf1dc26164e">MaxOS::system::SMX</a> = 1 &lt;&lt; 6
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a33a61062aa4da2b795b7f9616c138b89">MaxOS::system::EST</a> = 1 &lt;&lt; 7
+&#160;&#160;<b>DS_CPL</b> = 1 &lt;&lt; 4
+, <b>VMX</b> = 1 &lt;&lt; 5
+, <b>SMX</b> = 1 &lt;&lt; 6
+, <b>EST</b> = 1 &lt;&lt; 7
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a39c266dca8396334e6a478ee7d6a58a3">MaxOS::system::TM2</a> = 1 &lt;&lt; 8
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a1aee6afddc2384c63b5adef3a9bb9f8b">MaxOS::system::SSSE3</a> = 1 &lt;&lt; 9
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200add395d6201581ad212d782d571f0ad64">MaxOS::system::CID</a> = 1 &lt;&lt; 10
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200af69a5c2dc16e31e03fd3acf67bce22db">MaxOS::system::SDBG</a> = 1 &lt;&lt; 11
+&#160;&#160;<b>TM2</b> = 1 &lt;&lt; 8
+, <b>SSSE3</b> = 1 &lt;&lt; 9
+, <b>CID</b> = 1 &lt;&lt; 10
+, <b>SDBG</b> = 1 &lt;&lt; 11
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200afcf973d1553272be39c9fceeeeeffc28">MaxOS::system::FMA</a> = 1 &lt;&lt; 12
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a0a1f6ee60423ae7066499e4267ac37e9">MaxOS::system::CX16</a> = 1 &lt;&lt; 13
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a130a5bef8c251220d55a464358093be1">MaxOS::system::XTPR</a> = 1 &lt;&lt; 14
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a5f1a20641930246ba7aa82c2e4c78d93">MaxOS::system::PDCM</a> = 1 &lt;&lt; 15
+&#160;&#160;<b>FMA</b> = 1 &lt;&lt; 12
+, <b>CX16</b> = 1 &lt;&lt; 13
+, <b>XTPR</b> = 1 &lt;&lt; 14
+, <b>PDCM</b> = 1 &lt;&lt; 15
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a9929cbe36146d8dd8b79aacdb08b4f37">MaxOS::system::PCID</a> = 1 &lt;&lt; 17
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200acf4c24e87f3bf7a7ba3bc78dd952a0c1">MaxOS::system::DCA</a> = 1 &lt;&lt; 18
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a9a7d3ec1a04d0b6f4a123d86baacccdb">MaxOS::system::SSE4_1</a> = 1 &lt;&lt; 19
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a46503c282f6150b96358dd8b5b7b85b4">MaxOS::system::SSE4_2</a> = 1 &lt;&lt; 20
+&#160;&#160;<b>PCID</b> = 1 &lt;&lt; 17
+, <b>DCA</b> = 1 &lt;&lt; 18
+, <b>SSE4_1</b> = 1 &lt;&lt; 19
+, <b>SSE4_2</b> = 1 &lt;&lt; 20
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200ad109db768c962d0dcbff314147149a20">MaxOS::system::X2APIC</a> = 1 &lt;&lt; 21
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a0736bd85aa45e4d08a43ef2a500266ad">MaxOS::system::MOVBE</a> = 1 &lt;&lt; 22
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a34073e80906c50c0f159a1b631b4bfdf">MaxOS::system::POPCNT</a> = 1 &lt;&lt; 23
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a28e098175bb05703eb34c5adbb234370">MaxOS::system::TSC</a> = 1 &lt;&lt; 24
+&#160;&#160;<b>X2APIC</b> = 1 &lt;&lt; 21
+, <b>MOVBE</b> = 1 &lt;&lt; 22
+, <b>POPCNT</b> = 1 &lt;&lt; 23
+, <b>TSC</b> = 1 &lt;&lt; 24
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a76b7593457e2ab50befe2dcd63cf388f">MaxOS::system::AES</a> = 1 &lt;&lt; 25
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a367c5d2642c63edb641f8a2228414526">MaxOS::system::XSAVE</a> = 1 &lt;&lt; 26
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a63b0727cb48c60da1a4f12f995db8dd0">MaxOS::system::OSXSAVE</a> = 1 &lt;&lt; 27
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200a4863502abea45861b9ed022e66d66cb2">MaxOS::system::AVX</a> = 1 &lt;&lt; 28
+&#160;&#160;<b>AES</b> = 1 &lt;&lt; 25
+, <b>XSAVE</b> = 1 &lt;&lt; 26
+, <b>OSXSAVE</b> = 1 &lt;&lt; 27
+, <b>AVX</b> = 1 &lt;&lt; 28
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200ab3d388f4cf8c78d3592959b1ddf8fa34">MaxOS::system::F16C</a> = 1 &lt;&lt; 29
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200ada6e177ae13693e83f8bfcb689218d62">MaxOS::system::RDRAND</a> = 1 &lt;&lt; 30
-, <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200aabb9899dda14ee146fe60811ffced005">MaxOS::system::HYPERVISOR</a> = 1 &lt;&lt; 31
+&#160;&#160;<b>F16C</b> = 1 &lt;&lt; 29
+, <b>RDRAND</b> = 1 &lt;&lt; 30
+, <b>HYPERVISOR</b> = 1 &lt;&lt; 31
 <br />
  }</td></tr>
+<tr class="memdesc:a955509bd4aa295b6038a6812bf689200"><td class="mdescLeft">&#160;</td><td class="mdescRight">CPU features indicated by the ECX register after calling CPUID with EAX = 1.  <a href="cpu_8h.html#a955509bd4aa295b6038a6812bf689200">More...</a><br /></td></tr>
 <tr class="separator:a955509bd4aa295b6038a6812bf689200"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabd92958148e45d498450aaf57c8d6ab" id="r_aabd92958148e45d498450aaf57c8d6ab"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6ab">MaxOS::system::CPU_FEATURE_EDX</a> : int32_t { <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba11e4d339cb835db9884cd4a4e0c3dbb7">MaxOS::system::FPU</a> = 1 &lt;&lt; 0
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba5b382b19324e0a71d404284d5c312804">MaxOS::system::VME</a> = 1 &lt;&lt; 1
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba3a52f3c22ed6fcde5bf696a6c02c9e73">MaxOS::system::DE</a> = 1 &lt;&lt; 2
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba6f0862d55fca52dbe032fa0b99e9c6b5">MaxOS::system::PSE</a> = 1 &lt;&lt; 3
+<tr class="memitem:aabd92958148e45d498450aaf57c8d6ab" id="r_aabd92958148e45d498450aaf57c8d6ab"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#aabd92958148e45d498450aaf57c8d6ab">MaxOS::system::CPU_FEATURE_EDX</a> : int32_t { <br />
+&#160;&#160;<b>FPU</b> = 1 &lt;&lt; 0
+, <b>VME</b> = 1 &lt;&lt; 1
+, <b>DE</b> = 1 &lt;&lt; 2
+, <b>PSE</b> = 1 &lt;&lt; 3
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba28e098175bb05703eb34c5adbb234370">MaxOS::system::TSC</a> = 1 &lt;&lt; 4
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba88c3927325f37f64ba93991bb88caf8a">MaxOS::system::MSR</a> = 1 &lt;&lt; 5
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6ababb156e28d38e80191e14b4d6525c844b">MaxOS::system::PAE</a> = 1 &lt;&lt; 6
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abaff3da9fa37305280824b8a9e11299b56">MaxOS::system::MCE</a> = 1 &lt;&lt; 7
+&#160;&#160;<b>TSC</b> = 1 &lt;&lt; 4
+, <b>MSR</b> = 1 &lt;&lt; 5
+, <b>PAE</b> = 1 &lt;&lt; 6
+, <b>MCE</b> = 1 &lt;&lt; 7
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba8b7992d96d737490be72d598a6b8449c">MaxOS::system::CX8</a> = 1 &lt;&lt; 8
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abaa545e1cb82e5b040d4cd6afe0e0cea62">MaxOS::system::APIC</a> = 1 &lt;&lt; 9
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abaedf5bdfdf496166746e1794e80042a49">MaxOS::system::SEP</a> = 1 &lt;&lt; 11
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba13a8342a37e721bab5a9c655ca2cce34">MaxOS::system::MTRR</a> = 1 &lt;&lt; 12
+&#160;&#160;<b>CX8</b> = 1 &lt;&lt; 8
+, <b>APIC</b> = 1 &lt;&lt; 9
+, <b>SEP</b> = 1 &lt;&lt; 11
+, <b>MTRR</b> = 1 &lt;&lt; 12
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abaeab15251d3e7452fb90874a2f4211b29">MaxOS::system::PGE</a> = 1 &lt;&lt; 13
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6ababa1cd891cc365a37012794107bf7a494">MaxOS::system::MCA</a> = 1 &lt;&lt; 14
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abaf4e7952302d93f100a8f19e1f87ad783">MaxOS::system::CMOV</a> = 1 &lt;&lt; 15
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba157181ffcabbeae54bb036e489bc2b77">MaxOS::system::PAT</a> = 1 &lt;&lt; 16
+&#160;&#160;<b>PGE</b> = 1 &lt;&lt; 13
+, <b>MCA</b> = 1 &lt;&lt; 14
+, <b>CMOV</b> = 1 &lt;&lt; 15
+, <b>PAT</b> = 1 &lt;&lt; 16
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abaf0ab1f2970682e7e2a2a0e2ef1d90410">MaxOS::system::PSE36</a> = 1 &lt;&lt; 17
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba3061f19c6be3cbb270da5bd31ceb4be4">MaxOS::system::PSN</a> = 1 &lt;&lt; 18
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba54ee0bbeba3f7b1b0156eb6b5b46f4bc">MaxOS::system::CLFLUSH</a> = 1 &lt;&lt; 19
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba47b79bd259e22596ffc4be2ffbbe5c5a">MaxOS::system::DS</a> = 1 &lt;&lt; 21
+&#160;&#160;<b>PSE36</b> = 1 &lt;&lt; 17
+, <b>PSN</b> = 1 &lt;&lt; 18
+, <b>CLFLUSH</b> = 1 &lt;&lt; 19
+, <b>DS</b> = 1 &lt;&lt; 21
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba970d747229841c61b3c063fb45baa9e7">MaxOS::system::ACPI</a> = 1 &lt;&lt; 22
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba54cc5c1b13d96ded25684285263eab0f">MaxOS::system::MMX</a> = 1 &lt;&lt; 23
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6ababe797ddea71e0d3970fb71a78ecd26fd">MaxOS::system::FXSR</a> = 1 &lt;&lt; 24
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba5fc53fc8197865c63285f74b1e147013">MaxOS::system::SSE</a> = 1 &lt;&lt; 25
+&#160;&#160;<b>ACPI</b> = 1 &lt;&lt; 22
+, <b>MMX</b> = 1 &lt;&lt; 23
+, <b>FXSR</b> = 1 &lt;&lt; 24
+, <b>SSE</b> = 1 &lt;&lt; 25
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abacbb179b45ebb240c6ec51390ac12e562">MaxOS::system::SSE2</a> = 1 &lt;&lt; 26
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abad53aeb78abc83a52ab8982f5c82a3d5b">MaxOS::system::SS</a> = 1 &lt;&lt; 27
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba0e7756b24afbdddbe3f085470b133c50">MaxOS::system::HTT</a> = 1 &lt;&lt; 28
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abaac7a4fbd0d788d94f43454817e1c208c">MaxOS::system::TM</a> = 1 &lt;&lt; 29
+&#160;&#160;<b>SSE2</b> = 1 &lt;&lt; 26
+, <b>SS</b> = 1 &lt;&lt; 27
+, <b>HTT</b> = 1 &lt;&lt; 28
+, <b>TM</b> = 1 &lt;&lt; 29
 , <br />
-&#160;&#160;<a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6aba4c2c294c51f3230d47a6bf0fb0cbe47a">MaxOS::system::IA64</a> = 1 &lt;&lt; 30
-, <a class="el" href="namespaceMaxOS_1_1system.html#aabd92958148e45d498450aaf57c8d6abaeff7c5571b267c9cf48a2c16d82e99f4">MaxOS::system::PBE</a> = 1 &lt;&lt; 31
+&#160;&#160;<b>IA64</b> = 1 &lt;&lt; 30
+, <b>PBE</b> = 1 &lt;&lt; 31
 <br />
  }</td></tr>
+<tr class="memdesc:aabd92958148e45d498450aaf57c8d6ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">CPU features indicated by the EDX register after calling CPUID with EAX = 1.  <a href="cpu_8h.html#aabd92958148e45d498450aaf57c8d6ab">More...</a><br /></td></tr>
 <tr class="separator:aabd92958148e45d498450aaf57c8d6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0eefbe7986fc94cfb5bb15e0dca7d6b1" id="r_a0eefbe7986fc94cfb5bb15e0dca7d6b1"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structMaxOS_1_1system_1_1tss.html">MaxOS::system::tss</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1system.html#a0eefbe7986fc94cfb5bb15e0dca7d6b1">MaxOS::system::__attribute__</a> ((__packed__)) tss_t</td></tr>
-<tr class="separator:a0eefbe7986fc94cfb5bb15e0dca7d6b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d3ce0f98cbfe481d7597fef8f25a230" id="r_a2d3ce0f98cbfe481d7597fef8f25a230"><td class="memItemLeft" align="right" valign="top"><a id="a2d3ce0f98cbfe481d7597fef8f25a230" name="a2d3ce0f98cbfe481d7597fef8f25a230"></a>
+struct <a class="el" href="structMaxOS_1_1system_1_1TaskStateSegment.html">MaxOS::system::TaskStateSegment</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MaxOS::system::__attribute__</b> ((__packed__)) tss_t</td></tr>
+<tr class="memdesc:a2d3ce0f98cbfe481d7597fef8f25a230"><td class="mdescLeft">&#160;</td><td class="mdescRight">Task State Segment (TSS) structure for x86_64. <br /></td></tr>
+<tr class="separator:a2d3ce0f98cbfe481d7597fef8f25a230"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:aed93283265f941dc1d2bf8d634164493" id="r_aed93283265f941dc1d2bf8d634164493"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#aed93283265f941dc1d2bf8d634164493">reserved0</a></td></tr>
+<tr class="memdesc:aed93283265f941dc1d2bf8d634164493"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unused, must be zero.  <br /></td></tr>
 <tr class="separator:aed93283265f941dc1d2bf8d634164493"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72b38046f765f14ce3d8f74ead10766b" id="r_a72b38046f765f14ce3d8f74ead10766b"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a72b38046f765f14ce3d8f74ead10766b">rsp0</a></td></tr>
+<tr class="memdesc:a72b38046f765f14ce3d8f74ead10766b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stack pointer for ring 0.  <br /></td></tr>
 <tr class="separator:a72b38046f765f14ce3d8f74ead10766b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01fe81e8371ef1ebbf418968c24938af" id="r_a01fe81e8371ef1ebbf418968c24938af"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a01fe81e8371ef1ebbf418968c24938af">rsp1</a></td></tr>
+<tr class="memdesc:a01fe81e8371ef1ebbf418968c24938af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stack pointer for ring 1.  <br /></td></tr>
 <tr class="separator:a01fe81e8371ef1ebbf418968c24938af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15cb2c4ffbfbf962c70a94c7519ef51f" id="r_a15cb2c4ffbfbf962c70a94c7519ef51f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a15cb2c4ffbfbf962c70a94c7519ef51f">rsp2</a></td></tr>
+<tr class="memdesc:a15cb2c4ffbfbf962c70a94c7519ef51f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stack pointer for ring 2.  <br /></td></tr>
 <tr class="separator:a15cb2c4ffbfbf962c70a94c7519ef51f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70e1f8ea009867b1bee1dcd6740874a1" id="r_a70e1f8ea009867b1bee1dcd6740874a1"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a70e1f8ea009867b1bee1dcd6740874a1">reserved1</a></td></tr>
+<tr class="memdesc:a70e1f8ea009867b1bee1dcd6740874a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unused, must be zero.  <br /></td></tr>
 <tr class="separator:a70e1f8ea009867b1bee1dcd6740874a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43927117f60a83134aaf449767b87b6c" id="r_a43927117f60a83134aaf449767b87b6c"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a43927117f60a83134aaf449767b87b6c">reserved2</a></td></tr>
+<tr class="memdesc:a43927117f60a83134aaf449767b87b6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unused, must be zero.  <br /></td></tr>
 <tr class="separator:a43927117f60a83134aaf449767b87b6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a715597b286f1f3911516ff33f7daed1d" id="r_a715597b286f1f3911516ff33f7daed1d"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a715597b286f1f3911516ff33f7daed1d">ist1</a></td></tr>
+<tr class="memdesc:a715597b286f1f3911516ff33f7daed1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interrupt Stack Table entry 1.  <br /></td></tr>
 <tr class="separator:a715597b286f1f3911516ff33f7daed1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cad174ca03880e2ef66877fa7452908" id="r_a0cad174ca03880e2ef66877fa7452908"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a0cad174ca03880e2ef66877fa7452908">ist2</a></td></tr>
+<tr class="memdesc:a0cad174ca03880e2ef66877fa7452908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interrupt Stack Table entry 2.  <br /></td></tr>
 <tr class="separator:a0cad174ca03880e2ef66877fa7452908"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfffc52e9460241dab25a95518f110f1" id="r_adfffc52e9460241dab25a95518f110f1"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#adfffc52e9460241dab25a95518f110f1">ist3</a></td></tr>
+<tr class="memdesc:adfffc52e9460241dab25a95518f110f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interrupt Stack Table entry 3.  <br /></td></tr>
 <tr class="separator:adfffc52e9460241dab25a95518f110f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9913c81119fe2e85184295729bb919f" id="r_aa9913c81119fe2e85184295729bb919f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#aa9913c81119fe2e85184295729bb919f">ist4</a></td></tr>
+<tr class="memdesc:aa9913c81119fe2e85184295729bb919f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interrupt Stack Table entry 4.  <br /></td></tr>
 <tr class="separator:aa9913c81119fe2e85184295729bb919f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad44d2330d19aca0011f83bd384e17ffb" id="r_ad44d2330d19aca0011f83bd384e17ffb"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#ad44d2330d19aca0011f83bd384e17ffb">ist5</a></td></tr>
+<tr class="memdesc:ad44d2330d19aca0011f83bd384e17ffb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interrupt Stack Table entry 5.  <br /></td></tr>
 <tr class="separator:ad44d2330d19aca0011f83bd384e17ffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50ceffaaa84b8c9e483ab22a3e446a25" id="r_a50ceffaaa84b8c9e483ab22a3e446a25"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a50ceffaaa84b8c9e483ab22a3e446a25">ist6</a></td></tr>
+<tr class="memdesc:a50ceffaaa84b8c9e483ab22a3e446a25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interrupt Stack Table entry 6.  <br /></td></tr>
 <tr class="separator:a50ceffaaa84b8c9e483ab22a3e446a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92d8554e63dfe173bb1cdc79e6105b77" id="r_a92d8554e63dfe173bb1cdc79e6105b77"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a92d8554e63dfe173bb1cdc79e6105b77">ist7</a></td></tr>
+<tr class="memdesc:a92d8554e63dfe173bb1cdc79e6105b77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interrupt Stack Table entry 7.  <br /></td></tr>
 <tr class="separator:a92d8554e63dfe173bb1cdc79e6105b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0c86982c9eef8033adb225c9f4c0458" id="r_aa0c86982c9eef8033adb225c9f4c0458"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#aa0c86982c9eef8033adb225c9f4c0458">reserved3</a></td></tr>
+<tr class="memdesc:aa0c86982c9eef8033adb225c9f4c0458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unused, must be zero.  <br /></td></tr>
 <tr class="separator:aa0c86982c9eef8033adb225c9f4c0458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9c80382144c72c09f80eb6458d5238e" id="r_af9c80382144c72c09f80eb6458d5238e"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#af9c80382144c72c09f80eb6458d5238e">reserved4</a></td></tr>
+<tr class="memdesc:af9c80382144c72c09f80eb6458d5238e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unused, must be zero.  <br /></td></tr>
 <tr class="separator:af9c80382144c72c09f80eb6458d5238e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0cd4cbf2cda7bf0599dc6441efc8b3c" id="r_ac0cd4cbf2cda7bf0599dc6441efc8b3c"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#ac0cd4cbf2cda7bf0599dc6441efc8b3c">io_bitmap_offset</a></td></tr>
+<tr class="memdesc:ac0cd4cbf2cda7bf0599dc6441efc8b3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset to the I/O bitmap.  <br /></td></tr>
 <tr class="separator:ac0cd4cbf2cda7bf0599dc6441efc8b3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ffe95b2b6023ed7f9266bbc3e94971a" id="r_a6ffe95b2b6023ed7f9266bbc3e94971a"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="namespaceMaxOS_1_1system.html#a955509bd4aa295b6038a6812bf689200">MaxOS::system::CPU_FEATURE_ECX</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMaxOS_1_1system.html#a6ffe95b2b6023ed7f9266bbc3e94971a">MaxOS::system::__attribute__</a></td></tr>
+<tr class="memitem:a6ffe95b2b6023ed7f9266bbc3e94971a" id="r_a6ffe95b2b6023ed7f9266bbc3e94971a"><td class="memItemLeft" align="right" valign="top"><a id="a6ffe95b2b6023ed7f9266bbc3e94971a" name="a6ffe95b2b6023ed7f9266bbc3e94971a"></a>
+enum <a class="el" href="cpu_8h.html#a955509bd4aa295b6038a6812bf689200">MaxOS::system::CPU_FEATURE_ECX</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MaxOS::system::__attribute__</b></td></tr>
 <tr class="separator:a6ffe95b2b6023ed7f9266bbc3e94971a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adacd1bb3e91dd22eaae8f252d4135d4d" id="r_adacd1bb3e91dd22eaae8f252d4135d4d"><td class="memItemLeft" align="right" valign="top">StackFrame *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#adacd1bb3e91dd22eaae8f252d4135d4d">next</a></td></tr>
+<tr class="memdesc:adacd1bb3e91dd22eaae8f252d4135d4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the next stack frame (up the call stack)  <br /></td></tr>
 <tr class="separator:adacd1bb3e91dd22eaae8f252d4135d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad37248eb45d2509df75a205d8412ac65" id="r_ad37248eb45d2509df75a205d8412ac65"><td class="memItemLeft" align="right" valign="top">uintptr_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a></td></tr>
+<tr class="memdesc:ad37248eb45d2509df75a205d8412ac65"><td class="mdescLeft">&#160;</td><td class="mdescRight">The instruction pointer at this frame.  <br /></td></tr>
 <tr class="separator:ad37248eb45d2509df75a205d8412ac65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eed65db00a29bed626cd7e0a16cbd05" id="r_a1eed65db00a29bed626cd7e0a16cbd05"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a1eed65db00a29bed626cd7e0a16cbd05">stack</a></td></tr>
+<tr class="memdesc:a1eed65db00a29bed626cd7e0a16cbd05"><td class="mdescLeft">&#160;</td><td class="mdescRight">The stack pointer for the core.  <br /></td></tr>
+<tr class="separator:a1eed65db00a29bed626cd7e0a16cbd05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fc1d0f743f4314f0b9083fa0b755e07" id="r_a9fc1d0f743f4314f0b9083fa0b755e07"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a9fc1d0f743f4314f0b9083fa0b755e07">p4_table</a></td></tr>
+<tr class="memdesc:a9fc1d0f743f4314f0b9083fa0b755e07"><td class="mdescLeft">&#160;</td><td class="mdescRight">The physical address of the P4 page table.  <br /></td></tr>
+<tr class="separator:a9fc1d0f743f4314f0b9083fa0b755e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e6927fa1486224044e568f9c370519b" id="r_a1e6927fa1486224044e568f9c370519b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a1e6927fa1486224044e568f9c370519b">id</a></td></tr>
+<tr class="memdesc:a1e6927fa1486224044e568f9c370519b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ID of the core.  <br /></td></tr>
+<tr class="separator:a1e6927fa1486224044e568f9c370519b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73e9fa0c3543560192f38a8ab6a78c47" id="r_a73e9fa0c3543560192f38a8ab6a78c47"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a73e9fa0c3543560192f38a8ab6a78c47">activated</a></td></tr>
+<tr class="memdesc:a73e9fa0c3543560192f38a8ab6a78c47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the core has been activated.  <br /></td></tr>
+<tr class="separator:a73e9fa0c3543560192f38a8ab6a78c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f6e3329ba03df2dd96fa12c454d0c32" id="r_a3f6e3329ba03df2dd96fa12c454d0c32"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a3f6e3329ba03df2dd96fa12c454d0c32">gdt_64_base</a></td></tr>
+<tr class="memdesc:a3f6e3329ba03df2dd96fa12c454d0c32"><td class="mdescLeft">&#160;</td><td class="mdescRight">The base of the 64-bit GDT.  <br /></td></tr>
+<tr class="separator:a3f6e3329ba03df2dd96fa12c454d0c32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cdb341b2d45114c2d033ec00bc3b356" id="r_a0cdb341b2d45114c2d033ec00bc3b356"><td class="memItemLeft" align="right" valign="top">constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8h.html#a0cdb341b2d45114c2d033ec00bc3b356">MaxOS::system::BOOT_STACK_SIZE</a> = 16384</td></tr>
+<tr class="memdesc:a0cdb341b2d45114c2d033ec00bc3b356"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the stack allocated for booting a core (should align with the startup assembly code for the kernel)  <br /></td></tr>
+<tr class="separator:a0cdb341b2d45114c2d033ec00bc3b356"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Defines Central Processing Unit (CPU) structures and functions for managing CPU state and features. </p>
+<dl class="section date"><dt>Date</dt><dd>17th January 2024 </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Max Tyson </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a955509bd4aa295b6038a6812bf689200" name="a955509bd4aa295b6038a6812bf689200"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a955509bd4aa295b6038a6812bf689200">&#9670;&#160;</a></span>CPU_FEATURE_ECX</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="cpu_8h.html#a955509bd4aa295b6038a6812bf689200">MaxOS::system::CPU_FEATURE_ECX</a> : int32_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>CPU features indicated by the ECX register after calling CPUID with EAX = 1. </p>
+<dl class="section see"><dt>See also</dt><dd><a href="https://wiki.osdev.org/CPUID">https://wiki.osdev.org/CPUID</a> as the original author </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00085">85</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   85</span>                                   : int32_t {</div>
+<div class="line"><span class="lineno">   86</span>            SSE3        = 1 &lt;&lt; 0,</div>
+<div class="line"><span class="lineno">   87</span>            PCLMUL      = 1 &lt;&lt; 1,</div>
+<div class="line"><span class="lineno">   88</span>            DTES64      = 1 &lt;&lt; 2,</div>
+<div class="line"><span class="lineno">   89</span>            MONITOR     = 1 &lt;&lt; 3,</div>
+<div class="line"><span class="lineno">   90</span>            DS_CPL      = 1 &lt;&lt; 4,</div>
+<div class="line"><span class="lineno">   91</span>            VMX         = 1 &lt;&lt; 5,</div>
+<div class="line"><span class="lineno">   92</span>            SMX         = 1 &lt;&lt; 6,</div>
+<div class="line"><span class="lineno">   93</span>            EST         = 1 &lt;&lt; 7,</div>
+<div class="line"><span class="lineno">   94</span>            TM2         = 1 &lt;&lt; 8,</div>
+<div class="line"><span class="lineno">   95</span>            SSSE3       = 1 &lt;&lt; 9,</div>
+<div class="line"><span class="lineno">   96</span>            CID         = 1 &lt;&lt; 10,</div>
+<div class="line"><span class="lineno">   97</span>            SDBG        = 1 &lt;&lt; 11,</div>
+<div class="line"><span class="lineno">   98</span>            FMA         = 1 &lt;&lt; 12,</div>
+<div class="line"><span class="lineno">   99</span>            CX16        = 1 &lt;&lt; 13,</div>
+<div class="line"><span class="lineno">  100</span>            XTPR        = 1 &lt;&lt; 14,</div>
+<div class="line"><span class="lineno">  101</span>            PDCM        = 1 &lt;&lt; 15,</div>
+<div class="line"><span class="lineno">  102</span>            PCID        = 1 &lt;&lt; 17,</div>
+<div class="line"><span class="lineno">  103</span>            DCA         = 1 &lt;&lt; 18,</div>
+<div class="line"><span class="lineno">  104</span>            SSE4_1      = 1 &lt;&lt; 19,</div>
+<div class="line"><span class="lineno">  105</span>            SSE4_2      = 1 &lt;&lt; 20,</div>
+<div class="line"><span class="lineno">  106</span>            X2APIC      = 1 &lt;&lt; 21,</div>
+<div class="line"><span class="lineno">  107</span>            MOVBE       = 1 &lt;&lt; 22,</div>
+<div class="line"><span class="lineno">  108</span>            POPCNT      = 1 &lt;&lt; 23,</div>
+<div class="line"><span class="lineno">  109</span>            TSC         = 1 &lt;&lt; 24,</div>
+<div class="line"><span class="lineno">  110</span>            AES         = 1 &lt;&lt; 25,</div>
+<div class="line"><span class="lineno">  111</span>            XSAVE       = 1 &lt;&lt; 26,</div>
+<div class="line"><span class="lineno">  112</span>            OSXSAVE     = 1 &lt;&lt; 27,</div>
+<div class="line"><span class="lineno">  113</span>            AVX         = 1 &lt;&lt; 28,</div>
+<div class="line"><span class="lineno">  114</span>            F16C        = 1 &lt;&lt; 29,</div>
+<div class="line"><span class="lineno">  115</span>            RDRAND      = 1 &lt;&lt; 30,</div>
+<div class="line"><span class="lineno">  116</span>            HYPERVISOR  = 1 &lt;&lt; 31,</div>
+<div class="line"><span class="lineno">  117</span>        };</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="aabd92958148e45d498450aaf57c8d6ab" name="aabd92958148e45d498450aaf57c8d6ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabd92958148e45d498450aaf57c8d6ab">&#9670;&#160;</a></span>CPU_FEATURE_EDX</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="cpu_8h.html#aabd92958148e45d498450aaf57c8d6ab">MaxOS::system::CPU_FEATURE_EDX</a> : int32_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>CPU features indicated by the EDX register after calling CPUID with EAX = 1. </p>
+<dl class="section see"><dt>See also</dt><dd><a href="https://wiki.osdev.org/CPUID">https://wiki.osdev.org/CPUID</a> as the original author </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00125">125</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  125</span>                                   : int32_t {</div>
+<div class="line"><span class="lineno">  126</span>            FPU     = 1 &lt;&lt; 0,</div>
+<div class="line"><span class="lineno">  127</span>            VME     = 1 &lt;&lt; 1,</div>
+<div class="line"><span class="lineno">  128</span>            DE      = 1 &lt;&lt; 2,</div>
+<div class="line"><span class="lineno">  129</span>            PSE     = 1 &lt;&lt; 3,</div>
+<div class="line"><span class="lineno">  130</span>            TSC     = 1 &lt;&lt; 4,</div>
+<div class="line"><span class="lineno">  131</span>            MSR     = 1 &lt;&lt; 5,</div>
+<div class="line"><span class="lineno">  132</span>            PAE     = 1 &lt;&lt; 6,</div>
+<div class="line"><span class="lineno">  133</span>            MCE     = 1 &lt;&lt; 7,</div>
+<div class="line"><span class="lineno">  134</span>            CX8     = 1 &lt;&lt; 8,</div>
+<div class="line"><span class="lineno">  135</span>            APIC    = 1 &lt;&lt; 9,</div>
+<div class="line"><span class="lineno">  136</span>            SEP     = 1 &lt;&lt; 11,</div>
+<div class="line"><span class="lineno">  137</span>            MTRR    = 1 &lt;&lt; 12,</div>
+<div class="line"><span class="lineno">  138</span>            PGE     = 1 &lt;&lt; 13,</div>
+<div class="line"><span class="lineno">  139</span>            MCA     = 1 &lt;&lt; 14,</div>
+<div class="line"><span class="lineno">  140</span>            CMOV    = 1 &lt;&lt; 15,</div>
+<div class="line"><span class="lineno">  141</span>            PAT     = 1 &lt;&lt; 16,</div>
+<div class="line"><span class="lineno">  142</span>            PSE36   = 1 &lt;&lt; 17,</div>
+<div class="line"><span class="lineno">  143</span>            PSN     = 1 &lt;&lt; 18,</div>
+<div class="line"><span class="lineno">  144</span>            CLFLUSH = 1 &lt;&lt; 19,</div>
+<div class="line"><span class="lineno">  145</span>            DS      = 1 &lt;&lt; 21,</div>
+<div class="line"><span class="lineno">  146</span>            ACPI    = 1 &lt;&lt; 22,</div>
+<div class="line"><span class="lineno">  147</span>            MMX     = 1 &lt;&lt; 23,</div>
+<div class="line"><span class="lineno">  148</span>            FXSR    = 1 &lt;&lt; 24,</div>
+<div class="line"><span class="lineno">  149</span>            SSE     = 1 &lt;&lt; 25,</div>
+<div class="line"><span class="lineno">  150</span>            SSE2    = 1 &lt;&lt; 26,</div>
+<div class="line"><span class="lineno">  151</span>            SS      = 1 &lt;&lt; 27,</div>
+<div class="line"><span class="lineno">  152</span>            HTT     = 1 &lt;&lt; 28,</div>
+<div class="line"><span class="lineno">  153</span>            TM      = 1 &lt;&lt; 29,</div>
+<div class="line"><span class="lineno">  154</span>            IA64    = 1 &lt;&lt; 30,</div>
+<div class="line"><span class="lineno">  155</span>            PBE     = 1 &lt;&lt; 31</div>
+<div class="line"><span class="lineno">  156</span>        };</div>
+</div><!-- fragment -->
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="a73e9fa0c3543560192f38a8ab6a78c47" name="a73e9fa0c3543560192f38a8ab6a78c47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73e9fa0c3543560192f38a8ab6a78c47">&#9670;&#160;</a></span>activated</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool activated</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether the core has been activated. </p>
+
+<p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00003">3</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="kernel_8cpp_source.html#l00046">core_main()</a>.</p>
+
+</div>
+</div>
+<a id="a0cdb341b2d45114c2d033ec00bc3b356" name="a0cdb341b2d45114c2d033ec00bc3b356"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cdb341b2d45114c2d033ec00bc3b356">&#9670;&#160;</a></span>BOOT_STACK_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr size_t MaxOS::system::BOOT_STACK_SIZE = 16384</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The size of the stack allocated for booting a core (should align with the startup assembly code for the kernel) </p>
+
+<p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00180">180</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="cpu_8cpp_source.html#l00110">MaxOS::system::Core::init_tss()</a>, and <a class="el" href="cpu_8cpp_source.html#l00059">MaxOS::system::Core::wake_up()</a>.</p>
+
+</div>
+</div>
+<a id="a3f6e3329ba03df2dd96fa12c454d0c32" name="a3f6e3329ba03df2dd96fa12c454d0c32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f6e3329ba03df2dd96fa12c454d0c32">&#9670;&#160;</a></span>gdt_64_base</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* gdt_64_base</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The base of the 64-bit GDT. </p>
+
+<p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00004">4</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+
+</div>
+</div>
+<a id="a1e6927fa1486224044e568f9c370519b" name="a1e6927fa1486224044e568f9c370519b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e6927fa1486224044e568f9c370519b">&#9670;&#160;</a></span>id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The ID of the core. </p>
+
+<p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00002">2</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+
+</div>
+</div>
 <a id="ac0cd4cbf2cda7bf0599dc6441efc8b3c" name="ac0cd4cbf2cda7bf0599dc6441efc8b3c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac0cd4cbf2cda7bf0599dc6441efc8b3c">&#9670;&#160;</a></span>io_bitmap_offset</h2>
 
@@ -280,6 +537,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Offset to the I/O bitmap. </p>
 
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00015">15</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
@@ -297,6 +556,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Interrupt Stack Table entry 1. </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00006">6</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
 </div>
@@ -312,6 +573,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Interrupt Stack Table entry 2. </p>
 
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00007">7</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
@@ -329,6 +592,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Interrupt Stack Table entry 3. </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00008">8</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
 </div>
@@ -344,6 +609,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Interrupt Stack Table entry 4. </p>
 
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00009">9</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
@@ -361,6 +628,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Interrupt Stack Table entry 5. </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00010">10</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
 </div>
@@ -376,6 +645,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Interrupt Stack Table entry 6. </p>
 
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00011">11</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
@@ -393,6 +664,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Interrupt Stack Table entry 7. </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00012">12</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
 </div>
@@ -409,7 +682,29 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Pointer to the next stack frame (up the call stack) </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00000">0</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+
+</div>
+</div>
+<a id="a9fc1d0f743f4314f0b9083fa0b755e07" name="a9fc1d0f743f4314f0b9083fa0b755e07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fc1d0f743f4314f0b9083fa0b755e07">&#9670;&#160;</a></span>p4_table</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t p4_table</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The physical address of the P4 page table. </p>
+
+<p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00001">1</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="cpu_8cpp_source.html#l00548">MaxOS::system::CPU::init_cores()</a>, and <a class="el" href="physical_8cpp_source.html#l00948">MaxOS::memory::PhysicalMemoryManager::unmap_lower_kernel()</a>.</p>
 
 </div>
 </div>
@@ -424,6 +719,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Unused, must be zero. </p>
 
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00000">0</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
@@ -441,6 +738,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Unused, must be zero. </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00004">4</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
 </div>
@@ -456,6 +755,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Unused, must be zero. </p>
 
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00005">5</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
@@ -473,6 +774,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Unused, must be zero. </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00013">13</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
 </div>
@@ -488,6 +791,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Unused, must be zero. </p>
 
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00014">14</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
@@ -505,7 +810,11 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The instruction pointer at this frame. </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00001">1</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="symbols_8cpp_source.html#l00024">MaxOS::common::resolve_symbol()</a>.</p>
 
 </div>
 </div>
@@ -520,6 +829,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stack pointer for ring 0. </p>
 
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00001">1</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
@@ -537,6 +848,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stack pointer for ring 1. </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00002">2</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
 
 </div>
@@ -553,7 +866,29 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stack pointer for ring 2. </p>
+
 <p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00003">3</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+
+</div>
+</div>
+<a id="a1eed65db00a29bed626cd7e0a16cbd05" name="a1eed65db00a29bed626cd7e0a16cbd05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1eed65db00a29bed626cd7e0a16cbd05">&#9670;&#160;</a></span>stack</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t stack</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The stack pointer for the core. </p>
+
+<p class="definition">Definition at line <a class="el" href="cpu_8h_source.html#l00000">0</a> of file <a class="el" href="cpu_8h_source.html">cpu.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="vfs_8cpp_source.html#l00368">MaxOS::filesystem::VirtualFileSystem::delete_directory()</a>.</p>
 
 </div>
 </div>

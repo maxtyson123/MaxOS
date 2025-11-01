@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-MaxOS::processes::BaseResourceRegistry
+MaxOS::processes::BaseResourceRegistry \- Manages the creation, retention and destruction of resources of a certain type\&. Should be subclassed for each resource type\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,13 +15,11 @@ Inherited by \fBMaxOS::processes::ResourceRegistry< MaxOS::processes::SharedMemo
 
 .in +1c
 .ti -1c
-.RI "\fBBaseResourceRegistry\fP (\fBresource_type_t\fP \fBtype\fP)"
+.RI "\fBBaseResourceRegistry\fP (resource_type_t \fBtype\fP)"
 .br
+.RI "Constructs a new \fBBaseResourceRegistry\fP object and registers it globally\&. "
 .ti -1c
-.RI "\fB~BaseResourceRegistry\fP ()"
-.br
-.ti -1c
-.RI "\fBresource_type_t\fP \fBtype\fP ()"
+.RI "resource_type_t \fBtype\fP ()"
 .br
 .RI "Gets the type of resources this registry handles\&. "
 .ti -1c
@@ -46,27 +45,41 @@ Inherited by \fBMaxOS::processes::ResourceRegistry< MaxOS::processes::SharedMemo
 .ti -1c
 .RI "\fBcommon::Map\fP< \fBstring\fP, \fBResource\fP * > \fBm_resources\fP"
 .br
+.RI "The map of resource names to resource instances\&. "
 .ti -1c
 .RI "\fBcommon::Map\fP< \fBstring\fP, uint64_t > \fBm_resource_uses\fP"
 .br
+.RI "The map of resource names to how many processes are using them\&. "
 .ti -1c
-.RI "\fBresource_type_t\fP \fBm_type\fP"
+.RI "resource_type_t \fBm_type\fP"
 .br
+.RI "The resource type that this registry manages\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line \fB42\fP of file \fBresource\&.h\fP\&.
+Manages the creation, retention and destruction of resources of a certain type\&. Should be subclassed for each resource type\&. 
+.PP
+Definition at line \fB54\fP of file \fBresource\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "BaseResourceRegistry::BaseResourceRegistry (\fBresource_type_t\fP type)\fC [explicit]\fP"
+.SS "BaseResourceRegistry::BaseResourceRegistry (resource_type_t type)\fC [explicit]\fP"
 
 .PP
-Definition at line \fB81\fP of file \fBresource\&.cpp\fP\&..PP
+Constructs a new \fBBaseResourceRegistry\fP object and registers it globally\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The type of resources this registry will handle 
+.RE
+.PP
+
+.PP
+Definition at line \fB98\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-82 : m_type(type)
-83 {
-84     GlobalResourceRegistry::add_registry(type, this);
-85 }
+99 : m_type(type)
+100 {
+101     GlobalResourceRegistry::add_registry(type, this);
+102 }
 .fi
 
 .PP
@@ -74,16 +87,14 @@ References \fBMaxOS::processes::GlobalResourceRegistry::add_registry()\fP, and \
 .SS "BaseResourceRegistry::~BaseResourceRegistry ()"
 
 .PP
-Definition at line \fB87\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB104\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-87                                            {
-88 
-89     GlobalResourceRegistry::remove_registry(this);
-90 }
+104                                            {
+105 
+106     GlobalResourceRegistry::remove_registry(this);
+107 }
 .fi
 
-.PP
-References \fBMaxOS::processes::GlobalResourceRegistry::remove_registry()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "void BaseResourceRegistry::close_resource (\fBResource\fP * resource, size_t flags)\fC [virtual]\fP"
@@ -100,30 +111,30 @@ Close the resource provided, if it exists in this registry\&.
 .PP
 
 .PP
-Definition at line \fB145\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB161\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-145                                                                           {
-146 
-147     // Resource isn't stored in this registry
-148     if(m_resources\&.find(resource\->name()) == m_resources\&.end())
-149         return;
-150 
-151     m_resource_uses[resource\->name()]\-\-;
-152 
-153     // Don't close a resource that has more processes using it
-154     if(m_resource_uses[resource\->name()])
-155         return;
-156 
-157     // Can safely close the resource
-158     resource\->close(flags);
-159     m_resources\&.erase(resource\->name());
-160     m_resource_uses\&.erase(resource\->name());
-161     delete resource;
-162 }
+161                                                                           {
+162 
+163     // Resource isn't stored in this registry
+164     if(m_resources\&.find(resource\->name()) == m_resources\&.end())
+165         return;
+166 
+167     m_resource_uses[resource\->name()]\-\-;
+168 
+169     // Don't close a resource that has more processes using it
+170     if(m_resource_uses[resource\->name()])
+171         return;
+172 
+173     // Can safely close the resource
+174     resource\->close(flags);
+175     m_resources\&.erase(resource\->name());
+176     m_resource_uses\&.erase(resource\->name());
+177     delete resource;
+178 }
 .fi
 
 .PP
-References \fBMaxOS::processes::Resource::close()\fP, \fBflags\fP, \fBm_resource_uses\fP, \fBm_resources\fP, and \fBMaxOS::processes::Resource::name()\fP\&.
+References \fBMaxOS::processes::Resource::close()\fP, \fBMaxOS::common::Map< Key, Value >::erase()\fP, \fBflags\fP, \fBm_resource_uses\fP, \fBm_resources\fP, and \fBMaxOS::processes::Resource::name()\fP\&.
 .SS "\fBResource\fP * BaseResourceRegistry::create_resource (const \fBstring\fP & name, size_t flags)\fC [virtual]\fP"
 
 .PP
@@ -145,11 +156,11 @@ The resource created or nullptr if failed to create the resource
 .PP
 Reimplemented in \fBMaxOS::filesystem::VFSResourceRegistry\fP, \fBMaxOS::processes::ResourceRegistry< Type >\fP, \fBMaxOS::processes::ResourceRegistry< MaxOS::processes::SharedMemory >\fP, and \fBMaxOS::processes::ResourceRegistry< MaxOS::processes::SharedMessageEndpoint >\fP\&.
 .PP
-Definition at line \fB171\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB187\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-171                                                                                 {
-172     return nullptr;
-173 }
+187                                                                                 {
+188     return nullptr;
+189 }
 .fi
 
 .SS "\fBResource\fP * BaseResourceRegistry::get_resource (const \fBstring\fP & name)\fC [virtual]\fP"
@@ -171,19 +182,19 @@ The resource or nullptr if the resource was not found
 .PP
 Reimplemented in \fBMaxOS::filesystem::VFSResourceRegistry\fP\&.
 .PP
-Definition at line \fB108\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB125\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-108                                                                {
-109 
-110     // Resource isn't stored in this registry
-111     if(m_resources\&.find(name) == m_resources\&.end())
-112         return nullptr;
-113 
-114     // Increment the use count of the resource and return it
-115     m_resource_uses[name]++;
-116     return m_resources[name];
-117 
-118 }
+125                                                                {
+126 
+127     // Resource isn't stored in this registry
+128     if(m_resources\&.find(name) == m_resources\&.end())
+129         return nullptr;
+130 
+131     // Increment the use count of the resource and return it
+132     m_resource_uses[name]++;
+133     return m_resources[name];
+134 
+135 }
 .fi
 
 .PP
@@ -198,8 +209,6 @@ Registers a resource in the registry\&.
 \fBParameters\fP
 .RS 4
 \fIresource\fP The resource to store 
-.br
-\fIname\fP The name of the resource (must not already be in use) 
 .RE
 .PP
 \fBReturns\fP
@@ -209,25 +218,25 @@ True if the register was successful, false if not
 .PP
 
 .PP
-Definition at line \fB127\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB143\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-127                                                                {
-128 
-129     // Resource name is already stored in this registry
-130     if(m_resources\&.find(resource\->name()) != m_resources\&.end())
-131         return false;
-132 
-133     m_resources\&.insert(resource\->name(), resource);
-134     m_resource_uses\&.insert(resource\->name(), 0);
-135     return true;
-136 }
+143                                                                {
+144 
+145     // Resource name is already stored in this registry
+146     if(m_resources\&.find(resource\->name()) != m_resources\&.end())
+147         return false;
+148 
+149     m_resources\&.insert(resource\->name(), resource);
+150     m_resource_uses\&.insert(resource\->name(), 0);
+151     return true;
+152 }
 .fi
 
 .PP
-References \fBm_resource_uses\fP, \fBm_resources\fP, and \fBMaxOS::processes::Resource::name()\fP\&.
+References \fBMaxOS::common::Map< Key, Value >::insert()\fP, \fBm_resource_uses\fP, \fBm_resources\fP, and \fBMaxOS::processes::Resource::name()\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::ResourceRegistry< Type >::create_resource()\fP\&.
-.SS "\fBresource_type_t\fP BaseResourceRegistry::type ()"
+.SS "resource_type_t BaseResourceRegistry::type ()"
 
 .PP
 Gets the type of resources this registry handles\&. 
@@ -239,12 +248,12 @@ The type
 .PP
 
 .PP
-Definition at line \fB97\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB114\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-97                                            {
-98 
-99     return m_type;
-100 }
+114                                            {
+115 
+116     return m_type;
+117 }
 .fi
 
 .PP
@@ -256,19 +265,25 @@ Referenced by \fBBaseResourceRegistry()\fP, \fBMaxOS::processes::ResourceRegistr
 .SS "\fBcommon::Map\fP<\fBstring\fP, uint64_t> MaxOS::processes::BaseResourceRegistry::m_resource_uses\fC [protected]\fP"
 
 .PP
-Definition at line \fB46\fP of file \fBresource\&.h\fP\&.
+The map of resource names to how many processes are using them\&. 
+.PP
+Definition at line \fB58\fP of file \fBresource\&.h\fP\&.
 .PP
 Referenced by \fBclose_resource()\fP, \fBget_resource()\fP, and \fBregister_resource()\fP\&.
 .SS "\fBcommon::Map\fP<\fBstring\fP, \fBResource\fP*> MaxOS::processes::BaseResourceRegistry::m_resources\fC [protected]\fP"
 
 .PP
-Definition at line \fB45\fP of file \fBresource\&.h\fP\&.
+The map of resource names to resource instances\&. 
+.PP
+Definition at line \fB57\fP of file \fBresource\&.h\fP\&.
 .PP
 Referenced by \fBclose_resource()\fP, \fBget_resource()\fP, and \fBregister_resource()\fP\&.
-.SS "\fBresource_type_t\fP MaxOS::processes::BaseResourceRegistry::m_type\fC [protected]\fP"
+.SS "resource_type_t MaxOS::processes::BaseResourceRegistry::m_type\fC [protected]\fP"
 
 .PP
-Definition at line \fB48\fP of file \fBresource\&.h\fP\&.
+The resource type that this registry manages\&. 
+.PP
+Definition at line \fB60\fP of file \fBresource\&.h\fP\&.
 .PP
 Referenced by \fBtype()\fP\&.
 

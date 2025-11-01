@@ -17,55 +17,25 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .ti -1c
 .RI "\fBPIT\fP (\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP *apic)"
 .br
-.ti -1c
-.RI "\fB~PIT\fP ()"
-.br
+.RI "Constructor for the \fBPIT\fP class\&. Registers a handler for interrupt 0x22 and initializes ports\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *\fBstatus\fP)"
+.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
 .in -1c
-.SS "Protected Member Functions"
+.SS "Additional Inherited Members"
 
-.in +1c
-.ti -1c
-.RI "\fBvoid\fP \fBhandle_interrupt\fP () \fBfinal\fP"
-.br
-.RI "Tick on each interrupt\&. "
-.ti -1c
-.RI "\fBuint32_t\fP \fBticks_per_ms\fP ()"
-.br
-.RI "Uses the \fBPIT\fP to calculate how many APIC ticks are in 1 millisecond\&. "
-.in -1c
 
 Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
-.ti -1c
-.RI "\fB~InterruptHandler\fP ()"
-.br
-.in -1c
-.SS "Protected Attributes"
-
-.in +1c
-.ti -1c
-.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_data_port\fP"
-.br
-.ti -1c
-.RI "\fBhardwarecommunication::Port8Bit\fP \fBm_command_port\fP"
-.br
-.ti -1c
-.RI "\fBhardwarecommunication::LocalAPIC\fP * \fBm_local_apic\fP"
-.br
-.ti -1c
-.RI "\fBhardwarecommunication::IOAPIC\fP * \fBm_io_apic\fP"
-.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
@@ -73,147 +43,39 @@ Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHa
 .ti -1c
 .RI "uint8_t \fBm_interrupt_number\fP"
 .br
+.RI "The interrupt number this handler handles\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 \fBDriver\fP for the Programmable Interval Timer\&. 
 .PP
-Definition at line \fB96\fP of file \fBclock\&.h\fP\&.
+Definition at line \fB93\fP of file \fBclock\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "PIT::PIT (\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP * apic)"
 
 .PP
-Definition at line \fB236\fP of file \fBclock\&.cpp\fP\&..PP
-.nf
-237 : InterruptHandler(0x22),
-238   m_data_port(0x40),
-239   m_command_port(0x43),
-240   m_local_apic(apic\->local_apic()),
-241   m_io_apic(apic\->io_apic())
-242 {
-243 
-244 }
-.fi
-
-.SS "PIT::~PIT ()\fC [default]\fP"
-
-.SH "Member Function Documentation"
-.PP 
-.SS "\fBvoid\fP PIT::handle_interrupt ()\fC [final]\fP, \fC [protected]\fP, \fC [virtual]\fP"
-
+Constructor for the \fBPIT\fP class\&. Registers a handler for interrupt 0x22 and initializes ports\&. 
 .PP
-Tick on each interrupt\&. 
-.PP
-Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
-.PP
-Definition at line \fB251\fP of file \fBclock\&.cpp\fP\&..PP
-.nf
-251                            {
-252     m_ticks++;
-253 }
-.fi
-
-.SS "\fBuint32_t\fP PIT::ticks_per_ms ()\fC [protected]\fP"
-
-.PP
-Uses the \fBPIT\fP to calculate how many APIC ticks are in 1 millisecond\&. 
-.PP
-\fBReturns\fP
+\fBParameters\fP
 .RS 4
-The amount of APIC ticks per millisecond 
+\fIapic\fP The APIC controller for the BSP core 
 .RE
 .PP
 
 .PP
-Definition at line \fB260\fP of file \fBclock\&.cpp\fP\&..PP
+Definition at line \fB216\fP of file \fBclock\&.cpp\fP\&..PP
 .nf
-260                            {
-261 
-262     // Set the redirect for the timer interrupt
-263     interrupt_redirect_t redirect = {
-264             \&.type = 0x2,
-265             \&.index = 0x14,
-266             \&.interrupt = 0x22,
-267             \&.destination = 0x00,
-268             \&.flags = 0x00,
-269             \&.mask = true,
-270     };
-271     m_io_apic\->set_redirect(&redirect);
-272 
-273     // Configure the PIT clock
-274     pit_command_t command = {
-275             \&.bcd_mode       = (uint8_t) BCDMode::BINARY,
-276             \&.operating_mode = (uint8_t) OperatingMode::RATE_GENERATOR,
-277             \&.access_mode    = (uint8_t) AccessMode::LOW_HIGH_BYTE,
-278             \&.channel        = (uint8_t) Channel::INTERRUPT
-279     };
-280     m_command_port\&.write(*(uint8_t *) &command);
-281 
-282     // Set the clock rate to 1 ms;
-283     uint16_t rate = 1193182 / 1000;
-284     m_data_port\&.write(rate & 0xFF);
-285     m_data_port\&.write(rate >> 8);
-286 
-287     // Stop the clock
-288     m_local_apic\->write(0x380, 0x00);
-289 
-290     // Set the divisor to 2
-291     m_local_apic\->write(0x3E0, 0x0);
-292 
-293     // Unmask the PIT interrupt
-294     m_io_apic\->set_redirect_mask(redirect\&.index, false);
-295 
-296     // Calculate the number of ticks in 1 ms
-297     auto max = (uint32_t) \-1;
-298     m_local_apic\->write(0x380, max);
-299 
-300     while (m_ticks < s_calibrate_ticks)
-301         asm volatile("nop");
-302 
-303     uint32_t elapsed = max \- (m_local_apic\->read(0x390));
-304     uint32_t ticks_per_ms = elapsed / s_calibrate_ticks;
-305 
-306     Logger::DEBUG() << "Ticks per ms: " << (int) ticks_per_ms << "\\n";
-307 
-308     // Disable the PIT interrupt again
-309     m_local_apic\->write(0x380, 0x00);
-310     m_io_apic\->set_redirect_mask(redirect\&.index, true);
-311 
-312     return ticks_per_ms;
-313 }
+217 : InterruptHandler(0x22),
+218   m_data_port(0x40),
+219   m_command_port(0x43),
+220   m_local_apic(apic\->local_apic()),
+221   m_io_apic(apic\->io_apic())
+222 {
+223 
+224 }
 .fi
 
-.PP
-References \fBMaxOS::drivers::clock::BINARY\fP, \fBcommand\fP, \fBLogger::DEBUG()\fP, \fBMaxOS::drivers::clock::INTERRUPT\fP, \fBMaxOS::drivers::clock::LOW_HIGH_BYTE\fP, \fBm_command_port\fP, \fBm_data_port\fP, \fBm_io_apic\fP, \fBm_local_apic\fP, \fBMaxOS::drivers::clock::RATE_GENERATOR\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::read()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::set_redirect_mask()\fP, \fBticks_per_ms()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::write()\fP, and \fBMaxOS::hardwarecommunication::Port8Bit::write()\fP\&.
-.PP
-Referenced by \fBticks_per_ms()\fP\&.
-.SH "Member Data Documentation"
-.PP 
-.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::PIT::m_command_port\fC [protected]\fP"
-
-.PP
-Definition at line \fB108\fP of file \fBclock\&.h\fP\&.
-.PP
-Referenced by \fBticks_per_ms()\fP\&.
-.SS "\fBhardwarecommunication::Port8Bit\fP MaxOS::drivers::clock::PIT::m_data_port\fC [protected]\fP"
-
-.PP
-Definition at line \fB107\fP of file \fBclock\&.h\fP\&.
-.PP
-Referenced by \fBticks_per_ms()\fP\&.
-.SS "\fBhardwarecommunication::IOAPIC\fP* MaxOS::drivers::clock::PIT::m_io_apic\fC [protected]\fP"
-
-.PP
-Definition at line \fB112\fP of file \fBclock\&.h\fP\&.
-.PP
-Referenced by \fBticks_per_ms()\fP\&.
-.SS "\fBhardwarecommunication::LocalAPIC\fP* MaxOS::drivers::clock::PIT::m_local_apic\fC [protected]\fP"
-
-.PP
-Definition at line \fB111\fP of file \fBclock\&.h\fP\&.
-.PP
-Referenced by \fBticks_per_ms()\fP\&.
 
 .SH "Author"
 .PP 

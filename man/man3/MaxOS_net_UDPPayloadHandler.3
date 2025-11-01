@@ -1,0 +1,108 @@
+.TH "MaxOS::net::UDPPayloadHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::net::UDPPayloadHandler \- Handles the payload of a UDP packet\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <udp\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::EventHandler< UDPEvents >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBUDPPayloadHandler\fP ()"
+.br
+.RI "\fBHandler\fP "
+.ti -1c
+.RI "\fBcommon::Event\fP< \fBUDPEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBUDPEvents\fP > *\fBevent\fP) \fBoverride\fP"
+.br
+.RI "Event handler for UDP payload events\&. "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBhandleUserDatagramProtocolMessage\fP (\fBUDPSocket\fP *socket, \fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
+.br
+.RI "Handle the recivement of a UDP message\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::EventHandler< UDPEvents >\fP
+.in +1c
+.ti -1c
+.RI "\fBvirtual\fP \fBEvent\fP< UDPEvents > * \fBon_event\fP (\fBEvent\fP< UDPEvents > *\fBevent\fP)"
+.br
+.RI "This function is called when an event is raised\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the payload of a UDP packet\&. 
+.PP
+Definition at line \fB66\fP of file \fBudp\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBvoid\fP UDPPayloadHandler::handleUserDatagramProtocolMessage (\fBUDPSocket\fP * socket, \fBuint8_t\fP * data, \fBuint16_t\fP size)\fC [virtual]\fP"
+
+.PP
+Handle the recivement of a UDP message\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsocket\fP The socket that received the message 
+.br
+\fIdata\fP The data received 
+.br
+\fIsize\fP The size of the data received 
+.RE
+.PP
+
+.PP
+Definition at line \fB29\fP of file \fBudp\&.cpp\fP\&..PP
+.nf
+29                                                                                                          {
+30 
+31 }
+.fi
+
+.PP
+Referenced by \fBon_event()\fP\&.
+.SS "\fBEvent\fP< \fBUDPEvents\fP > * UDPPayloadHandler::on_event (\fBcommon::Event\fP< \fBUDPEvents\fP > * event)\fC [override]\fP"
+
+.PP
+Event handler for UDP payload events\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIevent\fP The event that was raised 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The event that was raised 
+.RE
+.PP
+
+.PP
+Definition at line \fB39\fP of file \fBudp\&.cpp\fP\&..PP
+.nf
+39                                                                      {
+40 
+41     switch (event \-> type) {
+42         case UDPEvents::DATA_RECEIVED:
+43             handleUserDatagramProtocolMessage(((UDPDataReceivedEvent*)event) \-> socket, ((UDPDataReceivedEvent*)event) \-> data, ((UDPDataReceivedEvent*)event) \-> size);
+44             break;
+45         default:
+46             break;
+47     }
+48 
+49     return event;
+50 }
+.fi
+
+.PP
+References \fBdata\fP, \fBhandleUserDatagramProtocolMessage()\fP, \fBsize\fP, and \fBtype\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,102 @@
+.TH "MaxOS::net::IPV4AddressResolver" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::net::IPV4AddressResolver \- Resolves IP addresses to MAC addresses\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ipv4\&.h>\fP
+.PP
+Inherited by \fBMaxOS::net::AddressResolutionProtocol\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBIPV4AddressResolver\fP (\fBInternetProtocolHandler\fP *internetProtocolHandler)"
+.br
+.RI "\fBRESOLVER\fP/// "
+.ti -1c
+.RI "\fBvirtual\fP \fBdrivers::ethernet::MediaAccessControlAddress\fP \fBResolve\fP (InternetProtocolAddress address)"
+.br
+.RI "Resolves an IP address to a MAC address\&. (Default, returns broadcast address, override for use) "
+.ti -1c
+.RI "\fBvirtual\fP \fBvoid\fP \fBStore\fP (InternetProtocolAddress \fBinternetProtocolAddress\fP, \fBdrivers::ethernet::MediaAccessControlAddress\fP \fBmediaAccessControlAddress\fP)"
+.br
+.RI "Stores an IP address to MAC address mapping\&. (Default, does nothing, override for use) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Resolves IP addresses to MAC addresses\&. 
+.PP
+Definition at line \fB49\fP of file \fBipv4\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "IPV4AddressResolver::IPV4AddressResolver (\fBInternetProtocolHandler\fP * internetProtocolHandler)"
+
+.PP
+\fBRESOLVER\fP/// 
+.PP
+Definition at line \fB22\fP of file \fBipv4\&.cpp\fP\&..PP
+.nf
+23 {
+24 
+25     internetProtocolHandler \-> RegisterIPV4AddressResolver(this);
+26 
+27 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "MediaAccessControlAddress IPV4AddressResolver::Resolve (InternetProtocolAddress address)\fC [virtual]\fP"
+
+.PP
+Resolves an IP address to a MAC address\&. (Default, returns broadcast address, override for use) 
+.PP
+\fBReturns\fP
+.RS 4
+The MAC address\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::net::AddressResolutionProtocol\fP\&.
+.PP
+Definition at line \fB38\fP of file \fBipv4\&.cpp\fP\&..PP
+.nf
+38                                                                               {
+39     return 0xFFFFFFFFFFFF;
+40 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
+.SS "\fBvoid\fP IPV4AddressResolver::Store (InternetProtocolAddress internetProtocolAddress, \fBdrivers::ethernet::MediaAccessControlAddress\fP mediaAccessControlAddress)\fC [virtual]\fP"
+
+.PP
+Stores an IP address to MAC address mapping\&. (Default, does nothing, override for use) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinternetProtocolAddress\fP The IP address\&. 
+.br
+\fImediaAccessControlAddress\fP The MAC address\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::net::AddressResolutionProtocol\fP\&.
+.PP
+Definition at line \fB48\fP of file \fBipv4\&.cpp\fP\&..PP
+.nf
+48                                                                                   {
+49 
+50 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

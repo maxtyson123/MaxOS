@@ -17,13 +17,7 @@ Inherited by \fBMaxOS::gui::Widget\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBKeyboardEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~KeyboardEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fBcommon::Event\fP< \fBKeyboardEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBKeyboardEvents\fP > *) \fBoverride\fP"
+.RI "\fBcommon::Event\fP< KeyboardEvents > * \fBon_event\fP (\fBcommon::Event\fP< KeyboardEvents > *) \fBoverride\fP"
 .br
 .RI "Handle the trigger of an event\&. "
 .ti -1c
@@ -39,12 +33,6 @@ Inherited by \fBMaxOS::gui::Widget\fP\&.
 Public Member Functions inherited from \fBMaxOS::common::EventHandler< KeyboardEvents >\fP
 .in +1c
 .ti -1c
-.RI "\fBEventHandler\fP ()"
-.br
-.ti -1c
-.RI "\fB~EventHandler\fP ()"
-.br
-.ti -1c
 .RI "\fBvirtual\fP \fBEvent\fP< KeyboardEvents > * \fBon_event\fP (\fBEvent\fP< KeyboardEvents > *\fBevent\fP)"
 .br
 .RI "This function is called when an event is raised\&. "
@@ -53,16 +41,10 @@ Public Member Functions inherited from \fBMaxOS::common::EventHandler< KeyboardE
 .PP 
 Handles the events that are triggered by the Keyboard \fBDriver\fP\&. 
 .PP
-Definition at line \fB259\fP of file \fBkeyboard\&.h\fP\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "KeyboardEventHandler::KeyboardEventHandler ()\fC [default]\fP"
-
-.SS "KeyboardEventHandler::~KeyboardEventHandler ()\fC [default]\fP"
-
+Definition at line \fB264\fP of file \fBkeyboard\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBEvent\fP< \fBKeyboardEvents\fP > * KeyboardEventHandler::on_event (\fBcommon::Event\fP< \fBKeyboardEvents\fP > * event)\fC [override]\fP"
+.SS "\fBEvent\fP< KeyboardEvents > * KeyboardEventHandler::on_event (\fBcommon::Event\fP< KeyboardEvents > * event)\fC [override]\fP"
 
 .PP
 Handle the trigger of an event\&. 
@@ -79,31 +61,31 @@ The event that was passed with the data modified
 .PP
 
 .PP
-Definition at line \fB41\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB45\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-41                                                                                   {
-42 
-43     switch (event\->type) {
-44 
-45         case KeyboardEvents::KEYDOWN:
-46             this\->on_key_down(((KeyDownEvent *) event)\->key_code, ((KeyDownEvent *) event)\->keyboard_state);
-47             break;
+45                                                                                   {
+46 
+47     switch (event\->type) {
 48 
-49         case KeyboardEvents::KEYUP:
-50             this\->on_key_up(((KeyUpEvent *) event)\->key_code, ((KeyUpEvent *) event)\->keyboard_state);
+49         case KeyboardEvents::KEYDOWN:
+50             this\->on_key_down(((KeyDownEvent *) event)\->key_code, ((KeyDownEvent *) event)\->keyboard_state);
 51             break;
 52 
-53         default:
-54             break;
-55     }
+53         case KeyboardEvents::KEYUP:
+54             this\->on_key_up(((KeyUpEvent *) event)\->key_code, ((KeyUpEvent *) event)\->keyboard_state);
+55             break;
 56 
-57     return event;
-58 }
+57         default:
+58             break;
+59     }
+60 
+61     return event;
+62 }
 .fi
 
 .PP
-References \fBMaxOS::drivers::peripherals::KEYDOWN\fP, \fBMaxOS::drivers::peripherals::KEYUP\fP, \fBon_key_down()\fP, and \fBon_key_up()\fP\&.
-.SS "\fBvoid\fP KeyboardEventHandler::on_key_down (\fBKeyCode\fP, \fBKeyboardState\fP)\fC [virtual]\fP"
+References \fBon_key_down()\fP, and \fBon_key_up()\fP\&.
+.SS "\fBvoid\fP KeyboardEventHandler::on_key_down (\fBKeyCode\fP key_down_code, \fBKeyboardState\fP key_down_state)\fC [virtual]\fP"
 
 .PP
 Handle the key down event\&. 
@@ -117,17 +99,17 @@ Handle the key down event\&.
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::gui::Desktop\fP, and \fBMaxOS::gui::widgets::InputBox\fP\&.
+Reimplemented in \fBMaxOS::gui::widgets::InputBox\fP, and \fBMaxOS::gui::Desktop\fP\&.
 .PP
-Definition at line \fB23\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB27\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-23                                                              {
-24 }
+27                                                                                           {
+28 }
 .fi
 
 .PP
 Referenced by \fBon_event()\fP, and \fBMaxOS::gui::Desktop::on_key_down()\fP\&.
-.SS "\fBvoid\fP KeyboardEventHandler::on_key_up (\fBKeyCode\fP, \fBKeyboardState\fP)\fC [virtual]\fP"
+.SS "\fBvoid\fP KeyboardEventHandler::on_key_up (\fBKeyCode\fP key_up_code, \fBKeyboardState\fP key_up_state)\fC [virtual]\fP"
 
 .PP
 Handle the key up event\&. 
@@ -143,10 +125,10 @@ Handle the key up event\&.
 .PP
 Reimplemented in \fBMaxOS::gui::Desktop\fP\&.
 .PP
-Definition at line \fB32\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB36\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-32                                                            {
-33 }
+36                                                                                     {
+37 }
 .fi
 
 .PP

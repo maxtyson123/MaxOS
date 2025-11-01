@@ -15,12 +15,6 @@ Inherited by \fBMaxOS::drivers::video::VideoDriver\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBGraphicsContext\fP ()"
-.br
-.ti -1c
-.RI "\fB~GraphicsContext\fP ()"
-.br
-.ti -1c
 .RI "\fBuint32_t\fP \fBcolour_to_int\fP (\fBconst\fP \fBColour\fP &)"
 .br
 .RI "Converts a colour to an integer value based on the current color depth\&. "
@@ -39,6 +33,7 @@ Inherited by \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .ti -1c
 .RI "\fBuint32_t\fP \fBcolor_depth\fP () \fBconst\fP"
 .br
+.RI "Gets the current color depth (bits per pixel) "
 .ti -1c
 .RI "\fBuint64_t\fP * \fBframebuffer_address\fP ()"
 .br
@@ -150,124 +145,128 @@ Inherited by \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .ti -1c
 .RI "\fBbool\fP \fBmirror_y_axis\fP { \fBfalse\fP }"
 .br
+.RI "Should the y axis be mirrored (0,0 is top left if false, bottom left if true) "
 .ti -1c
 .RI "\fBint32_t\fP \fBm_width\fP { 0 }"
 .br
+.RI "The width of the screen in pixels\&. "
 .ti -1c
 .RI "\fBint32_t\fP \fBm_height\fP { 0 }"
 .br
+.RI "The height of the screen in pixels\&. "
 .ti -1c
 .RI "\fBuint32_t\fP \fBm_color_depth\fP { 0 }"
 .br
+.RI "The color depth of the screen in bits per pixel\&. "
 .ti -1c
 .RI "\fBColour\fP \fBm_colour_pallet\fP [256]"
 .br
+.RI "The colour pallet for 8 bit color depth\&. "
 .ti -1c
 .RI "\fBuint64_t\fP * \fBm_framebuffer_address\fP { \fBnullptr\fP }"
 .br
+.RI "The address of the framebuffer\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Draws pixels to the screen, and handles drawing lines, rectangles and circles\&. 
 .PP
-Definition at line \fB19\fP of file \fBgraphicsContext\&.h\fP\&.
+Definition at line \fB23\fP of file \fBgraphicsContext\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "GraphicsContext::GraphicsContext ()"
 
 .PP
-Definition at line \fB9\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB13\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-9                                  {
-10 
-11 
-12     // VirtualBox VGA palette
-13     m_colour_pallet[0x00] = Colour(0x00, 0x00, 0x00);    // Black
-14     m_colour_pallet[0x01] = Colour(0x00, 0x00, 0xA8);    // Duke Blue
-15     m_colour_pallet[0x02] = Colour(0x00, 0xA8, 0x00);    // Islamic Green
-16     m_colour_pallet[0x03] = Colour(0x00, 0xA8, 0xA8);    // Persian Green
-17     m_colour_pallet[0x04] = Colour(0xA8, 0x00, 0x00);    // Dark Candy Apple Red
-18     m_colour_pallet[0x05] = Colour(0xA8, 0x00, 0xA8);    // Heliotrope Magenta
-19 
-20     m_colour_pallet[0x06] = Colour(0xA8, 0xA8, 0x00);    // Light Gold
-21     m_colour_pallet[0x07] = Colour(0xA8, 0xA8, 0xA8);    // Dark Gray (X11)
-22     m_colour_pallet[0x08] = Colour(0x00, 0x00, 0x57);    // Cetacean Blue
-23     m_colour_pallet[0x09] = Colour(0x00, 0x00, 0xFF);    // Blue
-24     m_colour_pallet[0x0A] = Colour(0x00, 0xA8, 0x57);    // Green (Pigment)
-25     m_colour_pallet[0x0B] = Colour(0x00, 0xA8, 0xFF);    // Vivid Cerulean
-26     m_colour_pallet[0x0C] = Colour(0xA8, 0x00, 0x57);    // Jazz berry Jam
-27     m_colour_pallet[0x0D] = Colour(0xA8, 0x00, 0x57);    // Jazz berry Jam
-28     m_colour_pallet[0x0E] = Colour(0xA8, 0xA8, 0x57);    // Olive Green
-29     m_colour_pallet[0x0F] = Colour(0xA8, 0xA8, 0xFF);    // Maximum Blue Purple
-30 
-31     m_colour_pallet[0x10] = Colour(0x00, 0x57, 0x00);    // Dark Green (X11)
-32     m_colour_pallet[0x11] = Colour(0x00, 0x57, 0xA8);    // Cobalt Blue
-33     m_colour_pallet[0x12] = Colour(0x00, 0xFF, 0x00);    // Electric Green
-34     m_colour_pallet[0x13] = Colour(0x00, 0xFF, 0xA8);    // Medium Spring Green
-35     m_colour_pallet[0x14] = Colour(0xA8, 0x57, 0x00);    // Windsor Tan
-36     m_colour_pallet[0x15] = Colour(0xA8, 0x57, 0xA8);    // Purpureus
-37     m_colour_pallet[0x16] = Colour(0xA8, 0xFF, 0x00);    // Spring Bud
-38     m_colour_pallet[0x17] = Colour(0xA8, 0xFF, 0xA8);    // Mint Green
-39     m_colour_pallet[0x18] = Colour(0x00, 0x57, 0x57);    // Midnight Green (Eagle Green)
-40     m_colour_pallet[0x19] = Colour(0x00, 0x57, 0xFF);    // Blue (RYB)
-41     m_colour_pallet[0x1A] = Colour(0x00, 0xFF, 0x57);    // Malachite
-42     m_colour_pallet[0x1B] = Colour(0x00, 0xFF, 0xFF);    // Aqua
-43     m_colour_pallet[0x1C] = Colour(0xA8, 0x57, 0x57);    // Middle Red Purple
-44     m_colour_pallet[0x1D] = Colour(0xA8, 0x57, 0xFF);    // Lavender Indigo
-45     m_colour_pallet[0x1E] = Colour(0xA8, 0xFF, 0x57);    // Olive Green
-46     m_colour_pallet[0x1F] = Colour(0xA8, 0xFF, 0xFF);    // Celeste
-47 
-48     m_colour_pallet[0x20] = Colour(0x57, 0x00, 0x00);    // Blood Red
-49     m_colour_pallet[0x21] = Colour(0x57, 0x00, 0xA8);    // Metallic Violet
-50     m_colour_pallet[0x22] = Colour(0x57, 0xA8, 0x00);    // Kelly Green
-51     m_colour_pallet[0x23] = Colour(0x57, 0xA8, 0xA8);    // Cadet Blue
-52     m_colour_pallet[0x24] = Colour(0xFF, 0x00, 0x00);    // Red
-53     m_colour_pallet[0x25] = Colour(0xFF, 0x00, 0xA8);    // Fashion Fuchsia
-54     m_colour_pallet[0x26] = Colour(0xFF, 0xA8, 0x00);    // Chrome Yellow
-55     m_colour_pallet[0x27] = Colour(0xFF, 0xA8, 0xA8);    // Light Salmon Pink
-56     m_colour_pallet[0x28] = Colour(0x57, 0x00, 0x57);    // Imperial Purple
-57     m_colour_pallet[0x29] = Colour(0x57, 0x00, 0xFF);    // Electric Indigo
-58     m_colour_pallet[0x2A] = Colour(0x57, 0xA8, 0x57);    // Apple
-59     m_colour_pallet[0x2B] = Colour(0x57, 0xA8, 0xFF);    // Blue Jeans
-60     m_colour_pallet[0x2C] = Colour(0xFF, 0x00, 0x57);    // Folly
-61     m_colour_pallet[0x2D] = Colour(0xFF, 0x00, 0xFF);    // Fuchsia
-62     m_colour_pallet[0x2E] = Colour(0xFF, 0xA8, 0x57);    // Rajah
-63     m_colour_pallet[0x2F] = Colour(0xFF, 0xA8, 0xFF);    // Rich Brilliant Lavender
-64 
-65     m_colour_pallet[0x30] = Colour(0x57, 0x57, 0x00);    // Dark Bronze (Coin)
-66     m_colour_pallet[0x31] = Colour(0x57, 0x57, 0xA8);    // Liberty
-67     m_colour_pallet[0x32] = Colour(0x57, 0xFF, 0x00);    // Chlorophyll Green
-68     m_colour_pallet[0x33] = Colour(0x57, 0xFF, 0xA8);    // Medium Aquamarine
-69     m_colour_pallet[0x34] = Colour(0xFF, 0x57, 0x00);    // Orange (Pantone)
-70     m_colour_pallet[0x35] = Colour(0xFF, 0x57, 0xA8);    // Brilliant Rose
-71     m_colour_pallet[0x36] = Colour(0xFF, 0xFF, 0x00);    // Yellow
-72     m_colour_pallet[0x37] = Colour(0xFF, 0xFF, 0xA8);    // Calamansi
-73     m_colour_pallet[0x38] = Colour(0x57, 0x57, 0x57);    // Davy's Grey
-74     m_colour_pallet[0x39] = Colour(0x57, 0x57, 0xFF);    // Very Light Blue
-75     m_colour_pallet[0x3A] = Colour(0x57, 0xFF, 0x57);    // Screamin' Green
-76     m_colour_pallet[0x3B] = Colour(0x57, 0xFF, 0xFF);    // Electric Blue
-77     m_colour_pallet[0x3C] = Colour(0xFF, 0x57, 0x57);    // Sunset Orange
-78     m_colour_pallet[0x3D] = Colour(0xFF, 0x57, 0xFF);    // Shocking Pink (Crayola)
-79     m_colour_pallet[0x3E] = Colour(0xFF, 0xFF, 0x57);    // Shocking Pink (Crayola)
-80     m_colour_pallet[0x3F] = Colour(0xFF, 0xFF, 0xFF);    // White
-81 
-82 
-83     // Set the rest of the palette to black
-84     for (uint8_t color_code = 255; color_code >= 0x40; \-\-color_code)
-85         m_colour_pallet[color_code] = Colour(0, 0, 0);
+13                                  {
+14 
+15 
+16     // VirtualBox VGA palette
+17     m_colour_pallet[0x00] = Colour(0x00, 0x00, 0x00);    // Black
+18     m_colour_pallet[0x01] = Colour(0x00, 0x00, 0xA8);    // Duke Blue
+19     m_colour_pallet[0x02] = Colour(0x00, 0xA8, 0x00);    // Islamic Green
+20     m_colour_pallet[0x03] = Colour(0x00, 0xA8, 0xA8);    // Persian Green
+21     m_colour_pallet[0x04] = Colour(0xA8, 0x00, 0x00);    // Dark Candy Apple Red
+22     m_colour_pallet[0x05] = Colour(0xA8, 0x00, 0xA8);    // Heliotrope Magenta
+23 
+24     m_colour_pallet[0x06] = Colour(0xA8, 0xA8, 0x00);    // Light Gold
+25     m_colour_pallet[0x07] = Colour(0xA8, 0xA8, 0xA8);    // Dark Gray (X11)
+26     m_colour_pallet[0x08] = Colour(0x00, 0x00, 0x57);    // Cetacean Blue
+27     m_colour_pallet[0x09] = Colour(0x00, 0x00, 0xFF);    // Blue
+28     m_colour_pallet[0x0A] = Colour(0x00, 0xA8, 0x57);    // Green (Pigment)
+29     m_colour_pallet[0x0B] = Colour(0x00, 0xA8, 0xFF);    // Vivid Cerulean
+30     m_colour_pallet[0x0C] = Colour(0xA8, 0x00, 0x57);    // Jazz berry Jam
+31     m_colour_pallet[0x0D] = Colour(0xA8, 0x00, 0x57);    // Jazz berry Jam
+32     m_colour_pallet[0x0E] = Colour(0xA8, 0xA8, 0x57);    // Olive Green
+33     m_colour_pallet[0x0F] = Colour(0xA8, 0xA8, 0xFF);    // Maximum Blue Purple
+34 
+35     m_colour_pallet[0x10] = Colour(0x00, 0x57, 0x00);    // Dark Green (X11)
+36     m_colour_pallet[0x11] = Colour(0x00, 0x57, 0xA8);    // Cobalt Blue
+37     m_colour_pallet[0x12] = Colour(0x00, 0xFF, 0x00);    // Electric Green
+38     m_colour_pallet[0x13] = Colour(0x00, 0xFF, 0xA8);    // Medium Spring Green
+39     m_colour_pallet[0x14] = Colour(0xA8, 0x57, 0x00);    // Windsor Tan
+40     m_colour_pallet[0x15] = Colour(0xA8, 0x57, 0xA8);    // Purpureus
+41     m_colour_pallet[0x16] = Colour(0xA8, 0xFF, 0x00);    // Spring Bud
+42     m_colour_pallet[0x17] = Colour(0xA8, 0xFF, 0xA8);    // Mint Green
+43     m_colour_pallet[0x18] = Colour(0x00, 0x57, 0x57);    // Midnight Green (Eagle Green)
+44     m_colour_pallet[0x19] = Colour(0x00, 0x57, 0xFF);    // Blue (RYB)
+45     m_colour_pallet[0x1A] = Colour(0x00, 0xFF, 0x57);    // Malachite
+46     m_colour_pallet[0x1B] = Colour(0x00, 0xFF, 0xFF);    // Aqua
+47     m_colour_pallet[0x1C] = Colour(0xA8, 0x57, 0x57);    // Middle Red Purple
+48     m_colour_pallet[0x1D] = Colour(0xA8, 0x57, 0xFF);    // Lavender Indigo
+49     m_colour_pallet[0x1E] = Colour(0xA8, 0xFF, 0x57);    // Olive Green
+50     m_colour_pallet[0x1F] = Colour(0xA8, 0xFF, 0xFF);    // Celeste
+51 
+52     m_colour_pallet[0x20] = Colour(0x57, 0x00, 0x00);    // Blood Red
+53     m_colour_pallet[0x21] = Colour(0x57, 0x00, 0xA8);    // Metallic Violet
+54     m_colour_pallet[0x22] = Colour(0x57, 0xA8, 0x00);    // Kelly Green
+55     m_colour_pallet[0x23] = Colour(0x57, 0xA8, 0xA8);    // Cadet Blue
+56     m_colour_pallet[0x24] = Colour(0xFF, 0x00, 0x00);    // Red
+57     m_colour_pallet[0x25] = Colour(0xFF, 0x00, 0xA8);    // Fashion Fuchsia
+58     m_colour_pallet[0x26] = Colour(0xFF, 0xA8, 0x00);    // Chrome Yellow
+59     m_colour_pallet[0x27] = Colour(0xFF, 0xA8, 0xA8);    // Light Salmon Pink
+60     m_colour_pallet[0x28] = Colour(0x57, 0x00, 0x57);    // Imperial Purple
+61     m_colour_pallet[0x29] = Colour(0x57, 0x00, 0xFF);    // Electric Indigo
+62     m_colour_pallet[0x2A] = Colour(0x57, 0xA8, 0x57);    // Apple
+63     m_colour_pallet[0x2B] = Colour(0x57, 0xA8, 0xFF);    // Blue Jeans
+64     m_colour_pallet[0x2C] = Colour(0xFF, 0x00, 0x57);    // Folly
+65     m_colour_pallet[0x2D] = Colour(0xFF, 0x00, 0xFF);    // Fuchsia
+66     m_colour_pallet[0x2E] = Colour(0xFF, 0xA8, 0x57);    // Rajah
+67     m_colour_pallet[0x2F] = Colour(0xFF, 0xA8, 0xFF);    // Rich Brilliant Lavender
+68 
+69     m_colour_pallet[0x30] = Colour(0x57, 0x57, 0x00);    // Dark Bronze (Coin)
+70     m_colour_pallet[0x31] = Colour(0x57, 0x57, 0xA8);    // Liberty
+71     m_colour_pallet[0x32] = Colour(0x57, 0xFF, 0x00);    // Chlorophyll Green
+72     m_colour_pallet[0x33] = Colour(0x57, 0xFF, 0xA8);    // Medium Aquamarine
+73     m_colour_pallet[0x34] = Colour(0xFF, 0x57, 0x00);    // Orange (Pantone)
+74     m_colour_pallet[0x35] = Colour(0xFF, 0x57, 0xA8);    // Brilliant Rose
+75     m_colour_pallet[0x36] = Colour(0xFF, 0xFF, 0x00);    // Yellow
+76     m_colour_pallet[0x37] = Colour(0xFF, 0xFF, 0xA8);    // Calamansi
+77     m_colour_pallet[0x38] = Colour(0x57, 0x57, 0x57);    // Davy's Grey
+78     m_colour_pallet[0x39] = Colour(0x57, 0x57, 0xFF);    // Very Light Blue
+79     m_colour_pallet[0x3A] = Colour(0x57, 0xFF, 0x57);    // Screamin' Green
+80     m_colour_pallet[0x3B] = Colour(0x57, 0xFF, 0xFF);    // Electric Blue
+81     m_colour_pallet[0x3C] = Colour(0xFF, 0x57, 0x57);    // Sunset Orange
+82     m_colour_pallet[0x3D] = Colour(0xFF, 0x57, 0xFF);    // Shocking Pink (Crayola)
+83     m_colour_pallet[0x3E] = Colour(0xFF, 0xFF, 0x57);    // Shocking Pink (Crayola)
+84     m_colour_pallet[0x3F] = Colour(0xFF, 0xFF, 0xFF);    // White
+85 
 86 
-87 
-88 }
+87     // Set the rest of the palette to black
+88     for (uint8_t color_code = 255; color_code >= 0x40; \-\-color_code)
+89         m_colour_pallet[color_code] = Colour(0, 0, 0);
+90 
+91 
+92 }
 .fi
-
-.PP
-References \fBm_colour_pallet\fP\&.
-.SS "GraphicsContext::~GraphicsContext ()\fC [default]\fP"
 
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBuint32_t\fP GraphicsContext::color_depth () const"
-@breif Gets the current color depth (bits per pixel) 
+
+.PP
+Gets the current color depth (bits per pixel) 
 .PP
 \fBReturns\fP
 .RS 4
@@ -276,17 +275,17 @@ The color depth
 .PP
 
 .PP
-Definition at line \fB356\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB360\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-356                                             {
-357     return m_color_depth;
-358 }
+360                                             {
+361     return m_color_depth;
+362 }
 .fi
 
 .PP
 References \fBm_color_depth\fP\&.
 .PP
-Referenced by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::internal_set_mode()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::supports_mode()\fP\&.
+Referenced by \fBMaxOS::drivers::video::VideoDriver::set_mode()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::supports_mode()\fP\&.
 .SS "\fBuint32_t\fP GraphicsContext::colour_to_int (\fBconst\fP \fBColour\fP & colour)"
 
 .PP
@@ -304,52 +303,52 @@ The integer value of the colour
 .PP
 
 .PP
-Definition at line \fB237\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB241\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-237                                                             {
-238 
-239     switch (m_color_depth) {
-240         case 8: {
-241             uint32_t result = 0;
-242             int mindistance = 0xfffffff;
-243             for (uint32_t i = 0; i <= 255; ++i) {
-244                 Colour *c = &m_colour_pallet[i];
-245                 int distance =
-246                         ((int) colour\&.red \- (int) c\->red) * ((int) colour\&.red \- (int) c\->red)
-247                         + ((int) colour\&.green \- (int) c\->green) * ((int) colour\&.green \- (int) c\->green)
-248                         + ((int) colour\&.blue \- (int) c\->blue) * ((int) colour\&.blue \- (int) c\->blue);
-249                 if (distance < mindistance) {
-250                     mindistance = distance;
-251                     result = i;
-252                 }
-253             }
-254             return result;
-255         }
-256         case 16: {
-257             // 16\-Bit colours RRRRRGGGGGGBBBBB
-258             return ((uint16_t) (colour\&.red & 0xF8)) << 8
-259                    | ((uint16_t) (colour\&.green & 0xFC)) << 3
-260                    | ((uint16_t) (colour\&.blue & 0xF8) >> 3);
-261         }
-262         case 24: {
-263             return (uint32_t) colour\&.red << 16
-264                    | (uint32_t) colour\&.green << 8
-265                    | (uint32_t) colour\&.blue;
-266         }
-267         default:
-268         case 32: {
-269             uint32_t red_hex = ((uint32_t) colour\&.red & 0xFF) << 16;
-270             uint32_t green_hex = ((uint32_t) colour\&.green & 0xFF) << 8;
-271             uint32_t blue_hex = (uint32_t) colour\&.blue & 0xFF;
-272             uint32_t alpha_hex = ((uint32_t) colour\&.alpha & 0xFF) << 24;
-273 
-274             uint32_t hexValue = red_hex | green_hex | blue_hex | alpha_hex;
-275 
-276 
-277             return hexValue;
-278         }
-279     }
-280 }
+241                                                             {
+242 
+243     switch (m_color_depth) {
+244         case 8: {
+245             uint32_t result = 0;
+246             int mindistance = 0xfffffff;
+247             for (uint32_t i = 0; i <= 255; ++i) {
+248                 Colour *c = &m_colour_pallet[i];
+249                 int distance =
+250                         ((int) colour\&.red \- (int) c\->red) * ((int) colour\&.red \- (int) c\->red)
+251                         + ((int) colour\&.green \- (int) c\->green) * ((int) colour\&.green \- (int) c\->green)
+252                         + ((int) colour\&.blue \- (int) c\->blue) * ((int) colour\&.blue \- (int) c\->blue);
+253                 if (distance < mindistance) {
+254                     mindistance = distance;
+255                     result = i;
+256                 }
+257             }
+258             return result;
+259         }
+260         case 16: {
+261             // 16\-Bit colours RRRRRGGGGGGBBBBB
+262             return ((uint16_t) (colour\&.red & 0xF8)) << 8
+263                    | ((uint16_t) (colour\&.green & 0xFC)) << 3
+264                    | ((uint16_t) (colour\&.blue & 0xF8) >> 3);
+265         }
+266         case 24: {
+267             return (uint32_t) colour\&.red << 16
+268                    | (uint32_t) colour\&.green << 8
+269                    | (uint32_t) colour\&.blue;
+270         }
+271         default:
+272         case 32: {
+273             uint32_t red_hex = ((uint32_t) colour\&.red & 0xFF) << 16;
+274             uint32_t green_hex = ((uint32_t) colour\&.green & 0xFF) << 8;
+275             uint32_t blue_hex = (uint32_t) colour\&.blue & 0xFF;
+276             uint32_t alpha_hex = ((uint32_t) colour\&.alpha & 0xFF) << 24;
+277 
+278             uint32_t hexValue = red_hex | green_hex | blue_hex | alpha_hex;
+279 
+280 
+281             return hexValue;
+282         }
+283     }
+284 }
 .fi
 
 .PP
@@ -374,11 +373,11 @@ Draws a circle on the screen\&.
 .PP
 
 .PP
-Definition at line \fB641\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB645\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-641                                                                                               {
-642     draw_circle(x0, y0, radius, colour_to_int(colour));
-643 }
+645                                                                                               {
+646     draw_circle(x0, y0, radius, colour_to_int(colour));
+647 }
 .fi
 
 .PP
@@ -403,35 +402,35 @@ Draws a circle on the screen\&.
 .PP
 
 .PP
-Definition at line \fB653\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB657\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-653                                                                                          {
-654 
-655     // Make sure the circle is with in the width and height of the screen
-656     if (x0 < 0) x0 = 0;
-657     if (x0 > m_width) x0 = m_width;
-658     if (y0 < 0) y0 = 0;
-659     if (y0 > m_height) y0 = m_height;
-660 
-661     // Mirror the Y axis as directly calling put_pixel will not do this
-662     if (mirror_y_axis)
-663         y0 = m_height \- y0 \- 1;
+657                                                                                          {
+658 
+659     // Make sure the circle is with in the width and height of the screen
+660     if (x0 < 0) x0 = 0;
+661     if (x0 > m_width) x0 = m_width;
+662     if (y0 < 0) y0 = 0;
+663     if (y0 > m_height) y0 = m_height;
 664 
-665 
-666     // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
-667     for (int32_t x = \-radius; x <= radius; ++x) {
+665     // Mirror the Y axis as directly calling put_pixel will not do this
+666     if (mirror_y_axis)
+667         y0 = m_height \- y0 \- 1;
 668 
-669         // Draw a line from the top most point of the circle to the bottom most point of the circle
-670         for (int32_t y = \-radius; y <= radius; ++y) {
-671 
-672             // If the point is within the circle, draw it but make sure it is only part of the outline
-673             if (x * x + y * y <= radius * radius && x * x + y * y >= (radius \- 1) * (radius \- 1))
-674                 putPixel(x0 + x, y0 + y, colour);
-675         }
-676     }
-677 
-678 
-679 }
+669 
+670     // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
+671     for (int32_t x = \-radius; x <= radius; ++x) {
+672 
+673         // Draw a line from the top most point of the circle to the bottom most point of the circle
+674         for (int32_t y = \-radius; y <= radius; ++y) {
+675 
+676             // If the point is within the circle, draw it but make sure it is only part of the outline
+677             if (x * x + y * y <= radius * radius && x * x + y * y >= (radius \- 1) * (radius \- 1))
+678                 putPixel(x0 + x, y0 + y, colour);
+679         }
+680     }
+681 
+682 
+683 }
 .fi
 
 .PP
@@ -456,11 +455,11 @@ Draws a line on the screen\&.
 .PP
 
 .PP
-Definition at line \fB444\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB448\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-444                                                                                                     {
-445     drawLine(x0, y0, x1, y1, colour_to_int(colour));
-446 }
+448                                                                                                     {
+449     drawLine(x0, y0, x1, y1, colour_to_int(colour));
+450 }
 .fi
 
 .PP
@@ -485,12 +484,12 @@ Draws a rectangle on the screen\&.
 .PP
 
 .PP
-Definition at line \fB546\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB550\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-546                                                                                                          {
-547     draw_rectangle(x0, y0, x1, y1, colour_to_int(colour));
-548 
-549 }
+550                                                                                                          {
+551     draw_rectangle(x0, y0, x1, y1, colour_to_int(colour));
+552 
+553 }
 .fi
 
 .PP
@@ -517,21 +516,21 @@ Draws a rectangle on the screen\&.
 .PP
 
 .PP
-Definition at line \fB560\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB564\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-560                                                                                                     {
-561 
-562     // Ensure x and y 0 is smaller than x and y 1
-563     \-\-y0;
-564     \-\-x0;
+564                                                                                                     {
 565 
-566     // Draw the rectangle
-567     drawLine(x0, y0, x1, y0, colour); // Top
-568     drawLine(x0, y1, x1, y1, colour); // Bottom
-569     drawLine(x0, y0, x0, y1, colour); // Left
-570     drawLine(x1, y0, x1, y1, colour); // Right
-571 
-572 }
+566     // Ensure x and y 0 is smaller than x and y 1
+567     \-\-y0;
+568     \-\-x0;
+569 
+570     // Draw the rectangle
+571     drawLine(x0, y0, x1, y0, colour); // Top
+572     drawLine(x0, y1, x1, y1, colour); // Bottom
+573     drawLine(x0, y0, x0, y1, colour); // Left
+574     drawLine(x1, y0, x1, y1, colour); // Right
+575 
+576 }
 .fi
 
 .PP
@@ -556,87 +555,87 @@ Draws a line on the screen\&.
 .PP
 
 .PP
-Definition at line \fB457\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB461\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-457                                                                                               {
-458 
-459     // Store the minimum and maximum y values
-460     bool y_0_is_smaller = y0 < y1;
-461     int32_t y_min = y_0_is_smaller ? y0 : y1;
-462     int32_t y_max = y_0_is_smaller ? y1 : y0;
-463 
-464     //Reverse the points to draw from left to right
-465     if (x1 < x0) {
-466         drawLine(x1, y1, x0, y0, colour);
-467         return;
-468     }
-469 
-470     // Vertical line
-471     if (x1 == x0) {
-472         // Force the line to be within the screen
-473         if (y_min < 0) y_min = 0;
-474         if (y_max >= m_height)
-475             y_max = m_height \- 1;
-476 
-477         // Mirror the Y axis as directly calling put_pixel will not do this
-478         if (mirror_y_axis) {
-479             int32_t temp = y_max;
-480             y_max = m_height \- y_min \- 1;
-481             y_min = m_height \- temp \- 1;
-482         }
-483 
-484         // Check that the line is within the screen
-485         if (0 > x0 || (uint32_t) x0 >= m_width) {
-486             return;
-487         }
-488 
-489         // Draw the line
-490         for (int32_t y = y_min; y <= y_max; ++y)
-491             putPixel(x0, y, colour);
+461                                                                                               {
+462 
+463     // Store the minimum and maximum y values
+464     bool y_0_is_smaller = y0 < y1;
+465     int32_t y_min = y_0_is_smaller ? y0 : y1;
+466     int32_t y_max = y_0_is_smaller ? y1 : y0;
+467 
+468     //Reverse the points to draw from left to right
+469     if (x1 < x0) {
+470         drawLine(x1, y1, x0, y0, colour);
+471         return;
+472     }
+473 
+474     // Vertical line
+475     if (x1 == x0) {
+476         // Force the line to be within the screen
+477         if (y_min < 0) y_min = 0;
+478         if (y_max >= m_height)
+479             y_max = m_height \- 1;
+480 
+481         // Mirror the Y axis as directly calling put_pixel will not do this
+482         if (mirror_y_axis) {
+483             int32_t temp = y_max;
+484             y_max = m_height \- y_min \- 1;
+485             y_min = m_height \- temp \- 1;
+486         }
+487 
+488         // Check that the line is within the screen
+489         if (0 > x0 || (uint32_t) x0 >= m_width) {
+490             return;
+491         }
 492 
-493         return;
-494     }
-495 
-496     // Horizontal line
-497     if (y1 == y0) {
-498         // Ensure the line is within the screen
-499         if (x0 < 0) x0 = 0;
-500         if (x1 >= m_width) x1 = m_width \- 1;
-501 
-502         // Mirror the Y axis as directly calling put_pixel will not do this
-503         if (mirror_y_axis)
-504             y0 = m_height \- y0 \- 1;
+493         // Draw the line
+494         for (int32_t y = y_min; y <= y_max; ++y)
+495             putPixel(x0, y, colour);
+496 
+497         return;
+498     }
+499 
+500     // Horizontal line
+501     if (y1 == y0) {
+502         // Ensure the line is within the screen
+503         if (x0 < 0) x0 = 0;
+504         if (x1 >= m_width) x1 = m_width \- 1;
 505 
-506         // Check that the line is within the screen
-507         if (0 > y0 || y0 >= m_height)
-508             return;
+506         // Mirror the Y axis as directly calling put_pixel will not do this
+507         if (mirror_y_axis)
+508             y0 = m_height \- y0 \- 1;
 509 
-510         // Draw the line
-511         for (int32_t x = x0; x <= x1; ++x)
-512             putPixel(x, y0, colour);
-513     }
-514 
-515     // If the line is not horizontal or vertical then it must be a diagonal line
-516     // Find the slope of the line
-517     float slope = ((float) (y1 \- y0)) / (x1 \- x0);
+510         // Check that the line is within the screen
+511         if (0 > y0 || y0 >= m_height)
+512             return;
+513 
+514         // Draw the line
+515         for (int32_t x = x0; x <= x1; ++x)
+516             putPixel(x, y0, colour);
+517     }
 518 
-519     // A slope that is more horizontal should be drawn by incrementing x
-520     if (\-1 <= slope && slope <= 1) {
-521         float y = y0;
-522         for (int32_t x = x0; x <= x1; x++, y += slope)
-523             putPixel(x, (int32_t) y, colour);
-524     }
-525 
-526         // A slope that is more vertical should be drawn by incrementing y
-527     else {
-528         // Invert the slope
-529         slope = 1\&.0f / slope;
-530 
-531         float x = x0;
-532         for (int32_t y = y_min; y <= y_max; x += slope, y++)
-533             putPixel((int32_t) x, y, colour);
-534     }
-535 }
+519     // If the line is not horizontal or vertical then it must be a diagonal line
+520     // Find the slope of the line
+521     float slope = ((float) (y1 \- y0)) / (x1 \- x0);
+522 
+523     // A slope that is more horizontal should be drawn by incrementing x
+524     if (\-1 <= slope && slope <= 1) {
+525         float y = y0;
+526         for (int32_t x = x0; x <= x1; x++, y += slope)
+527             putPixel(x, (int32_t) y, colour);
+528     }
+529 
+530         // A slope that is more vertical should be drawn by incrementing y
+531     else {
+532         // Invert the slope
+533         slope = 1\&.0f / slope;
+534 
+535         float x = x0;
+536         for (int32_t y = y_min; y <= y_max; x += slope, y++)
+537             putPixel((int32_t) x, y, colour);
+538     }
+539 }
 .fi
 
 .PP
@@ -661,12 +660,12 @@ Draws a circle on the screen, filled with a colour\&.
 .PP
 
 .PP
-Definition at line \fB689\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB693\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-689                                                                                               {
-690     fillCircle(x0, y0, radius, colour_to_int(colour));
-691 
-692 }
+693                                                                                               {
+694     fillCircle(x0, y0, radius, colour_to_int(colour));
+695 
+696 }
 .fi
 
 .PP
@@ -691,11 +690,11 @@ Draws a rectangle on the screen, filled with a colour\&.
 .PP
 
 .PP
-Definition at line \fB583\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB587\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-583                                                                                                          {
-584     fill_rectangle(x0, y0, x1, y1, colour_to_int(colour));
-585 }
+587                                                                                                          {
+588     fill_rectangle(x0, y0, x1, y1, colour_to_int(colour));
+589 }
 .fi
 
 .PP
@@ -722,44 +721,44 @@ Draws a rectangle on the screen, filled with a colour\&.
 .PP
 
 .PP
-Definition at line \fB596\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB600\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-596                                                                                                     {
-597 
-598     // Draw from left to right
-599     if (y1 < y0) {
-600         fill_rectangle(x1, y1, x0, y0, colour);
-601         return;
-602     }
-603 
-604     // Make sure the rectangle is within the height of the screen
-605     if (y0 < 0) y0 = 0;
-606     if (y1 > m_height) y1 = m_height;
+600                                                                                                     {
+601 
+602     // Draw from left to right
+603     if (y1 < y0) {
+604         fill_rectangle(x1, y1, x0, y0, colour);
+605         return;
+606     }
 607 
-608     // Make sure the rectangle is within the width of the screen
-609     bool x_0_is_smaller = x0 < x1;
-610     int32_t x_min = x_0_is_smaller ? x0 : x1;
-611     int32_t x_max = x_0_is_smaller ? x1 : x0;
-612 
-613     if (x_min < 0) x_min = 0;
-614     if (x_max > m_width)
-615         x_max = m_width;
+608     // Make sure the rectangle is within the height of the screen
+609     if (y0 < 0) y0 = 0;
+610     if (y1 > m_height) y1 = m_height;
+611 
+612     // Make sure the rectangle is within the width of the screen
+613     bool x_0_is_smaller = x0 < x1;
+614     int32_t x_min = x_0_is_smaller ? x0 : x1;
+615     int32_t x_max = x_0_is_smaller ? x1 : x0;
 616 
-617     // Mirror the Y axis as directly calling put_pixel will not do this
-618     if (mirror_y_axis) {
-619         int32_t temp = y1;
-620         y1 = m_height \- y0 \- 1;
-621         y0 = m_height \- temp \- 1;
-622     }
-623 
-624     // Draw the rectangle
-625     for (int32_t y = y0; y < y1; ++y) {
-626         for (int32_t x = x_min; x < x_max; ++x) {
-627             putPixel(x, y, colour);
-628         }
-629     }
-630 
-631 }
+617     if (x_min < 0) x_min = 0;
+618     if (x_max > m_width)
+619         x_max = m_width;
+620 
+621     // Mirror the Y axis as directly calling put_pixel will not do this
+622     if (mirror_y_axis) {
+623         int32_t temp = y1;
+624         y1 = m_height \- y0 \- 1;
+625         y0 = m_height \- temp \- 1;
+626     }
+627 
+628     // Draw the rectangle
+629     for (int32_t y = y0; y < y1; ++y) {
+630         for (int32_t x = x_min; x < x_max; ++x) {
+631             putPixel(x, y, colour);
+632         }
+633     }
+634 
+635 }
 .fi
 
 .PP
@@ -782,34 +781,34 @@ Draws a circle on the screen, filled with a colour\&.
 .PP
 
 .PP
-Definition at line \fB702\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB706\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-702                                                                                         {
-703 
-704     // Make sure the circle is with in the width and height of the screen
-705     if (x0 < 0) x0 = 0;
-706     if (x0 > m_width) x0 = m_width;
-707     if (y0 < 0) y0 = 0;
-708     if (y0 > m_height) y0 = m_height;
-709 
-710     // Mirror the Y axis as directly calling put_pixel will not do this
-711     if (mirror_y_axis)
-712         y0 = m_height \- y0 \- 1;
+706                                                                                         {
+707 
+708     // Make sure the circle is with in the width and height of the screen
+709     if (x0 < 0) x0 = 0;
+710     if (x0 > m_width) x0 = m_width;
+711     if (y0 < 0) y0 = 0;
+712     if (y0 > m_height) y0 = m_height;
 713 
-714     // Draw the circle
-715 
-716     // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
-717     for (int32_t x = \-radius; x <= radius; ++x) {
-718 
-719         // Draw a line from the top most point of the circle to the bottom most point of the circle
-720         for (int32_t y = \-radius; y <= radius; ++y) {
-721 
-722             // Only draw the pixel if it is within the circle
-723             if (x * x + y * y <= radius * radius)
-724                 putPixel(x0 + x, y0 + y, colour);
-725         }
-726     }
-727 }
+714     // Mirror the Y axis as directly calling put_pixel will not do this
+715     if (mirror_y_axis)
+716         y0 = m_height \- y0 \- 1;
+717 
+718     // Draw the circle
+719 
+720     // Begin drawing at the left most point of the circle and draw a line to the right most point of the circle
+721     for (int32_t x = \-radius; x <= radius; ++x) {
+722 
+723         // Draw a line from the top most point of the circle to the bottom most point of the circle
+724         for (int32_t y = \-radius; y <= radius; ++y) {
+725 
+726             // Only draw the pixel if it is within the circle
+727             if (x * x + y * y <= radius * radius)
+728                 putPixel(x0 + x, y0 + y, colour);
+729         }
+730     }
+731 }
 .fi
 
 .PP
@@ -828,11 +827,11 @@ The framebuffer address
 .PP
 
 .PP
-Definition at line \fB734\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB738\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-734                                                {
-735     return m_framebuffer_address;
-736 }
+738                                                {
+739     return m_framebuffer_address;
+740 }
 .fi
 
 .PP
@@ -856,18 +855,18 @@ The colour of the pixel or black if the pixel is outside the screen
 .PP
 
 .PP
-Definition at line \fB403\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB407\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-403                                                       {
-404 
-405     // Check if the pixel is within the bounds of the screen
-406     if (0 > x || (uint32_t) x >= m_width || 0 > y || (uint32_t) y >= m_height)
-407         return {0, 0, 0};
+407                                                       {
 408 
-409     // Get the pixel and convert it to a colour
-410     uint32_t translated_color = get_rendered_pixel(x, mirror_y_axis ? m_height \- y \- 1 : y);
-411     return int_to_colour(translated_color);
-412 }
+409     // Check if the pixel is within the bounds of the screen
+410     if (0 > x || (uint32_t) x >= m_width || 0 > y || (uint32_t) y >= m_height)
+411         return {0, 0, 0};
+412 
+413     // Get the pixel and convert it to a colour
+414     uint32_t translated_color = get_rendered_pixel(x, mirror_y_axis ? m_height \- y \- 1 : y);
+415     return int_to_colour(translated_color);
+416 }
 .fi
 
 .PP
@@ -893,23 +892,23 @@ The colour of the pixel or white if the pixel is not supported
 .PP
 
 .PP
-Definition at line \fB171\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB175\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-171                                                                    {
-172     // Call the correct get_pixel function based on the color depth
-173     switch (m_color_depth) {
-174         case 8:
-175             return get_rendered_pixel_8_bit(x, y);
-176         case 16:
-177             return get_rendered_pixel_16_bit(x, y);
-178         case 24:
-179             return get_rendered_pixel_24_bit(x, y);
-180         case 32:
-181             return get_rendered_pixel_32_bit(x, y);
-182     }
-183 
-184     return colour_to_int(Colour(0xFF, 0xFF, 0xFF));
-185 }
+175                                                                    {
+176     // Call the correct get_pixel function based on the color depth
+177     switch (m_color_depth) {
+178         case 8:
+179             return get_rendered_pixel_8_bit(x, y);
+180         case 16:
+181             return get_rendered_pixel_16_bit(x, y);
+182         case 24:
+183             return get_rendered_pixel_24_bit(x, y);
+184         case 32:
+185             return get_rendered_pixel_32_bit(x, y);
+186     }
+187 
+188     return colour_to_int(Colour(0xFF, 0xFF, 0xFF));
+189 }
 .fi
 
 .PP
@@ -935,11 +934,11 @@ The 16Bit colour of the pixel
 .PP
 
 .PP
-Definition at line \fB205\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB209\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-205                                                                       {
-206     return 0;
-207 }
+209                                                                       {
+210     return 0;
+211 }
 .fi
 
 .PP
@@ -963,11 +962,11 @@ The 24Bit colour of the pixel
 .PP
 
 .PP
-Definition at line \fB216\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB220\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-216                                                                       {
-217     return 0;
-218 }
+220                                                                       {
+221     return 0;
+222 }
 .fi
 
 .PP
@@ -991,13 +990,11 @@ The 32Bit colour of the pixel
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP\&.
-.PP
-Definition at line \fB227\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB231\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-227                                                                       {
-228     return 0;
-229 }
+231                                                                       {
+232     return 0;
+233 }
 .fi
 
 .PP
@@ -1021,13 +1018,11 @@ The 8Bit colour of the pixel
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::drivers::video::VideoGraphicsArray\fP\&.
-.PP
-Definition at line \fB194\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB198\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-194                                                                     {
-195     return 0;
-196 }
+198                                                                     {
+199     return 0;
+200 }
 .fi
 
 .PP
@@ -1044,17 +1039,17 @@ The height of the screen
 .PP
 
 .PP
-Definition at line \fB348\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB352\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-348                                        {
-349     return m_height;
-350 }
+352                                        {
+353     return m_height;
+354 }
 .fi
 
 .PP
 References \fBm_height\fP\&.
 .PP
-Referenced by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::internal_set_mode()\fP, \fBMaxOS::drivers::video::VideoDriver::set_mode()\fP, \fBMaxOS::drivers::video::VideoGraphicsArray::supports_mode()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::supports_mode()\fP\&.
+Referenced by \fBMaxOS::drivers::video::VideoDriver::set_mode()\fP, \fBMaxOS::drivers::video::VideoGraphicsArray::supports_mode()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::supports_mode()\fP\&.
 .SS "\fBColour\fP GraphicsContext::int_to_colour (\fBuint32_t\fP colour)"
 
 .PP
@@ -1072,53 +1067,53 @@ The colour class of the integer value
 .PP
 
 .PP
-Definition at line \fB288\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB292\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-288                                                      {
-289     switch (m_color_depth) {
-290 
-291         case 8: {
-292             // Return the colour from the palette
-293             return m_colour_pallet[colour & 0xFF];
-294         }
-295 
-296         case 16: {
-297             // 16\-Bit Colour: 5 bits for red, 6 bits for green, 5 bits for blue (RRRRR,GGGGGG,BBBBB)
-298             Colour result;
+292                                                      {
+293     switch (m_color_depth) {
+294 
+295         case 8: {
+296             // Return the colour from the palette
+297             return m_colour_pallet[colour & 0xFF];
+298         }
 299 
-300             result\&.red = (colour & 0xF800) >> 8;
-301             result\&.green = (colour & 0x07E0) >> 3;
-302             result\&.blue = (colour & 0x001F) << 3;
+300         case 16: {
+301             // 16\-Bit Colour: 5 bits for red, 6 bits for green, 5 bits for blue (RRRRR,GGGGGG,BBBBB)
+302             Colour result;
 303 
-304             return result;
-305         }
-306 
-307         case 24: {
-308             // 24\-Bit Colour: 8 bits for red, 8 bits for green, 8 bits for blue (RRRRRRRR,GGGGGGGG,BBBBBBBB)
-309             Colour result;
+304             result\&.red = (colour & 0xF800) >> 8;
+305             result\&.green = (colour & 0x07E0) >> 3;
+306             result\&.blue = (colour & 0x001F) << 3;
+307 
+308             return result;
+309         }
 310 
-311             result\&.red = (colour & 0xFF0000) >> 16;
-312             result\&.green = (colour & 0x00FF00) >> 8;
-313             result\&.blue = (colour & 0x0000FF);
+311         case 24: {
+312             // 24\-Bit Colour: 8 bits for red, 8 bits for green, 8 bits for blue (RRRRRRRR,GGGGGGGG,BBBBBBBB)
+313             Colour result;
 314 
-315             return result;
-316         }
-317 
-318         default:
-319         case 32: {
-320             Colour result;
+315             result\&.red = (colour & 0xFF0000) >> 16;
+316             result\&.green = (colour & 0x00FF00) >> 8;
+317             result\&.blue = (colour & 0x0000FF);
+318 
+319             return result;
+320         }
 321 
-322             uint32_t hex_value = colour;
-323             result\&.red = (hex_value >> 16) & 0xFF;
-324             result\&.green = (hex_value >> 8) & 0xFF;
-325             result\&.blue = hex_value & 0xFF;
-326             result\&.alpha = (hex_value >> 24) & 0xFF;
-327 
-328             return result;
-329 
-330         }
-331     }
-332 }
+322         default:
+323         case 32: {
+324             Colour result;
+325 
+326             uint32_t hex_value = colour;
+327             result\&.red = (hex_value >> 16) & 0xFF;
+328             result\&.green = (hex_value >> 8) & 0xFF;
+329             result\&.blue = hex_value & 0xFF;
+330             result\&.alpha = (hex_value >> 24) & 0xFF;
+331 
+332             return result;
+333 
+334         }
+335     }
+336 }
 .fi
 
 .PP
@@ -1139,21 +1134,21 @@ Inverts a pixel\&.
 .PP
 
 .PP
-Definition at line \fB420\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB424\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-420                                                        {
-421 
-422     // Get the pixel
-423     Colour colour = get_pixel(x, y);
-424 
-425     // Invert the pixel
-426     colour\&.red = 255 \- colour\&.red;
-427     colour\&.green = 255 \- colour\&.green;
-428     colour\&.blue = 255 \- colour\&.blue;
-429 
-430     // Render the pixel
-431     put_pixel(x, y, colour);
-432 }
+424                                                        {
+425 
+426     // Get the pixel
+427     Colour colour = get_pixel(x, y);
+428 
+429     // Invert the pixel
+430     colour\&.red = 255 \- colour\&.red;
+431     colour\&.green = 255 \- colour\&.green;
+432     colour\&.blue = 255 \- colour\&.blue;
+433 
+434     // Render the pixel
+435     put_pixel(x, y, colour);
+436 }
 .fi
 
 .PP
@@ -1176,13 +1171,13 @@ Renders a pixel to the screen (automatically converts the colour to an integer)
 .PP
 
 .PP
-Definition at line \fB367\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB371\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-367                                                                           {
-368 
-369     // Convert the colour to an integer and then print it
-370     putPixel(x, y, colour_to_int(colour));
-371 }
+371                                                                           {
+372 
+373     // Convert the colour to an integer and then print it
+374     putPixel(x, y, colour_to_int(colour));
+375 }
 .fi
 
 .PP
@@ -1205,23 +1200,23 @@ Renders a pixel to the screen (automatically converts the colour to an integer),
 .PP
 
 .PP
-Definition at line \fB380\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB384\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-380                                                                     {
-381 
-382     if (0 > x || (uint32_t) x >= m_width) {
-383         return;
-384     }
+384                                                                     {
 385 
-386     // Check if the pixel is within the m_height of the screen
-387     if (0 > y || (uint32_t) y >= m_height) {
-388         return;
-389     }
-390 
-391     // Render the pixel
-392     render_pixel(x, mirror_y_axis ? m_height \- y \- 1 : y, colour);
-393 
-394 }
+386     if (0 > x || (uint32_t) x >= m_width) {
+387         return;
+388     }
+389 
+390     // Check if the pixel is within the m_height of the screen
+391     if (0 > y || (uint32_t) y >= m_height) {
+392         return;
+393     }
+394 
+395     // Render the pixel
+396     render_pixel(x, mirror_y_axis ? m_height \- y \- 1 : y, colour);
+397 
+398 }
 .fi
 
 .PP
@@ -1244,28 +1239,28 @@ Renders a pixel to the screen based on the current color depth\&.
 .PP
 
 .PP
-Definition at line \fB99\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB103\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-99                                                                           {
-100 
-101     // Call the correct put_pixel function based on the color depth
-102     switch (m_color_depth) {
-103         case 8:
-104             render_pixel_8_bit(x, y, colour);
-105             break;
-106         case 16:
-107             render_pixel_16_bit(x, y, colour);
-108             break;
-109         case 24:
-110             render_pixel_24_bit(x, y, colour);
-111             break;
-112         case 32:
-113             render_pixel_32_bit(x, y, colour);
-114             break;
-115     }
-116 
-117 
-118 }
+103                                                                           {
+104 
+105     // Call the correct put_pixel function based on the color depth
+106     switch (m_color_depth) {
+107         case 8:
+108             render_pixel_8_bit(x, y, colour);
+109             break;
+110         case 16:
+111             render_pixel_16_bit(x, y, colour);
+112             break;
+113         case 24:
+114             render_pixel_24_bit(x, y, colour);
+115             break;
+116         case 32:
+117             render_pixel_32_bit(x, y, colour);
+118             break;
+119     }
+120 
+121 
+122 }
 .fi
 
 .PP
@@ -1288,11 +1283,11 @@ Renders a pixel to the screen using the 16 bit color depth\&.
 .PP
 
 .PP
-Definition at line \fB138\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB142\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-138                                                                       {
-139 
-140 }
+142                                                                       {
+143 
+144 }
 .fi
 
 .PP
@@ -1313,11 +1308,11 @@ Renders a pixel to the screen using the 24 bit color depth\&.
 .PP
 
 .PP
-Definition at line \fB149\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB153\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-149                                                                       {
-150 
-151 }
+153                                                                       {
+154 
+155 }
 .fi
 
 .PP
@@ -1338,13 +1333,11 @@ Renders a pixel to the screen using the 32 bit color depth\&.
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP\&.
-.PP
-Definition at line \fB160\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB164\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-160                                                                       {
-161 
-162 }
+164                                                                       {
+165 
+166 }
 .fi
 
 .PP
@@ -1365,13 +1358,11 @@ Renders a pixel to the screen using the 8 bit color depth\&.
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::drivers::video::VideoGraphicsArray\fP\&.
-.PP
-Definition at line \fB127\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB131\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-127                                                                     {
-128 
-129 }
+131                                                                     {
+132 
+133 }
 .fi
 
 .PP
@@ -1388,25 +1379,27 @@ The width of the screen
 .PP
 
 .PP
-Definition at line \fB339\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
+Definition at line \fB343\fP of file \fBgraphicsContext\&.cpp\fP\&..PP
 .nf
-339                                       {
-340     return m_width;
-341 }
+343                                       {
+344     return m_width;
+345 }
 .fi
 
 .PP
 References \fBm_width\fP\&.
 .PP
-Referenced by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::internal_set_mode()\fP, \fBMaxOS::drivers::video::VideoDriver::set_mode()\fP, \fBMaxOS::drivers::video::VideoGraphicsArray::supports_mode()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::supports_mode()\fP\&.
+Referenced by \fBMaxOS::drivers::video::VideoDriver::set_mode()\fP, \fBMaxOS::drivers::video::VideoGraphicsArray::supports_mode()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::supports_mode()\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBuint32_t\fP MaxOS::common::GraphicsContext::m_color_depth { 0 }\fC [protected]\fP"
 
 .PP
-Definition at line \fB26\fP of file \fBgraphicsContext\&.h\fP\&..PP
+The color depth of the screen in bits per pixel\&. 
+.PP
+Definition at line \fB30\fP of file \fBgraphicsContext\&.h\fP\&..PP
 .nf
-26 { 0 };
+30 { 0 };    
 .fi
 
 .PP
@@ -1414,25 +1407,38 @@ Referenced by \fBcolor_depth()\fP, \fBcolour_to_int()\fP, \fBget_rendered_pixel(
 .SS "\fBColour\fP MaxOS::common::GraphicsContext::m_colour_pallet[256]\fC [protected]\fP"
 
 .PP
-Definition at line \fB28\fP of file \fBgraphicsContext\&.h\fP\&.
+The colour pallet for 8 bit color depth\&. 
 .PP
-Referenced by \fBcolour_to_int()\fP, \fBGraphicsContext()\fP, and \fBint_to_colour()\fP\&.
+\fBTodo\fP
+.RS 4
+make const 
+.RE
+.PP
+
+.PP
+Definition at line \fB32\fP of file \fBgraphicsContext\&.h\fP\&.
+.PP
+Referenced by \fBcolour_to_int()\fP, and \fBint_to_colour()\fP\&.
 .SS "\fBuint64_t\fP* MaxOS::common::GraphicsContext::m_framebuffer_address { \fBnullptr\fP }\fC [protected]\fP"
 
 .PP
-Definition at line \fB30\fP of file \fBgraphicsContext\&.h\fP\&..PP
+The address of the framebuffer\&. 
+.PP
+Definition at line \fB34\fP of file \fBgraphicsContext\&.h\fP\&..PP
 .nf
-30 { nullptr };
+34 { nullptr }; 
 .fi
 
 .PP
-Referenced by \fBframebuffer_address()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::get_rendered_pixel_32_bit()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::render_pixel_32_bit()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
+Referenced by \fBframebuffer_address()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
 .SS "\fBint32_t\fP MaxOS::common::GraphicsContext::m_height { 0 }\fC [protected]\fP"
 
 .PP
-Definition at line \fB25\fP of file \fBgraphicsContext\&.h\fP\&..PP
+The height of the screen in pixels\&. 
+.PP
+Definition at line \fB29\fP of file \fBgraphicsContext\&.h\fP\&..PP
 .nf
-25 { 0 };
+29 { 0 };          
 .fi
 
 .PP
@@ -1440,9 +1446,11 @@ Referenced by \fBdraw_circle()\fP, \fBdrawLine()\fP, \fBfill_rectangle()\fP, \fB
 .SS "\fBint32_t\fP MaxOS::common::GraphicsContext::m_width { 0 }\fC [protected]\fP"
 
 .PP
-Definition at line \fB24\fP of file \fBgraphicsContext\&.h\fP\&..PP
+The width of the screen in pixels\&. 
+.PP
+Definition at line \fB28\fP of file \fBgraphicsContext\&.h\fP\&..PP
 .nf
-24 { 0 };
+28 { 0 };           
 .fi
 
 .PP
@@ -1450,9 +1458,11 @@ Referenced by \fBdraw_circle()\fP, \fBdrawLine()\fP, \fBfill_rectangle()\fP, \fB
 .SS "\fBbool\fP MaxOS::common::GraphicsContext::mirror_y_axis { \fBfalse\fP }\fC [protected]\fP"
 
 .PP
-Definition at line \fB22\fP of file \fBgraphicsContext\&.h\fP\&..PP
+Should the y axis be mirrored (0,0 is top left if false, bottom left if true) 
+.PP
+Definition at line \fB26\fP of file \fBgraphicsContext\&.h\fP\&..PP
 .nf
-22 { false };
+26 { false };    
 .fi
 
 .PP

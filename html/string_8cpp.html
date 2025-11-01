@@ -34,6 +34,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
    <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
    </div>
@@ -104,6 +105,9 @@ $(document).ready(function(){initNavTree('string_8cpp.html',''); initResizable()
   <div class="headertitle"><div class="title">string.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implementation of a simple String class for handling text of varying types and lengths.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;<a class="el" href="string_8h_source.html">common/string.h</a>&gt;</code><br />
 </div>
 <p><a href="string_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -147,7 +151,13 @@ Functions</h2></td></tr>
 <tr class="memdesc:af081375580299c09df67ad5841914b24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if one String is equal to another String up to a specified length (each must be &gt;= this length)  <br /></td></tr>
 <tr class="separator:af081375580299c09df67ad5841914b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implementation of a simple String class for handling text of varying types and lengths. </p>
+<dl class="section date"><dt>Date</dt><dd>7th January 2024 </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Max Tyson </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a67b7d920f0d5f6764f9d0a58f771a126" name="a67b7d920f0d5f6764f9d0a58f771a126"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67b7d920f0d5f6764f9d0a58f771a126">&#9670;&#160;</a></span>ftoa()</h2>
 
@@ -168,80 +178,77 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">number</td><td>The number to convert </td></tr>
-    <tr><td class="paramname">buffer</td><td>The buffer to store the converted string </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The converted string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00666">666</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  666</span>                         {</div>
-<div class="line"><span class="lineno">  667</span> </div>
-<div class="line"><span class="lineno">  668</span>    <span class="keyword">static</span> <span class="keywordtype">char</span> buffer[50];</div>
-<div class="line"><span class="lineno">  669</span>    <span class="keywordtype">char</span> *ptr = buffer;</div>
-<div class="line"><span class="lineno">  670</span> </div>
-<div class="line"><span class="lineno">  671</span>    <span class="comment">// Handle negative numbers.</span></div>
-<div class="line"><span class="lineno">  672</span>    <span class="keywordflow">if</span> (number &lt; 0) {</div>
-<div class="line"><span class="lineno">  673</span>        *ptr++ = <span class="charliteral">&#39;-&#39;</span>;</div>
-<div class="line"><span class="lineno">  674</span>        number = -number;</div>
-<div class="line"><span class="lineno">  675</span>    }</div>
-<div class="line"><span class="lineno">  676</span> </div>
-<div class="line"><span class="lineno">  677</span>    <span class="comment">// Separate integer and fractional parts.</span></div>
-<div class="line"><span class="lineno">  678</span>    int64_t intPart = (int64_t) number;</div>
-<div class="line"><span class="lineno">  679</span>    <span class="keywordtype">float</span> fraction = number - (float) intPart;</div>
-<div class="line"><span class="lineno">  680</span> </div>
-<div class="line"><span class="lineno">  681</span>    <span class="comment">// Convert integer part to string using itoa.</span></div>
-<div class="line"><span class="lineno">  682</span>    <span class="keywordtype">char</span> *intStr = <a class="code hl_function" href="string_8cpp.html#a100df116078d0e34de582fc45d2e7df2">itoa</a>(10, intPart);</div>
-<div class="line"><span class="lineno">  683</span>    <span class="keywordflow">while</span> (*intStr) {</div>
-<div class="line"><span class="lineno">  684</span>        *ptr++ = *intStr++;</div>
-<div class="line"><span class="lineno">  685</span>    }</div>
-<div class="line"><span class="lineno">  686</span> </div>
-<div class="line"><span class="lineno">  687</span>    <span class="comment">// Add the decimal point.</span></div>
-<div class="line"><span class="lineno">  688</span>    *ptr++ = <span class="charliteral">&#39;.&#39;</span>;</div>
-<div class="line"><span class="lineno">  689</span> </div>
-<div class="line"><span class="lineno">  690</span>    <span class="comment">// Define the desired precision for the fractional part.</span></div>
-<div class="line"><span class="lineno">  691</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> precision = 6;</div>
-<div class="line"><span class="lineno">  692</span> </div>
-<div class="line"><span class="lineno">  693</span>    <span class="comment">// Multiply the fraction to shift the decimal digits into integer range.</span></div>
-<div class="line"><span class="lineno">  694</span>    <span class="keywordtype">float</span> fracValue = fraction;</div>
-<div class="line"><span class="lineno">  695</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> &lt; precision; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>++) {</div>
-<div class="line"><span class="lineno">  696</span>        fracValue *= 10.0f;</div>
-<div class="line"><span class="lineno">  697</span>    }</div>
-<div class="line"><span class="lineno">  698</span> </div>
-<div class="line"><span class="lineno">  699</span>    <span class="comment">// Optionally, round the value.</span></div>
-<div class="line"><span class="lineno">  700</span>    <span class="keyword">auto</span> fracInt = (int64_t) (fracValue + 0.5f);</div>
-<div class="line"><span class="lineno">  701</span> </div>
-<div class="line"><span class="lineno">  702</span>    <span class="comment">// Convert the fractional part to string.</span></div>
-<div class="line"><span class="lineno">  703</span>    <span class="keywordtype">char</span> fracBuffer[50];</div>
-<div class="line"><span class="lineno">  704</span>    <span class="keywordtype">char</span> *fracStr = <a class="code hl_function" href="string_8cpp.html#a100df116078d0e34de582fc45d2e7df2">itoa</a>(10, fracInt);</div>
-<div class="line"><span class="lineno">  705</span> </div>
-<div class="line"><span class="lineno">  706</span>    <span class="comment">// Ensure we have leading zeros if the fractional part doesn&#39;t produce enough digits.</span></div>
-<div class="line"><span class="lineno">  707</span>    <span class="comment">// Calculate length of the converted fractional string.</span></div>
-<div class="line"><span class="lineno">  708</span>    <span class="keywordtype">int</span> len = 0;</div>
-<div class="line"><span class="lineno">  709</span>    <span class="keywordflow">for</span> (<span class="keywordtype">char</span> *p = fracStr; *<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a">p</a>; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a">p</a>++) {</div>
-<div class="line"><span class="lineno">  710</span>        len++;</div>
-<div class="line"><span class="lineno">  711</span>    }</div>
-<div class="line"><span class="lineno">  712</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> &lt; precision - len; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>++) {</div>
-<div class="line"><span class="lineno">  713</span>        *ptr++ = <span class="charliteral">&#39;0&#39;</span>;</div>
-<div class="line"><span class="lineno">  714</span>    }</div>
-<div class="line"><span class="lineno">  715</span> </div>
-<div class="line"><span class="lineno">  716</span>    <span class="comment">// Copy the fractional digits.</span></div>
-<div class="line"><span class="lineno">  717</span>    <span class="keywordflow">while</span> (*fracStr) {</div>
-<div class="line"><span class="lineno">  718</span>        *ptr++ = *fracStr++;</div>
-<div class="line"><span class="lineno">  719</span>    }</div>
-<div class="line"><span class="lineno">  720</span> </div>
-<div class="line"><span class="lineno">  721</span>    <span class="comment">// Null-terminate the string.</span></div>
-<div class="line"><span class="lineno">  722</span>    *ptr = <span class="charliteral">&#39;\0&#39;</span>;</div>
-<div class="line"><span class="lineno">  723</span> </div>
-<div class="line"><span class="lineno">  724</span>    <span class="keywordflow">return</span> buffer;</div>
-<div class="line"><span class="lineno">  725</span>}</div>
-<div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca83878c91171338902e0fe0fb97a8c47a">MaxOS::drivers::peripherals::KeyCode::p</a></div><div class="ttdeci">@ p</div></div>
-<div class="ttc" id="anamespaceMaxOS_1_1drivers_1_1peripherals_html_a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741"><div class="ttname"><a href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">MaxOS::drivers::peripherals::KeyCode::i</a></div><div class="ttdeci">@ i</div></div>
-<div class="ttc" id="astring_8cpp_html_a100df116078d0e34de582fc45d2e7df2"><div class="ttname"><a href="string_8cpp.html#a100df116078d0e34de582fc45d2e7df2">itoa</a></div><div class="ttdeci">char * itoa(int base, int64_t number)</div><div class="ttdoc">Converts integer to string.</div><div class="ttdef"><b>Definition</b> <a href="string_8cpp_source.html#l00611">string.cpp:611</a></div></div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00773">773</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  773</span>                         {</div>
+<div class="line"><span class="lineno">  774</span> </div>
+<div class="line"><span class="lineno">  775</span>    <span class="keyword">static</span> <span class="keywordtype">char</span> buffer[50];</div>
+<div class="line"><span class="lineno">  776</span>    <span class="keywordtype">char</span> *ptr = buffer;</div>
+<div class="line"><span class="lineno">  777</span> </div>
+<div class="line"><span class="lineno">  778</span>    <span class="comment">// Handle negative numbers.</span></div>
+<div class="line"><span class="lineno">  779</span>    <span class="keywordflow">if</span> (number &lt; 0) {</div>
+<div class="line"><span class="lineno">  780</span>        *ptr++ = <span class="charliteral">&#39;-&#39;</span>;</div>
+<div class="line"><span class="lineno">  781</span>        number = -number;</div>
+<div class="line"><span class="lineno">  782</span>    }</div>
+<div class="line"><span class="lineno">  783</span> </div>
+<div class="line"><span class="lineno">  784</span>    <span class="comment">// Separate integer and fractional parts.</span></div>
+<div class="line"><span class="lineno">  785</span>    int64_t intPart = (int64_t) number;</div>
+<div class="line"><span class="lineno">  786</span>    <span class="keywordtype">float</span> fraction = number - (float) intPart;</div>
+<div class="line"><span class="lineno">  787</span> </div>
+<div class="line"><span class="lineno">  788</span>    <span class="comment">// Convert integer part to string using itoa.</span></div>
+<div class="line"><span class="lineno">  789</span>    <span class="keywordtype">char</span> *intStr = <a class="code hl_function" href="string_8cpp.html#a100df116078d0e34de582fc45d2e7df2">itoa</a>(10, intPart);</div>
+<div class="line"><span class="lineno">  790</span>    <span class="keywordflow">while</span> (*intStr) {</div>
+<div class="line"><span class="lineno">  791</span>        *ptr++ = *intStr++;</div>
+<div class="line"><span class="lineno">  792</span>    }</div>
+<div class="line"><span class="lineno">  793</span> </div>
+<div class="line"><span class="lineno">  794</span>    <span class="comment">// Add the decimal point.</span></div>
+<div class="line"><span class="lineno">  795</span>    *ptr++ = <span class="charliteral">&#39;.&#39;</span>;</div>
+<div class="line"><span class="lineno">  796</span> </div>
+<div class="line"><span class="lineno">  797</span>    <span class="comment">// Define the desired precision for the fractional part.</span></div>
+<div class="line"><span class="lineno">  798</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> precision = 6;</div>
+<div class="line"><span class="lineno">  799</span> </div>
+<div class="line"><span class="lineno">  800</span>    <span class="comment">// Multiply the fraction to shift the decimal digits into integer range.</span></div>
+<div class="line"><span class="lineno">  801</span>    <span class="keywordtype">float</span> fracValue = fraction;</div>
+<div class="line"><span class="lineno">  802</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; precision; i++) {</div>
+<div class="line"><span class="lineno">  803</span>        fracValue *= 10.0f;</div>
+<div class="line"><span class="lineno">  804</span>    }</div>
+<div class="line"><span class="lineno">  805</span> </div>
+<div class="line"><span class="lineno">  806</span>    <span class="comment">// Optionally, round the value.</span></div>
+<div class="line"><span class="lineno">  807</span>    <span class="keyword">auto</span> fracInt = (int64_t) (fracValue + 0.5f);</div>
+<div class="line"><span class="lineno">  808</span> </div>
+<div class="line"><span class="lineno">  809</span>    <span class="comment">// Convert the fractional part to string.</span></div>
+<div class="line"><span class="lineno">  810</span>    <span class="keywordtype">char</span> fracBuffer[50];</div>
+<div class="line"><span class="lineno">  811</span>    <span class="keywordtype">char</span> *fracStr = <a class="code hl_function" href="string_8cpp.html#a100df116078d0e34de582fc45d2e7df2">itoa</a>(10, fracInt);</div>
+<div class="line"><span class="lineno">  812</span> </div>
+<div class="line"><span class="lineno">  813</span>    <span class="comment">// Ensure we have leading zeros if the fractional part doesn&#39;t produce enough digits.</span></div>
+<div class="line"><span class="lineno">  814</span>    <span class="comment">// Calculate length of the converted fractional string.</span></div>
+<div class="line"><span class="lineno">  815</span>    <span class="keywordtype">int</span> len = 0;</div>
+<div class="line"><span class="lineno">  816</span>    <span class="keywordflow">for</span> (<span class="keywordtype">char</span> *p = fracStr; *p; p++) {</div>
+<div class="line"><span class="lineno">  817</span>        len++;</div>
+<div class="line"><span class="lineno">  818</span>    }</div>
+<div class="line"><span class="lineno">  819</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; precision - len; i++) {</div>
+<div class="line"><span class="lineno">  820</span>        *ptr++ = <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><span class="lineno">  821</span>    }</div>
+<div class="line"><span class="lineno">  822</span> </div>
+<div class="line"><span class="lineno">  823</span>    <span class="comment">// Copy the fractional digits.</span></div>
+<div class="line"><span class="lineno">  824</span>    <span class="keywordflow">while</span> (*fracStr) {</div>
+<div class="line"><span class="lineno">  825</span>        *ptr++ = *fracStr++;</div>
+<div class="line"><span class="lineno">  826</span>    }</div>
+<div class="line"><span class="lineno">  827</span> </div>
+<div class="line"><span class="lineno">  828</span>    <span class="comment">// Null-terminate the string.</span></div>
+<div class="line"><span class="lineno">  829</span>    *ptr = <span class="charliteral">&#39;\0&#39;</span>;</div>
+<div class="line"><span class="lineno">  830</span> </div>
+<div class="line"><span class="lineno">  831</span>    <span class="keywordflow">return</span> buffer;</div>
+<div class="line"><span class="lineno">  832</span>}</div>
+<div class="ttc" id="astring_8cpp_html_a100df116078d0e34de582fc45d2e7df2"><div class="ttname"><a href="string_8cpp.html#a100df116078d0e34de582fc45d2e7df2">itoa</a></div><div class="ttdeci">char * itoa(int base, int64_t number)</div><div class="ttdoc">Converts integer to string.</div><div class="ttdef"><b>Definition</b> <a href="string_8cpp_source.html#l00720">string.cpp:720</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="string_8cpp_source.html#l00611">itoa()</a>.</p>
+<p class="reference">References <a class="el" href="string_8cpp_source.html#l00720">itoa()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="string_8cpp_source.html#l00100">MaxOS::String::String()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="string_8cpp_source.html#l00131">MaxOS::String::String()</a>.</p>
 
 </div>
 </div>
@@ -265,30 +272,29 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">number</td><td>The number to convert </td></tr>
-    <tr><td class="paramname">buffer</td><td>The buffer to store the converted string </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The converted string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00643">643</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  643</span>                            {</div>
-<div class="line"><span class="lineno">  644</span>    <span class="comment">// If there is no buffer use a default buffer</span></div>
-<div class="line"><span class="lineno">  645</span>    <span class="keyword">static</span> <span class="keywordtype">char</span> buffer[50] = {0};</div>
-<div class="line"><span class="lineno">  646</span>    <span class="keywordtype">int</span> <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> = 49;</div>
-<div class="line"><span class="lineno">  647</span> </div>
-<div class="line"><span class="lineno">  648</span>    <span class="keywordflow">if</span> (number == 0) {</div>
-<div class="line"><span class="lineno">  649</span>        buffer[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>] = <span class="charliteral">&#39;0&#39;</span>;</div>
-<div class="line"><span class="lineno">  650</span>        <span class="keywordflow">return</span> &amp;buffer[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>];</div>
-<div class="line"><span class="lineno">  651</span>    }</div>
-<div class="line"><span class="lineno">  652</span> </div>
-<div class="line"><span class="lineno">  653</span>    <span class="keywordflow">for</span> (; number &amp;&amp; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>; --<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>, number /= 16)</div>
-<div class="line"><span class="lineno">  654</span>        buffer[i] = <span class="stringliteral">&quot;0123456789ABCDEF&quot;</span>[number % 16];</div>
-<div class="line"><span class="lineno">  655</span> </div>
-<div class="line"><span class="lineno">  656</span>    <span class="keywordflow">return</span> &amp;buffer[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> + 1];</div>
-<div class="line"><span class="lineno">  657</span>}</div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00751">751</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  751</span>                            {</div>
+<div class="line"><span class="lineno">  752</span>    <span class="comment">// If there is no buffer use a default buffer</span></div>
+<div class="line"><span class="lineno">  753</span>    <span class="keyword">static</span> <span class="keywordtype">char</span> buffer[50] = {0};</div>
+<div class="line"><span class="lineno">  754</span>    <span class="keywordtype">int</span> i = 49;</div>
+<div class="line"><span class="lineno">  755</span> </div>
+<div class="line"><span class="lineno">  756</span>    <span class="keywordflow">if</span> (number == 0) {</div>
+<div class="line"><span class="lineno">  757</span>        buffer[i] = <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><span class="lineno">  758</span>        <span class="keywordflow">return</span> &amp;buffer[i];</div>
+<div class="line"><span class="lineno">  759</span>    }</div>
+<div class="line"><span class="lineno">  760</span> </div>
+<div class="line"><span class="lineno">  761</span>    <span class="keywordflow">for</span> (; number &amp;&amp; i; --i, number /= 16)</div>
+<div class="line"><span class="lineno">  762</span>        buffer[i] = <span class="stringliteral">&quot;0123456789ABCDEF&quot;</span>[number % 16];</div>
+<div class="line"><span class="lineno">  763</span> </div>
+<div class="line"><span class="lineno">  764</span>    <span class="keywordflow">return</span> &amp;buffer[i + 1];</div>
+<div class="line"><span class="lineno">  765</span>}</div>
 </div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="string_8cpp_source.html#l00085">MaxOS::String::String()</a>, and <a class="el" href="outputStream_8cpp_source.html#l00111">MaxOS::common::OutputStream::write_hex()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="string_8cpp_source.html#l00112">MaxOS::String::String()</a>, and <a class="el" href="outputStream_8cpp_source.html#l00115">MaxOS::common::OutputStream::write_hex()</a>.</p>
 
 </div>
 </div>
@@ -322,43 +328,42 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">base</td><td>The base of the number (10 for decimal, 16 for hex) </td></tr>
-    <tr><td class="paramname">number</td><td>The number to convert </td></tr>
-    <tr><td class="paramname">buffer</td><td>The buffer to store the converted string</td></tr>
+    <tr><td class="paramname">number</td><td>The number to convert</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The converted string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00611">611</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  611</span>                                     {</div>
-<div class="line"><span class="lineno">  612</span> </div>
-<div class="line"><span class="lineno">  613</span>    <span class="comment">// If there is no buffer use a default buffer</span></div>
-<div class="line"><span class="lineno">  614</span>    <span class="keyword">static</span> <span class="keywordtype">char</span> buffer[50] = {0};</div>
-<div class="line"><span class="lineno">  615</span> </div>
-<div class="line"><span class="lineno">  616</span>    <span class="keywordtype">int</span> <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> = 49;</div>
-<div class="line"><span class="lineno">  617</span>    <span class="keywordtype">bool</span> isNegative = number &lt; 0;</div>
-<div class="line"><span class="lineno">  618</span> </div>
-<div class="line"><span class="lineno">  619</span>    <span class="keywordflow">if</span> (number == 0) {</div>
-<div class="line"><span class="lineno">  620</span>        buffer[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>] = <span class="charliteral">&#39;0&#39;</span>;</div>
-<div class="line"><span class="lineno">  621</span>        <span class="keywordflow">return</span> &amp;buffer[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>];</div>
-<div class="line"><span class="lineno">  622</span>    }</div>
-<div class="line"><span class="lineno">  623</span> </div>
-<div class="line"><span class="lineno">  624</span> </div>
-<div class="line"><span class="lineno">  625</span>    <span class="keywordflow">for</span> (; number &amp;&amp; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>; --<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>, number /= <a class="code hl_variable" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>)</div>
-<div class="line"><span class="lineno">  626</span>        buffer[i] = <span class="stringliteral">&quot;0123456789ABCDEF&quot;</span>[number % <a class="code hl_variable" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>];</div>
-<div class="line"><span class="lineno">  627</span> </div>
-<div class="line"><span class="lineno">  628</span>    <span class="keywordflow">if</span> (isNegative) {</div>
-<div class="line"><span class="lineno">  629</span>        buffer[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>] = <span class="charliteral">&#39;-&#39;</span>;</div>
-<div class="line"><span class="lineno">  630</span>        <span class="keywordflow">return</span> &amp;buffer[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>];</div>
-<div class="line"><span class="lineno">  631</span>    }</div>
-<div class="line"><span class="lineno">  632</span> </div>
-<div class="line"><span class="lineno">  633</span>    <span class="keywordflow">return</span> &amp;buffer[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> + 1];</div>
-<div class="line"><span class="lineno">  634</span>}</div>
-<div class="ttc" id="ainterrupts_8h_html_aeca790c0426654358d031f8180e84aca"><div class="ttname"><a href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a></div><div class="ttdeci">uint64_t base</div><div class="ttdef"><b>Definition</b> <a href="interrupts_8h_source.html#l00001">interrupts.h:1</a></div></div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00720">720</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  720</span>                                     {</div>
+<div class="line"><span class="lineno">  721</span> </div>
+<div class="line"><span class="lineno">  722</span>    <span class="comment">// If there is no buffer use a default buffer</span></div>
+<div class="line"><span class="lineno">  723</span>    <span class="keyword">static</span> <span class="keywordtype">char</span> buffer[50] = {0};</div>
+<div class="line"><span class="lineno">  724</span> </div>
+<div class="line"><span class="lineno">  725</span>    <span class="keywordtype">int</span> i = 49;</div>
+<div class="line"><span class="lineno">  726</span>    <span class="keywordtype">bool</span> isNegative = number &lt; 0;</div>
+<div class="line"><span class="lineno">  727</span> </div>
+<div class="line"><span class="lineno">  728</span>    <span class="keywordflow">if</span> (number == 0) {</div>
+<div class="line"><span class="lineno">  729</span>        buffer[i] = <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><span class="lineno">  730</span>        <span class="keywordflow">return</span> &amp;buffer[i];</div>
+<div class="line"><span class="lineno">  731</span>    }</div>
+<div class="line"><span class="lineno">  732</span> </div>
+<div class="line"><span class="lineno">  733</span> </div>
+<div class="line"><span class="lineno">  734</span>    <span class="keywordflow">for</span> (; number &amp;&amp; i; --i, number /= <a class="code hl_variable" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>)</div>
+<div class="line"><span class="lineno">  735</span>        buffer[i] = <span class="stringliteral">&quot;0123456789ABCDEF&quot;</span>[number % <a class="code hl_variable" href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a>];</div>
+<div class="line"><span class="lineno">  736</span> </div>
+<div class="line"><span class="lineno">  737</span>    <span class="keywordflow">if</span> (isNegative) {</div>
+<div class="line"><span class="lineno">  738</span>        buffer[i] = <span class="charliteral">&#39;-&#39;</span>;</div>
+<div class="line"><span class="lineno">  739</span>        <span class="keywordflow">return</span> &amp;buffer[i];</div>
+<div class="line"><span class="lineno">  740</span>    }</div>
+<div class="line"><span class="lineno">  741</span> </div>
+<div class="line"><span class="lineno">  742</span>    <span class="keywordflow">return</span> &amp;buffer[i + 1];</div>
+<div class="line"><span class="lineno">  743</span>}</div>
+<div class="ttc" id="ainterrupts_8h_html_aeca790c0426654358d031f8180e84aca"><div class="ttname"><a href="interrupts_8h.html#aeca790c0426654358d031f8180e84aca">base</a></div><div class="ttdeci">uint64_t base</div><div class="ttdoc">The start address of the IDT.</div><div class="ttdef"><b>Definition</b> <a href="interrupts_8h_source.html#l00001">interrupts.h:1</a></div></div>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="interrupts_8h_source.html#l00001">base</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="string_8cpp_source.html#l00666">ftoa()</a>, <a class="el" href="string_8cpp_source.html#l00064">MaxOS::String::String()</a>, and <a class="el" href="outputStream_8cpp_source.html#l00100">MaxOS::common::OutputStream::write_int()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="string_8cpp_source.html#l00773">ftoa()</a>, <a class="el" href="string_8cpp_source.html#l00091">MaxOS::String::String()</a>, and <a class="el" href="outputStream_8cpp_source.html#l00104">MaxOS::common::OutputStream::write_int()</a>.</p>
 
 </div>
 </div>
@@ -398,20 +403,20 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the strings are equal, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00734">734</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  734</span>                                                {</div>
-<div class="line"><span class="lineno">  735</span> </div>
-<div class="line"><span class="lineno">  736</span>    <span class="comment">// Check if the strings are equal</span></div>
-<div class="line"><span class="lineno">  737</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; str1[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>] != <span class="charliteral">&#39;\0&#39;</span> || str2[<a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>] != <span class="charliteral">&#39;\0&#39;</span>; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>++)</div>
-<div class="line"><span class="lineno">  738</span>        <span class="keywordflow">if</span> (str1[i] != str2[i])</div>
-<div class="line"><span class="lineno">  739</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><span class="lineno">  740</span> </div>
-<div class="line"><span class="lineno">  741</span>    <span class="comment">// The strings are equal</span></div>
-<div class="line"><span class="lineno">  742</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><span class="lineno">  743</span> </div>
-<div class="line"><span class="lineno">  744</span>}</div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00841">841</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  841</span>                                                {</div>
+<div class="line"><span class="lineno">  842</span> </div>
+<div class="line"><span class="lineno">  843</span>    <span class="comment">// Check if the strings are equal</span></div>
+<div class="line"><span class="lineno">  844</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; str1[i] != <span class="charliteral">&#39;\0&#39;</span> || str2[i] != <span class="charliteral">&#39;\0&#39;</span>; i++)</div>
+<div class="line"><span class="lineno">  845</span>        <span class="keywordflow">if</span> (str1[i] != str2[i])</div>
+<div class="line"><span class="lineno">  846</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">  847</span> </div>
+<div class="line"><span class="lineno">  848</span>    <span class="comment">// The strings are equal</span></div>
+<div class="line"><span class="lineno">  849</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><span class="lineno">  850</span> </div>
+<div class="line"><span class="lineno">  851</span>}</div>
 </div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="vesaboot_8cpp_source.html#l00069">MaxOS::drivers::console::VESABootConsole::put_character()</a>, <a class="el" href="string_8cpp_source.html#l00753">strcmp()</a>, <a class="el" href="string_8cpp_source.html#l00767">strcmp()</a>, and <a class="el" href="string_8cpp_source.html#l00780">strcmp()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="vesaboot_8cpp_source.html#l00074">MaxOS::drivers::console::VESABootConsole::put_character()</a>, <a class="el" href="string_8cpp_source.html#l00860">strcmp()</a>, <a class="el" href="string_8cpp_source.html#l00874">strcmp()</a>, and <a class="el" href="string_8cpp_source.html#l00887">strcmp()</a>.</p>
 
 </div>
 </div>
@@ -451,16 +456,16 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the strings are equal, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00753">753</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  753</span>                                                  {</div>
-<div class="line"><span class="lineno">  754</span> </div>
-<div class="line"><span class="lineno">  755</span>    <span class="comment">// Use the other strcmp function</span></div>
-<div class="line"><span class="lineno">  756</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a82efc5a6f65207e2120b326554db0ee9">strcmp</a>(str1, str2.c_str());</div>
-<div class="line"><span class="lineno">  757</span> </div>
-<div class="line"><span class="lineno">  758</span>}</div>
-<div class="ttc" id="astring_8cpp_html_a82efc5a6f65207e2120b326554db0ee9"><div class="ttname"><a href="string_8cpp.html#a82efc5a6f65207e2120b326554db0ee9">strcmp</a></div><div class="ttdeci">bool strcmp(char const *str1, char const *str2)</div><div class="ttdoc">Checks if one string pointer is equal to another string pointer.</div><div class="ttdef"><b>Definition</b> <a href="string_8cpp_source.html#l00734">string.cpp:734</a></div></div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00860">860</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  860</span>                                                  {</div>
+<div class="line"><span class="lineno">  861</span> </div>
+<div class="line"><span class="lineno">  862</span>    <span class="comment">// Use the other strcmp function</span></div>
+<div class="line"><span class="lineno">  863</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a82efc5a6f65207e2120b326554db0ee9">strcmp</a>(str1, str2.c_str());</div>
+<div class="line"><span class="lineno">  864</span> </div>
+<div class="line"><span class="lineno">  865</span>}</div>
+<div class="ttc" id="astring_8cpp_html_a82efc5a6f65207e2120b326554db0ee9"><div class="ttname"><a href="string_8cpp.html#a82efc5a6f65207e2120b326554db0ee9">strcmp</a></div><div class="ttdeci">bool strcmp(char const *str1, char const *str2)</div><div class="ttdoc">Checks if one string pointer is equal to another string pointer.</div><div class="ttdef"><b>Definition</b> <a href="string_8cpp_source.html#l00841">string.cpp:841</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="string_8cpp_source.html#l00208">MaxOS::String::c_str()</a>, and <a class="el" href="string_8cpp_source.html#l00734">strcmp()</a>.</p>
+<p class="reference">References <a class="el" href="string_8cpp_source.html#l00251">MaxOS::String::c_str()</a>, and <a class="el" href="string_8cpp_source.html#l00841">strcmp()</a>.</p>
 
 </div>
 </div>
@@ -500,14 +505,14 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the strings are equal, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00767">767</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  767</span>                                                  {</div>
-<div class="line"><span class="lineno">  768</span> </div>
-<div class="line"><span class="lineno">  769</span>    <span class="comment">// Use the other strcmp function</span></div>
-<div class="line"><span class="lineno">  770</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a82efc5a6f65207e2120b326554db0ee9">strcmp</a>(str1.c_str(), str2);</div>
-<div class="line"><span class="lineno">  771</span>}</div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00874">874</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  874</span>                                                  {</div>
+<div class="line"><span class="lineno">  875</span> </div>
+<div class="line"><span class="lineno">  876</span>    <span class="comment">// Use the other strcmp function</span></div>
+<div class="line"><span class="lineno">  877</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a82efc5a6f65207e2120b326554db0ee9">strcmp</a>(str1.c_str(), str2);</div>
+<div class="line"><span class="lineno">  878</span>}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="string_8cpp_source.html#l00208">MaxOS::String::c_str()</a>, and <a class="el" href="string_8cpp_source.html#l00734">strcmp()</a>.</p>
+<p class="reference">References <a class="el" href="string_8cpp_source.html#l00251">MaxOS::String::c_str()</a>, and <a class="el" href="string_8cpp_source.html#l00841">strcmp()</a>.</p>
 
 </div>
 </div>
@@ -547,15 +552,15 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the strings are equal, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00780">780</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  780</span>                                                    {</div>
-<div class="line"><span class="lineno">  781</span> </div>
-<div class="line"><span class="lineno">  782</span>    <span class="comment">// Use the other strcmp function</span></div>
-<div class="line"><span class="lineno">  783</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a82efc5a6f65207e2120b326554db0ee9">strcmp</a>(str1.c_str(), str2.c_str());</div>
-<div class="line"><span class="lineno">  784</span> </div>
-<div class="line"><span class="lineno">  785</span>}</div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00887">887</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  887</span>                                                    {</div>
+<div class="line"><span class="lineno">  888</span> </div>
+<div class="line"><span class="lineno">  889</span>    <span class="comment">// Use the other strcmp function</span></div>
+<div class="line"><span class="lineno">  890</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a82efc5a6f65207e2120b326554db0ee9">strcmp</a>(str1.c_str(), str2.c_str());</div>
+<div class="line"><span class="lineno">  891</span> </div>
+<div class="line"><span class="lineno">  892</span>}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="string_8cpp_source.html#l00208">MaxOS::String::c_str()</a>, and <a class="el" href="string_8cpp_source.html#l00734">strcmp()</a>.</p>
+<p class="reference">References <a class="el" href="string_8cpp_source.html#l00251">MaxOS::String::c_str()</a>, and <a class="el" href="string_8cpp_source.html#l00841">strcmp()</a>.</p>
 
 </div>
 </div>
@@ -584,14 +589,14 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The length of the string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00596">596</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  596</span>                            {</div>
-<div class="line"><span class="lineno">  597</span>    <span class="keywordtype">int</span> len = 0;</div>
-<div class="line"><span class="lineno">  598</span>    <span class="keywordflow">for</span> (; str[len] != <span class="charliteral">&#39;\0&#39;</span>; len++);</div>
-<div class="line"><span class="lineno">  599</span>    <span class="keywordflow">return</span> len;</div>
-<div class="line"><span class="lineno">  600</span>}</div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00706">706</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  706</span>                            {</div>
+<div class="line"><span class="lineno">  707</span>    <span class="keywordtype">int</span> len = 0;</div>
+<div class="line"><span class="lineno">  708</span>    <span class="keywordflow">for</span> (; str[len] != <span class="charliteral">&#39;\0&#39;</span>; len++);</div>
+<div class="line"><span class="lineno">  709</span>    <span class="keywordflow">return</span> len;</div>
+<div class="line"><span class="lineno">  710</span>}</div>
 </div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="string_8cpp_source.html#l00100">MaxOS::String::String()</a>, <a class="el" href="string_8cpp_source.html#l00064">MaxOS::String::String()</a>, and <a class="el" href="string_8cpp_source.html#l00085">MaxOS::String::String()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="string_8cpp_source.html#l00131">MaxOS::String::String()</a>, <a class="el" href="string_8cpp_source.html#l00091">MaxOS::String::String()</a>, and <a class="el" href="string_8cpp_source.html#l00112">MaxOS::String::String()</a>.</p>
 
 </div>
 </div>
@@ -638,23 +643,23 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the strings are equal, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00795">795</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  795</span>                                                             {</div>
-<div class="line"><span class="lineno">  796</span> </div>
-<div class="line"><span class="lineno">  797</span>    <span class="comment">// Check if the strings are equal</span></div>
-<div class="line"><span class="lineno">  798</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a> &lt; <a class="code hl_variable" href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a>; <a class="code hl_enumvalue" href="namespaceMaxOS_1_1drivers_1_1peripherals.html#a891861cdf457ecedb7e3a5fa56515ebca865c0c0b4ab0e063e5caa3387c1a8741">i</a>++)</div>
-<div class="line"><span class="lineno">  799</span>        <span class="keywordflow">if</span> (str1[i] != str2[i])</div>
-<div class="line"><span class="lineno">  800</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><span class="lineno">  801</span> </div>
-<div class="line"><span class="lineno">  802</span>    <span class="comment">// Strings are equal</span></div>
-<div class="line"><span class="lineno">  803</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><span class="lineno">  804</span> </div>
-<div class="line"><span class="lineno">  805</span>}</div>
-<div class="ttc" id="aintel__i217_8h_html_aebb70c2aab3407a9f05334c47131a43b"><div class="ttname"><a href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a></div><div class="ttdeci">uint16_t length</div><div class="ttdef"><b>Definition</b> <a href="intel__i217_8h_source.html#l00001">intel_i217.h:1</a></div></div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00902">902</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  902</span>                                                             {</div>
+<div class="line"><span class="lineno">  903</span> </div>
+<div class="line"><span class="lineno">  904</span>    <span class="comment">// Check if the strings are equal</span></div>
+<div class="line"><span class="lineno">  905</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <a class="code hl_variable" href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a>; i++)</div>
+<div class="line"><span class="lineno">  906</span>        <span class="keywordflow">if</span> (str1[i] != str2[i])</div>
+<div class="line"><span class="lineno">  907</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">  908</span> </div>
+<div class="line"><span class="lineno">  909</span>    <span class="comment">// Strings are equal</span></div>
+<div class="line"><span class="lineno">  910</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><span class="lineno">  911</span> </div>
+<div class="line"><span class="lineno">  912</span>}</div>
+<div class="ttc" id="aintel__i217_8h_html_aebb70c2aab3407a9f05334c47131a43b"><div class="ttname"><a href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a></div><div class="ttdeci">uint16_t length</div><div class="ttdoc">The size of the entire table, including the header, in bytes.</div><div class="ttdef"><b>Definition</b> <a href="intel__i217_8h_source.html#l00001">intel_i217.h:1</a></div></div>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="intel__i217_8h_source.html#l00001">length</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="acpi_8cpp_source.html#l00106">MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()</a>, <a class="el" href="string_8cpp_source.html#l00815">strncmp()</a>, <a class="el" href="string_8cpp_source.html#l00830">strncmp()</a>, and <a class="el" href="string_8cpp_source.html#l00845">strncmp()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="acpi_8cpp_source.html#l00160">MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()</a>, <a class="el" href="string_8cpp_source.html#l00922">strncmp()</a>, <a class="el" href="string_8cpp_source.html#l00937">strncmp()</a>, and <a class="el" href="string_8cpp_source.html#l00952">strncmp()</a>.</p>
 
 </div>
 </div>
@@ -701,16 +706,16 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the strings are equal, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00815">815</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  815</span>                                                               {</div>
-<div class="line"><span class="lineno">  816</span> </div>
-<div class="line"><span class="lineno">  817</span>    <span class="comment">// Use the other strncmp function</span></div>
-<div class="line"><span class="lineno">  818</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a>(str1, str2.c_str(), <a class="code hl_variable" href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a>);</div>
-<div class="line"><span class="lineno">  819</span> </div>
-<div class="line"><span class="lineno">  820</span>}</div>
-<div class="ttc" id="astring_8cpp_html_a9a382141e88fb589c55148c54fa45d64"><div class="ttname"><a href="string_8cpp.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a></div><div class="ttdeci">bool strncmp(char const *str1, char const *str2, int length)</div><div class="ttdoc">Checks if one string pointer is equal to another string pointer up to a specified length (each must b...</div><div class="ttdef"><b>Definition</b> <a href="string_8cpp_source.html#l00795">string.cpp:795</a></div></div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00922">922</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  922</span>                                                               {</div>
+<div class="line"><span class="lineno">  923</span> </div>
+<div class="line"><span class="lineno">  924</span>    <span class="comment">// Use the other strncmp function</span></div>
+<div class="line"><span class="lineno">  925</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a>(str1, str2.c_str(), <a class="code hl_variable" href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a>);</div>
+<div class="line"><span class="lineno">  926</span> </div>
+<div class="line"><span class="lineno">  927</span>}</div>
+<div class="ttc" id="astring_8cpp_html_a9a382141e88fb589c55148c54fa45d64"><div class="ttname"><a href="string_8cpp.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a></div><div class="ttdeci">bool strncmp(char const *str1, char const *str2, int length)</div><div class="ttdoc">Checks if one string pointer is equal to another string pointer up to a specified length (each must b...</div><div class="ttdef"><b>Definition</b> <a href="string_8cpp_source.html#l00902">string.cpp:902</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="string_8cpp_source.html#l00208">MaxOS::String::c_str()</a>, <a class="el" href="intel__i217_8h_source.html#l00001">length</a>, and <a class="el" href="string_8cpp_source.html#l00795">strncmp()</a>.</p>
+<p class="reference">References <a class="el" href="string_8cpp_source.html#l00251">MaxOS::String::c_str()</a>, <a class="el" href="intel__i217_8h_source.html#l00001">length</a>, and <a class="el" href="string_8cpp_source.html#l00902">strncmp()</a>.</p>
 
 </div>
 </div>
@@ -757,15 +762,15 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the strings are equal, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00830">830</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  830</span>                                                               {</div>
-<div class="line"><span class="lineno">  831</span> </div>
-<div class="line"><span class="lineno">  832</span>    <span class="comment">// Use the other strncmp function</span></div>
-<div class="line"><span class="lineno">  833</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a>(str1.c_str(), str2, <a class="code hl_variable" href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a>);</div>
-<div class="line"><span class="lineno">  834</span> </div>
-<div class="line"><span class="lineno">  835</span>}</div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00937">937</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  937</span>                                                               {</div>
+<div class="line"><span class="lineno">  938</span> </div>
+<div class="line"><span class="lineno">  939</span>    <span class="comment">// Use the other strncmp function</span></div>
+<div class="line"><span class="lineno">  940</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a>(str1.c_str(), str2, <a class="code hl_variable" href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a>);</div>
+<div class="line"><span class="lineno">  941</span> </div>
+<div class="line"><span class="lineno">  942</span>}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="string_8cpp_source.html#l00208">MaxOS::String::c_str()</a>, <a class="el" href="intel__i217_8h_source.html#l00001">length</a>, and <a class="el" href="string_8cpp_source.html#l00795">strncmp()</a>.</p>
+<p class="reference">References <a class="el" href="string_8cpp_source.html#l00251">MaxOS::String::c_str()</a>, <a class="el" href="intel__i217_8h_source.html#l00001">length</a>, and <a class="el" href="string_8cpp_source.html#l00902">strncmp()</a>.</p>
 
 </div>
 </div>
@@ -812,14 +817,14 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the strings are equal, false otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00845">845</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  845</span>                                                                 {</div>
-<div class="line"><span class="lineno">  846</span> </div>
-<div class="line"><span class="lineno">  847</span>    <span class="comment">// Use the other strncmp function</span></div>
-<div class="line"><span class="lineno">  848</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a>(str1.c_str(), str2.c_str(), <a class="code hl_variable" href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a>);</div>
-<div class="line"><span class="lineno">  849</span>}</div>
+<p class="definition">Definition at line <a class="el" href="string_8cpp_source.html#l00952">952</a> of file <a class="el" href="string_8cpp_source.html">string.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  952</span>                                                                 {</div>
+<div class="line"><span class="lineno">  953</span> </div>
+<div class="line"><span class="lineno">  954</span>    <span class="comment">// Use the other strncmp function</span></div>
+<div class="line"><span class="lineno">  955</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="string_8cpp.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a>(str1.c_str(), str2.c_str(), <a class="code hl_variable" href="intel__i217_8h.html#aebb70c2aab3407a9f05334c47131a43b">length</a>);</div>
+<div class="line"><span class="lineno">  956</span>}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="string_8cpp_source.html#l00208">MaxOS::String::c_str()</a>, <a class="el" href="intel__i217_8h_source.html#l00001">length</a>, and <a class="el" href="string_8cpp_source.html#l00795">strncmp()</a>.</p>
+<p class="reference">References <a class="el" href="string_8cpp_source.html#l00251">MaxOS::String::c_str()</a>, <a class="el" href="intel__i217_8h_source.html#l00001">length</a>, and <a class="el" href="string_8cpp_source.html#l00902">strncmp()</a>.</p>
 
 </div>
 </div>

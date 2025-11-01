@@ -17,9 +17,7 @@ Inherits \fBMaxOS::common::Event< EthernetDriverEvents >\fP\&.
 .ti -1c
 .RI "\fBBeforeSendEvent\fP (\fBuint8_t\fP *\fBbuffer\fP, \fBuint32_t\fP \fBsize\fP)"
 .br
-.ti -1c
-.RI "\fB~BeforeSendEvent\fP ()"
-.br
+.RI "Construct a new Before Send Event object\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::Event< EthernetDriverEvents >\fP
@@ -28,9 +26,6 @@ Public Member Functions inherited from \fBMaxOS::common::Event< EthernetDriverEv
 .RI "\fBEvent\fP (EthernetDriverEvents \fBtype\fP)"
 .br
 .RI "___________________________ Template Implementation ___________________________ "
-.ti -1c
-.RI "\fB~Event\fP ()"
-.br
 .in -1c
 .SS "Public Attributes"
 
@@ -38,9 +33,11 @@ Public Member Functions inherited from \fBMaxOS::common::Event< EthernetDriverEv
 .ti -1c
 .RI "uint8_t * \fBbuffer\fP"
 .br
+.RI "The buffer to be sent\&. "
 .ti -1c
 .RI "uint32_t \fBsize\fP"
 .br
+.RI "The size of the buffer to be sent\&. "
 .in -1c
 
 Public Attributes inherited from \fBMaxOS::common::Event< EthernetDriverEvents >\fP
@@ -77,37 +74,49 @@ Public Attributes inherited from \fBMaxOS::common::Event< EthernetDriverEvents >
 .PP 
 Event that is triggered before data is sent, holds the buffer and size of the data\&. 
 .PP
-Definition at line \fB31\fP of file \fBethernet\&.h\fP\&.
+Definition at line \fB39\fP of file \fBethernet\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "BeforeSendEvent::BeforeSendEvent (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)"
 
 .PP
-Definition at line \fB182\fP of file \fBethernet\&.cpp\fP\&..PP
+Construct a new Before Send Event object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to send 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+
+.PP
+Definition at line \fB199\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-183 : Event(EthernetDriverEvents::BEFORE_SEND)
-184 {
-185     this \-> buffer = buffer;
-186     this \-> size = size;
-187 }
+200         : Event(EthernetDriverEvents::BEFORE_SEND) {
+201     this\->buffer = buffer;
+202     this\->size = size;
+203 }
 .fi
 
 .PP
 References \fBbuffer\fP, and \fBsize\fP\&.
-.SS "BeforeSendEvent::~BeforeSendEvent ()\fC [default]\fP"
-
 .SH "Member Data Documentation"
 .PP 
 .SS "uint8_t* MaxOS::drivers::ethernet::BeforeSendEvent::buffer"
 
 .PP
-Definition at line \fB33\fP of file \fBethernet\&.h\fP\&.
+The buffer to be sent\&. 
+.PP
+Definition at line \fB41\fP of file \fBethernet\&.h\fP\&.
 .PP
 Referenced by \fBBeforeSendEvent()\fP\&.
 .SS "uint32_t MaxOS::drivers::ethernet::BeforeSendEvent::size"
 
 .PP
-Definition at line \fB34\fP of file \fBethernet\&.h\fP\&.
+The size of the buffer to be sent\&. 
+.PP
+Definition at line \fB42\fP of file \fBethernet\&.h\fP\&.
 .PP
 Referenced by \fBBeforeSendEvent()\fP\&.
 
