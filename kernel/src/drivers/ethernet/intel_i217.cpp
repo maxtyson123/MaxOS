@@ -22,13 +22,7 @@ using namespace memory;
 ///     See OSDEV wiki for the credit for this driver
 
 // Buffer Sizes
-#define buffer256                  (3 << 16)
-#define buffer512                  (2 << 16)
-#define buffer1024                 (1 << 16)
-#define buffer2048                 (0 << 16)
-#define buffer4096                 ((3 << 16) | (1 << 25))
 #define buffer8192                 ((2 << 16) | (1 << 25))
-#define buffer16384                ((1 << 16) | (1 << 25))
 
 ///__DRIVER___
 

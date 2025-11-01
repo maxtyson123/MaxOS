@@ -29,8 +29,12 @@ namespace MaxOS {
 		/**
 		 * @struct SyscallArguments
 		 * @brief The arguments passed to a syscall (simplified representation of values in registers)
+		 *
+		 * @typedef syscall_args_t
+		 * @brief Alias for SyscallArguments struct
 		 */
 		typedef struct SyscallArguments {
+
 			uint64_t arg0;                  ///< First argument (in rdi)
 			uint64_t arg1;                  ///< Second argument (in rsi)
 			uint64_t arg2;                  ///< Third argument (in rdx)
@@ -39,6 +43,7 @@ namespace MaxOS {
 			uint64_t arg5;                  ///< Sixth argument (in r9)
 			uint64_t return_value;          ///< The return value of the syscall (in rax)
 			cpu_status_t* return_state;     ///< The CPU state to return to after the syscall
+
 		} syscall_args_t;
 
 		/// @todo Could use a class based response but a single class might want multiple handlers e.g. fs
@@ -79,9 +84,7 @@ namespace MaxOS {
 				static syscall_args_t* syscall_thread_sleep(syscall_args_t* args);
 				static syscall_args_t* syscall_thread_close(syscall_args_t* args);
 		};
-
 	}
-
 }
 
 #endif //MAXOS_SYSTEM_SYSCALLS_H

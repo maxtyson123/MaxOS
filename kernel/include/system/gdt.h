@@ -10,6 +10,7 @@
 #define MAX_OS_SYSTEM_GDT_H
 
 #include <stdint.h>
+#include <common/macros.h>
 #include <system/multiboot.h>
 
 namespace MaxOS {
@@ -34,11 +35,16 @@ namespace MaxOS {
         /**
          * @struct GDTRegister
          * @brief How the CPU stores the GDT
+         *
+         * @typedef gdtr_t
+         * @brief Alias for GDTRegister struct
          */
-        typedef struct GDTRegister {
+        typedef struct PACKED GDTRegister {
+
             uint16_t size;      ///< The size of the GDT
             uint64_t address;   ///< The address of the GDT
-        } __attribute__((packed)) gdtr_t;
+
+        } gdtr_t;
 
         /**
          * @class GlobalDescriptorTable

@@ -73,7 +73,7 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 	reserve_kernel_regions(multiboot);
 
 	// Initialisation Done
-	m_initialized = true;
+	m_initialised = true;
 	Logger::DEBUG() << "Memory used at start: " << (int) (memory_used() / 1024 / 1024) << "mb \n";
 }
 
@@ -191,7 +191,7 @@ void* PhysicalMemoryManager::allocate_frame() {
 
 	// If not initialised, cant use the bitmap or higher half mapped physical memory so use leftover kernel memory already
 	// mapped in loader.s
-	if (!m_initialized) {
+	if (!m_initialised) {
 
 		// Use frames at the start of the mmap free
 		void* address = (void*)m_mmap->addr + (m_setup_frames * PAGE_SIZE);
@@ -391,7 +391,7 @@ pml_t* PhysicalMemoryManager::get_or_create_table(pml_t* table, size_t index, si
 }
 
 /**
- * @brief Creates a page table entry when the higher half is not initialized
+ * @brief Creates a page table entry when the higher half is not initialised
  *
  * @param parent_table The parent table to create the entry in
  * @param table_index The index of the table to create
@@ -444,7 +444,7 @@ pte_t* PhysicalMemoryManager::get_entry(virtual_address_t* virtual_address, pml_
 	pml_t* pt_table = nullptr;
 
 	// If it is before initialization then cant rely on the direct map
-	if (!m_initialized) {
+	if (!m_initialised) {
 		pdpr_table = get_and_create_table(pml4_table, pml4_index, get_higher_half_table(pml4_index));
 		pd_table = get_and_create_table(pdpr_table, pdpr_index, get_higher_half_table(pdpr_index, pml4_index));
 		pt_table = get_and_create_table(pd_table, pd_index, get_higher_half_table(pd_index, pdpr_index, pml4_index));

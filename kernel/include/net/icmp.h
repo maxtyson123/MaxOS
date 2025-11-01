@@ -21,14 +21,19 @@ namespace MaxOS {
 		/**
 		 * @struct ICMPHeader
 		 * @brief The header of an ICMP packet
+		 *
+		 * @typedef icmp_header_t
+		 * @brief Alias for ICMPHeader struct
 		 */
-		struct ICMPHeader {
+		typedef struct PACKED ICMPHeader {
+
 			uint8_t type;           ///< The type of ICMP message
 			uint8_t code;           ///< The code of the ICMP message
 
 			uint16_t checksum;      ///< Checksum to verify integrity
 			uint32_t data;          ///< Payload data (Varies by type and code)
-		}__attribute__((packed));
+
+		} icmp_header_t;
 
 		/**
 		 * @class InternetControlMessageProtocol

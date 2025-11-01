@@ -21,15 +21,18 @@ namespace MaxOS {
 		/**
 		 * @struct UDPHeader
 		 * @brief The header of a UDP packet
+		 *
+		 * @typedef udp_header_t
+		 * @brief Alias for UDPHeader struct
 		 */
-		struct UDPHeader {
+		typedef struct PACKED UDPHeader {
 
 			uint16_t sourcePort;            ///< The port of the sender
 			uint16_t destinationPort;       ///< The port of the receiver
 			uint16_t length;                ///< The length of the UDP header and data
 			uint16_t checksum;              ///< The checksum of the header and data
 
-		} __attribute__((packed));
+		} udp_header_t;
 
 		/**
 		 * @enum UDPEvents
@@ -43,7 +46,7 @@ namespace MaxOS {
 		class UDPSocket;
 		class UserDatagramProtocolHandler;
 
-		typedef uint16_t UserDatagramProtocolPort;
+		typedef uint16_t UserDatagramProtocolPort;      ///< UDP port @todo: Make UDPPort class and do udp_port_t (or generic port that can be used for TCP and UDP)
 
 		/**
 		 * @class UDPDataReceivedEvent

@@ -23,23 +23,31 @@ namespace MaxOS {
 		/**
 		 * @struct EthernetFrameHeader
 		 * @brief Structure the raw data. This is the header of an Ethernet Frame
+		 *
+		 * @typedef ethernet_frame_header_t
+		 * @brief Alias for EthernetFrameHeader struct
 		 */
-		struct EthernetFrameHeader {
+		typedef struct PACKED EthernetFrameHeader {
 
 			uint64_t destinationMAC: 48;     ///< The mac address of the target (Big Endian)
 			uint64_t sourceMAC: 48;          ///< The mac address of the sender (Big Endian)
 
 			uint16_t type;                  ///< The type (Big Endian) 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6
 
-		}__attribute__ ((packed));
+		} ethernet_frame_header_t;
 
 		/**
 		 * @struct EthernetFrameFooter
 		 * @brief Structure the raw data. This is the footer of an Ethernet Frame
+		 *
+		 * @typedef ethernet_frame_footer_t
+		 * @brief Alias for EthernetFrameFooter struct
 		 */
-		struct EthernetFrameFooter {
+		typedef struct PACKED EthernetFrameFooter {
+
 			uint32_t checksum;          	///< Checksum of the payload
-		}__attribute__ ((packed));
+
+		} ethernet_frame_footer_t;
 
 		class EthernetFrameHandler;
 

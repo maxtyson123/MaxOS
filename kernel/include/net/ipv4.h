@@ -16,14 +16,18 @@ namespace MaxOS {
 
 	namespace net {
 
-		typedef uint32_t InternetProtocolAddress;
-		typedef uint32_t SubnetMask;
+		typedef uint32_t InternetProtocolAddress;   ///< An IPv4 address @todo: Make IPv4Address class and do ip_t
+		typedef uint32_t SubnetMask;                ///< A subnet mask @todo: Make SubnetMask class and do subnetmask_t
 
 		/**
 		 * @struct IPV4Header
 		 * @brief The header of an IPv4 packet
+		 *
+		 * @typedef ipv4_header_t
+		 * @brief Alias for IPV4Header struct
 		 */
-		struct IPV4Header {
+		typedef struct PACKED IPV4Header {
+
 			uint8_t headerLength: 4;        ///< The length of the header in 32-bit words (min 5, max 15)
 			uint8_t version: 4;             ///< The version of the IP protocol (4 for IPv4)
 			uint8_t typeOfService;          ///< The type of service (low delay, high throughput, high reliability, etc. @todo: enum
@@ -38,7 +42,8 @@ namespace MaxOS {
 
 			uint32_t sourceIP;              ///< The IP of the sender
 			uint32_t destinationIP;         ///< The IP of the receiver
-		} __attribute__((packed));
+
+		} ipv4_header_t;
 
 		class InternetProtocolHandler;
 

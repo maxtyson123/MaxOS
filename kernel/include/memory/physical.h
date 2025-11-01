@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <common/macros.h>
 #include <system/multiboot.h>
 
 #include <common/spinlock.h>
@@ -19,23 +20,25 @@ namespace MaxOS {
 
 	namespace memory {
 
-		#define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))
-		#define PMLX_GET_INDEX(ADDR, LEVEL) (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))
+		#define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))                  ///< Convert page map level indices to a virtual address
+		#define PMLX_GET_INDEX(ADDR, LEVEL) (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))      ///< Get the index for a given page map level from a virtual address
 
-		#define PML4_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 3)
-		#define PML3_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 2)
-		#define PML2_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 1)
-		#define PML1_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 0)
+		#define PML4_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 3)    ///< Get the PML4 index from a virtual address
+		#define PML3_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 2)    ///< Get the PDPT index from a virtual address
+		#define PML2_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 1)    ///< Get the PDP index from a virtual address
+		#define PML1_GET_INDEX(ADDR) PMLX_GET_INDEX(ADDR, 0)    ///< Get the PT index from a virtual address
 
-		// Useful for readability
-		typedef void virtual_address_t;
-		typedef void physical_address_t;
+		typedef void virtual_address_t;     ///< A type representing a virtual address (used for readability)
+		typedef void physical_address_t;    ///< A type representing a physical address (used for readability)
 
 		/**
 		 * @enum PageFlags
 		 * @brief Flags for page table entries
 		 *
-		 * @todo: fix. this is stupid. Leave as enum not enum class for bitwise operations
+		 * @typedef page_flags_t
+		 * @brief Alias for PageFlags enum
+		 *
+		 * @todo: fix. this is stupid: Leave as enum not enum class for bitwise operations
 		 */
 		typedef enum PageFlags {
 			NONE            = 0,                ///< No flags
@@ -54,8 +57,12 @@ namespace MaxOS {
 		/**
 		 * @struct PageTableEntry
 		 * @brief Struct for a page table entry
+		 *
+		 * @typedef pte_t
+		 * @brief Alias for PageTableEntry struct
 		 */
-		typedef struct PageTableEntry {
+		typedef struct PACKED PageTableEntry {
+
 			bool present: 1;                    ///< *copydoc PageFlags::PRESENT
 			bool write: 1;                      ///< *copydoc PageFlags::WRITE
 			bool user: 1;                       ///< *copydoc PageFlags::USER
@@ -67,16 +74,21 @@ namespace MaxOS {
 			bool global: 1;                     ///< *copydoc PageFlags::GLOBAL
 			uint8_t available: 3;               ///< Extra metadata bytes available for OS use
 			uint64_t physical_address: 52;      ///< The address the page represents in memory
-		} __attribute__((packed)) pte_t;
+
+		} pte_t;
 
 		/**
 		 * @struct PageMapLevel
 		 * @brief Struct for a page map level (PML4, PDPT, PD, PT)
+		 *
+		 * @typedef pml_t
+		 * @brief Alias for PageMapLevel struct
 		 */
-		typedef struct PageMapLevel {
-			pte_t entries[512];             ///< The entries in this page map level. If it is a PT then these are page table entries, otherwise they are pointers to the next level. Indexed by the relevant bits in the virtual address.
-		} __attribute__((packed)) pml_t;
+		typedef struct PACKED PageMapLevel {
 
+			pte_t entries[512];             ///< The entries in this page map level. If it is a PT then these are page table entries, otherwise they are pointers to the next level. Indexed by the relevant bits in the virtual address.
+
+		} pml_t;
 
 		constexpr uint64_t PAGE_SIZE = 0x1000;      ///< The size of a page (4KB)
 		constexpr uint8_t  ROW_BITS = 64;           ///< The number of bits in the bitmap row
@@ -114,7 +126,7 @@ namespace MaxOS {
 				uint64_t* m_pml4_root_address;
 				pte_t* m_pml4_root;
 
-				bool m_initialized;
+				bool m_initialised;
 				bool m_nx_allowed;
 
 				common::Spinlock m_lock;

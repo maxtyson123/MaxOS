@@ -122,6 +122,9 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 /**
+ * @todo Proper file formatting
+ * @todo Full doxygen comments
+ * @todo Kernel configuration (debug/release)
  * @todo Clean up warnings
  * @todo Test suite of common functions & other statics (paths)
  * @todo Thread storage (when clib)

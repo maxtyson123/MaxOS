@@ -135,23 +135,20 @@ namespace MaxOS{
 
         };
 
-        typedef WidgetMoverResizer<1, 1, 0, 0> WidgetMover;
+        typedef WidgetMoverResizer<1, 1, 0, 0> WidgetMover;                         ///< A widget mover that moves the widget without resizing it
 
-        typedef WidgetMoverResizer<0, 1, 0, -1> WidgetMoverResizerTop;
-        typedef WidgetMoverResizer<0, 0, 0, 1> WidgetMoverResizerBottom;
-        typedef WidgetMoverResizer<1, 0, -1, 0> WidgetMoverResizerLeft;
-        typedef WidgetMoverResizer<0, 0, 1, 0> WidgetMoverResizerRight;
+        typedef WidgetMoverResizer<0, 1, 0, -1> WidgetMoverResizerTop;              ///< A widget mover and resizer that resizes the top edge of the widget
+        typedef WidgetMoverResizer<0, 0, 0, 1> WidgetMoverResizerBottom;            ///< A widget mover andresizer that resizes the bottom edge of  the widget
+        typedef WidgetMoverResizer<1, 0, -1, 0> WidgetMoverResizerLeft;             ///< A widget mover and resizer that resizes the left edge of the widget
+        typedef WidgetMoverResizer<0, 0, 1, 0> WidgetMoverResizerRight;             ///< A widget mover and resizer that resizes the right edge of the widget
 
-        typedef WidgetMoverResizer<1, 1, -1, -1> WidgetMoverResizerTopLeft;
-        typedef WidgetMoverResizer<0, 1, 1, -1> WidgetMoverResizerTopRight;
-        typedef WidgetMoverResizer<1, 0, -1, 1> WidgetMoverResizerBottomLeft;
-        typedef WidgetMoverResizer<0, 0, 1, 1> WidgetMoverResizerBottomRight;
+        typedef WidgetMoverResizer<1, 1, -1, -1> WidgetMoverResizerTopLeft;         ///< A widget mover and resizer that resizes the top-left corner of the widget
+        typedef WidgetMoverResizer<0, 1, 1, -1> WidgetMoverResizerTopRight;         ///< A widget mover and resizer that resizes the top-right corner of the widget
+        typedef WidgetMoverResizer<1, 0, -1, 1> WidgetMoverResizerBottomLeft;       ///< A widget mover and resizer that resizes the bottom-left corner of the widget
+        typedef WidgetMoverResizer<0, 0, 1, 1> WidgetMoverResizerBottomRight;       ///< A widget mover and resizer that resizes the bottom-right corner of the widget
 
-
-        ///________________________________Tempaltes________________________________///
+		////@TODO move this to the cpp file
         /**
-
-
         * @details WidgetMoverResizer is a template class that allows you to move and resize a widget
         *
         * @tparam Left The left edge of the widget

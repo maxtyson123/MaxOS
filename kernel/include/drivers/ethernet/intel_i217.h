@@ -11,6 +11,7 @@
 
 #include <stddef.h>
 #include <common/outputStream.h>
+#include <common/macros.h>
 #include <drivers/driver.h>
 #include <hardwarecommunication/pci.h>
 #include <hardwarecommunication/interrupts.h>
@@ -25,31 +26,45 @@ namespace MaxOS{
 
         namespace ethernet{
 
+			/**
+			 * @struct ReceiveDescriptor
+			 * @brief The receive descriptor for the Intel I217 Ethernet Controller
+			 *
+			 * @typedef receive_descriptor_t
+			 * @brief Alias for ReceiveDescriptor struct
+			 */
+	        typedef struct PACKED ReceiveDescriptor {
+		        uint64_t bufferAddress;              ///< The address of the receive buffer
+		        uint16_t length;                     ///< The length of the received frame
+		        uint16_t checksum;                   ///< The checksum of the received frame
+		        uint8_t status;                      ///< The status of the received frame
+		        uint8_t errors;                      ///< Any errors that occurred
+		        uint16_t special;                    ///< Special
+	        } receive_descriptor_t;
+
+			/**
+			 * @struct SendDescriptor
+			 * @brief The send descriptor for the Intel I217 Ethernet Controller
+			 *
+			 * @typedef send_descriptor_t
+			 * @brief Alias for SendDescriptor struct
+			 */
+	        typedef struct PACKED SendDescriptor {
+		        uint64_t bufferAddress;             ///< The address of the send buffer
+		        uint16_t length;                    ///< The length of the send frame
+		        uint8_t cso;                        ///< The checksum offset
+		        uint8_t cmd;                        ///< The command
+		        uint8_t status;                     ///< The status
+		        uint8_t css;                        ///< The checksum start
+		        uint16_t special;                   ///< Special
+	        } send_descriptor_t;
+
 
             /**
              * @class IntelI217
              * @brief Driver for the Intel I217 Ethernet Controller
              */
             class IntelI217 : public EthernetDriver, public hardwarecommunication::InterruptHandler {
-
-                struct receiveDescriptor {
-                    uint64_t bufferAddress;              // The address of the receive buffer
-                    uint16_t length;                     // The length of the received frame
-                    uint16_t checksum;                   // The checksum of the received frame
-                    uint8_t status;                      // The status of the received frame
-                    uint8_t errors;                      // Any errors that occurred
-                    uint16_t special;                    // Special
-                } __attribute__((packed));
-
-                struct sendDescriptor {
-                    uint64_t bufferAddress;             // The address of the send buffer
-                    uint16_t length;                    // The length of the send frame
-                    uint8_t cso;                        // The checksum offset
-                    uint8_t cmd;                        // The command
-                    uint8_t status;                     // The status
-                    uint8_t css;                        // The checksum start
-                    uint16_t special;                   // Special
-                } __attribute__((packed));
 
                 uint8_t bar_type = { 0 };
                 uint16_t portBase = { 0 };

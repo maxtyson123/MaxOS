@@ -103,8 +103,12 @@ namespace MaxOS {
 		/**
 		 * @struct ELFHeader64
 		 * @brief The header of a 64-bit ELF file
+		 *
+		 * @typedef elf_64_header_t
+		 * @brief Alias for ELFHeader64 struct
 		 */
 		typedef struct ELFHeader64 {
+
 			unsigned char identification[16];   ///< Identifies the file as an ELF file and contains metadata about the file (class, data encoding, version, OS ABI, etc.)
 			uint16_t type;                      ///< The type of the ELF file (see ELFType)
 			uint16_t machine;                   ///< The target architecture of the ELF file (see ELFMachine)
@@ -119,6 +123,7 @@ namespace MaxOS {
 			uint16_t section_header_size;       ///< The size of each entry in the section header table
 			uint16_t section_header_count;      ///< The number of entries in the section header table
 			uint16_t section_header_string_table_index; ///< Where the section header string table is located (index into the section header table)
+
 		} elf_64_header_t;
 
 		/**
@@ -150,8 +155,12 @@ namespace MaxOS {
 		/**
 		 * @struct ELFProgramHeader64
 		 * @brief The header for the program segments in a 64-bit ELF file
+		 *
+		 * @typedef elf_64_program_header_t
+		 * @brief Alias for ELFProgramHeader64 struct
 		 */
 		typedef struct ELFProgramHeader64 {
+
 			uint32_t type;                  ///< The type of the program header (see ELFProgramType)
 			uint32_t flags;                 ///< The flags of the program header (see ELFProgramFlags)
 			uint64_t offset;                ///< The offset in the file where the segment is located
@@ -160,6 +169,7 @@ namespace MaxOS {
 			uint64_t file_size;             ///< The size of the segment in the file
 			uint64_t memory_size;           ///< The size of the segment in memory (should be >= file_size)
 			uint64_t align;                 ///< The required alignment of the segment in memory (normally 2^n)
+
 		} elf_64_program_header_t;
 
 		/**
@@ -181,8 +191,12 @@ namespace MaxOS {
 		/**
 		 * @struct ELFSectionHeader64
 		 * @brief The header for the sections in a 64-bit ELF file
+		 *
+		 * @typedef elf_64_section_header_t
+		 * @brief Alias for ELFSectionHeader64 struct
 		 */
 		typedef struct ELFSectionHeader64 {
+
 			uint32_t name_index;            ///< The index into the section header string table where the name of this section is located
 			uint32_t type;                  ///< The type of the section (see ELFSectionType)
 			uint64_t sh_flags;              ///< The flags of the section (see ELFSectionFlags)
@@ -193,6 +207,7 @@ namespace MaxOS {
 			uint32_t info;                  ///< Extra information (meaning depends on section type)
 			uint64_t address_alignment;     ///< The required alignment of the section in memory (normally 2^n)
 			uint64_t entry_size;            ///< The size of each entry in the section if it contains a table of fixed-size entries
+
 		} elf_64_section_header_t;
 
 		/**

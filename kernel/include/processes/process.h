@@ -20,12 +20,19 @@
 #include <processes/elf.h>
 #include <processes/resource.h>
 
-
 namespace MaxOS
 {
     namespace processes
     {
+	    class Process;
 
+		/**
+		 * @enum ThreadState
+		 * @brief The different operational states a thread can be in
+		 *
+		 * @typedef thread_state_t
+		 * @brief Alias for ThreadState enum
+		 */
         typedef enum class ThreadState{
             NEW,
             RUNNING,
@@ -35,9 +42,7 @@ namespace MaxOS
             STOPPED
         } thread_state_t;
 
-
-        // Forward declaration
-        class Process;
+		/// The size of the stack for each thread (4KB)
 		constexpr size_t STACK_SIZE = 0x10000;
 
         /**

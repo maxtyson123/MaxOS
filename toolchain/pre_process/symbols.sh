@@ -75,15 +75,19 @@ namespace MaxOS{
 
 	namespace common{
 
-	 	 	/**
-   		 * @struct KernelSymbol
-   		 * @brief Holds the address and name of a kernel symbol
-   		 */
+	 		/**
+      * @struct KernelSymbol
+      * @brief Holds the address and name of a kernel symbol
+      *
+      * @typedef kernel_sym_t
+      * @brief alias for KernelSymbol
+      */
    		typedef struct KernelSymbol {
    			uintptr_t address;              ///< The address of the symbol (loaded address)
    			const char* name;               ///< The stripped name of the symbol (including namespaces)
    		} kernel_sym_t;
 
+     /// Holds a list of address/name pairs for kernel symbols
 		const kernel_sym_t kernel_symbols[] = {
 EOF
 if [ ! -s "$RAW" ]; then
@@ -134,6 +138,8 @@ fi
 # Write the footer
 cat >> "$OUT" <<EOF
     };
+
+    /// The number of symbols detected to be in the kernel
 		constexpr size_t KERNEL_SYMBOLS_COUNT = $COUNT;
 
 		const char* resolve_symbol(uintptr_t rip, uintptr_t link_base = memory::HIGHER_HALF_KERNEL_OFFSET, uintptr_t load_base = memory::HIGHER_HALF_KERNEL_OFFSET);

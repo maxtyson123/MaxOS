@@ -9,6 +9,7 @@
 #ifndef MAXOS_HARDWARECOMMUNICATION_APIC_H
 #define MAXOS_HARDWARECOMMUNICATION_APIC_H
 
+#include <common/macros.h>
 #include <hardwarecommunication/port.h>
 #include <hardwarecommunication/acpi.h>
 #include <memory/physical.h>
@@ -47,21 +48,27 @@ namespace MaxOS {
 		 * @struct MADT
 		 * @brief Multiple APIC Description Table (MADT) (ACPI 2 or higher). Provides information about the APICs in
 		 * the system. Following this header are multiple entries describing the APICs (see MADTEntry).
+		 *
+		 * @typedef madt_t
+		 * @brief Alias for MADT struct
 		 */
-		typedef struct MADT {
+		typedef struct PACKED MADT {
 			ACPISDTHeader header;               ///< Common ACPI SDT header
 			uint32_t local_apic_address;        ///< The physical address of the local APIC
 			uint32_t flags;                     ///< Flags indicating the capabilities of the system (1 = Legacy PICs are present)
-		} __attribute__((packed)) madt_t;
+		} madt_t;
 
 		/**
 		 * @struct MADTEntry
 		 * @brief An item in the MADT table
+		 *
+		 * @typedef madt_entry_t
+		 * @brief Alias for MADTEntry struct
 		 */
-		typedef struct MADTEntry {
+		typedef struct PACKED MADTEntry {
 			uint8_t type;       ///< The type of the MADT entry (see MADT_TYPE)
 			uint8_t length;     ///< How many bytes this entry takes up (including the type and length fields)
-		} __attribute__((packed)) madt_entry_t;
+		} madt_entry_t;
 
 		/**
 		 * @enum MADT_TYPE
@@ -81,31 +88,40 @@ namespace MaxOS {
 		 * @struct MADT_IO_APIC
 		 * @brief An entry in the MADT table describing an IO APIC
 		 *
+		 * @typedef madt_io_apic_t
+		 * @brief Alias for MADT_IO_APIC struct
+		 *
 		 * @todo Rename for consistency
 		 */
-		typedef struct MADT_IO_APIC {
+		typedef struct PACKED MADT_IO_APIC {
 			uint8_t io_apic_id;                         ///< The ID of the IO APIC
 			uint8_t reserved;                           ///< Reserved
 			uint32_t io_apic_address;                   ///< The physical address of the IO APIC
 			uint32_t global_system_interrupt_base;      ///< The first GSI number that this IO APIC handles
-		} __attribute__((packed)) madt_io_apic_t;
+		} madt_io_apic_t;
 
 		/**
 		 * @struct MADT_PROCESSOR_APIC
 		 * @brief An entry in the MADT table describing a processor local APIC
+		 *
+		 * @typedef madt_processor_apic_t
+		 * @brief Alias for MADT_PROCESSOR_APIC struct
 		 */
-		typedef struct MADT_PROCESSOR_APIC {
+		typedef struct PACKED MADT_PROCESSOR_APIC {
 			uint8_t processor_id;   ///< The ID for the core
 			uint8_t apic_id;        ///< The ID for the APIC that the core uses
 			uint32_t flags;         ///< Flags indicating the status of the core (bit 0 = core enabled, bit 1 = can be enabled)
-		} __attribute__((packed)) madt_processor_apic_t;
+		} madt_processor_apic_t;
 
 		/**
-		 * @struct RedirectionEntry
+		 * @union RedirectionEntry
 		 * @brief An IO APIC redirection entry. Describes how an interrupt is routed.
+		 *
+		 * @typedef redirection_entry_t
+		 * @brief Alias for RedirectionEntry union
 		 */
 		typedef union RedirectionEntry {
-			struct {
+			struct PACKED {
 				uint64_t vector: 8;             ///< The interrupt that will be triggered when this redirection entry is used
 				uint64_t delivery_mode: 3;      ///< How the interrupt will be delvied to the core(s) (see DeliveryMode)
 				uint64_t destination_mode: 1;   ///< How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores)
@@ -116,7 +132,7 @@ namespace MaxOS {
 				uint64_t mask: 1;               ///< Whether the interrupt is disabled or not
 				uint64_t reserved: 39;          ///< Reserved bits (should be zero)
 				uint64_t destination: 8;        ///< The core(s) the interrupt should be sent to (interpreted based on destination_mode)
-			} __attribute__((packed));          ///< Packed because the bitfields should be one uint64_t together
+			};          ///< Packed because the bitfields should be one uint64_t together
 
 			uint64_t raw;   					///< The raw 64-bit value of the redirection entry
 		} redirection_entry_t;
@@ -139,8 +155,12 @@ namespace MaxOS {
 		/**
 		 * @struct InterruptRedirect
 		 * @brief Defines how an interrupt input is redirected to a specific processor via the I/O APIC
+		 *
+		 * @typedef interrupt_redirect_t
+		 * @brief Alias for InterruptRedirect struct
 		 */
 		typedef struct InterruptRedirect {
+
 			uint8_t type;           ///< The type of redirect (should be 0 for normal interrupts)
 			uint8_t index;          ///< Where in the IO APIC redirection table this redirect should be placed
 			uint8_t interrupt;      ///< The interrupt number to trigger when this redirect is used
@@ -153,13 +173,18 @@ namespace MaxOS {
 		/**
 		 * @struct Override
 		 * @brief Specifies how a specific interrupt source is mapped to a global system interrupt
+		 *
+		 * @typedef override_t
+		 * @brief Alias for Override struct
 		 */
-		typedef struct Override {
+		typedef struct PACKED Override {
+
 			uint8_t bus;                        ///< Identifies the hardware bus the interrupt comes from (0 = ISA, 1 = PCI)
 			uint8_t source;                     ///< The interrupt source number on the specified bus
 			uint32_t global_system_interrupt;   ///< The global system interrupt that the source is mapped to
 			uint16_t flags;                     ///< Flags describing the polarity and trigger mode of the interrupt source (see MADT override flags)
-		} __attribute__((packed)) override_t;
+
+		} override_t;
 
 		/**
 		 * @class IOAPIC

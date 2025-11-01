@@ -21,7 +21,6 @@ namespace MaxOS {
 
 		namespace partition {
 
-
 			/// Credit: http://www.osdever.net/documents/pdf/partitiontypes.pdf
 			enum class PartitionType {
 				EMPTY,                 // 0x00
@@ -302,8 +301,11 @@ namespace MaxOS {
 			/**
 			 * @struct PartitionTableEntry
 			 * @brief Stores information about a partition
+			 *
+			 * @typedef partition_table_entry_t
+			 * @brief Alias for PartitionTableEntry struct
 			 */
-			struct PartitionTableEntry {
+			typedef struct PACKED PartitionTableEntry {
 
 				uint8_t bootable;               	///< Is this partition bootable? (0x80 = bootable, 0x00 = not bootable)
 
@@ -320,13 +322,16 @@ namespace MaxOS {
 				uint32_t start_LBA;                 ///< The starting LBA of the partition
 				uint32_t length;                    ///< The length of the partition in sectors
 
-			} __attribute__((packed));
+			} partition_table_entry_t;
 
 			/**
 			 * @struct MasterBootRecord
 			 * @brief Stores information about the master boot record
+			 *
+			 * @typedef master_boot_record_t
+			 * @brief Alias for MasterBootRecord struct
 			 */
-			struct MasterBootRecord {
+			typedef struct PACKED MasterBootRecord {
 
 				uint8_t bootloader[440];                        ///< The assembly bytes that make up the bootloader software
 				uint32_t disk_signature;                        ///< Unique disk signature (optional)
@@ -336,7 +341,7 @@ namespace MaxOS {
 
 				uint16_t magic;                                 ///< The magic number that identifies this as a valid MBR (0xAA55)
 
-			} __attribute__((packed));
+			} master_boot_record_t;
 
 
 			/**

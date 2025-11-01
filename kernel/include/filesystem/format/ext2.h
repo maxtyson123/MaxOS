@@ -9,12 +9,13 @@
 #ifndef MAXOS_FILESYSTEM_EXT2_H
 #define MAXOS_FILESYSTEM_EXT2_H
 
-#include <drivers/disk/disk.h>
-#include <filesystem/filesystem.h>
 #include <stdint.h>
-#include <memory/memoryIO.h>
 #include <common/spinlock.h>
+#include <common/macros.h>
+#include <drivers/disk/disk.h>
 #include <drivers/clock/clock.h>
+#include <filesystem/filesystem.h>
+#include <memory/memoryIO.h>
 
 namespace MaxOS {
 	namespace filesystem {
@@ -24,8 +25,11 @@ namespace MaxOS {
 				/**
 				 * @struct SuperBlock
 				 * @brief The metadata of the ext2 filesystem. Found at an offset of 1024 bytes from the start of the partition.
+				 *
+				 * @typedef superblock_t
+				 * @brief Alias for SuperBlock struct
 				 */
-				typedef struct SuperBlock {
+				typedef struct PACKED SuperBlock {
 					uint32_t total_inodes;                  ///< Total number of inodes
 					uint32_t total_blocks;                  ///< Total number of blocks
 					uint32_t reserved_blocks;               ///< Number of reserved blocks for superuser
@@ -72,7 +76,7 @@ namespace MaxOS {
 					uint32_t orphan_inodes_start;           ///< The start of the list of inodes without a directory entry that need to be deleted
 					uint8_t free[276];                      ///< Reserved for future expansion
 
-				} __attribute__((packed)) superblock_t;
+				} superblock_t;
 
 				/**
 				 * @enum FileSystemState
@@ -145,9 +149,12 @@ namespace MaxOS {
 				 * @struct BlockGroupDescriptor
 				 * @brief The metadata for a block group in ext2
 				 *
+				 * @typedef block_group_descriptor_t
+				 * @brief Alias for BlockGroupDescriptor struct
+				 *
 				 * @todo Support updating directory_count when creating/deleting directories
 				 */
-				typedef struct BlockGroupDescriptor {
+				typedef struct PACKED BlockGroupDescriptor {
 					uint32_t block_usage_bitmap;            ///< The block address of the block usage bitmap
 					uint32_t block_inode_bitmap;            ///< The block address of the inode usage bitmap
 					uint32_t inode_table_address;           ///< The starting block address of the inode table
@@ -156,13 +163,16 @@ namespace MaxOS {
 					uint16_t directory_count;               ///< How many directories are in this block group
 					uint8_t free[14];                       ///< Reserved for future expansion
 
-				} __attribute__((packed)) block_group_descriptor_t;
+				} block_group_descriptor_t;
 
 				/**
 				 * @struct Inode
 				 * @brief The metadata for a file or directory in ext2
+				 *
+				 * @typedef inode_t
+				 * @brief Alias for Inode struct
 				 */
-				typedef struct Inode {
+				typedef struct PACKED Inode {
 					union {
 						uint16_t type_permissions;          ///< The type and permissions of the inode
 						struct {
@@ -189,7 +199,7 @@ namespace MaxOS {
 					uint32_t extended_attribute;            ///< File extended attribute block (Access Control List)
 					uint32_t size_upper;                    ///< The upper 32 bits of the size of the file in bytes (for files larger than 4GB). If this is a directory, this is the Directory Access Control List.
 					uint32_t os_2[3];                       ///< Second OS specific value (see InodeOS2Linux, ...)
-				} __attribute__((packed)) inode_t;
+				} inode_t;
 
 				/**
 				 * @enum InodeType
@@ -258,28 +268,34 @@ namespace MaxOS {
 				 * @struct InodeOS2Linux
 				 * @brief The OS specific data for Linux created ext2 inodes
 				 *
+				 * @typedef linux_os_2_t
+				 * @brief Alias for InodeOS2Linux struct
+				 *
 				 * @todo HURD, MASIX
 				 */
-				typedef struct InodeOS2Linux {
+				typedef struct PACKED InodeOS2Linux {
 					uint8_t fragment;                   ///<  The fragment number
 					uint8_t fragment_size;              ///<  How many 1024 byte fragments are in the file
 					uint16_t high_type_permissions;     ///<  The high bits of the type & permissions
 					uint16_t high_user_id;              ///<  The high bits of the user ID
 					uint16_t high_group_id;             ///<  The high bits of the group ID
 					uint32_t author_id;                 ///<  The user who created the inode (0xFFFFFFFF if use UID/GID fields)
-				} __attribute__((packed)) linux_os_2_t;
+				} linux_os_2_t;
 
 				/**
 				 * @struct DirectoryEntry
 				 * @brief An entry in a directory that points to a file or subdirectory (the name follows this struct)
+				 *
+				 * @typedef directory_entry_t
+				 * @brief Alias for DirectoryEntry struct
 				 */
-				typedef struct DirectoryEntry {
+				typedef struct PACKED DirectoryEntry {
 					uint32_t inode;         ///<  The inode number this entry points to (0 = unused)
 					uint16_t size;          ///<  The total size of this entry (including name)
 					uint8_t name_length;    ///<  The length of the name
 					uint8_t type;           ///<  The type of the entry (see EntryType) (only if the high bit of the superblock's optional_features is set)
 					// Rest are name chars
-				} __attribute__((packed)) directory_entry_t;
+				} directory_entry_t;
 
 				/**
 				 * @enum EntryType

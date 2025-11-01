@@ -25,12 +25,20 @@ namespace MaxOS {
 
 		namespace peripherals {
 
+			/**
+			 * @enum ScanCodeType
+			 * @brief The type of scan code being sent by the keyboard
+			 */
 			enum class ScanCodeType : int {
 				REGULAR,
-				EXTENDED,
+				EXTENDED,237
 				EXTENDED_BUFFER
 			};
 
+			/**
+			 * @enum KeyCode
+			 * @brief A mapping of key codes to their values
+			 */
 			enum class KeyCode : uint16_t {
 
 				// Alphabet
@@ -213,20 +221,24 @@ namespace MaxOS {
 					~KeyboardState();
 
 					// Left and Right
-					bool left_shift     = false;    ///< Is the left shift key pressed
-					bool right_shift    = false;    ///< Is the right shift key pressed
-					bool left_control   = false;    ///< Is the left control key pressed
-					bool right_control  = false;    ///< Is the right control key pressed
-					bool left_alt       = false;    ///< Is the left alt key pressed
-					bool right_alt      = false;    ///< Is the right alt key pressed
+					bool left_shift = false;    ///< Is the left shift key pressed
+					bool right_shift = false;    ///< Is the right shift key pressed
+					bool left_control = false;    ///< Is the left control key pressed
+					bool right_control = false;    ///< Is the right control key pressed
+					bool left_alt = false;    ///< Is the left alt key pressed
+					bool right_alt = false;    ///< Is the right alt key pressed
 
 					// Other Stuff
-					bool caps_lock          = false; ///< Is caps lock enabled
-					bool number_pad_lock    = false; ///< Is number pad lock enabled
-					bool scroll_lock        = false; ///< Is scroll lock enabled
+					bool caps_lock = false; ///< Is caps lock enabled
+					bool number_pad_lock = false; ///< Is number pad lock enabled
+					bool scroll_lock = false; ///< Is scroll lock enabled
 			};
 
-			enum KeyboardEvents {
+			/**
+			 * @enum KeyboardEvents
+			 * @brief The events that can be triggered by the Keyboard Driver
+			 */
+			enum class KeyboardEvents {f
 				KEYDOWN,
 				KEYUP
 			};
@@ -279,11 +291,11 @@ namespace MaxOS {
 			class KeyboardInterpreter : public common::InputStreamEventHandler<uint8_t>, public common::EventManager<KeyboardEvents> {
 
 				protected:
-					KeyboardState m_keyboard_state;             		///< The current state of what special keys are pressed on the keyboard
+					KeyboardState m_keyboard_state;                    ///< The current state of what special keys are pressed on the keyboard
 
-					bool        m_next_is_first_extended_code = false;  ///< If true, the next code should be interpreted as an extended code (set when receiving 0xE0)
-					uint8_t     m_extended_scan_code_bytes = 0;      	///< How many bytes are left to read for the current extended scan code
-					uint16_t    m_extended_code_buffer = 0;             ///< The storage for scan codes that take more than one byte
+					bool m_next_is_first_extended_code = false;  ///< If true, the next code should be interpreted as an extended code (set when receiving 0xE0)
+					uint8_t m_extended_scan_code_bytes = 0;        ///< How many bytes are left to read for the current extended scan code
+					uint16_t m_extended_code_buffer = 0;             ///< The storage for scan codes that take more than one byte
 
 				public:
 					KeyboardInterpreter();

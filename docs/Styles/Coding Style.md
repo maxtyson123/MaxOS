@@ -2,13 +2,15 @@
 # MaxOS C++ coding style
 
 
+TODO: order import alphabetically (libc then project headers last), must typedef structs
+
 This document describes the coding style used for C++ code in the Max Operating System project. All new code should conform to this style.
 
 ### Names
 
 A combination of CamelCase, snake\_case, and SCREAMING\_CASE:
 
-- Use CamelCase (Capitalize the m_first_memory_chunk letter, including all letters in an acronym) in a class, struct, or namespace name
+- Use CamelCase (Capitalise the m_first_memory_chunk letter, including all letters in an acronym) in a class, struct, or namespace name
 - Use snake\_case (all lowercase, with underscores separating words) for variable and function names
 - Use SCREAMING\_CASE for constants (both global and static member variables)
 
@@ -145,7 +147,7 @@ Prefer `const` to `#define`. Prefer inline functions to macros.
 
 ### Other Punctuation
 
-Constructors for C++ classes should initialize their members using C++ initializer syntax. Each member (and superclass) should be indented on a separate line, with the colon or comma preceding the member on that line. Prefer initialization at member definition whenever possible.
+Constructors for C++ classes should initialise their members using C++ initialiser syntax. Each member (and superclass) should be indented on a separate line, with the colon or comma preceding the member on that line. Prefer initialization at member definition whenever possible.
 
 ###### Right:
 

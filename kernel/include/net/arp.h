@@ -20,8 +20,11 @@ namespace MaxOS {
 		/**
 		 * @struct ARPMessage
 		 * @brief An ARP message
+		 *
+		 * @typedef arp_message_t
+		 * @brief Alias for ARPMessage struct
 		 */
-		struct ARPMessage {
+		typedef struct PACKED ARPMessage {
 
 			uint16_t hardwareType;          ///< The type of device that sent the ARP message (1 = Ethernet)
 			uint16_t protocol;              ///< The protocol being used (0x0800 = IPv4)
@@ -36,7 +39,7 @@ namespace MaxOS {
 			uint32_t dstIP;                 ///< The IP address of the target
 
 
-		}__attribute__((packed));
+		} arp_message_t;
 
 		/**
 		 * @class AddressResolutionProtocol

@@ -71,12 +71,17 @@ namespace MaxOS {
 			/**
 			 * @struct PITCommand
 			 * @brief The command byte to send to the PIT, specifies the channel, access mode, operating mode and BCD mode
+			 *
+			 * @typedef pit_command_t
+			 * @brief Alias for PITCommand struct
 			 */
 			typedef struct PITCommand {
+
 				uint8_t bcd_mode:       1;      ///< 0 = binary, 1 = BCD
 				uint8_t operating_mode: 3;      ///< What mode the PIT should operate in
 				uint8_t access_mode:    2;      ///< How the data is accessed
 				uint8_t channel:        2;      ///< Which channel to configure
+
 			} pit_command_t;
 
 
@@ -162,7 +167,7 @@ namespace MaxOS {
 					string device_name() final;
 
 					static Clock* active_clock();
-					common::Time get_time();
+					common::time_t get_time();
 			};
 
 		}

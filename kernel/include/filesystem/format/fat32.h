@@ -13,19 +13,23 @@
 #ifndef MAXOS_FILESYSTEM_FAT32_H
 #define MAXOS_FILESYSTEM_FAT32_H
 
+#include <stdint.h>
+#include <common/macros.h>
 #include <drivers/disk/disk.h>
 #include <filesystem/filesystem.h>
-#include <stdint.h>
 
 namespace MaxOS {
 	namespace filesystem {
 		namespace format {
 
 			/**
-			* @struct BiosParameterBlock32
-			* @brief Stores information about the FAT32 filesystem
-			*/
-			typedef struct BiosParameterBlock32 {
+			 * @struct BiosParameterBlock32
+			 * @brief Stores information about the FAT32 filesystem
+			 *
+			 * @typedef bpb32_t
+			 * @brief Alias for BiosParameterBlock32 struct
+			 */
+			typedef struct PACKED BiosParameterBlock32 {
 
 				uint8_t jump[3];                    ///< Jump instruction to boot code
 				uint8_t OEM_name[8];                ///< OEM Name in ASCII
@@ -56,13 +60,16 @@ namespace MaxOS {
 				uint8_t volume_label[11];           ///< Volume label in ASCII (spaces padded)
 				uint8_t file_system_type[8];        ///< System type in ASCII (not null-terminated)
 
-			} __attribute__((packed)) bpb32_t;
+			} bpb32_t;
 
 			/**
 			 * @struct FSInfo
 			 * @brief Stores extra information about the FAT32 filesystem
+			 *
+			 * @typedef fs_info_t
+			 * @brief Alias for FSInfo struct
 			 */
-			typedef struct FSInfo {
+			typedef struct PACKED FSInfo {
 				uint32_t lead_signature;            ///< FSInfo lead signature (0x41615252)
 				uint8_t reserved1[480];             ///< Reserved (should be zero)
 				uint32_t structure_signature;       ///< FSInfo structure signature (0x61417272)
@@ -70,13 +77,16 @@ namespace MaxOS {
 				uint32_t next_free_cluster;         ///< Cluster number of the next free cluster (or 0xFFFFFFFF if unknown, start searching from cluster 2)
 				uint8_t reserved2[12];              ///< Reserved (should be zero)
 				uint32_t trail_signature;           ///< FSInfo trail signature (0xAA550000)
-			} __attribute__((packed)) fs_info_t;
+			} fs_info_t;
 
 			/**
 			 * @struct DirectoryEntry
 			 * @brief Stores information about a file or directory
+			 *
+			 * @typedef dir_entry_t
+			 * @brief Alias for DirectoryEntry struct
 			 */
-			typedef struct DirectoryEntry {
+			typedef struct PACKED DirectoryEntry {
 
 				uint8_t name[8];                    ///< File name
 				uint8_t extension[3];               ///< File extension
@@ -97,7 +107,7 @@ namespace MaxOS {
 
 				uint32_t size;                      ///< File size in bytes
 
-			} __attribute__((packed)) dir_entry_t;
+			} dir_entry_t;
 
 			/**
 			 * @enum DirectoryEntryAttributes
@@ -126,8 +136,11 @@ namespace MaxOS {
 			/**
 			 * @struct LongFileNameEntry
 			 * @brief Directory entry for a long file name
+			 *
+			 * @typedef long_file_name_entry_t
+			 * @brief Alias for LongFileNameEntry struct
 			 */
-			typedef struct LongFileNameEntry {
+			typedef struct PACKED LongFileNameEntry {
 				uint8_t order;          ///< Index of this entry in the sequence of LFN entries
 				uint16_t name1[5];      ///< First 5 characters of the long file name
 				uint8_t attributes;     ///< Attributes (always 0x0F for LFN entries)
@@ -137,7 +150,7 @@ namespace MaxOS {
 				uint16_t zero;          ///< Must be zero
 				uint16_t name3[2];      ///< Last 2 characters of the long file name
 
-			} __attribute__((packed)) long_file_name_entry_t;
+			} long_file_name_entry_t;
 
 			/**
 			 * @enum ClusterState

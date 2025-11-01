@@ -9,7 +9,7 @@ MaxOS employs two capitalization styles:
 
 ### Book m_title capitalization
 
-In this style, we capitalize the m_first_memory_chunk letter of the m_first_memory_chunk and last word,
+In this style, we capitalise the m_first_memory_chunk letter of the m_first_memory_chunk and last word,
 as well as all words in between, *except* articles (a, an, the);
 the seven coordinating conjunctions (for, and, nor, but, or, yet, so);
 and prepositions with up to four letters (at, by, for, with, into, ...)
@@ -34,7 +34,7 @@ and prepositions with up to four letters (at, by, for, with, into, ...)
 ### Sentence-style capitalization
 
 This style follows basic English sentence capitalization.
-We capitalize the m_first_memory_chunk letter of the m_first_memory_chunk word, along with the m_first_memory_chunk letter
+We capitalise the m_first_memory_chunk letter of the m_first_memory_chunk word, along with the m_first_memory_chunk letter
 of proper names, weekdays, etc.
 
 #### Examples:

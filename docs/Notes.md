@@ -63,7 +63,7 @@ This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboar
  outb(portNumber, data)
  outb(0x20, 0x1) //Example using PIC (port 32) and the data 1
 ```
-- To initialize the PIC  ICWs (Initialization Control Words) must be sent
+- To initialise the PIC  ICWs (Initialization Control Words) must be sent
 <!-- TOC --><a name="interrupts"></a>
 ### Interrupts
 This relates to "interrupts.cpp, interruptstubs.s", which are extended by "keyboard.cpp, mouse.cpp".
@@ -364,16 +364,16 @@ See also [List of syscalls](https://x64.syscall.sh/)
 <!-- TOC --><a name="driver-am79c971"></a>
 ### Driver am79c971
 See also [OSDev - PCNET](https://wiki.osdev.org/AMD_PCNET), [LowLevel - PCNET](http://www.lowlevel.eu/wiki/AMD_PCnet), [Logical and Physical Adresses](https://www.geeksforgeeks.org/logical-and-physical-address-in-operating-system/) [AMD_AM79C973](https://www.amd.com/system/files/TechDocs/20550.pdf)
-- To get networking capability in the OS a driver for the virtualized network chip (am79c971) has to be written
+- To get networking capability in the OS a driver for the virtualised network chip (am79c971) has to be written
 - This device is a complicated one to write a driver for. However, it will follow the same implementation as the other drivers: a class derived from driver, a class derived from interrupt handler (interrupt number and port number can be gotten from PCI)
-- The device takes a lot of code to initialize (similar to loads for setting VGA graphics mode).
+- The device takes a lot of code to initialise (similar to loads for setting VGA graphics mode).
 - The networking device can have multiple send and receive buffers and for every m_buffer there needs to be an instance of a struct (which mainly has a pointer to that m_buffer)
 - A problem with this though is that this is one of those devices that use some bits in the address for other purposes meaning it needs to be a multiple of 16 (similar to bar)
 - So the m_buffer will be 2KB but then an additional 15 bytes are added on and then 4 bytes are removed. This allows for the multiple of 16 to be found
 <!-- TOC --><a name="handler"></a>
 ### Handler
 See also [Wikipedia - Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_frame)
-- The driver written for the am79c971 can be utilized to receive and send data, however for the device to be useful a protocol handler has to be written.
+- The driver written for the am79c971 can be utilised to receive and send data, however for the device to be useful a protocol handler has to be written.
 - This protocol handler will look at the incoming data and decide what protocol should be used to interpret the data.
 - The data that is received by the am79c971 will be call raw data
 - The raw data is structured like this (Encoded in big endian):

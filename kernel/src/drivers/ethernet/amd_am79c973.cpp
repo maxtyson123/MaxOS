@@ -36,7 +36,7 @@ AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev)
     currentSendBuffer = 0;
     currentRecvBuffer = 0;
 
-    //Not active or initialized
+    //Not active or initialised
     active = false;
     initDone = false;
 

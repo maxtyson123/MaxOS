@@ -16,8 +16,8 @@
 namespace MaxOS {
 	namespace runtime {
 
-		typedef void (* constructor)();
-		typedef unsigned uarch_t;
+		typedef void (* constructor)();     ///< A pointer to a constructor function
+		typedef unsigned uarch_t;           ///< An unsigned architecture specific type
 
 		extern "C" {
 
@@ -31,13 +31,30 @@ namespace MaxOS {
 				void* dso_handle;                       ///< The DSO handle (not used)
 			};
 
+			/**
+			 * @brief Register a function to be called at program exit
+			 *
+			 * @param f The function to call
+			 * @param objptr The object pointer to pass to the function
+			 * @param dso The DSO handle (not used)
+			 * @return int 0 on success, non-zero on failure
+			 */
 			int __cxa_atexit(void (* f)(void*), void* objptr, void* dso);
+
+			/**
+			 * @brief Finalise all global objects by calling their destructors
+			 *
+			 * @param f The DSO handle to finalise (nullptr for all)
+			 */
 			void __cxa_finalize(void* f);
 
-			// Stack Gaurd
+			/// The stack canary value used to detect stack buffer overflows (@todo make random at runtime)
 			uintptr_t __stack_chk_guard = 0x595e9fbd94fda766;
-			void __stack_chk_fail(void);
 
+			/**
+			 * @brief Called when a stack buffer overflow is detected
+			 */
+			void __stack_chk_fail(void);
 		}
 	}
 }

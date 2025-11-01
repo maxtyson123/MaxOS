@@ -22,7 +22,6 @@
 namespace MaxOS {
     namespace hardwarecommunication {
 
-
         class InterruptManager;
 
         /**
@@ -45,17 +44,24 @@ namespace MaxOS {
         /**
          * @struct IDTR
          * @brief A struct that holds the Interrupt Descriptor Table Register (IDTR)
+         *
+         * @typedef idtr_t
+         * @brief Alias for IDTR struct
          */
-        typedef struct IDTR {
+        typedef struct PACKED IDTR {
             uint16_t limit; ///< The size of the IDT
             uint64_t base;  ///< The start address of the IDT
-        } __attribute__((packed)) idtr_t;
+        } idtr_t;
 
-		/**
+	    /**
 		 * @struct InterruptDescriptor
 		 * @brief An entry in the Interrupt Descriptor Table (IDT)
+	     *
+	     * @typedef interrupt_descriptor_t
+	     * @brief Alias for InterruptDescriptor struct
 		 */
-        typedef struct InterruptDescriptor{
+        typedef struct PACKED InterruptDescriptor{
+
           uint16_t address_low_bits;    ///< The low bits of the handler function address
           uint16_t segment_selector;    ///< The code segment selector in the GDT to use when this interrupt fires
           uint8_t ist;                  ///< The offset into the Interrupt Stack Table (0 if not used) (see TSS)
@@ -63,7 +69,8 @@ namespace MaxOS {
           uint16_t address_mid_bits;    ///< The middle bits of the handler function address
           uint32_t address_high_bits;   ///< The high bits of the handler function address
           uint32_t reserved;            ///< Reserved, must be zero
-        } __attribute__((packed)) interrupt_descriptor_t;
+
+        } interrupt_descriptor_t;
 
 	    constexpr uint16_t HARDWARE_INTERRUPT_OFFSET = 0x20;    ///< The offset in the IDT where interrupts from hardware start
 	    constexpr uint16_t MAX_INTERRUPT_HANDLERS = 256;        ///< The maximum number of interrupt handlers

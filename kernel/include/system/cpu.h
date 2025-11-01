@@ -28,8 +28,15 @@ namespace MaxOS {
 
 	namespace system {
 
-		/// The state of the CPU when an interrupt occurs (must align with the interrupt handler assembly code)
-		typedef struct {
+		/**
+		 * @struct CPUStatus
+		 * @brief Structure representing the CPU state during an interrupt
+		 *
+		 * @typedef cpu_status_t
+		 * @brief Alias for CPUStatus struct
+		 */
+		typedef struct PACKED CPUStatus {
+
 			uint64_t r15;   ///< Register r15
 			uint64_t r14;   ///< Register r14
 			uint64_t r13;   ///< Register r13
@@ -54,10 +61,18 @@ namespace MaxOS {
 			uint64_t rflags;    ///< Flags register
 			uint64_t rsp;       ///< Stack pointer
 			uint64_t ss;        ///< Stack segment
-		} __attribute__((__packed__)) cpu_status_t;
 
-		/// Task State Segment (TSS) structure for x86_64
-		typedef struct TaskStateSegment {
+		} cpu_status_t;
+
+		/**
+		 * @struct TaskStateSegment
+		 * @brief Structure representing the Task State Segment (TSS)
+		 *
+		 * @typedef tss_t
+		 * @brief Alias for TaskStateSegment struct
+		 */
+		typedef struct PACKED TaskStateSegment {
+
 			uint32_t reserved0;     ///< Unused, must be zero
 			uint64_t rsp0;          ///< Stack pointer for ring 0
 			uint64_t rsp1;          ///< Stack pointer for ring 1
@@ -74,7 +89,8 @@ namespace MaxOS {
 			uint64_t reserved3;     ///< Unused, must be zero
 			uint16_t reserved4;     ///< Unused, must be zero
 			uint16_t io_bitmap_offset;  ///< Offset to the I/O bitmap
-		}__attribute__((__packed__)) tss_t;
+
+		} tss_t;
 
 		/**
 		 * @enum CPU_FEATURE_ECX
@@ -158,23 +174,33 @@ namespace MaxOS {
 		/**
 		 * @struct StackFrame
 		 * @brief A snapshot of the a frame in the call stack
+		 *
+		 * @typedef stack_frame_t
+		 * @brief Alias for StackFrame struct
 		 */
-		typedef struct StackFrame {
+		typedef struct PACKED StackFrame {
+
 			StackFrame* next;   ///< Pointer to the next stack frame (up the call stack)
 			uintptr_t rip;      ///< The instruction pointer at this frame
-		}__attribute__((__packed__)) stack_frame_t;
+
+		} stack_frame_t;
 
 		/**
 		 * @struct CoreBootInfo
 		 * @brief Information needed when booting a core
+		 *
+		 * @typedef core_boot_info_t
+		 * @brief Alias for CoreBootInfo struct
 		 */
-		typedef struct CoreBootInfo {
+		typedef struct PACKED CoreBootInfo {
+
 			uint64_t stack;         ///< The stack pointer for the core
 			uint64_t p4_table;      ///< The physical address of the P4 page table
 			uint8_t id;             ///< The ID of the core
 			bool activated;         ///< Whether the core has been activated
 			void* gdt_64_base;      ///< The base of the 64-bit GDT
-		}__attribute__((__packed__)) core_boot_info_t;
+
+		} core_boot_info_t;
 
 		/// The size of the stack allocated for booting a core (should align with the startup assembly code for the kernel)
 		constexpr size_t BOOT_STACK_SIZE = 16384;

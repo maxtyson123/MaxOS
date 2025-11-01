@@ -15,17 +15,27 @@ using namespace MaxOS::runtime;
 // Define static constructors (DSO = Dynamic Shared Object)
 extern "C" void* __dso_handle = nullptr;
 
-// Pure virtual function call
+/**
+ * @brief Called when a virtual function is called on an object with no implementation
+ */
 extern "C" void __cxa_pure_virtual() {
 	ASSERT(false, "Pure virtual function call failed");
 }
 
+/**
+ * @brief Called when stack smashing is detected
+ */
 extern "C" void __stack_chk_fail(void)
 {
 	ASSERT(false, "Stack Smashed");
 }
+
 extern "C" constructor start_ctors;
 extern "C" constructor end_ctors;
+
+/**
+ * @brief Calls all global constructors
+ */
 extern "C" void call_constructors() {
 	// Loop through and initialise all the global constructors
 	for (constructor* i = &start_ctors; i != &end_ctors; i++)

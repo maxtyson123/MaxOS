@@ -20,6 +20,7 @@ namespace MaxOS{
 
         namespace ethernet {
 
+			/// Used to make MAC addresses more readable @todo make a MacAddress class and use mac_t
             typedef uint64_t MediaAccessControlAddress;
 
 			/**

@@ -18,6 +18,9 @@ namespace MaxOS{
         /**
          * @struct Time
          * @brief Stores the year, month, day, hour, minute and second of a time.
+         *
+         * @typedef time_t
+         * @brief Alias for Time struct
          */
         typedef struct Time{
 
@@ -39,6 +42,7 @@ namespace MaxOS{
 
         } time_t;
 
+		/// List of month names indexed by month number - 1
         static const char* Months[] = {
             "January",
             "February",
@@ -54,6 +58,7 @@ namespace MaxOS{
             "December"
         };
 
+		/// List of day names starting from Sunday ending on Saturday
         static const char* Days[] = {
             "Sunday",
             "Monday",
@@ -64,6 +69,7 @@ namespace MaxOS{
             "Saturday"
         };
 
+		/// Number of days in each month indexed by month number - 1
         constexpr uint8_t DAYS_IN_MONTH[] = {
             31, // January
             28, // February
@@ -79,8 +85,8 @@ namespace MaxOS{
             31  // December
         };
 
-        constexpr uint16_t DAYS_PER_YEAR = 365;
-	    constexpr uint16_t DAYS_PER_LEAP_YEAR = 366;
+        constexpr uint16_t DAYS_PER_YEAR = 365;         ///< Number of days in a non-leap year
+	    constexpr uint16_t DAYS_PER_LEAP_YEAR = 366;    ///< Number of days in a leap year
 
         /**
          * @brief Converts a time to an epoch

@@ -179,14 +179,14 @@ void Clock::setup_apic_clock(hardwarecommunication::LocalAPIC* local_apic) const
  *
  * @return The current time in a Time struct format
  */
-common::Time Clock::get_time() {
+common::time_t Clock::get_time() {
 
 	// Wait for the clock to be ready
 	while (read_hardware_clock(0xA) & 0x80)
 		asm volatile("nop");
 
 	// Read the time from the clock
-	Time time{};
+	time_t time{};
 	time.year = binary_representation(read_hardware_clock(0x9)) + 2000;
 	time.month = binary_representation(read_hardware_clock(0x8));
 	time.day = binary_representation(read_hardware_clock(0x7));
@@ -210,7 +210,7 @@ Clock *Clock::active_clock() {
 }
 
 /**
- * @brief Constructor for the PIT class. Registers a handler for interrupt 0x22 and initializes ports
+ * @brief Constructor for the PIT class. Registers a handler for interrupt 0x22 and initialises ports
  * @param apic The APIC controller for the BSP core
  */
 PIT::PIT(AdvancedProgrammableInterruptController *apic)

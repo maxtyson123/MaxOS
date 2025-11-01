@@ -17,7 +17,7 @@ namespace MaxOS {
 
 	namespace net {
 
-		typedef uint16_t TransmissionControlProtocolPort;
+		typedef uint16_t TransmissionControlProtocolPort;   ///< TCP port @todo: Make TCPPort class and do tcp_port_t
 
 		/**
 		 * @enum TCPSocketState
@@ -59,8 +59,12 @@ namespace MaxOS {
 		/**
 		 * @struct TCPHeader
 		 * @brief The header of a TCP packet
+		 *
+		 * @typedef tcp_header_t
+		 * @brief Alias for TCPHeader struct
 		 */
-		struct TCPHeader {
+		typedef struct PACKED TCPHeader {
+
 			uint16_t srcPort;                   ///< The port of the sender
 			uint16_t dstPort;                   ///< The port of the receiver
 			uint32_t sequenceNumber;            ///< Where this packet's data fits in the overall order of the data stream
@@ -75,7 +79,8 @@ namespace MaxOS {
 			uint16_t urgentPtr;                 ///< Where in the data the urgent data *ends* (if the URG flag is set)
 
 			uint32_t options;                   ///< The options for the TCP packet (MSS, Window Scale, SACK Permitted) @todo: make this a struct
-		} __attribute__((packed));
+
+		} tcp_header_t;
 
 		/**
 		 * @struct TCPPseudoHeader
@@ -83,13 +88,18 @@ namespace MaxOS {
 		 *
 		 * @details The pseudo header is used to calculate the checksum of the TCP header. It is a copy of the IP
 		 * header, but with the protocol field set to 6 (TCP) and the length field set to the length of the TCP header.
+		 *
+		 * @typedef tcp_pseudo_header_t
+		 * @brief Alias for TCPPseudoHeader struct
 		 */
-		struct TCPPseudoHeader {
+		typedef struct PACKED TCPPseudoHeader {
+
 			uint32_t srcIP;         ///< The IP address of the sender
 			uint32_t dstIP;         ///< The IP address of the receiver
 			uint16_t protocol;      ///< The protocol (set to 6 for TCP)
 			uint16_t totalLength;   ///< The total length of the TCP header and data
-		} __attribute__((packed));
+
+		} tcp_pseudo_header_t;
 
 
 		// Forward declarations
