@@ -1,6 +1,10 @@
-//
-// Created by 98max on 22/11/2022.
-//
+/**
+ * @file ipv4.cpp
+ * @brief Implementation of IPv4 protocol handlers
+ *
+ * @date 22nd November 2022
+ * @author Max Tyson
+ */
 
 #include <net/ipv4.h>
 
@@ -15,39 +19,50 @@ using namespace MaxOS::drivers::ethernet;
 
 ///__RESOLVER__///
 
-InternetProtocolAddressResolver::InternetProtocolAddressResolver(InternetProtocolHandler *internetProtocolHandler)
+IPV4AddressResolver::IPV4AddressResolver(InternetProtocolHandler *internetProtocolHandler)
 {
 
-    internetProtocolHandler -> RegisterInternetProtocolAddressResolver(this);
+    internetProtocolHandler -> RegisterIPV4AddressResolver(this);
 
 }
 
 
 
-InternetProtocolAddressResolver::~InternetProtocolAddressResolver() = default;
+IPV4AddressResolver::~IPV4AddressResolver() = default;
 
-MediaAccessControlAddress InternetProtocolAddressResolver::Resolve(InternetProtocolAddress) {
-    return 0xFFFFFFFFFFFF; // the broadcast address
+/**
+ * @brief Resolves an IP address to a MAC address. (Default, returns broadcast address, override for use)
+ *
+ * @return The MAC address.
+ */
+MediaAccessControlAddress IPV4AddressResolver::Resolve(InternetProtocolAddress) {
+    return 0xFFFFFFFFFFFF;
 }
 
-void InternetProtocolAddressResolver::Store(InternetProtocolAddress, MediaAccessControlAddress) {
+/**
+ * @brief Stores an IP address to MAC address mapping. (Default, does nothing, override for use)
+ *
+ * @param internetProtocolAddress The IP address.
+ * @param mediaAccessControlAddress The MAC address.
+ */
+void IPV4AddressResolver::Store(InternetProtocolAddress, MediaAccessControlAddress) {
 
 }
 
 
 ///__Payload Handler__///
-InternetProtocolPayloadHandler::InternetProtocolPayloadHandler(InternetProtocolHandler* internetProtocolHandler, uint8_t protocol) {
+IPV4PayloadHandler::IPV4PayloadHandler(InternetProtocolHandler* internetProtocolHandler, uint8_t protocol) {
 
     // Store vars
     this -> internetProtocolHandler = internetProtocolHandler;
     this -> ipProtocol = protocol;
 
     //Register handler
-    internetProtocolHandler ->connectInternetProtocolPayloadHandler(this);
+    internetProtocolHandler ->connectIPV4PayloadHandler(this);
 
 }
 
-InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler() = default;
+IPV4PayloadHandler::~IPV4PayloadHandler() = default;
 
 /**
  * @brief Called when an IP packet is received. (Deafult, does nothing, overide for use)
@@ -58,22 +73,21 @@ InternetProtocolPayloadHandler::~InternetProtocolPayloadHandler() = default;
  * @param size The size of the IP packet.
  * @return True if the packet was handled, false otherwise.
  */
-bool InternetProtocolPayloadHandler::handleInternetProtocolPayload(net::InternetProtocolAddress,
-                                                                   net::InternetProtocolAddress,
-                                                                   uint8_t *,
-                                                                   uint32_t) {
+bool IPV4PayloadHandler::handleInternetProtocolPayload(net::InternetProtocolAddress srcIP_BE,
+                                                                   net::InternetProtocolAddress dstIP_BE,
+                                                                   uint8_t * internetprotocolPayload,
+                                                                   uint32_t size) {
     return false;
 }
 
 /**
  * @brief Sends an IP packet.
  *
- * @param dstIP_BE The destination IP address.
- * @param internetprotocolPayload The payload of the IP packet.
+ * @param destinationIP The destination IP address.
+ * @param payloadData The payload of the IP packet.
  * @param size The size of the IP packet.
- * @return True if the packet was sent, false otherwise.
  */
-void InternetProtocolPayloadHandler::Send(InternetProtocolAddress destinationIP, uint8_t *payloadData, uint32_t size) {
+void IPV4PayloadHandler::Send(InternetProtocolAddress destinationIP, uint8_t *payloadData, uint32_t size) {
 
 
     //Pass to backend
@@ -81,10 +95,15 @@ void InternetProtocolPayloadHandler::Send(InternetProtocolAddress destinationIP,
 
 }
 
-
-
-
-
+/**
+ * @brief Construct a new Internet Protocol Handler object
+ *
+ * @param backend The backend Ethernet frame handler.
+ * @param ownInternetProtocolAddress The IP address of this device.
+ * @param defaultGatewayInternetProtocolAddress The IP address of the default gateway.
+ * @param subnetMask The subnet mask.
+ * @param errorMessages Where to write error messages.
+ */
 InternetProtocolHandler::InternetProtocolHandler(EthernetFrameHandler *backend, InternetProtocolAddress ownInternetProtocolAddress, InternetProtocolAddress defaultGatewayInternetProtocolAddress, SubnetMask subnetMask, OutputStream* errorMessages)
         : EthernetFramePayloadHandler(backend, 0x0800)
 {
@@ -100,20 +119,22 @@ InternetProtocolHandler::~InternetProtocolHandler() = default;
 /**
  * @brief Called when an IP packet is received.
  *
- * @param etherframePayload The payload of the IP packet.
+ * @param ethernetframePayload The payload of the IP packet.
  * @param size The size of the IP packet.
  * @return True if the packet is to be sent back, false otherwise.
+ *
+ * @todo Set the identifier when sending packets back
  */
 bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframePayload, uint32_t size){
 
     errorMessages ->write("IP: Handling packet\n");
 
     //Check if the size is big enough to contain an ethernet frame
-    if(size < sizeof(InternetProtocolV4Header))
+    if(size < sizeof(IPV4Header))
         return false;
 
     //Convert to struct for easier use
-    auto* ipMessage = (InternetProtocolV4Header*)ethernetframePayload;
+    auto* ipMessage = (IPV4Header*)ethernetframePayload;
     bool sendBack = false;
 
     //Only handle if it is for this device
@@ -124,11 +145,11 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
             length = size;                                              //If so, set length to size (this stops heartbleed attacks as it will not read past the end of the message, which the attacker could have filled with data)
 
         // Get the handler for the protocol
-        Map<uint8_t, InternetProtocolPayloadHandler*>::iterator handlerIterator = internetProtocolPayloadHandlers.find(ipMessage -> protocol);
-        if(handlerIterator != internetProtocolPayloadHandlers.end()) {
-            InternetProtocolPayloadHandler* handler = handlerIterator -> second;
+        Map<uint8_t, IPV4PayloadHandler*>::iterator handlerIterator = IPV4PayloadHandlers.find(ipMessage -> protocol);
+        if(handlerIterator != IPV4PayloadHandlers.end()) {
+            IPV4PayloadHandler* handler = handlerIterator -> second;
             if(handler != nullptr) {
-                sendBack = handler -> handleInternetProtocolPayload(ipMessage -> sourceIP, ipMessage -> destinationIP, ethernetframePayload + sizeof(InternetProtocolV4Header), length - sizeof(InternetProtocolV4Header));
+                sendBack = handler -> handleInternetProtocolPayload(ipMessage -> sourceIP, ipMessage -> destinationIP, ethernetframePayload + sizeof(IPV4Header), length - sizeof(IPV4Header));
             }
         }
 
@@ -146,8 +167,6 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
         ipMessage -> timeToLive = 0x40;                                                                                         //Reset TTL
         ipMessage -> checksum = Checksum((uint16_t*)ipMessage, 4 * ipMessage -> headerLength);                  //Reset checksum as the source and destination IP have changed so has the time to live and therefore there is a different header
 
-
-        // TODO: Set the identifier
     }
 
     errorMessages ->write("IP: Handled packet\n");
@@ -165,14 +184,14 @@ bool InternetProtocolHandler::handleEthernetframePayload(uint8_t* ethernetframeP
  */
 void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint8_t protocol, const uint8_t *data, uint32_t size) {
 
-    auto* buffer = (uint8_t*)MemoryManager::kmalloc(sizeof(InternetProtocolV4Header) + size);                           //Allocate memory for the message
-    auto *message = (InternetProtocolV4Header*)buffer;                                                                            //Convert to struct for easier use
+    auto* buffer = (uint8_t*)MemoryManager::kmalloc(sizeof(IPV4Header) + size);                           //Allocate memory for the message
+    auto *message = (IPV4Header*)buffer;                                                                            //Convert to struct for easier use
 
     message -> version = 4;                                                                                                                           //Set version
-    message -> headerLength = sizeof(InternetProtocolV4Header)/4;                                                                                     //Set header length
+    message -> headerLength = sizeof(IPV4Header)/4;                                                                                     //Set header length
     message -> typeOfService = 0;                                                                                                                     //Set type of service (not private)
 
-    message -> totalLength = size + sizeof(InternetProtocolV4Header);                                                                                 //Set total length
+    message -> totalLength = size + sizeof(IPV4Header);                                                                                 //Set total length
     message -> totalLength = ((message -> totalLength & 0xFF00) >> 8)                                                                                 // Convert to big endian (Swap bytes)
                              | ((message -> totalLength & 0x00FF) << 8);                                                                              // Convert to big endian (Swap bytes)
 
@@ -186,10 +205,10 @@ void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint
     message -> sourceIP = GetInternetProtocolAddress();                                                                                                  //Set source IP
 
     message -> checksum = 0;                                                                                                                          //Set checksum to 0, init with 0 as checksum funct will also add this value
-    message -> checksum = Checksum((uint16_t*)message, sizeof(InternetProtocolV4Header));                                             //Calculate checksum
+    message -> checksum = Checksum((uint16_t*)message, sizeof(IPV4Header));                                             //Calculate checksum
 
     //Copy data
-    uint8_t* data_buffer = buffer + sizeof(InternetProtocolV4Header);                                                                                  //Get pointer to the data
+    uint8_t* data_buffer = buffer + sizeof(IPV4Header);                                                                                  //Get pointer to the data
     for(uint32_t i = 0; i < size; i++)                                                                                                                            //Loop through data
       data_buffer[i] = data[i];                                                                                                                             //Copy data
 
@@ -201,7 +220,7 @@ void InternetProtocolHandler::sendInternetProtocolPacket(uint32_t dstIP_BE, uint
     uint32_t MAC = resolver ->Resolve(route);
 
     //Send message
-    frameHandler -> sendEthernetFrame(MAC, this -> handledType, buffer, size + sizeof(InternetProtocolV4Header));      //Send message
+    frameHandler -> sendEthernetFrame(MAC, this -> handledType, buffer, size + sizeof(IPV4Header));      //Send message
     MemoryManager::kfree(buffer);                                                                                                 //Free memory
 }
 
@@ -228,12 +247,27 @@ uint16_t InternetProtocolHandler::Checksum(const uint16_t *data, uint32_t length
     return ((~temp & 0xFF00) >> 8) | ((~temp & 0x00FF) << 8);
 }
 
-void InternetProtocolHandler::RegisterInternetProtocolAddressResolver(InternetProtocolAddressResolver *resolver) {
+/**
+ * @brief Registers an IP address resolver.
+ *
+ * @param resolver The resolver to register.
+ */
+void InternetProtocolHandler::RegisterIPV4AddressResolver(IPV4AddressResolver *resolver) {
 
     this -> resolver = resolver;
 
 }
 
+/**
+ * @brief Creates an IP address from four digits.
+ *
+ * @param digit1 The first digit.
+ * @param digit2 The second digit.
+ * @param digit3 The third digit.
+ * @param digit4 The fourth digit.
+ *
+ * @return The created IP address.
+ */
 InternetProtocolAddress InternetProtocolHandler::CreateInternetProtocolAddress(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4) {
     InternetProtocolAddress result = digit4;
     result = (result << 8) | digit3;
@@ -242,6 +276,12 @@ InternetProtocolAddress InternetProtocolHandler::CreateInternetProtocolAddress(u
     return result;
 }
 
+/**
+ * @brief Parses a string representation of an IP address.
+ *
+ * @param address The string representation of the IP address.
+ * @return The parsed IP address.
+ */
 InternetProtocolAddress InternetProtocolHandler::Parse(string address) {
     uint8_t digits[4];
 
@@ -262,18 +302,43 @@ InternetProtocolAddress InternetProtocolHandler::Parse(string address) {
     return CreateInternetProtocolAddress(digits[0], digits[1], digits[2], digits[3]);
 }
 
+/**
+ * @brief Creates a subnet mask from four digits.
+ *
+ * @param digit1 The first digit.
+ * @param digit2 The second digit.
+ * @param digit3 The third digit.
+ * @param digit4 The fourth digit.
+ *
+ * @return The created subnet mask.
+ */
 SubnetMask InternetProtocolHandler::CreateSubnetMask(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4) {
     return (SubnetMask)CreateInternetProtocolAddress(digit1, digit2, digit3, digit4);
 }
 
+/**
+ * @brief Gets the IP address of this device.
+ *
+ * @return The IP address.
+ */
 InternetProtocolAddress InternetProtocolHandler::GetInternetProtocolAddress() const {
     return ownInternetProtocolAddress;
 }
 
+/**
+ * @brief Gets the MAC address of this device.
+ *
+ * @return The MAC address.
+ */
 MediaAccessControlAddress InternetProtocolHandler::GetMediaAccessControlAddress() {
     return frameHandler -> getMAC();
 }
 
-void InternetProtocolHandler::connectInternetProtocolPayloadHandler( InternetProtocolPayloadHandler *internetProtocolPayloadHandler) {
-    internetProtocolPayloadHandlers.insert(internetProtocolPayloadHandler -> ipProtocol, internetProtocolPayloadHandler);
+/**
+ * @brief Connects an IP protocol payload handler.
+ *
+ * @param IPV4PayloadHandler The payload handler to connect.
+ */
+void InternetProtocolHandler::connectIPV4PayloadHandler( IPV4PayloadHandler *IPV4PayloadHandler) {
+    IPV4PayloadHandlers.insert(IPV4PayloadHandler -> ipProtocol, IPV4PayloadHandler);
 }

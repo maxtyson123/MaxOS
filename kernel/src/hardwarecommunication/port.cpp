@@ -1,11 +1,20 @@
-//
-// Created by 98max on 10/4/2022.
-//
+/**
+ * @file port.cpp
+ * @brief Implementation of a Port class for handling IO ports
+ *
+ * @date 10th April 2022
+ * @author Max Tyson
+ */
 
 #include <hardwarecommunication/port.h>
 
 using namespace MaxOS::hardwarecommunication;
 
+/**
+ * @brief Construct a new Port object
+ *
+ * @param port_number The IO port number
+ */
 Port::Port(uint16_t port_number)
 : m_port_number(port_number)
 {
@@ -13,6 +22,11 @@ Port::Port(uint16_t port_number)
 
 Port::~Port() = default;
 
+/**
+ * @brief Construct a new Port object for ports handling 8 bit read/writes
+ *
+ * @param port_number The IO port number
+ */
 Port8Bit::Port8Bit(uint16_t port_number)
 : Port(port_number) {
 }
@@ -41,6 +55,11 @@ uint8_t Port8Bit::read() {
 	return result;
 }
 
+/**
+ * @brief Construct a new Port object for ports handling 8 bit read/writes (slow)
+ *
+ * @param port_number The IO port number
+ */
 Port8BitSlow::Port8BitSlow(uint16_t port_number)
 : Port8Bit(port_number) {
 }
@@ -57,7 +76,11 @@ void Port8BitSlow::write(uint8_t data) {
 	asm volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (data), "Nd" (m_port_number));
 }
 
-
+/**
+ * @brief Construct a new Port object for ports handling 16 bit read/writes
+ *
+ * @param port_number The IO port number
+ */
 Port16Bit::Port16Bit(uint16_t port_number)
 : Port(port_number) {
 }
@@ -86,7 +109,11 @@ uint16_t Port16Bit::read() {
 	return result;
 }
 
-
+/**
+ * @brief Construct a new Port object for ports handling 32 bit read/writes
+ *
+ * @param port_number The IO port number
+ */
 Port32Bit::Port32Bit(uint16_t port_number)
 : Port(port_number) {
 }

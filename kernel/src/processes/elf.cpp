@@ -1,6 +1,10 @@
-//
-// Created by 98max on 21/03/2025.
-//
+/**
+ * @file elf.cpp
+ * @brief Implementation of an Executable and Linkable Format (ELF) loader for 64-bit binaries
+ *
+ * @date 21st March 2025
+ * @author Max Tyson
+ */
 
 #include <processes/elf.h>
 #include <common/logger.h>
@@ -9,29 +13,30 @@ using namespace MaxOS;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
 
-char Elf64::elf_magic[4] = {0x7F, 'E', 'L', 'F'};
+
 
 /**
- * @brief Constructor for the Elf64 class
+ * @brief Constructor for the ELF64 class
  *
  * @param elf_header_address The address of the elf header, this must be mapped to memory before uses
  */
-Elf64::Elf64(uintptr_t elf_header_address)
+ELF64::ELF64(uintptr_t elf_header_address)
 : m_elf_header_address(elf_header_address)
 {
 }
 
 /**
- * @brief Destructor for the Elf64 class
+ * @brief Destructor for the ELF64 class
  */
-Elf64::~Elf64() = default;
+ELF64::~ELF64() = default;
 
 /**
  * @brief Loads the elf program into memory if a valid elf file
+ *
+ * @todo Error handling
  */
-void Elf64::load() {
+void ELF64::load() {
 
-	//TODO: error handling when the syscall for this is implemented
 	if (!is_valid())
 		return;
 
@@ -44,7 +49,7 @@ void Elf64::load() {
  *
  * @return The header of the elf file
  */
-elf_64_header_t* Elf64::header() const {
+elf_64_header_t* ELF64::header() const {
 
 	return (elf_64_header_t*) m_elf_header_address;
 }
@@ -55,7 +60,7 @@ elf_64_header_t* Elf64::header() const {
  * @param index The index of the program header
  * @return The program header at that index or nullptr if out of bounds
  */
-elf_64_program_header_t* Elf64::get_program_header(size_t index) const {
+elf_64_program_header_t* ELF64::get_program_header(size_t index) const {
 
 	// Check bounds
 	if (index >= header()->program_header_count)
@@ -73,7 +78,7 @@ elf_64_program_header_t* Elf64::get_program_header(size_t index) const {
  * @param index The index of the section header
  * @return The section header at that index or nullptr if out of bounds
  */
-elf_64_section_header_t* Elf64::get_section_header(size_t index) const {
+elf_64_section_header_t* ELF64::get_section_header(size_t index) const {
 
 	// Check bound
 	if (index >= header()->section_header_count)
@@ -87,36 +92,38 @@ elf_64_section_header_t* Elf64::get_section_header(size_t index) const {
 
 /**
  * @brief Checks if the elf file is valid for MaxOS runtime
+ *
+ * @todo Add support for maxOS ABI
  */
-bool Elf64::is_valid() const {
+bool ELF64::is_valid() const {
 
 	// Validate the magic number
 	for (size_t i = 0; i < 4; i++)
-		if (header()->identification[i] != elf_magic[i])
+		if (header()->identification[i] != ELF_MAGIC[i])
 			return false;
 
 	// Check if the elf is 64 bit
-	if (header()->identification[(int) ElfIdentification::Class] != (int) ElfClass::Bits64)
+	if (header()->identification[(int) ELFIdentification::Class] != (int) ELFClass::Bits64)
 		return false;
 
 	// Check if the elf is little endian
-	if (header()->identification[(int) ElfIdentification::Data] != (int) ElfData::LittleEndian)
+	if (header()->identification[(int) ELFIdentification::Data] != (int) ELFData::LittleEndian)
 		return false;
 
 	// Check if the elf is version 1
-	if (header()->identification[(int) ElfIdentification::Version] != (int) ElfVersion::Current)
+	if (header()->identification[(int) ELFIdentification::Version] != (int) ELFVersion::Current)
 		return false;
 
 	// Check if the elf is for the MaxOS platform
 	//  if(header() -> identification[OSABI] != MaxOSABI)
-	//      return false; TODO: Would be nice to have an OS ABI
+	//      return false;
 
 	// Check if the elf is executable
-	if (header()->type != (int) ElfType::Executable)
+	if (header()->type != (int) ELFType::Executable)
 		return false;
 
 	// Check if the elf is for the x86_64 platform
-	if (header()->machine != (int) ElfMachine::x86_64)
+	if (header()->machine != (int) ELFMachine::x86_64)
 		return false;
 
 	// LGTM
@@ -127,7 +134,7 @@ bool Elf64::is_valid() const {
 /**
  * @brief Loop through the program headers and load the program into memory at the give address with the given size
  */
-void Elf64::load_program_headers() const {
+void ELF64::load_program_headers() const {
 
 	for (size_t i = 0; i < header()->program_header_count; i++) {
 
@@ -135,11 +142,11 @@ void Elf64::load_program_headers() const {
 		elf_64_program_header_t* program_header = get_program_header(i);
 
 		// Only load headers that actually need loading
-		if (program_header->type != (int) ElfProgramType::Load)
+		if (program_header->type != (int) ELFProgramType::Load)
 			continue;
 
 		// Allocate space at the requested address
-		void* address = MemoryManager::s_current_memory_manager->vmm()->allocate(program_header->virtual_address, program_header->memory_size, Present | Write);
+		void* address = MemoryManager::s_current_memory_manager->vmm()->allocate(program_header->virtual_address, program_header->memory_size, PRESENT | WRITE);
 		ASSERT(address != nullptr, "Failed to allocate memory for program header\n");
 
 		// Copy the program into memory at that address
@@ -161,7 +168,7 @@ void Elf64::load_program_headers() const {
  * @param type The elf flags of the program header
  * @return The vmm flags
  */
-uint64_t Elf64::to_vmm_flags(uint32_t type) {
+uint64_t ELF64::to_vmm_flags(uint32_t type) {
 
 	// Conversion
 	// ELF   |   VMM
@@ -169,15 +176,15 @@ uint64_t Elf64::to_vmm_flags(uint32_t type) {
 	// 0x1   |   Write
 	// 0x2   |   Read
 
-	uint64_t flags = Present | User | NoExecute;
+	uint64_t flags = PRESENT | USER | NO_EXECUTE;
 
 	// Enable write
-	if (type & ElfWrite)
-		flags |= Write;
+	if (type & ELFWrite)
+		flags |= WRITE;
 
 	// Disable no execute
-	if (type & ElfExecute)
-		flags &= ~NoExecute;
+	if (type & ELFExecute)
+		flags &= ~NO_EXECUTE;
 
 	return flags;
 }

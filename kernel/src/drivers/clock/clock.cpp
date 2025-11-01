@@ -1,6 +1,11 @@
-//
-// Created by 98max on 10/04/2023.
-//
+/**
+ * @file clock.cpp
+ * @brief Implementation of a Clock driver for handling system time and clock interrupts
+ *
+ * @date 10th April 2023
+ * @author Max Tyson
+ */
+
 #include <drivers/clock/clock.h>
 #include <common/logger.h>
 
@@ -10,47 +15,13 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::clock;
 
-
-ClockEventHandler::ClockEventHandler() = default;
-
-ClockEventHandler::~ClockEventHandler() = default;
-
-/**
- * @brief Called when the clock ticks
- *
- * @param time The current time
- */
-void ClockEventHandler::on_time(common::Time const &) {
-
-}
-
-/**
- * @brief Delegates the clock event to the relevant handler
- *
- * @param event The event being fired
- * @return The event (may have been modified by the handler)
- */
-Event<ClockEvents> *ClockEventHandler::on_event(Event<ClockEvents> *event) {
-
-	switch (event->type) {
-		case ClockEvents::TIME:
-			on_time(*((TimeEvent *) event)->time);
-			break;
-
-		default:
-			break;
-	}
-
-	return event;
-}
-
 /**
  * @brief Constructor for the Clock class
  *
- * @param interrupt_manager The interrupt manager
+ * @param apic The apic controller for this core
  * @param time_between_events The time between events in 10ths of a second
  */
-Clock::Clock(AdvancedProgrammableInterruptController *apic, uint16_t time_between_events)
+Clock::Clock(AdvancedProgrammableInterruptController* apic, uint16_t time_between_events)
 : InterruptHandler(0x20),
   m_apic(apic),
   m_ticks_between_events(time_between_events)
@@ -177,20 +148,30 @@ void Clock::calibrate(uint64_t ms_per_tick) {
 
 	// Get the ticks per ms
 	PIT pit(m_apic);
-	uint32_t ticks_per_ms = pit.ticks_per_ms();
+	m_pit_ticks_per_ms = pit.ticks_per_ms();
+
+	// Calibrate the BSP apic to the desired time
+	setup_apic_clock(m_apic->local_apic());
+
+	Logger::DEBUG() << "Clock: Calibrated to " << ms_per_tick << "ms per kernel tick\n";
+}
+
+/**
+ * @brief Sets up the APIC clock to fire interrupts at the desired rate
+ * @param local_apic The local APIC to setup the clock on
+ */
+void Clock::setup_apic_clock(hardwarecommunication::LocalAPIC* local_apic) const {
 
 	// Configure the clock to periodic mode
 	uint32_t lvt = 0x20 | (1 << 17);
-	m_apic->local_apic()->write(0x320, lvt);
+	local_apic->write(0x320, lvt);
 
 	// Set the initial count
-	m_apic->local_apic()->write(0x380, ms_per_tick * ticks_per_ms);
+	local_apic->write(0x380, m_pit_ticks_per_ms * clock_accuracy);
 
 	// Clear the interrupt mask for the clock
 	lvt &= ~(1 << 16);
-	m_apic->local_apic()->write(0x380, lvt);
-
-	Logger::DEBUG() << "Clock: Calibrated to " << ms_per_tick << "ms per tick\n";
+	local_apic->write(0x320, lvt);
 }
 
 /**
@@ -220,19 +201,18 @@ common::Time Clock::get_time() {
 	return time;
 }
 
+/**
+ * @brief Gets the currently active clock
+ * @return The clock being used by the kernel
+ */
 Clock *Clock::active_clock() {
 	return s_active_clock;
 }
 
-TimeEvent::TimeEvent(Time *time)
-: Event(ClockEvents::TIME),
-  time(time)
-{
-
-}
-
-TimeEvent::~TimeEvent() = default;
-
+/**
+ * @brief Constructor for the PIT class. Registers a handler for interrupt 0x22 and initializes ports
+ * @param apic The APIC controller for the BSP core
+ */
 PIT::PIT(AdvancedProgrammableInterruptController *apic)
 : InterruptHandler(0x22),
   m_data_port(0x40),
@@ -297,11 +277,11 @@ uint32_t PIT::ticks_per_ms() {
 	auto max = (uint32_t) -1;
 	m_local_apic->write(0x380, max);
 
-	while (m_ticks < s_calibrate_ticks)
+	while (m_ticks < TICK_CALIBRATE_LENGTH)
 		asm volatile("nop");
 
 	uint32_t elapsed = max - (m_local_apic->read(0x390));
-	uint32_t ticks_per_ms = elapsed / s_calibrate_ticks;
+	uint32_t ticks_per_ms = elapsed / TICK_CALIBRATE_LENGTH;
 
 	Logger::DEBUG() << "Ticks per ms: " << (int) ticks_per_ms << "\n";
 

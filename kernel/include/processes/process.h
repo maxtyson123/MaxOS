@@ -1,6 +1,10 @@
-//
-// Created by 98max on 25/02/2025.
-//
+/**
+ * @file process.h
+ * @brief Defines Process and Thread classes for managing processes and their execution contexts
+ *
+ * @date 25th February 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_PROCESSES_PROCESS_H
 #define MAXOS_PROCESSES_PROCESS_H
@@ -34,6 +38,7 @@ namespace MaxOS
 
         // Forward declaration
         class Process;
+		constexpr size_t STACK_SIZE = 0x10000;
 
         /**
          * @class Thread
@@ -48,27 +53,27 @@ namespace MaxOS
 
               char m_sse_save_region[512] __attribute__((aligned(16)));
 
-              static const uint64_t s_stack_size = 0x10000;
-
             public:
               Thread(void (*_entry_point)(void *) , void* args, int arg_amount, Process* parent);
               ~Thread();
 
-              system::cpu_status_t* sleep(size_t milliseconds);
+	          void sleep(size_t milliseconds);
 
-              uint64_t tid;
-              uint64_t parent_pid;
+              uint64_t tid;                             ///< The thread ID
+              uint64_t parent_pid;                      ///< The parent process ID
 
-              system::cpu_status_t* execution_state;
-              thread_state_t thread_state;
+              system::cpu_status_t execution_state;     ///< The CPU state of the thread
+              thread_state_t thread_state;              ///< The current state of the thread
 
-              size_t ticks;
-              size_t wakeup_time;
+              size_t ticks;                             ///< The number of ticks the thread has run for
+              size_t wakeup_time;                       ///< The time at which the thread should wake up (if sleeping)
 
-              [[nodiscard]] uintptr_t tss_pointer() const { return m_tss_stack_pointer; }
+              [[nodiscard]] uintptr_t tss_pointer() const { return m_tss_stack_pointer; }   ///< Gets the stack pointer to use for the TSS when switching to this thread
 
               void save_sse_state();
               void restore_sse_state();
+
+			  void save_cpu_state();
         };
 
         /**
@@ -82,11 +87,12 @@ namespace MaxOS
               common::Vector<Thread*> m_threads;
 
               uint64_t m_pid = 0;
+			  common::Spinlock m_lock;
 
             public:
                 Process(const string& name, bool is_kernel = false);
                 Process(const string& name, void (*_entry_point)(void *), void *args, int arg_amount, bool is_kernel = false);
-                Process(const string& name, void *args, int arg_amount, Elf64* elf, bool is_kernel = false);
+                Process(const string& name, void *args, int arg_amount, ELF64* elf, bool is_kernel = false);
                 ~Process();
 
                 common::Vector<Thread*> threads();
@@ -97,15 +103,13 @@ namespace MaxOS
                 uint64_t pid() const;
                 uint64_t total_ticks();
 
-                bool is_kernel;
+                bool is_kernel;                                             ///< Whether this process is a kernel process
 
-                string name;
-				string working_directory = "/";
+                string name;                                                ///< The name of the process
+				string working_directory = "/";                             ///< The working directory of the process
 
-                memory::MemoryManager* memory_manager = nullptr;
-				ResourceManager resource_manager;
-
-
+                memory::MemoryManager* memory_manager = nullptr;            ///< The manager for memory used by this process
+				ResourceManager resource_manager;                           ///< The manger for resources used by this process
         };
     }
 }

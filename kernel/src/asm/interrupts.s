@@ -1,4 +1,13 @@
-; Credit https://github.com/dreamos82/Dreamos64
+;/**
+; * @file interrupts.s (NASM)
+; * @brief Stub interrupt handlers that call the C++ interrupt manager
+; *
+; * @see hardwarecommunication/interrupts/interrupts.h
+; * @see Credit https://github.com/dreamos82/Dreamos64
+; *
+; * @date 2024
+; * @author Max Tyson
+; */
 
 [bits  64]
 [extern _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE]
@@ -48,6 +57,15 @@ _ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev:
     add rsp, 16
     iretq
 %endmacro
+
+
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system12cpu_status_tE]
+_ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system12cpu_status_tE:
+
+    mov rsp, rdi         ; use the returned context
+    restore_context
+    add rsp, 16
+    iretq
 
 %macro save_context 0
     push rax

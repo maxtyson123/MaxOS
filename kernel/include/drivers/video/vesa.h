@@ -1,6 +1,10 @@
-//
-// Created by 98max on 19/07/2023.
-//
+/**
+ * @file vesa.h
+ * @brief Defines a Video Electronics Standards Association (VESA) video driver for handling pixel rendering using VESA standards and a framebuffer
+ *
+ * @date 19th July 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_VIDEO_VESA_H
 #define MAXOS_VIDEO_VESA_H
@@ -25,7 +29,7 @@ namespace MaxOS {
              */
             class VideoElectronicsStandardsAssociation : public VideoDriver {
 
-                protected:
+	            private:
                     bool internal_set_mode(uint32_t width,  uint32_t height,  uint32_t) final;
 
                     void render_pixel_32_bit( uint32_t x,  uint32_t y,  uint32_t colour) final;

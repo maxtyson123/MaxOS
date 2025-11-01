@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/20/2022.
-//
+/**
+ * @file memorymanagement.cpp
+ * @brief Implementation of a Memory Manager for dynamic memory allocation
+ *
+ * @date 20th October 2022
+ * @author Max Tyson
+ */
 
 #include <memory/memorymanagement.h>
 #include <common/logger.h>
@@ -10,6 +14,11 @@ using namespace MaxOS::memory;
 using namespace MaxOS::common;
 using namespace MaxOS::system;
 
+/**
+ * @brief Construct a new Memory Manager object. Will switch the pml4 to use the calling process's page tables.
+ *
+ * @param vmm The virtual memory manager to use, if nullptr a new one will be created
+ */
 MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 : m_virtual_memory_manager(vmm)
 {
@@ -22,11 +31,11 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 	switch_active_memory_manager(this);
 
 	// Setup the first chunk of memory
-	this->m_first_memory_chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(PhysicalMemoryManager::s_page_size + sizeof(MemoryChunk), 0);
+	this->m_first_memory_chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(PAGE_SIZE + sizeof(MemoryChunk), 0);
 	m_first_memory_chunk->allocated = false;
 	m_first_memory_chunk->prev = nullptr;
 	m_first_memory_chunk->next = nullptr;
-	m_first_memory_chunk->size = PhysicalMemoryManager::s_page_size - sizeof(MemoryChunk);
+	m_first_memory_chunk->size = PAGE_SIZE - sizeof(MemoryChunk);
 	m_last_memory_chunk = m_first_memory_chunk;
 
 	// First memory manager is the kernel memory manager
@@ -226,7 +235,7 @@ void MemoryManager::handle_free(void* pointer) {
 MemoryChunk* MemoryManager::expand_heap(size_t size) {
 
 	// Create a new chunk of memory
-	auto* chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(size, Present | Write | NoExecute);
+	auto* chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(size, PRESENT | WRITE | NO_EXECUTE);
 	ASSERT(chunk != nullptr, "Out of memory - kernel cannot allocate any more memory");
 
 	// Handled by assert, but just in case
@@ -276,7 +285,7 @@ int MemoryManager::memory_used() {
  */
 size_t MemoryManager::align(size_t size) {
 
-	return (size / s_chunk_alignment + 1) * s_chunk_alignment;
+	return (size / CHUNK_ALIGNMENT + 1) * CHUNK_ALIGNMENT;
 }
 
 
@@ -332,17 +341,17 @@ void* operator new(size_t size) throw() {
 void* operator new[](size_t size) throw() {
 
 	// Handle the memory allocation
-	void* p = MaxOS::memory::MemoryManager::kmalloc(size);
-	return p;
+	return  MaxOS::memory::MemoryManager::kmalloc(size);
 }
 
 /**
  * @brief Overloaded new operator, allocates memory using the KERNEL memory manager
  *
  * @param pointer The pointer to the memory to allocate
+ * @param size The size of the memory to free - ignored in this implementation
  * @return The pointer to the memory
  */
-void* operator new(size_t, void* pointer) {
+void* operator new(size_t size, void* pointer) {
 
 	return pointer;
 }
@@ -350,10 +359,11 @@ void* operator new(size_t, void* pointer) {
 /**
  * @brief Overloaded new operator, allocates memory using the KERNEL memory manager
  *
+ * @param size The size of the memory to free - ignored in this implementation
  * @param pointer The pointer to the memory to allocate
  * @return The pointer to the memory
  */
-void* operator new[](size_t, void* pointer) {
+void* operator new[](size_t size, void* pointer) {
 
 
 	return pointer;
@@ -397,8 +407,9 @@ void operator delete(void* pointer, size_t) {
  * @brief Overloaded delete operator, frees memory using the KERNEL memory manager
  *
  * @param pointer The pointer to the memory to free
+ * @param size The size of the memory to free - ignored in this implementation
  */
-void operator delete[](void* pointer, size_t) {
+void operator delete[](void* pointer, size_t size) {
 
 	// Handle the memory freeing
 	return MaxOS::memory::MemoryManager::kfree(pointer);

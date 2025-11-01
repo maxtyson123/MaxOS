@@ -66,12 +66,14 @@ if [ "$IS_MACOS" -eq 1 ]; then
       export LD=gcc-13
 fi
 
-# Create the sysroot directory
-mkdir -p "$SYSROOT"
-
+# Configure the build
+FTP_MIRROR="https://ftp.wayne.edu" # "https://ftp.gnu.org" <-- official but sometimes slow
 BINUTILS_VERSION=2.41
 GCC_VERSION=13.2.0
 NUM_JOBS=$(nproc)
+
+# Create the sysroot directory
+mkdir -p "$SYSROOT"
 msg "Installing binutils-$BINUTILS_VERSION and gcc-$GCC_VERSION for $TARGET to $PREFIX"
 
 # == Build Binutils ==
@@ -79,7 +81,7 @@ msg "Installing binutils-$BINUTILS_VERSION and gcc-$GCC_VERSION for $TARGET to $
 # Download Binutils if not already downloaded
 if [ ! -f binutils-$BINUTILS_VERSION.tar.gz ]; then
     msg "Downloading binutils-$BINUTILS_VERSION"
-    wget https://ftp.gnu.org/gnu/binutils/binutils-$BINUTILS_VERSION.tar.gz || fail "Couldn't download binutils-$BINUTILS_VERSION"
+    wget $FTP_MIRROR/gnu/binutils/binutils-$BINUTILS_VERSION.tar.gz || fail "Couldn't download binutils-$BINUTILS_VERSION"
     tar xf binutils-$BINUTILS_VERSION.tar.gz
 fi
 
@@ -101,7 +103,7 @@ cd ../
 # Download GCC if not already downloaded
 if [ ! -f gcc-$GCC_VERSION.tar.gz ]; then
     msg "Downloading gcc-$GCC_VERSION"
-    wget https://ftp.gnu.org/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.gz || fail "Couldn't download gcc-$GCC_VERSION"
+    wget $FTP_MIRROR/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.gz || fail "Couldn't download gcc-$GCC_VERSION"
     tar xf gcc-$GCC_VERSION.tar.gz
 fi
 
@@ -117,14 +119,16 @@ if [ "$IS_MACOS" -eq 1 ]; then
 	done
 fi
 
-../gcc-$GCC_VERSION/configure --prefix="$PREFIX" --target="$TARGET" --disable-nls --enable-languages=c,c++ --without-headers "${extra_config_args[@]}" || fail "Configuring gcc failed"
+../gcc-$GCC_VERSION/configure --prefix="$PREFIX" --target="$TARGET" --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx "${extra_config_args[@]}" || fail "Configuring gcc failed"
 
 # Build GCC
 msg "Building gcc-$GCC_VERSION"
-make all-gcc -j "$NUM_JOBS"           || fail "Building gcc failed"
-make all-target-libgcc -j "$NUM_JOBS" || fail "Building libgcc failed"
-make install-gcc                      || fail "Installing gcc failed"
-make install-target-libgcc            || fail "Installing libgcc failed"
+make all-gcc -j "$NUM_JOBS"                 || fail "Building gcc failed"
+make all-target-libgcc -j "$NUM_JOBS"       || fail "Building libgcc failed"
+make all-target-libstdc++-v3 -j "$NUM_JOBS" || fail "Building libstdc++ failed"
+make install-gcc                            || fail "Installing gcc failed"
+make install-target-libgcc                  || fail "Installing libgcc failed"
+make install-target-libstdc++-v3            || fail "Installing libstdc++ failed"
 cd ../
 
 
@@ -173,4 +177,5 @@ ls
 # Setup the first version of the kernel
 cd pre_process
 ./version.sh --force
+./symbols.sh pre ../../kernel/include/common/symbols.h
 cd ../

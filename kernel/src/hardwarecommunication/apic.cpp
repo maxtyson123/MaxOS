@@ -1,6 +1,11 @@
-//
-// Created by 98max on 18/01/2024.
-//
+/**
+ * @file apic.cpp
+ * @brief Implementation of the Local & IO APIC class for managing the CPU's local Advanced Programmable Interrupt Controller (APIC)
+ *
+ * @date 18th January 2024
+ * @author Max Tyson
+ */
+
 #include <hardwarecommunication/apic.h>
 #include <common/logger.h>
 #include <hardwarecommunication/interrupts.h>
@@ -15,7 +20,11 @@ LocalAPIC::LocalAPIC() {
 	// Get the APIC base address
 	uint64_t msr_info = CPU::read_msr(0x1B);
 	m_apic_base = msr_info & 0xFFFFF000;
-	PhysicalMemoryManager::s_current_manager->reserve(m_apic_base);
+
+	// Reserve the base address once
+	static bool bsp_setup = false;
+	if(!bsp_setup)
+		PhysicalMemoryManager::s_current_manager->reserve(m_apic_base);
 
 	// Check if the APIC supports x2APIC
 	uint32_t ignored, xleaf, x2leaf;
@@ -36,28 +45,20 @@ LocalAPIC::LocalAPIC() {
 
 		// Map the APIC base address to the higher half
 		m_apic_base_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_apic_base);
-		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_apic_base,
-													  (virtual_address_t*) m_apic_base_high, Write | Present);
+		PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_apic_base, (virtual_address_t*) m_apic_base_high, PRESENT | WRITE);
 		Logger::DEBUG() << "APIC Base: phy=0x" << m_apic_base << ", virt=0x" << m_apic_base_high << "\n";
-
 	} else {
 		ASSERT(false, "CPU does not support xAPIC");
 	}
 
-	// Get information about the APIC
-	uint32_t spurious_vector = read(0xF0);
-	bool is_enabled = msr_info & (1 << 11);
-	bool is_bsp = msr_info & (1 << 8);
-	Logger::DEBUG() << "APIC: boot processor: " << (is_bsp ? "Yes" : "No") << ", enabled (globally): " << (is_enabled ? "Yes" : "No") << " Spurious Vector: 0x" << (uint64_t) (spurious_vector & 0xFF) << "\n";
-
-
-	if (!is_enabled) {
+	if (!(msr_info & (1 << 11))) {
 		Logger::WARNING() << "APIC is not enabled\n";
 		return;
 	}
 
 	// Enable the APIC
 	write(0xF0, (1 << 8) | 0x100);
+	bsp_setup = true;
 	Logger::DEBUG() << "APIC Enabled\n";
 }
 
@@ -87,8 +88,10 @@ uint32_t LocalAPIC::read(uint32_t reg) const {
 void LocalAPIC::write(uint32_t reg, uint32_t value) const {
 
 	// If x2APIC is enabled I/O is done through the MSR
-	if (m_x2apic)
+	if (m_x2apic){
 		CPU::write_msr((reg >> 4) + 0x800, value);
+		return;
+	}
 
 	// Default to memory I/O
 	*(volatile uint32_t*) ((uintptr_t) m_apic_base_high + reg) = value;
@@ -116,22 +119,95 @@ void LocalAPIC::send_eoi() const {
 	write(0xB0, 0);
 }
 
+/**
+ * @brief Send the init IPI to another apic
+ *
+ * @param apic_id The id of the apic to send to
+ * @param assert Is this an assert code (drive / release the signal)
+ */
+void LocalAPIC::send_init(uint8_t apic_id, bool assert) {
+
+	uint32_t icr_low = 0;
+
+	// Delivery mode = INIT (101b at bits 8-10)
+	icr_low |= (0b101 << 8);
+
+	// Level (bit 14): 1 = assert, 0 = de-assert
+	if (assert)
+		icr_low |= (1 << 14);
+
+	// Trigger mode: Level = 1
+	icr_low |= (1 << 15);
+
+	if (!m_x2apic) {
+
+		// Select target core
+		write(0x310, apic_id << 24);
+
+		// Send INIT (Delivery mode = INIT, Level = 1)
+		write(0x300, icr_low);
+
+		// Wait for delivery
+		while (read(0x300) & (1 << 12))
+			asm volatile("pause");
+
+	} else {
+
+		// x2APIC
+		CPU::write_msr(0x830, apic_id << 32 | icr_low);
+	}
+}
+
+/**
+ * @brief Send the start up IPI to another apic
+ *
+ * @param apic_id The apic to send it to
+ * @param vector Where to start executing
+ */
+void LocalAPIC::send_startup(uint8_t apic_id, uint8_t vector) {
+
+	if (!m_x2apic) {
+
+		// Select target core
+		write(0x310, apic_id << 24);
+
+		// Send SIPI (Delivery mode = STARTUP)
+		write(0x300, 0x4600 | vector);
+
+		// Wait for delivery
+		while (read(0x300) & (1 << 12))
+		 	asm volatile("pause");
+
+	} else {
+
+		// x2APIC
+		CPU::write_msr(0x831, apic_id << 32 | 0x4600 | vector);
+	}
+
+
+}
+
+/**
+ * @brief Construct a new IO APIC object. Maps the IO APIC registers and reads the MADT to get information about the IO APICs and interrupt source overrides.
+ *
+ * @param acpi The ACPI interface to get the MADT from
+ */
 IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 : m_acpi(acpi)
 {
 
 	// Get the information about the IO APIC
 	m_madt = (MADT*) m_acpi->find("APIC");
-	MADT_Item* io_apic_item = get_madt_item(1, 0);
+	MADTEntry* io_apic_item = get_madt_item(MADT_TYPE::IO_APIC, 0);
 
 	// Get the IO APIC
-	auto* io_apic = (MADT_IOAPIC*) PhysicalMemoryManager::to_io_region((uint64_t) io_apic_item + sizeof(MADT_Item));
-	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) io_apic_item, (virtual_address_t*) (io_apic - sizeof(MADT_Item)), Present | Write);
+	auto* io_apic = (MADT_IO_APIC*) PhysicalMemoryManager::to_io_region((uint64_t) io_apic_item + sizeof(MADTEntry));
+	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) io_apic_item, (virtual_address_t*) (io_apic - sizeof(MADTEntry)), PRESENT | WRITE);
 
 	// Map the IO APIC address to the higher half
 	m_address = io_apic->io_apic_address;
 	m_address_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_address);
-	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_address, (virtual_address_t*) m_address_high, Present | Write);
+	PhysicalMemoryManager::s_current_manager->map((physical_address_t*) m_address, (virtual_address_t*) m_address_high, PRESENT | WRITE);
 	Logger::DEBUG() << "IO APIC Address: phy=0x" << m_address << ", virt=0x" << m_address_high << "\n";
 
 	// Get the IO APIC version and max redirection entry
@@ -143,7 +219,7 @@ IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 	Logger::DEBUG() << "IO APIC Max Redirection Entry: 0x" << (uint64_t) m_max_redirect_entry << "\n";
 
 	// Get the source override item
-	MADT_Item* source_override_item = get_madt_item(2, m_override_array_size);
+	MADTEntry* source_override_item = get_madt_item(MADT_TYPE::IO_APIC, m_override_array_size);
 	uint32_t total_length = sizeof(MADT);
 	while (total_length < m_madt->header.length && m_override_array_size < 0x10) { // 0x10 is the max items
 
@@ -162,7 +238,7 @@ IOAPIC::IOAPIC(AdvancedConfigurationAndPowerInterface* acpi)
 		}
 
 		// Get the next item
-		source_override_item = get_madt_item(2, m_override_array_size);
+		source_override_item = get_madt_item(MADT_TYPE::IO_APIC, m_override_array_size);
 		if (source_override_item == nullptr)
 			break;
 	}
@@ -179,10 +255,10 @@ IOAPIC::~IOAPIC() = default;
  * @param index The index of the item
  * @return The item or null if not found
  */
-MADT_Item* IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
+MADTEntry* IOAPIC::get_madt_item(MADT_TYPE type, uint8_t index) {
 
 	// The item starts at the start of the MADT
-	auto* item = (MADT_Item*) ((uint64_t) m_madt + sizeof(MADT));
+	auto* item = (MADTEntry*) ((uint64_t) m_madt + sizeof(MADT));
 	uint64_t total_length = 0;
 	uint8_t current_index = 0;
 
@@ -190,7 +266,7 @@ MADT_Item* IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
 	while (total_length + sizeof(MADT) < m_madt->header.length && current_index <= index) {
 
 		// Correct type
-		if (item->type == type) {
+		if (item->type == (uint8_t)type) {
 
 			// Correct index means found
 			if (current_index == index)
@@ -202,7 +278,7 @@ MADT_Item* IOAPIC::get_madt_item(uint8_t type, uint8_t index) {
 
 		// Increment the total length
 		total_length += item->length;
-		item = (MADT_Item*) ((uint64_t) item + item->length);
+		item = (MADTEntry*) ((uint64_t) item + item->length);
 	}
 
 	// No item found
@@ -229,7 +305,6 @@ uint32_t IOAPIC::read(uint32_t reg) const {
  *
  * @param reg The register to write to
  * @param value The value to set the register to
- * @return The value at the register
  */
 void IOAPIC::write(uint32_t reg, uint32_t value) const {
 
@@ -329,6 +404,11 @@ void IOAPIC::set_redirect_mask(uint8_t index, bool mask) {
 	write_redirect(index, &entry);
 }
 
+/**
+ * @brief Construct a new Advanced Programmable Interrupt Controller object and initialises the Local APIC and IO APIC, disabling the legacy PIC.
+ *
+ * @param acpi The ACPI interface to get the MADT from
+ */
 AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi)
 : m_pic_master_command_port(0x20),
   m_pic_master_data_port(0x21),

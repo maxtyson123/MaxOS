@@ -1,6 +1,10 @@
-//
-// Created by 98max on 27/10/2022.
-//
+/**
+ * @file syscalls.cpp
+ * @brief Implementation of System Call Manager and handlers
+ *
+ * @date 27th October 2022
+ * @author Max Tyson
+ */
 
 #include <system/syscalls.h>
 #include <common/logger.h>
@@ -18,11 +22,8 @@ SyscallManager::SyscallManager()
 : InterruptHandler(0x80)
 {
 
-	// Clear the args
-	Logger::INFO() << "Setting up Syscalls \n";
-	m_current_args = new syscall_args_t;
-
 	// Register the handlers
+	Logger::INFO() << "Setting up Syscalls \n";
 	set_syscall_handler(SyscallType::CLOSE_PROCESS, syscall_close_process);
 	set_syscall_handler(SyscallType::KLOG, syscall_klog);
 	set_syscall_handler(SyscallType::ALLOCATE_MEMORY, syscall_allocate_memory);
@@ -49,35 +50,35 @@ SyscallManager::~SyscallManager() = default;
 cpu_status_t* SyscallManager::handle_interrupt(cpu_status_t* status) {
 
 	// Get the args from the cpu state
-	m_current_args->arg0 = status->rdi;
-	m_current_args->arg1 = status->rsi;
-	m_current_args->arg2 = status->rdx;
-	m_current_args->arg3 = status->r10;
-	m_current_args->arg4 = status->r8;
-	m_current_args->arg5 = status->r9;
-	m_current_args->return_value = 0;
-	m_current_args->return_state = status;
+	syscall_args_t args;
+	args.arg0 = status->rdi;
+	args.arg1 = status->rsi;
+	args.arg2 = status->rdx;
+	args.arg3 = status->r10;
+	args.arg4 = status->r8;
+	args.arg5 = status->r9;
+	args.return_value = 0;
+	args.return_state = status;
 
 	// Call the handler
 	uint64_t syscall = status->rax;
 	if (m_syscall_handlers[syscall] != nullptr)
-		m_current_args = m_syscall_handlers[syscall](m_current_args);
+		args = *(m_syscall_handlers[syscall](&args));
 	else
 		Logger::ERROR() << "Syscall " << syscall << " not found\n";
 
 	// If there is a specific return state, use that
-	if (m_current_args->return_state != status)
-		return m_current_args->return_state;
+	if (args.return_state != status)
+		return args.return_state;
 
 	// Update the cpu state
-	status->rdi = m_current_args->arg0;
-	status->rsi = m_current_args->arg1;
-	status->rdx = m_current_args->arg2;
-	status->r10 = m_current_args->arg3;
-	status->r8 = m_current_args->arg4;
-	status->r9 = m_current_args->arg5;
-	status->rax = m_current_args->return_value;
-
+	status->rdi = args.arg0;
+	status->rsi = args.arg1;
+	status->rdx = args.arg2;
+	status->r10 = args.arg3;
+	status->r8 = args.arg4;
+	status->r9 = args.arg5;
+	status->rax = args.return_value;
 
 	// Return the status
 	return status;
@@ -118,18 +119,26 @@ syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t* ar
 	int exit_code = (int) args->arg1;
 
 	// Close the process
-	Process* process = pid == 0 ? Scheduler::current_process() : Scheduler::get_process(pid);
-	Scheduler::system_scheduler()->remove_process(process);
+	Process* process = pid == 0 ? GlobalScheduler::current_process() : GlobalScheduler::get_process(pid);
+	GlobalScheduler::system_scheduler()->remove_process(process);
 
 	// Schedule the next process
-	cpu_status_t* next_process = Scheduler::system_scheduler()->schedule_next(args->return_state);
+	cpu_status_t* next_process = GlobalScheduler::core_scheduler()->schedule_next(args->return_state);
 	args->return_state = next_process;
 
 	// Done
 	return args;
 }
 
+/**
+ * @brief System call to log a message to the kernel log
+ *
+ * @param args Arg0 = message
+ * @return The same args structure
+ */
 syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
+
+	s_lock.lock();
 
 	char* message = (char*) args->arg0;
 
@@ -137,7 +146,9 @@ syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 	if (message[0] == '%' && message[1] == 'h')
 		Logger::Out() << message + 2;
 	else
-		Logger::INFO() << ANSI_COLOURS[FG_Blue] << "(" << Scheduler::current_process()->name.c_str() << ":" << Scheduler::current_thread()->tid << "): " << ANSI_COLOURS[Reset] << message;
+		Logger::INFO() << message;
+
+	s_lock.unlock();
 
 	return args;
 }
@@ -209,7 +220,7 @@ syscall_args_t* SyscallManager::syscall_resource_open(syscall_args_t* args) {
 	auto flags 	= (size_t)args->arg2;
 
 	// Open the resource
-	args->return_value = Scheduler::current_process()->resource_manager.open_resource(type, name, flags);
+	args->return_value = GlobalScheduler::current_process()->resource_manager.open_resource(type, name, flags);
 	return args;
 }
 
@@ -226,7 +237,7 @@ syscall_args_t* SyscallManager::syscall_resource_close(syscall_args_t* args) {
 	auto flags 	= (size_t)args->arg1;
 
 	// Close the resource
-	Scheduler::current_process()->resource_manager.close_resource(handle, flags);
+	GlobalScheduler::current_process()->resource_manager.close_resource(handle, flags);
 	return args;
 }
 
@@ -245,7 +256,7 @@ syscall_args_t* SyscallManager::syscall_resource_write(syscall_args_t* args) {
 	auto flags 	= (size_t)args->arg3;
 
 	// Open the resource
-	auto resource = Scheduler::current_process()->resource_manager.get_resource(handle);
+	auto resource = GlobalScheduler::current_process()->resource_manager.get_resource(handle);
 	if(!resource){
 		args->return_value = 0;
 		return args;
@@ -271,7 +282,7 @@ syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
 	auto flags 	= (size_t)args->arg3;
 
 	// Open the resource
-	auto resource = Scheduler::current_process()->resource_manager.get_resource(handle);
+	auto resource = GlobalScheduler::current_process()->resource_manager.get_resource(handle);
 	if(!resource){
 		args->return_value = 0;
 		return args;
@@ -291,9 +302,7 @@ syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
 syscall_args_t* SyscallManager::syscall_thread_yield(syscall_args_t* args) {
 
 	// Yield
-	Scheduler::current_thread()->execution_state = args->return_state;
-	cpu_status_t* next_process = Scheduler::system_scheduler()->yield();
-	args->return_state = next_process;
+	args->return_state = GlobalScheduler::yield(args->return_state);
 
 	return args;
 }
@@ -309,12 +318,9 @@ syscall_args_t* SyscallManager::syscall_thread_sleep(syscall_args_t* args) {
 	// Get the milliseconds
 	size_t milliseconds = args->arg0;
 
-	// Store the updated state in the thread as the scheduler will not have the updated state when switching to the next thread
-	Scheduler::current_thread()->execution_state = args->return_state;
-
 	// Sleep the thread
-	cpu_status_t* next_thread = Scheduler::current_thread()->sleep(milliseconds);
-	args->return_state = next_thread;
+	GlobalScheduler::current_thread()->sleep(milliseconds);
+	args->return_state = GlobalScheduler::yield(args->return_state);
 
 	// Done
 	return args;
@@ -333,14 +339,14 @@ syscall_args_t* SyscallManager::syscall_thread_close(syscall_args_t* args) {
 	int exit_code = (int) args->arg1;
 
 	// Get the thread if it is 0 then it is the current thread
-	Thread* thread = tid == 0 ? Scheduler::current_thread() : Scheduler::get_thread(tid);
-
-	// Close the thread
-	Scheduler::get_process(thread->parent_pid)->remove_thread(tid);
+	Thread* thread = tid == 0 ? GlobalScheduler::current_thread() : GlobalScheduler::get_thread(tid);
+	thread->thread_state = ThreadState::STOPPED;
 
 	// Schedule the next thread
-	cpu_status_t* next_thread = Scheduler::system_scheduler()->schedule_next(args->return_state);
-	args->return_state = next_thread;
+	if(tid == 0){
+		cpu_status_t* next_thread = GlobalScheduler::core_scheduler()->schedule_next(args->return_state);
+		args->return_state = next_thread;
+	}
 
 	// Done
 	return args;

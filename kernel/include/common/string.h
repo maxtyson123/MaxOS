@@ -1,6 +1,10 @@
-//
-// Created by 98max on 4/12/2023.
-//
+/**
+ * @file string.h
+ * @brief Defines a String class for dynamically sized strings with various operations
+ *
+ * @date 12th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_STRING_H
 #define MAXOS_STRING_H
@@ -8,20 +12,23 @@
 #include <stdint.h>
 
 #include <common/vector.h>
+#include <stdarg.h>
 
 namespace MaxOS {
+
+	/// How many characters can be stored in the small string optimization array
+	constexpr int MAX_STRING_SMALL_STORAGE = 0x99;
 
     /**
      * @class String
      * @brief Dynamically sized string with various operations
      */
-    class String {
+    typedef class String {
         private:
           char* m_string = nullptr;
           int m_length = 0;           // Does not include the null terminator
 
-		  const static uint8_t s_small_storage = 0x99;
-		  char m_small_string[s_small_storage];
+		  char m_small_string[MAX_STRING_SMALL_STORAGE] = {0};
 		  bool m_using_small = true;
 
           [[nodiscard]] static int lex_value(String const &other) ;
@@ -34,22 +41,26 @@ namespace MaxOS {
           String(char const* string);
           String(uint8_t const* string, int length);
           String(String const &other);
-          String(int value);
-          String(uint64_t value);
-          String(float value);
+          explicit String(int value);
+          explicit String(uint64_t value);
+          explicit String(float value);
+		  explicit String(bool value);
           ~String();
 
           void copy(String const &other);
+
+		  static String formatted(char const *format, ...);
+		  static String formatted(char const *format, va_list parameters);
 
           [[nodiscard]] int length(bool count_ansi = true) const;
           char* c_str();
           const char* c_str() const;
 
           bool starts_with(String const &other);
-          String substring(int start, int length) const;
+          [[nodiscard]] String substring(int start, int length) const;
 
-          common::Vector<String> split(String const &delimiter) const;
-          String strip(char strip_char = ' ') const;
+          [[nodiscard]] common::Vector<String> split(String const &delimiter) const;
+          [[nodiscard]] String strip(char strip_char = ' ') const;
 
 
           [[nodiscard]] String center(int width, char fill = ' ') const;
@@ -76,9 +87,27 @@ namespace MaxOS {
           char& operator [] (int index);
           char& operator [] (int index) const;
 
-    };
+    } string;   ///< Typedef for String
 
-    typedef String              string;
+	/**
+	 * @class StringBuilder
+	 * @brief Creates a string using a using a combination of parts with the '<<' operator. Simmilar to the logger.
+	 *
+	 * @see Logger
+	 */
+	class StringBuilder {
+		public:
+			String out;                                 ///< The output string
+			operator String() const { return out; } 	///< Convert to string
+
+			StringBuilder& operator << (char const* str) { out += string(str); return *this; }   	///< Append C-string
+			StringBuilder& operator << (String const &other) { out += other; return *this; }           	///< Append String
+			StringBuilder& operator << (int value) { out += string(value); return *this; }              ///< Append int
+			StringBuilder& operator << (uint64_t value) { out += string(value); return *this; }         ///< Append hex
+			StringBuilder& operator << (float value) { out += string(value); return *this; }            ///< Append decimal
+			StringBuilder& operator << (bool value) { out += string(value); return *this; }             ///< Append bool
+
+	};
 }
 
 // Convert functions

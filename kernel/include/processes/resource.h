@@ -1,6 +1,10 @@
-//
-// Created by 98max on 8/26/2025.
-//
+/**
+ * @file resource.h
+ * @brief Defines classes for managing process resources such as files and devices
+ *
+ * @date 26th August 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_PROCESSES_RESOURCE_H
 #define MAXOS_PROCESSES_RESOURCE_H
@@ -18,6 +22,10 @@ namespace MaxOS {
 		typedef ::syscore::ResourceType resource_type_t;
 		typedef ::syscore::ResourceErrorBase resource_error_base_t;
 
+		/**
+		 * @class Resource
+		 * @brief Represents a generic resource that can be opened, closed, read from and written to
+		 */
 		class Resource {
 
 			private:
@@ -26,7 +34,7 @@ namespace MaxOS {
 
 			public:
 
-				Resource(const string& name, size_t flags, resource_type_t type);
+				Resource(const string &name, size_t flags, resource_type_t type);
 				virtual ~Resource();
 
 				string name();
@@ -39,13 +47,17 @@ namespace MaxOS {
 				virtual int write(const void* buffer, size_t size, size_t flags);
 		};
 
-		 class BaseResourceRegistry{
+		/**
+		 * @class BaseResourceRegistry
+		 * @brief Manages the creation, retention and destruction of resources of a certain type. Should be subclassed for each resource type
+		 */
+		class BaseResourceRegistry {
 
-		 	protected:
-				common::Map<string, Resource*> m_resources;
-				common::Map<string, uint64_t>  m_resource_uses;
+			protected:
+				common::Map<string, Resource*> m_resources;         ///< The map of resource names to resource instances
+				common::Map<string, uint64_t> m_resource_uses;      ///< The map of resource names to how many processes are using them
 
-			 	resource_type_t m_type;
+				resource_type_t m_type;                             ///< The resource type that this registry manages
 
 			public:
 				explicit BaseResourceRegistry(resource_type_t type);
@@ -53,36 +65,53 @@ namespace MaxOS {
 
 				resource_type_t type();
 
-			 	virtual Resource* 	get_resource(const string& name);
-			 	virtual bool 		register_resource(Resource* resource);
+				virtual Resource* get_resource(const string &name);
+				virtual bool register_resource(Resource* resource);
 
-			 	virtual void 		close_resource(Resource* resource, size_t flags);
-				virtual Resource* 	create_resource(const string& name, size_t flags);
+				virtual void close_resource(Resource* resource, size_t flags);
+				virtual Resource* create_resource(const string &name, size_t flags);
 		};
 
-		template<class Type> class ResourceRegistry : public BaseResourceRegistry{
+		/**
+		 * @class ResourceRegistry
+		 * @brief A resource registry for a specific resource type
+		 *
+		 * @tparam Type The resource type that this registry manages
+		 */
+		template<class Type> class ResourceRegistry : public BaseResourceRegistry {
 
 			public:
 				explicit ResourceRegistry(resource_type_t type);
 				~ResourceRegistry() = default;
 
-				Resource* create_resource(const string& name, size_t flags) override {
+				/// Creates a resource of the specific type
+				Resource* create_resource(const string &name, size_t flags) override {
 
 					auto resource = new Type(name, flags, type());
 
 					// Creation failed
-					if(!register_resource(resource)){
+					if (!register_resource(resource)) {
 						delete resource;
 						return nullptr;
 					}
 
-					return  resource;
+					return resource;
 				}
 		};
 
-		template <class Type> ResourceRegistry<Type>::ResourceRegistry(resource_type_t type):BaseResourceRegistry(type) {}
+		/**
+		 * @brief Constructor for ResourceRegistry of a specific type
+		 *
+		 * @tparam Type The resource type that this registry manages
+		 * @param type The resource type enum value
+		 */
+		template<class Type> ResourceRegistry<Type>::ResourceRegistry(resource_type_t type):BaseResourceRegistry(type) {}
 
-		class GlobalResourceRegistry{
+		/**
+		 * @class GlobalResourceRegistry
+		 * @brief Manages all the resource registries for each resource type
+		 */
+		class GlobalResourceRegistry {
 
 			private:
 				common::Map<resource_type_t, BaseResourceRegistry*> m_registries;
@@ -98,7 +127,11 @@ namespace MaxOS {
 				static void remove_registry(BaseResourceRegistry* registry);
 		};
 
-		class ResourceManager{
+		/**
+		 * @class ResourceManager
+		 * @brief Manages the open resources for a process
+		 */
+		class ResourceManager {
 
 			private:
 				common::Map<uint64_t, Resource*> m_resources;
@@ -111,11 +144,11 @@ namespace MaxOS {
 
 				common::Map<uint64_t, Resource*> resources();
 
-				uint64_t open_resource(resource_type_t type, const string& name, size_t flags);
-				void 	 close_resource(uint64_t handle, size_t flags);
+				uint64_t open_resource(resource_type_t type, const string &name, size_t flags);
+				void close_resource(uint64_t handle, size_t flags);
 
 				Resource* get_resource(uint64_t handle);
-				Resource* get_resource(const string& name);
+				Resource* get_resource(const string &name);
 		};
 	}
 }

@@ -1,15 +1,23 @@
-//
-// Created by 98max on 4/04/2025.
-//
+/**
+ * @file logger.cpp
+ * @brief Implements a Logger class for logging messages to multiple output streams
+ *
+ * @date 4th April 2025
+ * @author Max Tyson
+ */
+
 #include <common/logger.h>
 #include <stdarg.h>
 #include <drivers/console/vesaboot.h>
 #include <common/version.h>
 #include <system/cpu.h>
+#include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::drivers::console;
+using namespace MaxOS::processes;
+using namespace MaxOS::system;
 
 Logger::Logger()
 : m_log_writers()
@@ -31,12 +39,12 @@ Logger::~Logger() {
 /**
  * @brief Adds an output stream to the logger
  *
- * @param output_stream The output stream to add
+ * @param log_writer The output stream to add
  */
-void Logger::add_log_writer(OutputStream *log_writer) {
+void Logger::add_log_writer(OutputStream* log_writer) {
 
 	// If the list is not empty
-	if (m_log_writer_count >= m_max_log_writers)
+	if (m_log_writer_count >= MAX_LOG_WRITERS)
 		return;
 
 	// Add the output stream to the list
@@ -53,9 +61,9 @@ void Logger::add_log_writer(OutputStream *log_writer) {
 /**
  * @brief Removes an output stream from the logger
  *
- * @param output_stream The output stream to remove
+ * @param log_writer The output stream to remove
  */
-void Logger::disable_log_writer(OutputStream *log_writer) {
+void Logger::disable_log_writer(OutputStream* log_writer) {
 
 	// If the list is empty
 	if (m_log_writer_count == 0)
@@ -99,14 +107,15 @@ void Logger::set_log_level(LogLevel log_level) {
 			break;
 
 		case LogLevel::WARNING:
-			*this << ANSI_COLOURS[ANSIColour::BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]"
-				  << ANSI_COLOURS[ANSIColour::Reset] << " ";
+			*this << ANSI_COLOURS[ANSIColour::BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
 			break;
 
 		case LogLevel::ERROR:
 			*this << ANSI_COLOURS[ANSIColour::BG_Red] << "[  ERROR   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
 			break;
 	}
+
+	GlobalScheduler::print_running_header();
 }
 
 
@@ -118,12 +127,12 @@ void Logger::set_log_level(LogLevel log_level) {
 void Logger::write_char(char c) {
 
 	// Ensure logging at this level is enabled
-	if (m_log_level > s_max_log_level)
+	if (m_log_level > MAX_LOG_LEVEL)
 		return;
 
 	// Write the character to all output streams
 	for (int i = 0; i < m_log_writer_count; i++)
-		if (m_log_writers_enabled[i] || m_log_level == LogLevel::ERROR)
+		if (m_log_writers_enabled[i])
 			m_log_writers[i]->write_char(c);
 
 }
@@ -134,6 +143,7 @@ void Logger::write_char(char c) {
  * @return The active logger
  */
 Logger &Logger::Out() {
+
 	return *active_logger();
 }
 
@@ -216,38 +226,7 @@ void Logger::printf(char const *format, ...) {
 	va_list parameters;
 	va_start(parameters, format);
 
-	// Loop through the format string
-	for (; *format != '\0'; format++) {
-
-		// If it is not a %, print the character
-		if (*format != '%') {
-			write_char(*format);
-			continue;
-		}
-
-		// Move to the next character
-		format++;
-		switch (*format) {
-			case 'd': {
-				// Print a decimal
-				int number = va_arg (parameters, int);
-				write_int(number);
-				break;
-			}
-			case 'x': {
-				// Print a hex
-				uint64_t number = va_arg (parameters, uint64_t);
-				write_hex(number);
-				break;
-			}
-			case 's': {
-				// Print a string
-				char *str = va_arg (parameters, char*);
-				write(str);
-				break;
-			}
-		}
-	}
+	write(String::formatted(format, parameters));
 }
 
 /**
@@ -262,12 +241,11 @@ void Logger::ASSERT(bool condition, char const *message, ...) {
 	if (condition)
 		return;
 
-	// Print the message
-	s_active_logger->set_log_level(LogLevel::ERROR);
-	s_active_logger->printf(message);
+	va_list parameters;
+	va_start(parameters, message);
 
 	// Hang the system
-	system::CPU::PANIC("Check previous logs for more information");
+	system::CPU::PANIC(String::formatted(message, parameters).c_str());
 }
 
 /**

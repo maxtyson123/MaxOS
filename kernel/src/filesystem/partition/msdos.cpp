@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/28/2022.
-//
+/**
+ * @file msdos.cpp
+ * @brief Implementation of MSDOS partition table reading and mounting
+ *
+ * @date 28th December 2022
+ * @author Max Tyson
+ */
 
 #include <filesystem/partition/msdos.h>
 
@@ -14,18 +18,18 @@ using namespace MaxOS::drivers::disk;
 /**
  * @brief read the partition table of a given hard disk
  *
- * @param hd The hard disk to read the partition table from
+ * @param disk The hard disk to read the partition table from
  */
-void MSDOSPartition::mount_partitions(Disk *hd) {
+void MSDOSPartition::mount_partitions(Disk* disk) {
 
 	// Read the MBR from the hard disk
 	MasterBootRecord mbr = {};
 	buffer_t mbr_buffer(&mbr, sizeof(MasterBootRecord));
-	hd->read(0, &mbr_buffer);
+	disk->read(0, &mbr_buffer);
 
 	// Check if the magic number is correct
 	if (mbr.magic != 0xAA55) {
-		Logger::WARNING() << "Could not find valid MBR on disk 0x" << (uint64_t) hd << "\n";
+		Logger::WARNING() << "Could not find valid MBR on disk 0x" << (uint64_t) disk << "\n";
 		return;
 	}
 
@@ -49,12 +53,12 @@ void MSDOSPartition::mount_partitions(Disk *hd) {
 
 			case PartitionType::FAT32:
 				Logger::Out() << "FAT32 partition\n";
-				vfs->mount_filesystem(new Fat32FileSystem(hd, entry.start_LBA));
+				vfs->mount_filesystem(new Fat32FileSystem(disk, entry.start_LBA));
 				break;
 
 			case PartitionType::LINUX_EXT2:
 				Logger::Out() << "EXT2 partition\n";
-				vfs->mount_filesystem(new ext2::Ext2FileSystem(hd, entry.start_LBA));
+				vfs->mount_filesystem(new ext2::Ext2FileSystem(disk, entry.start_LBA));
 				break;
 
 			default:

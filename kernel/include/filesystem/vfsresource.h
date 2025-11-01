@@ -1,6 +1,11 @@
-//
-// Created by 98max on 9/1/2025.
-//
+/**
+ * @file vfsresource.h
+ * @brief Defines VFSResource classes for wrapping File and Directory objects as Resources in the Virtual File System,
+ * allowing file system operations to be performed through the Resource interface.
+ *
+ * @date 1st September 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_FILESYSTEM_VFSRESOURCE_H
 #define MAXOS_FILESYSTEM_VFSRESOURCE_H
@@ -16,19 +21,31 @@ namespace MaxOS {
 
 	namespace filesystem {
 
+		/**
+		 * @class FileResource
+		 * @brief A wrapper for a File which exposes File operations as Resource operations
+		 *
+		 * @see File
+		 * @see Resource
+		 * @todo Should this free the memory of the file when the resource is done??
+		 */
 		class FileResource final : public processes::Resource{
 
 			public:
 				FileResource(const string& name, size_t flags, processes::resource_type_t type);
 				~FileResource() final;
 
-				File* file;
+				File* file; ///< The file that this resource handles & exposes
 
 				int read(void* buffer, size_t size, size_t flags) final;
 				int write(const void* buffer, size_t size, size_t flags) final;
 
 		};
 
+		/**
+		 * @class DirectoryResource
+         * @brief A wrapper for a Directory which exposes Directory operations as Resource operations
+		 */
 		class DirectoryResource final : public processes::Resource{
 
 			private:
@@ -41,13 +58,17 @@ namespace MaxOS {
 				DirectoryResource(const string& name, size_t flags, processes::resource_type_t type);
 				~DirectoryResource() final;
 
-				Directory* directory;
+				Directory* directory; ///< The directory that this resource handles & exposes
 
 				int read(void* buffer, size_t size, size_t flags) final;
 				int write(const void* buffer, size_t size, size_t flags) final;
 
 		};
 
+		/**
+		 * @class VFSResourceRegistry
+		 * @brief A resource registry for both Files & Directories
+		 */
 		class VFSResourceRegistry : processes::BaseResourceRegistry{
 
 			private:

@@ -1,6 +1,11 @@
-//
-// Created by 98max on 9/1/2025.
-//
+/**
+ * @file vfsresource.cpp
+ * @brief Implementation of virtual file system resources for files and directories
+ *
+ * @date 1st September 2025
+ * @author Max Tyson
+ */
+
 #include <filesystem/vfsresource.h>
 
 using namespace MaxOS;
@@ -9,6 +14,13 @@ using namespace MaxOS::processes;
 using namespace MaxOS::common;
 using namespace syscore::filesystem;
 
+/**
+ * @brief Construct a new File Resource object
+ *
+ * @param name The name of the resource
+ * @param flags The flags for the resource when opened
+ * @param type The type of the resource
+ */
 FileResource::FileResource(string const& name, size_t flags, processes::resource_type_t type)
 : Resource(name, flags, type),
   file(nullptr)	// Initialised by the registry
@@ -112,6 +124,13 @@ int FileResource::write(void const* buffer, size_t size, size_t flags) {
 	return size;
 }
 
+/**
+ * @brief Construct a new Directory Resource object
+ *
+ * @param name The name of the resource
+ * @param flags The flags for the resource when opened
+ * @param type The type of the resource
+ */
 DirectoryResource::DirectoryResource(string const& name, size_t flags, processes::resource_type_t type)
 : Resource(name, flags, type),
   directory(nullptr)
@@ -297,6 +316,11 @@ int DirectoryResource::write(void const* buffer, size_t size, size_t flags) {
 	return size;
 }
 
+/**
+ * @brief Construct a new VFS Resource Registry object
+ *
+ * @param vfs The virtual file system to use
+ */
 VFSResourceRegistry::VFSResourceRegistry(VirtualFileSystem* vfs)
 : BaseResourceRegistry(resource_type_t::FILESYSTEM),
   m_vfs(vfs)
@@ -352,7 +376,7 @@ Resource* VFSResourceRegistry::open_as_resource(string const& name, File* file) 
 Resource* VFSResourceRegistry::get_resource(string const& name) {
 
 	string path = Path::absolute_path(name);
-	path = Path::join_path(Scheduler::current_process()->working_directory, path);
+	path = Path::join_path(GlobalScheduler::current_process()->working_directory, path);
 
 	// Resource already opened
 	auto resource = BaseResourceRegistry::get_resource(path);
@@ -370,7 +394,7 @@ Resource* VFSResourceRegistry::get_resource(string const& name) {
 Resource* VFSResourceRegistry::create_resource(string const& name, size_t flags) {
 
 	string path = Path::absolute_path(name);
-	path = Path::join_path(Scheduler::current_process()->working_directory, path);
+	path = Path::join_path(GlobalScheduler::current_process()->working_directory, path);
 
 	// Resource already opened
 	auto resource = BaseResourceRegistry::get_resource(path);

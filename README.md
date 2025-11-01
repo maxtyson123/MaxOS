@@ -213,11 +213,11 @@ No user usage so far (userland will be added in the future)
 - [x] IPC
 - [x] VFS
 - [x] Loading ELF
-- [ ] Multiple Cores Support (SMP & Scheduler)
-- [ ] Move drivers to userspace 
-- [ ] Move VFS to userspace
+- [x] Multiple Cores Support (SMP & Scheduler)
+- [ ] Move VFS & drivers to userspace
 - [ ] Porting & Dynamically Linking Libc
 - [ ] Move networking to userspace (& rewrite, fix)
+- [ ] Clean up ALL Todos
 
 #### Userland
 - [ ] GUI

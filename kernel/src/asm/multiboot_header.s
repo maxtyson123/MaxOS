@@ -1,3 +1,11 @@
+;/**
+; * @file multiboot_header.s (NASM)
+; * @brief Multiboot2 header for the kernel
+; *
+; * @date 2022
+; * @author Max Tyson
+; */
+
 section .multiboot_header
 header_start:
 	align 8

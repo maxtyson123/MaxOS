@@ -1,16 +1,19 @@
-//
-// Created by 98max on 25/02/2025.
-//
+/**
+ * @file process.cpp
+ * @brief Implementation of a Thread and Process classes for managing system processes
+ *
+ * @date 25th February 2025
+ * @author Max Tyson
+ */
+
 #include <processes/process.h>
 #include <common/logger.h>
-#include <processes/scheduler.h>    //TODO: This is a circular dependency, need to fix, make the scheduler handle that sorta stuff
 
 using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::processes;
 using namespace MaxOS::common;
-
 
 /**
  * @brief Constructor for the Thread class
@@ -23,44 +26,42 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	ticks = 0;
 
 	// Create the stack
-	m_stack_pointer = (uintptr_t) MemoryManager::malloc(s_stack_size);
+	m_stack_pointer = (uintptr_t) MemoryManager::malloc(STACK_SIZE);
 
 	// Create the TSS stack
 	if (parent->is_kernel) {
 
 		// Use the kernel stack
-		m_tss_stack_pointer = CPU::tss.rsp0;
+		m_tss_stack_pointer = CPU::executing_core() -> tss.rsp0;
 
 	} else {
-		m_tss_stack_pointer = (uintptr_t) MemoryManager::kmalloc(s_stack_size) + s_stack_size;
+		m_tss_stack_pointer = (uintptr_t) MemoryManager::kmalloc(STACK_SIZE) + STACK_SIZE;
 	}
 
 	// Mak sure there is a stack
 	ASSERT(m_stack_pointer != 0 && m_tss_stack_pointer != 0, "Failed to allocate stack for thread");
 
 	// Set up the execution state
-	execution_state = new cpu_status_t;
-	execution_state->rip = (uint64_t) _entry_point;
-	execution_state->ss = parent->is_kernel ? 0x10 : 0x23;
-	execution_state->cs = parent->is_kernel ? 0x8 : 0x1B;
-	execution_state->rflags = 0x202;
-	execution_state->interrupt_number = 0;
-	execution_state->error_code = 0;
-	execution_state->rsp = m_stack_pointer;
-	execution_state->rbp = 0;
+	execution_state = {};
+	execution_state.rip = (uint64_t) _entry_point;
+	execution_state.ss = parent->is_kernel ? 0x10 : 0x23;
+	execution_state.cs = parent->is_kernel ? 0x8 : 0x1B;
+	execution_state.rflags = 0x202;
+	execution_state.interrupt_number = 0;
+	execution_state.error_code = 0;
+	execution_state.rsp = m_stack_pointer;
+	execution_state.rbp = 0;
 
 	// Copy the args into userspace
 	uint64_t argc = arg_amount;
 	void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
 	memcpy(argv, args, arg_amount * sizeof(void*));
 
-	execution_state->rdi = argc;
-	execution_state->rsi = (uint64_t) argv;
+	execution_state.rdi = argc;
+	execution_state.rsi = (uint64_t) argv;
 	//execution_state->rdx = (uint64_t)env_args;
 
-	// Begin scheduling this thread
 	parent_pid = parent->pid();
-	tid = Scheduler::system_scheduler()->add_thread(this);
 }
 
 /**
@@ -69,19 +70,15 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 Thread::~Thread() = default;
 
 /**
- * @brief Sleeps the thread for a certain amount of time (Yields the thread)
+ * @brief Sleeps the thread for a certain amount of time
  *
  * @param milliseconds The amount of time to sleep for
- * @return The status of the CPU for the next thread to run
  */
-cpu_status_t* Thread::sleep(size_t milliseconds) {
+void Thread::sleep(size_t milliseconds) {
 
 	// Update the state
 	thread_state = ThreadState::SLEEPING;
-	wakeup_time = Scheduler::system_scheduler()->ticks() + milliseconds;
-
-	// Let other processes do stuff while this thread is sleeping
-	return Scheduler::system_scheduler()->yield();
+	wakeup_time  = milliseconds;
 }
 
 /**
@@ -90,7 +87,7 @@ cpu_status_t* Thread::sleep(size_t milliseconds) {
 void Thread::save_sse_state() {
 
 	// Ensure the state saving is enabled
-	if (!CPU::s_xsave)
+	if (!CPU::executing_core()->xsave_enabled)
 		return;
 
 	// Save the state
@@ -103,11 +100,71 @@ void Thread::save_sse_state() {
 void Thread::restore_sse_state() {
 
 	// Ensure the state saving is enabled
-	if (!CPU::s_xsave)
+	if (!CPU::executing_core()->xsave_enabled)
 		return;
 
 	// Restore the state
 	asm volatile("fxrstor %0" : : "m" (m_sse_save_region));
+}
+
+/**
+ * @brief Saves the CPU state into the thread's execution_state structure
+ */
+void Thread::save_cpu_state() {
+	asm volatile(
+			// Store return address before stack is modified
+			"movq (%%rsp), %%rax\n"
+
+			// Store RDI before stack is modified
+			"pushq %%rdi\n"
+			"movq %0, %%rdi\n"
+
+			// Store general purpose
+			"movq %%r15, 0x00(%%rdi)\n"
+			"movq %%r14, 0x08(%%rdi)\n"
+			"movq %%r13, 0x10(%%rdi)\n"
+			"movq %%r12, 0x18(%%rdi)\n"
+			"movq %%r11, 0x20(%%rdi)\n"
+			"movq %%r10, 0x28(%%rdi)\n"
+			"movq %%r9,  0x30(%%rdi)\n"
+			"movq %%r8,  0x38(%%rdi)\n"
+			"movq %%rdi, 0x40(%%rdi)\n"
+			"movq %%rsi, 0x48(%%rdi)\n"
+			"movq %%rbp, 0x50(%%rdi)\n"
+			"movq %%rdx, 0x58(%%rdi)\n"
+			"movq %%rcx, 0x60(%%rdi)\n"
+			"movq %%rbx, 0x68(%%rdi)\n"
+			"movq %%rax, 0x70(%%rdi)\n"
+
+			// Reserved
+			"movq $0,    0x78(%%rdi)\n"
+			"movq $0,    0x80(%%rdi)\n"
+
+			// RIP from earlier
+			"movq %%rax, 0x88(%%rdi)\n"
+
+			// Get cs
+			"xorq %%rax, %%rax\n"
+			"movw %%cs, %%ax\n"
+			"movq %%rax, 0x90(%%rdi)\n"
+
+			// Store flags
+			"pushfq\n"
+			"popq %%rax\n"
+			"movq %%rax, 0x98(%%rdi)\n"
+
+			// Get RSP and SS
+			"movq %%rsp, 0xA0(%%rdi)\n"
+			"xorq %%rax, %%rax\n"
+			"movw %%ss, %%ax\n"
+			"movq %%rax, 0xA8(%%rdi)\n"
+
+			// Restore RDI
+			"popq %%rdi\n"
+			:
+			: "r" (&execution_state)
+			: "rax", "cc", "memory"
+			);
 }
 
 /**
@@ -120,17 +177,8 @@ Process::Process(const string& p_name, bool is_kernel)
 : is_kernel(is_kernel),
   name(p_name)
 {
-
-	// Pause interrupts while creating the process
-	asm("cli");
-
-	// Basic setup
-	m_pid = Scheduler::system_scheduler()->add_process(this);
-
 	// If it is a kernel process then don't need a new memory manager
 	memory_manager = is_kernel ? MemoryManager::s_kernel_memory_manager : new MemoryManager();
-
-	// Resuming interrupts are done when adding a thread
 }
 
 /**
@@ -156,13 +204,13 @@ Process::Process(const string& p_name, void (* _entry_point)(void*), void* args,
 /**
  * @brief Constructor for the Process class (from an elf, will free the elf memory after loading)
  *
- * @param name  The name of the process
+ * @param p_name  The name of the process
  * @param args  The arguments to pass to the process
  * @param arg_amount  The amount of arguments
  * @param elf  The elf file to load the process from
  * @param is_kernel  If the process is a kernel process
  */
-Process::Process(const string& p_name, void* args, int arg_amount, Elf64* elf, bool is_kernel)
+Process::Process(const string& p_name, void* args, int arg_amount, ELF64* elf, bool is_kernel)
 : Process(p_name, is_kernel)
 {
 
@@ -202,19 +250,17 @@ Process::~Process() {
  */
 void Process::add_thread(Thread* thread) {
 
-	// Pause interrupts while adding the thread
-	asm("cli");
+	m_lock.lock();
 
 	// Store the thread
 	m_threads.push_back(thread);
 	thread->parent_pid = m_pid;
 
-	// Can now resume interrupts
-	asm("sti");
+	m_lock.unlock();
 }
 
 /**
- * @brief Finds a thread by its tid
+ * @brief Remove a thread by its tid (NOTE: this will not remove it from the scheduler)
  *
  * @param tid
  */
@@ -233,11 +279,6 @@ void Process::remove_thread(uint64_t tid) {
 
 		// Remove the thread from the list
 		m_threads.erase(m_threads.begin() + i);
-
-		// If there are no more threads then delete the process from the scheduler
-		if (m_threads.empty())
-			Scheduler::system_scheduler()->remove_process(this);
-
 		return;
 	}
 }

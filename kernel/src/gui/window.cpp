@@ -1,6 +1,11 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file window.cpp
+ * @brief Implementation of a Window class for GUI windows
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
+
 #include <gui/window.h>
 #include <gui/widgets/text.h>
 
@@ -10,6 +15,15 @@ using namespace MaxOS::common;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::peripherals;
 
+/**
+ * @brief Construct a new Window object at a specific position and size (relative to the screen) with a title
+ *
+ * @param left How many pixels from the left of the screen the window is
+ * @param top How many pixels from the top of the screen the window is
+ * @param width How many pixels wide the window is
+ * @param height How many pixels tall the window is
+ * @param title_text The text to display in the title bar of the window
+ */
 Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& title_text)
 : CompositeWidget(left, top, width, height),
   m_title(0, -(10 + 5) + 2, width - 2 * 5, 10 + 5 - 3, title_text),
@@ -40,9 +54,14 @@ Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, const
 
 }
 
+/**
+ * @brief Construct a new Window object that contains a specific widget with a title. The window sizes itself to fit the widget.
+ *
+ * @param containedWidget The widget to contain within the window
+ * @param title_text The text to display in the title bar of the window
+ */
 Window::Window(Widget* containedWidget, const string& title_text)
-: CompositeWidget(0, 0, containedWidget->position().width + 2 * 5 + 2,
-				  containedWidget->position().height + 2 * 5 + 10 + 2),
+: CompositeWidget(0, 0, containedWidget->position().width + 2 * 5 + 2, containedWidget->position().height + 2 * 5 + 10 + 2),
   m_title(0, -(10 + 5) + 2, containedWidget->position().width, 10 + 5 - 3, title_text),
   m_mover(this),
   m_resizer_top(this),
@@ -76,22 +95,22 @@ Window::~Window() = default;
 /**
  * @brief Handles the mouse button being pressed.
  *
- * @param x The x coordinate of the mouse.
- * @param y The y coordinate of the mouse.
+ * @param mouse_x The x coordinate of the mouse.
+ * @param mouse_y The y coordinate of the mouse.
  * @param button The button that is pressed.
  */
-MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouseX, uint32_t mouseY, uint8_t button) {
+MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouse_x, uint32_t mouse_y, uint8_t button) {
 
 	// Pass the mouse event to the children
-	drivers::peripherals::MouseEventHandler* child_result = CompositeWidget::on_mouse_button_pressed(mouseX, mouseY, button);
+	drivers::peripherals::MouseEventHandler* child_result = CompositeWidget::on_mouse_button_pressed(mouse_x, mouse_y, button);
 	Rectangle<int32_t> window_position = position();
 
 	// Bring the window to the front
 	bring_to_front();
 
 	// Convert the mouse coordinates to an int32_t
-	auto x = (int32_t) mouseX;
-	auto y = (int32_t) mouseY;
+	auto x = (int32_t) mouse_x;
+	auto y = (int32_t) mouse_y;
 
 	if (x <= frame_thickness) {
 		if (y <= frame_thickness)
@@ -129,6 +148,7 @@ MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouseX, uint32_t mou
  * @brief Draws the window and its children.
  *
  * @param gc The graphics context to draw on.
+ * @param area The area to draw
  */
 void Window::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) {
 

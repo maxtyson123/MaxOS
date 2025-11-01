@@ -1,6 +1,14 @@
-//
-// Created by 98max on 24/03/2025.
-//
+/**
+ * @file ipc.cpp
+ * @brief Implementation of inter-process communication (IPC) resources
+ *
+ * @date 24th March 2025
+ * @author Max Tyson
+ *
+ * @todo Import scheduler is a circular dependency, need to fix
+ * @todo Shouldnt have to specify type in resource constructor
+ */
+
 #include <processes/ipc.h>
 
 using namespace MaxOS;
@@ -9,17 +17,18 @@ using namespace MaxOS::common;
 using namespace MaxOS::memory;
 
 #include <common/logger.h>
-#include <processes/scheduler.h>      //TODO: Circular dependency, need to fix
+#include <processes/scheduler.h>
 
 /**
  * @brief Creates a new shared memory block
  *
  * @param name The name of the block
+ * @param size The size of the shared memory region
+ * @param type The type of resource
  */
 SharedMemory::SharedMemory(const string& name, size_t size, resource_type_t type)
-: Resource(name, size, type),
-  m_size(size),
-  name(name)
+: Resource(name, size, syscore::ResourceType::SHARED_MEMORY),
+  m_size(size)
 {
 
 	m_physical_address = (uintptr_t) PhysicalMemoryManager::s_current_manager->allocate_area(0, size);
@@ -38,7 +47,7 @@ SharedMemory::~SharedMemory() = default;
 int SharedMemory::read(void* buffer, size_t size, size_t flags) {
 
 	// Process hasn't opened the resource
-	auto it = m_mappings.find(Scheduler::current_process()->pid());
+	auto it = m_mappings.find(GlobalScheduler::current_process()->pid());
 	if(it == m_mappings.end())
 		return 0;
 
@@ -73,12 +82,12 @@ size_t SharedMemory::size() const {
 void SharedMemory::open(size_t flags) {
 
 	// Process has already opened this memory
-	auto it = m_mappings.find(Scheduler::current_process()->pid());
+	auto it = m_mappings.find(GlobalScheduler::current_process()->pid());
 	if(it != m_mappings.end())
 		return;
 
-	auto virtual_address = (uintptr_t)Scheduler::current_process()->memory_manager->vmm()->load_shared_memory(m_physical_address, m_size);
-	m_mappings.insert(Scheduler::current_process()->pid(), virtual_address);
+	auto virtual_address = (uintptr_t)GlobalScheduler::current_process()->memory_manager->vmm()->load_shared_memory(m_physical_address, m_size);
+	m_mappings.insert(GlobalScheduler::current_process()->pid(), virtual_address);
 
 }
 
@@ -93,6 +102,13 @@ void SharedMemory::close(size_t flags) {
 
 }
 
+/**
+ * @brief Creates a new shared message endpoint
+ *
+ * @param name The name of the endpoint
+ * @param size The size of messages that can be sent
+ * @param type The type of resource
+ */
 SharedMessageEndpoint::SharedMessageEndpoint(const string& name, size_t size, resource_type_t type)
 : Resource(name, size, type)
 {
@@ -106,13 +122,12 @@ SharedMessageEndpoint::~SharedMessageEndpoint() {
 		delete message;
 }
 
-// TODO: Add a min() max() to common somewhere
-
 /**
  * @brief Reads the first message from the endpoint or will yield until a message has been written
  *
  * @param buffer Where to write the message to
  * @param size Max size of the message to be read
+ * @param flags Unused
  * @return The amount of bytes read
  */
 int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
@@ -134,6 +149,7 @@ int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
  *
  * @param buffer The message to write to the endpoint
  * @param size The size of the message
+ * @param flags Unused
  * @return The amount of bytes written
  */
 int SharedMessageEndpoint::write(void const* buffer, size_t size, size_t flags) {

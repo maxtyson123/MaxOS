@@ -1,6 +1,10 @@
-//
-// Created by 98max on 12/1/2022.
-//
+/**
+ * @file ethernet.h
+ * @brief Defines an EthernetDriver class for managing Ethernet communication, including sending and receiving data, handling MAC addresses, and event management.
+ *
+ * @date 1st December 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_ETHERNET_ETHERNET_H
 #define MAXOS_DRIVERS_ETHERNET_ETHERNET_H
@@ -18,6 +22,10 @@ namespace MaxOS{
 
             typedef uint64_t MediaAccessControlAddress;
 
+			/**
+			 * @enum EthernetDriverEvents
+			 * @brief Events that can be triggered by the Ethernet Driver
+			 */
             enum class EthernetDriverEvents{
                 BEFORE_SEND,
                 DATA_SENT,
@@ -30,8 +38,8 @@ namespace MaxOS{
              */
             class BeforeSendEvent : public common::Event<EthernetDriverEvents>{
                 public:
-                    uint8_t* buffer;
-                    uint32_t size;
+                    uint8_t* buffer;    ///< The buffer to be sent
+                    uint32_t size;      ///< The size of the buffer to be sent
                     BeforeSendEvent(uint8_t* buffer, uint32_t size);
                     ~BeforeSendEvent();
             };
@@ -42,8 +50,8 @@ namespace MaxOS{
              */
             class DataSentEvent : public common::Event<EthernetDriverEvents>{
                 public:
-                    uint8_t* buffer;
-                    uint32_t size;
+                    uint8_t* buffer;    ///< The buffer that was sent
+                    uint32_t size;      ///< The size of the buffer that was sent
                     DataSentEvent(uint8_t* buffer, uint32_t size);
                     ~DataSentEvent();
             };
@@ -54,8 +62,8 @@ namespace MaxOS{
              */
             class DataReceivedEvent : public common::Event<EthernetDriverEvents>{
                 public:
-                    uint8_t* buffer;
-                    uint32_t size;
+                    uint8_t* buffer;     ///< @deprecated WRS
+                    uint32_t size;       ///< @deprecated WRS
                     DataReceivedEvent(uint8_t* buffer, uint32_t size);
                     ~DataReceivedEvent();
             };

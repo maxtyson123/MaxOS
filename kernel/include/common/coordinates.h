@@ -1,6 +1,10 @@
-//
-// Created by 98max on 9/04/2023.
-//
+/**
+ * @file coordinates.h
+ * @brief Defines a simple Coordinates type as a pair of int32_t values.
+ *
+ * @date 9th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_COORDINATES_H
 #define MAXOS_COMMON_COORDINATES_H
@@ -12,6 +16,10 @@ namespace MaxOS{
 
     namespace common{
 
+		/**
+		 * @typedef Coordinates
+		 * @brief A type representing 2D coordinates as a pair of int32_t
+		 */
         typedef Pair<int32_t, int32_t> Coordinates;
 
     }

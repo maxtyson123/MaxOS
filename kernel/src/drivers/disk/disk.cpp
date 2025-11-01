@@ -1,6 +1,10 @@
-//
-// Created by Max Tyson on 18/04/2025.
-//
+/**
+ * @file disk.cpp
+ * @brief Implementation of a Disk driver base class
+ *
+ * @date 18th April 2025
+ * @author Max Tyson
+ */
 
 #include <drivers/disk/disk.h>
 
@@ -37,6 +41,12 @@ void Disk::read(uint32_t sector, buffer_t *data_buffer, size_t amount) {
 
 }
 
+/**
+ * @brief Write data to the disk from a buffer (max capacity 512 bytes)
+ *
+ * @param sector The sector to write to
+ * @param data The buffer to write the data from
+ */
 void Disk::write(uint32_t sector, common::buffer_t const *data) {
 
 	size_t amount = (data->capacity() > 512) ? 512 : data->capacity();
@@ -48,10 +58,10 @@ void Disk::write(uint32_t sector, common::buffer_t const *data) {
  * @brief Write data to the disk
  *
  * @param sector The sector to write to
- * @param data_buffer The buffer to write the data into
- * @param amount The amount of data to write
+ * @param data The buffer to write the data into
+ * @param count The amount of data to write
  */
-void Disk::write(uint32_t sector, const buffer_t *data, size_t count) {
+void Disk::write(uint32_t sector, const buffer_t* data, size_t count) {
 }
 
 /**

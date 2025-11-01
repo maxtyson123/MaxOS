@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/04/2023.
-//
+/**
+ * @file time.h
+ * @brief Defines a Time struct for storing date and time information, along with functions for time manipulation.
+ *
+ * @date 10th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_TIME_H
 #define MAXOS_COMMON_TIME_H
@@ -17,14 +21,18 @@ namespace MaxOS{
          */
         typedef struct Time{
 
-            uint16_t year;
-            uint8_t month;
-            uint8_t day;
+            uint16_t year;              ///< The year
+            uint8_t month;              ///< The month (1-12)
+            uint8_t day;                ///< The day (1-31)
 
-            uint8_t hour;
-            uint8_t minute;
-            uint8_t second;
+            uint8_t hour;               ///< The hour (0-23)
+            uint8_t minute;             ///< The minute (0-59)
+            uint8_t second;             ///< The second (0-59)
 
+			/**
+			 * @brief Checks if the year is a leap year
+			 * @return True if the year is a leap year, false otherwise
+			 */
             [[nodiscard]] bool is_leap_year() const {
                 return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
             }
@@ -56,7 +64,7 @@ namespace MaxOS{
             "Saturday"
         };
 
-        static const uint8_t DaysInMonth[] = {
+        constexpr uint8_t DAYS_IN_MONTH[] = {
             31, // January
             28, // February
             31, // March
@@ -71,9 +79,8 @@ namespace MaxOS{
             31  // December
         };
 
-        static const uint16_t DaysInYear = 365;
-
-        static const uint16_t DaysInLeapYear = 366;
+        constexpr uint16_t DAYS_PER_YEAR = 365;
+	    constexpr uint16_t DAYS_PER_LEAP_YEAR = 366;
 
         /**
          * @brief Converts a time to an epoch
@@ -85,14 +92,13 @@ namespace MaxOS{
                 uint64_t epoch = 0;
 
                 // Add the number of years
-                for(uint16_t year = 1970; year < time.year; year++){
-                        epoch += (time.is_leap_year() ? DaysInLeapYear : DaysInYear);
-                }
+                for(uint16_t year = 1970; year < time.year; year++)
+                        epoch += (time.is_leap_year() ? DAYS_PER_LEAP_YEAR : DAYS_PER_YEAR);
+
 
                 // Add the number of days in the current year
-                for(uint8_t month = 0; month < time.month - 1; month++){
-                        epoch += DaysInMonth[month];
-                }
+                for(uint8_t month = 0; month < time.month - 1; month++)
+                    epoch += DAYS_IN_MONTH[month];
 
                 // Add the number of days in the current month
                 epoch += time.day - 1;

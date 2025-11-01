@@ -1,6 +1,10 @@
-//
-// Created by 98max on 30/03/2023.
-//
+/**
+ * @file graphicsContext.cpp
+ * @brief Implements the GraphicsContext class defined in graphicsContext.h
+ *
+ * @date 30th March 2023
+ * @author Max Tyson
+ */
 
 #include <common/graphicsContext.h>
 
@@ -350,7 +354,7 @@ uint32_t GraphicsContext::height() const {
 }
 
 /**
- * @breif Gets the current color depth (bits per pixel)
+ * @brief Gets the current color depth (bits per pixel)
  * @return The color depth
  */
 uint32_t GraphicsContext::color_depth() const {

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 13/04/2023.
-//
+/**
+ * @file outputStream.cpp
+ * @brief Implements an output stream for writing strings, characters, integers, and hex values to an output device
+ *
+ * @date 13th April 2023
+ * @author Max Tyson
+ */
 
 #include <common/outputStream.h>
 
@@ -18,7 +22,7 @@ OutputStream::~OutputStream() = default;
 /**
  * @brief Writes a newline to the output stream.
  */
-void OutputStream::lineFeed() {
+void OutputStream::line_feed() {
 
 	write_char('\n');
 
@@ -64,7 +68,7 @@ void OutputStream::write(const char *string_to_write) {
 		switch (string_to_write[i]) {
 
 			case '\n':
-				lineFeed();
+				line_feed();
 				break;
 
 			case '\r':
@@ -106,7 +110,7 @@ void OutputStream::write_int(int int_to_write) {
 /**
  * @brief Writes a hex to the output stream.
  *
- * @param writeHex The hex to write to the output stream.
+ * @param hex_to_write The hex to write to the output stream.
  */
 void OutputStream::write_hex(uint64_t hex_to_write) {
 

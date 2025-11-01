@@ -1,6 +1,14 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file desktop.cpp
+ * @brief Implementation of a Desktop class for managing the GUI desktop and mouse
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ *
+ * @todo Make a border class
+ * @todo Draw a proper mouse cursor
+ * @todo Draw a background image
+ */
 
 #include <gui/desktop.h>
 
@@ -17,7 +25,6 @@ using namespace MaxOS::drivers::peripherals;
 Desktop::Desktop(GraphicsContext* gc)
 : CompositeWidget(0, 0, gc->width(), gc->height()),
   MouseEventHandler(),
-  ClockEventHandler(),
   m_graphics_context(gc),
   colour(Colour(0xA8, 0xA8, 0xA8))
 {
@@ -69,8 +76,6 @@ void Desktop::bring_to_front(Widget* front_widget) {
  * @brief Draws the mouse cursor at the current mouse m_position by inverting the pixels (mouse is a plus sign)
  */
 void Desktop::invert_mouse_cursor() {
-
-	//TODO: Get image drawing going and draw a proper mouse
 
 	// Draw the horizontal line
 	for (int32_t x = m_mouse_x - 3; x <= m_mouse_x + 3; ++x) {
@@ -133,8 +138,6 @@ void Desktop::internal_invalidate(common::Rectangle<int32_t>& area, Vector<Recta
  */
 void Desktop::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) {
 
-	//TODO: Draw a background image instead
-
 	// Calculate the rectangle
 	int32_t topCornerX = area.left;
 	int32_t topCornerY = area.top;
@@ -148,7 +151,7 @@ void Desktop::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>&
 /**
  * @brief Adds a child widget to the desktop
  *
- * @param widget The widget to add
+ * @param child_widget The widget to add
  */
 void Desktop::add_child(Widget* child_widget) {
 

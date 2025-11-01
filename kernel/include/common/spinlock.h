@@ -1,38 +1,77 @@
-//
-// Created by 98max on 24/02/2025.
-//
+/**
+ * @file spinlock.h
+ * @brief Defines Spinlock and BlockingLock classes for thread synchronization
+ *
+ * @date 24th February 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_SPINLOCK_H
 #define MAXOS_COMMON_SPINLOCK_H
 
-namespace MaxOS{
+#include <common/vector.h>
 
-  namespace common{
+namespace MaxOS {
 
-    /**
-     * @class Spinlock
-     * @brief Enables a resource to be used by only one instance at a time through locking and unlocking
-     */
-    class Spinlock
-    {
-      private:
-        bool m_locked = false;
-        bool m_should_yield;
+	namespace common {
 
-      public:
-        Spinlock(bool should_yield = false);
-        ~Spinlock();
+		/**
+		 * @class Spinlock
+		 * @brief Enables a resource to be used by only one instance at a time through locking and unlocking
+		 */
+		class Spinlock {
 
-        void lock();
-        void unlock();
-        bool is_locked() const;
+			private:
+				bool m_locked = false;
 
-        void acquire();
-        void release();
-    };
+			public:
+				Spinlock();
+				~Spinlock();
+
+				void lock();
+				void unlock();
+				[[nodiscard]] bool is_locked() const;
+
+				void acquire();
+				void release();
+		};
 
 
-  }
+
+		/// How many attempts to acquire the lock should fail before queueing
+		constexpr uint8_t BLOCKING_FAST_TRY_LIMIT = UINT8_MAX;
+
+		/**
+		 * @class BlockingLock
+		 * @brief Enables a resource to be used by only one instance at a time through a combination of spinning and queuing. When waiting enqueued, thread will sleep.
+		 *
+		 * @note Repeated API that could be made a class that isn't because lock types shouldn't be interchangeable
+		 * @see Spinlock
+		 */
+		class BlockingLock {
+
+			private:
+				bool m_locked = false;
+				Vector<uint64_t> m_queue;
+
+				static bool must_spin();
+
+			public:
+				BlockingLock();
+				~BlockingLock();
+
+				void lock();
+				void unlock();
+				[[nodiscard]] bool is_locked() const;
+
+				void acquire();
+				void release();
+
+		};
+
+
+
+	}
 
 }
 

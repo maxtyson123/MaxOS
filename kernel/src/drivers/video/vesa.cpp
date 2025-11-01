@@ -1,6 +1,10 @@
-//
-// Created by 98max on 19/07/2023.
-//
+/**
+ * @file vesa.cpp
+ * @brief Implementation of a VESA video driver
+ *
+ * @date 19th July 2023
+ * @author Max Tyson
+ */
 
 #include <drivers/video/vesa.h>
 #include <common/logger.h>
@@ -12,6 +16,11 @@ using namespace MaxOS::memory;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
 
+/**
+ * @brief Constructs a new VESA driver object. Maps the framebuffer into the higher half
+ *
+ * @param framebuffer_info The framebuffer information from multiboot
+ */
 VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multiboot_tag_framebuffer *framebuffer_info)
 : m_framebuffer_info(framebuffer_info)
 {
@@ -22,18 +31,17 @@ VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation(multi
 	m_bpp = m_framebuffer_info->common.framebuffer_bpp;
 	m_pitch = m_framebuffer_info->common.framebuffer_pitch;
 	m_framebuffer_size = m_framebuffer_info->common.framebuffer_height * m_pitch;
-	this->set_mode(framebuffer_info->common.framebuffer_width, framebuffer_info->common.framebuffer_height,
-				   framebuffer_info->common.framebuffer_bpp);
+	this->set_mode(framebuffer_info->common.framebuffer_width, framebuffer_info->common.framebuffer_height, framebuffer_info->common.framebuffer_bpp);
 	Logger::DEBUG() << "Framebuffer: bpp=" << m_bpp << ", pitch=" << m_pitch << ", size=" << m_framebuffer_size << "\n";
 
 	// Map the frame buffer into the higher half
 	auto physical_address = (uint64_t) m_framebuffer_info->common.framebuffer_addr;
 	m_framebuffer_address = (uint64_t *) PhysicalMemoryManager::to_dm_region(physical_address);
-	PhysicalMemoryManager::s_current_manager->map_area((physical_address_t *) physical_address, m_framebuffer_address, m_framebuffer_size, Write | Present);
+	PhysicalMemoryManager::s_current_manager->map_area((physical_address_t *) physical_address, m_framebuffer_address, m_framebuffer_size, WRITE | PRESENT);
 
 	// Reserve the physical memory
 	size_t pages = PhysicalMemoryManager::size_to_frames(m_framebuffer_size);
-	PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common.framebuffer_addr, pages);
+	PhysicalMemoryManager::s_current_manager->reserve(m_framebuffer_info->common.framebuffer_addr, pages, "Framebuffer");
 
 	// Log info
 	Logger::DEBUG() << "Framebuffer address: physical=0x" << (uint64_t) physical_address << ", virtual=0x" << (uint64_t) m_framebuffer_address << "\n";

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/29/2022.
-//
+/**
+ * @file intel_i217.cpp
+ * @brief Implementation of the Intel I217 Ethernet Driver
+ *
+ * @date 29th November 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/ethernet/intel_i217.h>
 
@@ -28,7 +32,7 @@ using namespace memory;
 
 ///__DRIVER___
 
-intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor)
+IntelI217::IntelI217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor)
 : InterruptHandler(0x20 + deviceDescriptor->interrupt)
 {
 
@@ -54,7 +58,7 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
     sendDescriptorTailRegister = 0x3818;
 
     // Get BAR0 type, io_base address and MMIO base address
-    bar_type = 1; // deviceDescriptor -> has_memory_base ? 0 : 1;  //TODO: Fix memory mapping from PCI as it is unable to get MAC from memory
+    bar_type = 1; // deviceDescriptor -> has_memory_base ? 0 : 1;  @todo Fix memory mapping from PCI as it is unable to get MAC from memory
     portBase = deviceDescriptor ->port_base;
     //TODO: memBase = deviceDescriptor -> memory_base;
 
@@ -82,10 +86,10 @@ intel_i217::intel_i217(PeripheralComponentInterconnectDeviceDescriptor *deviceDe
 
 }
 
-intel_i217::~intel_i217() = default;
+IntelI217::~IntelI217() = default;
 
 
-void intel_i217::Write(uint16_t address, uint32_t data) const {
+void IntelI217::Write(uint16_t address, uint32_t data) const {
 
     //Note: These Ports/MemIO cant be init in the constructor like they normally would as it depends on wether the device is using IO or MemIO, and checking that in every function would be messy
 
@@ -107,7 +111,7 @@ void intel_i217::Write(uint16_t address, uint32_t data) const {
 
 }
 
-uint32_t intel_i217::Read(uint16_t address) const {
+uint32_t IntelI217::Read(uint16_t address) const {
 
     //Note: These Ports/MemIO cant be init in the constructor like they normally would as it depends on wether the device is using IO or MemIO, and checking that in every function would be messy
     if(bar_type == 0) {                                             // If the base address register is memory mapped
@@ -127,7 +131,7 @@ uint32_t intel_i217::Read(uint16_t address) const {
 
 }
 
-bool intel_i217::detectEEProm() {
+bool IntelI217::detectEEProm() {
 
     uint32_t val = 0;                                   // The value to be returned
     Write(epromRegister, 0x1);              // Set the register to read the EEProm
@@ -144,7 +148,7 @@ bool intel_i217::detectEEProm() {
     return epromPresent;
 }
 
-uint32_t intel_i217::eepromRead( uint8_t addr)
+uint32_t IntelI217::eepromRead( uint8_t addr)
 {
     uint16_t data = 0;                                                              // The data to be returned
     uint32_t tmp = 0;                                                               // A temporary variable
@@ -162,7 +166,7 @@ uint32_t intel_i217::eepromRead( uint8_t addr)
     return data;                                                                  // Return the data
 }
 
-bool intel_i217::readMACAddress() {
+bool IntelI217::readMACAddress() {
     if ( epromPresent)                                                                //If the EPROM exists
     {
         uint32_t temp;
@@ -197,7 +201,7 @@ bool intel_i217::readMACAddress() {
     return true;
 }
 
-void intel_i217::receiveInit() {
+void IntelI217::receiveInit() {
 
     uint8_t * ptr;                                                                                                          //A pointer to the memory
     struct receiveDescriptor *descs;                                                                                        //A pointer to the receive descriptors
@@ -241,7 +245,7 @@ void intel_i217::receiveInit() {
 
 }
 
-void intel_i217::sendInit() {
+void IntelI217::sendInit() {
 
     uint8_t * ptr;                                                                                                          //A pointer to the memory
     struct sendDescriptor *descs;                                                                                           //A pointer to the send descriptors
@@ -286,7 +290,7 @@ void intel_i217::sendInit() {
 
 }
 
-void intel_i217::activate() {
+void IntelI217::activate() {
 
 
     //Enable interrupts
@@ -304,7 +308,7 @@ void intel_i217::activate() {
 
 }
 
-void intel_i217::handle_interrupt() {
+void IntelI217::handle_interrupt() {
 
     Write(interruptMaskRegister, 0x1);      //Clear the interrupt or it will hang
     uint32_t temp = Read(0xc0);                //read the interrupt status register
@@ -318,7 +322,7 @@ void intel_i217::handle_interrupt() {
     if(temp & 0x80) FetchDataReceived();
 }
 
-void intel_i217::FetchDataReceived() {
+void IntelI217::FetchDataReceived() {
 
 
     uint16_t old_cur;
@@ -345,7 +349,7 @@ void intel_i217::FetchDataReceived() {
 
 }
 
-void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
+void IntelI217::DoSend(uint8_t* buffer, uint32_t size) {
 
     while(!active);
 
@@ -370,25 +374,25 @@ void intel_i217::DoSend(uint8_t* buffer, uint32_t size) {
 
 }
 
-uint64_t intel_i217::GetMediaAccessControlAddress() {
+uint64_t IntelI217::GetMediaAccessControlAddress() {
     while(ownMAC == 0);
     return ownMAC;
 
 }
 
-uint32_t intel_i217::reset() {
+uint32_t IntelI217::reset() {
     return Driver::reset();
 }
 
-void intel_i217::deactivate() {
+void IntelI217::deactivate() {
     Driver::deactivate();
 }
 
-string intel_i217::vendor_name() {
+string IntelI217::vendor_name() {
     return "Intel";
 }
 
-string intel_i217::device_name() {
+string IntelI217::device_name() {
     return "E1000 (i217)";
 }
 

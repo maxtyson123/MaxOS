@@ -1,6 +1,10 @@
-//
-// Created by 98max on 9/2/2025.
-//
+/**
+ * @file path.h
+ * @brief Provides utilities for handling file and directory paths
+ *
+ * @date 2nd September 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_FILESYSTEM_PATH_H
 #define MAXOS_FILESYSTEM_PATH_H

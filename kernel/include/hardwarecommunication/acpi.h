@@ -1,6 +1,10 @@
-//
-// Created by 98max on 18/01/2024.
-//
+/**
+ * @file acpi.h
+ * @brief Defines an Advanced Configuration And Power Interface (ACPI class for handling ACPI table parsing and retrieval
+ *
+ * @date 18th January 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_HARDWARECOMMUNICATION_ACPI_H
 #define MAXOS_HARDWARECOMMUNICATION_ACPI_H
@@ -10,73 +14,102 @@
 #include <system/multiboot.h>
 #include <common/string.h>
 #include <memory/memorymanagement.h>
+#include <memory/memoryIO.h>
 #include <memory/physical.h>
 
 namespace MaxOS {
-    namespace hardwarecommunication {
+	namespace hardwarecommunication {
 
-      struct RSDPDescriptor {
-        char signature[8];
-        uint8_t checksum;
-        char OEMID[6];
-        uint8_t revision;
-        uint32_t rsdt_address;
-      } __attribute__ ((packed));
+		/**
+		 * @struct RSDPDescriptor
+		 * @brief Root System Description Pointer (RSDP) structure for ACPI 1. Ide
+		 */
+		typedef struct RSDPDescriptor {
+			char signature[8];              ///< Indicates a valid RSDP structure if it contains "RSD PTR " (null-terminated)
+			uint8_t checksum;               ///< This byte added to all bytes in the table must equal zero for the table to be valid
+			char OEMID[6];                  ///< A string supplied by the OEM to identify the OEM
+			uint8_t revision;               ///< The version of the ACPI specification that is supported (higher means more features and is backwards compatible)
+			uint32_t rsdt_address;          ///< The physical address of the RSDT (@deprecated in ACPI 2 and above)
+		} __attribute__ ((packed)) rsdp_descriptor_t;
 
-      struct RSDPDescriptor2 {
-        RSDPDescriptor firstPart;
-        uint32_t length;
-        uint64_t xsdt_address;
-        uint8_t extended_checksum;
-        uint8_t reserved[3];
-      } __attribute__ ((packed));
+		/**
+		 * @struct RSDPDescriptor2
+		 * @brief Root System Description Pointer (RSDP) structure for ACPI 2 and above
+		 */
+		typedef struct RSDPDescriptor2 {
+			RSDPDescriptor version_1_info;      ///< The ACPI 1 RSDP structure (see rsdp_descriptor_t)
+			uint32_t length;                    ///< The total length of the RSDP structure (including the version 1 part)
+			uint64_t xsdt_address;              ///< The physical address of the XSDT
+			uint8_t extended_checksum;          ///< This byte added to all bytes in the table must equal zero for the table to be valid (including the version 1 part)
+			uint8_t reserved[3];                ///< Reserved, must be zero
+		} __attribute__ ((packed)) rsdp_descriptor2_t;
 
-      struct ACPISDTHeader {
-        char signature[4];
-        uint32_t length;
-        uint8_t revision;
-        uint8_t checksum;
-        char OEM_id[6];
-        char OEM_table_id[8];
-        uint32_t OEM_revision;
-        uint32_t creator_id;
-        uint32_t creator_revision;
-      } __attribute__ ((packed));
+		/**
+		 * @struct ACPISDTHeader
+		 * @brief Common header for all ACPI System Description Tables (SDTs)
+		 */
+		typedef struct ACPISDTHeader {
+			char signature[4];              ///< The signature that identifies the type of the table
+			uint32_t length;                ///< The size of the entire table, including the header, in bytes
+			uint8_t revision;               ///< The version of the ACPI specification that is supported (higher means more features and is backwards compatible)
+			uint8_t checksum;               ///< This byte added to all bytes in the table must equal zero mod 0x100 for the table to be valid (including the header)
+			char OEM_id[6];                 ///< A string supplied by the OEM to identify the OEM
+			char OEM_table_id[8];           ///< A string supplied by the OEM to identify the particular table
+			uint32_t OEM_revision;          ///< The revision number of the table as supplied by the OEM
+			uint32_t creator_id;            ///< A vendor ID of the utility that created the table
+			uint32_t creator_revision;      ///< The revision number of the utility that created the table
+		} __attribute__ ((packed)) acpi_sdt_header_t;
 
-      struct RSDT {
-        ACPISDTHeader header;
-        uint32_t pointers[];
-      };
+		/**
+		 * @struct RSDT
+		 * @brief Root System Description Table (RSDT) structure for ACPI 1. Contains the header and an array of pointers to other SDTs
+		 */
+		typedef struct RSDT {
+			ACPISDTHeader header;   ///< The common header for all ACPI SDTs (see acpi_sdt_header_t)
+			uint32_t pointers[];    ///< An array of physical addresses pointing to other ACPI SDTs
+		} rsdt_t;
 
-      struct XSDT {
-        ACPISDTHeader header;
-        uint64_t pointers[];
-      };
+		/**
+		 * @struct XSDT
+		 * @brief Extended System Description Table (XSDT) structure for ACPI 2 and above. Contains the header and an array of pointers to other SDTs
+		 */
+		typedef struct XSDT {
+			ACPISDTHeader header;   ///< The common header for all ACPI SDTs (see acpi_sdt_header_t)
+			uint64_t pointers[];    ///< An array of physical addresses pointing to other ACPI SDTs
+		} xsdt_t;
 
-      class AdvancedConfigurationAndPowerInterface {
-        protected:
-          bool m_using_new_acpi = false;
-          ACPISDTHeader* m_header;
+		/**
+		 * @class AdvancedConfigurationAndPowerInterface
+		 * @brief Handles ACPI table parsing and retrieval
+		 */
+		class AdvancedConfigurationAndPowerInterface {
+			private:
+				bool m_using_new_acpi = false;
+				acpi_sdt_header_t* m_header;
 
-          XSDT* m_xsdt;
-          RSDT* m_rsdt;
+				xsdt_t* m_xsdt;
+				rsdt_t* m_rsdt;
 
-          RSDPDescriptor* m_rsdp;
-          RSDPDescriptor2* m_rsdp2;
+				rsdp_descriptor_t * m_rsdp;
+				rsdp_descriptor2_t * m_rsdp2;
 
-          static bool validate(const char*descriptor, size_t length);
+				static bool validate(const char* descriptor, size_t length);
 
-          void map_tables(uint8_t size_of_table);
-          bool valid_checksum();
+				void map_tables(uint8_t size_of_table);
+				memory::virtual_address_t* map_descriptor(uint64_t physical);
 
-        public:
-            AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot);
-            ~AdvancedConfigurationAndPowerInterface();
+				uint64_t get_rsdt_pointer(size_t index);
 
-            ACPISDTHeader* find(const char* signature);
-      };
+				bool valid_checksum();
 
-    }
+			public:
+				AdvancedConfigurationAndPowerInterface(system::Multiboot* multiboot);
+				~AdvancedConfigurationAndPowerInterface();
+
+				acpi_sdt_header_t* find(const char* signature);
+		};
+
+	}
 }
 
 #endif // MAXOS_HARDWARECOMMUNICATION_ACPI_H

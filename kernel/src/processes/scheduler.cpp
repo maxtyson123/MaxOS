@@ -1,6 +1,10 @@
-//
-// Created by 98max on 25/02/2025.
-//
+/**
+ * @file scheduler.cpp
+ * @brief Implementation of a Global Scheduler for managing processes and threads
+ *
+ * @date 25th February 2025
+ * @author Max Tyson
+ */
 
 #include <processes/scheduler.h>
 #include <common/logger.h>
@@ -11,37 +15,43 @@ using namespace MaxOS::memory;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 
-Scheduler::Scheduler(Multiboot& multiboot)
+/**
+ * @brief Constructs a new Global Scheduler object. Registers as the interrupt handler for interrupt 0x20 and setups
+ * the shared resource registries. Loads any ELF files from the multiboot structure.
+ *
+ * @param multiboot The multiboot structure that may contain ELF files to load
+ */
+GlobalScheduler::GlobalScheduler(Multiboot& multiboot)
 : InterruptHandler(0x20),
-  m_current_thread_index(0),
-  m_active(false),
-  m_ticks(0),
-  m_next_pid(-1),
-  m_next_tid(-1),
   m_shared_memory_registry(resource_type_t::SHARED_MEMORY),
-  m_shared_messages_registry(resource_type_t::MESSAGE_ENDPOINT)
+  m_shared_messages_registry(resource_type_t::MESSAGE_ENDPOINT),
+  m_next_pid(-1),
+  m_next_tid(-1)
 {
 
-	// Set up the basic scheduler
-	Logger::INFO() << "Setting up Scheduler \n";
+	// Set up the global scheduler
+	Logger::INFO() << "Setting up global Scheduler\n";
 	s_instance = this;
 
-	// Create the idle process
-	auto* idle = new Process("kernelMain Idle", nullptr, nullptr, 0, true);
-	idle->memory_manager = MemoryManager::s_kernel_memory_manager;
-	add_process(idle);
-	idle->set_pid(0);
+	// Set up the per core scheduler
+	for(const auto& core : CPU::cores)
+		core -> scheduler = new Scheduler();
 
 	// Load the elfs
 	load_multiboot_elfs(&multiboot);
+
 }
 
-Scheduler::~Scheduler() {
+/**
+ * @brief Gets the system scheduler
+ *
+ * @return The system scheduler or nullptr if not found
+ */
+GlobalScheduler* GlobalScheduler::system_scheduler() {
 
-	// Deactivate this scheduler
-	s_instance = nullptr;
-	m_active = false;
+	return s_instance;
 }
+
 
 /**
  * @brief Handles the interrupt 0x20
@@ -49,10 +59,320 @@ Scheduler::~Scheduler() {
  * @param status The current CPU status
  * @return The new CPU status
  */
-cpu_status_t* Scheduler::handle_interrupt(cpu_status_t* status) {
+system::cpu_status_t* GlobalScheduler::handle_interrupt(system::cpu_status_t* status) {
 
-	return schedule(status);
+	// Scheduler not active
+	if(!s_instance || !s_instance->m_active)
+		return status;
+
+	auto s = core_scheduler()->schedule(status);
+	ASSERT(s->rip != 0, "Cant run a empty state\n");
+	return s;
 }
+
+/**
+ * @brief Pass execution to the next thread
+ *
+ * @param current where to resume this thread to
+ */
+system::cpu_status_t* GlobalScheduler::yield(cpu_status_t* current) {
+	current_thread()->execution_state = *current;
+	return core_scheduler()->yield();
+}
+
+
+GlobalScheduler::~GlobalScheduler(){
+
+	// No longer the global instance
+	s_instance = nullptr;
+
+	// Free the per core scheduler
+	for(const auto& core : CPU::cores)
+		delete core->scheduler;
+
+}
+
+/**
+ * @brief Activates each core's scheduler
+ */
+void GlobalScheduler::activate() {
+
+	s_instance -> m_active = true;
+	for(const auto& core : CPU::cores)
+		core->scheduler->activate();
+
+}
+
+/**
+ * @brief Deactivates each core's scheduler
+ */
+void GlobalScheduler::deactivate() {
+
+	s_instance -> m_active = false;
+	for(const auto& core : CPU::cores)
+		core->scheduler->deactivate();
+
+}
+
+/**
+ * @brief Moves processes and threads between cores to balance the load so that each core has a similar amount of threads
+ * and processes
+ *
+ * @todo Implement
+ */
+void GlobalScheduler::balance() {
+
+}
+
+
+/**
+ * @brief Loads any valid ELF files from the multiboot structure
+ *
+ * @param multiboot The multiboot structure
+ *
+ * @todo Handle passing multiple args to the process
+ */
+void GlobalScheduler::load_multiboot_elfs(Multiboot* multiboot) {
+
+	for (multiboot_tag* tag = multiboot->start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag->size + 7) & ~7))) {
+
+		// Tag is not an ELF
+		if (tag->type != MULTIBOOT_TAG_TYPE_MODULE)
+			continue;
+
+		// Try to create the elf from the module
+		auto* module = (struct multiboot_tag_module*) tag;
+		ELF64 elf((uintptr_t) PhysicalMemoryManager::to_dm_region(module->mod_start));
+		if (!elf.is_valid())
+			continue;
+
+		Logger::DEBUG() << "Creating process from multiboot module for " << module->cmdline << " (at 0x" << (uint64_t) module->mod_start << ")\n";
+
+		// Create an array of args for the process
+		char* args[1] = {module->cmdline};
+
+		// Create the process
+		auto* process = new Process(module->cmdline, args, 1, &elf);
+		GlobalScheduler::system_scheduler() -> add_process(process);
+
+		Logger::DEBUG() << "ELF loaded to pid " << process->pid() << "\n";
+	}
+}
+
+/**
+ * @brief Print the header for the running processes in the form ({name}:t{tid}c{core})
+ */
+void GlobalScheduler::print_running_header() {
+
+	// No threads or processes to get
+	if(!s_instance || !s_instance->m_active)
+		return;
+
+	auto process = current_process();
+	auto thread   = current_thread();
+
+	Logger::Out() << "(" << process->name << ":t" << thread->tid  << "c" << CPU::executing_core()->id << ") ";
+}
+
+/**
+ * @brief Adds a process to the least busy core
+ *
+ * @param process The process to add
+ * @return The pid of the new process
+ */
+uint64_t GlobalScheduler::add_process(Process* process) {
+
+	// No cores?
+	if(CPU::cores.empty())
+		return 0;
+
+	// Find the core with the least processes
+	uint64_t core_id = 0;
+	Scheduler* scheduler = CPU::cores[core_id]->scheduler;
+	for(const auto& core : CPU::cores){
+		auto core_scheduler = core->scheduler;
+		if(core_scheduler->process_amount() < scheduler->process_amount()){
+			core_id = core->id;
+			scheduler = core_scheduler;
+		}
+	}
+
+	// Save the pid
+	auto pid = scheduler->add_process(process);
+	m_core_pids.insert(pid,core_id);
+
+	Logger::DEBUG() << "Adding process " << pid << ": " << process->name << " to core " << core_id <<"\n";
+	return pid;
+}
+
+/**
+ * @brief Adds a thread to the least busy core
+ *
+ * @param thread The thread to add
+ * @return The tid of the new thread
+ */
+uint64_t GlobalScheduler::add_thread(Thread* thread) {
+
+	// No cores?
+	if(CPU::cores.empty())
+		return 0;
+
+	// Find the core with the least threads
+	uint64_t core_id = 0;
+	Scheduler* scheduler = CPU::cores[core_id]->scheduler;
+	for(const auto& core : CPU::cores){
+		auto core_scheduler = core->scheduler;
+		if(core_scheduler->thread_amount() < scheduler->thread_amount()){
+			core_id = core->id;
+			scheduler = core_scheduler;
+		}
+	}
+
+	// Save the tid
+	auto tid = scheduler->add_thread(thread);
+	m_core_tids.insert(tid,core_id);
+
+	Logger::DEBUG() << "Adding thread " << tid << " to core " << core_id <<"\n";
+	return tid;
+}
+
+/**
+ * @brief Removes a process from the scheduler if the process has no threads, if it does then the threads are stopped but the process is not removed (this will be done automatically when all threads are stopped)
+ *
+ * @param process The process to remove
+ * @return -1 if the process has threads, 0 otherwise
+ */
+uint64_t GlobalScheduler::remove_process(Process* process) {
+
+	// Get the core running the process
+	if(!s_instance)
+		return 0;
+
+	auto core = s_instance -> m_core_pids[process->pid()];
+	return CPU::cores[core]->scheduler->remove_process(process);
+}
+
+/**
+ * @brief Removes a process from the scheduler and deletes all threads, begins running the next process
+ *
+ * @param process The process to remove
+ * @return The status of the CPU for the next process to run or nullptr if the process was not found
+ */
+system::cpu_status_t* GlobalScheduler::force_remove_process(Process* process) {
+
+	// Get the core running the process
+	if(!s_instance)
+		return 0;
+
+	auto core = s_instance -> m_core_pids[process->pid()];
+	return CPU::cores[core]->scheduler->force_remove_process(process);
+
+}
+
+/**
+ * @brief Gets the process on the currently executing core
+ *
+ * @return The current process, or nullptr if not found
+ */
+Process* GlobalScheduler::current_process() {
+	if(!s_instance || !s_instance ->m_active)
+		return nullptr;
+
+	return core_scheduler()->current_process();
+}
+
+/**
+ * @brief Gets a process on the currently executing core by its PID
+ *
+ * @param pid The process ID
+ * @return The process or nullptr if not found
+ */
+Process* GlobalScheduler::get_process(uint64_t pid) {
+
+	// Get the core running the pid
+	if(!s_instance)
+		return nullptr;
+
+	auto core = s_instance -> m_core_pids[pid];
+	return CPU::cores[core]->scheduler->get_process(pid);
+}
+
+/**
+ * @brief Gets the next usable global PID
+ * @return
+ */
+uint64_t GlobalScheduler::next_pid() {
+	return s_instance -> m_next_pid++;
+}
+
+/**
+ * @brief Gets the thread on the currently executing core
+ *
+ * @return The currently executing thread
+ */
+Thread* GlobalScheduler::current_thread() {
+	return core_scheduler()->current_thread();
+}
+
+/**
+ * @brief Gets a thread on the currently executing core by its TID
+ *
+ * @param tid The thread ID
+ * @return The thread or nullptr if not found
+ */
+Thread* GlobalScheduler::get_thread(uint64_t tid) {
+
+	// Get the core running the tid
+	if(!s_instance)
+		return nullptr;
+
+	auto core = s_instance -> m_core_tids[tid];
+	return CPU::cores[core]->scheduler->get_thread(tid);
+}
+
+/**
+ * @brief Gets the next usable global TID
+ * @return
+ */
+uint64_t GlobalScheduler::next_tid() {
+	return s_instance->m_next_tid++;
+}
+
+/**
+ * @brief Gets the scheduler for the currently executing core
+ *
+ * @return The scheduler for this core
+ */
+Scheduler* GlobalScheduler::core_scheduler() {
+	return CPU::executing_core()->scheduler;
+}
+
+/**
+ * @brief Checks if the global scheduler is active
+ *
+ * @return True if the scheduler is active, false otherwise
+ */
+bool GlobalScheduler::is_active() {
+	return s_instance->m_active;
+}
+
+/**
+ * @brief Constructs a new Scheduler object and creates the idle process
+ */
+Scheduler::Scheduler()
+: m_next_thread_index(0),
+  m_active(false),
+  m_ticks(0)
+{
+
+	// Create this idle process
+	auto* idle = new Process("Idle", nullptr, nullptr, 0, true);
+	idle->memory_manager = MemoryManager::s_kernel_memory_manager;
+	idle->set_pid(0);
+	add_process(idle);
+}
+
+Scheduler::~Scheduler() = default;
 
 
 /**
@@ -68,14 +388,15 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
 		return cpu_state;
 
 	// Thread that we are dealing with
-	Thread* current_thread = m_threads[m_current_thread_index];
+	Thread* current_thread = m_threads[m_next_thread_index];
 
 	// Ticked
 	m_ticks++;
 	current_thread->ticks++;
 
-	// Wait for a bit so that the scheduler doesn't run too fast TODO: fix
-	if (m_ticks % s_ticks_per_event != 0) return cpu_state;
+	// Thread hasn't used its time slot yet
+	if(current_thread->ticks % TICKS_PER_EVENT)
+		return cpu_state;
 
 	// Schedule the next thread
 	return schedule_next(cpu_state);
@@ -86,89 +407,112 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
  *
  * @param status The current CPU status of the thread
  * @return The next CPU status
+ *
+ * @todo Remove by reference where possible
  */
 cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 
-	// Get the thread that is executing right now
-	Thread* current_thread = m_threads[m_current_thread_index];
+	// Get the current state
+	Thread* current_thread = m_threads[m_next_thread_index];
+	Process* owner_process = current_process();
+	auto old_tid = m_next_thread_index;
 
-	// Save its state
-	current_thread->execution_state = cpu_state;
+	// Save the executing thread state
+	current_thread->execution_state = *cpu_state;
 	current_thread->save_sse_state();
 	if (current_thread->thread_state == ThreadState::RUNNING)
 		current_thread->thread_state = ThreadState::READY;
 
-	// Switch to the thread that will now run
-	m_current_thread_index++;
-	m_current_thread_index %= m_threads.size();
-	current_thread = m_threads[m_current_thread_index];
+	// Find a free thread to run
+	while ((++m_next_thread_index) != old_tid){
+		m_next_thread_index %= m_threads.size();
 
-	Process* owner_process = current_process();
+		// Get the current thread
+		current_thread = m_threads[m_next_thread_index];
+		owner_process = current_process();
 
-	// Handle state changes
-	switch (current_thread->thread_state) {
+		// Handle state changes
+		switch (current_thread->thread_state) {
 
-		case ThreadState::NEW:
-			current_thread->thread_state = ThreadState::RUNNING;
-			break;
+			case ThreadState::SLEEPING:
 
-		case ThreadState::SLEEPING:
-
-			// If the wake-up time hasn't occurred yet, run the next thread
-			if (current_thread->wakeup_time > m_ticks)
-				return schedule_next(current_thread->execution_state);
-
-			break;
-
-		case ThreadState::STOPPED:
-
-			// Find the process that has the thread and remove it
-			for (auto thread: owner_process->threads()) {
-				if (thread == current_thread) {
-					owner_process->remove_thread(m_current_thread_index);
-					break;
+				// If the wake-up time hasn't occurred yet, run the next thread
+				if (current_thread->wakeup_time > TICKS_PER_EVENT){
+					current_thread->wakeup_time -= TICKS_PER_EVENT;
+					continue;
 				}
-			}
 
-			// Remove the thread
-			m_threads.erase(m_threads.begin() + m_current_thread_index);
+				break;
 
-			// Run the next thread
-			return schedule_next(cpu_state);
+			case ThreadState::STOPPED:
 
-		default:
-			break;
+				// Find the process that has the thread and remove it
+				for (auto thread: owner_process->threads()) {
+					if (thread == current_thread) {
+						owner_process->remove_thread(thread->tid);
+						break;
+					}
+				}
+
+				// Remove the thread
+				m_threads.erase(m_threads.begin() + m_next_thread_index);
+				if(owner_process->threads().empty())
+					remove_process(owner_process);
+				continue;
+
+			case ThreadState::WAITING:
+				continue;
+
+			default:
+				break;
+		}
+		break;
 	}
 
-	// Prepare the next thread to run
-	current_thread->thread_state = ThreadState::RUNNING;
-	current_thread->restore_sse_state();
-
-	// Load the thread's memory manager and task state
-	MemoryManager::switch_active_memory_manager(owner_process->memory_manager);
-	CPU::tss.rsp0 = current_thread->tss_pointer();
-
-	return current_thread->execution_state;
+	// Load the thread's state
+	return load_process(owner_process, current_thread);
 }
 
+/**
+ * @brief Load the thread specific state for the thread
+ *
+ * @param process The process that owns the thread
+ * @param thread The thread to load
+ * @return The cpu state to run with the next thread
+ */
+cpu_status_t* Scheduler::load_process(Process* process, Thread* thread) {
+
+	// Prepare the next thread to run
+	thread->thread_state = ThreadState::RUNNING;
+	thread->restore_sse_state();
+
+	// Load the thread's memory manager and task state
+	MemoryManager::switch_active_memory_manager(process->memory_manager);
+	CPU::executing_core() -> tss.rsp0 = thread->tss_pointer();
+
+	return &thread->execution_state;
+}
 
 /**
  * @brief Adds a process to the scheduler
  *
  * @param process The process to add
- * @return The process ID
+ * @return The process ID (will be assigned during add)
  */
 uint64_t Scheduler::add_process(Process* process) {
 
 	// Get the next process ID
-	m_next_pid++;
+	auto pid = GlobalScheduler::next_pid();
+	process->set_pid(pid);
 
 	// Add the process to the list
 	m_processes.push_back(process);
-	Logger::DEBUG() << "Adding process " << m_next_pid << ": " << process->name << "\n";
 
-	// Return the process ID
-	return m_next_pid;
+	// Add the threads to the list
+	for(const auto& thread : process->threads())
+		thread->tid = add_thread(thread);
+
+	return pid;
 }
 
 /**
@@ -180,24 +524,14 @@ uint64_t Scheduler::add_process(Process* process) {
 uint64_t Scheduler::add_thread(Thread* thread) {
 
 	// Get the next thread ID
-	m_next_tid++;
+	auto tid = GlobalScheduler::next_tid();
+	thread->tid = tid;
 
 	// Add the thread to the list
 	m_threads.push_back(thread);
-	Logger::DEBUG() << "Adding thread " << m_next_tid << " to process " << thread->parent_pid << "\n";
 
 	// Return the thread ID
-	return m_next_tid;
-}
-
-/**
- * @brief Gets the system scheduler
- *
- * @return The system scheduler or nullptr if not found
- */
-Scheduler* Scheduler::system_scheduler() {
-
-	return s_instance;
+	return tid;
 }
 
 /**
@@ -217,15 +551,15 @@ cpu_status_t* Scheduler::yield() {
 
 	// If this is the only thread, can't yield
 	if (m_threads.size() <= 1)
-		return current_thread()->execution_state;
+		return &current_thread()->execution_state;
 
 	// Set the current thread to waiting if running
-	if (m_threads[m_current_thread_index]->thread_state == ThreadState::RUNNING)
-		m_threads[m_current_thread_index]->thread_state = ThreadState::READY;
-
+	auto thread = current_thread();
+	if (thread->thread_state == ThreadState::RUNNING)
+		thread->thread_state = ThreadState::READY;
 
 	// Schedule the next thread
-	return schedule_next(current_thread()->execution_state);
+	return schedule_next(&thread->execution_state);
 }
 
 /**
@@ -240,7 +574,6 @@ void Scheduler::activate() {
  * @brief Removes a process from the scheduler if the process has no threads, if it does then the threads are stopped but the process is not removed (this will be done automatically when all threads are stopped)
  *
  * @param process The process to remove
- * @param force If true, the process will be removed and so will all threads
  * @return -1 if the process has threads, 0 otherwise
  */
 uint64_t Scheduler::remove_process(Process* process) {
@@ -298,7 +631,7 @@ cpu_status_t* Scheduler::force_remove_process(Process* process) {
 
 	// Process will be dead now so run the next process (don't care about the execution state being outdated as it is being
 	// removed regardless)
-	return schedule_next(current_thread()->execution_state);
+	return schedule_next(&current_thread()->execution_state);
 }
 
 /**
@@ -310,12 +643,8 @@ Process* Scheduler::current_process() {
 
 	Process* current_process = nullptr;
 
-	// Make sure there is something with process attached
-	if (!s_instance)
-		return nullptr;
-
 	// Find the process that has the thread being executed
-	for (auto process: s_instance->m_processes)
+	for (auto process: m_processes)
 		if (process->pid() == current_thread()->parent_pid) {
 			current_process = process;
 			break;
@@ -333,7 +662,7 @@ Process* Scheduler::current_process() {
 Process* Scheduler::get_process(uint64_t pid) {
 
 	// Try to find the process
-	for (auto process: s_instance->m_processes)
+	for (auto process: m_processes)
 		if (process->pid() == pid)
 			return process;
 
@@ -341,6 +670,13 @@ Process* Scheduler::get_process(uint64_t pid) {
 	return nullptr;
 }
 
+/**
+ * @brief Gets how processes are running on this scheduler
+ * @return The amount
+ */
+uint64_t Scheduler::process_amount() {
+	return m_processes.size();
+}
 
 /**
  * @brief Gets the currently executing thread
@@ -349,7 +685,15 @@ Process* Scheduler::get_process(uint64_t pid) {
  */
 Thread* Scheduler::current_thread() {
 
-	return s_instance->m_threads[s_instance->m_current_thread_index];
+	return m_threads[m_next_thread_index];
+}
+
+/**
+ * @brief Gets how many threads are running on this scheduler
+ * @return The amount
+ */
+uint64_t Scheduler::thread_amount(){
+	return m_threads.size();
 }
 
 /**
@@ -361,38 +705,6 @@ void Scheduler::deactivate() {
 }
 
 /**
- * @brief Loads any valid ELF files from the multiboot structure
- *
- * @param multiboot The multiboot structure
- */
-void Scheduler::load_multiboot_elfs(Multiboot* multiboot) {
-
-	for (multiboot_tag* tag = multiboot->start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag->size + 7) & ~7))) {
-
-		// Tag is not an ELF
-		if (tag->type != MULTIBOOT_TAG_TYPE_MODULE)
-			continue;
-
-		// Try create the elf from the module
-		auto* module = (struct multiboot_tag_module*) tag;
-		auto* elf = new Elf64((uintptr_t) PhysicalMemoryManager::to_dm_region(module->mod_start));
-		if (!elf->is_valid())
-			continue;
-
-		Logger::DEBUG() << "Creating process from multiboot module for " << module->cmdline << " (at 0x" << (uint64_t) module->mod_start << ")\n";
-
-		// Create an array of args for the process TODO: handle multiple args ("" & spaces)
-		char* args[1] = {module->cmdline};
-
-		// Create the process
-		auto* process = new Process(module->cmdline, args, 1, elf);
-
-		Logger::DEBUG() << "Elf loaded to pid " << process->pid() << "\n";
-		delete elf;
-	}
-}
-
-/**
  * @brief Gets a thread by its TID
  *
  * @param tid The thread ID
@@ -401,7 +713,7 @@ void Scheduler::load_multiboot_elfs(Multiboot* multiboot) {
 Thread* Scheduler::get_thread(uint64_t tid) {
 
 	// Try to find the thread
-	for (auto thread: s_instance->m_threads)
+	for (auto thread: m_threads)
 		if (thread->tid == tid)
 			return thread;
 

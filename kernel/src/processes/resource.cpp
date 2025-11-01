@@ -1,11 +1,23 @@
-//
-// Created by 98max on 8/26/2025.
-//
+/**
+ * @file resource.cpp
+ * @brief Implementation of Resource and Resource Registry classes
+ *
+ * @date 26th August 2025
+ * @author Max Tyson
+ */
+
 #include <processes/resource.h>
 
 using namespace MaxOS;
 using namespace MaxOS::processes;
 
+/**
+ * @brief Constructs a new Resource object
+ *
+ * @param name The name of the resource
+ * @param flags The flags for the resource (unused by default but resource type specific)
+ * @param type The type of the resource
+ */
 Resource::Resource(const string& name, size_t flags, resource_type_t type)
 : m_name(name),
   m_type(type)
@@ -78,6 +90,11 @@ resource_type_t Resource::type() {
 	return m_type;
 }
 
+/**
+ * @brief Constructs a new BaseResourceRegistry object and registers it globally
+ *
+ * @param type The type of resources this registry will handle
+ */
 BaseResourceRegistry::BaseResourceRegistry(resource_type_t type)
 : m_type(type)
 {
@@ -121,7 +138,6 @@ Resource* BaseResourceRegistry::get_resource(string const& name) {
  * @brief Registers a resource in the registry
  *
  * @param resource The resource to store
- * @param name The name of the resource (must not already be in use)
  * @return True if the register was successful, false if not
  */
 bool BaseResourceRegistry::register_resource(Resource* resource) {
@@ -216,7 +232,6 @@ void GlobalResourceRegistry::add_registry(resource_type_t type, BaseResourceRegi
 /**
  * @brief Adds a registry to the global list if there is not already one for that type
  *
- * @param type The type of registry being added
  * @param registry The registry to add
  */
 void GlobalResourceRegistry::remove_registry(BaseResourceRegistry* registry) {
@@ -257,8 +272,9 @@ common::Map<uint64_t, Resource*> ResourceManager::resources() {
 /**
  * @brief Registers a resource with the resource manager and then opens it
  *
- * @param resource The resource to register
+ * @param type The type of resource to register
  * @param name The name of the resource
+ * @param flags Per resource flags for opening
  * @return The handle id of the resource or 0 if failed
  */
 uint64_t ResourceManager::open_resource(resource_type_t type, string const& name, size_t flags) {

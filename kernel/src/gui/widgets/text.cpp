@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/16/2022.
-//
+/**
+ * @file text.cpp
+ * @brief Implementation of a Text widget for displaying text in the GUI
+ *
+ * @date 16th October 2022
+ * @author Max Tyson
+ */
 
 #include <gui/font/amiga_font.h>
 #include <gui/widgets/text.h>
@@ -10,6 +14,15 @@ using namespace MaxOS::common;
 using namespace MaxOS::gui;
 using namespace MaxOS::gui::widgets;
 
+/**
+ * @brief Construct a new Text object at a specific position and size with text
+ *
+ * @param left How many pixels from the left of the parent widget the text is
+ * @param top How many pixels from the top of the parent widget the text is
+ * @param width How many pixels wide the text area is
+ * @param height How many pixels tall the text area is
+ * @param text The text to display
+ */
 Text::Text(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text)
 : Widget(left, top, width, height),
   font((uint8_t*) AMIGA_FONT),

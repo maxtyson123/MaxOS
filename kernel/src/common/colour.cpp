@@ -1,6 +1,10 @@
-//
-// Created by 98max on 30/03/2023.
-//
+/**
+ * @file colour.cpp
+ * @brief Implementation of the Colour class defined in colour.h
+ *
+ * @date 30th March 2023
+ * @author Max Tyson
+ */
 
 #include <common/colour.h>
 
@@ -8,27 +12,21 @@ using namespace MaxOS::common;
 
 Colour::Colour() = default;
 
-Colour::Colour(uint8_t red, uint8_t green, uint8_t blue)
-		: red(red),
-		  green(green),
-		  blue(blue) {
 
-}
-
-Colour::Colour(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-		: red(red),
-		  green(green),
-		  blue(blue),
-		  alpha(alpha) {
-
-}
-
-Colour::~Colour() = default;
-
+/**
+ * @brief Constructs a Colour from the the console equivalent
+ *
+ * @param colour The console colour to convert
+ */
 Colour::Colour(ConsoleColour colour) {
 	parse_console_colour(colour);
 }
 
+/**
+ * @brief Constructs a Colour from a string. If it starts with a '#' will be treated as a hex code otherwise, a ansi code.
+ *
+ * @param string The string to parse, must be either a hex code or an ANSI escape code
+ */
 Colour::Colour(string string) {
 
 	if (string[0] == '#')
@@ -37,6 +35,40 @@ Colour::Colour(string string) {
 		parse_ansi_string(string);
 
 }
+
+/**
+ * @brief Constructs a Colour from a set of RGB values. Alpha defaults to 255
+ *
+ * @param red The amount of red 0-255
+ * @param green The amount of green 0-255
+ * @param blue The amount of blue 0-255
+ */
+Colour::Colour(uint8_t red, uint8_t green, uint8_t blue)
+: red(red),
+  green(green),
+  blue(blue)
+{
+
+}
+
+/**
+ * @brief Constructs a Colour from a set of RGBA values.
+ *
+ * @param red The amount of red 0-255
+ * @param green The amount of green 0-255
+ * @param blue The amount of blue 0-255
+ * @param alpha The amount of alpha 0-255
+ */
+Colour::Colour(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+: red(red),
+  green(green),
+  blue(blue),
+  alpha(alpha)
+{
+
+}
+
+Colour::~Colour() = default;
 
 /**
  * @brief Parses a hex string, must be in the format #RRGGBB or #RRGGBBAA

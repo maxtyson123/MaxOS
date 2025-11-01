@@ -1,6 +1,10 @@
-//
-// Created by 98max on 27/09/2023.
-//
+/**
+ * @file console.cpp
+ * @brief Implementation of a basic console driver interface
+ *
+ * @date 27th September 2023
+ * @author Max Tyson
+ */
 
 #include <drivers/console/console.h>
 
@@ -121,7 +125,7 @@ void Console::put_character(uint16_t x, uint16_t y, char c, ConsoleColour foregr
  *
  * @param x The x coordinate of the string
  * @param y The y coordinate of the string
- * @param s The string to put on the console
+ * @param string The string to put on the console
  * @param foreground The foreground color of the string
  * @param background The background color of the string
  */
@@ -214,6 +218,15 @@ void Console::invert_colors(uint16_t x, uint16_t y) {
     set_background_color(x, y, foreground);
 }
 
+/**
+ * @brief Construct a new Console Area object
+ *
+ * @param console The console to create the area on
+ * @param left How far from the left the area starts
+ * @param top How far from the top the area starts
+ * @param width The width of the area
+ * @param height The height of the area
+ */
 ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t width, uint16_t height)
 : m_console(console),
   m_left(left),
@@ -224,6 +237,17 @@ ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t
 
 }
 
+/**
+ * @brief Construct a new Console Area object with specified foreground and background colors
+ *
+ * @param console The console to create the area on
+ * @param left How far from the left the area starts
+ * @param top How far from the top the area starts
+ * @param width The width of the area
+ * @param height The height of the area
+ * @param foreground The foreground color of the area
+ * @param background The background color of the area
+ */
 ConsoleArea::ConsoleArea(Console *console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background)
 : m_console(console),
   m_left(left),
@@ -394,6 +418,10 @@ void ConsoleArea::scroll_up(uint16_t left, uint16_t top, uint16_t width,
 
 }
 
+/**
+ * @brief Construct a new Console Stream object
+ * @param console The console to create the stream on
+ */
 ConsoleStream::ConsoleStream(Console *console)
 : m_console(console)
 {
@@ -415,7 +443,7 @@ void ConsoleStream::write_char(char c) {
 
     // If the character placement is more than the width of the console go on a new line
     if(m_cursor_x >= m_console->width() && c != '\n'){
-        lineFeed();
+	    line_feed();
         write("             ");
     }
 

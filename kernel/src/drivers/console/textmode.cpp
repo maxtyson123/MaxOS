@@ -1,6 +1,10 @@
-//
-// Created by 98max on 27/09/2023.
-//
+/**
+ * @file textmode.cpp
+ * @brief Implementation of a TextModeConsole class for handling text mode console output
+ *
+ * @date 27th September 2023
+ * @author Max Tyson
+ */
 
 #include <drivers/console/textmode.h>
 

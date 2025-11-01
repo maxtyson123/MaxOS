@@ -40,10 +40,13 @@ fi
 
 # Write the version header
 cat > "${OUTPUT_FILE}" << EOF
-//
-// This file is generated automatically by the MaxOS build system.
-//
-
+/**
+ * @file version.h
+ * @brief Defines version information for MaxOS
+ *
+ * @date ${BUILD_YEAR}-${BUILD_MONTH}-${BUILD_DAY}
+ * @author Max Tyson
+ */
 #ifndef MAX_OS_COMMON_VERSION_H
 #define MAX_OS_COMMON_VERSION_H
 

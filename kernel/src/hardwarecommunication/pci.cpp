@@ -1,6 +1,11 @@
-//
-// Created by 98max on 12/10/2022.
-//
+/**
+ * @file pci.cpp
+ * @brief Implementation of a Peripheral Component Interconnect (PCI) controller and device descriptor
+ *
+ * @date 12th October 2022
+ * @author Max Tyson
+ */
+
 #include <hardwarecommunication/pci.h>
 #include <common/logger.h>
 
@@ -24,6 +29,8 @@ PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnec
 
 /**
  * @brief Get the type of the device
+ *
+ * @todo See wiki for more types to add
  *
  * @return Type of the device as a string (or Unknown if the type is not known)
  */
@@ -161,9 +168,7 @@ bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bu
 /**
  * @brief Select the driver for the device
  *
- * @param driverManager device driver manager
- * @param interrupt_manager Interrupt manager
- * @return Driver for the device
+ * @param handler device driver event manager
  */
 void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler* handler) {
 
@@ -238,7 +243,6 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
  * @brief Get the driver for the device
  *
  * @param dev Device descriptor
- * @param interrupt_manager Interrupt manager
  * @return Driver for the device, null pointer if there is no driver
  */
 Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev) {
@@ -262,7 +266,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
 
 				case 0x100E: //i217 (Ethernet Controller)
 				{
-					return new intel_i217(&dev);
+					return new IntelI217(&dev);
 				}
 
 				case 0x7010: // PIIX4 (IDE Controller)
@@ -295,9 +299,12 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
 	return nullptr;
 }
 
-
-void PeripheralComponentInterconnectController::list_known_device(
-		const PeripheralComponentInterconnectDeviceDescriptor& dev) {
+/**
+ * @brief Print the vednor and device id of known devices, or "Unknown" + their ids if not known.
+ *
+ * @param dev The device to print
+ */
+void PeripheralComponentInterconnectController::list_known_device( const PeripheralComponentInterconnectDeviceDescriptor& dev) {
 
 	switch (dev.vendor_id) {
 		case 0x1022: {

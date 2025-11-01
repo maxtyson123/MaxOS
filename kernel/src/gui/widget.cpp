@@ -1,6 +1,11 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file widget.cpp
+ * @brief Implementation of a GUI Widget base class for creating GUI elements
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
+
 #include <gui/widget.h>
 
 using namespace MaxOS::common;
@@ -14,6 +19,14 @@ Widget::Widget()
 
 }
 
+/**
+ * @brief Construct a new Widget object at a specific position and size
+ *
+ * @param left The left position of the widget relative to its parent
+ * @param top The top position of the widget relative to its parent
+ * @param width The width of the widget
+ * @param height The height of the widget
+ */
 Widget::Widget(int32_t left, int32_t top, uint32_t width, uint32_t height)
 : KeyboardEventHandler(),
   m_position(left, top, width, height)
@@ -74,6 +87,12 @@ void Widget::add_child(Widget* child) {
 
 }
 
+/**
+ * @brief Get the absolute coordinates of the widget (relative to the screen)
+ *
+ * @param coordinates The coordinates within the widget to convert
+ * @return The absolute coordinates of the widget
+ */
 Coordinates Widget::absolute_coordinates(common::Coordinates coordinates) {
 
 	// Return the parents absolute coordinates
@@ -132,6 +151,8 @@ void Widget::move(int32_t left, int32_t top) {
  *
  * @param width The new m_width of the rectangle
  * @param height The new m_height of the rectangle
+ *
+ * @todo Fix the invalidation so it only redraws the areas that need to be redrawn (right and bottom are always fully redrawn currently)
  */
 void Widget::resize(int32_t width, int32_t height) {
 
@@ -150,7 +171,7 @@ void Widget::resize(int32_t width, int32_t height) {
 	Vector<Rectangle<int32_t>> invalid_areas_old = old_position.subtract(m_position);
 	Vector<Rectangle<int32_t>> invalid_areas_new = m_position.subtract(old_position);
 
-	// Right and Bottom require to be fully invalidated TODO: Fix this hack
+	// Right and Bottom require to be fully invalidated
 	if (m_position.width > old_position.width || m_position.height > old_position.height ||
 		old_position.width > m_position.width || old_position.height > m_position.height) {
 		invalidate();
@@ -288,8 +309,16 @@ void Widget::on_mouse_button_released(uint32_t, uint32_t, uint8_t) {
 
 CompositeWidget::CompositeWidget() = default;
 
+/**
+ * @brief Construct a new Composite Widget object at a specific position and size
+ *
+ * @param left The left position of the widget relative to its parent
+ * @param top The top position of the widget relative to its parent
+ * @param width How many pixels wide the widget is
+ * @param height How many pixels tall the widget is
+ */
 CompositeWidget::CompositeWidget(int32_t left, int32_t top, uint32_t width, uint32_t height)
-		: Widget(left, top, width, height) {
+: Widget(left, top, width, height) {
 
 }
 

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 24/10/2022.
-//
+/**
+ * @file ata.h
+ * @brief Driver for the ATA controller, handles the reading and writing of data to the hard drive
+ *
+ * @date 24th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_DISK_ATA_H
 #define MAXOS_DRIVERS_DISK_ATA_H
@@ -24,7 +28,7 @@ namespace MaxOS{
              */
             class AdvancedTechnologyAttachment : public Disk {
 
-                protected:
+	            private:
                     hardwarecommunication::Port16Bit m_data_port;
                     hardwarecommunication::Port8Bit m_error_port;
                     hardwarecommunication::Port8Bit m_sector_count_port;

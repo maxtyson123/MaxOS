@@ -1,39 +1,45 @@
-//
-// Created by 98max on 30/03/2025.
-//
+/**
+ * @file cplusplus.h
+ * @brief Defines C++ runtime functions and structures needed for linking C++ code in the kernel
+ *
+ * @see https://wiki.osdev.org/C%2B%2B - code adapted from here
+ *
+ * @date 30th March 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_RUNTIME_CPLUSPLUS_H
 #define MAXOS_RUNTIME_CPLUSPLUS_H
 
+#include <stdint.h>
+
 namespace MaxOS {
-    namespace runtime {
+	namespace runtime {
 
+		typedef void (* constructor)();
+		typedef unsigned uarch_t;
 
-      // Thanks: https://wiki.osdev.org/C%2B%2B
+		extern "C" {
 
-      //Define what a constructor is
-      typedef void (*constructor)();
+			/**
+			 * @struct atexit_func_entry_t
+			 * @brief An entry in the list of functions to call at program exit (not used in kernel but needed for linking)
+			 */
+			struct atexit_func_entry_t {
+				void (* destructor_func)(void*);        ///< The destructor function to call
+				void* obj_ptr;                          ///< The pointer to the object to destroy
+				void* dso_handle;                       ///< The DSO handle (not used)
+			};
 
-      typedef unsigned uarch_t;
+			int __cxa_atexit(void (* f)(void*), void* objptr, void* dso);
+			void __cxa_finalize(void* f);
 
-      extern "C" {
+			// Stack Gaurd
+			uintptr_t __stack_chk_guard = 0x595e9fbd94fda766;
+			void __stack_chk_fail(void);
 
-      struct atexit_func_entry_t
-      {
-        /*
-	* Each member is at least 4 bytes large. Such that each entry is 12bytes.
-	* 128 * 12 = 1.5KB exact.
-	**/
-        void (*destructor_func)(void *);
-        void *obj_ptr;
-        void *dso_handle;
-      };
-
-      int __cxa_atexit(void (*f)(void *), void *objptr, void *dso);
-      void __cxa_finalize(void *f);
-
-      }
-    }
+		}
+	}
 }
 
 #endif // MAXOS_RUNTIME_CPLUSPLUS_H

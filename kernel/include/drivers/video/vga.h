@@ -1,6 +1,10 @@
-//
-// Created by Tyson on 14/10/2022.
-//
+/**
+ * @file vga.h
+ * @brief Defines a Video Graphics Array (VGA) driver for rendering graphics to the screen
+ *
+ * @date 14th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MaxOS_DRIVERS_VGA_H
 #define MaxOS_DRIVERS_VGA_H
@@ -22,7 +26,8 @@ namespace MaxOS{
              * @brief Driver for the VGA graphics controller, handles the rendering of pixels to the screen
              */
             class VideoGraphicsArray : public VideoDriver{
-                protected:
+
+				private:
                     hardwarecommunication::Port8Bit m_misc_port;
                     hardwarecommunication::Port8Bit m_crtc_index_port;
                     hardwarecommunication::Port8Bit crtc_data_port;

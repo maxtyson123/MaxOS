@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/10/2023.
-//
+/**
+ * @file button.cpp
+ * @brief Implementation of a Button widget for GUI applications
+ *
+ * @date 10th October 2023
+ * @author Max Tyson
+ */
 
 #include <gui/widgets/button.h>
 #include <gui/font/amiga_font.h>
@@ -54,6 +58,15 @@ void ButtonEventHandler::on_button_released(Button*) {
 
 }
 
+/**
+ * @brief Construct a new Button object at a specific position and size with text
+ *
+ * @param left How many pixels from the left of the parent widget the button is
+ * @param top  How many pixels from the top of the parent widget the button is
+ * @param width How many pixels wide the button is
+ * @param height How many pixels tall the button is
+ * @param text The text to display on the button
+ */
 Button::Button(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text)
 : Widget(left, top, width, height),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
@@ -90,7 +103,7 @@ void Button::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	gc->fill_rectangle(x + area.left, y + area.top, x + area.left + area.width,
 					   y + area.top + area.height, background_colour);
 
-	// Draw the border  (TODO: Make a border class?? Window uses it too)
+	// Draw the border
 
 	// Top Border
 	if (area.intersects(Rectangle<int32_t>(0, 0, buttonPosition.width, 1))) {
@@ -174,8 +187,11 @@ void Button::on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) {
 	Widget::on_mouse_button_released(x, y, button);
 }
 
-/// ___ Event ___
-
+/**
+ * @brief Construct a new Button Released Event object
+ *
+ * @param source The button that triggered the event
+ */
 ButtonReleasedEvent::ButtonReleasedEvent(Button* source)
 : Event(ButtonEvents::RELEASED),
   source(source)
@@ -185,6 +201,10 @@ ButtonReleasedEvent::ButtonReleasedEvent(Button* source)
 
 ButtonReleasedEvent::~ButtonReleasedEvent() = default;
 
+/**
+ * @brief Construct a new Button Pressed Event object
+ * @param source The button that triggered the event
+ */
 ButtonPressedEvent::ButtonPressedEvent(Button* source)
 : Event(ButtonEvents::PRESSED),
   source(source)

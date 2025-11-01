@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file graphicsContext.h
+ * @brief Defines a GraphicsContext class for drawing pixels, lines, rectangles and circles to the screen
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MaxOS_COMMON_GRAPHICSCONTEX_H
 #define MaxOS_COMMON_GRAPHICSCONTEX_H
@@ -19,15 +23,15 @@ namespace MaxOS {
        class GraphicsContext {
 
         protected:
-           bool mirror_y_axis { false };
+           bool mirror_y_axis { false };    ///< Should the y axis be mirrored (0,0 is top left if false, bottom left if true)
 
-           int32_t m_width { 0 };
-           int32_t m_height { 0 };
-           uint32_t m_color_depth { 0 };
+           int32_t m_width { 0 };           ///<  The width of the screen in pixels
+           int32_t m_height { 0 };          ///<  The height of the screen in pixels
+           uint32_t m_color_depth { 0 };    ///<  The color depth of the screen in bits per pixel
 
-           Colour m_colour_pallet[256];
+           Colour m_colour_pallet[256];     ///<  The colour pallet for 8 bit color depth @todo make const
 
-           uint64_t* m_framebuffer_address { nullptr };
+           uint64_t* m_framebuffer_address { nullptr }; ///< The address of the framebuffer
 
            virtual void render_pixel(uint32_t x, uint32_t y, uint32_t colour);
            virtual void render_pixel_8_bit(uint32_t x, uint32_t y, uint8_t colour);

@@ -1,11 +1,16 @@
-//
-// Created by 98max on 12/1/2022.
-//
+/**
+ * @file vector.h
+ * @brief Defines a Vector class for dynamically storing an array of elements.
+ *
+ * @date 1st December 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_VECTOR_H
 #define MAXOS_COMMON_VECTOR_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 namespace MaxOS{
 
@@ -36,14 +41,12 @@ namespace MaxOS{
         template<class Type> class Vector
         {
         protected:
-            Type* m_elements;
-            uint32_t m_size { 0 };
-            uint32_t m_capacity { 1 };
-
-            void increase_size();
+            Type* m_elements;                   ///< The array of elements
+            uint32_t m_size { 0 };              ///< How many elements are currently stored
+            uint32_t m_capacity { 1 };          ///< How many elements can be stored without resizing
 
         public:
-            typedef Type* iterator;
+            typedef Type* iterator;             ///< The iterator type for the Vector
 
             Vector();
             Vector(int Size, Type element);
@@ -69,8 +72,11 @@ namespace MaxOS{
             Type pop_front();
 
             void erase(Type);
-            void erase(iterator position);
+            void erase(typename Vector<Type>::iterator position);
             void clear();
+
+			void reserve(size_t amount);
+	        void increase_size();
 
             void iterate(VectorIterationHandler<Type>*);
             void Iterate(void callback(Type&));
@@ -156,27 +162,38 @@ namespace MaxOS{
          * @tparam Type Type of the Vector
          */
         template <class Type> void Vector<Type>::increase_size() {
-
-
-            // Allocate more space for the array
-            Type* new_elements = new Type[m_capacity * 2];
-
-            // Copy the elements to the new array
-            for (uint32_t i = 0; i < m_size; ++i)
-              new_elements[i] = m_elements[i];
-
-            // De-allocate the old array
-            delete[] m_elements;
-
-            // Set the new array
-            m_elements = new_elements;
-
-            // Increase the capacity of the Vector
-            m_capacity *= 2;
-
+	        reserve(m_capacity * 2);
         }
 
-        /**
+		/**
+		 * @brief Reserves space in the Vector for a certain amount of elements
+		 *
+		 * @tparam Type Type of the Vector
+		 * @param amount The amount of elements to reserve space for
+		 */
+	    template<class Type> void Vector<Type>::reserve(size_t amount) {
+
+
+		    // Increase the capacity of the Vector
+			if(m_capacity < amount)
+				m_capacity = amount;
+
+		    // Allocate more space for the array
+		    Type* new_elements = new Type[amount];
+
+		    // Copy the elements to the new array
+		    for (uint32_t i = 0; i < m_size; ++i)
+			    new_elements[i] = m_elements[i];
+
+		    // De-allocate the old array
+		    delete[] m_elements;
+
+		    // Set the new array
+		    m_elements = new_elements;
+	    }
+
+
+	    /**
          * @brief Overloads the [] operator to return the element at the index
          *
          * @tparam Type Type of the Vector
@@ -422,8 +439,7 @@ namespace MaxOS{
          * @tparam Type The type of the Vector
          * @param position The m_position of the element to remove
          */
-        template<class Type>
-        void Vector<Type>::erase(typename Vector<Type>::iterator position) {
+        template<class Type> void Vector<Type>::erase(typename Vector<Type>::iterator position) {
 
             // If the m_position is not in the Vector
             if (position < begin() || position >= end())
@@ -480,10 +496,21 @@ namespace MaxOS{
 
         template<class Type> VectorIterationHandler<Type>::~VectorIterationHandler() = default;
 
+
+		/**
+		 * @brief Called when the end of the stream is reached (overridden by subclasses, no default behavior)
+		 *
+		 * @tparam Type Type of the values stored in the Vector
+		 */
         template<class Type> void VectorIterationHandler<Type>::on_end_of_stream() {
 
         }
 
+		/**
+		 * @brief Called when an element is read from the Vector (overridden by subclasses, no default behavior)
+		 *
+		 * @tparam Type Type of the values stored in the Vector
+		 */
         template<class Type> void VectorIterationHandler<Type>::on_read(Type) {
 
         }

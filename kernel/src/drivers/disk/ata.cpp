@@ -1,6 +1,10 @@
-//
-// Created by 98max on 24/10/2022.
-//
+/**
+ * @file ata.cpp
+ * @brief Implementation of the Advanced Technology Attachment (ATA) driver for disk communication
+ *
+ * @date 24th October 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/disk/ata.h>
 
@@ -10,6 +14,12 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::disk;
 
+/**
+ * @brief Constructor for the AdvancedTechnologyAttachment class
+ *
+ * @param port_base The base port for the ATA device
+ * @param master True if the device is master, false if slave
+ */
 AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, bool master)
 : m_data_port(port_base),
   m_error_port(port_base + 1),
@@ -97,7 +107,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t *data_buffer, 
 	// Select the device (master or slave)
 	m_device_port.write((m_is_master ? 0xE0 : 0xF0) | ((sector & 0x0F000000) >> 24));
 
-	// Device is busy (TODO: YIELD)
+	// Device is busy @todo yeild
 	while ((m_command_port.read() & 0x80) != 0);
 
 	// Reset the device
@@ -117,7 +127,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t *data_buffer, 
 	if (status == 0x00)
 		return;
 
-	// Wait for the device to be ready or for an error to occur TODO: Userspace block here
+	// Wait for the device to be ready or for an error to occur @todo Userspace block here
 	while (((status & 0x80) == 0x80) && ((status & 0x01) != 0x01))
 		status = m_command_port.read();
 
@@ -157,7 +167,7 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const buffer_t *data, 
 	// Select the device (master or slave)
 	m_device_port.write(m_is_master ? 0xE0 : 0xF0 | ((sector & 0x0F000000) >> 24));
 
-	// Device is busy (TODO: YIELD)
+	// Device is busy @todo YIELD
 	while ((m_command_port.read() & 0x80) != 0);
 
 	// Reset the device
@@ -172,7 +182,7 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const buffer_t *data, 
 	// Send the write command
 	m_command_port.write(0x30);
 
-	// Wait for the device be ready writing (TODO: YIELD)
+	// Wait for the device be ready writing @todo YIELD
 	uint8_t status = m_command_port.read();
 	while ((status & 0x80) != 0 || (status & 0x08) == 0)
 		status = m_command_port.read();
@@ -193,7 +203,7 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const buffer_t *data, 
 	for (int i = count + (count % 2); i < m_bytes_per_sector; i += 2)
 		m_data_port.write(0x0000);
 
-	// Wait for the device to finish writing (TODO: YIELD)
+	// Wait for the device to finish writing @todo YIELD
 	status = m_command_port.read();
 	while ((status & 0x80) != 0 || (status & 0x08) != 0)
 		status = m_command_port.read();

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 23/10/2023.
-//
+/**
+ * @file map.h
+ * @brief Defines a Map class for storing key-value pairs
+ *
+ * @date 23rd October 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_MAP_H
 #define MAXOS_COMMON_MAP_H
@@ -39,10 +43,10 @@ namespace MaxOS{
         template<class Key, class Value> class Map
         {
             protected:
-                Vector<Pair<Key, Value>> m_elements;
+                Vector<Pair<Key, Value>> m_elements;                             ///< The internal storage of the map, a vector of key-value pairs
 
             public:
-                typedef typename Vector<Pair<Key, Value>>::iterator iterator;
+                typedef typename Vector<Pair<Key, Value>>::iterator iterator;   ///< The iterator type for the map
 
                 Map();
                 ~Map();
@@ -68,11 +72,13 @@ namespace MaxOS{
 		        void erase(iterator position);
 		        void clear();
 
+		        void reserve(size_t amount);
+		        void increase_size();
+
                 void iterate(MapIterationHandler<Key, Value>* handler);
-                void iterate(void callback(Key&, Value&));
+	            void iterate(void (*callback)(Key &, Value &));
 
         };
-
 
 	    /// ______________ TEMPLATE IMPLEMENTATION ______________
         template<class Key, class Value> MapIterationHandler<Key, Value>::MapIterationHandler() = default;
@@ -159,22 +165,53 @@ namespace MaxOS{
 
         }
 
+		/**
+		 * @brief Adds a new key-value pair to the end of the map
+		 *
+		 * @tparam Key The key type
+		 * @tparam Value The value type
+		 * @param key The key
+		 * @param value The value
+		 * @return The iterator of the new element
+		 */
 	    template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_back(Key key, Value value) {
 		    return m_elements.push_back(Pair<Key, Value>(key, value));
 	    }
 
+		/**
+		 * @brief Removes the last key-value pair from the map and returns it
+		 *
+		 * @tparam Key The key type
+		 * @tparam Value The value type
+		 * @return
+		 */
 	    template<class Key, class Value> Pair<Key, Value> Map<Key, Value>::pop_back() {
 		    return m_elements.pop_back();
 	    }
 
+		/**
+		 * @brief Adds a new key-value pair to the front of the map
+		 *
+		 * @tparam Key The key type
+		 * @tparam Value The value type
+		 * @param key The key
+		 * @param value The value
+		 * @return
+		 */
 	    template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_front(Key key, Value value) {
 		    return m_elements.push_front({key, value});
 	    }
 
+		/**
+		 * @brief Removes the first key-value pair from the map and returns it
+		 *
+		 * @tparam Key The key type
+		 * @tparam Value The value type
+		 * @return The removed key-value pair
+		 */
 	    template<class Key, class Value> Pair<Key, Value> Map<Key, Value>::pop_front() {
 		    return m_elements.pop_front();
 	    }
-
 
         /**
          * @brief Returns whether the map is empty
@@ -250,12 +287,40 @@ namespace MaxOS{
 
         }
 
+		/**
+		 * @brief Removes an element from the map at the specified position
+		 *
+		 * @tparam Key The key type
+		 * @tparam Value The value type
+		 * @param position The iterator of the element to remove
+		 */
 	    template<class Key, class Value> void Map<Key, Value>::erase(Map::iterator position) {
 			m_elements.erase(position);
 
 	    }
 
-        /**
+	    /**
+		 * @brief Reserves space in the map for a certain amount of elements to avoid reallocations
+		 *
+		 * @tparam Key The key type
+		 * @tparam Value The value type
+		 * @param amount The amount of elements to reserve space for
+		 */
+	    template<class Key, class Value> void Map<Key, Value>::reserve(size_t amount) {
+		    m_elements.reserve(amount);
+	    }
+
+		/**
+		 * @brief Doubles the size of the map
+		 *
+		 * @tparam Key The key type
+		 * @tparam Value The value type
+		 */
+	    template<class Key, class Value> void Map<Key, Value>::increase_size() {
+			m_elements.increase_size();
+	    }
+
+	    /**
          * @brief Iterates through the map and calls the handler
          *
          * @tparam Key The key type

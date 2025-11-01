@@ -1,11 +1,20 @@
-//
-// Created by 98max on 11/29/2022.
-//
+/**
+ * @file memoryIO.cpp
+ * @brief Implementation of memory-mapped I/O operations
+ *
+ * @date 29th November 2022
+ * @author Max Tyson
+ */
 
 #include <memory/memoryIO.h>
 
 using namespace MaxOS::memory;
 
+/**
+ * @brief Construct a new Mem IO object
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO::MemIO(uintptr_t address)
 : m_address(address)
 {
@@ -14,6 +23,11 @@ MemIO::MemIO(uintptr_t address)
 
 MemIO::~MemIO() = default;
 
+/**
+ * @brief Construct a new Mem IO object for 8 bit reads/writes
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO8Bit::MemIO8Bit(uintptr_t address)
 : MemIO(address)
 {
@@ -41,6 +55,11 @@ uint8_t MemIO8Bit::read() {
 	return *((volatile uint8_t*) (m_address));
 }
 
+/**
+ * @brief Construct a new Mem IO object for 16 bit reads/writes
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO16Bit::MemIO16Bit(uintptr_t address)
 : MemIO(address)
 {
@@ -68,6 +87,11 @@ uint16_t MemIO16Bit::read() {
 	return *((volatile uint16_t*) (m_address));
 }
 
+/**
+ * @brief Construct a new Mem IO object for 32 bit reads/writes
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO32Bit::MemIO32Bit(uintptr_t address)
 : MemIO(address)
 {
@@ -95,6 +119,11 @@ uint32_t MemIO32Bit::read() {
 	return *((volatile uint32_t*) (m_address));
 }
 
+/**
+ * @brief Construct a new Mem IO object for 64 bit reads/writes
+ *
+ * @param address The memory address to read from / write to
+ */
 MemIO64Bit::MemIO64Bit(uintptr_t address)
 : MemIO(address)
 {
@@ -163,7 +192,7 @@ void* memcpy(void* destination, const void* source, uint64_t num) {
  * @param num The number of bytes to fill
  * @return The pointer to the block of memory
  */
-void* memset(void* ptr, uint32_t value, uint64_t num) {
+void* memset(void* ptr, unsigned char value, uint64_t num) {
 
 	// Make sure the pointer exists
 	if (ptr == nullptr)
@@ -172,6 +201,26 @@ void* memset(void* ptr, uint32_t value, uint64_t num) {
 	auto* dst = (unsigned char*) ptr;
 	for (size_t i = 0; i < num; i++)
 		dst[i] = (unsigned char) value;
+	return ptr;
+}
+
+/**
+ * @brief Fills a block of memory with a specified value
+ *
+ * @param ptr The pointer to the block of memory
+ * @param value The value to fill the block of memory with
+ * @param num The number of bytes to fill
+ * @return The pointer to the block of memory
+ */
+void* memset(void* ptr, uint32_t value, uint64_t num) {
+
+	// Make sure the pointer exists
+	if (ptr == nullptr)
+		return ptr;
+
+	auto* dst = (uint32_t*) ptr;
+	for (size_t i = 0; i < num; i++)
+		dst[i] = value;
 	return ptr;
 }
 

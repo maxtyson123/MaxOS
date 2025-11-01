@@ -1,6 +1,10 @@
-//
-// Created by 98max on 18/01/2024.
-//
+/**
+ * @file apic.h
+ * @brief Defines classes and structures for handling the Advanced Programmable Interrupt Controller (APIC) in a multiprocessor system
+ *
+ * @date 18th January 2024
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_HARDWARECOMMUNICATION_APIC_H
 #define MAXOS_HARDWARECOMMUNICATION_APIC_H
@@ -10,137 +14,215 @@
 #include <memory/physical.h>
 
 namespace MaxOS {
-    namespace hardwarecommunication {
+	namespace hardwarecommunication {
 
+		/**
+		 * @class LocalAPIC
+		 * @brief Handles the local APIC for the current core
+		 */
+		class LocalAPIC {
 
-      class  LocalAPIC {
+			private:
+				uint64_t m_apic_base{};
+				uint64_t m_apic_base_high{};
+				uint32_t m_id{};
+				bool m_x2apic{};
 
-        protected:
-          uint64_t m_apic_base{};
-          uint64_t m_apic_base_high{};
-          uint32_t m_id{};
-          bool m_x2apic{};
+			public:
+				LocalAPIC();
+				~LocalAPIC();
 
-        public:
-            LocalAPIC();
-            ~LocalAPIC();
+				[[nodiscard]] uint32_t read(uint32_t reg) const;
+				void write(uint32_t reg, uint32_t value) const;
 
-            void init();
+				[[nodiscard]] uint32_t id() const;
+				void send_eoi() const;
 
-            [[nodiscard]] uint32_t read(uint32_t reg) const;
-            void write(uint32_t reg, uint32_t value) const;
+				void send_init(uint8_t apic_id, bool assert);
+				void send_startup(uint8_t apic_id, uint8_t vector);
 
-            [[nodiscard]] uint32_t id() const;
-            void send_eoi() const;
+		};
 
-        };
+		/**
+		 * @struct MADT
+		 * @brief Multiple APIC Description Table (MADT) (ACPI 2 or higher). Provides information about the APICs in
+		 * the system. Following this header are multiple entries describing the APICs (see MADTEntry).
+		 */
+		typedef struct MADT {
+			ACPISDTHeader header;               ///< Common ACPI SDT header
+			uint32_t local_apic_address;        ///< The physical address of the local APIC
+			uint32_t flags;                     ///< Flags indicating the capabilities of the system (1 = Legacy PICs are present)
+		} __attribute__((packed)) madt_t;
 
-        struct MADT {
-          ACPISDTHeader header;
-          uint32_t local_apic_address;
-          uint32_t flags;
-        } __attribute__((packed));
+		/**
+		 * @struct MADTEntry
+		 * @brief An item in the MADT table
+		 */
+		typedef struct MADTEntry {
+			uint8_t type;       ///< The type of the MADT entry (see MADT_TYPE)
+			uint8_t length;     ///< How many bytes this entry takes up (including the type and length fields)
+		} __attribute__((packed)) madt_entry_t;
 
-        struct MADT_Item {
-          uint8_t type;
-          uint8_t length;
-        } __attribute__((packed));
+		/**
+		 * @enum MADT_TYPE
+		 * @brief The types of MADT entries
+		 */
+		enum class MADT_TYPE {
+			PROCESSOR_APIC,
+			IO_APIC,
+			INTERRUPT_SOURCE_OVERRIDE,
+			NMI_SOURCE,
+			APIC_NMIS,
+			APIC_ADDRESS_OVERRIDE,
+			PROCESSOR_X2APIC,
+		};
 
-        struct MADT_IOAPIC {
-          uint8_t io_apic_id;
-          uint8_t reserved;
-          uint32_t io_apic_address;
-          uint32_t global_system_interrupt_base;
-        } __attribute__((packed));
+		/**
+		 * @struct MADT_IO_APIC
+		 * @brief An entry in the MADT table describing an IO APIC
+		 *
+		 * @todo Rename for consistency
+		 */
+		typedef struct MADT_IO_APIC {
+			uint8_t io_apic_id;                         ///< The ID of the IO APIC
+			uint8_t reserved;                           ///< Reserved
+			uint32_t io_apic_address;                   ///< The physical address of the IO APIC
+			uint32_t global_system_interrupt_base;      ///< The first GSI number that this IO APIC handles
+		} __attribute__((packed)) madt_io_apic_t;
 
-        union RedirectionEntry {
-          struct {
-            uint64_t vector : 8;
-            uint64_t delivery_mode : 3;
-            uint64_t destination_mode : 1;
-            uint64_t delivery_status : 1;
-            uint64_t pin_polarity : 1;
-            uint64_t remote_irr : 1;
-            uint64_t trigger_mode : 1;
-            uint64_t mask : 1;
-            uint64_t reserved : 39;
-            uint64_t destination : 8;
-          } __attribute__((packed));
+		/**
+		 * @struct MADT_PROCESSOR_APIC
+		 * @brief An entry in the MADT table describing a processor local APIC
+		 */
+		typedef struct MADT_PROCESSOR_APIC {
+			uint8_t processor_id;   ///< The ID for the core
+			uint8_t apic_id;        ///< The ID for the APIC that the core uses
+			uint32_t flags;         ///< Flags indicating the status of the core (bit 0 = core enabled, bit 1 = can be enabled)
+		} __attribute__((packed)) madt_processor_apic_t;
 
-          uint64_t raw;
-        };
+		/**
+		 * @struct RedirectionEntry
+		 * @brief An IO APIC redirection entry. Describes how an interrupt is routed.
+		 */
+		typedef union RedirectionEntry {
+			struct {
+				uint64_t vector: 8;             ///< The interrupt that will be triggered when this redirection entry is used
+				uint64_t delivery_mode: 3;      ///< How the interrupt will be delvied to the core(s) (see DeliveryMode)
+				uint64_t destination_mode: 1;   ///< How to interpret the destination field (0 = means its the core ID, 1 = means a bitmask of cores)
+				uint64_t delivery_status: 1;    ///< Indicates whether, when setting this entry, the interrupt is still being sent
+				uint64_t pin_polarity: 1;       ///< Defines the electrical signal that indicates an active interrupt line (0 = high active, 1 = low active) (must match the MADT override flags)
+				uint64_t remote_irr: 1;         ///< ?
+				uint64_t trigger_mode: 1;       ///< How the electrical signal is interpreted (0 = edge triggered, 1 = level triggered) (must match the MADT override flags)
+				uint64_t mask: 1;               ///< Whether the interrupt is disabled or not
+				uint64_t reserved: 39;          ///< Reserved bits (should be zero)
+				uint64_t destination: 8;        ///< The core(s) the interrupt should be sent to (interpreted based on destination_mode)
+			} __attribute__((packed));          ///< Packed because the bitfields should be one uint64_t together
 
-        typedef struct InterruptRedirect{
-          uint8_t type;
-          uint8_t index;
-          uint8_t interrupt;
-          uint8_t destination;
-          uint32_t flags;
-          bool mask;
+			uint64_t raw;   					///< The raw 64-bit value of the redirection entry
+		} redirection_entry_t;
 
-        } interrupt_redirect_t;
+		/**
+		 * @enum DeliveryMode
+		 * @brief How the interrupt should be delivered (can it override others etc). Set fixed/lowest priority for normal interrupts.
+		 *
+		 * @todo use this
+		 */
+		enum DeliveryMode {
+			FIXED           = 0,
+			LOWEST_PRIORITY = 1,
+			SMI             = 2,
+			NMI             = 4,
+			INIT            = 5,
+			EXTINT          = 7,
+		};
 
-        struct Override {
-          uint8_t bus;
-          uint8_t source;
-          uint32_t global_system_interrupt;
-          uint16_t flags;
-        } __attribute__((packed));
+		/**
+		 * @struct InterruptRedirect
+		 * @brief Defines how an interrupt input is redirected to a specific processor via the I/O APIC
+		 */
+		typedef struct InterruptRedirect {
+			uint8_t type;           ///< The type of redirect (should be 0 for normal interrupts)
+			uint8_t index;          ///< Where in the IO APIC redirection table this redirect should be placed
+			uint8_t interrupt;      ///< The interrupt number to trigger when this redirect is used
+			uint8_t destination;    ///< The ID of the core the interrupt should be sent to
+			uint32_t flags;         ///< Configuration flags for the interrupt (see MADT override flags)
+			bool mask;              ///< Should the interrupt be disabled initially
 
-        class IOAPIC {
-          private:
-            AdvancedConfigurationAndPowerInterface* m_acpi;
-            MADT* m_madt  = { nullptr };
-            uint64_t m_address = 0;
-            uint64_t m_address_high = 0;
-            uint32_t m_version = 0;
-            uint8_t m_max_redirect_entry  = 0;
+		} interrupt_redirect_t;
 
-            uint8_t m_override_array_size = 0;
-            Override m_override_array[0x10] = {};
+		/**
+		 * @struct Override
+		 * @brief Specifies how a specific interrupt source is mapped to a global system interrupt
+		 */
+		typedef struct Override {
+			uint8_t bus;                        ///< Identifies the hardware bus the interrupt comes from (0 = ISA, 1 = PCI)
+			uint8_t source;                     ///< The interrupt source number on the specified bus
+			uint32_t global_system_interrupt;   ///< The global system interrupt that the source is mapped to
+			uint16_t flags;                     ///< Flags describing the polarity and trigger mode of the interrupt source (see MADT override flags)
+		} __attribute__((packed)) override_t;
 
-            MADT_Item* get_madt_item(uint8_t type, uint8_t index);
+		/**
+		 * @class IOAPIC
+		 * @brief Handles the IO APIC in the system (one per system)
+		 */
+		class IOAPIC {
+			private:
+				AdvancedConfigurationAndPowerInterface* m_acpi;
+				MADT* m_madt = {nullptr};
+				uint64_t m_address = 0;
+				uint64_t m_address_high = 0;
+				uint32_t m_version = 0;
+				uint8_t m_max_redirect_entry = 0;
 
-            void read_redirect(uint8_t index, RedirectionEntry* entry);
-            void write_redirect(uint8_t index, RedirectionEntry* entry);
+				uint8_t m_override_array_size = 0;
+				Override m_override_array[0x10] = {};
 
-          public:
-              IOAPIC(AdvancedConfigurationAndPowerInterface* acpi);
-              ~IOAPIC();
+				void read_redirect(uint8_t index, RedirectionEntry* entry);
+				void write_redirect(uint8_t index, RedirectionEntry* entry);
 
-              uint32_t read(uint32_t reg) const;
-              void write(uint32_t reg, uint32_t value) const;
+			public:
+				IOAPIC(AdvancedConfigurationAndPowerInterface* acpi);
+				~IOAPIC();
 
-              void set_redirect(interrupt_redirect_t* redirect);
-              void set_redirect_mask(uint8_t index, bool mask);
+				uint32_t read(uint32_t reg) const;
+				void write(uint32_t reg, uint32_t value) const;
 
-              void init();
-        };
+				void set_redirect(interrupt_redirect_t* redirect);
+				void set_redirect_mask(uint8_t index, bool mask);
 
-      class AdvancedProgrammableInterruptController {
+				MADTEntry* get_madt_item(MADT_TYPE type, uint8_t index);
 
-        protected:
-            LocalAPIC* m_local_apic;
-            IOAPIC* m_io_apic;
+		};
 
-            Port8BitSlow m_pic_master_command_port;
-            Port8BitSlow m_pic_master_data_port;
-            Port8BitSlow m_pic_slave_command_port;
-            Port8BitSlow m_pic_slave_data_port;
+		/**
+		 * @class AdvancedProgrammableInterruptController
+		 * @brief Handles both the Local APIC (boot core) and IO APIC
+		 *
+		 * @todo Should either handle all Local APICs or none (only boot core right now, others accessed per core directly which is inconsistent)
+		 */
+		class AdvancedProgrammableInterruptController {
 
-            void disable_pic();
+			private:
+				LocalAPIC* m_local_apic;
+				IOAPIC* m_io_apic;
 
+				Port8BitSlow m_pic_master_command_port;
+				Port8BitSlow m_pic_master_data_port;
+				Port8BitSlow m_pic_slave_command_port;
+				Port8BitSlow m_pic_slave_data_port;
 
-        public:
-            AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi);
-            ~AdvancedProgrammableInterruptController();
+				void disable_pic();
 
-            LocalAPIC* local_apic() const;
-            IOAPIC* io_apic() const;
+			public:
+				AdvancedProgrammableInterruptController(AdvancedConfigurationAndPowerInterface* acpi);
+				~AdvancedProgrammableInterruptController();
 
-      };
+				LocalAPIC* local_apic() const;
+				IOAPIC* io_apic() const;
 
-    }
+		};
+
+	}
 }
 
 #endif // MAXOS_HARDWARECOMMUNICATION_APIC_H

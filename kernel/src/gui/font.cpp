@@ -1,6 +1,12 @@
-//
-// Created by 98max on 4/15/2023.
-//
+/**
+ * @file font.cpp
+ * @brief Implementation of a Font class for rendering text in a graphics context
+ *
+ * @date 15th April 2023
+ * @author Max Tyson
+ *
+ * @todo Replace with a proper font format
+ */
 
 #include <gui/font.h>
 
@@ -8,6 +14,11 @@ using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::gui;
 
+/**
+ * @brief Construct a new Font object
+ *
+ * @param font_data The 8x8 font data to use
+ */
 Font::Font(const uint8_t* font_data) {
 
 	// Store the font data
@@ -22,6 +33,8 @@ Font::~Font() = default;
  * @brief write the entire text to the screen
  * @param x The x coordinate of the text
  * @param y The y coordinate of the text
+ * @param foreground_colour The letter colour
+ * @param background_colour The background colour
  * @param context The graphics context to draw the text on
  * @param text The text to draw
  */
@@ -48,6 +61,8 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
  *
  * @param x The x coordinate of the text
  * @param y The y coordinate of the text
+ * @param foreground_colour The letter colour
+ * @param background_colour The background colour
  * @param context The graphics context to draw the text on
  * @param text The text to draw
  * @param limitArea The area of the text to draw
@@ -103,8 +118,6 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
 				continue;
 			}
 
-			//TODO: Bold, Italic when other fonts are working
-
 			// Get the character
 			uint8_t character = text[xBitMapOffset / 8];
 
@@ -124,7 +137,7 @@ void Font::draw_text(int32_t x, int32_t y, common::Colour foreground_colour,
  * @param text The text to get the height of
  * @return The height of the text
  */
-int32_t Font::get_text_height(string) {
+int32_t Font::get_text_height(string text) {
 
 	return 8;
 

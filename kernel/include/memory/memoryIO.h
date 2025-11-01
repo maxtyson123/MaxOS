@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/29/2022.
-//
+/**
+ * @file memoryIO.h
+ * @brief Defines classes for memory input and output operations of various bit widths (8, 16, 32, 64 bits).
+ *
+ * @date 29th November 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_MEMORY_MEMORYINPUTOUTPUT_H
 #define MAXOS_MEMORY_MEMORYINPUTOUTPUT_H
@@ -14,10 +18,12 @@ namespace MaxOS{
         /**
          * @class MemIO
          * @brief base class for all memory IO
+         *
+         * @todo Not used, delete?
          */
         class MemIO {
             protected:
-                uintptr_t m_address;
+                uintptr_t m_address;    ///< The memory address to read from / write to
 
                 MemIO(uintptr_t address);
                 ~MemIO();

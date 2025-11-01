@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/10/2022.
-//
+/**
+ * @file mouse.cpp
+ * @brief Implementation of a Mouse driver and event handler
+ *
+ * @date 10th October 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/peripherals/mouse.h>
 
@@ -150,6 +154,11 @@ string MouseDriver::device_name() {
 	return "Mouse";
 }
 
+/**
+ * @brief Constructor for the MouseUpEvent class
+ *
+ * @param button The button that was released
+ */
 MouseUpEvent::MouseUpEvent(uint8_t button)
 : Event<MouseEvents>(MouseEvents::UP),
   button(button)
@@ -159,6 +168,11 @@ MouseUpEvent::MouseUpEvent(uint8_t button)
 
 MouseUpEvent::~MouseUpEvent() = default;
 
+/**
+ * @brief Constructor for the MouseDownEvent class
+ *
+ * @param button The button that was pressed
+ */
 MouseDownEvent::MouseDownEvent(uint8_t button)
 : Event<MouseEvents>(MouseEvents::DOWN),
   button(button)
@@ -167,6 +181,12 @@ MouseDownEvent::MouseDownEvent(uint8_t button)
 
 MouseDownEvent::~MouseDownEvent() = default;
 
+/**
+ * @brief Constructor for the MouseMoveEvent class
+ *
+ * @param x The amount the mouse moved in the x direction
+ * @param y The amount the mouse moved in the y direction
+ */
 MouseMoveEvent::MouseMoveEvent(int8_t x, int8_t y)
 : Event<MouseEvents>(MouseEvents::MOVE),
   x(x),

@@ -55,53 +55,17 @@ void close()
         );
 }
 
-void wait(uint64_t ms)
-{
-  // syscall 0x010, arg0 = milliseconds
-  asm volatile(
-      "mov %[ms], %%rdi\n\t"
-      "mov $0x0A, %%rax\n\t"
-      "int $0x80\n\t"
-      :
-      : [ms] "r"(ms)
-      : "rax", "rdi"
-  );
-}
-
 extern "C" int _start(int argc, char** argv)
 {
 	// Write to the console
 	write("MaxOS Test Program v3\n");
 
-	uint64_t dd = open_directory("/test/abc/");
-	write("dd: \n");
-	write_hex(dd);
+	// Wait 0.5 seconds
 
-	// Read Tests
-//	write("size: \n");
-//	write_hex(directory_entries_size(dd));
-//
-//	uint8_t buffer[163];
-//	directory_entries(dd, buffer, 163);
-//	size_t offset = 0;
-//	while (offset < 163)
-//	{
-//		auto* entry = (entry_information_t*)(buffer + offset);
-//		write(entry->name);
-//		write("%h\n");
-//		offset += entry->entry_length;
-//	}
+	// Get lock
 
-  	// Write Tests
-//	new_file(dd, "c.txt");
-//	new_directory(dd, "sub");
-//
-//	remove_file(dd, "c.txt");
-//	remove_directory(dd, "sub");
+	// Write
 
-//	rename_directory(dd, "def");
-
-	while (true)
-		thread_yield();
+	close();
 
 }

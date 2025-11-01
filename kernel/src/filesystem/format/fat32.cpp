@@ -1,6 +1,10 @@
-//
-// Created by 98max on 1/01/2023.
-//
+/**
+ * @file fat32.cpp
+ * @brief Implementation of a FAT32 filesystem driver
+ *
+ * @date 1st January 2023
+ * @author Max Tyson
+ */
 
 #include <filesystem/format/fat32.h>
 #include <memory/memoryIO.h>
@@ -13,8 +17,14 @@ using namespace MaxOS::filesystem;
 using namespace MaxOS::filesystem::format;
 using namespace MaxOS::memory;
 
-Fat32Volume::Fat32Volume(Disk *hd, uint32_t partition_offset)
-: disk(hd)
+/**
+ * @brief Construct a new Fat32 Volume object
+ *
+ * @param disk The disk to read from
+ * @param partition_offset The offset of the partition on the disk
+ */
+Fat32Volume::Fat32Volume(Disk* disk, uint32_t partition_offset)
+: disk(disk)
 {
 
 	// Read the BIOS parameter block
@@ -49,6 +59,8 @@ Fat32Volume::~Fat32Volume() = default;
  *
  * @param cluster The base cluster to start from
  * @return The next cluster in the chain
+ *
+ * @todo The auto entry = uint32_t* '&' is weird, fix it
  */
 lba_t Fat32Volume::next_cluster(lba_t cluster) {
 
@@ -62,7 +74,7 @@ lba_t Fat32Volume::next_cluster(lba_t cluster) {
 	disk->read(sector, &fat);
 
 	// Get the next cluster info (mask the upper 4 bits)
-	auto entry = (uint32_t *) (&(fat.raw()[entry_index])); //  TODO & here is weird
+	auto entry = (uint32_t *) (&(fat.raw()[entry_index]));
 	return *entry & 0x0FFFFFFF;
 }
 
@@ -72,10 +84,10 @@ lba_t Fat32Volume::next_cluster(lba_t cluster) {
  * @param cluster The base cluster to start from
  * @param next_cluster The next cluster in the chain
  * @return The next cluster in the chain
+ *
+ * @todo when in userspace: For performance cache fat entirely, cache file data, cache cluster chains
  */
 uint32_t Fat32Volume::set_next_cluster(uint32_t cluster, uint32_t next_cluster) {
-
-	// TODO - when in userspace: For performance cache fat entirely, cache file data, cache cluster chains
 
 	// Get the location in the FAT table
 	lba_t offset = cluster * sizeof(uint32_t);
@@ -174,7 +186,6 @@ uint32_t Fat32Volume::allocate_cluster(uint32_t cluster, size_t amount) {
  * @brief Free a cluster in the FAT table
  *
  * @param cluster The base cluster to start from
- * @param full Weather the chain's length is 1 or not
  */
 void Fat32Volume::free_cluster(lba_t cluster) {
 
@@ -218,8 +229,15 @@ void Fat32Volume::free_cluster(uint32_t cluster, size_t amount) {
 	set_next_cluster(cluster, (uint32_t) ClusterState::END_OF_CHAIN);
 }
 
-
-Fat32File::Fat32File(Fat32Volume *volume, Fat32Directory *parent, dir_entry_t *info, const string &name)
+/**
+ * @brief Construct a new Fat32 File object
+ *
+ * @param volume The helper volume object
+ * @param parent The directory that contains this file
+ * @param info The directory entry information that describes this file
+ * @param name The name of the file
+ */
+Fat32File::Fat32File(Fat32Volume* volume, Fat32Directory *parent, dir_entry_t *info, const string &name)
 : m_volume(volume),
   m_parent_directory(parent),
   m_entry(info),
@@ -238,6 +256,8 @@ Fat32File::~Fat32File() = default;
  *
  * @param data The byte buffer to write
  * @param amount The amount of data to write
+ *
+ * @todo When in userspace: save timestamps
  */
 void Fat32File::write(const buffer_t *data, size_t amount) {
 
@@ -329,7 +349,7 @@ void Fat32File::write(const buffer_t *data, size_t amount) {
 	m_entry->size = m_size;
 	m_entry->first_cluster_high = (m_first_cluster >> 16) & 0xFFFF;
 	m_entry->first_cluster_low = m_first_cluster & 0xFFFF;
-	// TODO: When implemented as a usermode driver save the time
+
 	m_parent_directory->save_entry_to_disk(m_entry);
 
 }
@@ -396,6 +416,13 @@ void Fat32File::flush() {
 	File::flush();
 }
 
+/**
+ * @brief Construct a new Fat32 Directory object
+ *
+ * @param volume The FAT32 volume
+ * @param cluster The cluster of the directory
+ * @param name The name of the directory
+ */
 Fat32Directory::Fat32Directory(Fat32Volume *volume, uint32_t cluster, const string &name)
 : m_volume(volume),
   m_first_cluster(cluster)
@@ -575,6 +602,10 @@ void Fat32Directory::save_entry_to_disk(DirectoryEntry *entry) {
 	update_entry_on_disk(index);
 }
 
+/**
+ * @brief Save the directory entry at the given index to the disk
+ * @param index The index of the entry to update
+ */
 void Fat32Directory::update_entry_on_disk(int index) {
 
 	// Get the entry
@@ -952,6 +983,12 @@ void Fat32Directory::remove_subdirectory(const string &name) {
 	}
 }
 
+/**
+ * @brief Construct a new Fat32 File System object
+ *
+ * @param disk The disk to mount the filesystem from
+ * @param partition_offset The partition offset on the disk
+ */
 Fat32FileSystem::Fat32FileSystem(Disk *disk, uint32_t partition_offset)
 : m_volume(disk, partition_offset)
 {

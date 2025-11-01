@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/15/2022.
-//
+/**
+ * @file window.h
+ * @brief Defines a Window class for creating movable and resizable GUI windows
+ *
+ * @date 15th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MaxOS_GUI_WINDOW_H
 #define MaxOS_GUI_WINDOW_H
@@ -19,7 +23,7 @@ namespace MaxOS{
          */
         class Window : public CompositeWidget{
 
-            protected:
+	        private:
                 widgets::Text m_title;
 
                 // Resizes
@@ -36,12 +40,12 @@ namespace MaxOS{
 
             public:
 
-                uint8_t frame_thickness { 5 };
-                uint8_t title_bar_height { 10 };
+                uint8_t frame_thickness { 5 };              ///< How thick the bar around the window is
+                uint8_t title_bar_height { 10 };            ///< How large the bar at the top of the window is
 
-                common::Colour area_colour;
-                common::Colour frame_colour;
-                common::Colour frame_border_colour;
+                common::Colour area_colour;                 ///< The background colour of the window inner area
+                common::Colour frame_colour;                ///< The colour of the bar around the window
+                common::Colour frame_border_colour;         ///< The colour of the border around the bar around the window
 
                 Window(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& title_text);
                 Window(Widget* containedWidget, const string& title_text);

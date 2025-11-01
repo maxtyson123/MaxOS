@@ -1,6 +1,10 @@
-//
-// Created by 98max on 13/04/2023.
-//
+/**
+ * @file outputStream.h
+ * @brief Defines OutputStream and GenericOutputStream classes for writing data to streams
+ *
+ * @date 13th April 2023
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_COMMON_OUTPUTSTREAM_H
 #define MAXOS_COMMON_OUTPUTSTREAM_H
@@ -45,7 +49,7 @@ namespace MaxOS{
                 OutputStream();
                 ~OutputStream();
 
-                virtual void lineFeed();
+                virtual void line_feed();
                 virtual void carriageReturn();
                 virtual void clear();
 
@@ -122,7 +126,6 @@ namespace MaxOS{
          * @brief write an element to the stream.
          *
          * @tparam Type The type of the elements that will be written to the stream.
-         * @param write_element The element that will be written to the stream.
          */
         template<class Type> void GenericOutputStream<Type>::write(Type) {
 

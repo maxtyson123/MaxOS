@@ -1,6 +1,10 @@
-//
-// Created by 98max on 5/01/2023.
-//
+/**
+ * @file filesystem.cpp
+ * @brief Implementation of a generic filesystem interface
+ *
+ * @date 5th January 2023
+ * @author Max Tyson
+ */
 
 #include <filesystem/filesystem.h>
 #include <common/logger.h>
@@ -17,7 +21,7 @@ File::~File() = default;
  * @brief Write data to the file
  *
  * @param data The byte buffer to write
- * @param size The amount of data to write
+ * @param amount The amount of data to write
  */
 void File::write(const common::buffer_t* data, size_t amount) {
 }
@@ -26,7 +30,7 @@ void File::write(const common::buffer_t* data, size_t amount) {
  * @brief Read data from the file
  *
  * @param data The byte buffer to read into
- * @param size The amount of data to read
+ * @param amount The amount of data to read
  */
 void File::read(common::buffer_t* data, size_t amount) {
 }

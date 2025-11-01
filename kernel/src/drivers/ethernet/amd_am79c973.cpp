@@ -1,6 +1,10 @@
-// 
-//  Created by 98max on 22/10/2022.
-// 
+/**
+ * @file amd_am79c973.cpp
+ * @brief Implementation of the AMD AM79C973 Ethernet Driver
+ *
+ * @date 22nd October 2022
+ * @author Max Tyson
+ */
 
 #include <drivers/ethernet/amd_am79c973.h>
 
@@ -70,9 +74,6 @@ AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev)
     initBlock.reserved3 = 0;                         // Reserved
     initBlock.logicalAddress = 0;                    // None for now
 
-
-    //TODO: Use malloc?
-
     // Set Buffer descriptors memory
     sendBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
     initBlock.sendBufferDescrAddress = (uint64_t)sendBufferDescr;
@@ -115,11 +116,12 @@ AMD_AM79C973::~AMD_AM79C973() = default;
 
 /**
  * @brief This function activates the device and starts it (Runs when the driver-manger calls activateAll())
+ *
+ * @todo Re-implement this class
  */
 void AMD_AM79C973::activate()
 {
 
-    // TODO: Have a look at re - implementing this again someday
     return;
 
     initDone = false;                                            // Set initDone to false
@@ -157,12 +159,8 @@ uint32_t AMD_AM79C973::reset() {
 /**
  * @brief This function handles the interrupt for the device
  *
- * @param esp The stack pointer (where to return to)
 */
 void AMD_AM79C973::handle_interrupt() {
-
-
-
 
     // Similar to PIC, data needs to be read when an interrupt is sent, or it hangs
     registerAddressPort.write(0);                           // Tell device to read from register 0

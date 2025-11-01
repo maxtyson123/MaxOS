@@ -1,3 +1,11 @@
+/**
+ * @file udp.cpp
+ * @brief Implementation of the User Datagram Protocol (UDP) handler and socket classes
+ *
+ * @date 24 November 2022
+ * @author Max Tyson
+ */
+
 #include <net/udp.h>
 
 using namespace MaxOS;
@@ -7,18 +15,31 @@ using namespace MaxOS::memory;
 
 ///__Handler__
 
-UserDatagramProtocolPayloadHandler::UserDatagramProtocolPayloadHandler() = default;
+UDPPayloadHandler::UDPPayloadHandler() = default;
 
-UserDatagramProtocolPayloadHandler::~UserDatagramProtocolPayloadHandler() = default;
+UDPPayloadHandler::~UDPPayloadHandler() = default;
 
-void UserDatagramProtocolPayloadHandler::handleUserDatagramProtocolMessage(UserDatagramProtocolSocket*, uint8_t *, uint16_t) {
+/**
+ * @brief Handle the recivement of a UDP message
+ *
+ * @param socket The socket that received the message
+ * @param data The data received
+ * @param size The size of the data received
+ */
+void UDPPayloadHandler::handleUserDatagramProtocolMessage(UDPSocket* socket, uint8_t* data, uint16_t size) {
 
 }
 
-Event<UserDatagramProtocolEvents>* UserDatagramProtocolPayloadHandler::on_event(Event<UserDatagramProtocolEvents> *event) {
+/**
+ * @brief Event handler for UDP payload events
+ *
+ * @param event The event that was raised
+ * @return The event that was raised
+ */
+Event<UDPEvents>* UDPPayloadHandler::on_event(Event<UDPEvents> *event) {
 
     switch (event -> type) {
-        case UserDatagramProtocolEvents::DATA_RECEIVED:
+        case UDPEvents::DATA_RECEIVED:
             handleUserDatagramProtocolMessage(((UDPDataReceivedEvent*)event) -> socket, ((UDPDataReceivedEvent*)event) -> data, ((UDPDataReceivedEvent*)event) -> size);
             break;
         default:
@@ -31,16 +52,22 @@ Event<UserDatagramProtocolEvents>* UserDatagramProtocolPayloadHandler::on_event(
 ///__Socket__
 
 
-UserDatagramProtocolSocket::UserDatagramProtocolSocket() {
+UDPSocket::UDPSocket() {
 
     //Set the instance variables
     listening = false;
 
 }
 
-UserDatagramProtocolSocket::~UserDatagramProtocolSocket() = default;
+UDPSocket::~UDPSocket() = default;
 
-void UserDatagramProtocolSocket::handleUserDatagramProtocolPayload(uint8_t *data, uint16_t size) {
+/**
+ * @brief Handle the recivement of a UDP payload
+ *
+ * @param data The data received
+ * @param size The size of the data received
+ */
+void UDPSocket::handleUserDatagramProtocolPayload(uint8_t *data, uint16_t size) {
 
     // Create the event
     auto* event = new UDPDataReceivedEvent(this, data, size);
@@ -49,13 +76,22 @@ void UserDatagramProtocolSocket::handleUserDatagramProtocolPayload(uint8_t *data
 
 }
 
-void UserDatagramProtocolSocket::Send(uint8_t *data, uint16_t size) {
+/**
+ * @brief Send data through the UDP socket
+ *
+ * @param data The data to send
+ * @param size The size of the data
+ */
+void UDPSocket::Send(uint8_t *data, uint16_t size) {
 
     userDatagramProtocolHandler -> Send(this, data, size);
 
 }
 
-void UserDatagramProtocolSocket::Disconnect() {
+/**
+ * @brief Disconnect the UDP socket
+ */
+void UDPSocket::Disconnect() {
 
     userDatagramProtocolHandler ->Disconnect(this);
 
@@ -65,37 +101,44 @@ void UserDatagramProtocolSocket::Disconnect() {
 
 UserDatagramProtocolPort UserDatagramProtocolHandler::freePorts = 0x8000;
 
+/**
+ * @brief Construct a new User Datagram Protocol Handler object
+ *
+ * @param internetProtocolHandler The Internet protocol handler
+ * @param errorMessages Where to write error messages
+ */
 UserDatagramProtocolHandler::UserDatagramProtocolHandler(InternetProtocolHandler* internetProtocolHandler, OutputStream* errorMessages)
-: InternetProtocolPayloadHandler(internetProtocolHandler, 0x11)    //0x11 is the UDP protocol number
+: IPV4PayloadHandler(internetProtocolHandler, 0x11)    //0x11 is the UDP protocol number
 {
     this -> errorMessages = errorMessages;
 }
 
 UserDatagramProtocolHandler::~UserDatagramProtocolHandler() = default;
+
 /**
  * @brief Handle the recivement of an UDP packet
  *
- * @param srcIP_BE The source IP address in big endian
- * @param dstIP_BE  The destination IP address in big endian
- * @param internetprotocolPayload The UDP payload
+ * @param sourceIP The source IP address in big endian
+ * @param destinationIP  The destination IP address in big endian
+ * @param payloadData The UDP payload
  * @param size The size of the UDP payload
  * @return True if the packet is to be sent back to the sender
  */
 bool UserDatagramProtocolHandler::handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size) {
 
     //Check the size
-    if(size < sizeof(UserDatagramProtocolHeader)) {
+    if(size < sizeof(UDPHeader)) {
         return false;
     }
 
     //Get the header
-    auto* header = (UserDatagramProtocolHeader*)payloadData;
+    auto* header = (UDPHeader*)payloadData;
 
     //Set the local and remote ports
     uint16_t localPort = header -> destinationPort;
     uint16_t remotePort = header -> sourcePort;
 
-    UserDatagramProtocolSocket* socket = nullptr;                     //The socket that will be used
+    UDPSocket* socket = nullptr;                     //The socket that will be used
     for(auto & currentSocket : sockets) {
         if(currentSocket->localPort == localPort                  //If the local port (header dst, our port) is the same as the local port of the socket
         && currentSocket->localIP == destinationIP                     //If the local IP (packet dst, our IP) is the same as the local IP of the socket
@@ -118,7 +161,7 @@ bool UserDatagramProtocolHandler::handleInternetProtocolPayload(InternetProtocol
     }
 
     if(socket != nullptr) {                                          //If the socket is not null then pass the data to the socket
-        socket->handleUserDatagramProtocolPayload(payloadData + sizeof(UserDatagramProtocolHeader), size - sizeof(UserDatagramProtocolHeader));
+        socket->handleUserDatagramProtocolPayload(payloadData + sizeof(UDPHeader), size - sizeof(UDPHeader));
     }
 
     //UDP doesn't send back packets, so always return false
@@ -132,14 +175,14 @@ bool UserDatagramProtocolHandler::handleInternetProtocolPayload(InternetProtocol
  * @param port The remote port
  * @return The socket that was connected
  */
-UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, uint16_t port) {
+UDPSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, uint16_t port) {
 
 
-    auto* socket = (UserDatagramProtocolSocket*)MemoryManager::kmalloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
+    auto* socket = (UDPSocket*)MemoryManager::kmalloc(sizeof(UDPSocket));   //Allocate memory for the socket
 
     if(socket != nullptr) //If the socket was created
     {
-        new (socket) UserDatagramProtocolSocket();    //Create the socket
+        new (socket) UDPSocket();    //Create the socket
 
         //Configure the socket
         socket -> remotePort = port;                                    //Port to that application wants to connect to
@@ -154,9 +197,15 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(uint32_t ip, ui
     return socket;                                        //Return the socket
 }
 
-UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(const string&) {
-
-  //TODO NEW STRING PARSEING
+/**
+ * @brief Connects to a remote host through the UDP protocol
+ *
+ * @param address The address to connect to in the form "IP:PORT"
+ * @return The socket that is connected to the remote host, nullptr if it failed
+ *
+ * @todo Implement string parsing to extract IP and port
+ */
+UDPSocket *UserDatagramProtocolHandler::Connect(const string& address) {
 
   return nullptr;
 }
@@ -167,13 +216,13 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Connect(const string&) 
  * @param port The port to listen on
  * @return The socket that is listening
  */
-UserDatagramProtocolSocket *UserDatagramProtocolHandler::Listen(uint16_t port) {
+UDPSocket *UserDatagramProtocolHandler::Listen(uint16_t port) {
 
-    auto* socket = (UserDatagramProtocolSocket*)MemoryManager::kmalloc(sizeof(UserDatagramProtocolSocket));   //Allocate memory for the socket
+    auto* socket = (UDPSocket*)MemoryManager::kmalloc(sizeof(UDPSocket));   //Allocate memory for the socket
 
     if(socket != nullptr) //If the socket was created
     {
-        new (socket) UserDatagramProtocolSocket();    //Create the socket
+        new (socket) UDPSocket();    //Create the socket
 
         //Configure the socket
         socket -> listening = true;                                     //Set the socket to listening
@@ -193,10 +242,10 @@ UserDatagramProtocolSocket *UserDatagramProtocolHandler::Listen(uint16_t port) {
  *
  * @param socket The socket to disconnect
  */
-void UserDatagramProtocolHandler::Disconnect(UserDatagramProtocolSocket *socket) {
+void UserDatagramProtocolHandler::Disconnect(UDPSocket *socket) {
 
 
-    for(Vector<UserDatagramProtocolSocket*>::iterator currentSocket = sockets.begin(); currentSocket != sockets.end(); currentSocket++) {
+    for(Vector<UDPSocket*>::iterator currentSocket = sockets.begin(); currentSocket != sockets.end(); currentSocket++) {
         if((*currentSocket) == socket)                               //If the socket is the same as the socket that is being checked
         {
             sockets.erase(currentSocket);                            //Remove the socket from the list of sockets
@@ -214,13 +263,13 @@ void UserDatagramProtocolHandler::Disconnect(UserDatagramProtocolSocket *socket)
  * @param data The data to send
  * @param size The size of the data
  */
-void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, const uint8_t *data, uint16_t size) {
+void UserDatagramProtocolHandler::Send(UDPSocket *socket, const uint8_t *data, uint16_t size) {
 
-    uint16_t totalSize = sizeof(UserDatagramProtocolHeader) + size;                                 //Get the total size of the packet
+    uint16_t totalSize = sizeof(UDPHeader) + size;                                 //Get the total size of the packet
     auto* buffer = (uint8_t*)MemoryManager::kmalloc(totalSize);          //Allocate memory for the packet
-    uint8_t* buffer2 = buffer + sizeof(UserDatagramProtocolHeader);                                 //Get the buffer that will be used to store the data
+    uint8_t* buffer2 = buffer + sizeof(UDPHeader);                                 //Get the buffer that will be used to store the data
 
-    auto* header = (UserDatagramProtocolHeader*)buffer;                       //Create the header of the packet
+    auto* header = (UDPHeader*)buffer;                       //Create the header of the packet
 
     //Set the header
     header -> sourcePort = socket -> localPort;                                                    //Set the source port to the local port of the socket    (this is the port that the packet will be sent from)
@@ -240,7 +289,7 @@ void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, const
     header -> checksum = 0;                                                                        //Set the checksum to 0, this is becuase UDP doesnt have to have a checksum
 
     //Send the packet
-    InternetProtocolPayloadHandler::Send(socket->remoteIP, buffer, totalSize);
+    IPV4PayloadHandler::Send(socket->remoteIP, buffer, totalSize);
 
     //Free the buffer
     MemoryManager::kfree(buffer);
@@ -251,18 +300,18 @@ void UserDatagramProtocolHandler::Send(UserDatagramProtocolSocket *socket, const
  * @brief Binds a handler to the socket
  *
  * @param socket The socket to bind the handler to
- * @param userDatagramProtocolHandler The handler to bind
+ * @param UDPPayloadHandler The handler to bind
  */
-void UserDatagramProtocolHandler::Bind(UserDatagramProtocolSocket *socket, UserDatagramProtocolPayloadHandler *userDatagramProtocolPayloadHandler) {
+void UserDatagramProtocolHandler::Bind(UDPSocket *socket, UDPPayloadHandler *UDPPayloadHandler) {
 
-  socket->m_handlers.push_back(userDatagramProtocolPayloadHandler);                                                                //Set the handler of the socket to the handler that was passed in
+  socket->m_handlers.push_back(UDPPayloadHandler);                                                                //Set the handler of the socket to the handler that was passed in
 
 
 }
 
 /// ___ Events ___ ///
-UDPDataReceivedEvent::UDPDataReceivedEvent(UserDatagramProtocolSocket *socket, uint8_t *data, uint16_t size)
-: Event(UserDatagramProtocolEvents::DATA_RECEIVED)
+UDPDataReceivedEvent::UDPDataReceivedEvent(UDPSocket *socket, uint8_t *data, uint16_t size)
+: Event(UDPEvents::DATA_RECEIVED)
 {
     this -> socket = socket;    //Set the socket
     this -> data = data;        //Set the data

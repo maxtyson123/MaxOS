@@ -1,17 +1,29 @@
-//
-// Created by 98max on 17/07/2025.
-//
+/**
+ * @file ext2.cpp
+ * @brief Implementation of an Ext2 filesystem driver
+ *
+ * @date 17th July 2025
+ * @author Max Tyson
+ */
+
 #include <filesystem/format/ext2.h>
 
 using namespace MaxOS;
-using namespace MaxOS::filesystem;
 using namespace MaxOS::common;
-using namespace MaxOS::filesystem::format;
+using namespace MaxOS::filesystem;
 using namespace MaxOS::filesystem::format::ext2;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::disk;
 using namespace MaxOS::drivers::clock;
 
+/**
+ * @brief Construct a new Ext2 Volume object, reads the superblock and block group descriptors
+ *
+ * @param disk The disk to read from
+ * @param partition_offset The offset of the partition on the disk in sectors
+ *
+ * @todo Should lock per file and not expose volume lock
+ */
 Ext2Volume::Ext2Volume(drivers::disk::Disk *disk, lba_t partition_offset)
 : disk(disk),
   partition_offset(partition_offset)
@@ -39,8 +51,6 @@ Ext2Volume::Ext2Volume(drivers::disk::Disk *disk, lba_t partition_offset)
 	pointers_per_block = block_size / sizeof(uint32_t);
 	inodes_per_block = block_size / superblock.inode_size;
 	sectors_per_block = block_size / 512;
-	blocks_per_inode_table = (superblock.inode_size * superblock.inodes_per_group + (block_size - 1)) / block_size;
-	sectors_per_inode_table = (superblock.inode_size * superblock.inodes_per_group + (512 - 1)) / 512;
 
 	// Read the block groups
 	block_groups = new block_group_descriptor_t *[total_block_groups]{nullptr};
@@ -60,7 +70,7 @@ Ext2Volume::Ext2Volume(drivers::disk::Disk *disk, lba_t partition_offset)
 Ext2Volume::~Ext2Volume() = default;
 
 /**
- * @breif Write a single block from a buffer into onto the disk
+ * @brief Write a single block from a buffer into onto the disk
  *
  * @param block_num The block to update
  * @param buffer The buffer to read from
@@ -109,7 +119,7 @@ void Ext2Volume::write_inode(uint32_t inode_num, inode_t *inode) {
 }
 
 /**
- * @breif Reads a single block from the disk into a buffer
+ * @brief Reads a single block from the disk into a buffer
  *
  * @param block_num The block to read
  * @param buffer The buffer to read into
@@ -268,6 +278,8 @@ common::Vector<uint32_t> Ext2Volume::allocate_group_blocks(uint32_t block_group,
  *
  * @param block_group The block group where the blocks exist
  * @param amount The amount of blocks to free
+ *
+ * @todo Decide whether to zero out or not, my implementation zeros on allocation but idk about others
  */
 void Ext2Volume::free_group_blocks(uint32_t block_group, uint32_t amount, uint32_t start) {
 
@@ -290,8 +302,6 @@ void Ext2Volume::free_group_blocks(uint32_t block_group, uint32_t amount, uint32
 		descriptor->free_blocks++;
 		superblock.unallocated_blocks++;
 		bitmap.raw()[i / 8] &= ~(1u << (i % 8));
-
-		// TODO: Decide whether to zero out or not, my implementation zeros on allocation but idk about others
 	}
 
 	// Save the changed metadata
@@ -487,7 +497,12 @@ void Ext2Volume::free_blocks(const common::Vector<uint32_t> &blocks) {
 	free_group_blocks(group, amount, start);
 }
 
-
+/**
+ * @brief Construct a new Inode Handler object. Reads the inode and caches the block pointers
+ *
+ * @param volume The volume the inode belongs to
+ * @param inode_index The inode index
+ */
 InodeHandler::InodeHandler(Ext2Volume *volume, uint32_t inode_index)
 : m_volume(volume),
   inode_number(inode_index),
@@ -650,7 +665,10 @@ void InodeHandler::store_blocks(Vector<uint32_t> const &blocks) {
  * @brief Increase the size of the inode's storage capacity by allocating new blocks.
  *
  * @param amount The amount to grow to in bytes
- * @return
+ * @param flush Save the newly allocated chunks to disk, defaults to true
+ * @return The new toatal size of the file (size() + amount)
+ *
+ * @todo Should this return size() instead?
  */
 size_t InodeHandler::grow(size_t amount, bool flush) {
 
@@ -695,6 +713,13 @@ void InodeHandler::free() {
 
 InodeHandler::~InodeHandler() = default;
 
+/**
+ * @brief Construct a new Ext2 File object
+ *
+ * @param volume The volume the file exists on
+ * @param inode The inode number of the file (will be used to setup the internal InodeHandler)
+ * @param name The name of the file
+ */
 Ext2File::Ext2File(Ext2Volume *volume, uint32_t inode, string const &name)
 : m_volume(volume),
   m_inode(volume, inode)
@@ -818,6 +843,13 @@ void Ext2File::flush() {
 
 Ext2File::~Ext2File() = default;
 
+/**
+ * @brief Construct a new Ext2 Directory object
+ *
+ * @param volume The volume the directory exists on
+ * @param inode The inode number of the directory (will be used to setup the internal InodeHandler)
+ * @param name The name of the directory
+ */
 Ext2Directory::Ext2Directory(Ext2Volume *volume, uint32_t inode, const string &name)
 : m_volume(volume),
   m_inode(m_volume, inode)
@@ -956,6 +988,9 @@ void Ext2Directory::read_from_disk() {
 	m_volume->ext2_lock.unlock();
 }
 
+/**
+ * @brief Write all directory entries to the disk (expands the directory blocks if needed)
+ */
 void Ext2Directory::write_entries() {
 
 	// Calculate the size needed to store the entries and the null entry
@@ -1122,6 +1157,12 @@ void Ext2Directory::rename_subdirectory(string const &old_name, string const &ne
 
 Ext2Directory::~Ext2Directory() = default;
 
+/**
+ * @brief Construct a new Ext2 File System object
+ *
+ * @param disk The disk the filesystem exists on
+ * @param partition_offset The partition offset on the disk (in sectors)
+ */
 Ext2FileSystem::Ext2FileSystem(Disk *disk, uint32_t partition_offset)
 		: m_volume(disk, partition_offset) {
 

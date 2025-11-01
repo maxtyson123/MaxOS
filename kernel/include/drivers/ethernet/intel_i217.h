@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/29/2022.
-//
+/**
+ * @file intel_i217.h
+ * @brief Driver for the Intel I217 Ethernet Controller
+ *
+ * @date 29th November 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_ETHERNET_INTEL_I127_H
 #define MAXOS_DRIVERS_ETHERNET_INTEL_I127_H
@@ -23,10 +27,10 @@ namespace MaxOS{
 
 
             /**
-             * @class Intel I217
+             * @class IntelI217
              * @brief Driver for the Intel I217 Ethernet Controller
              */
-            class intel_i217 : public EthernetDriver, public hardwarecommunication::InterruptHandler {
+            class IntelI217 : public EthernetDriver, public hardwarecommunication::InterruptHandler {
 
                 struct receiveDescriptor {
                     uint64_t bufferAddress;              // The address of the receive buffer
@@ -111,8 +115,8 @@ namespace MaxOS{
 
             public:
 
-                intel_i217(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor);
-                ~intel_i217();                                                  // Default Destructor
+	            IntelI217(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* deviceDescriptor);
+                ~IntelI217();                                                  // Default Destructor
 
 
                 //Override driver default methods

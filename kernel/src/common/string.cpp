@@ -1,10 +1,18 @@
-//
-// Created by 98max on 1/7/2024.
-//
+/**
+ * @file string.cpp
+ * @brief Implementation of a simple String class for handling text of varying types and lengths
+ *
+ * @date 7th January 2024
+ * @author Max Tyson
+ */
+
 #include <common/string.h>
 
 using namespace MaxOS;
 
+/**
+ * @brief Construct a String, 0 length and only contains the null terminator
+ */
 String::String() {
 
 	// String that only contains the null terminator
@@ -14,6 +22,10 @@ String::String() {
 
 }
 
+/**
+ * @brief Constructs a String from a single character
+ * @param c The character
+ */
 String::String(char c) {
 
 	// Create the memory
@@ -27,6 +39,10 @@ String::String(char c) {
 
 }
 
+/**
+ * @brief Constructs a String from a pointer to an array of chars
+ * @param string An array of chars, must be null terminated and of length less than 10,000
+ */
 String::String(char const *string) {
 
 	// Get the length of the string, prevent longer than 10000 because this should mean something's gone wrong
@@ -48,6 +64,12 @@ String::String(char const *string) {
 	m_string[m_length] = '\0';
 }
 
+/**
+ * @brief Constructs a string from a an array of bytes (doesnt have to be null terminated)
+ *
+ * @param string The string bytes
+ * @param length How large the string byte buffer is
+ */
 String::String(uint8_t const *string, int length) {
 	// Allocate memory for the string (and null terminator)
 	m_length = length;
@@ -61,6 +83,11 @@ String::String(uint8_t const *string, int length) {
 	m_string[length] = '\0';
 }
 
+/**
+ * @brief Constructs a string from an integer (must be base 10)
+ *
+ * @param value The integer value
+ */
 String::String(int value) {
 
 	// Convert to a string
@@ -78,9 +105,9 @@ String::String(int value) {
 }
 
 /**
- * @brief Constructs a string from a hex value (Excludes 0x____)
+ * @brief Constructs a string from a hex value (Excludes 0x)
  *
- * @param value
+ * @param value The hex value
  */
 String::String(uint64_t value) {
 
@@ -97,6 +124,10 @@ String::String(uint64_t value) {
 	m_string[m_length] = '\0';
 }
 
+/**
+ * @brief Constructs a String from a float
+ * @param value The float value
+ */
 String::String(float value) {
 
 	// Convert to a string
@@ -110,6 +141,19 @@ String::String(float value) {
 	for (int i = 0; i < m_length; i++)
 		m_string[i] = str[i];
 	m_string[m_length] = '\0';
+
+}
+
+/**
+ * @brief Constructs a String from a boolean as "true" or "false"
+ * @param value The bool value
+ */
+String::String(bool value) {
+
+	if(value)
+		*this = string("true");
+	else
+		*this = string("false");
 
 }
 
@@ -177,11 +221,10 @@ void String::allocate_self() {
 		delete[] m_string;
 
 	// Try to use the small string buffer
-	m_using_small = m_length + 1 <= s_small_storage;
+	m_using_small = m_length + 1 <= MAX_STRING_SMALL_STORAGE;
 	m_string = m_using_small ? m_small_string : new char[m_length + 1];
 
 }
-
 
 /**
  * @brief Sets the string to the other string
@@ -368,7 +411,7 @@ bool String::equals(String const &other) const {
  * @param other The other string
  * @return True if the strings are equal, false otherwise
  */
-bool String::operator==(String const &other) const {
+bool String::operator == (String const &other) const {
 
 	// Check if the strings are equal
 	return equals(other);
@@ -380,7 +423,7 @@ bool String::operator==(String const &other) const {
  * @param other The other string
  * @return True if the strings are not equal, false otherwise
  */
-bool String::operator!=(String const &other) const {
+bool String::operator != (String const &other) const {
 
 	// Self assignment check
 	if (*this == other)
@@ -395,7 +438,7 @@ bool String::operator!=(String const &other) const {
  * @param other The other string
  * @return True if the string is less than the other, false otherwise
  */
-bool String::operator<(String const &other) const {
+bool String::operator < (String const &other) const {
 
 	return lex_value(*this) < lex_value(other);
 
@@ -407,7 +450,7 @@ bool String::operator<(String const &other) const {
  * @param other The other string
  * @return True if the string is greater than the other, false otherwise
  */
-bool String::operator>(String const &other) const {
+bool String::operator > (String const &other) const {
 
 	return lex_value(*this) > lex_value(other);
 
@@ -419,7 +462,7 @@ bool String::operator>(String const &other) const {
  * @param other The other string
  * @return True if the string is less than or equal to the other, false otherwise
  */
-bool String::operator<=(String const &other) const {
+bool String::operator <= (String const &other) const {
 
 	return lex_value(*this) <= lex_value(other);
 
@@ -431,7 +474,7 @@ bool String::operator<=(String const &other) const {
  * @param other The other string
  * @return True if the string is greater than or equal to the other, false otherwise
  */
-bool String::operator>=(String const &other) const {
+bool String::operator >= (String const &other) const {
 
 	return lex_value(*this) >= lex_value(other);
 
@@ -443,7 +486,7 @@ bool String::operator>=(String const &other) const {
  * @param other The other string
  * @return The concatenated string
  */
-String String::operator+(String const &other) const {
+String String::operator + (String const &other) const {
 
 	// The concatenated string
 	String concatenated;
@@ -588,6 +631,73 @@ String String::strip(char strip_char) const {
 }
 
 /**
+ * @brief Creates a formated string. %s = string, %x = hex, %d = decimal
+ *
+ * @param format The string containing the format
+ * @param ... The arguments to format into the string
+ *
+ * @return The string with the arguments formated inside
+ */
+String String::formatted(char const* format, ...) {
+
+	// Create a pointer to the data
+	va_list parameters;
+	va_start(parameters, format);
+
+	return formatted(format, parameters);
+
+}
+
+/**
+ * @brief Creates a formated string. %s = string, %x = hex, %d = decimal
+ *
+ * @param format The string containing the format
+ * @param parameters The arguments to format into the string
+ *
+ * @return The string with the arguments formated inside
+ */
+String String::formatted(char const* format, va_list parameters) {
+
+	String out;
+
+	// Loop through the format string
+	for (; *format != '\0'; format++) {
+
+		// If it is not a %, print the character
+		if (*format != '%') {
+			out += (string)(char)(*format);
+			continue;
+		}
+
+		// Move to the next character
+		format++;
+		switch (*format) {
+			case 'd': {
+				// Print a decimal
+				int number = va_arg (parameters, int);
+				out += (string)(number);
+				break;
+			}
+			case 'x': {
+				// Print a hex
+				uint64_t number = va_arg (parameters, uint64_t);
+				out += (string)(number);
+				break;
+			}
+			case 's': {
+				// Print a string
+				char *str = va_arg (parameters, char*);
+				out += (string)(str);
+				break;
+			}
+		}
+	}
+
+	return out;
+
+}
+
+/**
  * @brief Gets the length of a string
  *
  * @param str The string to get the length of
@@ -604,7 +714,6 @@ int strlen(const char *str) {
  *
  * @param base The base of the number (10 for decimal, 16 for hex)
  * @param number The number to convert
- * @param buffer The buffer to store the converted string
  *
  * @return The converted string
  */
@@ -637,7 +746,6 @@ char *itoa(int base, int64_t number) {
  * @brief Converts hex to string
  *
  * @param number The number to convert
- * @param buffer The buffer to store the converted string
  * @return The converted string
  */
 char *htoa(uint64_t number) {
@@ -660,7 +768,6 @@ char *htoa(uint64_t number) {
  * @brief Converts a float to a string
  *
  * @param number The number to convert
- * @param buffer The buffer to store the converted string
  * @return The converted string
  */
 char *ftoa(float number) {

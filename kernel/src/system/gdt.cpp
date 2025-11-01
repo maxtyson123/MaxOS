@@ -1,6 +1,10 @@
-//
-// Created by 98max on 10/3/2022.
-//
+/**
+ * @file gdt.cpp
+ * @brief Implementation of the Global Descriptor Table (GDT) for memory segmentation
+ *
+ * @date 3rd October 2022
+ * @author Max Tyson
+ */
 
 #include <system/gdt.h>
 #include <common/logger.h>
@@ -10,8 +14,6 @@ using namespace MaxOS::system;
 
 GlobalDescriptorTable::GlobalDescriptorTable()
 {
-
-	Logger::INFO() << "Setting up Global Descriptor Table\n";
 
 	// Null descriptor
 	table[0] = 0;
@@ -54,15 +56,8 @@ GlobalDescriptorTable::GlobalDescriptorTable()
 	table[5] = 0;
 	table[6] = 0;
 
-	Logger::DEBUG() << "Created GDT entries\n";
-
 	// Load the GDT
-	gdtr_t gdtr = {
-			.size    = sizeof(table) - 1,
-			.address = (uint64_t) table,
-	};
-	asm volatile("lgdt %0" : : "m"(gdtr));
-	Logger::DEBUG() << "Loaded GDT of limit 0x" << (uint64_t) gdtr.size << " and address 0x" << (uint64_t) gdtr.address << "\n";
+	load();
 
 	// Reload the segment registers
 	asm volatile("mov %0, %%ds" : : "r"(0x10));
@@ -71,6 +66,19 @@ GlobalDescriptorTable::GlobalDescriptorTable()
 	asm volatile("mov %0, %%gs" : : "r"(0x10));
 	asm volatile("mov %0, %%ss" : : "r"(0x10));
 	Logger::DEBUG() << "Reloaded segment registers\n";
+}
+
+/**
+ * @brief Loads the GDT into the CPU
+ */
+void GlobalDescriptorTable::load() {
+	gdtr = {
+			.size    = sizeof(table) - 1,
+			.address = (uint64_t) table,
+	};
+	asm volatile("lgdt %0" : : "m"(gdtr));
+	Logger::DEBUG() << "Loaded GDT of limit 0x" << (uint64_t) gdtr.size << " and address 0x" << (uint64_t) gdtr.address << "\n";
+
 }
 
 GlobalDescriptorTable::~GlobalDescriptorTable() = default;

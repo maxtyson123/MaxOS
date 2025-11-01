@@ -1,6 +1,10 @@
-//
-// Created by 98max on 18/04/2025.
-//
+/**
+ * @file disk.h
+ * @brief Defines a generic Disk driver for reading and writing data to disk drives
+ *
+ * @date 18th April 2025
+ * @author Max Tyson
+ */
 
 #ifndef MAXOS_DRIVERS_DISK_H
 #define MAXOS_DRIVERS_DISK_H

@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/10/2023.
-//
+/**
+ * @file inputbox.cpp
+ * @brief Implementation of an InputBox widget for text input in the GUI
+ *
+ * @date 11th October 2023
+ * @author Max Tyson
+ */
 
 #include <gui/widgets/inputbox.h>
 #include <gui/font/amiga_font.h>
@@ -39,6 +43,14 @@ void InputBoxEventHandler::on_input_box_text_changed(string) {
 
 }
 
+/**
+ * @brief Construct a new Input Box object at a specific position and size
+ *
+ * @param left How many pixels from the left of the parent widget the input box is
+ * @param top How many pixels from the top of the parent widget the input box is
+ * @param width How many pixels wide the input box is
+ * @param height How many pixels tall the input box is
+ */
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
 : Widget(left, top, width, height),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
@@ -49,6 +61,15 @@ InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height)
 
 }
 
+/**
+ * @brief Construct a new Input Box object at a specific position and size with initial text
+ *
+ * @param left The left position of the input box
+ * @param top The top position of the input box
+ * @param width The width of the input box
+ * @param height The height of the input box
+ * @param text The initial text in the input box
+ */
 InputBox::InputBox(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text)
 : Widget(left, top, width, height),
   background_colour(Colour(0xFF, 0xFF, 0xFF)),
@@ -87,7 +108,7 @@ void InputBox::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	gc->fill_rectangle(x + area.left, y + area.top, x + area.left + area.width,
 					   y + area.top + area.height, background_colour);
 
-	// Draw the border  (TODO: Make this a function because it is used in multiple places)
+	// Draw the border
 
 	// Top Border
 	if (area.intersects(Rectangle<int32_t>(0, 0, inputBoxPosition.width, 1))) {
@@ -151,12 +172,13 @@ void InputBox::on_focus_lost() {
 /**
  * @brief Handles a keypress event by updating the rendered text in the input box
  *
- * @param keyDownCode The key being pressed
+ * @param key_down_code The key being pressed
+ * @param key_down_state The state of the key being pressed
  */
-void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
+void InputBox::on_key_down(KeyCode key_down_code, KeyboardState key_down_state) {
 
 	// Handle the key press
-	switch (keyDownCode) {
+	switch (key_down_code) {
 		case KeyCode::backspace: {
 			if (cursor_position == 0)
 				break;
@@ -191,7 +213,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
 		default: {
 
 			// If the key is a printable character, add it to the text
-			if (31 < (int) keyDownCode && (int) keyDownCode < 127) {
+			if (31 < (int) key_down_code && (int) key_down_code < 127) {
 				uint32_t length = cursor_position;
 
 				// Find the length of the text buffer
@@ -212,7 +234,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
 
 				// Insert the new character
 				m_widget_text[cursor_position + 1] = m_widget_text[cursor_position];
-				m_widget_text[cursor_position] = (uint8_t) keyDownCode;
+				m_widget_text[cursor_position] = (uint8_t) key_down_code;
 				cursor_position++;
 			} else {
 
@@ -227,7 +249,7 @@ void InputBox::on_key_down(KeyCode keyDownCode, KeyboardState) {
 	invalidate();
 
 	// Fire the text changed event
-	if (keyDownCode != KeyCode::leftArrow && keyDownCode != KeyCode::rightArrow)
+	if (key_down_code != KeyCode::leftArrow && key_down_code != KeyCode::rightArrow)
 		raise_event(new InputBoxTextChangedEvent(m_widget_text));
 
 }
@@ -259,7 +281,11 @@ string InputBox::text() {
 	return m_widget_text;
 }
 
-
+/**
+ * @brief Construct a new Input Box Text Changed Event object
+ *
+ * @param new_text The new text in the input box
+ */
 InputBoxTextChangedEvent::InputBoxTextChangedEvent(const string& new_text)
 : Event(InputBoxEvents::TEXT_CHANGED),
   new_text(new_text)

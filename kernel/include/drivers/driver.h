@@ -1,6 +1,10 @@
-//
-// Created by 98max on 11/10/2022.
-//
+/**
+ * @file driver.h
+ * @brief Defines a base Driver class and DriverManager for managing drivers
+ *
+ * @date 11th October 2022
+ * @author Max Tyson
+ */
 
 #ifndef MAX_OS_DRIVERS_DRIVER_H
 #define MAX_OS_DRIVERS_DRIVER_H
