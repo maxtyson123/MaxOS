@@ -142,6 +142,7 @@ void Ext2Volume::read_block(uint32_t block_num, buffer_t *buffer) const {
  * @brief Read an inode from the filesystem
  *
  * @param inode_num The inode index
+ * @return The inode read
  */
 inode_t Ext2Volume::read_inode(uint32_t inode_num) const {
 
@@ -1172,6 +1173,9 @@ Ext2FileSystem::Ext2FileSystem(Disk *disk, uint32_t partition_offset)
 
 }
 
+/**
+ * @brief Destroy the Ext2 File System object and free the root directory
+ */
 Ext2FileSystem::~Ext2FileSystem() {
 	delete m_root_directory;
-};
+}

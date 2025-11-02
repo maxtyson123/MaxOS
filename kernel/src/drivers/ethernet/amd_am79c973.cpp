@@ -19,7 +19,11 @@ using namespace MaxOS::hardwarecommunication;
 ///     All the old (this) networking code poorly written and not used, this will be moved to userspace in the future
 ///     but is kept here as a reference for now.
 
-AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev)
+/**
+ * @brief Constructs a new AMD_AM79C973 Ethernet driver, reads the MAC address and sets up the initialisation block and buffer descriptors
+ * @param dev The PCI device descriptor for this device
+ */
+AMD_AM79C973::AMD_AM79C973(PCIDeviceDescriptor *dev)
 : InterruptHandler(0x20 + dev -> interrupt),
   MACAddress0Port(dev ->port_base),
   MACAddress2Port(dev ->port_base + 0x02),
@@ -39,6 +43,8 @@ AMD_AM79C973::AMD_AM79C973(PeripheralComponentInterconnectDeviceDescriptor *dev)
     //Not active or initialised
     active = false;
     initDone = false;
+
+	///@todo move all this to initilise()
 
     // Get the MAC addresses (split up in little endian order)
     uint64_t MAC0 = MACAddress0Port.read() % 256;

@@ -93,6 +93,8 @@ elf_64_section_header_t* ELF64::get_section_header(size_t index) const {
 /**
  * @brief Checks if the elf file is valid for MaxOS runtime
  *
+ * @return True if the elf file is valid, false otherwise
+ *
  * @todo Add support for maxOS ABI
  */
 bool ELF64::is_valid() const {

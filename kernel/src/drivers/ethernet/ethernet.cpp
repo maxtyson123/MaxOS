@@ -21,22 +21,31 @@ EthernetDriverEventHandler::~EthernetDriverEventHandler() = default;
 
 /**
  * @brief Handle data received event
+ *
+ * @param buffer The buffer to handle
+ * @param size The size of the buffer
  * @return True if the data should be sent back, false otherwise
  */
-bool EthernetDriverEventHandler::DataReceived(uint8_t*, uint32_t) {
+bool EthernetDriverEventHandler::DataReceived(uint8_t* buffer, uint32_t size) {
 	return false;
 }
 
 /**
  * @brief Handle before send event
+ *
+ * @param buffer The buffer to handle
+ * @param size The size of the buffer
  */
-void EthernetDriverEventHandler::BeforeSend(uint8_t*, uint32_t) {
+void EthernetDriverEventHandler::BeforeSend(uint8_t* buffer, uint32_t size) {
 }
 
 /**
  * @brief Handle data sent event
+ *
+ * @param buffer The buffer to handle
+ * @param size The size of the buffer
  */
-void EthernetDriverEventHandler::DataSent(uint8_t*, uint32_t) {
+void EthernetDriverEventHandler::DataSent(uint8_t* buffer, uint32_t size) {
 }
 
 /**
@@ -97,8 +106,11 @@ void EthernetDriver::Send(uint8_t* buffer, uint32_t size) {
 
 /**
  * @brief (Device Side) Send the data
+ *
+ * @param buffer The buffer to handle
+ * @param size The size of the buffer
  */
-void EthernetDriver::DoSend(uint8_t*, uint32_t) {
+void EthernetDriver::DoSend(uint8_t* buffer, uint32_t size) {
 }
 
 /**

@@ -11,6 +11,9 @@
 using namespace MaxOS;
 using namespace MaxOS::common;
 
+/**
+ * @brief Constructs an OutputStream object that uses strings as the underlying data type
+ */
 OutputStream::OutputStream()
 : GenericOutputStream<string>::GenericOutputStream()
 {

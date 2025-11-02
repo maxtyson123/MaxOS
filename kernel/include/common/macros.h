@@ -15,6 +15,17 @@ namespace MaxOS{
 		#define PACKED __attribute__((packed))
 	#endif
 
+	#ifdef DOXYGEN
+		/// Align to page size (4096 bytes)
+		#define PAGE_ALIGNED
+	#else
+		/// Align to page size (4096 bytes)
+		#define PAGE_ALIGNED __attribute__((aligned(4096)))
+	#endif
+
+
+
+
 }
 
 

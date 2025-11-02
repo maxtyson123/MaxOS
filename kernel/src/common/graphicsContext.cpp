@@ -10,6 +10,10 @@
 
 using namespace MaxOS::common;
 
+
+/**
+ * @brief Constructs a GraphicsContext object and initializes the color palette
+ */
 GraphicsContext::GraphicsContext() {
 
 

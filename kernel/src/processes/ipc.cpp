@@ -115,6 +115,9 @@ SharedMessageEndpoint::SharedMessageEndpoint(const string& name, size_t size, re
 
 }
 
+/**
+ * @brief Destroys the shared message endpoint and frees all messages
+ */
 SharedMessageEndpoint::~SharedMessageEndpoint() {
 
 	// Free the messages

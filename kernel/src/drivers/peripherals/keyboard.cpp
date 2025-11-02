@@ -61,6 +61,9 @@ Event<KeyboardEvents> *KeyboardEventHandler::on_event(Event<KeyboardEvents> *eve
 	return event;
 }
 
+/**
+ * @brief Construct a new Keyboard Driver object, registering it as an interrupt handler for interrupt 0x21
+ */
 KeyboardDriver::KeyboardDriver()
 : InterruptHandler(0x21, 0x1, 0x12),
   m_data_port(0x60),
@@ -119,6 +122,9 @@ KeyboardState::KeyboardState() = default;
 
 KeyboardState::~KeyboardState() = default;
 
+/**
+ * @brief Construct a new Keyboard Interpreter object
+ */
 KeyboardInterpreter::KeyboardInterpreter()
 : InputStreamEventHandler<uint8_t>()
 {
@@ -144,6 +150,9 @@ void KeyboardInterpreter::on_key_read(bool released, const KeyboardState &state,
 
 }
 
+/**
+ * @brief Construct a new Keyboard Interpreter for the EN_US layout
+ */
 KeyboardInterpreterEN_US::KeyboardInterpreterEN_US()
 : KeyboardInterpreter()
 {

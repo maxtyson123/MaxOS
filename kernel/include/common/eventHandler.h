@@ -79,8 +79,14 @@ namespace MaxOS{
                 Vector<Event<EventType>*> raise_event(Event<EventType>* event);
         };
 
+		///@todo move to a c++ files
 
-        /// ___________________________ Template Implementation ___________________________
+		/**
+		 * @brief Constructs a new Event object
+		 *
+		 * @tparam EventType The type of event
+		 * @param type The type of the event
+		 */
         template<typename EventType> Event<EventType>::Event(EventType type) {
             this->type = type;
         }
@@ -98,6 +104,8 @@ namespace MaxOS{
          *
          * @tparam EventType The type of event
          * @param event The event that was raised
+         *
+         * @return The event after it has been handled
          */
         template<typename EventType> Event<EventType>* EventHandler<EventType>::on_event(Event<EventType>* event) {
             return event;

@@ -14,15 +14,15 @@ using namespace MaxOS::memory;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
 
-volatile extern __attribute__((aligned(4096))) unsigned char p4_table[];
-volatile extern __attribute__((aligned(4096))) unsigned char p3_table[];
-volatile extern __attribute__((aligned(4096))) unsigned char p3_table_hh[];
-volatile extern __attribute__((aligned(4096))) unsigned char p2_table[];
-volatile extern __attribute__((aligned(4096))) unsigned char p1_table[];
+volatile extern PAGE_ALIGNED unsigned char p4_table[];        ///< The PML4 table setup in loader.s
+volatile extern PAGE_ALIGNED unsigned char p3_table[];        ///< The PDPT table setup in loader.s
+volatile extern PAGE_ALIGNED unsigned char p3_table_hh[];     ///< The PDPT table for higher half direct map setup in loader.s
+volatile extern PAGE_ALIGNED unsigned char p2_table[];        ///< The PD table setup in loader.s
+volatile extern PAGE_ALIGNED unsigned char p1_table[];        ///< The PT table setup in loader.s
 
-extern uint64_t _kernel_end;
-extern uint64_t _kernel_size;
-extern uint64_t _kernel_physical_end;
+extern uint64_t _kernel_end;            ///< The virtual address of where the kernel ends
+extern uint64_t _kernel_size;           ///< The length of the memory region used by the kernel code
+extern uint64_t _kernel_physical_end;   ///< The physical address where the kernel ends
 
 /**
  * @brief Constructs a PhysicalMemoryManager. Unmaps the lower kernel and sets up the bitmap for physical memory management. Reserves the kernel and the multiboot regions.

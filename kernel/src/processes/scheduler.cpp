@@ -74,13 +74,16 @@ system::cpu_status_t* GlobalScheduler::handle_interrupt(system::cpu_status_t* st
  * @brief Pass execution to the next thread
  *
  * @param current where to resume this thread to
+ * @return The cpu state of the next thread to run
  */
 system::cpu_status_t* GlobalScheduler::yield(cpu_status_t* current) {
 	current_thread()->execution_state = *current;
 	return core_scheduler()->yield();
 }
 
-
+/**
+ * @brief Destroys the global scheduler and frees the per core schedulers
+ */
 GlobalScheduler::~GlobalScheduler(){
 
 	// No longer the global instance
@@ -546,6 +549,8 @@ uint64_t Scheduler::ticks() const {
 
 /**
  * @brief Pass execution to the next thread
+ *
+ * @return The cpu state of the next thread to run
  */
 cpu_status_t* Scheduler::yield() {
 

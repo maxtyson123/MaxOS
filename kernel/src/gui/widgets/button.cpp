@@ -23,6 +23,7 @@ ButtonEventHandler::~ButtonEventHandler() = default;
  * @brief Handles the button events
  *
  * @param event The event to handle
+ * @return The handled event
  */
 Event<ButtonEvents>* ButtonEventHandler::on_event(Event<ButtonEvents>* event) {
 

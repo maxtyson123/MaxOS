@@ -23,11 +23,11 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
 
-extern uint64_t stack[];
-volatile extern __attribute__((aligned(4096))) unsigned char p4_table[];
+extern uint64_t stack[];                                    ///< The stack setup for the core in loader.s
+volatile extern PAGE_ALIGNED unsigned char p4_table[];      ///< The PML4 table setup in loader.s
 
-extern "C" void  core_start();
-extern "C" uint8_t core_boot_info[];
+extern "C" void  core_start();          ///< The entry point for the core startup assembly code
+extern "C" uint8_t core_boot_info[];    ///< The info passed between the bsp c++ and booting core assembly code
 
 /**
  * @brief Constructs a new Core object from the MADT entry
@@ -245,6 +245,9 @@ void Core::init() {
 
 /**
  * @brief Constructor for the CPU class
+ *
+ * @param gdt The global descriptor table
+ * @param multiboot The multiboot information struct
  */
 CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot)
 : acpi(multiboot),

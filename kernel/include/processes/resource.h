@@ -84,7 +84,13 @@ namespace MaxOS {
 				explicit ResourceRegistry(resource_type_t type);
 				~ResourceRegistry() = default;
 
-				/// Creates a resource of the specific type
+				/**
+				 * @brief Create a new resource of the specific type
+				 *
+				 * @param name The name of the resource
+				 * @param flags The flags to open the resource with
+				 * @return The created resource, or nullptr on failure
+				 */
 				Resource* create_resource(const string &name, size_t flags) override {
 
 					auto resource = new Type(name, flags, type());

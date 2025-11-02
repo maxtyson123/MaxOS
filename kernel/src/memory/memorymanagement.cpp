@@ -44,6 +44,9 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 
 }
 
+/**
+ * @brief Destroy the Memory Manager object, frees the VMM if not the kernel memory manager
+ */
 MemoryManager::~MemoryManager() {
 
 	// Free the VMM (if this is not the kernel memory manager)

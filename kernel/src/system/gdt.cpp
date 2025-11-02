@@ -12,6 +12,9 @@
 using namespace MaxOS;
 using namespace MaxOS::system;
 
+/**
+ * @brief Construct a new Global Descriptor Table object and set up the GDT entries and load it into the CPU, reloading segment registers
+ */
 GlobalDescriptorTable::GlobalDescriptorTable()
 {
 

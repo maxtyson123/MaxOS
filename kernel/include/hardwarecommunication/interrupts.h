@@ -174,7 +174,11 @@ namespace MaxOS {
                 void activate();
                 void deactivate();
 
-	            static void ForceInterruptReturn(system::cpu_status_t* state);  ///< Force the CPU to return from an interrupt (see interrupts.s)
+				/**
+				 * @brief Force the CPU to return from an interrupt (see interrupts.s)
+				 * @param state the state to return to
+				 */
+	            static void ForceInterruptReturn(system::cpu_status_t* state);
 
         };
     }

@@ -17,7 +17,9 @@ using namespace MaxOS::system;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
 
-
+/**
+ * @brief Construct a new Syscall Manager object and register the syscall handlers. Registers to interrupt 0x80
+ */
 SyscallManager::SyscallManager()
 : InterruptHandler(0x80)
 {

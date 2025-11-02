@@ -98,6 +98,7 @@ Window::~Window() = default;
  * @param mouse_x The x coordinate of the mouse.
  * @param mouse_y The y coordinate of the mouse.
  * @param button The button that is pressed.
+ * @return The MouseEventHandler of the widget that will handle the event, nullptr otherwise.
  */
 MouseEventHandler* Window::on_mouse_button_pressed(uint32_t mouse_x, uint32_t mouse_y, uint8_t button) {
 

@@ -21,22 +21,41 @@ TCPPayloadHandler::TCPPayloadHandler() = default;
 
 TCPPayloadHandler::~TCPPayloadHandler()= default;
 
-/// Revisit and document
-void TCPPayloadHandler::handleTransmissionControlProtocolPayload(TCPSocket*, uint8_t*, uint16_t) {
+/**
+ * @brief Handle TCP data received on the socket
+ *
+ * @param socket The socket the data was received on
+ * @param data The data received
+ * @param size The size of the data in bytes
+ */
+void TCPPayloadHandler::handleTransmissionControlProtocolPayload(TCPSocket* socket, uint8_t* data, uint16_t size) {
 
 }
 
-/// Revisit and document
-void TCPPayloadHandler::Connected(TCPSocket*) {
+/**
+ * @brief Handle a new TCP connection on the socket
+ *
+ * @param socket The socket that was connected
+ */
+void TCPPayloadHandler::Connected(TCPSocket* socket) {
 
 }
 
-/// Revisit and document
-void TCPPayloadHandler::Disconnected(TCPSocket*) {
+/**
+ * @brief Handle a TCP disconnection on the socket
+ *
+ * @param socket The socket that was disconnected
+ */
+void TCPPayloadHandler::Disconnected(TCPSocket* socket) {
 
 }
 
-/// Revisit and document
+/**
+ * @brief Handle an event occurring on the TCP payload handler
+ *
+ * @param event The event to handle
+ * @return The handled event
+ */
 Event<TCPPayloadHandlerEvents>* TCPPayloadHandler::on_event(Event<TCPPayloadHandlerEvents>* event) {
 
 	switch (event->type) {
@@ -56,8 +75,11 @@ Event<TCPPayloadHandlerEvents>* TCPPayloadHandler::on_event(Event<TCPPayloadHand
 	return event;
 }
 
-
-///__Socket__///
+/**
+ * @brief Construct a new TCP Socket object
+ *
+ * @param transmissionControlProtocolHandler the TCP handler the socket is associated with
+ */
 TCPSocket::TCPSocket(TransmissionControlProtocolHandler* transmissionControlProtocolHandler) {
 	//Set the default values
 	this->transmissionControlProtocolHandler = transmissionControlProtocolHandler;
@@ -143,7 +165,12 @@ TransmissionControlProtocolHandler::TransmissionControlProtocolHandler(MaxOS::ne
 
 TransmissionControlProtocolHandler::~TransmissionControlProtocolHandler() = default;
 
-//Shorthand for BE
+/**
+ * @brief Convert a 32-bit integer to big-endian format
+ *
+ * @param x The 32-bit integer to convert
+ * @return The big-endian formatted integer
+ */
 uint32_t bigEndian32(uint32_t x) {
 	return ((x & 0xFF000000) >> 24)
 	       | ((x & 0x00FF0000) >> 8)
@@ -151,6 +178,12 @@ uint32_t bigEndian32(uint32_t x) {
 	       | ((x & 0x000000FF) << 24);
 }
 
+/**
+ * @brief Convert a 16-bit integer to big-endian format
+ *
+ * @param x The 16-bit integer to convert
+ * @return The big-endian formatted integer
+ */
 uint32_t bigEndian16(uint16_t x) {
 	return ((x & 0xFF00) >> 8)
 	       | ((x & 0x00FF) << 8);
@@ -548,8 +581,14 @@ void TransmissionControlProtocolHandler::Bind(TCPSocket* socket, TCPPayloadHandl
 }
 
 
-/// ___ EVENTS ___ ///
+/**
+ * @brief Construct a new Data Received Event object
+ *
+ * @param socket The socket that received the data
+ * @param data The data that was received
+ * @param size The size of the data
 
+ */
 DataReceivedEvent::DataReceivedEvent(TCPSocket* socket, uint8_t* data, uint16_t size)
 		: Event(TCPPayloadHandlerEvents::DATA_RECEIVED) {
 	this->socket = socket;

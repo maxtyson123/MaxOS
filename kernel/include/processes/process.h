@@ -73,7 +73,7 @@ namespace MaxOS
               size_t ticks;                             ///< The number of ticks the thread has run for
               size_t wakeup_time;                       ///< The time at which the thread should wake up (if sleeping)
 
-              [[nodiscard]] uintptr_t tss_pointer() const { return m_tss_stack_pointer; }   ///< Gets the stack pointer to use for the TSS when switching to this thread
+              [[nodiscard]] uintptr_t tss_pointer() const { return m_tss_stack_pointer; }    ///< Gets the stack pointer to use for the TSS when switching to this thread @return tss
 
               void save_sse_state();
               void restore_sse_state();

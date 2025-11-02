@@ -14,23 +14,23 @@
 #include <memory/memoryIO.h>
 #include <common/logger.h>
 
-namespace MaxOS{
+namespace MaxOS {
 
-	namespace common{
+	namespace common {
 
 		/**
 		 * @class Buffer
 		 * @brief Wrapper class for a region of bytes in memor in an attempt to add some memory safety. Automatically
 		 * allocates the size specified and frees it once done, adds boundary to I/O.
 		 */
-		class Buffer{
+		class Buffer {
 
 			private:
-			 	 uint8_t* m_bytes = nullptr;
-				 size_t m_capacity;
-				 bool m_dont_delete = false;
+				uint8_t* m_bytes = nullptr;
+				size_t m_capacity;
+				bool m_dont_delete = false;
 
-				 size_t m_offset = 0;
+				size_t m_offset = 0;
 
 			public:
 				Buffer(size_t size, bool update_offset = true);

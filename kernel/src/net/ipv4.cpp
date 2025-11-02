@@ -15,10 +15,10 @@ using namespace MaxOS::memory;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::ethernet;
 
-
-
-///__RESOLVER__///
-
+/**
+ * @brief Construct a new IPV4 Address Resolver object and register it with the Internet Protocol Handler
+ * @param internetProtocolHandler The Internet Protocol Handler to register with
+ */
 IPV4AddressResolver::IPV4AddressResolver(InternetProtocolHandler *internetProtocolHandler)
 {
 
@@ -33,9 +33,10 @@ IPV4AddressResolver::~IPV4AddressResolver() = default;
 /**
  * @brief Resolves an IP address to a MAC address. (Default, returns broadcast address, override for use)
  *
+ * @param address The IP address to turn into a MAC address.
  * @return The MAC address.
  */
-MediaAccessControlAddress IPV4AddressResolver::Resolve(InternetProtocolAddress) {
+MediaAccessControlAddress IPV4AddressResolver::Resolve(InternetProtocolAddress address) {
     return 0xFFFFFFFFFFFF;
 }
 
@@ -49,8 +50,12 @@ void IPV4AddressResolver::Store(InternetProtocolAddress, MediaAccessControlAddre
 
 }
 
-
-///__Payload Handler__///
+/**
+ * @brief Construct a new IPV4 Payload Handler object and register it with the Internet Protocol Handler
+ *
+ * @param internetProtocolHandler The Internet Protocol Handler to register with
+ * @param protocol The IP protocol to handle
+ */
 IPV4PayloadHandler::IPV4PayloadHandler(InternetProtocolHandler* internetProtocolHandler, uint8_t protocol) {
 
     // Store vars

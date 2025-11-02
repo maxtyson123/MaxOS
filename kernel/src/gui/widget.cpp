@@ -13,6 +13,9 @@ using namespace MaxOS::gui;
 using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::peripherals;
 
+/**
+ * @brief Construct a new Widget object
+ */
 Widget::Widget()
 : KeyboardEventHandler()
 {
@@ -33,7 +36,6 @@ Widget::Widget(int32_t left, int32_t top, uint32_t width, uint32_t height)
 {
 
 }
-
 
 Widget::~Widget() = default;
 

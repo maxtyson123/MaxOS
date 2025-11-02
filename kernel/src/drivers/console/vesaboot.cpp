@@ -245,6 +245,8 @@ ConsoleColour VESABootConsole::get_background_color(uint16_t x, uint16_t y) {
 
 /**
  * @brief Prints the logo to the center of the screen
+ *
+ * @param is_panic Whether to print the kernel panic logo or the normal logo
  */
 void VESABootConsole::print_logo(bool is_panic) {
 

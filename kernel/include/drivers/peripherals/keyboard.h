@@ -31,7 +31,7 @@ namespace MaxOS {
 			 */
 			enum class ScanCodeType : int {
 				REGULAR,
-				EXTENDED,237
+				EXTENDED,
 				EXTENDED_BUFFER
 			};
 
@@ -238,7 +238,7 @@ namespace MaxOS {
 			 * @enum KeyboardEvents
 			 * @brief The events that can be triggered by the Keyboard Driver
 			 */
-			enum class KeyboardEvents {f
+			enum class KeyboardEvents {
 				KEYDOWN,
 				KEYUP
 			};

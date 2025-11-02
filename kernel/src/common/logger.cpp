@@ -19,6 +19,9 @@ using namespace MaxOS::drivers::console;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 
+/**
+ * @brief Constructs a Logger object and sets it as the active logger
+ */
 Logger::Logger()
 : m_log_writers()
 {
@@ -31,10 +34,7 @@ Logger::Logger()
 }
 
 
-Logger::~Logger() {
-
-
-}
+Logger::~Logger() = default;
 
 /**
  * @brief Adds an output stream to the logger

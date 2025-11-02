@@ -309,7 +309,13 @@ void UserDatagramProtocolHandler::Bind(UDPSocket *socket, UDPPayloadHandler *UDP
 
 }
 
-/// ___ Events ___ ///
+/**
+ * @brief Construct a new UDP Data Received Event object
+ *
+ * @param socket The socket that received the data
+ * @param data The data received
+ * @param size The size of the data received
+ */
 UDPDataReceivedEvent::UDPDataReceivedEvent(UDPSocket *socket, uint8_t *data, uint16_t size)
 : Event(UDPEvents::DATA_RECEIVED)
 {

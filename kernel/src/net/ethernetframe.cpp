@@ -98,6 +98,7 @@ drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::getMAC() {
  *
  * @param buffer the buffer with the received data
  * @param size the size of the received data
+ * @return True if the data is to be sent back, false otherwise
  *
  * @todo Future debugging me: the override is not being called in derived classes
  */

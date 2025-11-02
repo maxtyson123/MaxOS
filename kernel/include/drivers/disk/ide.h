@@ -31,7 +31,7 @@ namespace MaxOS {
 					common::Map<AdvancedTechnologyAttachment*, bool> devices;
 
 				public:
-					IntegratedDriveElectronicsController(hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor* device_descriptor);
+					IntegratedDriveElectronicsController(hardwarecommunication::PCIDeviceDescriptor* device_descriptor);
 					~IntegratedDriveElectronicsController();
 
 					void initialise() final;

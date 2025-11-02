@@ -15,6 +15,9 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 
+/**
+ * @brief Construct a new Local APIC object and map the APIC base address to the higher half if needed as well as enabling the APIC
+ */
 LocalAPIC::LocalAPIC() {
 
 	// Get the APIC base address
@@ -433,6 +436,9 @@ AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController
 	m_io_apic = new IOAPIC(acpi);
 }
 
+/**
+ * @brief Destroy the Advanced Programmable Interrupt Controller object and frees the Local APIC and IO APIC
+ */
 AdvancedProgrammableInterruptController::~AdvancedProgrammableInterruptController() {
 
 	// Free the memory

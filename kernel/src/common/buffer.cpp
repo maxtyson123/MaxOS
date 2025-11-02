@@ -160,6 +160,7 @@ void Buffer::write(size_t offset, uint8_t byte) {
 /**
  * @brief Safely reads a byte from the buffer at the current offset
  *
+ * @return The read byte
  */
 uint8_t Buffer::read() {
 	set_offset(m_offset + 1);
@@ -170,6 +171,8 @@ uint8_t Buffer::read() {
  * @brief Safely reads a byte from the buffer at the specified offset
  *
  * @param offset The offset into the buffer storage array
+ *
+ * @return The read byte
  */
 uint8_t Buffer::read(size_t offset) {
 

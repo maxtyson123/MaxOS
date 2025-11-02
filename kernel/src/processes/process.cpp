@@ -17,6 +17,11 @@ using namespace MaxOS::common;
 
 /**
  * @brief Constructor for the Thread class
+ *
+ * @param _entry_point The address of the function to start executing
+ * @param args The arguments to pass to the function
+ * @param arg_amount The number of arguments
+ * @param parent The proccess that owns this thread (started it)
  */
 Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process* parent) {
 
@@ -305,6 +310,8 @@ void Process::set_pid(uint64_t pid) {
 
 /**
  * @brief Gets the threads of the process
+ *
+ * @return The threads of the process
  */
 Vector<Thread*> Process::threads() {
 

@@ -15,6 +15,10 @@ using namespace MaxOS::drivers;
 using namespace MaxOS::drivers::video;
 using namespace MaxOS::hardwarecommunication;
 
+
+/**
+ * @brief Constructs a new Video Graphics Array (VGA) driver object, initializing the necessary I/O ports for VGA register access.
+ */
 VideoGraphicsArray::VideoGraphicsArray()
 : m_misc_port(0x3C2),
   m_crtc_index_port(0x3D4),
@@ -86,6 +90,9 @@ void VideoGraphicsArray::write_registers(uint8_t *registers) {
 /**
  * @brief Checks if the specified resolution is supported.
  *
+ * @param width The width of the resolution.
+ * @param height The height of the resolution.
+ * @param colour_depth The byte depth of the resolution.
  * @return True if the specified resolution is supported, otherwise false.
  */
 bool VideoGraphicsArray::supports_mode(uint32_t width, uint32_t height, uint32_t colour_depth) {

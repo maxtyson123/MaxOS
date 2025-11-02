@@ -94,6 +94,9 @@ size_t File::size() {
 
 Directory::Directory() = default;
 
+/**
+ * @brief Destructor for Directory, frees all files and subdirectories
+ */
 Directory::~Directory() {
 
 	// Free the files
@@ -276,12 +279,15 @@ void Directory::rename_subdirectory(string const &old_name, string const &new_na
 
 FileSystem::FileSystem() = default;
 
+/**
+ * @brief Destructor for FileSystem, frees the root directory (Which in turn frees all files and subdirectories)
+ */
 FileSystem::~FileSystem() {
 
 	// Free the root directory
 	delete m_root_directory;
 
-};
+}
 
 /**
  * @brief Get the directory at "/"

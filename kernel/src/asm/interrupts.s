@@ -10,7 +10,7 @@
 ; */
 
 [bits  64]
-[extern _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE]
+[extern _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system9CPUStatusE]
 
 %macro HandleException 1
 [global _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev]
@@ -21,7 +21,7 @@ _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev:
     save_context ; Now we can save the general purpose registers
     mov rdi, rsp    ; Let's set the current stack pointer as a parameter of the interrupts_handler
     cld ; Clear the direction flag
-    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE ; Now we call the interrupt handler
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system9CPUStatusE ; Now we call the interrupt handler
     mov rsp, rax    ; use the returned context
     restore_context ; We served the interrupt let's restore the previous context
     add rsp, 16 ; We can discard the interrupt number and the error code
@@ -37,7 +37,7 @@ _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev:
     save_context ; Now we can save the general purpose registers
     mov rdi, rsp    ; Let's set the current stack pointer as a parameter of the interrupts_handler
     cld ; Clear the direction flag
-    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE ; Now we call the interrupt handler
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system9CPUStatusE ; Now we call the interrupt handler
     mov rsp, rax    ; use the returned context
     restore_context ; We served the interrupt let's restore the previous context
     add rsp, 16 ; We can discard the interrupt number and the error code
@@ -51,7 +51,7 @@ _ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev:
     save_context
     mov rdi, rsp
     cld
-    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system9CPUStatusE
     mov rsp, rax    ; use the returned context
     restore_context
     add rsp, 16
@@ -59,8 +59,8 @@ _ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev:
 %endmacro
 
 
-[global _ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system12cpu_status_tE]
-_ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system12cpu_status_tE:
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system9CPUStatusE]
+_ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system9CPUStatusE:
 
     mov rsp, rdi         ; use the returned context
     restore_context

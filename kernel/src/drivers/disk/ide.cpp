@@ -22,7 +22,7 @@ using namespace MaxOS::filesystem::partition;
  * @param device_descriptor The PCI device descriptor for this controller
  * @todo Use the device descriptor to get the port base and add the devices dynamically
  */
-IntegratedDriveElectronicsController::IntegratedDriveElectronicsController(PeripheralComponentInterconnectDeviceDescriptor* device_descriptor)
+IntegratedDriveElectronicsController::IntegratedDriveElectronicsController(PCIDeviceDescriptor* device_descriptor)
 {
 	// Primary
 	auto primary_maser = new AdvancedTechnologyAttachment(0x1F0, true);
@@ -89,6 +89,8 @@ void IntegratedDriveElectronicsController::activate() {
 
 /**
  * @brief Get the vendor name
+ *
+ * @return The vendor name
  */
 string IntegratedDriveElectronicsController::vendor_name() {
 	return "Intel";
@@ -96,6 +98,8 @@ string IntegratedDriveElectronicsController::vendor_name() {
 
 /**
  * @brief Get the device name
+ *
+ * @return The device name
  */
 string IntegratedDriveElectronicsController::device_name() {
 	return "PIIX4";

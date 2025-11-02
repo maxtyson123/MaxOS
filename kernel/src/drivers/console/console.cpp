@@ -428,9 +428,7 @@ ConsoleStream::ConsoleStream(Console *console)
 
 }
 
-ConsoleStream::~ConsoleStream() {
-
-}
+ConsoleStream::~ConsoleStream() = default;
 
 /**
  * @brief write a character to the console stream

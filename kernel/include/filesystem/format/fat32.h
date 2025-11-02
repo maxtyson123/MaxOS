@@ -222,7 +222,11 @@ namespace MaxOS {
 					void read(common::buffer_t* data, size_t amount) final;
 					void flush() final;
 
-					uint32_t first_cluster() const { return m_first_cluster; } ///< Get the first cluster of the file
+					/**
+					 * @brief Get the first cluster of the directory
+					 * @return The first cluster of the directory
+					 */
+					[[nodiscard]] uint32_t first_cluster() const { return m_first_cluster; }
 			};
 
 			/**
@@ -269,7 +273,11 @@ namespace MaxOS {
 					Directory* create_subdirectory(const string &name) final;
 					void remove_subdirectory(const string &name) final;
 
-					[[nodiscard]] lba_t first_cluster() const { return m_first_cluster; }   ///< Get the first cluster of the directory
+					/**
+					 * @brief Get the first cluster of the directory
+					 * @return The first cluster of the directory
+					 */
+					[[nodiscard]] lba_t first_cluster() const { return m_first_cluster; }
 			};
 
 			/**

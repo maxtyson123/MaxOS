@@ -24,9 +24,13 @@ using namespace memory;
 // Buffer Sizes
 #define buffer8192                 ((2 << 16) | (1 << 25))
 
-///__DRIVER___
 
-IntelI217::IntelI217(PeripheralComponentInterconnectDeviceDescriptor *deviceDescriptor)
+/**
+ * @brief Constructs a new Intel I217 Ethernet driver. Gets the MAC address and clears the receive descriptor array
+ *
+ * @param deviceDescriptor The PCI device descriptor for this device
+ */
+IntelI217::IntelI217(PCIDeviceDescriptor *deviceDescriptor)
 : InterruptHandler(0x20 + deviceDescriptor->interrupt)
 {
 
@@ -198,13 +202,13 @@ bool IntelI217::readMACAddress() {
 void IntelI217::receiveInit() {
 
     uint8_t * ptr;                                                                                                          //A pointer to the memory
-    struct receiveDescriptor *descs;                                                                                        //A pointer to the receive descriptors
-    ptr = (uint8_t *)(MemoryManager::kmalloc(sizeof(struct receiveDescriptor)*32 + 16));           //Allocate memory for the receive descriptors
-    descs = (struct receiveDescriptor *)ptr;                                                                                //Set the pointer to the receive descriptors
+    receive_descriptor_t*descs;                                                                                        //A pointer to the receive descriptors
+    ptr = (uint8_t *)(MemoryManager::kmalloc(sizeof(receive_descriptor_t)*32 + 16));           //Allocate memory for the receive descriptors
+    descs = (receive_descriptor_t*)ptr;                                                                                //Set the pointer to the receive descriptors
 
     for(int i = 0; i < 32; i++)
     {
-        receiveDsrctrs[i] = (struct receiveDescriptor *)((uint8_t *)descs + i*16);
+        receiveDsrctrs[i] = (receive_descriptor_t*)((uint8_t *)descs + i*16);
         receiveDsrctrs[i] -> bufferAddress = (uint64_t)(uint8_t *)(MemoryManager::kmalloc(8192 + 16));
         receiveDsrctrs[i] -> status = 0;
     }
@@ -242,14 +246,14 @@ void IntelI217::receiveInit() {
 void IntelI217::sendInit() {
 
     uint8_t * ptr;                                                                                                          //A pointer to the memory
-    struct sendDescriptor *descs;                                                                                           //A pointer to the send descriptors
-    ptr = (uint8_t *)(MemoryManager::kmalloc(sizeof(struct sendDescriptor)*8 + 16));                //Allocate memory for the send descriptors
-    descs = (struct sendDescriptor *)ptr;                                                                                   //Set the pointer to the send descriptors
+	send_descriptor_t* descs;                                                                                           //A pointer to the send descriptors
+    ptr = (uint8_t *)(MemoryManager::kmalloc(sizeof(send_descriptor_t)*8 + 16));                //Allocate memory for the send descriptors
+    descs = (send_descriptor_t*)ptr;                                                                                   //Set the pointer to the send descriptors
 
 
     for(int i = 0; i < 8; i++)
     {
-        sendDsrctrs[i] = (struct sendDescriptor *)((uint8_t*)descs + i*16);
+        sendDsrctrs[i] = (send_descriptor_t*)((uint8_t*)descs + i*16);
         sendDsrctrs[i] -> bufferAddress = 0;
         sendDsrctrs[i] -> cmd = 0;
         sendDsrctrs[i] -> status = (1 << 0);    // Descriptor Done

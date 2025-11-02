@@ -34,6 +34,7 @@ namespace MaxOS {
 		 *
 		 * @typedef cpu_status_t
 		 * @brief Alias for CPUStatus struct
+		 *
 		 */
 		typedef struct PACKED CPUStatus {
 

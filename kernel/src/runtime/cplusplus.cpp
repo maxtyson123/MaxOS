@@ -12,7 +12,7 @@
 using namespace MaxOS;
 using namespace MaxOS::runtime;
 
-// Define static constructors (DSO = Dynamic Shared Object)
+/// Define static constructors (DSO = Dynamic Shared Object)
 extern "C" void* __dso_handle = nullptr;
 
 /**
@@ -30,14 +30,14 @@ extern "C" void __stack_chk_fail(void)
 	ASSERT(false, "Stack Smashed");
 }
 
-extern "C" constructor start_ctors;
-extern "C" constructor end_ctors;
+extern "C" constructor start_ctors; ///< Pointer to the start of the constructors section
+extern "C" constructor end_ctors;   ///< Pointer to the end of the constructors section
 
 /**
  * @brief Calls all global constructors
  */
 extern "C" void call_constructors() {
-	// Loop through and initialise all the global constructors
+	// Loop through and initialise all the global constructorsu
 	for (constructor* i = &start_ctors; i != &end_ctors; i++)
 		(*i)();
 }

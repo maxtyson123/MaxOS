@@ -73,6 +73,9 @@ void MouseEventHandler::on_mouse_move_event(int8_t, int8_t) {
 
 MouseEventHandler::~MouseEventHandler() = default;
 
+/**
+ * @brief Constructs a new MouseDriver object and registers it as an interrupt handler for interrupt 0x2C
+ */
 MouseDriver::MouseDriver()
 : InterruptHandler(0x2C, 0xC, 0x28),
   data_port(0x60),
