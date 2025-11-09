@@ -72,10 +72,9 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
 	call_constructors();
 
-	// Initialise the logger
 	Logger logger;
 	SerialConsole serial_console(&logger);
-	Logger::INFO() << "MaxOS Booted Successfully 0x\n";
+	Logger::INFO() << "MaxOS Booted Successfully\n";
 
 	Logger::HEADER() << "Stage {1}: System Initialisation\n";
 	Multiboot multiboot(addr, magic);
@@ -122,8 +121,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 /**
- * @todo Proper file formatting
- * @todo Full doxygen comments
  * @todo Kernel configuration (debug/release)
  * @todo Clean up warnings
  * @todo Test suite of common functions & other statics (paths)

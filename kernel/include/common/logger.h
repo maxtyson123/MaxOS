@@ -30,7 +30,11 @@ namespace MaxOS{
 
 
 	constexpr uint8_t MAX_LOG_WRITERS = 5;                  ///< The maximum number of log writers that can be added to the logger
+#ifdef NDEBUG
+	constexpr LogLevel MAX_LOG_LEVEL = LogLevel::INFO;      ///< The maximum log level for this build (messages above this level will not be logged)
+#else
 	constexpr LogLevel MAX_LOG_LEVEL = LogLevel::DEBUG;     ///< The maximum log level for this build (messages above this level will not be logged)
+#endif
 
 /**
  * @class Logger

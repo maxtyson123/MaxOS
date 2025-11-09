@@ -16,9 +16,10 @@ using namespace MaxOS;
 String::String() {
 
 	// String that only contains the null terminator
+	m_length = 0;
 	allocate_self();
 	m_string[0] = '\0';
-	m_length = 0;
+
 
 }
 
@@ -122,26 +123,6 @@ String::String(uint64_t value) {
 	for (int i = 0; i < m_length; i++)
 		m_string[i] = str[i];
 	m_string[m_length] = '\0';
-}
-
-/**
- * @brief Constructs a String from a float
- * @param value The float value
- */
-String::String(float value) {
-
-	// Convert to a string
-	const char* str = ftoa(value);
-	m_length = strlen(str);
-
-	// Create space to store
-	allocate_self();
-
-	// Store the string
-	for (int i = 0; i < m_length; i++)
-		m_string[i] = str[i];
-	m_string[m_length] = '\0';
-
 }
 
 /**
@@ -727,6 +708,10 @@ char* itoa(int base, int64_t number) {
 	int i = 49;
 	bool isNegative = number < 0;
 
+	// Null terminate the string
+	buffer[i] = '\0';
+	--i;
+
 	if (number == 0) {
 		buffer[i] = '0';
 		return &buffer[i];
@@ -755,6 +740,10 @@ char* htoa(uint64_t number) {
 	static char buffer[50] = { 0 };
 	int i = 49;
 
+	// Null terminate the string
+	buffer[i] = '\0';
+	--i;
+
 	if (number == 0) {
 		buffer[i] = '0';
 		return &buffer[i];
@@ -764,73 +753,6 @@ char* htoa(uint64_t number) {
 		buffer[i] = "0123456789ABCDEF"[number % 16];
 
 	return &buffer[i + 1];
-}
-
-/**
- * @brief Converts a float to a string
- *
- * @param number The number to convert
- * @return The converted string
- */
-char* ftoa(float number) {
-
-	static char buffer[50];
-	char* ptr = buffer;
-
-	// Handle negative numbers.
-	if (number < 0) {
-		*ptr++ = '-';
-		number = -number;
-	}
-
-	// Separate integer and fractional parts.
-	int64_t intPart = (int64_t) number;
-	float fraction = number - (float) intPart;
-
-	// Convert integer part to string using itoa.
-	char* intStr = itoa(10, intPart);
-	while (*intStr) {
-		*ptr++ = *intStr++;
-	}
-
-	// Add the decimal point.
-	*ptr++ = '.';
-
-	// Define the desired precision for the fractional part.
-	const int precision = 6;
-
-	// Multiply the fraction to shift the decimal digits into integer range.
-	float fracValue = fraction;
-	for (int i = 0; i < precision; i++) {
-		fracValue *= 10.0f;
-	}
-
-	// Optionally, round the value.
-	auto fracInt = (int64_t) (fracValue + 0.5f);
-
-	// Convert the fractional part to string.
-	char fracBuffer[50];
-	char* fracStr = itoa(10, fracInt);
-
-	// Ensure we have leading zeros if the fractional part doesn't produce enough digits.
-	// Calculate length of the converted fractional string.
-	int len = 0;
-	for (char* p = fracStr; *p; p++) {
-		len++;
-	}
-	for (int i = 0; i < precision - len; i++) {
-		*ptr++ = '0';
-	}
-
-	// Copy the fractional digits.
-	while (*fracStr) {
-		*ptr++ = *fracStr++;
-	}
-
-	// Null-terminate the string.
-	*ptr = '\0';
-
-	return buffer;
 }
 
 /**
@@ -997,17 +919,6 @@ StringBuilder& StringBuilder::operator <<(int value) {
  * @return The StringBuilder reference
  */
 StringBuilder& StringBuilder::operator <<(uint64_t value) {
-	out += string(value);
-	return *this;
-}
-
-/**
- * @brief Append decimal to the StringBuilder
- *
- * @param value The decimal value to append
- * @return The StringBuilder reference
- */
-StringBuilder& StringBuilder::operator <<(float value) {
 	out += string(value);
 	return *this;
 }

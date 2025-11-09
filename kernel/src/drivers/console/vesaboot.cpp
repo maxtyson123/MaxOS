@@ -38,7 +38,7 @@ VESABootConsole::VESABootConsole(GraphicsContext *graphics_context)
 	cout = new ConsoleStream(m_console_area);
 
 	// Only log to the screen when debugging
-	#ifdef TARGET_DEBUG
+	#ifndef NDEBUG
 		Logger::active_logger()->add_log_writer(cout);
 		Logger::INFO() << "Console Stream set up \n";
 	#endif

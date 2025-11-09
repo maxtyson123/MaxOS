@@ -43,7 +43,6 @@ namespace MaxOS {
 			String(String const &other);
 			explicit String(int value);
 			explicit String(uint64_t value);
-			explicit String(float value);
 			explicit String(bool value);
 			~String();
 
@@ -104,7 +103,6 @@ namespace MaxOS {
 			StringBuilder &operator<<(String const &other);
 			StringBuilder &operator<<(int value);
 			StringBuilder &operator<<(uint64_t value);
-			StringBuilder &operator<<(float value);
 			StringBuilder &operator<<(bool value);
 
 	};

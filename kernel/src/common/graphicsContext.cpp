@@ -522,11 +522,12 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
 
 	// If the line is not horizontal or vertical then it must be a diagonal line
 	// Find the slope of the line
-	float slope = ((float) (y1 - y0)) / (x1 - x0);
+//	float slope = ((float) (y1 - y0)) / (x1 - x0);
+	int slope = 1; // replace when in userland
 
 	// A slope that is more horizontal should be drawn by incrementing x
 	if (-1 <= slope && slope <= 1) {
-		float y = y0;
+		int y = y0;
 		for (int32_t x = x0; x <= x1; x++, y += slope)
 			putPixel(x, (int32_t) y, colour);
 	}
@@ -534,9 +535,9 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
 		// A slope that is more vertical should be drawn by incrementing y
 	else {
 		// Invert the slope
-		slope = 1.0f / slope;
+		slope = 1 / slope;
 
-		float x = x0;
+		int x = x0;
 		for (int32_t y = y_min; y <= y_max; x += slope, y++)
 			putPixel((int32_t) x, y, colour);
 	}

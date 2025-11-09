@@ -23,9 +23,6 @@ namespace MaxOS{
 		#define PAGE_ALIGNED __attribute__((aligned(4096)))
 	#endif
 
-
-
-
 }
 
 

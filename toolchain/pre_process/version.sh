@@ -72,7 +72,11 @@ namespace MaxOS {
 		const vstring   VERSION_NAME = "${VERSION_NAME}";                                             	///< The human readable version name
 		const int       BUILD_NUMBER = ${BUILD_NUMBER};                                                                   ///< How many times the code has been built on this device
 		const time_t    BUILD_DATE = {${BUILD_YEAR}, ${BUILD_MONTH}, ${BUILD_DAY}, ${BUILD_HOUR}, ${BUILD_MINUTE}, ${BUILD_SECOND}};     ///< The build date and time
-		const vstring   BUILD_TYPE = "${BUILD_TYPE}";                                                            	///< The build type (Debug/Release)
+#ifdef NDEBUG
+		const vstring   BUILD_TYPE = "Release";                                                            	///< The build type (Debug/Release)
+#else
+		const vstring   BUILD_TYPE = "Debug";                                                          	///< The build type (Debug/Release)
+#endif
 		const vstring   GIT_REVISION = "${GIT_REVISION}";                                                          ///< The git revision hash
 		const vstring   GIT_BRANCH = "${GIT_BRANCH}";                                              ///< The name of the git branch that was built
 		const int       GIT_COMMIT = ${GIT_COMMIT};                                                                   ///< The commit number in the git repository that this build was made from

@@ -448,7 +448,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 
 	// Print using the backend
 	Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
-	Logger::ERROR() << "Kernel Panic: " << message << "\n";
+	Logger::ERROR() << "Kernel Panic: " << message;
 	Logger::ERROR() << "On Core: " << (panic_core ? panic_core->id : 0) << "\n";
 
 	// Info about the running process

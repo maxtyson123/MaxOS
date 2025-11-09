@@ -192,7 +192,7 @@ void PCIController::select_drivers(DriverSelectorEventHandler* handler) {
 				// Get the earliest port number
 				for (int barNum = 5; barNum >= 0; barNum--) {
 					BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
-					if (bar.address && (bar.type == BaseAddressRegisterType::InputOutput))
+					if (bar.address && (bar.type == BARType::InputOutput))
 						deviceDescriptor.port_base = (uint64_t) bar.address;
 				}
 
@@ -446,7 +446,7 @@ BaseAddressRegister PCIController::get_base_address_register(uint16_t bus, uint1
 
 	// read the base address register
 	uint64_t bar_value = read(bus, device, function, 0x10 + 4 * bar);
-	result.type = (bar_value & 0x1) ? BaseAddressRegisterType::InputOutput : BaseAddressRegisterType::MemoryMapped;
+	result.type = (bar_value & 0x1) ? BARType::InputOutput : BARType::MemoryMapped;
 	result.address = (uint8_t*) (bar_value & ~0xF);
 
 	// Read the size of the base address register
