@@ -149,7 +149,7 @@ void Buffer::write(uint8_t byte) {
 void Buffer::write(size_t offset, uint8_t byte) {
 
 	// Prevent writing past the buffer bounds
-	ASSERT(m_offset + offset < capacity() && offset >= 0, "Buffer overflow");
+	ASSERT(m_offset + offset < capacity(), "Buffer overflow");
 
 	// Set the byte
 	m_bytes[m_offset + offset] = byte;
@@ -177,7 +177,7 @@ uint8_t Buffer::read() {
 uint8_t Buffer::read(size_t offset) {
 
 	// Prevent writing past the buffer bounds
-	ASSERT(m_offset + offset < capacity() && offset >= 0, "Buffer overflow");
+	ASSERT(m_offset + offset < capacity(), "Buffer overflow");
 
 	// Set the byte
 	set_offset(m_offset + 1);

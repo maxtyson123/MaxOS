@@ -53,7 +53,7 @@ String::String(char const* string) {
 	allocate_self();
 
 	// Copy the string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		m_string[i] = string[i];
 
 	// If the length is more than 10,000 Replace the end with a warning incase future use actually requires that
@@ -99,7 +99,7 @@ String::String(int value) {
 	allocate_self();
 
 	// Store the string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		m_string[i] = str[i];
 	m_string[m_length] = '\0';
 
@@ -120,7 +120,7 @@ String::String(uint64_t value) {
 	allocate_self();
 
 	// Store the string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		m_string[i] = str[i];
 	m_string[m_length] = '\0';
 }
@@ -170,7 +170,7 @@ void String::copy(String const& other) {
 	allocate_self();
 
 	// Copy the string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		m_string[i] = other[i];
 
 	// Write the null terminator
@@ -188,7 +188,7 @@ int String::lex_value(String const& string) {
 
 	// Sum the ascii values of the characters in the string
 	int sum = 0;
-	for (int i = 0; i < string.length(); i++)
+	for (size_t i = 0; i < string.length(); i++)
 		sum += string[i];
 
 	return sum;
@@ -259,7 +259,7 @@ bool String::starts_with(String const& other) {
 		return false;
 
 	// Check if the string starts with the other string
-	for (int i = 0; i < other.length(); i++)
+	for (size_t i = 0; i < other.length(); i++)
 		if (m_string[i] != other[i])
 			return false;
 
@@ -274,14 +274,14 @@ bool String::starts_with(String const& other) {
  * @param length The length of the substring
  * @return The substring or empty string if out of bounds
  */
-String String::substring(int start, int length) const {
+String String::substring(size_t start, size_t length) const {
 
 	// Ensure the start is within bounds
-	if (start < 0 || start >= m_length)
+	if (start >= m_length)
 		return { };
 
 	// Ensure the length is within bounds
-	if (length < 0 || start + length > m_length)
+	if (start + length > m_length)
 		return { };
 
 	// Allocate memory for the substring (and null terminator)
@@ -290,7 +290,7 @@ String String::substring(int start, int length) const {
 	substring.allocate_self();
 
 	// Copy the substring
-	for (int i = 0; i < length; i++)
+	for (size_t i = 0; i < length; i++)
 		substring.m_string[i] = m_string[start + i];
 
 	// Write the null terminator
@@ -309,12 +309,12 @@ common::Vector<String> String::split(String const& delimiter) const {
 	common::Vector<String> strings;
 
 	// Go through the string and split it by the delimiter
-	int start = 0;
-	for (int i = 0; i <= m_length - delimiter.length(); i++) {
+	size_t start = 0;
+	for (size_t i = 0; i <= m_length - delimiter.length(); i++) {
 
 		// Check if matches at this position
 		bool matches = true;
-		for (int j = 0; j < delimiter.length(); j++)
+		for (size_t j = 0; j < delimiter.length(); j++)
 			if (m_string[i + j] != delimiter[j]) {
 				matches = false;
 				break;
@@ -341,7 +341,7 @@ common::Vector<String> String::split(String const& delimiter) const {
  * @param count_ansi Whether to count the ansi characters (default true)
  * @return The length of the string
  */
-int String::length(bool count_ansi) const {
+size_t String::length(bool count_ansi) const {
 
 	// If ansi characters are not to be counted
 	if (count_ansi)
@@ -379,7 +379,7 @@ bool String::equals(String const& other) const {
 		return false;
 
 	// Check if the characters are equal
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		if (m_string[i] != other[i])
 			return false;
 
@@ -477,11 +477,11 @@ String String::operator +(String const& other) const {
 	concatenated.allocate_self();
 
 	// Copy the first string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		concatenated.m_string[i] = m_string[i];
 
 	// Copy the second string
-	for (int i = 0; i < other.length(); i++)
+	for (size_t i = 0; i < other.length(); i++)
 		concatenated.m_string[m_length + i] = other[i];
 
 	// Write the null terminator
@@ -512,7 +512,7 @@ String& String::operator +=(String const& other) {
  * @param index The index of the character
  * @return The character at the specified index
  */
-char& String::operator [](int index) {
+char& String::operator [](size_t index) {
 	return m_string[index];
 }
 
@@ -523,7 +523,7 @@ char& String::operator [](int index) {
  * @param index The index of the character
  * @return The character at the specified index
  */
-char& String::operator [](int index) const {
+char& String::operator [](size_t index) const {
 	return m_string[index];
 }
 
@@ -542,7 +542,7 @@ String String::operator *(int times) const {
 
 	// Copy the string
 	for (int i = 0; i < times; i++)
-		for (int j = 0; j < m_length; j++)
+		for (size_t j = 0; j < m_length; j++)
 			repeated.m_string[i * m_length + j] = m_string[j];
 
 	// Write the null terminator

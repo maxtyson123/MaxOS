@@ -23,7 +23,7 @@ File::~File() = default;
  * @param data The byte buffer to write
  * @param amount The amount of data to write
  */
-void File::write(const common::buffer_t* data, size_t amount) {
+void File::write(buffer_t* data, size_t amount) {
 }
 
 /**

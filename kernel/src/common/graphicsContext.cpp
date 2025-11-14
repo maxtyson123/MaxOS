@@ -384,15 +384,17 @@ void GraphicsContext::put_pixel(int32_t x, int32_t y, const Colour &colour) {
  * @param x The x coordinate of the pixel
  * @param y The y coordinate of the pixel
  * @param colour The colour of the pixel
+ *
+ * @todo make them uint32_t
  */
 void GraphicsContext::putPixel(int32_t x, int32_t y, uint32_t colour) {
 
-	if (0 > x || (uint32_t) x >= m_width) {
+	if (0 > x || x >= m_width) {
 		return;
 	}
 
 	// Check if the pixel is within the m_height of the screen
-	if (0 > y || (uint32_t) y >= m_height) {
+	if (0 > y || y >= m_height) {
 		return;
 	}
 
@@ -411,7 +413,7 @@ void GraphicsContext::putPixel(int32_t x, int32_t y, uint32_t colour) {
 Colour GraphicsContext::get_pixel(int32_t x, int32_t y) {
 
 	// Check if the pixel is within the bounds of the screen
-	if (0 > x || (uint32_t) x >= m_width || 0 > y || (uint32_t) y >= m_height)
+	if (0 > x || x >= m_width || 0 > y || y >= m_height)
 		return {0, 0, 0};
 
 	// Get the pixel and convert it to a colour
@@ -490,7 +492,7 @@ void GraphicsContext::drawLine(int32_t x0, int32_t y0, int32_t x1, int32_t y1, u
 		}
 
 		// Check that the line is within the screen
-		if (0 > x0 || (uint32_t) x0 >= m_width) {
+		if (0 > x0 || x0 >= m_width) {
 			return;
 		}
 

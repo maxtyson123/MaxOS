@@ -29,7 +29,7 @@ Logger::Logger()
 	s_active_logger = this;
 
 	// The following line is generated automatically by the MaxOS build system.
-	s_progress_total = 24;
+	s_progress_total = 22;
 
 }
 

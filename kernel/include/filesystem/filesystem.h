@@ -40,7 +40,7 @@ namespace MaxOS {
 				File();
 				virtual ~File();
 
-				virtual void write(const common::buffer_t* data, size_t size);
+				virtual void write(common::buffer_t* data, size_t size);
 				virtual void read(common::buffer_t* data, size_t size);
 				virtual void flush();
 

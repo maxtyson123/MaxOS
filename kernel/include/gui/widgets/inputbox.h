@@ -83,7 +83,7 @@ namespace MaxOS{
                     common::Colour foreground_colour;           ///< The colour of the text in the input box
                     common::Colour border_colour;               ///< The colour of the bar around the input box
                     gui::Font font;                             ///< The font to use for the input box text
-                    int32_t cursor_position { 0 };              ///< How many characters into the text the cursor is
+                    uint32_t cursor_position { 0 };              ///< How many characters into the text the cursor is
 
             };
         }

@@ -43,11 +43,11 @@ namespace MaxOS{
 
                 public:
                     AdvancedTechnologyAttachment(uint16_t port_base, bool master);
-                    ~AdvancedTechnologyAttachment();
+                    virtual ~AdvancedTechnologyAttachment();
 
                     bool identify();
                     void read(uint32_t sector, common::buffer_t* data_buffer, size_t amount) final;
-                    void write(uint32_t sector, const common::buffer_t* data, size_t count) final;
+                    void write(uint32_t sector, common::buffer_t* data, size_t count) final;
                     void flush() final;
 
                     string device_name() final;

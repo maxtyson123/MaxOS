@@ -410,7 +410,7 @@ namespace MaxOS {
 						Ext2File(Ext2Volume* volume, uint32_t inode, const string &name);
 						~Ext2File() final;
 
-						void write(const common::buffer_t* data, size_t amount) final;
+						void write(common::buffer_t* data, size_t amount) final;
 						void read(common::buffer_t* data, size_t amount) final;
 						void flush() final;
 				};

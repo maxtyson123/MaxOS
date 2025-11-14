@@ -21,17 +21,16 @@ using namespace MaxOS::drivers::disk;
  * @param master True if the device is master, false if slave
  */
 AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, bool master)
-: m_data_port(port_base),
-  m_error_port(port_base + 1),
-  m_sector_count_port(port_base + 2),
-  m_LBA_low_port(port_base + 3),
-  m_LBA_mid_port(port_base + 4),
-  m_LBA_high_Port(port_base + 5),
-  m_device_port(port_base + 6),
-  m_command_port(port_base + 7),
-  m_control_port(port_base + 0x206),
-  m_is_master(master)
-{
+		: m_data_port(port_base),
+		m_error_port(port_base + 1),
+		m_sector_count_port(port_base + 2),
+		m_LBA_low_port(port_base + 3),
+		m_LBA_mid_port(port_base + 4),
+		m_LBA_high_Port(port_base + 5),
+		m_device_port(port_base + 6),
+		m_command_port(port_base + 7),
+		m_control_port(port_base + 0x206),
+		m_is_master(master) {
 
 }
 
@@ -98,7 +97,7 @@ bool AdvancedTechnologyAttachment::identify() {
  * @param data_buffer The data to read into
  * @param amount The amount of bytes to read from that sector
  */
-void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t *data_buffer, size_t amount) {
+void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t* data_buffer, size_t amount) {
 
 	// Don't allow reading more than a sector
 	if (sector & 0xF0000000 || amount > m_bytes_per_sector)
@@ -158,7 +157,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t *data_buffer, 
  * @param data The data to write
  * @param count The amount of data to write to that sector
  */
-void AdvancedTechnologyAttachment::write(uint32_t sector, const buffer_t *data, size_t count) {
+void AdvancedTechnologyAttachment::write(uint32_t sector, buffer_t* data, size_t count) {
 
 	// Don't allow writing more than a sector
 	if (sector > 0x0FFFFFFF || count > m_bytes_per_sector)
@@ -188,7 +187,7 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const buffer_t *data, 
 		status = m_command_port.read();
 
 	// Write the data to the device
-	for (uint16_t i = 0; i < m_bytes_per_sector; i += 2) {
+	for (size_t i = 0; i < m_bytes_per_sector; i += 2) {
 
 		uint16_t writeData = data->read();
 

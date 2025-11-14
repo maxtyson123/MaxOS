@@ -92,7 +92,7 @@ uint32_t Fat32Volume::set_next_cluster(uint32_t cluster, uint32_t next_cluster) 
 	// Get the location in the FAT table
 	lba_t offset = cluster * sizeof(uint32_t);
 
-	for (int i = 0; i < fat_copies; ++i) {
+	for (uint32_t i = 0; i < fat_copies; ++i) {
 
 		lba_t sector = (fat_lba + i * bpb.table_size_32) + (offset / bpb.bytes_per_sector);
 		uint32_t entry_index = offset % bpb.bytes_per_sector;
@@ -259,7 +259,7 @@ Fat32File::~Fat32File() = default;
  *
  * @todo When in userspace: save timestamps
  */
-void Fat32File::write(const buffer_t *data, size_t amount) {
+void Fat32File::write(buffer_t *data, size_t amount) {
 
 	size_t buffer_space = m_volume->bpb.bytes_per_sector * m_volume->bpb.sectors_per_cluster;
 	buffer_t buffer(buffer_space);
@@ -450,9 +450,9 @@ dir_entry_t *Fat32Directory::create_entry(const string &name, bool is_directory)
 	Vector<long_file_name_entry_t> lfn_entries = to_long_filenames(name);
 	char short_name[8];
 	char short_extension[3];
-	for (int i = 0; i < 8; i++)
+	for (size_t i = 0; i < 8; i++)
 		short_name[i] = (i < name.length()) ? name[i] : ' ';
-	for (int i = 0; i < 3; i++)
+	for (size_t i = 0; i < 3; i++)
 		short_extension[i] = (8 + i < name.length()) ? name[8 + i] : ' ';
 
 	// Create the directory entry
@@ -475,7 +475,7 @@ dir_entry_t *Fat32Directory::create_entry(const string &name, bool is_directory)
 		m_entries[entry_index + i] = i == 0 ? entry : *(dir_entry_t *) &lfn_entries[i - 1];
 
 	// Write the long file name entries
-	for (size_t index = entry_index + lfn_entries.size() - 1; index >= entry_index; index--)
+	for (int index = entry_index + lfn_entries.size() - 1; index >= entry_index; index--)
 		update_entry_on_disk(index);
 
 	// Creating the file is done
@@ -523,17 +523,17 @@ void Fat32Directory::remove_entry(uint32_t cluster, const string &name) {
 		return;
 
 	// Find any long file name entries that belong to this entry
-	size_t delete_entry_index = entry;
+	int delete_entry_index = entry;
 	while (delete_entry_index > 0 &&
 		   m_entries[delete_entry_index - 1].attributes == (uint8_t) DirectoryEntryAttributes::LONG_NAME)
 		delete_entry_index--;
 
 	// Mark the entries as free
-	for (size_t i = delete_entry_index; i < entry; i++)
+	for (int i = delete_entry_index; i < entry; i++)
 		m_entries[i].name[0] = (uint8_t) DirectoryEntryType::FREE;
 
 	// Update the entries on the disk
-	for (size_t i = delete_entry_index; i <= entry; i++)
+	for (int i = delete_entry_index; i <= entry; i++)
 		update_entry_on_disk(i);
 
 	// Count the number of clusters in the chain
@@ -639,9 +639,9 @@ void Fat32Directory::update_entry_on_disk(int index) {
  * @param cluster The cluster
  * @return The index or -1 if not found
  */
-int Fat32Directory::entry_index(lba_t cluster) {
+uint32_t Fat32Directory::entry_index(lba_t cluster) {
 
-	int entry_index = 0;
+	uint32_t entry_index = 0;
 	for (; entry_index < m_entries.size(); entry_index++) {
 		auto &entry = m_entries[entry_index];
 
@@ -676,11 +676,11 @@ int Fat32Directory::entry_index(lba_t cluster) {
  */
 int Fat32Directory::find_free_entries(size_t amount) {
 
-	for (int entry_index = 0; entry_index < m_entries.size(); entry_index++) {
+	for (uint32_t entry_index = 0; entry_index < m_entries.size(); entry_index++) {
 		// Check if there are enough free entries in a row
 		bool found = true;
 		for (size_t j = 0; j < amount; j++)
-			if (m_entries[entry_index + j].name[0] != (char) DirectoryEntryType::FREE)
+			if (m_entries[entry_index + j].name[0] != (uint8_t)DirectoryEntryType::FREE)
 				found = false;
 
 		if (found)
@@ -735,7 +735,7 @@ int Fat32Directory::expand_directory(size_t amount) {
 	}
 
 	// Expand the directory to fit the remaining entries
-	for (int i = 0; i < additional_entries; ++i) {
+	for (uint32_t i = 0; i < additional_entries; ++i) {
 		dir_entry_t free = {};
 		free.name[0] = (uint8_t) DirectoryEntryType::FREE;
 		m_entries.push_back(free);
@@ -757,11 +757,12 @@ int Fat32Directory::expand_directory(size_t amount) {
  */
 Vector<long_file_name_entry_t> Fat32Directory::to_long_filenames(string name) {
 
-	size_t lfn_count = (name.length() + 12) / 13;
+	int lfn_count = (name.length() + 12) / 13;
 	Vector<long_file_name_entry_t> lfn_entries;
 
 	// Create the long file name entries (in reverse order)
 	for (int i = lfn_count - 1; i >= 0; i--) {
+
 		// Create the long file name entry
 		long_file_name_entry_t lfn_entry;
 		lfn_entry.order = i + 1;

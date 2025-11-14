@@ -189,7 +189,7 @@ void InputBox::on_key_down(KeyCode key_down_code, KeyboardState key_down_state) 
 		}
 		case KeyCode::deleteKey: {
 			// Move the text to the left
-			for (int i = cursor_position; i < m_widget_text.length(); ++i)
+			for (size_t i = cursor_position; i < m_widget_text.length(); ++i)
 				m_widget_text[i] = m_widget_text[i + 1];
 
 			// Put a null character at the end of the string

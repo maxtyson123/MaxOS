@@ -13,7 +13,7 @@ using namespace MaxOS;
 using namespace MaxOS::runtime;
 
 /// Define static constructors (DSO = Dynamic Shared Object)
-extern "C" void* __dso_handle = nullptr;
+extern "C" void* __dso_handle;
 
 /**
  * @brief Called when a virtual function is called on an object with no implementation
@@ -23,7 +23,7 @@ extern "C" void __cxa_pure_virtual() {
 }
 
 /**
- * @brief Called when stack smashing is detected
+ * @brief Called when stack smashing is detectedf
  */
 extern "C" void __stack_chk_fail(void)
 {

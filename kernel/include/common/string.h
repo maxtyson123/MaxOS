@@ -26,7 +26,7 @@ namespace MaxOS {
 	typedef class String {
 		private:
 			char* m_string = nullptr;
-			int m_length = 0;           // Does not include the null terminator
+			size_t m_length = 0;           ///< Length of the string (not including null terminator)
 
 			char m_small_string[MAX_STRING_SMALL_STORAGE] = { 0 };
 			bool m_using_small = true;
@@ -51,12 +51,12 @@ namespace MaxOS {
 			static String formatted(char const* format, ...);
 			static String formatted(char const* format, va_list parameters);
 
-			[[nodiscard]] int length(bool count_ansi = true) const;
+			[[nodiscard]] size_t length(bool count_ansi = true) const;
 			char* c_str();
 			const char* c_str() const;
 
 			bool starts_with(String const &other);
-			[[nodiscard]] String substring(int start, int length) const;
+			[[nodiscard]] String substring(size_t start, size_t length) const;
 
 			[[nodiscard]] common::Vector<String> split(String const &delimiter) const;
 			[[nodiscard]] String strip(char strip_char = ' ') const;
@@ -83,8 +83,8 @@ namespace MaxOS {
 			bool operator<=(String const &other) const;
 			bool operator>=(String const &other) const;
 
-			char &operator[](int index);
-			char &operator[](int index) const;
+			char &operator[](size_t index);
+			char &operator[](size_t index) const;
 
 	} string;   ///< Typedef for String
 

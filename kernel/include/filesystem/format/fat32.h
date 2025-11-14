@@ -218,7 +218,7 @@ namespace MaxOS {
 					Fat32File(Fat32Volume* volume, Fat32Directory* parent, dir_entry_t* info, const string &name);
 					~Fat32File() final;
 
-					void write(const common::buffer_t* data, size_t amount) final;
+					void write(common::buffer_t* data, size_t amount) final;
 					void read(common::buffer_t* data, size_t amount) final;
 					void flush() final;
 
@@ -249,7 +249,7 @@ namespace MaxOS {
 					void remove_entry(lba_t cluster, const string &name);
 					void read_all_entries();
 
-					int entry_index(lba_t cluster);
+					uint32_t entry_index(lba_t cluster);
 					int find_free_entries(size_t amount);
 					int expand_directory(size_t amount);
 

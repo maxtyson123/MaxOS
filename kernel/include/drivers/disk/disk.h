@@ -34,8 +34,8 @@ namespace MaxOS{
 					void         read(uint32_t sector, common::buffer_t* data_buffer);
                     virtual void read(uint32_t sector, common::buffer_t* data_buffer, size_t amount);
 
-                    void         write(uint32_t sector, const common::buffer_t* data);
-                    virtual void write(uint32_t sector, const common::buffer_t* data, size_t count);
+                    void         write(uint32_t sector, common::buffer_t* data);
+                    virtual void write(uint32_t sector, common::buffer_t* data, size_t count);
 
                     virtual void flush();
 

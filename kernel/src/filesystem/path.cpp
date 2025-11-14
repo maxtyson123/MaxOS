@@ -55,7 +55,7 @@ string Path::file_name(string path) {
 
 	// Find the last /
 	int last_slash = -1;
-	for (int i = 0; i < path.length(); i++)
+	for (size_t i = 0; i < path.length(); i++)
 		if (path[i] == '/')
 			last_slash = i;
 
@@ -78,7 +78,7 @@ string Path::file_extension(string path) {
 
 	// Find the last .
 	int last_dot = -1;
-	for (int i = 0; i < path.length(); i++)
+	for (size_t i = 0; i < path.length(); i++)
 		if (path[i] == '.')
 			last_dot = i;
 
@@ -102,7 +102,7 @@ string Path::file_path(string path) {
 
 	// Try to find the last /
 	int last_slash = -1;
-	for (int i = 0; i < path.length(); i++)
+	for (size_t i = 0; i < path.length(); i++)
 		if (path[i] == '/')
 			last_slash = i;
 
@@ -126,7 +126,7 @@ string Path::top_directory(string path) {
 
 	// Find the first /
 	int first_slash = -1;
-	for (int i = 0; i < path.length(); i++)
+	for (size_t i = 0; i < path.length(); i++)
 		if (path[i] == '/')
 			first_slash = i;
 
@@ -149,7 +149,7 @@ string Path::parent_directory(string path) {
 
 	// Find the last /
 	int last_slash = -1;
-	for (int i = 0; i < path.length(); i++)
+	for (size_t i = 0; i < path.length(); i++)
 		if (path[i] == '/')
 			last_slash = i;
 

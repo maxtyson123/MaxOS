@@ -37,7 +37,7 @@ void Disk::read(uint32_t sector, common::buffer_t* data_buffer) {
  * @param data_buffer The buffer to read the data into
  * @param amount The amount of data to read
  */
-void Disk::read(uint32_t sector, buffer_t *data_buffer, size_t amount) {
+void Disk::read(uint32_t sector, buffer_t* data_buffer, size_t amount) {
 
 }
 
@@ -47,7 +47,7 @@ void Disk::read(uint32_t sector, buffer_t *data_buffer, size_t amount) {
  * @param sector The sector to write to
  * @param data The buffer to write the data from
  */
-void Disk::write(uint32_t sector, common::buffer_t const *data) {
+void Disk::write(uint32_t sector, common::buffer_t* data) {
 
 	size_t amount = (data->capacity() > 512) ? 512 : data->capacity();
 	write(sector, data, amount);
@@ -61,7 +61,7 @@ void Disk::write(uint32_t sector, common::buffer_t const *data) {
  * @param data The buffer to write the data into
  * @param count The amount of data to write
  */
-void Disk::write(uint32_t sector, const buffer_t* data, size_t count) {
+void Disk::write(uint32_t sector, buffer_t* data, size_t count) {
 }
 
 /**

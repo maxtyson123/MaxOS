@@ -397,7 +397,8 @@ void VESABootConsole::update_progress_bar(uint8_t percentage) {
 			is_border = is_border && percentage == 0;
 
 			// If it is not within the percentage, skip it
-			if (progress_x > LOGO_WIDTH * percentage / 100 && !is_border)
+			uint32_t logo_progress_width = LOGO_WIDTH * percentage / 100;
+			if (progress_x > logo_progress_width && !is_border)
 				continue;
 
 			s_graphics_context->put_pixel(right_x + progress_x, bottom_y + progress_y, Colour(0xFF, 0xFF, 0xFF));

@@ -132,7 +132,7 @@ void Console::put_character(uint16_t x, uint16_t y, char c, ConsoleColour foregr
 void Console::put_string(uint16_t x, uint16_t y, string string, ConsoleColour foreground, ConsoleColour background) {
 
     // Print each character on the screen
-    for(int i = 0; i < string.length(); i++)
+    for(size_t i = 0; i < string.length(); i++)
         put_character(x + i, y, string[i], foreground, background);
 }
 
@@ -158,7 +158,7 @@ void Console::scroll_up() {
 void Console::scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
 
     // Shift everything but the last line by getting what is below it
-    for(uint32_t y = top; y < top+height-1; y++)
+    for(uint16_t y = top; y < top+height-1; y++)
         for(uint32_t x = left; x < left+width; x++)
             put_character(x, y, get_character(x, y + 1), get_foreground_color(x, y + 1), get_background_color(x, y + 1));
 
