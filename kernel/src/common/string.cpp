@@ -560,10 +560,10 @@ String String::operator *(int times) const {
  * @param fill The character to fill the string with
  * @return  The centered string
  */
-String String::center(int width, char fill) const {
+String String::center(size_t width, char fill) const {
 
 	// The number of characters to add
-	int add = (width - m_length) / 2;
+	size_t add = (width - m_length) / 2;
 
 	// The centered string
 	String centered;
@@ -571,15 +571,15 @@ String String::center(int width, char fill) const {
 	centered.allocate_self();
 
 	// Fill the right side (before)
-	for (int i = 0; i < add; i++)
+	for (size_t i = 0; i < add; i++)
 		centered.m_string[i] = fill;
 
 	// Copy the string (middle)
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		centered.m_string[add + i] = m_string[i];
 
 	// Fill the left side (after)
-	for (int i = add + m_length; i < width; i++)
+	for (size_t i = add + m_length; i < width; i++)
 		centered.m_string[i] = fill;
 
 	// Write the null terminator

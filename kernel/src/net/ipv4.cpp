@@ -294,7 +294,7 @@ InternetProtocolAddress InternetProtocolHandler::Parse(string address) {
     for(unsigned char & digit : digits)
         digit = 0;
 
-    for(int i = 0; i < address.length(); i++) {
+    for(size_t i = 0; i < address.length(); i++) {
         if(address[i] == '.') {
             currentDigit++;
             continue;

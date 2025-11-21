@@ -157,7 +157,7 @@ void LocalAPIC::send_init(uint8_t apic_id, bool assert) {
 	} else {
 
 		// x2APIC
-		CPU::write_msr(0x830, apic_id << 32 | icr_low);
+		CPU::write_msr(0x830, (uint64_t)apic_id << 32 | icr_low);
 	}
 }
 
@@ -184,7 +184,7 @@ void LocalAPIC::send_startup(uint8_t apic_id, uint8_t vector) {
 	} else {
 
 		// x2APIC
-		CPU::write_msr(0x831, apic_id << 32 | 0x4600 | vector);
+		CPU::write_msr(0x831, (uint64_t)apic_id << 32 | 0x4600 | vector);
 	}
 
 

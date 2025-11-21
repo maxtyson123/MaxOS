@@ -31,7 +31,7 @@ void close()
 			);
 }
 
-extern "C" [[noreturn]] void _start(void) {
+extern "C" void _start(void) {
 
 	// Write to the console
 	write("MaxOS Test Program v3\n");

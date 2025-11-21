@@ -62,7 +62,7 @@ namespace MaxOS {
 			[[nodiscard]] String strip(char strip_char = ' ') const;
 
 
-			[[nodiscard]] String center(int width, char fill = ' ') const;
+			[[nodiscard]] String center(size_t width, char fill = ' ') const;
 
 			// Operator functions
 			[[nodiscard]] bool equals(String const &other) const;

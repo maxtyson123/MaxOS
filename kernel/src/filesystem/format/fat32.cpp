@@ -757,11 +757,11 @@ int Fat32Directory::expand_directory(size_t amount) {
  */
 Vector<long_file_name_entry_t> Fat32Directory::to_long_filenames(string name) {
 
-	int lfn_count = (name.length() + 12) / 13;
+	size_t lfn_count = (name.length() + 12) / 13;
 	Vector<long_file_name_entry_t> lfn_entries;
 
 	// Create the long file name entries (in reverse order)
-	for (int i = lfn_count - 1; i >= 0; i--) {
+	for (size_t i = lfn_count; i-- > 0; ) {
 
 		// Create the long file name entry
 		long_file_name_entry_t lfn_entry;

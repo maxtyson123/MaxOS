@@ -135,4 +135,4 @@ EOF
 
 # Copy the version to the doxygen file (replace PROJECT_NUMBER         = x.x with the VERSION_STRING value)
 sed -i.bak "s/PROJECT_NUMBER         = .*/PROJECT_NUMBER         = ${MAJOR_VERSION}.${MINOR_VERSION}/" "${SCRIPTDIR}/../../docs/doxy/Doxyfile"
-rm "${SCRIPTDIR}/../../docs/Doxyfile.bak"
+rm "${SCRIPTDIR}/../../docs/doxy/Doxyfile.bak"
