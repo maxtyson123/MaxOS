@@ -10,129 +10,130 @@
 #define MAXOS_NET_UDP_H
 
 
-#include <stdint.h>
+#include <cstdint>
 #include <common/eventHandler.h>
 #include <net/ipv4.h>
 #include <memory/memorymanagement.h>
 
-namespace MaxOS {
-	namespace net {
 
-		/**
-		 * @struct UDPHeader
-		 * @brief The header of a UDP packet
-		 *
-		 * @typedef udp_header_t
-		 * @brief Alias for UDPHeader struct
-		 */
-		typedef struct PACKED UDPHeader {
+namespace MaxOS::net {
 
-			uint16_t sourcePort;            ///< The port of the sender
-			uint16_t destinationPort;       ///< The port of the receiver
-			uint16_t length;                ///< The length of the UDP header and data
-			uint16_t checksum;              ///< The checksum of the header and data
+	/**
+	 * @struct UDPHeader
+	 * @brief The header of a UDP packet
+	 *
+	 * @typedef udp_header_t
+	 * @brief Alias for UDPHeader struct
+	 */
+	typedef struct PACKED UDPHeader {
 
-		} udp_header_t;
+		uint16_t source_port;            ///< The port of the sender
+		uint16_t destination_port;       ///< The port of the receiver
+		uint16_t length;                ///< The length of the UDP header and data
+		uint16_t checksum;              ///< The checksum of the header and data
 
-		/**
-		 * @enum UDPEvents
-		 * @brief The events that can be fired by the UDP protocol
-		 */
-		enum class UDPEvents {
-			DATA_RECEIVED,
-		};
+	} udp_header_t;
 
-		//Predefine
-		class UDPSocket;
-		class UserDatagramProtocolHandler;
+	/**
+	 * @enum UDPEvents
+	 * @brief The events that can be fired by the UDP protocol
+	 */
+	enum class UDPEvents {
+		DATA_RECEIVED,
+	};
 
-		typedef uint16_t UserDatagramProtocolPort;      ///< UDP port @todo: Make UDPPort class and do udp_port_t (or generic port that can be used for TCP and UDP)
+	//Predefine
+	class UDPSocket;
 
-		/**
-		 * @class UDPDataReceivedEvent
-		 * @brief Event fired when data is received on a UDP socket
-		 */
-		class UDPDataReceivedEvent : public common::Event<UDPEvents> {
-			public:
-				UDPSocket* socket;     ///< The socket that received the data
-				uint8_t* data;                          ///< The data received
-				uint16_t size;                          ///< The size of the data received
+	class UserDatagramProtocolHandler;
 
-				UDPDataReceivedEvent(UDPSocket* socket, uint8_t* data, uint16_t size);
-				~UDPDataReceivedEvent();
-		};
+	typedef uint16_t UserDatagramProtocolPort;      ///< UDP port @todo: Make UDPPort class and do udp_port_t (or generic port that can be used for TCP and UDP)
 
-		/**
-		 * @class UDPPayloadHandler
-		 * @brief Handles the payload of a UDP packet
-		 */
-		class UDPPayloadHandler : public common::EventHandler<UDPEvents> {
-			public:
-				UDPPayloadHandler();
-				~UDPPayloadHandler();
+	/**
+	 * @class UDPDataReceivedEvent
+	 * @brief Event fired when data is received on a UDP socket
+	 */
+	class UDPDataReceivedEvent : public common::Event<UDPEvents> {
+		public:
+			UDPSocket* socket;     ///< The socket that received the data
+			uint8_t* data;                          ///< The data received
+			uint16_t size;                          ///< The size of the data received
 
-				common::Event<UDPEvents>* on_event(common::Event<UDPEvents>* event) override;
+			UDPDataReceivedEvent(UDPSocket* socket, uint8_t* data, uint16_t size);
+			~UDPDataReceivedEvent();
+	};
 
-				virtual void handleUserDatagramProtocolMessage(UDPSocket* socket, uint8_t* data, uint16_t size);
+	/**
+	 * @class UDPPayloadHandler
+	 * @brief Handles the payload of a UDP packet
+	 */
+	class UDPPayloadHandler : public common::EventHandler<UDPEvents> {
+		public:
+			UDPPayloadHandler();
+			~UDPPayloadHandler();
 
-		};
+			common::Event<UDPEvents>* on_event(common::Event<UDPEvents>* event) override;
 
-		/**
-		 * @class UDPSocket
-		 * @brief A UDP socket
-		 */
-		class UDPSocket : public common::EventManager<UDPEvents> {
-				friend class UserDatagramProtocolHandler;
+			virtual void handle_user_datagram_protocol_message(UDPSocket* socket, uint8_t* data, uint16_t size);
 
-			protected:
-				bool listening;             	///< Wether the port is waiting for incoming connections
+	};
 
-				uint16_t localPort = 0;         ///< The port on this device
-				uint16_t remotePort = 0;        ///< The port on the remote device
+	/**
+	 * @class UDPSocket
+	 * @brief A UDP socket
+	 */
+	class UDPSocket : public common::EventManager<UDPEvents> {
+			friend class UserDatagramProtocolHandler;
 
-				uint32_t localIP = 0;           ///< The IP of this device
-				uint32_t remoteIP = 0;          ///< The IP of the remote device
+		protected:
+			bool listening;                ///< Wether the port is waiting for incoming connections
 
-				UserDatagramProtocolHandler* userDatagramProtocolHandler;   ///< The UDP handler this socket is connected to
+			uint16_t local_port = 0;         ///< The port on this device
+			uint16_t remote_port = 0;        ///< The port on the remote device
 
-			public:
-				UDPSocket();
-				~UDPSocket();
+			uint32_t local_ip = 0;           ///< The IP of this device
+			uint32_t remote_ip = 0;          ///< The IP of the remote device
 
-				virtual void handleUserDatagramProtocolPayload(uint8_t* data, uint16_t size);
-				virtual void Send(uint8_t* data, uint16_t size);
-				virtual void Disconnect();
+			UserDatagramProtocolHandler* user_datagram_protocol_handler;   ///< The UDP handler this socket is connected to
 
-		};
+		public:
+			UDPSocket();
+			~UDPSocket();
 
-		/**
-		 * @class UserDatagramProtocolHandler
-		 * @brief Handles the UDP protocol
-		 */
-		class UserDatagramProtocolHandler : IPV4PayloadHandler {
-			protected:
-				common::Vector<UDPSocket*> sockets;    ///< The list of UDP sockets
-				static UserDatagramProtocolPort freePorts;              ///< The next free port number
-				common::OutputStream* errorMessages;                    ///< Where to write error messages
+			virtual void handle_user_datagram_protocol_payload(uint8_t* data, uint16_t size);
+			virtual void send(uint8_t* data, uint16_t size);
+			virtual void disconnect();
 
-			public:
-				UserDatagramProtocolHandler(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
-				~UserDatagramProtocolHandler();
+	};
 
-				bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size) override;
+	/**
+	 * @class UserDatagramProtocolHandler
+	 * @brief Handles the UDP protocol
+	 */
+	class UserDatagramProtocolHandler : IPV4PayloadHandler {
+		protected:
+			common::Vector<UDPSocket*> sockets;    ///< The list of UDP sockets
+			static UserDatagramProtocolPort free_ports;              ///< The next free port number
+			common::OutputStream* errorMessages;                    ///< Where to write error messages
 
-				UDPSocket* Connect(uint32_t ip, uint16_t port);
-				static UDPSocket* Connect(const string &address);
+		public:
+			UserDatagramProtocolHandler(InternetProtocolHandler* internet_protocol_handler, common::OutputStream* error_messages);
+			~UserDatagramProtocolHandler();
 
-				UDPSocket* Listen(uint16_t port);
+			bool handle_internet_protocol_payload(net::InternetProtocolAddress source_ip, net::InternetProtocolAddress destination_ip, uint8_t* payload_data, uint32_t size) override;
 
-				void Disconnect(UDPSocket* socket);
-				void Send(UDPSocket* socket, const uint8_t* data, uint16_t size);
+			UDPSocket* connect(uint32_t ip, uint16_t port);
+			static UDPSocket* connect(const string& address);
 
-				static void Bind(UDPSocket* socket, UDPPayloadHandler* UDPPayloadHandler);
-		};
+			UDPSocket* listen(uint16_t port);
 
-	}
+			void disconnect(UDPSocket* socket);
+			void send(UDPSocket* socket, const uint8_t* data, uint16_t size);
+
+			static void bind(UDPSocket* socket, UDPPayloadHandler* udp_payload_handler);
+	};
+
 }
+
 
 #endif //MAXOS_NET_UDP_H

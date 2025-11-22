@@ -147,10 +147,10 @@ uint8_t *VideoGraphicsArray::get_frame_buffer_segment() {
 
 	//read data from index number 6
 	m_graphics_controller_index_port.write(0x06);
-	uint8_t segmentNumber =
+	uint8_t segment_number =
 			m_graphics_controller_data_port.read() &
 			(3 << 2); //Shift by 2 as only interested in bits 3 & 4 (& 3 so all the other bits are removed)
-	switch (segmentNumber) {
+	switch (segment_number) {
 		default:
 		case 0 << 2:
 			return (uint8_t *) nullptr;

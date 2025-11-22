@@ -23,7 +23,7 @@ RawDataHandler::~RawDataHandler() = default;
  * @param size Size of the raw data in bytes
  * @return True if the data was handled, false otherwise
  */
-bool RawDataHandler::HandleRawData(uint8_t* data, uint32_t size)
+bool RawDataHandler::handle_raw_data(uint8_t* data, uint32_t size)
 {
     return false;
 }

@@ -140,7 +140,7 @@ void Core::init_tss() {
 	uint8_t base_3 = (base >> 24) & 0xFF;
 	uint32_t base_4 = (base >> 32) & 0xFFFFFFFF;
 
-	uint16_t limit_low = (uint16_t)(sizeof(tss) - 1);
+	auto limit_low = (uint16_t)(sizeof(tss) - 1);
 
 	// Flags: 1 - Type = 0x9, Descriptor Privilege Level = 0, Present = 1, 2 - Available = 0, Granularity = 0
 	uint8_t flags_1 = 0x89;
@@ -506,7 +506,7 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 			Logger::ERROR() << "CPU Panicked (i " << (int)status->interrupt_number << ") in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
 			Logger::ERROR() << msg;
 			panic_lock.unlock();
-			return GlobalScheduler::system_scheduler()->force_remove_process(process);
+			return GlobalScheduler::force_remove_process(process);
 		}
 
 		// Otherwise occurred whilst the kernel was doing something for the process
@@ -524,7 +524,7 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
  *
  * @todo Support for x2apic
  */
-void CPU::find_cores() {
+void CPU::find_cores() const {
 
 	// Now that memory is set up the vector can be used
 	cores.reserve(1);

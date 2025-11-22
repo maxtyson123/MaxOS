@@ -5,8 +5,8 @@
 #ifndef SYSCORE_SYSCALLS_H
 #define SYSCORE_SYSCALLS_H
 
-#include <stdint.h>
-#include <stddef.h>
+#include <cstdint>
+#include <cstddef>
 
 namespace syscore{
 

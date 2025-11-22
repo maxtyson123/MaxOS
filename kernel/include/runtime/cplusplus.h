@@ -11,52 +11,52 @@
 #ifndef MAXOS_RUNTIME_CPLUSPLUS_H
 #define MAXOS_RUNTIME_CPLUSPLUS_H
 
-#include <stdint.h>
+#include <cstdint>
 
-namespace MaxOS {
-	namespace runtime {
 
-		typedef void (* constructor)();     ///< A pointer to a constructor function
-		typedef unsigned uarch_t;           ///< An unsigned architecture specific type
+namespace MaxOS::runtime {
 
-		extern "C" {
+	typedef void (* constructor)();     ///< A pointer to a constructor function
+	typedef unsigned uarch_t;           ///< An unsigned architecture specific type
 
-			/**
-			 * @struct atexit_func_entry_t
-			 * @brief An entry in the list of functions to call at program exit (not used in kernel but needed for linking)
-			 */
-			struct atexit_func_entry_t {
-				void (* destructor_func)(void*);        ///< The destructor function to call
-				void* obj_ptr;                          ///< The pointer to the object to destroy
-				void* dso_handle;                       ///< The DSO handle (not used)
-			};
+	extern "C" {
 
-			/**
-			 * @brief Register a function to be called at program exit
-			 *
-			 * @param f The function to call
-			 * @param objptr The object pointer to pass to the function
-			 * @param dso The DSO handle (not used)
-			 * @return int 0 on success, non-zero on failure
-			 */
-			int __cxa_atexit(void (* f)(void*), void* objptr, void* dso);
+	/**
+	 * @struct atexit_func_entry_t
+	 * @brief An entry in the list of functions to call at program exit (not used in kernel but needed for linking)
+	 */
+	struct atexit_func_entry_t {
+		void (* destructor_func)(void*);        ///< The destructor function to call
+		void* obj_ptr;                          ///< The pointer to the object to destroy
+		void* dso_handle;                       ///< The DSO handle (not used)
+	};
 
-			/**
-			 * @brief Finalise all global objects by calling their destructors
-			 *
-			 * @param f The DSO handle to finalise (nullptr for all)
-			 */
-			void __cxa_finalize(void* f);
+	/**
+	 * @brief Register a function to be called at program exit
+	 *
+	 * @param f The function to call
+	 * @param objptr The object pointer to pass to the function
+	 * @param dso The DSO handle (not used)
+	 * @return int 0 on success, non-zero on failure
+	 */
+	int __cxa_atexit(void (* f)(void*), void* objptr, void* dso);
 
-			/// The stack canary value used to detect stack buffer overflows (@todo make random at runtime)
-			uintptr_t __stack_chk_guard = 0x595e9fbd94fda766;
+	/**
+	 * @brief Finalise all global objects by calling their destructors
+	 *
+	 * @param f The DSO handle to finalise (nullptr for all)
+	 */
+	void __cxa_finalize(void* f);
 
-			/**
-			 * @brief Called when a stack buffer overflow is detected
-			 */
-			void __stack_chk_fail(void);
-		}
+	/// The stack canary value used to detect stack buffer overflows (@todo make random at runtime)
+	uintptr_t __stack_chk_guard = 0x595e9fbd94fda766;
+
+	/**
+	 * @brief Called when a stack buffer overflow is detected
+	 */
+	void __stack_chk_fail(void);
 	}
 }
+
 
 #endif // MAXOS_RUNTIME_CPLUSPLUS_H

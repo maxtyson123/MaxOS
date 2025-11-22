@@ -12,40 +12,35 @@
 #include <common/outputStream.h>
 #include <common/buffer.h>
 #include <drivers/driver.h>
-#include <stdint.h>
+#include <cstdint>
 
 
-namespace MaxOS{
+namespace MaxOS::drivers::disk {
 
-    namespace drivers{
+	/**
+	 * @class Disk
+	 * @brief Generic Disk, handles the reading and writing of data to the hard drive
+	 */
+	class Disk : public Driver {
 
-        namespace disk{
+		public:
+			Disk();
+			~Disk();
 
-            /**
-             * @class Disk
-             * @brief Generic Disk, handles the reading and writing of data to the hard drive
-             */
-            class Disk : public Driver {
+			void read(uint32_t sector, common::buffer_t* data_buffer);
+			virtual void read(uint32_t sector, common::buffer_t* data_buffer, size_t amount);
 
-                public:
-                    Disk();
-                    ~Disk();
+			void write(uint32_t sector, common::buffer_t* data);
+			virtual void write(uint32_t sector, common::buffer_t* data, size_t count);
 
-					void         read(uint32_t sector, common::buffer_t* data_buffer);
-                    virtual void read(uint32_t sector, common::buffer_t* data_buffer, size_t amount);
+			virtual void flush();
 
-                    void         write(uint32_t sector, common::buffer_t* data);
-                    virtual void write(uint32_t sector, common::buffer_t* data, size_t count);
+			void activate() override;
 
-                    virtual void flush();
-
-                    void activate() override;
-
-                    string device_name() override;
-                    string vendor_name() override;
-            };
-        }
-    }
+			string device_name() override;
+			string vendor_name() override;
+	};
 }
+
 
 #endif //MAXOS_DRIVERS_DISK_H

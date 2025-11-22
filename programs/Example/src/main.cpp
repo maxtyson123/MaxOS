@@ -1,8 +1,8 @@
 //
 // Created by 98max on 21/03/2025.
 //
-#include <stdint.h>
-#include <stddef.h>
+#include <cstdint>
+#include <cstddef>
 #include <ipc/messages.h>
 #include <filesystem/file.h>
 

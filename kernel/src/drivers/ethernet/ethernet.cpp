@@ -26,7 +26,7 @@ EthernetDriverEventHandler::~EthernetDriverEventHandler() = default;
  * @param size The size of the buffer
  * @return True if the data should be sent back, false otherwise
  */
-bool EthernetDriverEventHandler::DataReceived(uint8_t* buffer, uint32_t size) {
+bool EthernetDriverEventHandler::data_received(uint8_t* buffer, uint32_t size) {
 	return false;
 }
 
@@ -36,7 +36,7 @@ bool EthernetDriverEventHandler::DataReceived(uint8_t* buffer, uint32_t size) {
  * @param buffer The buffer to handle
  * @param size The size of the buffer
  */
-void EthernetDriverEventHandler::BeforeSend(uint8_t* buffer, uint32_t size) {
+void EthernetDriverEventHandler::before_send(uint8_t* buffer, uint32_t size) {
 }
 
 /**
@@ -45,7 +45,7 @@ void EthernetDriverEventHandler::BeforeSend(uint8_t* buffer, uint32_t size) {
  * @param buffer The buffer to handle
  * @param size The size of the buffer
  */
-void EthernetDriverEventHandler::DataSent(uint8_t* buffer, uint32_t size) {
+void EthernetDriverEventHandler::data_sent(uint8_t* buffer, uint32_t size) {
 }
 
 /**
@@ -59,16 +59,16 @@ Event<EthernetDriverEvents>* EthernetDriverEventHandler::on_event(Event<Ethernet
 	switch (event->type) {
 
 		case EthernetDriverEvents::BEFORE_SEND:
-			BeforeSend(((BeforeSendEvent*) event)->buffer, ((BeforeSendEvent*) event)->size);
+			before_send(((BeforeSendEvent*) event)->buffer, ((BeforeSendEvent*) event)->size);
 			break;
 
 		case EthernetDriverEvents::DATA_SENT:
-			DataSent(((DataSentEvent*) event)->buffer, ((DataSentEvent*) event)->size);
+			data_sent(((DataSentEvent*) event)->buffer, ((DataSentEvent*) event)->size);
 			break;
 
 		case EthernetDriverEvents::DATA_RECEIVED:
-			event->return_value.boolValue = DataReceived(((DataReceivedEvent*) event)->buffer,
-			                                             ((DataReceivedEvent*) event)->size);
+			event->return_value.bool_value = data_received(((DataReceivedEvent*) event)->buffer,
+			                                               ((DataReceivedEvent*) event)->size);
 			break;
 
 		default:
@@ -86,31 +86,31 @@ EthernetDriver::~EthernetDriver() = default;
  *
  * @return the MAC address
  */
-MediaAccessControlAddress EthernetDriver::GetMediaAccessControlAddress() {
+MediaAccessControlAddress EthernetDriver::get_media_access_control_address() {
 	return 0;
 }
 
 /**
- * @brief Send data to the network via the driver backend
+ * @brief send data to the network via the driver backend
  *
  * @param buffer  The buffer to send
  * @param size The size of the buffer
  */
-void EthernetDriver::Send(uint8_t* buffer, uint32_t size) {
+void EthernetDriver::send(uint8_t* buffer, uint32_t size) {
 
 	// Raise the event
 	raise_event(new BeforeSendEvent(buffer, size));
 
-	DoSend(buffer, size);
+	do_send(buffer, size);
 }
 
 /**
- * @brief (Device Side) Send the data
+ * @brief (Device Side) send the data
  *
  * @param buffer The buffer to handle
  * @param size The size of the buffer
  */
-void EthernetDriver::DoSend(uint8_t* buffer, uint32_t size) {
+void EthernetDriver::do_send(uint8_t* buffer, uint32_t size) {
 }
 
 /**
@@ -119,7 +119,7 @@ void EthernetDriver::DoSend(uint8_t* buffer, uint32_t size) {
  * @param buffer The buffer to handle
  * @param size The size of the buffer
  */
-void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size) {
+void EthernetDriver::fire_data_received(uint8_t* buffer, uint32_t size) {
 
 	// Raise the event
 	Vector<Event<EthernetDriverEvents>*> values =
@@ -129,8 +129,8 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size) {
 	for (auto &value : values) {
 		switch (value->type) {
 			case EthernetDriverEvents::DATA_RECEIVED:
-				if (value->return_value.boolValue)
-					Send(buffer, size);
+				if (value->return_value.bool_value)
+					send(buffer, size);
 				break;
 
 			default:
@@ -140,12 +140,12 @@ void EthernetDriver::FireDataReceived(uint8_t* buffer, uint32_t size) {
 }
 
 /**
- * @brief Send data
+ * @brief send data
  *
  * @param buffer The buffer to send
  * @param size The size of the buffer
  */
-void EthernetDriver::FireDataSent(uint8_t* buffer, uint32_t size) {
+void EthernetDriver::fire_data_sent(uint8_t* buffer, uint32_t size) {
 	raise_event(new DataSentEvent(buffer, size));
 }
 
@@ -162,7 +162,7 @@ void EthernetDriver::FireDataSent(uint8_t* buffer, uint32_t size) {
  * @param digit6 The last digit
  * @return The MAC address
  */
-MediaAccessControlAddress EthernetDriver::CreateMediaAccessControlAddress(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6) {
+MediaAccessControlAddress EthernetDriver::create_media_access_control_address(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6) {
 	return // digit6 is the most significant byte
 			(uint64_t) digit6 << 40
 			| (uint64_t) digit5 << 32
@@ -203,7 +203,7 @@ DataReceivedEvent::~DataReceivedEvent()
 = default;
 
 /**
- * @brief Construct a new Before Send Event object
+ * @brief Construct a new Before send Event object
  *
  * @param buffer The buffer to send
  * @param size The size of the buffer

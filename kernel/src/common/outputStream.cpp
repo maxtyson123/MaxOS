@@ -34,7 +34,7 @@ void OutputStream::line_feed() {
 /**
  * @brief Writes a carriage return to the output stream.
  */
-void OutputStream::carriageReturn() {
+void OutputStream::carriage_return() {
 
 	// write the text representation of a carriage return to the output stream.
 	write_char('\r');
@@ -75,7 +75,7 @@ void OutputStream::write(const char *string_to_write) {
 				break;
 
 			case '\r':
-				carriageReturn();
+				carriage_return();
 				break;
 
 			case '\0':

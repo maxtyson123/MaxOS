@@ -18,7 +18,7 @@ using namespace MaxOS::filesystem;
  * @param path The path to check
  * @return True if the path is valid, false otherwise
  */
-bool Path::valid(string path) {
+bool Path::valid(const string& path) {
 
 	// Must not be empty
 	if (path.length() == 0)
@@ -51,7 +51,7 @@ bool Path::is_file(const string& path) {
  * @param path The path to get the file name from
  * @return The file name or the original path if it does not exist
  */
-string Path::file_name(string path) {
+string Path::file_name(const string& path) {
 
 	// Find the last /
 	int last_slash = -1;
@@ -74,7 +74,7 @@ string Path::file_name(string path) {
  * @param path The path to get the file extension from
  * @return The file extension or the original path if it does not exist
  */
-string Path::file_extension(string path) {
+string Path::file_extension(const string& path) {
 
 	// Find the last .
 	int last_dot = -1;
@@ -98,7 +98,7 @@ string Path::file_extension(string path) {
  * @param path The path to get the file path from
  * @return The file path or the original path if it does not exist
  */
-string Path::file_path(string path) {
+string Path::file_path(const string& path) {
 
 	// Try to find the last /
 	int last_slash = -1;
@@ -122,7 +122,7 @@ string Path::file_path(string path) {
  * @param path The path to get the top directory from
  * @return The top directory or the original path if it does not exist
  */
-string Path::top_directory(string path) {
+string Path::top_directory(const string& path) {
 
 	// Find the first /
 	int first_slash = -1;
@@ -145,7 +145,7 @@ string Path::top_directory(string path) {
  * @param path The path to either the file or the directory
  * @return
  */
-string Path::parent_directory(string path) {
+string Path::parent_directory(const string& path) {
 
 	// Find the last /
 	int last_slash = -1;
@@ -167,7 +167,7 @@ string Path::parent_directory(string path) {
  * @param path The path
  * @return The new path, direct from root
  */
-string Path::absolute_path(string path) {
+string Path::absolute_path(const string& path) {
 
 	// Split the path into components
 	auto components = path.split("/");
@@ -205,7 +205,7 @@ string Path::absolute_path(string path) {
  * @param extended What to add to the base path (if its from root, "/", then it will just return this)
  * @return The joint path
  */
-string Path::join_path(string base, string extended) {
+string Path::join_path(const string& base, const string& extended) {
 
 	// The new path is from root
 	if(extended[0] == '/')

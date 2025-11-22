@@ -265,7 +265,7 @@ system::cpu_status_t* GlobalScheduler::force_remove_process(Process* process) {
 
 	// Get the core running the process
 	if(!s_instance)
-		return 0;
+		return nullptr;
 
 	auto core = s_instance -> m_core_pids[process->pid()];
 	return CPU::cores[core]->scheduler->force_remove_process(process);
@@ -626,7 +626,7 @@ cpu_status_t* Scheduler::force_remove_process(Process* process) {
 	for (auto thread: process->threads()) {
 
 		// Remove the thread from the scheduler
-		int index = m_threads.find(thread) - m_threads.begin();
+		size_t index = m_threads.find(thread) - m_threads.begin();
 		m_threads.erase(m_threads.begin() + index);
 
 		// Delete the thread

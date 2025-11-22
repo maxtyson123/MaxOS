@@ -93,12 +93,12 @@ void Button::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	Widget::draw(gc, area);
 
 	// Get the absolute m_position of the button
-	Coordinates buttonCoordinates = absolute_coordinates(Coordinates(0, 0));
-	Rectangle<int32_t> buttonPosition = position();
+	Coordinates button_coordinates = absolute_coordinates(Coordinates(0, 0));
+	Rectangle<int32_t> button_position = position();
 
 	// Get the x and y m_position of the button
-	int32_t x = buttonCoordinates.first;
-	int32_t y = buttonCoordinates.second;
+	int32_t x = button_coordinates.first;
+	int32_t y = button_coordinates.second;
 
 	// Draw the background for the button
 	gc->fill_rectangle(x + area.left, y + area.top, x + area.left + area.width,
@@ -107,7 +107,7 @@ void Button::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	// Draw the border
 
 	// Top Border
-	if (area.intersects(Rectangle<int32_t>(0, 0, buttonPosition.width, 1))) {
+	if (area.intersects(Rectangle<int32_t>(0, 0, button_position.width, 1))) {
 
 		// Start in the top left corner of the button and end in the top right corner
 		gc->draw_line(x + area.left, y, x + area.left + area.width - 1, y,
@@ -115,7 +115,7 @@ void Button::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	}
 
 	// Left Border
-	if (area.intersects(Rectangle<int32_t>(0, 0, 1, buttonPosition.height))) {
+	if (area.intersects(Rectangle<int32_t>(0, 0, 1, button_position.height))) {
 
 		// Start in the top left corner and end in the bottom left corner
 		gc->draw_line(x, y + area.top, x, y + area.top + area.height - 1,
@@ -123,27 +123,27 @@ void Button::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	}
 
 	// Right Border
-	if (area.intersects(Rectangle<int32_t>(0, buttonPosition.height - 1, buttonPosition.width, 1))) {
+	if (area.intersects(Rectangle<int32_t>(0, button_position.height - 1, button_position.width, 1))) {
 
 		// Start in the top right corner and end in the bottom right corner
-		gc->draw_line(x + area.left, y + buttonPosition.height - 1,
+		gc->draw_line(x + area.left, y + button_position.height - 1,
 					  x + area.left + area.width - 1,
-					  y + buttonPosition.height - 1, border_colour);
+					  y + button_position.height - 1, border_colour);
 	}
 
 	// Bottom Border
-	if (area.intersects(Rectangle<int32_t>(buttonPosition.width - 1, 0, 1, buttonPosition.height))) {
+	if (area.intersects(Rectangle<int32_t>(button_position.width - 1, 0, 1, button_position.height))) {
 
 		// Start in the bottom left corner and end in the bottom right corner
-		gc->draw_line(x + buttonPosition.width - 1, y + area.top,
-					  x + buttonPosition.width - 1,
+		gc->draw_line(x + button_position.width - 1, y + area.top,
+		              x + button_position.width - 1,
 					  y + area.top + area.height - 1, border_colour);
 	}
 
 	// Draw the text
-	common::Rectangle<int32_t> textArea(area.left - 1, area.top - 1, area.width, area.height);
+	common::Rectangle<int32_t> text_area(area.left - 1, area.top - 1, area.width, area.height);
 	font.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc, text,
-				   textArea);
+	               text_area);
 
 }
 

@@ -5,42 +5,42 @@
 #ifndef SYSCORE_FILESYSTEM_FILE_H
 #define SYSCORE_FILESYSTEM_FILE_H
 
-#include <stdint.h>
-#include <stddef.h>
+#include <cstdint>
+#include <cstddef>
 #include <common.h>
 #include <syscalls.h>
 
-namespace syscore{
-	namespace filesystem{
 
-		enum class FileFlags{
-			DEFAULT,
-			READ_SIZE,
-			READ_OFFSET,
-			WRITE_SEEK_SET,
-			WRITE_SEEK_CUR,
-			WRITE_SEEK_END,
-			WRITE_NAME,
-		};
+namespace syscore::filesystem {
 
-		enum class SeekType{
-			SET,
-			CURRENT,
-			END
-		};
+	enum class FileFlags {
+		DEFAULT,
+		READ_SIZE,
+		READ_OFFSET,
+		WRITE_SEEK_SET,
+		WRITE_SEEK_CUR,
+		WRITE_SEEK_END,
+		WRITE_NAME,
+	};
 
-		uint64_t 	open_file(const char* path);
-		void		close_file(uint64_t handle);
+	enum class SeekType {
+		SET,
+		CURRENT,
+		END
+	};
 
-		size_t file_size(uint64_t handle);
-		size_t file_offset(uint64_t handle);
+	uint64_t open_file(const char* path);
+	void close_file(uint64_t handle);
 
-		size_t file_read(uint64_t handle, void* buffer, size_t size);
-		size_t file_write(uint64_t handle, void* buffer, size_t size);
+	size_t file_size(uint64_t handle);
+	size_t file_offset(uint64_t handle);
 
-		void rename_file(uint64_t handle, const char* name);
-		void seek_file(uint64_t handle, size_t position, SeekType seek_type);
-	}
+	size_t file_read(uint64_t handle, void* buffer, size_t size);
+	size_t file_write(uint64_t handle, void* buffer, size_t size);
+
+	void rename_file(uint64_t handle, const char* name);
+	void seek_file(uint64_t handle, size_t position, SeekType seek_type);
 }
+
 
 #endif //SYSCORE_FILESYSTEM_FILE_H

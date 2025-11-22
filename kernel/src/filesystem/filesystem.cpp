@@ -18,7 +18,7 @@ File::File() = default;
 File::~File() = default;
 
 /**
- * @brief Write data to the file
+ * @brief write data to the file
  *
  * @param data The byte buffer to write
  * @param amount The amount of data to write
@@ -27,7 +27,7 @@ void File::write(buffer_t* data, size_t amount) {
 }
 
 /**
- * @brief Read data from the file
+ * @brief read data from the file
  *
  * @param data The byte buffer to read into
  * @param amount The amount of data to read
@@ -70,7 +70,7 @@ void File::seek(SeekType seek_type, size_t offset) {
  *
  * @return The current position in the file
  */
-uint32_t File::position() {
+uint32_t File::position() const {
 	return m_offset;
 }
 
@@ -88,7 +88,7 @@ string File::name() {
  *
  * @return The size of the file (in bytes)
  */
-size_t File::size() {
+size_t File::size() const {
 	return m_size;
 }
 
@@ -110,7 +110,7 @@ Directory::~Directory() {
 }
 
 /**
- * @brief Read the directory from the disk
+ * @brief read the directory from the disk
  */
 void Directory::read_from_disk() {
 

@@ -12,7 +12,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-namespace common{
+namespace common {
 
 //
 //	uint64_t min(uint64_t val1, uint64_t val2);

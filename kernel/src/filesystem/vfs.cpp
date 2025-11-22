@@ -404,7 +404,7 @@ void VirtualFileSystem::delete_directory(Directory* parent, Directory* directory
 	}
 
 	// Delete the directory from the bottom of the tree
-	for (int i = to_delete.size() - 1; i >= 0; --i) {
+	for (uint32_t i = to_delete.size() - 1; i >= 0; --i) {
 
 		// Get the parent and child
 		const auto &current = to_delete[i];

@@ -49,7 +49,7 @@ void Text::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 
 	// Get the absolute m_position of the text
 	Coordinates textCoordinates = absolute_coordinates(Coordinates(0, 0));
-	Rectangle<int32_t> textPosition = position();
+	Rectangle<int32_t> text_position = position();
 
 	// Get the x and y m_position of the text
 	int32_t x = textCoordinates.first;

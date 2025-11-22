@@ -37,5 +37,5 @@ namespace syscore{
 
 			return (void*)address;
 		}
-	};
+	}
 }

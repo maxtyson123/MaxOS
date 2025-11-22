@@ -13,35 +13,33 @@
 #include <drivers/driver.h>
 #include <common/logger.h>
 
-namespace MaxOS {
 
-	namespace drivers {
+namespace MaxOS::drivers {
 
 
-		/**
-		 * @class SerialConsole
-		 * @brief A driver for the serial output
-		 */
-		class SerialConsole : public Driver, public common::OutputStream {
+	/**
+	 * @class SerialConsole
+	 * @brief A driver for the serial output
+	 */
+	class SerialConsole : public Driver, public common::OutputStream {
 
-			private:
-				hardwarecommunication::Port8Bit m_data_port;
-				hardwarecommunication::Port8Bit m_interrupt_enable_port;
-				hardwarecommunication::Port8Bit m_fifo_control_port;
-				hardwarecommunication::Port8Bit m_line_control_port;
-				hardwarecommunication::Port8Bit m_modem_control_port;
-				hardwarecommunication::Port8Bit m_line_status_port;
+		private:
+			hardwarecommunication::Port8Bit m_data_port;
+			hardwarecommunication::Port8Bit m_interrupt_enable_port;
+			hardwarecommunication::Port8Bit m_fifo_control_port;
+			hardwarecommunication::Port8Bit m_line_control_port;
+			hardwarecommunication::Port8Bit m_modem_control_port;
+			hardwarecommunication::Port8Bit m_line_status_port;
 
-			public:
-				SerialConsole(Logger* logger);
-				~SerialConsole();
+		public:
+			explicit SerialConsole(Logger* logger);
+			~SerialConsole();
 
-				void put_character(char c);
-				void write_char(char c) final;
+			void put_character(char c);
+			void write_char(char c) final;
 
-		};
+	};
 
-	}
 }
 
 

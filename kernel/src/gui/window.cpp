@@ -57,12 +57,12 @@ Window::Window(int32_t left, int32_t top, uint32_t width, uint32_t height, const
 /**
  * @brief Construct a new Window object that contains a specific widget with a title. The window sizes itself to fit the widget.
  *
- * @param containedWidget The widget to contain within the window
+ * @param contained_widget The widget to contain within the window
  * @param title_text The text to display in the title bar of the window
  */
-Window::Window(Widget* containedWidget, const string& title_text)
-: CompositeWidget(0, 0, containedWidget->position().width + 2 * 5 + 2, containedWidget->position().height + 2 * 5 + 10 + 2),
-  m_title(0, -(10 + 5) + 2, containedWidget->position().width, 10 + 5 - 3, title_text),
+Window::Window(Widget* contained_widget, const string& title_text)
+: CompositeWidget(0, 0, contained_widget->position().width + 2 * 5 + 2, contained_widget->position().height + 2 * 5 + 10 + 2),
+  m_title(0, -(10 + 5) + 2, contained_widget->position().width, 10 + 5 - 3, title_text),
   m_mover(this),
   m_resizer_top(this),
   m_resizer_bottom(this),
@@ -87,7 +87,7 @@ Window::Window(Widget* containedWidget, const string& title_text)
 
 	// Add the title to the window
 	Window::add_child(&m_title);
-	Window::add_child(containedWidget);
+	Window::add_child(contained_widget);
 }
 
 Window::~Window() = default;
@@ -155,14 +155,14 @@ void Window::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& 
 
 	// Get the positioning of the window
 	Coordinates window_absolute_position = CompositeWidget::absolute_coordinates(Coordinates(0, 0));
-	Rectangle<int32_t> windowPosition = this->position();
+	Rectangle<int32_t> window_position = this->position();
 	int32_t window_x = window_absolute_position.first;
 	int32_t window_y = window_absolute_position.second;
 
 	// Create an area for the window contents
 	Rectangle<int32_t> window_contents_area(frame_thickness, frame_thickness + title_bar_height,
-											windowPosition.width - 2 * frame_thickness,
-											windowPosition.height - 2 * frame_thickness - title_bar_height);
+	                                        window_position.width - 2 * frame_thickness,
+	                                        window_position.height - 2 * frame_thickness - title_bar_height);
 
 	// Draw the window contents if they are in the area to draw
 	if (window_contents_area.intersects(area)) {
@@ -173,7 +173,7 @@ void Window::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& 
 	}
 
 	// Draw the frame if it is in the area to draw
-	Rectangle<int32_t> window_frame_top_area(frame_thickness, 0, windowPosition.width - 2 * frame_thickness,
+	Rectangle<int32_t> window_frame_top_area(frame_thickness, 0, window_position.width - 2 * frame_thickness,
 											 frame_thickness + title_bar_height);
 	if (window_frame_top_area.intersects(area)) {
 		Rectangle<int32_t> frame_drawable = window_frame_top_area.intersection(area);
@@ -183,8 +183,8 @@ void Window::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& 
 	}
 
 	// Draw the bottom of the window frame
-	Rectangle<int32_t> window_frame_bottom_area(frame_thickness, windowPosition.height - frame_thickness,
-												windowPosition.width - 2 * frame_thickness, frame_thickness);
+	Rectangle<int32_t> window_frame_bottom_area(frame_thickness, window_position.height - frame_thickness,
+	                                            window_position.width - 2 * frame_thickness, frame_thickness);
 	if (window_frame_bottom_area.intersects(area)) {
 		Rectangle<int32_t> bottom_drawable = window_frame_bottom_area.intersection(area);
 		gc->fill_rectangle(window_x + bottom_drawable.left, window_y + bottom_drawable.top,
@@ -193,7 +193,7 @@ void Window::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& 
 	}
 
 	// Draw the left of the window frame
-	Rectangle<int32_t> window_frame_left_area(0, 0, frame_thickness, windowPosition.height);
+	Rectangle<int32_t> window_frame_left_area(0, 0, frame_thickness, window_position.height);
 	if (window_frame_left_area.intersects(area)) {
 		Rectangle<int32_t> left_drawable = window_frame_left_area.intersection(area);
 		gc->fill_rectangle(window_x + left_drawable.left, window_y + left_drawable.top,
@@ -202,8 +202,8 @@ void Window::draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& 
 	}
 
 	// Draw the right of the window frame
-	Rectangle<int32_t> window_frame_right_area(windowPosition.width - frame_thickness, 0, frame_thickness,
-											   windowPosition.height);
+	Rectangle<int32_t> window_frame_right_area(window_position.width - frame_thickness, 0, frame_thickness,
+	                                           window_position.height);
 	if (window_frame_right_area.intersects(area)) {
 		Rectangle<int32_t> right_drawable = window_frame_right_area.intersection(area);
 		gc->fill_rectangle(window_x + right_drawable.left, window_y + right_drawable.top,
@@ -223,9 +223,9 @@ void Window::add_child(Widget* child) {
 	if (child != nullptr) {
 
 		// Change the position of the child to be inside the window contents
-		Rectangle<int32_t> childPosition = child->position();
-		child->move(childPosition.left + frame_thickness + 1,
-					childPosition.top + frame_thickness + title_bar_height + 1);
+		Rectangle<int32_t> child_position = child->position();
+		child->move(child_position.left + frame_thickness + 1,
+		            child_position.top + frame_thickness + title_bar_height + 1);
 
 	}
 

@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <stdint.h>
+#include <cstdint>
 #include <common/logger.h>
 #include <hardwarecommunication/interrupts.h>
 #include <drivers/console/serial.h>
@@ -43,10 +43,10 @@ extern "C" uint8_t core_boot_info[];        ///< The boot info structure for the
 /**
  * @brief The main entry point for secondary cores. Sets up the core and waits to be scheduled.
  */
-extern "C" [[noreturn]] void core_main(){
+extern "C" [[noreturn]] void core_main() {
 
-	auto info = (core_boot_info_t*)(core_boot_info);
-	info -> activated = true;
+	auto info = (core_boot_info_t*) (core_boot_info);
+	info->activated = true;
 	auto core = CPU::executing_core();
 
 	// Make sure the correct core is being setup
@@ -54,11 +54,11 @@ extern "C" [[noreturn]] void core_main(){
 	Logger::DEBUG() << "Core " << core->id << " now in higher half \n";
 
 	// Set up the core
-	core -> init();
+	core->init();
 	asm("sti");
 
 	// Wait to be scheduled
-	while (true)
+	while(true)
 		asm("nop");
 }
 
@@ -84,7 +84,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	Logger::HEADER() << "Stage {1.1}: Memory Initialisation\n";
 	PhysicalMemoryManager pmm(&multiboot);
 	VirtualMemoryManager vmm;
-	MemoryManager memoryManager(&vmm);
+	MemoryManager memory_manager(&vmm);
 
 	Logger::HEADER() << "Stage {1.2}: Console Initialisation\n";
 	VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
@@ -115,14 +115,14 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	GlobalScheduler::activate();
 
 	// Idle loop  (read Idle.md)
-	while (true)
+	while(true)
 		asm("hlt");
 
 }
 
 /**
  * @todo Kernel configuration (debug/release)
- * @todo Clean up warnings
  * @todo Test suite of common functions & other statics (paths)
  * @todo Thread storage (when clib)
+ * @todo Once kernel done, turn into mono repo and seperate components
  */

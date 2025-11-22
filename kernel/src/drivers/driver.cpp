@@ -189,17 +189,17 @@ uint32_t DriverManager::reset_devices() {
 
 	Logger::INFO() << "Resetting Devices \n";
 
-	uint32_t resetWaitTime = 0;
+	uint32_t reset_wait_time = 0;
 	for (auto &driver: m_drivers) {
 		// Reset the driver
-		uint32_t waitTime = driver->reset();
+		uint32_t wait_time = driver->reset();
 
 		// If the wait time is longer than the current longest wait time, set it as the new longest wait time
-		if (waitTime > resetWaitTime)
-			resetWaitTime = waitTime;
+		if (wait_time > reset_wait_time)
+			reset_wait_time = wait_time;
 	}
 
-	return resetWaitTime;
+	return reset_wait_time;
 }
 
 /**

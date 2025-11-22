@@ -18,14 +18,14 @@ using namespace MaxOS::memory;
 /**
  * @brief Construct a new Ether Frame Payload Handler object
  *
- * @param frameHandler the handler for the ethernet frame
- * @param handledType the type of the protocol, which will be handled by this handler
+ * @param frame_handler the handler for the ethernet frame
+ * @param handled_type the type of the protocol, which will be handled by this handler
  */
-EthernetFramePayloadHandler::EthernetFramePayloadHandler(EthernetFrameHandler* frameHandler, uint16_t handledType) {
+EthernetFramePayloadHandler::EthernetFramePayloadHandler(EthernetFrameHandler* frame_handler, uint16_t handled_type) {
 
-    this -> handledType = handledType;
-    this -> frameHandler = frameHandler;
-    frameHandler->connectHandler(this);
+	this->handled_type = handled_type;
+	this->frame_handler = frame_handler;
+	frame_handler->connect_handler(this);
 
 
 }
@@ -40,44 +40,43 @@ EthernetFramePayloadHandler::~EthernetFramePayloadHandler() = default;
 /**
  * @brief Handle the received ethernet frame payload
  *
- * @param ethernetframePayload the payload of the ethernet frame
+ * @param ethernetframe_payload the payload of the ethernet frame
  * @param size the size of the payload
  *
  * @return True if the data is to be sent back, false otherwise
  */
-bool EthernetFramePayloadHandler::handleEthernetframePayload(uint8_t* ethernetframePayload, uint32_t size) {
+bool EthernetFramePayloadHandler::handle_ethernetframe_payload(uint8_t* ethernetframe_payload, uint32_t size) {
 
-    //By default, don't handle it, will be handled in the override
-    return false;
+	//By default, don't handle it, will be handled in the override
+	return false;
 
 }
 
 /**
- * @brief Send an packet via the backend driver
+ * @brief send an packet via the backend driver
  *
  * @param destination the destination MAC address
  * @param data the data to send
  * @param size the size of the payload
  */
-void EthernetFramePayloadHandler::Send(uint64_t destination, uint8_t *data, uint32_t size) {
+void EthernetFramePayloadHandler::send(uint64_t destination, uint8_t* data, uint32_t size) {
 
-    frameHandler -> sendEthernetFrame (destination, handledType, data, size);
+	frame_handler->send_ethernet_frame(destination, handled_type, data, size);
 }
 
 /**
  * @brief Construct a new Ether Frame Handler object
  *
  * @param driver The backend ethernet driver
- * @param errorMessages The output stream for error messages
+ * @param error_messages The output stream for error messages
  */
-EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, OutputStream* errorMessages)
-: EthernetDriverEventHandler()
-{
+EthernetFrameHandler::EthernetFrameHandler(EthernetDriver* driver, OutputStream* error_messages)
+		: EthernetDriverEventHandler() {
 
-    this -> ethernetDriver = driver;
-    this -> errorMessages = errorMessages;
+	this->ethernet_driver = driver;
+	this->error_messages = error_messages;
 
-    driver->connect_event_handler(this);
+	driver->connect_event_handler(this);
 
 }
 
@@ -88,8 +87,8 @@ EthernetFrameHandler::~EthernetFrameHandler() = default;
  *
  * @return MediaAccessControlAddress The MAC address
  */
-drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::getMAC() {
-    return ethernetDriver -> GetMediaAccessControlAddress();
+drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::get_mac() {
+	return ethernet_driver->get_media_access_control_address();
 }
 
 
@@ -102,106 +101,107 @@ drivers::ethernet::MediaAccessControlAddress EthernetFrameHandler::getMAC() {
  *
  * @todo Future debugging me: the override is not being called in derived classes
  */
-bool EthernetFrameHandler::DataReceived(uint8_t* buffer, uint32_t size) {
+bool EthernetFrameHandler::data_received(uint8_t* buffer, uint32_t size) {
 
-    errorMessages -> write("EFH: Data received\n");
+	error_messages->write("EFH: Data received\n");
 
 
-    //Check if the size is big enough to contain an ethernet frame
-    if(size < sizeof(EthernetFrameHeader))
-        return false;
+	//Check if the size is big enough to contain an ethernet frame
+	if(size < sizeof(EthernetFrameHeader))
+		return false;
 
-    //Convert to struct for easier use
-    auto* frame = (EthernetFrameHeader*)buffer;
-    bool sendBack = false;
+	//Convert to struct for easier use
+	auto* frame = (EthernetFrameHeader*) buffer;
+	bool send_back = false;
 
-    //Only handle if it is for this device
-    if(frame->destinationMAC == 0xFFFFFFFFFFFF                                          //If it is a broadcast
-    || frame->destinationMAC == ethernetDriver -> GetMediaAccessControlAddress())      //If it is for this device
-    {
+	//Only handle if it is for this device
+	if(frame->destination_mac == 0xFFFFFFFFFFFF                                          //If it is a broadcast
+	   || frame->destination_mac == ethernet_driver->get_media_access_control_address())      //If it is for this device
+	{
 
-        // Find the handler for the protocol
-        Map<uint16_t , EthernetFramePayloadHandler*>::iterator handlerIterator = frameHandlers.find(frame->type);
+		// Find the handler for the protocol
+		Map<uint16_t, EthernetFramePayloadHandler*>::iterator handler_iterator = frame_handlers.find(frame->type);
 
-        // If the handler is found
-        if(handlerIterator != frameHandlers.end()) {
+		// If the handler is found
+		if(handler_iterator != frame_handlers.end()) {
 
-            //Handle the data
-            errorMessages -> write("EFH: Handling ethernet frame payload\n");
-            sendBack = handlerIterator->second->handleEthernetframePayload(buffer + sizeof(EthernetFrameHeader), size - sizeof(EthernetFrameHeader));
-            errorMessages -> write("..DONE\n");
+			//Handle the data
+			error_messages->write("EFH: Handling ethernet frame payload\n");
+			send_back = handler_iterator->second->handle_ethernetframe_payload(buffer + sizeof(EthernetFrameHeader),
+			                                                                   size - sizeof(EthernetFrameHeader));
+			error_messages->write("..DONE\n");
 
-        } else {
+		} else {
 
-            //If the handler is not found, print an error message
-            errorMessages -> write("EFH: Unhandled ethernet frame type 0x");
-            errorMessages->write_hex(frame->type);
-            errorMessages -> write("\n");
+			//If the handler is not found, print an error message
+			error_messages->write("EFH: Unhandled ethernet frame type 0x");
+			error_messages->write_hex(frame->type);
+			error_messages->write("\n");
 
-        }
-    }
+		}
+	}
 
-    //If the data is to be sent back again
-    if(sendBack){
+	//If the data is to be sent back again
+	if(send_back) {
 
-        errorMessages -> write("EFH: Sending back\n");
+		error_messages->write("EFH: Sending back\n");
 
-        frame -> destinationMAC = frame -> sourceMAC;                             //Set the new destination to be the device the data was received from
-        frame -> sourceMAC = ethernetDriver->GetMediaAccessControlAddress();      //Set the new source to be this device's MAC address
+		frame->destination_mac = frame->source_mac;                             //Set the new destination to be the device the data was received from
+		frame->source_mac = ethernet_driver->get_media_access_control_address();      //Set the new source to be this device's MAC address
 
-    }
+	}
 
-    //Return if the data is to be sent back
-    return sendBack;
+	//Return if the data is to be sent back
+	return send_back;
 
 }
 
 /**
- * @brief Connect a handler to the frame handler
+ * @brief connect a handler to the frame handler
  *
  * @param handler The handler to connect
  */
-void EthernetFrameHandler::connectHandler(EthernetFramePayloadHandler *handler) {
+void EthernetFrameHandler::connect_handler(EthernetFramePayloadHandler* handler) {
 
-    // Convert the protocol type to big endian
-    uint16_t frameType_BE = ((handler->handledType >> 8) & 0xFF) | ((handler->handledType << 8) & 0xFF00);
+	// Convert the protocol type to big endian
+	uint16_t frame_type_be = ((handler->handled_type >> 8) & 0xFF) | ((handler->handled_type << 8) & 0xFF00);
 
-    // Add the handler to the list
-    frameHandlers.insert(frameType_BE, handler);
+	// Add the handler to the list
+	frame_handlers.insert(frame_type_be, handler);
 
 }
 
 /**
- * @brief Send an packet via the backend driver
+ * @brief send an packet via the backend driver
  *
- * @param destinationMAC the destination MAC address
- * @param frameType the type of the protocol
+ * @param destination_mac the destination MAC address
+ * @param frame_type the type of the protocol
  * @param data the data to send
  * @param size the size of the payload
  */
-void EthernetFrameHandler::sendEthernetFrame(uint64_t destinationMAC, uint16_t frameType, uint8_t* data, uint32_t size) {
+void EthernetFrameHandler::send_ethernet_frame(uint64_t destination_mac, uint16_t frame_type, uint8_t* data, uint32_t size) {
 
-    errorMessages->write("EFH: Sending frame...");
+	error_messages->write("EFH: Sending frame...");
 
-    //Allocate memory for the buffer
-    auto* buffer = (uint8_t*)MemoryManager::kmalloc(size + sizeof(EthernetFrameHeader));
-    auto* frame = (EthernetFrameHeader*)buffer;
+	//Allocate memory for the buffer
+	auto* buffer = (uint8_t*) MemoryManager::kmalloc(size + sizeof(EthernetFrameHeader));
+	auto* frame = (EthernetFrameHeader*) buffer;
 
-    //Put data in the header
-    frame -> destinationMAC = destinationMAC;
-    frame -> sourceMAC = ethernetDriver -> GetMediaAccessControlAddress();
-    frame -> type = (frameType >> 8) | (frameType << 8);                        //Convert to big endian
+	//Put data in the header
+	frame->destination_mac = destination_mac;
+	frame->source_mac = ethernet_driver->get_media_access_control_address();
+	frame->type = (frame_type >> 8) | (frame_type << 8);                        //Convert to big endian
 
-    //Copy the data
-    for(uint8_t *src = data + size - 1, *dst = buffer+sizeof(EthernetFrameHeader)+size-1; src >= data; --src, --dst)
-        *dst = *src;
+	//Copy the data
+	for(uint8_t* src = data + size - 1, * dst = buffer + sizeof(EthernetFrameHeader) + size - 1; src >= data; --src, --dst)
+		*dst = *src;
 
-    //Send the data
-    ethernetDriver -> Send(buffer, size + sizeof(EthernetFrameHeader));
+	//Send the data
+	ethernet_driver->send(buffer, size + sizeof(EthernetFrameHeader));
 
-    errorMessages->write("Done\n");
+	error_messages->write("Done\n");
 
 
-    //Free the buffer
-    MemoryManager::kfree(buffer);
+	//Free the buffer
+	MemoryManager::kfree(buffer);
 }

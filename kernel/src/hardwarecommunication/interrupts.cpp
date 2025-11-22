@@ -203,8 +203,7 @@ void InterruptManager::activate() {
 	Logger::INFO() << "Activating Interrupts \n";
 
 	// Deactivate the current (old) interrupt manager
-	if (s_active_interrupt_manager != nullptr)
-		s_active_interrupt_manager->deactivate();
+	InterruptManager::deactivate();
 
 	// Set the current interrupt manager and start interrupts
 	s_active_interrupt_manager = this;

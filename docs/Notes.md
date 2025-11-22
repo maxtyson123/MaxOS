@@ -5,7 +5,7 @@ These are my notes relative to various parts of the OS
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
 - [Hardware Communication](#hardware-communication)
-  + [Data Send and Receive](#data-send-and-receive)
+  + [Data send and Receive](#data-send-and-receive)
   + [Interrupts](#interrupts)
   + [Peripheral Component Interconnect (PCI)](#peripheral-component-interconnect-pci)
   + [base Address Registers](#base-address-registers)
@@ -50,7 +50,7 @@ NOTE TO SELF: FUNC AS VARIABLE:  auto func_name = [&](uint32_t p) {
 # Hardware Communication
 Here are some notes on how the communication with hardware works, this is used for the keyboard and mouse communication and setting up other devices, e.g. GPU
 <!-- TOC --><a name="data-send-and-receive"></a>
-### Data Send and Receive
+### Data send and Receive
 This relates to "port.cpp", directly used by "interrupts.cpp, mouse.cpp, keyboard.cpp"
 - When you press a key on the keyboard a signal will go to the programmable interrupt controller (PIC)
 - By default, the PIC is set ignore that, so to receive the key signal tell PIC not to ignore it
@@ -381,7 +381,7 @@ See also [Wikipedia - Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_fra
 - - Next 6 bytes: Source MAC Address (Who sent the data)
 - - Next 2 bytes: EtherType (Indicate the protocol)
 - - Next 46 - 1000 bytes: Data (Payload)
-- - Last 4 bytes: Checksum (CRC)
+- - Last 4 bytes: checksum (CRC)
 - From this data the handler can then interpret the data e.g. discard if the MAC address isn't for this device or pass the data to the ARP handler if the EtherType is 0x0806 etc.
 <!-- TOC --><a name="address-resolution-protocol"></a>
 ### Address Resolution Protocol
@@ -412,7 +412,7 @@ See also [Wikipedia - IPv4](https://en.wikipedia.org/wiki/IPv4), [Wikipedia - IP
 - - Next 2 Bytes: Flags (Used for fragmentation)
 - - Next 1 Byte: Time to live (How many hops the packet can make)
 - - Next 1 Byte: Protocol (What protocol is the data)
-- - Next 2 Bytes: Header Checksum (CRC)
+- - Next 2 Bytes: Header checksum (CRC)
 - - Next 4 Bytes: Source IP Address (Who sent the data)
 - - Next 4 Bytes: Destination IP Address (Who is the data for)
 - - Next 4 Bytes: Options (Optional, if header length is greater than 5)
@@ -438,7 +438,7 @@ See also [Wikipedia - ICMP](https://en.wikipedia.org/wiki/Internet_Control_Messa
 - The ICMP data block is as follows: (known as the payload in the raw-data)
 - - First 1 Byte: Type (What type of message is being sent)
 - - Next 1 Byte: Code (What code is being sent)
-- - Next 2 Bytes: Checksum (CRC)
+- - Next 2 Bytes: checksum (CRC)
 - - Next 4 Bytes: Data (Optional)
 - Message Types: See [Wikipedia - ICMP Message Types](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
 <!-- TOC --><a name="user-datagram-protocol"></a>
@@ -453,7 +453,7 @@ See also [Wikipedia - UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol)
 - - First 2 Bytes: Source Port (Port that the data is coming from)
 - - Next 2 Bytes: Destination Port (Port that the data is going to)
 - - Next 2 Bytes: Length (Length of the UDP data block)
-- - Next 2 Bytes: Checksum (CRC)
+- - Next 2 Bytes: checksum (CRC)
 - - Next 0 - 65507 Bytes: Data (Payload)
 - The reason the ports are repeated (as it is passed in the Handler's RAW data) is because there can be multiple devices between the sender and the receiver e.g. a WI-FI relay
 - Therefore, the UDP packet contains the port of the original device that sent the UDP request.
@@ -473,7 +473,7 @@ See also [Wikipedia - TCP](https://en.wikipedia.org/wiki/Transmission_Control_Pr
 - - Next 1 Byte: Header Length (Length of the TCP header)
 - - Next 1 Byte: Flags (Flags that are set)
 - - Next 2 Bytes: Window m_size (Window is the amount of data that can be sent before an acknowledgement is required)
-- - Next 2 Bytes: Checksum (CRC)
+- - Next 2 Bytes: checksum (CRC)
 - - Next 2 Bytes: Urgent Pointer (Pointer to the urgent data)
 - - Next 0 - 65507 Bytes: Data (Payload)
 - For security, the sender and receiver agree on an m_offset. This is the number of bytes that are added to the sequence number. This means that the sequence number is not the same as the data. This is to prevent people from being able to guess the sequence number and therefore the data, intercepting it and sending malicious data whilst impersonating the sender.

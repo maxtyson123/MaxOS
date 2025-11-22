@@ -9,80 +9,80 @@
 #ifndef MAXOS_MEMORY_MEMORYINPUTOUTPUT_H
 #define MAXOS_MEMORY_MEMORYINPUTOUTPUT_H
 
-#include <stdint.h>
-#include <stddef.h>
+#include <cstdint>
+#include <cstddef>
 
-namespace MaxOS{
-    namespace memory{
 
-        /**
-         * @class MemIO
-         * @brief base class for all memory IO
-         *
-         * @todo Not used, delete?
-         */
-        class MemIO {
-            protected:
-                uintptr_t m_address;    ///< The memory address to read from / write to
+namespace MaxOS::memory {
 
-                MemIO(uintptr_t address);
-                ~MemIO();
-            };
+	/**
+	 * @class MemIO
+	 * @brief base class for all memory IO
+	 *
+	 * @todo Not used, delete?
+	 */
+	class MemIO {
+		protected:
+			uintptr_t m_address;    ///< The memory address to read from / write to
 
-        /**
-         * @class MemIO8Bit
-         * @brief Handles 8 bit memory IO
-         */
-        class MemIO8Bit : public MemIO {
-            public:
-                MemIO8Bit(uintptr_t address);
-                ~MemIO8Bit();
+			explicit MemIO(uintptr_t address);
+			~MemIO();
+	};
 
-                virtual void write(uint8_t data);
-                virtual uint8_t read();
-            };
+	/**
+	 * @class MemIO8Bit
+	 * @brief Handles 8 bit memory IO
+	 */
+	class MemIO8Bit : public MemIO {
+		public:
+			explicit MemIO8Bit(uintptr_t address);
+			~MemIO8Bit();
 
-        /**
-         * @class MemIO16Bit
-         * @brief Handles 16 bit memory IO
-         */
-        class MemIO16Bit : public MemIO {
-            public:
-                MemIO16Bit(uintptr_t address);
-                ~MemIO16Bit();
+			virtual void write(uint8_t data);
+			virtual uint8_t read();
+	};
 
-                virtual void write(uint16_t data);
-                virtual uint16_t read();
-            };
+	/**
+	 * @class MemIO16Bit
+	 * @brief Handles 16 bit memory IO
+	 */
+	class MemIO16Bit : public MemIO {
+		public:
+			explicit MemIO16Bit(uintptr_t address);
+			~MemIO16Bit();
 
-        /**
-         * @class MemIO32Bit
-         * @brief Handles 32 bit memory IO
-         */
-        class MemIO32Bit : public MemIO {
-            public:
-                MemIO32Bit(uintptr_t address);
-                ~MemIO32Bit();
+			virtual void write(uint16_t data);
+			virtual uint16_t read();
+	};
 
-                virtual void write(uint32_t data);
-                virtual uint32_t read();
-            };
+	/**
+	 * @class MemIO32Bit
+	 * @brief Handles 32 bit memory IO
+	 */
+	class MemIO32Bit : public MemIO {
+		public:
+			explicit MemIO32Bit(uintptr_t address);
+			~MemIO32Bit();
 
-        /**
-         * @class MemIO64Bit
-         * @brief Handles 64 bit memory IO
-         */
-        class MemIO64Bit : public MemIO {
-        public:
-            MemIO64Bit(uintptr_t address);
-            ~MemIO64Bit();
+			virtual void write(uint32_t data);
+			virtual uint32_t read();
+	};
 
-            virtual void write(uint64_t data);
-            virtual uint64_t read();
-        };
+	/**
+	 * @class MemIO64Bit
+	 * @brief Handles 64 bit memory IO
+	 */
+	class MemIO64Bit : public MemIO {
+		public:
+			explicit MemIO64Bit(uintptr_t address);
+			~MemIO64Bit();
 
-    }
+			virtual void write(uint64_t data);
+			virtual uint64_t read();
+	};
+
 }
+
 
 void* memcpy(void* destination, const void* source, uint64_t num);
 void* memset(void* ptr, uint32_t value, uint64_t num);

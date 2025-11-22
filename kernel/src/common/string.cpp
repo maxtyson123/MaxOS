@@ -601,7 +601,7 @@ String String::strip(char strip_char) const {
 	stripped.copy(*this);
 
 	// Search from the back for the earliest non-whitespace character
-	int end = m_length - 1;
+	size_t end = m_length - 1;
 	while (end >= 0 && (m_string[end] == strip_char || m_string[end] == '\n' || m_string[end] == '\t'))
 		end--;
 
@@ -706,7 +706,7 @@ char* itoa(int base, int64_t number) {
 	static char buffer[50] = { 0 };
 
 	int i = 49;
-	bool isNegative = number < 0;
+	bool is_negative = number < 0;
 
 	// Null terminate the string
 	buffer[i] = '\0';
@@ -721,7 +721,7 @@ char* itoa(int base, int64_t number) {
 	for (; number && i; --i, number /= base)
 		buffer[i] = "0123456789ABCDEF"[number % base];
 
-	if (isNegative) {
+	if (is_negative) {
 		buffer[i] = '-';
 		return &buffer[i];
 	}

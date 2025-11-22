@@ -33,7 +33,7 @@ namespace MaxOS
                   ~VideoDriver();
 
                   virtual bool supports_mode(uint32_t width, uint32_t height, uint32_t color_depth);
-                  bool set_mode(uint32_t width, uint32_t height, uint32_t colorDepth);
+                  bool set_mode(uint32_t width, uint32_t height, uint32_t color_depth);
             };
 
         }

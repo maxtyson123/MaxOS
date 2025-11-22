@@ -122,7 +122,7 @@ namespace syscore{
 	}
 
 	/**
-	 * @brief Write a certain amount of bytes to a resource
+	 * @brief write a certain amount of bytes to a resource
 	 *
 	 * @param handle The handle number of the resource
 	 * @param buffer The buffer to read from
@@ -144,7 +144,7 @@ namespace syscore{
 	}
 
 	/**
-	 * @brief Read a certain amount of bytes from a resource
+	 * @brief read a certain amount of bytes from a resource
 	 *
 	 * @param handle The handle number of the resource
 	 * @param buffer The buffer to read into

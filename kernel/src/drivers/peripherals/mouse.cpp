@@ -22,20 +22,20 @@ MouseEventHandler::MouseEventHandler() = default;
  * @param event The event that was triggered
  * @return The event that was triggered with the modified data
  */
-Event<MouseEvents> *MouseEventHandler::on_event(Event<MouseEvents> *event) {
-	switch (event->type) {
+Event<MouseEvents>* MouseEventHandler::on_event(Event<MouseEvents>* event) {
+	switch(event->type) {
 
 		case MouseEvents::MOVE:
-			this->on_mouse_move_event(((MouseMoveEvent *) event)->x,
-									  ((MouseMoveEvent *) event)->y);
+			this->on_mouse_move_event(((MouseMoveEvent*) event)->x,
+			                          ((MouseMoveEvent*) event)->y);
 			break;
 
 		case MouseEvents::DOWN:
-			this->on_mouse_down_event(((MouseDownEvent *) event)->button);
+			this->on_mouse_down_event(((MouseDownEvent*) event)->button);
 			break;
 
 		case MouseEvents::UP:
-			this->on_mouse_up_event(((MouseUpEvent *) event)->button);
+			this->on_mouse_up_event(((MouseUpEvent*) event)->button);
 			break;
 
 	}
@@ -77,10 +77,9 @@ MouseEventHandler::~MouseEventHandler() = default;
  * @brief Constructs a new MouseDriver object and registers it as an interrupt handler for interrupt 0x2C
  */
 MouseDriver::MouseDriver()
-: InterruptHandler(0x2C, 0xC, 0x28),
-  data_port(0x60),
-  command_port(0x64)
-{
+		: InterruptHandler(0x2C, 0xC, 0x28),
+		data_port(0x60),
+		command_port(0x64) {
 
 }
 
@@ -115,7 +114,7 @@ void MouseDriver::handle_interrupt() {
 
 	// Check if there is data to handle
 	uint8_t status = command_port.read();
-	if (!(status & 0x20))
+	if(!(status & 0x20))
 		return;
 
 	// Read the data
@@ -123,23 +122,23 @@ void MouseDriver::handle_interrupt() {
 	m_offset = (m_offset + 1) % 3;
 
 	// If the mouse data transmission is incomplete (3rd piece of data isn't through)
-	if (m_offset != 0)
+	if(m_offset != 0)
 		return;
 
 	// If the mouse is moved (y-axis is inverted)
-	if (m_buffer[1] != 0 || m_buffer[2] != 0)
+	if(m_buffer[1] != 0 || m_buffer[2] != 0)
 		raise_event(new MouseMoveEvent(m_buffer[1], -m_buffer[2]));
 
 	// Handle button presses
-	for (int i = 0; i < 3; ++i) {
+	for(int i = 0; i < 3; ++i) {
 
 		// This button is still in the same state
-		if ((m_buffer[0] & (0x1 << i)) == (m_buttons & (0x1 << i)))
+		if((m_buffer[0] & (0x1 << i)) == (m_buttons & (0x1 << i)))
 			continue;
 
 		// Pass to handlers
 		bool is_pressed = (m_buttons & (0x1 << i)) != 0;
-		if (is_pressed)
+		if(is_pressed)
 			raise_event(new MouseDownEvent(m_buffer[i]));
 		else
 			raise_event(new MouseUpEvent(m_buffer[i]));
@@ -163,9 +162,8 @@ string MouseDriver::device_name() {
  * @param button The button that was released
  */
 MouseUpEvent::MouseUpEvent(uint8_t button)
-: Event<MouseEvents>(MouseEvents::UP),
-  button(button)
-{
+		: Event<MouseEvents>(MouseEvents::UP),
+		button(button) {
 
 }
 
@@ -177,9 +175,8 @@ MouseUpEvent::~MouseUpEvent() = default;
  * @param button The button that was pressed
  */
 MouseDownEvent::MouseDownEvent(uint8_t button)
-: Event<MouseEvents>(MouseEvents::DOWN),
-  button(button)
-{
+		: Event<MouseEvents>(MouseEvents::DOWN),
+		button(button) {
 }
 
 MouseDownEvent::~MouseDownEvent() = default;
@@ -191,10 +188,9 @@ MouseDownEvent::~MouseDownEvent() = default;
  * @param y The amount the mouse moved in the y direction
  */
 MouseMoveEvent::MouseMoveEvent(int8_t x, int8_t y)
-: Event<MouseEvents>(MouseEvents::MOVE),
-  x(x),
-  y(y)
-{
+		: Event<MouseEvents>(MouseEvents::MOVE),
+		x(x),
+		y(y) {
 }
 
 MouseMoveEvent::~MouseMoveEvent() = default;

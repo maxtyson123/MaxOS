@@ -47,7 +47,7 @@ void Resource::close(size_t flags) {
 }
 
 /**
- * @brief Read a certain amount of bytes from a resource
+ * @brief read a certain amount of bytes from a resource
  *
  * @param buffer The buffer to read into
  * @param size How many bytes to read
@@ -59,7 +59,7 @@ int Resource::read(void* buffer, size_t size, size_t flags) {
 }
 
 /**
- * @brief Write a certain amount of bytes to a resource
+ * @brief write a certain amount of bytes to a resource
  *
  * @param buffer The buffer to read from
  * @param size How many bytes to write

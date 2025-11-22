@@ -178,33 +178,33 @@ void PCIController::select_drivers(DriverSelectorEventHandler* handler) {
 	for (int bus = 0; bus < 8; ++bus) {
 		for (int device = 0; device < 32; ++device) {
 
-			int numFunctions = (device_has_functions(bus, device)) ? 8 : 1;
+			int num_functions = (device_has_functions(bus, device)) ? 8 : 1;
 
-			for (int function = 0; function < numFunctions; ++function) {
+			for (int function = 0; function < num_functions; ++function) {
 
 				// Get the device descriptor, if the vendor id is 0x0000 or 0xFFFF, the device is not present/ready
-				PCIDeviceDescriptor deviceDescriptor = get_device_descriptor(bus, device,
-																										 function);
-				if (deviceDescriptor.vendor_id == 0x0000 || deviceDescriptor.vendor_id == 0x0001 ||
-					deviceDescriptor.vendor_id == 0xFFFF)
+				PCIDeviceDescriptor device_descriptor = get_device_descriptor(bus, device,
+				                                                              function);
+				if (device_descriptor.vendor_id == 0x0000 || device_descriptor.vendor_id == 0x0001 ||
+				    device_descriptor.vendor_id == 0xFFFF)
 					continue;
 
 				// Get the earliest port number
-				for (int barNum = 5; barNum >= 0; barNum--) {
-					BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
+				for (int bar_num = 5; bar_num >= 0; bar_num--) {
+					BaseAddressRegister bar = get_base_address_register(bus, device, function, bar_num);
 					if (bar.address && (bar.type == BARType::InputOutput))
-						deviceDescriptor.port_base = (uint64_t) bar.address;
+						device_descriptor.port_base = (uint64_t) bar.address;
 				}
 
-				Logger::DEBUG() << "DEVICE FOUND: " << deviceDescriptor.get_type() << " - ";
+				Logger::DEBUG() << "DEVICE FOUND: " << device_descriptor.get_type() << " - ";
 
 				// Select the driver and print information about the device
-				Driver* driver = get_driver(deviceDescriptor);
+				Driver* driver = get_driver(device_descriptor);
 				if (driver != nullptr) {
 					handler->on_driver_selected(driver);
 					Logger::Out() << driver->vendor_name() << " " << driver->device_name();
 				} else {
-					list_known_device(deviceDescriptor);
+					list_known_device(device_descriptor);
 				}
 
 				Logger::Out() << "\n";
@@ -440,8 +440,8 @@ BaseAddressRegister PCIController::get_base_address_register(uint16_t bus, uint1
 	BaseAddressRegister result{};
 
 	// Only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
-	uint32_t headerType = read(bus, device, function, 0x0E);
-	if (headerType & 0x3F)
+	uint32_t header_type = read(bus, device, function, 0x0E);
+	if (header_type & 0x3F)
 		return result;
 
 	// read the base address register

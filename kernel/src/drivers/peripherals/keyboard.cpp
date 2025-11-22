@@ -24,7 +24,7 @@ KeyboardEventHandler::~KeyboardEventHandler() = default;
  * @param key_down_code The keycode of the key that was pressed
  * @param key_down_state The state of the keyboard when the key was pressed
  */
-void KeyboardEventHandler::on_key_down(KeyCode key_down_code, KeyboardState key_down_state) {
+void KeyboardEventHandler::on_key_down(KeyCode key_down_code, const KeyboardState& key_down_state) {
 }
 
 /**
@@ -33,7 +33,7 @@ void KeyboardEventHandler::on_key_down(KeyCode key_down_code, KeyboardState key_
  * @param key_up_code The keycode of the key that was released
  * @param key_up_state The state of the keyboard when the key was released
  */
-void KeyboardEventHandler::on_key_up(KeyCode key_up_code, KeyboardState key_up_state) {
+void KeyboardEventHandler::on_key_up(KeyCode key_up_code, const KeyboardState& key_up_state) {
 }
 
 /**
@@ -656,13 +656,13 @@ void KeyboardInterpreterEN_US::on_stream_read(uint8_t scan_code) {
 /**
  * @brief Constructor for the KeyDownEvent class
  *
- * @param keyCode The keycode of the key that was pressed
- * @param keyboardState The state of the keyboard when the key was pressed
+ * @param key_code The keycode of the key that was pressed
+ * @param keyboard_state The state of the keyboard when the key was pressed
  */
-KeyDownEvent::KeyDownEvent(KeyCode keyCode, const KeyboardState &keyboardState)
+KeyDownEvent::KeyDownEvent(KeyCode key_code, const KeyboardState &keyboard_state)
 : Event<KeyboardEvents>(KeyboardEvents::KEYDOWN),
-  key_code(keyCode),
-  keyboard_state(keyboardState)
+  key_code(key_code),
+  keyboard_state(keyboard_state)
 {
 }
 

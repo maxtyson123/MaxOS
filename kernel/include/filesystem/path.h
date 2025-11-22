@@ -11,33 +11,31 @@
 
 #include <common/string.h>
 
-namespace MaxOS {
 
-	namespace filesystem {
+namespace MaxOS::filesystem {
 
-		/**
-		* @class Path
-		* @brief Handles file & directory paths
-		*/
-		class Path
-		{
+	/**
+	* @class Path
+	* @brief Handles file & directory paths
+	*/
+	class Path {
 		public:
-			static bool   valid(string path);
-			static bool   is_file(const string& path);
+			static bool valid(const string& path);
+			static bool is_file(const string& path);
 
-			static string file_name(string path);
-			static string file_extension(string path);
-			static string file_path(string path);
+			static string file_name(const string& path);
+			static string file_extension(const string& path);
+			static string file_path(const string& path);
 
-			static string top_directory(string path);
-			static string parent_directory(string path);
+			static string top_directory(const string& path);
+			static string parent_directory(const string& path);
 
-			static string absolute_path(string path);
-			static string join_path(string base, string extended);
-		};
+			static string absolute_path(const string& path);
+			static string join_path(const string& base, const string& extended);
+	};
 
 
-	}
 }
+
 
 #endif //MAXOS_FILESYSTEM_PATH_H

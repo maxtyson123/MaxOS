@@ -151,7 +151,7 @@ multiboot_tag_new_acpi* Multiboot::new_acpi() {
  * @param address The address to check
  * @return True if the address is reserved
  */
-bool Multiboot::is_reserved(multiboot_uint64_t address) {
+bool Multiboot::is_reserved(multiboot_uint64_t address) const {
 
 	// Loop through the tags checking if the address is reserved
 	for (multiboot_tag* tag = start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag->size + 7) & ~7))) {

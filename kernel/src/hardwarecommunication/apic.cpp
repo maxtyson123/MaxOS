@@ -68,7 +68,7 @@ LocalAPIC::LocalAPIC() {
 LocalAPIC::~LocalAPIC() = default;
 
 /**
- * @brief Read a value from the apic register using the MSR or memory I/O depending on the local apic version
+ * @brief read a value from the apic register using the MSR or memory I/O depending on the local apic version
  *
  * @param reg The register to read
  * @return The value of the register
@@ -83,7 +83,7 @@ uint32_t LocalAPIC::read(uint32_t reg) const {
 }
 
 /**
- * @brief Write a value to the apic register using the MSR or memory I/O depending on the local apic version
+ * @brief write a value to the apic register using the MSR or memory I/O depending on the local apic version
  *
  * @param reg The register to write to
  * @param value The value to write
@@ -123,12 +123,12 @@ void LocalAPIC::send_eoi() const {
 }
 
 /**
- * @brief Send the init IPI to another apic
+ * @brief send the init IPI to another apic
  *
  * @param apic_id The id of the apic to send to
  * @param assert Is this an assert code (drive / release the signal)
  */
-void LocalAPIC::send_init(uint8_t apic_id, bool assert) {
+void LocalAPIC::send_init(uint8_t apic_id, bool assert) const {
 
 	uint32_t icr_low = 0;
 
@@ -162,12 +162,12 @@ void LocalAPIC::send_init(uint8_t apic_id, bool assert) {
 }
 
 /**
- * @brief Send the start up IPI to another apic
+ * @brief send the start up IPI to another apic
  *
  * @param apic_id The apic to send it to
  * @param vector Where to start executing
  */
-void LocalAPIC::send_startup(uint8_t apic_id, uint8_t vector) {
+void LocalAPIC::send_startup(uint8_t apic_id, uint8_t vector) const {
 
 	if (!m_x2apic) {
 
@@ -289,7 +289,7 @@ MADTEntry* IOAPIC::get_madt_item(MADT_TYPE type, uint8_t index) {
 }
 
 /**
- * @brief Read a value from a IO Apic register
+ * @brief read a value from a IO Apic register
  *
  * @param reg The register to read from
  * @return The value at the register
@@ -304,7 +304,7 @@ uint32_t IOAPIC::read(uint32_t reg) const {
 }
 
 /**
- * @brief Write a value to an IO Apic register
+ * @brief write a value to an IO Apic register
  *
  * @param reg The register to write to
  * @param value The value to set the register to
@@ -319,12 +319,12 @@ void IOAPIC::write(uint32_t reg, uint32_t value) const {
 }
 
 /**
- * @brief Read a redirect entry into a buffer
+ * @brief read a redirect entry into a buffer
  *
  * @param index The index of the entry
  * @param entry The buffer to read into
  */
-void IOAPIC::read_redirect(uint8_t index, RedirectionEntry* entry) {
+void IOAPIC::read_redirect(uint8_t index, RedirectionEntry* entry) const {
 
 	// Check bounds
 	if (index < 0x10 || index > 0x3F)
@@ -337,12 +337,12 @@ void IOAPIC::read_redirect(uint8_t index, RedirectionEntry* entry) {
 }
 
 /**
- * @brief Write a redirect entry from a buffer
+ * @brief write a redirect entry from a buffer
  *
  * @param index The index of the entry
  * @param entry The buffer to write into
  */
-void IOAPIC::write_redirect(uint8_t index, RedirectionEntry* entry) {
+void IOAPIC::write_redirect(uint8_t index, RedirectionEntry* entry) const {
 
 	// Check bounds
 	if (index < 0x10 || index > 0x3F)

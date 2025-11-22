@@ -12,350 +12,346 @@
 #include <common/vector.h>
 #include <common/pair.h>
 
-namespace MaxOS{
 
-    namespace common{
+namespace MaxOS::common {
 
-        /**
-         * @class MapIterationHandler
-         * @brief Handles iteration of a map
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         */
-        template<class Key, class Value> class MapIterationHandler
-        {
-        public:
-            MapIterationHandler();
-            ~MapIterationHandler();
+	/**
+	 * @class MapIterationHandler
+	 * @brief Handles iteration of a map
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 */
+	template<class Key, class Value> class MapIterationHandler {
+		public:
+			MapIterationHandler();
+			~MapIterationHandler() = default;
 
-            virtual void on_read(Key, Value);
-            virtual void on_end_of_stream();
-        };
+			virtual void on_read(Key, Value);
+			virtual void on_end_of_stream();
+	};
 
-        /**
-         * @class Map
-         * @brief A list of key-value pairs
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         */
-        template<class Key, class Value> class Map
-        {
-            protected:
-                Vector<Pair<Key, Value>> m_elements;                             ///< The internal storage of the map, a vector of key-value pairs
+	/**
+	 * @class Map
+	 * @brief A list of key-value pairs
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 */
+	template<class Key, class Value> class Map {
+		protected:
+			Vector<Pair<Key, Value>> m_elements;                             ///< The internal storage of the map, a vector of key-value pairs
 
-            public:
-                typedef typename Vector<Pair<Key, Value>>::iterator iterator;   ///< The iterator type for the map
+		public:
+			typedef typename Vector<Pair<Key, Value>>::iterator iterator;   ///< The iterator type for the map
 
-                Map();
-                ~Map();
+			Map();
+			~Map();
 
-	            Value& operator[](Key);
+			Value& operator [](Key);
 
-		        bool empty();
-		        int size();
+			bool empty();
+			int size();
 
-                iterator begin();
-                iterator end();
-                iterator find(Key);
+			iterator begin();
+			iterator end();
+			iterator find(Key);
 
-		        iterator push_back(Key, Value);
-	            Pair<Key, Value> pop_back();
+			iterator push_back(Key, Value);
+			Pair<Key, Value> pop_back();
 
-		        iterator push_front(Key, Value);
-	            Pair<Key, Value> pop_front();
+			iterator push_front(Key, Value);
+			Pair<Key, Value> pop_front();
 
-	            void insert(Key, Value);
+			void insert(Key, Value);
 
-		        void erase(Key);
-		        void erase(iterator position);
-		        void clear();
+			void erase(Key);
+			void erase(iterator position);
+			void clear();
 
-		        void reserve(size_t amount);
-		        void increase_size();
+			void reserve(size_t amount);
+			void increase_size();
 
-                void iterate(MapIterationHandler<Key, Value>* handler);
-	            void iterate(void (*callback)(Key &, Value &));
+			void iterate(MapIterationHandler<Key, Value>* handler);
+			void iterate(void (* callback)(Key&, Value&));
 
-        };
+	};
 
-	    /// ______________ TEMPLATE IMPLEMENTATION ______________
-        template<class Key, class Value> MapIterationHandler<Key, Value>::MapIterationHandler() = default;
+	/// ______________ TEMPLATE IMPLEMENTATION ______________
+	template<class Key, class Value> MapIterationHandler<Key, Value>::MapIterationHandler() = default;
 
-        template<class Key, class Value> MapIterationHandler<Key, Value>::~MapIterationHandler() = default;
 
-        /**
-         * @brief Called when the end of the stream is reached
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         */
-        template<class Key, class Value> void MapIterationHandler<Key, Value>::on_end_of_stream() {
 
-        }
+	/**
+	 * @brief Called when the end of the stream is reached
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 */
+	template<class Key, class Value> void MapIterationHandler<Key, Value>::on_end_of_stream() {
 
-        /**
-         * @brief Called when a key-value pair is read
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         */
-        template<class Key, class Value> void MapIterationHandler<Key, Value>::on_read(Key, Value) {
+	}
 
-        }
+	/**
+	 * @brief Called when a key-value pair is read
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 */
+	template<class Key, class Value> void MapIterationHandler<Key, Value>::on_read(Key, Value) {
 
-        template<class Key, class Value> Map<Key, Value>::Map() = default;
+	}
 
-        template<class Key, class Value> Map<Key, Value>::~Map() = default;
+	template<class Key, class Value> Map<Key, Value>::Map() = default;
 
-        /**
-         * @brief Overloads the [] operator to return the value of the key
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         * @param key The key to search for
-         * @return The value of the key
-         */
-        template<class Key, class Value> Value &Map<Key, Value>::operator[](Key key) {
+	template<class Key, class Value> Map<Key, Value>::~Map() = default;
 
-            // Return the value of the key (second item in the pair)
-            return find(key) -> second;
-        }
+	/**
+	 * @brief Overloads the [] operator to return the value of the key
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param key The key to search for
+	 * @return The value of the key
+	 */
+	template<class Key, class Value> Value& Map<Key, Value>::operator [](Key key) {
 
-        /**
-         * @brief Returns the beginning of the map
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         * @return The m_first_memory_chunk element in the map
-         */
-        template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::begin() {
-            return m_elements.begin();
-        }
+		// Return the value of the key (second item in the pair)
+		return find(key)->second;
+	}
 
-        /**
-         * @brief Returns the end of the map
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         * @return The last element in the map
-         */
-        template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::end() {
-            return m_elements.end();
-        }
+	/**
+	 * @brief Returns the beginning of the map
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @return The m_first_memory_chunk element in the map
+	 */
+	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::begin() {
+		return m_elements.begin();
+	}
 
-        /**
-         * @brief Finds an element in the map based on the key
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         * @param element The key to search for
-         * @return The iterator of the element, or the end iterator if not found
-         */
-        template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::find(Key element) {
+	/**
+	 * @brief Returns the end of the map
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @return The last element in the map
+	 */
+	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::end() {
+		return m_elements.end();
+	}
 
-            // Search for the element
-            for (iterator it = begin(); it != end(); it++)
-                if (it -> first == element)
-                    return it;
+	/**
+	 * @brief Finds an element in the map based on the key
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param element The key to search for
+	 * @return The iterator of the element, or the end iterator if not found
+	 */
+	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::find(Key element) {
 
-            // Item not found
-            return end();
+		// Search for the element
+		for(iterator it = begin(); it != end(); it++)
+			if(it->first == element)
+				return it;
 
-        }
+		// Item not found
+		return end();
 
-		/**
-		 * @brief Adds a new key-value pair to the end of the map
-		 *
-		 * @tparam Key The key type
-		 * @tparam Value The value type
-		 * @param key The key
-		 * @param value The value
-		 * @return The iterator of the new element
-		 */
-	    template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_back(Key key, Value value) {
-		    return m_elements.push_back(Pair<Key, Value>(key, value));
-	    }
+	}
 
-		/**
-		 * @brief Removes the last key-value pair from the map and returns it
-		 *
-		 * @tparam Key The key type
-		 * @tparam Value The value type
-		 * @return
-		 */
-	    template<class Key, class Value> Pair<Key, Value> Map<Key, Value>::pop_back() {
-		    return m_elements.pop_back();
-	    }
+	/**
+	 * @brief Adds a new key-value pair to the end of the map
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param key The key
+	 * @param value The value
+	 * @return The iterator of the new element
+	 */
+	template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_back(Key key, Value value) {
+		return m_elements.push_back(Pair<Key, Value>(key, value));
+	}
 
-		/**
-		 * @brief Adds a new key-value pair to the front of the map
-		 *
-		 * @tparam Key The key type
-		 * @tparam Value The value type
-		 * @param key The key
-		 * @param value The value
-		 * @return
-		 */
-	    template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_front(Key key, Value value) {
-		    return m_elements.push_front({key, value});
-	    }
+	/**
+	 * @brief Removes the last key-value pair from the map and returns it
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @return
+	 */
+	template<class Key, class Value> Pair<Key, Value> Map<Key, Value>::pop_back() {
+		return m_elements.pop_back();
+	}
 
-		/**
-		 * @brief Removes the first key-value pair from the map and returns it
-		 *
-		 * @tparam Key The key type
-		 * @tparam Value The value type
-		 * @return The removed key-value pair
-		 */
-	    template<class Key, class Value> Pair<Key, Value> Map<Key, Value>::pop_front() {
-		    return m_elements.pop_front();
-	    }
+	/**
+	 * @brief Adds a new key-value pair to the front of the map
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param key The key
+	 * @param value The value
+	 * @return
+	 */
+	template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_front(Key key, Value value) {
+		return m_elements.push_front({ key, value });
+	}
 
-        /**
-         * @brief Returns whether the map is empty
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         * @return Whether the map is empty
-         */
-        template<class Key, class Value> bool Map<Key, Value>::empty() {
-            return m_elements.empty();
-        }
+	/**
+	 * @brief Removes the first key-value pair from the map and returns it
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @return The removed key-value pair
+	 */
+	template<class Key, class Value> Pair<Key, Value> Map<Key, Value>::pop_front() {
+		return m_elements.pop_front();
+	}
 
-        /**
-         * @brief The number of elements in the map
-         *
-         * @return The number of elements in the Map
-         */
-        template <class Key, class Value> int Map<Key, Value>::size()
-        {
-            // Return the size of the vector
-            return m_elements.size();
+	/**
+	 * @brief Returns whether the map is empty
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @return Whether the map is empty
+	 */
+	template<class Key, class Value> bool Map<Key, Value>::empty() {
+		return m_elements.empty();
+	}
 
-        }
+	/**
+	 * @brief The number of elements in the map
+	 *
+	 * @return The number of elements in the Map
+	 */
+	template<class Key, class Value> int Map<Key, Value>::size() {
+		// Return the size of the vector
+		return m_elements.size();
 
-        /**
-         * @brief Removes all elements from the map
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         */
-        template<class Key, class Value> void Map<Key, Value>::clear() {
-          m_elements.clear();
-        }
+	}
 
-        /**
-         * @brief Updates the value of an element, or adds a new element if it does not exist
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         * @param key The key of the new element
-         * @param value The value of the new element
-         */
-        template<class Key, class Value> void Map<Key, Value>::insert(Key key, Value value) {
+	/**
+	 * @brief Removes all elements from the map
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 */
+	template<class Key, class Value> void Map<Key, Value>::clear() {
+		m_elements.clear();
+	}
 
-            // Find the element
-            iterator it = find(key);
+	/**
+	 * @brief Updates the value of an element, or adds a new element if it does not exist
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param key The key of the new element
+	 * @param value The value of the new element
+	 */
+	template<class Key, class Value> void Map<Key, Value>::insert(Key key, Value value) {
 
-            // If the element is found then update the value
-            if (it != end()) {
-                it -> second = value;
-            } else {
-                // Otherwise, add a new element
-                m_elements.push_back(Pair<Key, Value>(key, value));
-            }
-        }
+		// Find the element
+		iterator it = find(key);
 
-        /**
-         * @brief Removes an element from the map
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         * @param key The key of the element to remove
-         */
-        template<class Key, class Value> void Map<Key, Value>::erase(Key key) {
+		// If the element is found then update the value
+		if(it != end()) {
+			it->second = value;
+		} else {
+			// Otherwise, add a new element
+			m_elements.push_back(Pair<Key, Value>(key, value));
+		}
+	}
 
-            // Find the element
-            iterator it = find(key);
+	/**
+	 * @brief Removes an element from the map
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param key The key of the element to remove
+	 */
+	template<class Key, class Value> void Map<Key, Value>::erase(Key key) {
 
-            // If the element is found then remove it
-            if (it != end()) {
-                m_elements.erase(it);
-            }
+		// Find the element
+		iterator it = find(key);
 
-        }
+		// If the element is found then remove it
+		if(it != end()) {
+			m_elements.erase(it);
+		}
 
-		/**
-		 * @brief Removes an element from the map at the specified position
-		 *
-		 * @tparam Key The key type
-		 * @tparam Value The value type
-		 * @param position The iterator of the element to remove
-		 */
-	    template<class Key, class Value> void Map<Key, Value>::erase(Map::iterator position) {
-			m_elements.erase(position);
+	}
 
-	    }
+	/**
+	 * @brief Removes an element from the map at the specified position
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param position The iterator of the element to remove
+	 */
+	template<class Key, class Value> void Map<Key, Value>::erase(Map::iterator position) {
+		m_elements.erase(position);
 
-	    /**
-		 * @brief Reserves space in the map for a certain amount of elements to avoid reallocations
-		 *
-		 * @tparam Key The key type
-		 * @tparam Value The value type
-		 * @param amount The amount of elements to reserve space for
-		 */
-	    template<class Key, class Value> void Map<Key, Value>::reserve(size_t amount) {
-		    m_elements.reserve(amount);
-	    }
+	}
 
-		/**
-		 * @brief Doubles the size of the map
-		 *
-		 * @tparam Key The key type
-		 * @tparam Value The value type
-		 */
-	    template<class Key, class Value> void Map<Key, Value>::increase_size() {
-			m_elements.increase_size();
-	    }
+	/**
+	 * @brief Reserves space in the map for a certain amount of elements to avoid reallocations
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param amount The amount of elements to reserve space for
+	 */
+	template<class Key, class Value> void Map<Key, Value>::reserve(size_t amount) {
+		m_elements.reserve(amount);
+	}
 
-	    /**
-         * @brief Iterates through the map and calls the handler
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         * @param handler The handler to call
-         */
-        template<class Key, class Value> void Map<Key, Value>::iterate(MapIterationHandler<Key, Value> *handler) {
+	/**
+	 * @brief Doubles the size of the map
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 */
+	template<class Key, class Value> void Map<Key, Value>::increase_size() {
+		m_elements.increase_size();
+	}
 
-            // Loop through the elements
-            for(auto& it : m_elements) {
+	/**
+	 * @brief Iterates through the map and calls the handler
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param handler The handler to call
+	 */
+	template<class Key, class Value> void Map<Key, Value>::iterate(MapIterationHandler<Key, Value>* handler) {
 
-                // Call the handler
-                handler->on_read(it.first, it.second);
-            }
+		// Loop through the elements
+		for(auto& it : m_elements) {
 
-            // Call the handler
-            handler->on_end_of_stream();
+			// Call the handler
+			handler->on_read(it.first, it.second);
+		}
 
-        }
+		// Call the handler
+		handler->on_end_of_stream();
 
-        /**
-         * @brief Iterates through the map and calls the callback
-         *
-         * @tparam Key The key type
-         * @tparam Value The value type
-         * @param callback The callback to call
-         */
-        template<class Key, class Value> void Map<Key, Value>::iterate(void (*callback)(Key &, Value &)) {
+	}
 
-            // Call the callback for each element
-            for(auto& it : m_elements) {
-                    callback(it.first, it.second);
-            }
-        }
-    }
+	/**
+	 * @brief Iterates through the map and calls the callback
+	 *
+	 * @tparam Key The key type
+	 * @tparam Value The value type
+	 * @param callback The callback to call
+	 */
+	template<class Key, class Value> void Map<Key, Value>::iterate(void (* callback)(Key&, Value&)) {
+
+		// Call the callback for each element
+		for(auto& it : m_elements) {
+			callback(it.first, it.second);
+		}
+	}
 }
+
 
 #endif //MAXOS_COMMON_MAP_H

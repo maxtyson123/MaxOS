@@ -58,10 +58,10 @@ void Widget::invalidate() {
 	Coordinates coordinates = absolute_coordinates(Coordinates(0, 0));
 
 	// Create a rectangle with the absolute coordinates and the size of the widget
-	Rectangle<int32_t> invalidArea = Rectangle<int32_t>(coordinates.first, coordinates.second, m_position.width,  m_position.height);
+	Rectangle<int32_t> invalid_area = Rectangle<int32_t>(coordinates.first, coordinates.second, m_position.width, m_position.height);
 
 	// Invalidate the area
-	invalidate(invalidArea);
+	invalidate(invalid_area);
 
 }
 
@@ -410,20 +410,20 @@ void CompositeWidget::add_child(Widget* child) {
 /**
  * @brief Passes the event to the child that the mouse is over. (Event handling should be done by the derived class)
  *
- * @param toX The x coordinate of the mouse
- * @param toY The y coordinate of the mouse
+ * @param to_x The x coordinate of the mouse
+ * @param to_y The y coordinate of the mouse
  */
-void CompositeWidget::on_mouse_enter_widget(uint32_t toX, uint32_t toY) {
+void CompositeWidget::on_mouse_enter_widget(uint32_t to_x, uint32_t to_y) {
 
 	for (auto& child_widget: m_children) {
 
 		// Check if the mouse is in the child
 		Rectangle<int32_t> child_area = child_widget->position();
-		if (child_area.contains(toX, toY)) {
+		if (child_area.contains(to_x, to_y)) {
 
 			// Get the position of the mouse relative to the child
-			uint32_t child_x = toX - child_area.left;
-			uint32_t child_y = toY - child_area.top;
+			uint32_t child_x = to_x - child_area.left;
+			uint32_t child_y = to_y - child_area.top;
 
 			// Call the child's on_mouse_enter_widget function
 			child_widget->on_mouse_enter_widget(child_x, child_y);
@@ -437,20 +437,20 @@ void CompositeWidget::on_mouse_enter_widget(uint32_t toX, uint32_t toY) {
 /**
  * @brief Passes the event to the child that the mouse is over. (Event handling should be done by the derived class)
  *
- * @param fromX The x coordinate of the mouse
- * @param fromY The y coordinate of the mouse
+ * @param from_x The x coordinate of the mouse
+ * @param from_y The y coordinate of the mouse
  */
-void CompositeWidget::on_mouse_leave_widget(uint32_t fromX, uint32_t fromY) {
+void CompositeWidget::on_mouse_leave_widget(uint32_t from_x, uint32_t from_y) {
 
 	for (auto& child_widget: m_children) {
 
 		// Check if the mouse is in the child
 		Rectangle<int32_t> child_area = child_widget->position();
-		if (child_area.contains(fromX, fromY)) {
+		if (child_area.contains(from_x, from_y)) {
 
 			// Get the position of the mouse relative to the child
-			uint32_t child_x = fromX - child_area.left;
-			uint32_t child_y = fromY - child_area.top;
+			uint32_t child_x = from_x - child_area.left;
+			uint32_t child_y = from_y - child_area.top;
 
 			// Call the child's on_mouse_leave_widget function
 			child_widget->on_mouse_leave_widget(child_x, child_y);
@@ -464,12 +464,12 @@ void CompositeWidget::on_mouse_leave_widget(uint32_t fromX, uint32_t fromY) {
 /**
  * @brief Passes the event to the child that the mouse is over, also generates a leave/enter event for children
  *
- * @param fromX The x coordinate of the mouse
- * @param fromY The y coordinate of the mouse
- * @param toX The x coordinate of the mouse
- * @param toY The y coordinate of the mouse
+ * @param from_x The x coordinate of the mouse
+ * @param from_y The y coordinate of the mouse
+ * @param to_x The x coordinate of the mouse
+ * @param to_y The y coordinate of the mouse
  */
-void CompositeWidget::on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint32_t toX, uint32_t toY) {
+void CompositeWidget::on_mouse_move_widget(uint32_t from_x, uint32_t from_y, uint32_t to_x, uint32_t to_y) {
 
 	Widget* left_child = nullptr;
 	Widget* entered_child = nullptr;
@@ -478,8 +478,8 @@ void CompositeWidget::on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint3
 
 		// Check if the mouse is in the child
 		Rectangle<int32_t> child_area = child_widget->position();
-		bool mouse_in_from = child_area.contains(fromX, fromY);
-		bool mouse_in_to = child_area.contains(toX, toY);
+		bool mouse_in_from = child_area.contains(from_x, from_y);
+		bool mouse_in_to = child_area.contains(to_x, to_y);
 
 		// If the mouse started in the child
 		if (mouse_in_from) {
@@ -491,7 +491,7 @@ void CompositeWidget::on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint3
 			}
 
 			// Mouse still in the child
-			child_widget->on_mouse_move_widget(fromX, fromY, toX, toY);
+			child_widget->on_mouse_move_widget(from_x, from_y, to_x, to_y);
 
 		} else {
 
@@ -502,10 +502,10 @@ void CompositeWidget::on_mouse_move_widget(uint32_t fromX, uint32_t fromY, uint3
 
 		// Pass the events to the child
 		if (left_child != nullptr)
-			left_child->on_mouse_leave_widget(fromX, fromY);
+			left_child->on_mouse_leave_widget(from_x, from_y);
 
 		if (entered_child != nullptr)
-			entered_child->on_mouse_enter_widget(toX, toY);
+			entered_child->on_mouse_enter_widget(to_x, to_y);
 	}
 }
 
