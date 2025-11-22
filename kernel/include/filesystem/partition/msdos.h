@@ -304,7 +304,7 @@ namespace MaxOS::filesystem::partition {
 	 */
 	typedef struct PACKED PartitionTableEntry {
 
-		uint8_t bootable;                ///< Is this partition bootable? (0x80 = bootable, 0x00 = not bootable)
+		uint8_t bootable;                    ///< Is this partition bootable? (0x80 = bootable, 0x00 = not bootable)
 
 		uint8_t start_head;                 ///< The starting head of the partition
 		uint8_t start_sector : 6;            ///< The first sector of the partition

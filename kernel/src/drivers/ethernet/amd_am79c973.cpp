@@ -126,6 +126,8 @@ AMD_AM79C973::~AMD_AM79C973() = default;
  */
 void AMD_AM79C973::activate() {
 
+	return;
+
 	init_done = false;                                            // Set initDone to false
 	register_address_port.write(0);                           // Tell device to write to register 0
 	register_data_port.write(0x41);                           // Enable Interrupts and start the device
