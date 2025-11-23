@@ -13,18 +13,19 @@
 #include <common/colour.h>
 #include <common/spinlock.h>
 
-namespace MaxOS{
+namespace MaxOS {
 
 
-/**
- * @enum LogLevel
- * @brief Priority levels for logging messages. Different levels may be used to filter messages based on their importance depending on build type.
- */
+	/**
+	 * @enum LogLevel
+	 * @brief Priority levels for logging messages. Different levels may be used to filter messages based on their importance depending on build type.
+	 */
 	enum class LogLevel {
-		WARNING,
 		ERROR,
+		WARNING,
 		HEADER,
 		INFO,
+		TEST,
 		DEBUG,
 	};
 
@@ -36,10 +37,10 @@ namespace MaxOS{
 	constexpr LogLevel MAX_LOG_LEVEL = LogLevel::DEBUG;     ///< The maximum log level for this build (messages above this level will not be logged)
 #endif
 
-/**
- * @class Logger
- * @brief A class that handles logging messages to the console and files.
- */
+	/**
+	 * @class Logger
+	 * @brief A class that handles logging messages to the console and files.
+	 */
 	class Logger : public MaxOS::common::OutputStream {
 		private:
 
@@ -72,16 +73,17 @@ namespace MaxOS{
 
 			static Logger* active_logger();
 
-			static Logger &Out();
+			static Logger& Out();
 
+			static Logger ERROR();
+			static Logger WARNING();
 			static Logger HEADER();
 			static Logger INFO();
+			static Logger TEST();
 			static Logger DEBUG();
-			static Logger WARNING();
-			static Logger ERROR();
 
-			using OutputStream::operator<<;
-			Logger &operator<<(LogLevel log_level);
+			using OutputStream::operator <<;
+			Logger& operator <<(LogLevel log_level);
 	};
 
 	/**
@@ -95,7 +97,7 @@ namespace MaxOS{
 	*
 	* @see Logger::ASSERT
 	*/
-	#define ASSERT(condition, format, ...) Logger::ASSERT(condition, format, ##__VA_ARGS__)
+#define ASSERT(condition, format, ...) Logger::ASSERT(condition, format, ##__VA_ARGS__)
 
 }
 

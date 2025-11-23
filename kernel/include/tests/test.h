@@ -1,0 +1,128 @@
+/**
+ * @file test.h
+ * @brief Defines a basic test class for MaxOS
+ *
+ * @date 23rd November 2025
+ * @author Max Tyson
+ */
+
+#ifndef MAXOS_TESTS_TEST_H
+#define MAXOS_TESTS_TEST_H
+
+#include <common/string.h>
+#include <common/logger.h>
+
+
+#define PASS return TestStatus::TEST_PASS
+#define FAIL return TestStatus::TEST_FAIL
+#define SKIP return TestStatus::TEST_SKIP
+#define MAXOS_CONDITIONAL_TEST(name, type) \
+    auto test = new ConditionalTest(#name, type, []()
+
+namespace MaxOS::tests {
+
+	/**
+	 * @enum TestStatus
+	 * @brief The possible outcomes of a test
+	 */
+	enum class TestStatus {
+		TEST_PASS,
+		TEST_FAIL,
+		TEST_SKIP
+	};
+
+	/**
+	 * @enum TestType
+	 * @brief The different types of tests
+	 */
+	enum class TestType {
+		COMMON,
+		DRIVER,
+		FILESYSTEM,
+		GUI,
+		HARDWARE_COMMUNICATION,
+		MEMORY,
+		NETWORK,
+		PROCESSES,
+		RUNTIME,
+		SYSTEM,
+		MAX_TEST_TYPES
+	};
+
+	/// String representations of the TestType enum
+	constexpr const char* TEST_TYPE_STRINGS[] = {
+		"COMMON",
+		"DRIVER",
+		"FILESYSTEM",
+		"GUI",
+		"HARDWARE_COMMUNICATION",
+		"MEMORY",
+		"NETWORK",
+		"PROCESSES",
+		"RUNTIME",
+		"SYSTEM",
+		"UNKNOWN"
+	};
+
+	/**
+	 * @class Test
+	 * @brief A basic test class
+	 */
+	class Test {
+
+		private:
+			string m_name;
+			TestType m_type;
+
+		public:
+			Test(const string& name, TestType type);
+			virtual ~Test();
+
+			TestStatus run();
+			virtual TestStatus execute() = 0;
+
+			const string& name() const;
+			TestType type() const;
+
+	};
+
+	/**
+	 * @class ConditionalTest
+	 * @brief A test that only checks a condition to determine pass/fail
+	 */
+	class ConditionalTest : public Test {
+		private:
+			bool (*m_condition)();
+
+		public:
+			ConditionalTest(const string& name, TestType type, bool (*condition)());
+			~ConditionalTest() override;
+
+			TestStatus execute() override;
+	};
+
+	constexpr bool QUITE_TESTING = false;    	///< If true, suppresses test output
+
+	/**
+	 * @class TestRunner
+	 * @brief A class to run all tests
+	 */
+	class TestRunner {
+
+		private:
+			inline static common::Vector<Test*> s_tests = common::Vector<Test*>();
+
+		public:
+
+			static void test_kernel();
+
+			static void run_all_tests();
+			static void run_all_types(TestType type);
+
+			static void add_all_tests();
+			static void add_test(Test* test);
+
+	};
+}
+
+#endif //MAXOS_TESTS_TEST_H

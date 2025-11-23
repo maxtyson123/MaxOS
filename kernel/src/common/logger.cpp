@@ -102,6 +102,10 @@ void Logger::set_log_level(LogLevel log_level) {
 			*this << ANSI_COLOURS[ANSIColour::FG_Cyan] << "[  INFO    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
 			break;
 
+		case LogLevel::TEST:
+			*this << ANSI_COLOURS[ANSIColour::FG_Green] << "[  TEST    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
+			break;
+
 		case LogLevel::DEBUG:
 			*this << ANSI_COLOURS[ANSIColour::FG_Yellow] << "[  DEBUG   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
 			break;
@@ -167,6 +171,17 @@ Logger Logger::HEADER() {
 Logger Logger::INFO() {
 
 	s_active_logger->set_log_level(LogLevel::INFO);
+	return Out();
+}
+
+/**
+ * @brief Gets active logger set to test level
+ *
+ * @return The test logger
+ */
+Logger Logger::TEST() {
+
+	s_active_logger->set_log_level(LogLevel::TEST);
 	return Out();
 }
 

@@ -1,7 +1,10 @@
 # Set the flags
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -mno-red-zone -mno-80387 -mno-mmx -mcmodel=kernel -fno-use-cxa-atexit -m64 -mno-sse -mno-sse2 -mno-sse3 -mno-sse4 -mno-avx -mno-avx2")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-pointer-arith -Wno-address-of-packed-member -Wno-trigraphs -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-parameter") # Warnings
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fstack-protector-all -g") # Debug
+IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fstack-protector-all -g") # Debug -fsanitize=kernel-address
+ENDIF()
+
 
 # Enable assembly
 SET(CMAKE_ASM_FLAGS "-f elf64")
@@ -11,6 +14,11 @@ SET_SOURCE_FILES_PROPERTIES(${ASM_SRCS} PROPERTIES LANGUAGE ASM)
 
 # Find all the cpp and s files in the src directory (recursive)
 FILE(GLOB_RECURSE KERNEL_SRCS src/*.cpp src/*.s)
+
+# Remove the tests if not in Debug mode
+IF(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    LIST(FILTER KERNEL_SRCS EXCLUDE REGEX "src/tests/.*")
+ENDIF()
 
 # Update the version before building
 SET(VERSION_HEADER       "${CMAKE_SOURCE_DIR}/kernel/include/common/version.h")

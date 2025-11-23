@@ -22,6 +22,7 @@
 #include <memory/virtual.h>
 #include <filesystem/vfs.h>
 #include <filesystem/vfsresource.h>
+#include <tests/test.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -36,6 +37,7 @@ using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::filesystem;
+using namespace MaxOS::tests;
 
 extern "C" void call_constructors();        ///< Calls the C++ static constructors
 extern "C" uint8_t core_boot_info[];        ///< The boot info structure for the core being started
@@ -112,6 +114,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	VFSResourceRegistry vfs_registry(&vfs);
 	SyscallManager syscalls;
 	console.finish();
+	TestRunner::test_kernel();
 	GlobalScheduler::activate();
 
 	// Idle loop  (read Idle.md)
@@ -121,7 +124,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 /**
- * @todo Kernel configuration (debug/release)
  * @todo Test suite of common functions & other statics (paths)
  * @todo Thread storage (when clib)
  * @todo Once kernel done, turn into mono repo and seperate components
