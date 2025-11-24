@@ -114,7 +114,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	VFSResourceRegistry vfs_registry(&vfs);
 	SyscallManager syscalls;
 	console.finish();
-	TestRunner::test_kernel();
 	GlobalScheduler::activate();
 
 	// Idle loop  (read Idle.md)

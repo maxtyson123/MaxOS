@@ -78,10 +78,13 @@ void Buffer::clear() {
 void Buffer::full(uint8_t byte, size_t offset, size_t amount) {
 
 	// Prevent writing past the buffer bounds
-	if (amount == 0) amount = m_capacity - m_offset - offset;
-	ASSERT(m_offset + offset + amount <= capacity(), "Buffer overflow");
+	size_t start = m_offset + offset;
+	ASSERT(start <= m_capacity, "Offset past buffer end");
 
-	memset(m_bytes + m_offset + offset, byte, amount);
+	if (amount == 0) amount = m_capacity - start;
+	ASSERT(start + amount <= m_capacity, "Buffer overflow");
+
+	memset(m_bytes + start, byte, amount);
 
 }
 

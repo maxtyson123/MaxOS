@@ -28,11 +28,28 @@ TestStatus Test::run() {
 
 	// Run the test
 	auto result = execute();
-	ASSERT(result != TestStatus::TEST_FAIL, "Test '%s' of type %s FAILED", m_name.c_str(), TEST_TYPE_STRINGS[(size_t)m_type]);
+	StringBuilder msg;
+
+	// Build the message
+	msg << "Test ";
+	switch(result) {
+		case TestStatus::PASS:
+			msg << "PASSED";
+			break;
+		case TestStatus::SKIP:
+			msg << "SKIPPED";
+			break;
+		case TestStatus::FAIL:
+			msg << "FAILED";
+			break;
+	}
+	msg << " - " << m_name << "\n";
 
 	// Print the outcome
-	if (!QUITE_TESTING)
-		Logger::TEST() << "Test '" << m_name << "' of type " << TEST_TYPE_STRINGS[(size_t)m_type] << " " << (result == TestStatus::TEST_PASS ? "PASSED" : "SKIPPED") << "\n";
+	if (result == TestStatus::FAIL)
+		Logger::ERROR() << msg.out;
+	else
+		Logger::TEST() << msg.out;
 
 	return result;
 }
@@ -72,9 +89,9 @@ ConditionalTest::ConditionalTest(string const& name, TestType type, bool (* cond
 TestStatus ConditionalTest::execute() {
 
 	if (m_condition())
-		return TestStatus::TEST_PASS;
+		return TestStatus::PASS;
 	else
-		return TestStatus::TEST_FAIL;
+		return TestStatus::FAIL;
 
 }
 

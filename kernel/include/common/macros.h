@@ -23,6 +23,8 @@ namespace MaxOS{
 		#define PAGE_ALIGNED __attribute__((aligned(4096)))
 	#endif
 
+	#define CONCATENATE(a, b) CONCATENATE_IMPL(a, b)
+	#define CONCATENATE_IMPL(a, b) a##b
 }
 
 

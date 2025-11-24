@@ -11,13 +11,10 @@
 
 #include <common/string.h>
 #include <common/logger.h>
+#include <common/macros.h>
 
-
-#define PASS return TestStatus::TEST_PASS
-#define FAIL return TestStatus::TEST_FAIL
-#define SKIP return TestStatus::TEST_SKIP
 #define MAXOS_CONDITIONAL_TEST(name, type) \
-    auto test = new ConditionalTest(#name, type, []()
+    auto CONCATENATE(test_, __COUNTER__) = new ConditionalTest(#name, type, []()
 
 namespace MaxOS::tests {
 
@@ -26,9 +23,9 @@ namespace MaxOS::tests {
 	 * @brief The possible outcomes of a test
 	 */
 	enum class TestStatus {
-		TEST_PASS,
-		TEST_FAIL,
-		TEST_SKIP
+		PASS,
+		FAIL,
+		SKIP
 	};
 
 	/**
@@ -83,8 +80,18 @@ namespace MaxOS::tests {
 
 			const string& name() const;
 			TestType type() const;
-
 	};
+
+	template<typename T1, typename T2> bool compare(T1 const& actual, T2 const& expected) {
+
+		// Direct comparison
+		if (actual == expected)
+			return true;
+
+		// Report what failed
+		Logger::WARNING() << "Test failed comparison: expected [" << expected << "], got [" << actual << "]\n";
+		return false;
+	}
 
 	/**
 	 * @class ConditionalTest
@@ -101,11 +108,11 @@ namespace MaxOS::tests {
 			TestStatus execute() override;
 	};
 
-	constexpr bool QUITE_TESTING = false;    	///< If true, suppresses test output
-
 	/**
 	 * @class TestRunner
 	 * @brief A class to run all tests
+	 *
+	 * @todo Revisit when cbf
 	 */
 	class TestRunner {
 
