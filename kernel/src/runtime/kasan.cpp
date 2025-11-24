@@ -29,6 +29,33 @@ void KASanHandler::handle(bool write, uintptr_t address, size_t size, void* rip)
 }
 
 /**
+ * @brief Initializes the KASan handler by setting up the shadow memory
+ */
+void KASanHandler::initialize() {
+
+}
+
+/**
+ * @brief Marks a region of stack memory as poisoned (inaccessible)
+ *
+ * @param address The starting address of the region
+ * @param size The size of the region in bytes
+ */
+void KASanHandler::poison_stack(uintptr_t address, size_t size) {
+
+}
+
+/**
+ * @brief Marks a region of stack memory as unpoisoned (accessible)
+ *
+ * @param address The starting address of the region
+ * @param size The size of the region in bytes
+ */
+void KASanHandler::unpoison_stack(uintptr_t address, size_t size) {
+
+}
+
+/**
  * @brief Triggered when a memory load access violation of 1 byte is detected
  *
  * @param address The address that was accessed
@@ -159,8 +186,8 @@ extern "C" void __asan_alloca_poison(uintptr_t address, size_t size) {
 /**
  * @brief Unpoisons a region of stack memory allocated with alloca
  *
- * @param address The starting address of the allocated memory
- * @param size The size of the allocated memory in bytes
+ * @param stack_top The top address of the allocated memory
+ * @param stack_bottom The bottom address of the allocated memory
  */
 extern "C" void __asan_alloca_unpoison(void* stack_top, void* stack_bottom) {
 	//TODO: Implement stack unpoisoning

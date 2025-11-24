@@ -38,6 +38,8 @@ Event<InputBoxEvents>* InputBoxEventHandler::on_event(Event<InputBoxEvents>* eve
 
 /**
  * @brief Event triggered when the text in the input box is changed
+ *
+ * @param text The new text in the input box
  */
 void InputBoxEventHandler::on_input_box_text_changed(const string& text) {
 
@@ -97,12 +99,12 @@ void InputBox::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	Widget::draw(gc, area);
 
 	// Get the absolute m_position of the input box
-	Coordinates inputBoxCoordinates = absolute_coordinates(Coordinates(0, 0));
+	Coordinates input_box_coordinates = absolute_coordinates(Coordinates(0, 0));
 	Rectangle<int32_t> input_box_position = position();
 
 	// Get the x and y m_position of the input box
-	int32_t x = inputBoxCoordinates.first;
-	int32_t y = inputBoxCoordinates.second;
+	int32_t x = input_box_coordinates.first;
+	int32_t y = input_box_coordinates.second;
 
 	// Draw the background for the input box
 	gc->fill_rectangle(x + area.left, y + area.top, x + area.left + area.width,

@@ -249,32 +249,32 @@ void Widget::bring_to_front(Widget* widget) {
 /**
  * @brief Handles the event when the mouse is moved on to the widget
  *
- * @param toX The x coordinate of the mouse
- * @param toY The y coordinate of the mouse
+ * @param to_x The x coordinate of the mouse
+ * @param to_y The y coordinate of the mouse
  */
-void Widget::on_mouse_enter_widget(uint32_t, uint32_t) {
+void Widget::on_mouse_enter_widget(uint32_t to_x, uint32_t to_y) {
 
 }
 
 /**
  * @brief Handles the event when the mouse is moved out of the widget
  *
- * @param fromX The x coordinate of the mouse
- * @param fromY The y coordinate of the mouse
+ * @param from_x The x coordinate of the mouse
+ * @param from_y The y coordinate of the mouse
  */
-void Widget::on_mouse_leave_widget(uint32_t, uint32_t) {
+void Widget::on_mouse_leave_widget(uint32_t from_x, uint32_t from_y) {
 
 }
 
 /**
  * @brief Handles the event when the mouse is moved over the widget
  *
- * @param fromX The x original coordinate of the mouse
- * @param fromY The y original coordinate of the mouse
- * @param toX The x new coordinate of the mouse
- * @param toY The y new coordinate of the mouse
+ * @param from_x The x original coordinate of the mouse
+ * @param from_y The y original coordinate of the mouse
+ * @param to_x The x new coordinate of the mouse
+ * @param to_y The y new coordinate of the mouse
  */
-void Widget::on_mouse_move_widget(uint32_t, uint32_t, uint32_t, uint32_t) {
+void Widget::on_mouse_move_widget(uint32_t from_x, uint32_t from_y, uint32_t to_x, uint32_t to_y) {
 
 }
 

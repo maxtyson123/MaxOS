@@ -41,10 +41,10 @@ MediaAccessControlAddress IPV4AddressResolver::resolve(InternetProtocolAddress a
 /**
  * @brief Stores an IP address to MAC address mapping. (Default, does nothing, override for use)
  *
- * @param internetProtocolAddress The IP address.
- * @param mediaAccessControlAddress The MAC address.
+ * @param internet_protocol_address The IP address.
+ * @param media_access_control_address The MAC address.
  */
-void IPV4AddressResolver::store(InternetProtocolAddress, drivers::ethernet::MediaAccessControlAddress) {
+void IPV4AddressResolver::store(InternetProtocolAddress internet_protocol_address, MediaAccessControlAddress media_access_control_address) {
 
 }
 
@@ -271,7 +271,7 @@ uint16_t InternetProtocolHandler::checksum(const uint16_t* data, uint32_t length
 /**
  * @brief Registers an IP address resolver.
  *
- * @param resolver The resolver to register.
+ * @param ipv4_resolver The resolver to register.
  */
 void InternetProtocolHandler::register_ipv_4_address_resolver(IPV4AddressResolver* ipv4_resolver) {
 

@@ -112,7 +112,6 @@ namespace MaxOS {
 int strlen(const char* str);
 char* itoa(int base, int64_t number);
 char* htoa(uint64_t number);
-char* ftoa(float number);
 
 // Compare functions
 bool strcmp(char const* str1, char const* str2);

@@ -15,8 +15,8 @@
 namespace MaxOS::runtime {
 
 	/**
-	 * @class UBSanHandler
-	 * @brief Handles undefined behaviour sanitizer runtime errors
+	 * @class KASanHandler
+	 * @brief Handles kernel address sanitizer runtime errors
 	 *
 	 * @todo finish when cbf
 	 */

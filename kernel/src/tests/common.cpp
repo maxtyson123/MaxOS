@@ -453,6 +453,9 @@ void register_map_tests() {
 	});
 }
 
+/**
+ * @brief Registers all rectangle tests
+ */
 void register_rectangle_tests() {
 
 	MAXOS_CONDITIONAL_TEST(Rectangle_DefaultConstructor, TestType::COMMON)
@@ -578,6 +581,9 @@ void register_rectangle_tests() {
 
 }
 
+/**
+ * @brief Registers all string tests
+ */
 void register_string_tests() {
 
 
@@ -697,6 +703,9 @@ void register_string_tests() {
 
 }
 
+/**
+ * @brief Registers all time tests
+ */
 void register_time_tests() {
 
 
@@ -743,6 +752,9 @@ void register_time_tests() {
 
 }
 
+/**
+ * @brief Registers all vector tests
+ */
 void register_vector_tests() {
 
 	MAXOS_CONDITIONAL_TEST(Vector_Default_Construct_Empty, TestType::COMMON)

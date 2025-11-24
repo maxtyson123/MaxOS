@@ -12,6 +12,12 @@
 using namespace MaxOS;
 using namespace MaxOS::tests;
 
+/**
+ * @brief Constructs a Test with a name and type, and registers it with the TestRunner
+ *
+ * @param name The name of the test
+ * @param type The type of the test
+ */
 Test::Test(string const& name, TestType type)
 : m_name(name),
   m_type(type)
@@ -74,7 +80,13 @@ TestType Test::type() const {
 
 Test::~Test() = default;
 
-
+/**
+ * @brief Constructs a ConditionalTest with a name, type, and condition function
+ *
+ * @param name The name of the test
+ * @param type The type of the test
+ * @param condition The condition function to evaluate
+ */
 ConditionalTest::ConditionalTest(string const& name, TestType type, bool (* condition)())
 : Test(name, type),
   m_condition(condition)

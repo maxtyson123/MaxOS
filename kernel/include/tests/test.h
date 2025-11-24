@@ -13,6 +13,7 @@
 #include <common/logger.h>
 #include <common/macros.h>
 
+/// Simplified macro to define a conditional test
 #define MAXOS_CONDITIONAL_TEST(name, type) \
     auto CONCATENATE(test_, __COUNTER__) = new ConditionalTest(#name, type, []()
 
@@ -76,12 +77,27 @@ namespace MaxOS::tests {
 			virtual ~Test();
 
 			TestStatus run();
+
+			/**
+			 * @brief Executes the test and returns the status of the test
+			 *
+			 * @return The result of the test execution
+			 */
 			virtual TestStatus execute() = 0;
 
 			const string& name() const;
 			TestType type() const;
 	};
 
+	/**
+	 * @brief Compares two values and logs a warning if they are not equal
+	 *
+	 * @tparam T1 The type of the actual value
+	 * @tparam T2 The type of the expected value
+	 * @param actual The actual value
+	 * @param expected The expected value
+	 * @return True if the values are equal, false otherwise
+	 */
 	template<typename T1, typename T2> bool compare(T1 const& actual, T2 const& expected) {
 
 		// Direct comparison
