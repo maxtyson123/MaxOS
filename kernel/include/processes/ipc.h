@@ -9,8 +9,8 @@
 #ifndef MAXOS_PROCESSES_IPC_H
 #define MAXOS_PROCESSES_IPC_H
 
-#include <stdint.h>
-#include <stddef.h>
+#include <cstdint>
+#include <cstddef>
 #include <common/vector.h>
 #include <common/string.h>
 #include <common/buffer.h>
@@ -19,53 +19,52 @@
 #include <memory/memoryIO.h>
 #include <processes/resource.h>
 
-namespace MaxOS {
-	namespace processes {
 
-		/**
-		 * @class SharedMemory
-		 * @brief A block memory that is mapped into multiple processes
-		 */
-		class SharedMemory final : public Resource {
+namespace MaxOS::processes {
 
-			private:
-				uintptr_t m_physical_address;
-				size_t m_size;
+	/**
+	 * @class SharedMemory
+	 * @brief A block memory that is mapped into multiple processes
+	 */
+	class SharedMemory final : public Resource {
 
-				common::Map<size_t, uintptr_t> m_mappings;
+		private:
+			uintptr_t m_physical_address;
+			size_t m_size;
 
-			public:
-				SharedMemory(const string &name, size_t size, resource_type_t type);
-				~SharedMemory() final;
+			common::Map<size_t, uintptr_t> m_mappings;
 
-				void open(size_t flags) final;
-				void close(size_t flags) final;
+		public:
+			SharedMemory(const string& name, size_t size, resource_type_t type);
+			~SharedMemory() final;
 
-				int read(void* buffer, size_t size, size_t flags) final;
+			void open(size_t flags) final;
+			void close(size_t flags) final;
 
-				[[nodiscard]] uintptr_t physical_address() const;
-				[[nodiscard]] size_t size() const;
-		};
+			int read(void* buffer, size_t size, size_t flags) final;
 
-		/**
-		 * @class SharedMessageEndpoint
-		 * @brief A endpoint that allows processes to queue messages on
-		 */
-		class SharedMessageEndpoint final : public Resource {
+			[[nodiscard]] uintptr_t physical_address() const;
+			[[nodiscard]] size_t size() const;
+	};
 
-			private:
-				common::Vector<common::buffer_t*> m_queue{ };
-				common::Spinlock m_message_lock;
+	/**
+	 * @class SharedMessageEndpoint
+	 * @brief A endpoint that allows processes to queue messages on
+	 */
+	class SharedMessageEndpoint final : public Resource {
 
-			public:
-				SharedMessageEndpoint(const string &name, size_t size, resource_type_t type);
-				~SharedMessageEndpoint() final;
+		private:
+			common::Vector<common::buffer_t*> m_queue { };
+			common::Spinlock m_message_lock;
 
-				int read(void* buffer, size_t size, size_t flags) final;
-				int write(const void* buffer, size_t size, size_t flags) final;
-		};
-	}
+		public:
+			SharedMessageEndpoint(const string& name, size_t size, resource_type_t type);
+			~SharedMessageEndpoint() final;
 
+			int read(void* buffer, size_t size, size_t flags) final;
+			int write(const void* buffer, size_t size, size_t flags) final;
+	};
 }
+
 
 #endif // MAXOS_PROCESSES_IPC_H

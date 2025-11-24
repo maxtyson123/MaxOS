@@ -23,11 +23,11 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
 
-extern uint64_t stack[];
-volatile extern __attribute__((aligned(4096))) unsigned char p4_table[];
+extern uint64_t stack[];                                    ///< The stack setup for the core in loader.s
+volatile extern PAGE_ALIGNED unsigned char p4_table[];      ///< The PML4 table setup in loader.s
 
-extern "C" void  core_start();
-extern "C" uint8_t core_boot_info[];
+extern "C" void  core_start();          ///< The entry point for the core startup assembly code
+extern "C" uint8_t core_boot_info[];    ///< The info passed between the bsp c++ and booting core assembly code
 
 /**
  * @brief Constructs a new Core object from the MADT entry
@@ -140,7 +140,7 @@ void Core::init_tss() {
 	uint8_t base_3 = (base >> 24) & 0xFF;
 	uint32_t base_4 = (base >> 32) & 0xFFFFFFFF;
 
-	uint16_t limit_low = (uint16_t)(sizeof(tss) - 1);
+	auto limit_low = (uint16_t)(sizeof(tss) - 1);
 
 	// Flags: 1 - Type = 0x9, Descriptor Privilege Level = 0, Present = 1, 2 - Available = 0, Granularity = 0
 	uint8_t flags_1 = 0x89;
@@ -245,6 +245,9 @@ void Core::init() {
 
 /**
  * @brief Constructor for the CPU class
+ *
+ * @param gdt The global descriptor table
+ * @param multiboot The multiboot information struct
  */
 CPU::CPU(GlobalDescriptorTable* gdt, Multiboot* multiboot)
 : acpi(multiboot),
@@ -445,7 +448,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 
 	// Print using the backend
 	Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
-	Logger::ERROR() << "Kernel Panic: " << message << "\n";
+	Logger::ERROR() << "Kernel Panic: " << message;
 	Logger::ERROR() << "On Core: " << (panic_core ? panic_core->id : 0) << "\n";
 
 	// Info about the running process
@@ -503,7 +506,7 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 			Logger::ERROR() << "CPU Panicked (i " << (int)status->interrupt_number << ") in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
 			Logger::ERROR() << msg;
 			panic_lock.unlock();
-			return GlobalScheduler::system_scheduler()->force_remove_process(process);
+			return GlobalScheduler::force_remove_process(process);
 		}
 
 		// Otherwise occurred whilst the kernel was doing something for the process
@@ -521,7 +524,7 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
  *
  * @todo Support for x2apic
  */
-void CPU::find_cores() {
+void CPU::find_cores() const {
 
 	// Now that memory is set up the vector can be used
 	cores.reserve(1);

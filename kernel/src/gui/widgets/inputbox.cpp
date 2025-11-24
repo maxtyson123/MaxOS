@@ -38,8 +38,10 @@ Event<InputBoxEvents>* InputBoxEventHandler::on_event(Event<InputBoxEvents>* eve
 
 /**
  * @brief Event triggered when the text in the input box is changed
+ *
+ * @param text The new text in the input box
  */
-void InputBoxEventHandler::on_input_box_text_changed(string) {
+void InputBoxEventHandler::on_input_box_text_changed(const string& text) {
 
 }
 
@@ -97,12 +99,12 @@ void InputBox::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	Widget::draw(gc, area);
 
 	// Get the absolute m_position of the input box
-	Coordinates inputBoxCoordinates = absolute_coordinates(Coordinates(0, 0));
-	Rectangle<int32_t> inputBoxPosition = position();
+	Coordinates input_box_coordinates = absolute_coordinates(Coordinates(0, 0));
+	Rectangle<int32_t> input_box_position = position();
 
 	// Get the x and y m_position of the input box
-	int32_t x = inputBoxCoordinates.first;
-	int32_t y = inputBoxCoordinates.second;
+	int32_t x = input_box_coordinates.first;
+	int32_t y = input_box_coordinates.second;
 
 	// Draw the background for the input box
 	gc->fill_rectangle(x + area.left, y + area.top, x + area.left + area.width,
@@ -111,7 +113,7 @@ void InputBox::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	// Draw the border
 
 	// Top Border
-	if (area.intersects(Rectangle<int32_t>(0, 0, inputBoxPosition.width, 1))) {
+	if (area.intersects(Rectangle<int32_t>(0, 0, input_box_position.width, 1))) {
 
 		// Start in the top left corner of the button and end in the top right corner
 		gc->draw_line(x + area.left, y, x + area.left + area.width - 1, y,
@@ -119,7 +121,7 @@ void InputBox::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	}
 
 	// Left Border
-	if (area.intersects(Rectangle<int32_t>(0, 0, 1, inputBoxPosition.height))) {
+	if (area.intersects(Rectangle<int32_t>(0, 0, 1, input_box_position.height))) {
 
 		// Start in the top left corner and end in the bottom left corner
 		gc->draw_line(x, y + area.top, x, y + area.top + area.height - 1,
@@ -127,26 +129,26 @@ void InputBox::draw(GraphicsContext* gc, Rectangle<int32_t>& area) {
 	}
 
 	// Right Border
-	if (area.intersects(Rectangle<int32_t>(0, inputBoxPosition.height - 1, inputBoxPosition.width, 1))) {
+	if (area.intersects(Rectangle<int32_t>(0, input_box_position.height - 1, input_box_position.width, 1))) {
 
 		// Start in the top right corner and end in the bottom right corner
-		gc->draw_line(x + area.left, y + inputBoxPosition.height - 1,
+		gc->draw_line(x + area.left, y + input_box_position.height - 1,
 					  x + area.left + area.width - 1,
-					  y + inputBoxPosition.height - 1, border_colour);
+					  y + input_box_position.height - 1, border_colour);
 	}
 
 	// Bottom Border
-	if (area.intersects(Rectangle<int32_t>(inputBoxPosition.width - 1, 0, 1, inputBoxPosition.height))) {
+	if (area.intersects(Rectangle<int32_t>(input_box_position.width - 1, 0, 1, input_box_position.height))) {
 
 		// Start in the bottom left corner and end in the bottom right corner
-		gc->draw_line(x + inputBoxPosition.width - 1, y + area.top,
-					  x + inputBoxPosition.width - 1,
+		gc->draw_line(x + input_box_position.width - 1, y + area.top,
+		              x + input_box_position.width - 1,
 					  y + area.top + area.height - 1, border_colour);
 	}
 
 	// Draw the text
-	common::Rectangle<int32_t> textArea(area.left - 1, area.top - 1, area.width, area.height);
-	font.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc, m_widget_text, textArea);
+	common::Rectangle<int32_t> text_area(area.left - 1, area.top - 1, area.width, area.height);
+	font.draw_text(x + 1, y + 1, foreground_colour, background_colour, gc, m_widget_text, text_area);
 }
 
 /**
@@ -175,7 +177,7 @@ void InputBox::on_focus_lost() {
  * @param key_down_code The key being pressed
  * @param key_down_state The state of the key being pressed
  */
-void InputBox::on_key_down(KeyCode key_down_code, KeyboardState key_down_state) {
+void InputBox::on_key_down(KeyCode key_down_code, const KeyboardState& key_down_state) {
 
 	// Handle the key press
 	switch (key_down_code) {
@@ -189,7 +191,7 @@ void InputBox::on_key_down(KeyCode key_down_code, KeyboardState key_down_state) 
 		}
 		case KeyCode::deleteKey: {
 			// Move the text to the left
-			for (int i = cursor_position; i < m_widget_text.length(); ++i)
+			for (size_t i = cursor_position; i < m_widget_text.length(); ++i)
 				m_widget_text[i] = m_widget_text[i + 1];
 
 			// Put a null character at the end of the string
@@ -234,7 +236,7 @@ void InputBox::on_key_down(KeyCode key_down_code, KeyboardState key_down_state) 
 
 				// Insert the new character
 				m_widget_text[cursor_position + 1] = m_widget_text[cursor_position];
-				m_widget_text[cursor_position] = (uint8_t) key_down_code;
+				m_widget_text[cursor_position] = (char)key_down_code;
 				cursor_position++;
 			} else {
 

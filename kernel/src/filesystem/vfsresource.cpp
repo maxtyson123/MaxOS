@@ -31,7 +31,7 @@ FileResource::FileResource(string const& name, size_t flags, processes::resource
 FileResource::~FileResource() = default;
 
 /**
- * @brief Read from a file resource
+ * @brief read from a file resource
  *
  * @param buffer The buffer to read into
  * @param size The number of bytes to read
@@ -70,7 +70,7 @@ int FileResource::read(void* buffer, size_t size, size_t flags) {
 }
 
 /**
- * @brief Write to a file resource
+ * @brief write to a file resource
  *
  * @param buffer The buffer to write from
  * @param size The number of bytes to write
@@ -220,7 +220,7 @@ size_t DirectoryResource::entries_size() const {
 }
 
 /**
- * @brief Read from a directory resource
+ * @brief read from a directory resource
  *
  * @param buffer The buffer to read into
  * @param size The number of bytes to read
@@ -252,7 +252,7 @@ int DirectoryResource::read(void* buffer, size_t size, size_t flags) {
 }
 
 /**
- * @brief Write to a directory resource
+ * @brief write to a directory resource
  *
  * @param buffer The buffer to write from
  * @param size The number of bytes to write

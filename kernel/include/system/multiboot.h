@@ -508,43 +508,42 @@ struct multiboot_tag_load_base_addr {
 	multiboot_uint32_t load_base_addr;  ///< Where the OS image was loaded
 };
 
-namespace MaxOS {
-	namespace system {
 
-		/**
-		 * @class Multiboot
-		 * @brief Parses and provides access to Multiboot 2 information
-		 */
-		class Multiboot {
-			private:
-				multiboot_tag_framebuffer*      m_framebuffer;
-				multiboot_tag_basic_meminfo*    m_basic_meminfo;
-				multiboot_tag_string*           m_bootloader_name;
-				multiboot_tag_mmap*             m_mmap;
-				multiboot_tag_old_acpi*         m_old_acpi;
-				multiboot_tag_new_acpi*         m_new_acpi;
-				multiboot_tag_module*           m_module;
+namespace MaxOS::system {
 
-			public:
-				Multiboot(unsigned long address, unsigned long magic);
-				~Multiboot();
+	/**
+	 * @class Multiboot
+	 * @brief Parses and provides access to Multiboot 2 information
+	 */
+	class Multiboot {
+		private:
+			multiboot_tag_framebuffer* m_framebuffer;
+			multiboot_tag_basic_meminfo* m_basic_meminfo;
+			multiboot_tag_string* m_bootloader_name;
+			multiboot_tag_mmap* m_mmap;
+			multiboot_tag_old_acpi* m_old_acpi;
+			multiboot_tag_new_acpi* m_new_acpi;
+			multiboot_tag_module* m_module;
 
-				multiboot_tag_framebuffer* framebuffer();
-				multiboot_tag_basic_meminfo* basic_meminfo();
-				multiboot_tag_string* bootloader_name();
-				multiboot_tag_mmap* mmap();
-				multiboot_tag_old_acpi* old_acpi();
-				multiboot_tag_new_acpi* new_acpi();
+		public:
+			Multiboot(unsigned long address, unsigned long magic);
+			~Multiboot();
 
-				unsigned long start_address;    ///< The start address of the multiboot info struct
-				unsigned long end_address;      ///< The end address of the multiboot info struct
+			multiboot_tag_framebuffer* framebuffer();
+			multiboot_tag_basic_meminfo* basic_meminfo();
+			multiboot_tag_string* bootloader_name();
+			multiboot_tag_mmap* mmap();
+			multiboot_tag_old_acpi* old_acpi();
+			multiboot_tag_new_acpi* new_acpi();
 
-				[[nodiscard]] multiboot_tag* start_tag() const;
+			unsigned long start_address;    ///< The start address of the multiboot info struct
+			unsigned long end_address;      ///< The end address of the multiboot info struct
 
-				bool is_reserved(multiboot_uint64_t address);
+			[[nodiscard]] multiboot_tag* start_tag() const;
 
-		};
-	}
+			[[nodiscard]] bool is_reserved(multiboot_uint64_t address) const;
+
+	};
 }
 
 

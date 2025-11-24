@@ -16,9 +16,10 @@ using namespace MaxOS;
 String::String() {
 
 	// String that only contains the null terminator
+	m_length = 0;
 	allocate_self();
 	m_string[0] = '\0';
-	m_length = 0;
+
 
 }
 
@@ -43,7 +44,7 @@ String::String(char c) {
  * @brief Constructs a String from a pointer to an array of chars
  * @param string An array of chars, must be null terminated and of length less than 10,000
  */
-String::String(char const *string) {
+String::String(char const* string) {
 
 	// Get the length of the string, prevent longer than 10000 because this should mean something's gone wrong
 	m_length = 0;
@@ -52,11 +53,11 @@ String::String(char const *string) {
 	allocate_self();
 
 	// Copy the string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		m_string[i] = string[i];
 
 	// If the length is more than 10,000 Replace the end with a warning incase future use actually requires that
-	const char *warning = "MAXOS: String length exceeded 10000 - might be a bug";
+	const char* warning = "MAXOS: String length exceeded 10000 - might be a bug";
 	if (m_length > 10000)
 		for (int i = 0; i < 52; i++)
 			m_string[m_length - 52 + i] = warning[i];
@@ -70,7 +71,7 @@ String::String(char const *string) {
  * @param string The string bytes
  * @param length How large the string byte buffer is
  */
-String::String(uint8_t const *string, int length) {
+String::String(uint8_t const* string, int length) {
 	// Allocate memory for the string (and null terminator)
 	m_length = length;
 	allocate_self();
@@ -91,14 +92,14 @@ String::String(uint8_t const *string, int length) {
 String::String(int value) {
 
 	// Convert to a string
-	const char *str = itoa(10, value);
+	const char* str = itoa(10, value);
 	m_length = strlen(str);
 
 	// Create space to store
 	allocate_self();
 
 	// Store the string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		m_string[i] = str[i];
 	m_string[m_length] = '\0';
 
@@ -112,36 +113,16 @@ String::String(int value) {
 String::String(uint64_t value) {
 
 	// Convert to a string
-	const char *str = htoa(value);
+	const char* str = htoa(value);
 	m_length = strlen(str);
 
 	// Create space to store
 	allocate_self();
 
 	// Store the string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		m_string[i] = str[i];
 	m_string[m_length] = '\0';
-}
-
-/**
- * @brief Constructs a String from a float
- * @param value The float value
- */
-String::String(float value) {
-
-	// Convert to a string
-	const char *str = ftoa(value);
-	m_length = strlen(str);
-
-	// Create space to store
-	allocate_self();
-
-	// Store the string
-	for (int i = 0; i < m_length; i++)
-		m_string[i] = str[i];
-	m_string[m_length] = '\0';
-
 }
 
 /**
@@ -150,7 +131,7 @@ String::String(float value) {
  */
 String::String(bool value) {
 
-	if(value)
+	if (value)
 		*this = string("true");
 	else
 		*this = string("false");
@@ -162,11 +143,13 @@ String::String(bool value) {
  *
  * @param other String to copy from
  */
-String::String(String const &other) {
+String::String(String const& other) {
 	copy(other);
 }
 
-
+/**
+ * @brief Destructor for the string, cleans up memory if needed
+ */
 String::~String() {
 
 	// Free the memory
@@ -180,14 +163,14 @@ String::~String() {
  *
  * @param other The other string
  */
-void String::copy(String const &other) {
+void String::copy(String const& other) {
 
 	// Allocate memory for the string (and null terminator)
 	m_length = other.length();
 	allocate_self();
 
 	// Copy the string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		m_string[i] = other[i];
 
 	// Write the null terminator
@@ -201,11 +184,11 @@ void String::copy(String const &other) {
  * @param string The string
  * @return The sum of the ascii values of the characters in the string
  */
-int String::lex_value(String const &string) {
+int String::lex_value(String const& string) {
 
 	// Sum the ascii values of the characters in the string
 	int sum = 0;
-	for (int i = 0; i < string.length(); i++)
+	for (size_t i = 0; i < string.length(); i++)
 		sum += string[i];
 
 	return sum;
@@ -232,7 +215,7 @@ void String::allocate_self() {
  * @param other The string for this one to be updated to
  * @return String The string
  */
-String &String::operator=(String const &other) {
+String& String::operator =(String const& other) {
 
 	// Self assignment check
 	if (this == &other)
@@ -248,7 +231,7 @@ String &String::operator=(String const &other) {
  *
  * @return The char* string
  */
-char *String::c_str() {
+char* String::c_str() {
 
 	return m_string;
 }
@@ -258,7 +241,7 @@ char *String::c_str() {
  *
  * @return The string as an array of characters
  */
-const char *String::c_str() const {
+const char* String::c_str() const {
 
 	return m_string;
 }
@@ -269,14 +252,14 @@ const char *String::c_str() const {
  * @param other The other string
  * @return True if the string starts with the other string, false otherwise
  */
-bool String::starts_with(String const &other) {
+bool String::starts_with(String const& other) {
 
 	// Must at least be able to fit the other string
 	if (m_length < other.length())
 		return false;
 
 	// Check if the string starts with the other string
-	for (int i = 0; i < other.length(); i++)
+	for (size_t i = 0; i < other.length(); i++)
 		if (m_string[i] != other[i])
 			return false;
 
@@ -291,15 +274,15 @@ bool String::starts_with(String const &other) {
  * @param length The length of the substring
  * @return The substring or empty string if out of bounds
  */
-String String::substring(int start, int length) const {
+String String::substring(size_t start, size_t length) const {
 
 	// Ensure the start is within bounds
-	if (start < 0 || start >= m_length)
-		return {};
+	if (start >= m_length)
+		return { };
 
 	// Ensure the length is within bounds
-	if (length < 0 || start + length > m_length)
-		return {};
+	if (start + length > m_length)
+		return { };
 
 	// Allocate memory for the substring (and null terminator)
 	String substring;
@@ -307,7 +290,7 @@ String String::substring(int start, int length) const {
 	substring.allocate_self();
 
 	// Copy the substring
-	for (int i = 0; i < length; i++)
+	for (size_t i = 0; i < length; i++)
 		substring.m_string[i] = m_string[start + i];
 
 	// Write the null terminator
@@ -322,22 +305,22 @@ String String::substring(int start, int length) const {
  * @param delimiter What to split the string by
  * @return A vector of strings that were split by the delimiter
  */
-common::Vector<String> String::split(String const &delimiter) const {
+common::Vector<String> String::split(String const& delimiter) const {
 	common::Vector<String> strings;
 
 	// Go through the string and split it by the delimiter
-	int start = 0;
-	for (int i = 0; i <= m_length - delimiter.length(); i++) {
+	size_t start = 0;
+	for (size_t i = 0; i <= m_length - delimiter.length(); i++) {
 
 		// Check if matches at this position
 		bool matches = true;
-		for (int j = 0; j < delimiter.length(); j++)
+		for (size_t j = 0; j < delimiter.length(); j++)
 			if (m_string[i + j] != delimiter[j]) {
 				matches = false;
 				break;
 			}
 
-		if(!matches)
+		if (!matches)
 			continue;
 
 		// Add the splice of the string
@@ -358,7 +341,7 @@ common::Vector<String> String::split(String const &delimiter) const {
  * @param count_ansi Whether to count the ansi characters (default true)
  * @return The length of the string
  */
-int String::length(bool count_ansi) const {
+size_t String::length(bool count_ansi) const {
 
 	// If ansi characters are not to be counted
 	if (count_ansi)
@@ -389,14 +372,14 @@ int String::length(bool count_ansi) const {
  * @param other The other string
  * @return True if the strings are equal, false otherwise
  */
-bool String::equals(String const &other) const {
+bool String::equals(String const& other) const {
 
 	// Check if the lengths are equal
 	if (m_length != other.length())
 		return false;
 
 	// Check if the characters are equal
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		if (m_string[i] != other[i])
 			return false;
 
@@ -411,7 +394,7 @@ bool String::equals(String const &other) const {
  * @param other The other string
  * @return True if the strings are equal, false otherwise
  */
-bool String::operator == (String const &other) const {
+bool String::operator ==(String const& other) const {
 
 	// Check if the strings are equal
 	return equals(other);
@@ -423,7 +406,7 @@ bool String::operator == (String const &other) const {
  * @param other The other string
  * @return True if the strings are not equal, false otherwise
  */
-bool String::operator != (String const &other) const {
+bool String::operator !=(String const& other) const {
 
 	// Self assignment check
 	if (*this == other)
@@ -438,7 +421,7 @@ bool String::operator != (String const &other) const {
  * @param other The other string
  * @return True if the string is less than the other, false otherwise
  */
-bool String::operator < (String const &other) const {
+bool String::operator <(String const& other) const {
 
 	return lex_value(*this) < lex_value(other);
 
@@ -450,7 +433,7 @@ bool String::operator < (String const &other) const {
  * @param other The other string
  * @return True if the string is greater than the other, false otherwise
  */
-bool String::operator > (String const &other) const {
+bool String::operator >(String const& other) const {
 
 	return lex_value(*this) > lex_value(other);
 
@@ -462,7 +445,7 @@ bool String::operator > (String const &other) const {
  * @param other The other string
  * @return True if the string is less than or equal to the other, false otherwise
  */
-bool String::operator <= (String const &other) const {
+bool String::operator <=(String const& other) const {
 
 	return lex_value(*this) <= lex_value(other);
 
@@ -474,7 +457,7 @@ bool String::operator <= (String const &other) const {
  * @param other The other string
  * @return True if the string is greater than or equal to the other, false otherwise
  */
-bool String::operator >= (String const &other) const {
+bool String::operator >=(String const& other) const {
 
 	return lex_value(*this) >= lex_value(other);
 
@@ -486,7 +469,7 @@ bool String::operator >= (String const &other) const {
  * @param other The other string
  * @return The concatenated string
  */
-String String::operator + (String const &other) const {
+String String::operator +(String const& other) const {
 
 	// The concatenated string
 	String concatenated;
@@ -494,11 +477,11 @@ String String::operator + (String const &other) const {
 	concatenated.allocate_self();
 
 	// Copy the first string
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		concatenated.m_string[i] = m_string[i];
 
 	// Copy the second string
-	for (int i = 0; i < other.length(); i++)
+	for (size_t i = 0; i < other.length(); i++)
 		concatenated.m_string[m_length + i] = other[i];
 
 	// Write the null terminator
@@ -514,7 +497,7 @@ String String::operator + (String const &other) const {
  * @param other The other string
  * @return The concatenated string
  */
-String &String::operator+=(String const &other) {
+String& String::operator +=(String const& other) {
 
 	// Add the other string to this string
 	String concatenated = *this + other;
@@ -529,7 +512,7 @@ String &String::operator+=(String const &other) {
  * @param index The index of the character
  * @return The character at the specified index
  */
-char &String::operator[](int index) {
+char& String::operator [](size_t index) {
 	return m_string[index];
 }
 
@@ -540,7 +523,7 @@ char &String::operator[](int index) {
  * @param index The index of the character
  * @return The character at the specified index
  */
-char &String::operator[](int index) const {
+char& String::operator [](size_t index) const {
 	return m_string[index];
 }
 
@@ -550,7 +533,7 @@ char &String::operator[](int index) const {
  * @param times The number of times to repeat the string
  * @return The string repeated a number of times
  */
-String String::operator*(int times) const {
+String String::operator *(int times) const {
 
 	// The repeated string
 	String repeated;
@@ -559,7 +542,7 @@ String String::operator*(int times) const {
 
 	// Copy the string
 	for (int i = 0; i < times; i++)
-		for (int j = 0; j < m_length; j++)
+		for (size_t j = 0; j < m_length; j++)
 			repeated.m_string[i * m_length + j] = m_string[j];
 
 	// Write the null terminator
@@ -577,10 +560,10 @@ String String::operator*(int times) const {
  * @param fill The character to fill the string with
  * @return  The centered string
  */
-String String::center(int width, char fill) const {
+String String::center(size_t width, char fill) const {
 
 	// The number of characters to add
-	int add = (width - m_length) / 2;
+	size_t add = (width - m_length) / 2;
 
 	// The centered string
 	String centered;
@@ -588,15 +571,15 @@ String String::center(int width, char fill) const {
 	centered.allocate_self();
 
 	// Fill the right side (before)
-	for (int i = 0; i < add; i++)
+	for (size_t i = 0; i < add; i++)
 		centered.m_string[i] = fill;
 
 	// Copy the string (middle)
-	for (int i = 0; i < m_length; i++)
+	for (size_t i = 0; i < m_length; i++)
 		centered.m_string[add + i] = m_string[i];
 
 	// Fill the left side (after)
-	for (int i = add + m_length; i < width; i++)
+	for (size_t i = add + m_length; i < width; i++)
 		centered.m_string[i] = fill;
 
 	// Write the null terminator
@@ -618,7 +601,7 @@ String String::strip(char strip_char) const {
 	stripped.copy(*this);
 
 	// Search from the back for the earliest non-whitespace character
-	int end = m_length - 1;
+	size_t end = m_length - 1;
 	while (end >= 0 && (m_string[end] == strip_char || m_string[end] == '\n' || m_string[end] == '\t'))
 		end--;
 
@@ -665,7 +648,7 @@ String String::formatted(char const* format, va_list parameters) {
 
 		// If it is not a %, print the character
 		if (*format != '%') {
-			out += (string)(char)(*format);
+			out += (string) (char) (*format);
 			continue;
 		}
 
@@ -675,19 +658,19 @@ String String::formatted(char const* format, va_list parameters) {
 			case 'd': {
 				// Print a decimal
 				int number = va_arg (parameters, int);
-				out += (string)(number);
+				out += (string) (number);
 				break;
 			}
 			case 'x': {
 				// Print a hex
 				uint64_t number = va_arg (parameters, uint64_t);
-				out += (string)(number);
+				out += (string) (number);
 				break;
 			}
 			case 's': {
 				// Print a string
-				char *str = va_arg (parameters, char*);
-				out += (string)(str);
+				char* str = va_arg (parameters, char*);
+				out += (string) (str);
 				break;
 			}
 		}
@@ -703,7 +686,7 @@ String String::formatted(char const* format, va_list parameters) {
  * @param str The string to get the length of
  * @return The length of the string
  */
-int strlen(const char *str) {
+int strlen(const char* str) {
 	int len = 0;
 	for (; str[len] != '\0'; len++);
 	return len;
@@ -717,13 +700,17 @@ int strlen(const char *str) {
  *
  * @return The converted string
  */
-char *itoa(int base, int64_t number) {
+char* itoa(int base, int64_t number) {
 
 	// If there is no buffer use a default buffer
-	static char buffer[50] = {0};
+	static char buffer[50] = { 0 };
 
 	int i = 49;
-	bool isNegative = number < 0;
+	bool is_negative = number < 0;
+
+	// Null terminate the string
+	buffer[i] = '\0';
+	--i;
 
 	if (number == 0) {
 		buffer[i] = '0';
@@ -734,7 +721,7 @@ char *itoa(int base, int64_t number) {
 	for (; number && i; --i, number /= base)
 		buffer[i] = "0123456789ABCDEF"[number % base];
 
-	if (isNegative) {
+	if (is_negative) {
 		buffer[i] = '-';
 		return &buffer[i];
 	}
@@ -748,10 +735,14 @@ char *itoa(int base, int64_t number) {
  * @param number The number to convert
  * @return The converted string
  */
-char *htoa(uint64_t number) {
+char* htoa(uint64_t number) {
 	// If there is no buffer use a default buffer
-	static char buffer[50] = {0};
+	static char buffer[50] = { 0 };
 	int i = 49;
+
+	// Null terminate the string
+	buffer[i] = '\0';
+	--i;
 
 	if (number == 0) {
 		buffer[i] = '0';
@@ -765,80 +756,13 @@ char *htoa(uint64_t number) {
 }
 
 /**
- * @brief Converts a float to a string
- *
- * @param number The number to convert
- * @return The converted string
- */
-char *ftoa(float number) {
-
-	static char buffer[50];
-	char *ptr = buffer;
-
-	// Handle negative numbers.
-	if (number < 0) {
-		*ptr++ = '-';
-		number = -number;
-	}
-
-	// Separate integer and fractional parts.
-	int64_t intPart = (int64_t) number;
-	float fraction = number - (float) intPart;
-
-	// Convert integer part to string using itoa.
-	char *intStr = itoa(10, intPart);
-	while (*intStr) {
-		*ptr++ = *intStr++;
-	}
-
-	// Add the decimal point.
-	*ptr++ = '.';
-
-	// Define the desired precision for the fractional part.
-	const int precision = 6;
-
-	// Multiply the fraction to shift the decimal digits into integer range.
-	float fracValue = fraction;
-	for (int i = 0; i < precision; i++) {
-		fracValue *= 10.0f;
-	}
-
-	// Optionally, round the value.
-	auto fracInt = (int64_t) (fracValue + 0.5f);
-
-	// Convert the fractional part to string.
-	char fracBuffer[50];
-	char *fracStr = itoa(10, fracInt);
-
-	// Ensure we have leading zeros if the fractional part doesn't produce enough digits.
-	// Calculate length of the converted fractional string.
-	int len = 0;
-	for (char *p = fracStr; *p; p++) {
-		len++;
-	}
-	for (int i = 0; i < precision - len; i++) {
-		*ptr++ = '0';
-	}
-
-	// Copy the fractional digits.
-	while (*fracStr) {
-		*ptr++ = *fracStr++;
-	}
-
-	// Null-terminate the string.
-	*ptr = '\0';
-
-	return buffer;
-}
-
-/**
  * @brief Checks if one string pointer is equal to another string pointer
  *
  * @param str1 The first string
  * @param str2 The second string
  * @return True if the strings are equal, false otherwise
  */
-bool strcmp(char const *str1, char const *str2) {
+bool strcmp(char const* str1, char const* str2) {
 
 	// Check if the strings are equal
 	for (int i = 0; str1[i] != '\0' || str2[i] != '\0'; i++)
@@ -857,7 +781,7 @@ bool strcmp(char const *str1, char const *str2) {
  * @param str2 The second string
  * @return True if the strings are equal, false otherwise
  */
-bool strcmp(char const *str1, String const &str2) {
+bool strcmp(char const* str1, String const& str2) {
 
 	// Use the other strcmp function
 	return strcmp(str1, str2.c_str());
@@ -871,7 +795,7 @@ bool strcmp(char const *str1, String const &str2) {
  * @param str2 The second string
  * @return True if the strings are equal, false otherwise
  */
-bool strcmp(String const &str1, char const *str2) {
+bool strcmp(String const& str1, char const* str2) {
 
 	// Use the other strcmp function
 	return strcmp(str1.c_str(), str2);
@@ -884,7 +808,7 @@ bool strcmp(String const &str1, char const *str2) {
  * @param str2 The second string
  * @return True if the strings are equal, false otherwise
  */
-bool strcmp(String const &str1, String const &str2) {
+bool strcmp(String const& str1, String const& str2) {
 
 	// Use the other strcmp function
 	return strcmp(str1.c_str(), str2.c_str());
@@ -899,7 +823,7 @@ bool strcmp(String const &str1, String const &str2) {
  * @param length The length of the string to compare
  * @return True if the strings are equal, false otherwise
  */
-bool strncmp(char const *str1, char const *str2, int length) {
+bool strncmp(char const* str1, char const* str2, int length) {
 
 	// Check if the strings are equal
 	for (int i = 0; i < length; i++)
@@ -919,7 +843,7 @@ bool strncmp(char const *str1, char const *str2, int length) {
  * @param length The length of the string to compare
  * @return True if the strings are equal, false otherwise
  */
-bool strncmp(char const *str1, String const &str2, int length) {
+bool strncmp(char const* str1, String const& str2, int length) {
 
 	// Use the other strncmp function
 	return strncmp(str1, str2.c_str(), length);
@@ -934,7 +858,7 @@ bool strncmp(char const *str1, String const &str2, int length) {
  * @param length The length of the string to compare
  * @return True if the strings are equal, false otherwise
  */
-bool strncmp(String const &str1, char const *str2, int length) {
+bool strncmp(String const& str1, char const* str2, int length) {
 
 	// Use the other strncmp function
 	return strncmp(str1.c_str(), str2, length);
@@ -949,8 +873,63 @@ bool strncmp(String const &str1, char const *str2, int length) {
  * @param length The length of the string to compare
  * @return True if the strings are equal, false otherwise
  */
-bool strncmp(String const &str1, String const &str2, int length) {
+bool strncmp(String const& str1, String const& str2, int length) {
 
 	// Use the other strncmp function
 	return strncmp(str1.c_str(), str2.c_str(), length);
+}
+
+/**
+ * @brief Append C-string to the StringBuilder
+ *
+ * @param str The C-string to append
+ * @return The StringBuilder reference
+ */
+StringBuilder& StringBuilder::operator <<(char const* str) {
+	out += string(str);
+	return *this;
+}
+
+/**
+ * @brief Append String to the StringBuilder
+ *
+ * @param other The String to append
+ * @return The StringBuilder reference
+ */
+StringBuilder& StringBuilder::operator <<(String const& other) {
+	out += other;
+	return *this;
+}
+
+/**
+ * @brief Append int to the StringBuilder
+ *
+ * @param value The int value to append
+ * @return The StringBuilder reference
+ */
+StringBuilder& StringBuilder::operator <<(int value) {
+	out += string(value);
+	return *this;
+}
+
+/**
+ * @brief Append a hex to the StringBuilder
+ *
+ * @param value The hex value to append
+ * @return The StringBuilder reference
+ */
+StringBuilder& StringBuilder::operator <<(uint64_t value) {
+	out += string(value);
+	return *this;
+}
+
+/**
+ * @brief Append bool to the StringBuilder
+ *
+ * @param value The bool value to append
+ * @return The StringBuilder reference
+ */
+StringBuilder& StringBuilder::operator <<(bool value) {
+	out += string(value);
+	return *this;
 }

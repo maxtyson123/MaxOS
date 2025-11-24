@@ -14,15 +14,15 @@ using namespace MaxOS::memory;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
 
-volatile extern __attribute__((aligned(4096))) unsigned char p4_table[];
-volatile extern __attribute__((aligned(4096))) unsigned char p3_table[];
-volatile extern __attribute__((aligned(4096))) unsigned char p3_table_hh[];
-volatile extern __attribute__((aligned(4096))) unsigned char p2_table[];
-volatile extern __attribute__((aligned(4096))) unsigned char p1_table[];
+volatile extern PAGE_ALIGNED unsigned char p4_table[];        ///< The PML4 table setup in loader.s
+volatile extern PAGE_ALIGNED unsigned char p3_table[];        ///< The PDPT table setup in loader.s
+volatile extern PAGE_ALIGNED unsigned char p3_table_hh[];     ///< The PDPT table for higher half direct map setup in loader.s
+volatile extern PAGE_ALIGNED unsigned char p2_table[];        ///< The PD table setup in loader.s
+volatile extern PAGE_ALIGNED unsigned char p1_table[];        ///< The PT table setup in loader.s
 
-extern uint64_t _kernel_end;
-extern uint64_t _kernel_size;
-extern uint64_t _kernel_physical_end;
+extern uint64_t _kernel_end;            ///< The virtual address of where the kernel ends
+extern uint64_t _kernel_size;           ///< The length of the memory region used by the kernel code
+extern uint64_t _kernel_physical_end;   ///< The physical address where the kernel ends
 
 /**
  * @brief Constructs a PhysicalMemoryManager. Unmaps the lower kernel and sets up the bitmap for physical memory management. Reserves the kernel and the multiboot regions.
@@ -30,13 +30,14 @@ extern uint64_t _kernel_physical_end;
  */
 PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 : m_kernel_end((uint64_t) &_kernel_physical_end),
-  m_multiboot(multiboot),
-  m_pml4_root_address((uint64_t*) p4_table),
-  m_pml4_root((pte_t*) p4_table)
-{
+m_multiboot(multiboot),
+m_pml4_root_address((uint64_t*) p4_table),
+m_pml4_root((pte_t*) p4_table) {
 
 	Logger::INFO() << "Setting up Physical Memory Manager\n";
-	Logger::DEBUG() << "Kernel Memory: kernel_end = 0x" << (uint64_t) &_kernel_end << ", kernel_size = 0x" << (uint64_t) &_kernel_size << ", kernel_physical_end = 0x" << (uint64_t) &_kernel_physical_end << "\n";
+	Logger::DEBUG() << "Kernel Memory: kernel_end = 0x" << (uint64_t) &_kernel_end << ", kernel_size = 0x"
+	                << (uint64_t) &_kernel_size << ", kernel_physical_end = 0x" << (uint64_t) &_kernel_physical_end
+	                << "\n";
 	m_kernel_start_page = align_up_to_page((size_t) &_kernel_physical_end + PAGE_SIZE, PAGE_SIZE);
 
 	// Set up the current manager
@@ -45,12 +46,15 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 	s_current_manager = this;
 	m_nx_allowed = CPU::check_nx();
 
-  	// Find a region of memory available to be used
-  	m_mmap_tag = m_multiboot->mmap();
-  	for (multiboot_mmap_entry *entry = m_mmap_tag->entries; (multiboot_uint8_t *)entry < (multiboot_uint8_t *)m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry *)((unsigned long)entry + m_mmap_tag->entry_size)) {
+	// Find a region of memory available to be used
+	m_mmap_tag = m_multiboot->mmap();
+	for(multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry <
+	                                                       (multiboot_uint8_t*) m_mmap_tag +
+	                                                       m_mmap_tag->size; entry = (multiboot_mmap_entry*) (
+	(unsigned long) entry + m_mmap_tag->entry_size)) {
 
 		// Skip if the region is not free or there is not enough space
-		if (entry->type != MULTIBOOT_MEMORY_AVAILABLE)
+		if(entry->type != MULTIBOOT_MEMORY_AVAILABLE)
 			continue;
 
 		// Store the entry. (note: don't break here as it is desired to find the last usable entry as that is normally biggest)
@@ -61,19 +65,23 @@ PhysicalMemoryManager::PhysicalMemoryManager(Multiboot* multiboot)
 	m_memory_size = (m_mmap->addr + m_mmap->len);
 	m_bitmap_size = m_memory_size / PAGE_SIZE + 1;
 	m_total_entries = m_bitmap_size / ROW_BITS + 1;
-	Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x" << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x" << (uint64_t) PAGE_SIZE << "\n";
+	Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x"
+	                << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x"
+	                << (uint64_t) PAGE_SIZE << "\n";
 
 	// Map the physical memory into the virtual memory
-	Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap->addr + m_mmap->len) << " to higher half direct map at offset 0x" << HIGHER_HALF_DIRECT_MAP << "\n";
-	for (uint64_t physical_address = 0; physical_address < (m_mmap->addr + m_mmap->len); physical_address += PAGE_SIZE)
-		map((physical_address_t*) physical_address, (virtual_address_t*) (HIGHER_HALF_DIRECT_MAP + physical_address), PRESENT | WRITE);
+	Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap->addr + m_mmap->len)
+	                << " to higher half direct map at offset 0x" << HIGHER_HALF_DIRECT_MAP << "\n";
+	for(uint64_t physical_address = 0; physical_address < (m_mmap->addr + m_mmap->len); physical_address += PAGE_SIZE)
+		map((physical_address_t*) physical_address, (virtual_address_t*) (HIGHER_HALF_DIRECT_MAP + physical_address),
+		    PRESENT | WRITE);
 
 	// Kernel Setup
 	initialise_bit_map();
 	reserve_kernel_regions(multiboot);
 
 	// Initialisation Done
-	m_initialized = true;
+	m_initialised = true;
 	Logger::DEBUG() << "Memory used at start: " << (int) (memory_used() / 1024 / 1024) << "mb \n";
 }
 
@@ -88,14 +96,14 @@ PhysicalMemoryManager::~PhysicalMemoryManager() = default;
 void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 
 	// Reserve the pages used by the higher half mapping
-	reserve((uint64_t)m_mmap->addr, m_setup_frames * PAGE_SIZE, "HHDM");
+	reserve((uint64_t) m_mmap->addr, m_setup_frames * PAGE_SIZE, "HHDM");
 
 	// Reserve the area for the bitmap
 	reserve((uint64_t) from_dm_region((uint64_t) m_bit_map), m_bitmap_size / 8, "Bitmap");
 
 	// Calculate how much space the kernel takes up
 	uint32_t kernel_entries = (m_kernel_start_page / PAGE_SIZE) + 1;
-	if ((((uint32_t) (m_kernel_start_page)) % PAGE_SIZE) != 0)
+	if((((uint32_t) (m_kernel_start_page)) % PAGE_SIZE) != 0)
 		kernel_entries += 1;
 
 	// Reserve the kernel entries
@@ -103,23 +111,28 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 
 	// Reserve the area for the mmap
 	uint64_t mem_end = m_mmap->addr + m_mmap->len;
-	for (multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry < (multiboot_uint8_t*) m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry*) ((unsigned long) entry + m_mmap_tag->entry_size)) {
+	for(multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry <
+	                                                       (multiboot_uint8_t*) m_mmap_tag +
+	                                                       m_mmap_tag->size; entry = (multiboot_mmap_entry*) (
+	(unsigned long) entry + m_mmap_tag->entry_size)) {
 
 		// Dont reserve free regions
-		if (entry->type <= MULTIBOOT_MEMORY_AVAILABLE)
+		if(entry->type <= MULTIBOOT_MEMORY_AVAILABLE)
 			continue;
 
 		// Don't reserve the memory being managed by pmm
-		if (entry->addr >= mem_end)
+		if(entry->addr >= mem_end)
 			continue;
 
 		reserve(entry->addr, entry->len, "MMap");
 	}
 
 	// Reserve the area for each multiboot module
-	for (multiboot_tag* tag = multiboot->start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag->size + 7) & ~7))) {
+	for(multiboot_tag* tag = multiboot->start_tag();
+	    tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag +
+	                                                                        ((tag->size + 7) & ~7))) {
 
-		if (tag->type != MULTIBOOT_TAG_TYPE_MODULE)
+		if(tag->type != MULTIBOOT_TAG_TYPE_MODULE)
 			continue;
 
 		// Reserve the module's address
@@ -128,8 +141,8 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 	}
 
 	// Reserve all the tags
-	auto end_tag = (multiboot_tag*)to_higher_region(multiboot->end_address);
-	auto start_tag = (uint64_t)to_lower_region((uintptr_t)multiboot->start_tag());
+	auto end_tag = (multiboot_tag*) to_higher_region(multiboot->end_address);
+	auto start_tag = (uint64_t) to_lower_region((uintptr_t) multiboot->start_tag());
 	size_t tags_size = multiboot->end_address - start_tag + ((end_tag->size + 7) & ~7);
 	reserve(start_tag, tags_size, "Tags");
 }
@@ -191,10 +204,10 @@ void* PhysicalMemoryManager::allocate_frame() {
 
 	// If not initialised, cant use the bitmap or higher half mapped physical memory so use leftover kernel memory already
 	// mapped in loader.s
-	if (!m_initialized) {
+	if(!m_initialised) {
 
 		// Use frames at the start of the mmap free
-		void* address = (void*)m_mmap->addr + (m_setup_frames * PAGE_SIZE);
+		void* address = (void*) ((uintptr_t) m_mmap->addr + (m_setup_frames * PAGE_SIZE));
 		m_setup_frames++;
 
 		m_lock.unlock();
@@ -204,16 +217,16 @@ void* PhysicalMemoryManager::allocate_frame() {
 	// Check if there are enough frames
 	ASSERT(m_used_frames < m_bitmap_size, "No more frames available\n");
 
-	for (uint32_t row = 0; row < m_total_entries; ++row) {
+	for(uint32_t row = 0; row < m_total_entries; ++row) {
 
 		// If the row is full continue
-		if (m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
+		if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
 			continue;
 
-		for (uint32_t column = 0; column < ROW_BITS; ++column) {
+		for(uint32_t column = 0; column < ROW_BITS; ++column) {
 
 			// Entry isn't free
-			if (m_bit_map[row] & (1ULL << column))
+			if(m_bit_map[row] & (1ULL << column))
 				continue;
 
 			// Mark the frame as used
@@ -269,34 +282,34 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 	uint32_t start_column = 0;
 	size_t adjacent_frames = 0;
 
-	for (uint32_t row = 0; row < m_total_entries; ++row) {
+	for(uint32_t row = 0; row < m_total_entries; ++row) {
 
 		// Skip full rows
-		if (m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
+		if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
 			continue;
 
-		for (uint32_t column = 0; column < ROW_BITS; ++column) {
+		for(uint32_t column = 0; column < ROW_BITS; ++column) {
 
 			// Not enough adjacent frames
-			if (m_bit_map[row] & (1ULL << column)) {
+			if(m_bit_map[row] & (1ULL << column)) {
 				adjacent_frames = 0;
 				continue;
 			}
 
 			// Store the address of the first frame in set of adjacent ones
-			if (adjacent_frames == 0) {
+			if(adjacent_frames == 0) {
 				start_row = row;
 				start_column = column;
 			}
 
 			// Make sure there are enough frames in a row found
 			adjacent_frames++;
-			if (adjacent_frames != frame_count)
+			if(adjacent_frames != frame_count)
 				continue;
 
 			// Mark the frames as used
 			m_used_frames += frame_count;
-			for (uint32_t i = 0; i < frame_count; ++i) {
+			for(uint32_t i = 0; i < frame_count; ++i) {
 
 				// Get the location of the bit
 				uint32_t index = start_row + (start_column + i) / ROW_BITS;
@@ -335,7 +348,7 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 	uint64_t frame_address = start_address / PAGE_SIZE;
 
 	// Check bounds
-	if (frame_address >= m_bitmap_size)
+	if(frame_address >= m_bitmap_size)
 		return;
 
 	// Wait until other threads have finished other memory operations
@@ -343,7 +356,7 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 
 	// Mark the frames as not used
 	m_used_frames -= frame_count;
-	for (uint32_t i = 0; i < frame_count; ++i)
+	for(uint32_t i = 0; i < frame_count; ++i)
 		m_bit_map[(frame_address + i) / ROW_BITS] &= ~(1 << ((frame_address + i) % ROW_BITS));
 
 	m_lock.unlock();
@@ -374,7 +387,7 @@ pml_t* PhysicalMemoryManager::get_higher_half_table(uint64_t index, uint64_t ind
 pml_t* PhysicalMemoryManager::get_or_create_table(pml_t* table, size_t index, size_t flags) {
 
 	// Table is already created so just find the entry
-	if (table->entries[index].present)
+	if(table->entries[index].present)
 		return (pml_t*) to_dm_region(physical_address_of_entry(&table->entries[index]));
 
 	// Create the table
@@ -391,7 +404,7 @@ pml_t* PhysicalMemoryManager::get_or_create_table(pml_t* table, size_t index, si
 }
 
 /**
- * @brief Creates a page table entry when the higher half is not initialized
+ * @brief Creates a page table entry when the higher half is not initialised
  *
  * @param parent_table The parent table to create the entry in
  * @param table_index The index of the table to create
@@ -401,10 +414,10 @@ pml_t* PhysicalMemoryManager::get_or_create_table(pml_t* table, size_t index, si
  */
 pml_t* PhysicalMemoryManager::get_and_create_table(pml_t* parent_table, uint64_t table_index, pml_t* table) {
 
-	// Table already created so dont need to do anything
+	// Table already created so don't need to do anything
 	/// Note: this is where it differs when not having pmm init done as cant find the entry (direct map not setup) thus
 	///       requiring get_higher_half_table() to be passed in as the *table arg by the caller
-	if (parent_table->entries[table_index].present)
+	if(parent_table->entries[table_index].present)
 		return table;
 
 	// Create the table
@@ -431,7 +444,7 @@ pte_t* PhysicalMemoryManager::get_entry(virtual_address_t* virtual_address, pml_
 
 	// Kernel memory must be in the higher half
 	size_t flags = PRESENT | WRITE;
-	if (!in_higher_region((uint64_t) virtual_address))
+	if(!in_higher_region((uint64_t) virtual_address))
 		flags |= USER;
 
 	uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
@@ -444,7 +457,7 @@ pte_t* PhysicalMemoryManager::get_entry(virtual_address_t* virtual_address, pml_
 	pml_t* pt_table = nullptr;
 
 	// If it is before initialization then cant rely on the direct map
-	if (!m_initialized) {
+	if(!m_initialised) {
 		pdpr_table = get_and_create_table(pml4_table, pml4_index, get_higher_half_table(pml4_index));
 		pd_table = get_and_create_table(pdpr_table, pdpr_index, get_higher_half_table(pdpr_index, pml4_index));
 		pt_table = get_and_create_table(pd_table, pd_index, get_higher_half_table(pd_index, pdpr_index, pml4_index));
@@ -498,12 +511,12 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t* physical_addre
 virtual_address_t* PhysicalMemoryManager::map(physical_address_t* physical_address, virtual_address_t* virtual_address, size_t flags, uint64_t* pml4_table) {
 
 	// If it is in a lower region then assume it is the user space
-	if (!in_higher_region((uint64_t) virtual_address))
+	if(!in_higher_region((uint64_t) virtual_address))
 		flags |= USER;
 
 	// If the entry already exists then the mapping is already done
 	pte_t* pte = get_entry(virtual_address, (pml_t*) pml4_table);
-	if (pte->present)
+	if(pte->present)
 		return virtual_address;
 
 	// Map the physical address to the virtual address
@@ -539,8 +552,8 @@ virtual_address_t* PhysicalMemoryManager::map(virtual_address_t* virtual_address
 void PhysicalMemoryManager::map_area(virtual_address_t* virtual_address_start, size_t length, size_t flags) {
 
 	// Map the required frames
-	for (size_t i = 0; i < size_to_frames(length); ++i)
-		map(virtual_address_start + (i * PAGE_SIZE), flags);
+	for(size_t i = 0; i < size_to_frames(length); ++i)
+		map((virtual_address_t*) ((uintptr_t) virtual_address_start + (i * PAGE_SIZE)), flags);
 
 }
 
@@ -555,8 +568,9 @@ void PhysicalMemoryManager::map_area(virtual_address_t* virtual_address_start, s
 void PhysicalMemoryManager::map_area(physical_address_t* physical_address_start, virtual_address_t* virtual_address_start, size_t length, size_t flags) {
 
 	// Map the required frames
-	for (size_t i = 0; i < size_to_frames(length); ++i)
-		map(physical_address_start + (i * PAGE_SIZE), virtual_address_start + (i * PAGE_SIZE), flags);
+	for(size_t i = 0; i < size_to_frames(length); ++i)
+		map((virtual_address_t*) ((uintptr_t) physical_address_start + (i * PAGE_SIZE)),
+		    (virtual_address_t*) ((uintptr_t) virtual_address_start + (i * PAGE_SIZE)), flags);
 }
 
 /**
@@ -594,7 +608,7 @@ void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address, uint64_t* 
 	pte_t* pte = get_entry(virtual_address, (pml_t*) pml4_root);
 
 	// Make sure the address is actually mapped
-	if (!pte->present)
+	if(!pte->present)
 		return;
 
 	// Unmap the entry
@@ -613,8 +627,8 @@ void PhysicalMemoryManager::unmap(virtual_address_t* virtual_address, uint64_t* 
 void PhysicalMemoryManager::unmap_area(virtual_address_t* virtual_address_start, size_t length) {
 
 	// Unmap the required frames
-	for (size_t i = 0; i < size_to_frames(length); ++i)
-		unmap(virtual_address_start + (i * PAGE_SIZE));
+	for(size_t i = 0; i < size_to_frames(length); ++i)
+		unmap((virtual_address_t*) ((uintptr_t) virtual_address_start + (i * PAGE_SIZE)));
 }
 
 /**
@@ -625,7 +639,7 @@ void PhysicalMemoryManager::unmap_area(virtual_address_t* virtual_address_start,
 void PhysicalMemoryManager::clean_page_table(uint64_t* table) {
 
 	// Null the table (prevents false mappings when re-using frames)
-	for (int i = 0; i < 512; i++)
+	for(int i = 0; i < 512; i++)
 		table[i] = 0x00l;
 }
 
@@ -641,21 +655,21 @@ void PhysicalMemoryManager::clean_page_table(uint64_t* table) {
 pte_t PhysicalMemoryManager::create_page_table_entry(uintptr_t address, size_t flags) const {
 
 	pte_t page = (pte_t) {
-			.present            = (flags & PRESENT) != 0,
-			.write              = (flags & WRITE) != 0,
-			.user               = (flags & USER) != 0,
-			.write_through      = (flags & WRITE_THROUGH) != 0,
-			.cache_disabled     = (flags & CACHE_DISABLED) != 0,
-			.accessed           = (flags & ACCESSED) != 0,
-			.dirty              = (flags & DIRTY) != 0,
-			.huge_page          = (flags & HUGE_PAGE) != 0,
-			.global             = (flags & GLOBAL) != 0,
-			.available          = 0,
-			.physical_address   = address >> 12,
+	.present            = (flags & PRESENT) != 0,
+	.write              = (flags & WRITE) != 0,
+	.user               = (flags & USER) != 0,
+	.write_through      = (flags & WRITE_THROUGH) != 0,
+	.cache_disabled     = (flags & CACHE_DISABLED) != 0,
+	.accessed           = (flags & ACCESSED) != 0,
+	.dirty              = (flags & DIRTY) != 0,
+	.huge_page          = (flags & HUGE_PAGE) != 0,
+	.global             = (flags & GLOBAL) != 0,
+	.available          = 0,
+	.physical_address   = address >> 12,
 	};
 
 	// Set the NX bit if it is allowed
-	if (m_nx_allowed && (flags & NO_EXECUTE)) {
+	if(m_nx_allowed && (flags & NO_EXECUTE)) {
 		auto page_raw = (uint64_t) &page;
 		page_raw |= NO_EXECUTE;
 		page = *(pte_t*) page_raw;
@@ -675,17 +689,20 @@ void PhysicalMemoryManager::initialise_bit_map() {
 	uint64_t limit = m_kernel_start_page;
 
 	// Find a region for the bitmap to handle
-	for (multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry < (multiboot_uint8_t*) m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry*) ((unsigned long) entry + m_mmap_tag->entry_size)) {
+	for(multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry <
+	                                                       (multiboot_uint8_t*) m_mmap_tag +
+	                                                       m_mmap_tag->size; entry = (multiboot_mmap_entry*) (
+	(unsigned long) entry + m_mmap_tag->entry_size)) {
 
 		// Cant use a non-free entry or an entry past limit (ie don't user higher addresses that will be overridden later)
-		if (entry->type != MULTIBOOT_MEMORY_AVAILABLE || entry->len > limit)
+		if(entry->type != MULTIBOOT_MEMORY_AVAILABLE || entry->len > limit)
 			continue;
 
 		size_t space = entry->len;
 		size_t offset = 0;
 
 		// Determine how much of the region is below the limit and adjust the starting point to there
-		if (entry->addr < limit) {
+		if(entry->addr < limit) {
 			offset = limit - entry->addr;
 			space -= offset;
 		}
@@ -702,10 +719,12 @@ void PhysicalMemoryManager::initialise_bit_map() {
 	ASSERT(m_bit_map != nullptr, "No space for the bitmap (no region)\n");
 
 	// Clear the bitmap (mark all as free)
-	for (uint32_t i = 0; i < m_total_entries; ++i)
+	for(uint32_t i = 0; i < m_total_entries; ++i)
 		m_bit_map[i] = 0;
 
-	Logger::DEBUG() << "Bitmap: location: 0x" << (uint64_t) m_bit_map << " - 0x" << (uint64_t) (m_bit_map + m_bitmap_size / 8) << " (range of 0x" << (uint64_t) m_bitmap_size / 8 << ")\n";
+	Logger::DEBUG() << "Bitmap: location: 0x" << (uint64_t) m_bit_map << " - 0x"
+	                << (uint64_t) (m_bit_map + m_bitmap_size / 8) << " (range of 0x" << (uint64_t) m_bitmap_size / 8
+	                << ")\n";
 
 }
 
@@ -771,7 +790,8 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* t
 
 	// Cant reserve virtual addresses (ensure the address is physical)
 	ASSERT(address < m_memory_size, "Attempt to reserve address bigger then the memory can contain: 0x%x\n", address);
-	ASSERT(address + size < m_memory_size, "Attempt to reserve region bigger then the memory can contain: 0x%x-0x%x\n", address, address+size);
+	ASSERT(address + size < m_memory_size, "Attempt to reserve region bigger then the memory can contain: 0x%x-0x%x\n",
+	       address, address + size);
 
 	// Wait to be able to reserve
 	m_lock.lock();
@@ -787,7 +807,7 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* t
 	uint64_t frame_index = aligned_address / PAGE_SIZE;
 
 	// Mark all as used
-	for (size_t i = 0; i < page_count; ++i)
+	for(size_t i = 0; i < page_count; ++i)
 		m_bit_map[(frame_index + i) / ROW_BITS] |= (1ULL << ((frame_index + i) % ROW_BITS));
 
 	// Update the used frames
@@ -795,7 +815,8 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* t
 
 	// Clear the lock
 	m_lock.unlock();
-	Logger::DEBUG() << "Reserved Address for "<< type << ": 0x" << aligned_address << " - 0x" << aligned_address + size << " (length of 0x" << size << ")\n";
+	Logger::DEBUG() << "Reserved Address for " << type << ": 0x" << aligned_address << " - 0x" << aligned_address + size
+	                << " (length of 0x" << size << ")\n";
 }
 
 /**
@@ -810,7 +831,7 @@ physical_address_t* PhysicalMemoryManager::get_physical_address(virtual_address_
 	pte_t* entry = get_entry(virtual_address, (pml_t*) pml4_root);
 
 	// Cant get a physical address if its inst free
-	if (!entry->present)
+	if(!entry->present)
 		return nullptr;
 
 	return (physical_address_t*) physical_address_of_entry(entry);
@@ -828,7 +849,7 @@ void PhysicalMemoryManager::change_page_flags(virtual_address_t* virtual_address
 	pte_t* entry = get_entry(virtual_address, (pml_t*) pml4_root);
 
 	// Cant edit a non-present entry (will page fault)
-	if (!entry->present)
+	if(!entry->present)
 		return;
 
 	*entry = create_page_table_entry(physical_address_of_entry(entry), flags);
@@ -848,7 +869,8 @@ void PhysicalMemoryManager::change_page_flags(virtual_address_t* virtual_address
  */
 bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virtual_address, uint64_t* pml4_root) {
 
-	return get_physical_address((virtual_address_t*) virtual_address, pml4_root) == (physical_address_t*) physical_address;
+	return get_physical_address((virtual_address_t*) virtual_address, pml4_root) ==
+	       (physical_address_t*) physical_address;
 
 }
 
@@ -861,7 +883,7 @@ bool PhysicalMemoryManager::is_mapped(uintptr_t physical_address, uintptr_t virt
 void* PhysicalMemoryManager::to_higher_region(uintptr_t physical_address) {
 
 	// If it's in the lower half then add the offset
-	if (physical_address < HIGHER_HALF_KERNEL_OFFSET)
+	if(physical_address < HIGHER_HALF_KERNEL_OFFSET)
 		return (void*) (physical_address + HIGHER_HALF_KERNEL_OFFSET);
 
 	// Must be in the higher half
@@ -877,7 +899,7 @@ void* PhysicalMemoryManager::to_higher_region(uintptr_t physical_address) {
 void* PhysicalMemoryManager::to_lower_region(uintptr_t virtual_address) {
 
 	// If it's in the lower half then add the offset
-	if (virtual_address > HIGHER_HALF_KERNEL_OFFSET)
+	if(virtual_address > HIGHER_HALF_KERNEL_OFFSET)
 		return (void*) (virtual_address - HIGHER_HALF_KERNEL_OFFSET);
 
 	// Must be in the lower half
@@ -892,7 +914,7 @@ void* PhysicalMemoryManager::to_lower_region(uintptr_t virtual_address) {
  */
 void* PhysicalMemoryManager::to_io_region(uintptr_t physical_address) {
 
-	if (physical_address < HIGHER_HALF_MEM_OFFSET)
+	if(physical_address < HIGHER_HALF_MEM_OFFSET)
 		return (void*) (physical_address + HIGHER_HALF_MEM_OFFSET);
 
 	// Must be in the higher half
@@ -907,7 +929,7 @@ void* PhysicalMemoryManager::to_io_region(uintptr_t physical_address) {
  */
 void* PhysicalMemoryManager::to_dm_region(uintptr_t physical_address) {
 
-	if (physical_address < HIGHER_HALF_OFFSET)
+	if(physical_address < HIGHER_HALF_OFFSET)
 		return (void*) (physical_address + HIGHER_HALF_DIRECT_MAP);
 
 	// Must be in the higher half
@@ -922,7 +944,7 @@ void* PhysicalMemoryManager::to_dm_region(uintptr_t physical_address) {
  */
 void* PhysicalMemoryManager::from_dm_region(uintptr_t virtual_address) {
 
-	if (virtual_address > HIGHER_HALF_DIRECT_MAP)
+	if(virtual_address > HIGHER_HALF_DIRECT_MAP)
 		return (void*) (virtual_address - HIGHER_HALF_DIRECT_MAP);
 
 	// Must be in the lower half

@@ -11,7 +11,7 @@ We love your input! We want to make contributing to this project as easy and tra
 We use GitHub to host code, to track issues and feature requests, as well as accept pull requests.
 
 ## Code Standard
-To keep the code understandable please make sure it is formatted and reable. Please look in the coding style [docs](Styles/Coding%20Style.md) for more information.
+To keep the code understandable please make sure it is formatted and readable. Please look in the coding style [docs](Styles/Coding%20Style.md) for more information.
 
 ## We Use [GitHub Flow](https://guides.github.com/introduction/flow/index.html), So All Code Changes Happen Through Pull Requests
 Pull requests are the best way to propose changes to the codebase (we use [GitHub Flow](https://guides.github.com/introduction/flow/index.html)). We actively welcome your pull requests:
@@ -26,7 +26,7 @@ Pull requests are the best way to propose changes to the codebase (we use [GitHu
 ## Report bugs using GitHub's [issues](https://github.com/briandk/transcriptase-atom/issues)
 We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/maxtyson123/MaxOS/issues/new/choose); it's that easy!
 
-## Write bug reports with detail, background, and sample code
+## write bug reports with detail, background, and sample code
 [This is an example](http://stackoverflow.com/q/12488905/180626) of a bug report someone wrote on stack overflow.
 
 **Great Bug Reports** tend to have:

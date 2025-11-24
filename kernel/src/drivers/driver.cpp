@@ -20,14 +20,14 @@ Driver::Driver() = default;
 Driver::~Driver() = default;
 
 /**
- * @brief activate the driver
+ * @brief Activate the driver
  */
 void Driver::activate() {
 
 }
 
 /**
- * @brief deactivate the driver
+ * @brief Deactivate the driver
  */
 void Driver::deactivate() {
 
@@ -84,19 +84,26 @@ DriverSelector::DriverSelector() = default;
 DriverSelector::~DriverSelector() = default;
 
 /**
- * @brief Select the drivers
+ * @brief Select the drivers available on the system
+ *
+ * @param handler The event handler to notify when a driver is selected
  */
-void DriverSelector::select_drivers(DriverSelectorEventHandler *) {
+void DriverSelector::select_drivers(DriverSelectorEventHandler* handler) {
 }
 
-
+/**
+ * @brief Constructs the Driver Manager, adding any default driver selectors
+ */
 DriverManager::DriverManager() {
 
 	Logger::INFO() << "Setting up Driver Manager \n";
-	add_driver_selector(new PeripheralComponentInterconnectController);
+	add_driver_selector(new PCIController);
 	// add_driver_selector(new UniversalSerialBusController);
 }
 
+/**
+ * @brief Destructor for the Driver Manager, removes all drivers and driver selectors
+ */
 DriverManager::~DriverManager() {
 
 	// Remove any drivers that are still attached
@@ -132,6 +139,8 @@ void DriverManager::remove_driver(Driver *driver) {
 
 /**
  * @brief When a driver is selected add it to the manager
+ *
+ * @param driver The driver that was selected
  */
 void DriverManager::on_driver_selected(Driver *driver) {
 	add_driver(driver);
@@ -139,6 +148,8 @@ void DriverManager::on_driver_selected(Driver *driver) {
 
 /**
  * @brief Add a driver selector to the manager
+ *
+ * @param driver_selector The driver selector to add
  */
 void DriverManager::add_driver_selector(DriverSelector *driver_selector) {
 
@@ -148,6 +159,8 @@ void DriverManager::add_driver_selector(DriverSelector *driver_selector) {
 
 /**
  * @brief Remove a driver selector from the manager
+ *
+ * @param driver_selector The driver selector to remove
  */
 void DriverManager::remove_driver_selector(DriverSelector *driver_selector) {
 
@@ -176,17 +189,17 @@ uint32_t DriverManager::reset_devices() {
 
 	Logger::INFO() << "Resetting Devices \n";
 
-	uint32_t resetWaitTime = 0;
+	uint32_t reset_wait_time = 0;
 	for (auto &driver: m_drivers) {
 		// Reset the driver
-		uint32_t waitTime = driver->reset();
+		uint32_t wait_time = driver->reset();
 
 		// If the wait time is longer than the current longest wait time, set it as the new longest wait time
-		if (waitTime > resetWaitTime)
-			resetWaitTime = waitTime;
+		if (wait_time > reset_wait_time)
+			reset_wait_time = wait_time;
 	}
 
-	return resetWaitTime;
+	return reset_wait_time;
 }
 
 /**

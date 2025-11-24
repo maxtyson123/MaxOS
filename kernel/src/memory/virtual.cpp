@@ -14,6 +14,11 @@ using namespace MaxOS::memory;
 using namespace MaxOS::common;
 using namespace MaxOS::processes;
 
+/**
+ * @brief Construct a new Virtual Memory Manager object and set up the initial page tables (kernel mapped into the hh)
+ *
+ * @note Should only be called once per memory manager (kernel and each process)
+ */
 VirtualMemoryManager::VirtualMemoryManager() {
 
 	// Set the kernel flag
@@ -70,6 +75,9 @@ VirtualMemoryManager::VirtualMemoryManager() {
 
 }
 
+/**
+ * @brief Destroy the Virtual Memory Manager object and free all used pages
+ */
 VirtualMemoryManager::~VirtualMemoryManager() {
 
 	// Free all the frames used by the VMM
@@ -85,22 +93,18 @@ VirtualMemoryManager::~VirtualMemoryManager() {
 			if (i == m_current_chunk && region == m_current_region)
 				break;
 
-			// Loop through the pages
+			// Free each page in the chunk
 			size_t pages = PhysicalMemoryManager::size_to_frames(region->chunks[i].size);
 			for (size_t j = 0; j < pages; j++) {
 
-				// Get the frame
+				// Convert the virtual address to a physical address and free it
 				physical_address_t* frame = PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*) region->chunks[i].start_address + (j * PAGE_SIZE), m_pml4_root_address);
-
-				// Free the frame
 				PhysicalMemoryManager::s_current_manager->free_frame(frame);
 
 			}
 		}
 
-		// Move to the next region
 		region = region->next;
-
 	}
 }
 

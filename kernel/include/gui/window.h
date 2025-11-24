@@ -48,7 +48,7 @@ namespace MaxOS{
                 common::Colour frame_border_colour;         ///< The colour of the border around the bar around the window
 
                 Window(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& title_text);
-                Window(Widget* containedWidget, const string& title_text);
+                Window(Widget* contained_widget, const string& title_text);
                 ~Window();
 
                 void draw_self(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;

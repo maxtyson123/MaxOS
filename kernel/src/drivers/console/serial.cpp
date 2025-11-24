@@ -12,7 +12,7 @@ using namespace MaxOS;
 using namespace MaxOS::drivers;
 
 /**
- * @brief Constructs a new Serial Console object and initializes the serial port
+ * @brief Constructs a new Serial Console object and initialises the serial port
  * @param logger The logger which will use this serial console as a log writer
  */
 SerialConsole::SerialConsole(Logger* logger)

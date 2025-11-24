@@ -19,9 +19,11 @@ RawDataHandler::~RawDataHandler() = default;
 /**
  * @brief Handles raw data received from the Ethernet driver
  *
+ * @param data Pointer to the raw data
+ * @param size Size of the raw data in bytes
  * @return True if the data was handled, false otherwise
  */
-bool RawDataHandler::HandleRawData(uint8_t*, uint32_t)
+bool RawDataHandler::handle_raw_data(uint8_t* data, uint32_t size)
 {
     return false;
 }

@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <stdint.h>
+#include <cstdint>
 #include <common/logger.h>
 #include <hardwarecommunication/interrupts.h>
 #include <drivers/console/serial.h>
@@ -22,6 +22,7 @@
 #include <memory/virtual.h>
 #include <filesystem/vfs.h>
 #include <filesystem/vfsresource.h>
+#include <tests/test.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -36,6 +37,7 @@ using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::filesystem;
+using namespace MaxOS::tests;
 
 extern "C" void call_constructors();        ///< Calls the C++ static constructors
 extern "C" uint8_t core_boot_info[];        ///< The boot info structure for the core being started
@@ -43,10 +45,10 @@ extern "C" uint8_t core_boot_info[];        ///< The boot info structure for the
 /**
  * @brief The main entry point for secondary cores. Sets up the core and waits to be scheduled.
  */
-extern "C" [[noreturn]] void core_main(){
+extern "C" [[noreturn]] void core_main() {
 
-	auto info = (core_boot_info_t*)(core_boot_info);
-	info -> activated = true;
+	auto info = (core_boot_info_t*) (core_boot_info);
+	info->activated = true;
 	auto core = CPU::executing_core();
 
 	// Make sure the correct core is being setup
@@ -54,11 +56,11 @@ extern "C" [[noreturn]] void core_main(){
 	Logger::DEBUG() << "Core " << core->id << " now in higher half \n";
 
 	// Set up the core
-	core -> init();
+	core->init();
 	asm("sti");
 
 	// Wait to be scheduled
-	while (true)
+	while(true)
 		asm("nop");
 }
 
@@ -72,10 +74,9 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
 	call_constructors();
 
-	// Initialise the logger
 	Logger logger;
 	SerialConsole serial_console(&logger);
-	Logger::INFO() << "MaxOS Booted Successfully 0x\n";
+	Logger::INFO() << "MaxOS Booted Successfully\n";
 
 	Logger::HEADER() << "Stage {1}: System Initialisation\n";
 	Multiboot multiboot(addr, magic);
@@ -85,7 +86,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	Logger::HEADER() << "Stage {1.1}: Memory Initialisation\n";
 	PhysicalMemoryManager pmm(&multiboot);
 	VirtualMemoryManager vmm;
-	MemoryManager memoryManager(&vmm);
+	MemoryManager memory_manager(&vmm);
 
 	Logger::HEADER() << "Stage {1.2}: Console Initialisation\n";
 	VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
@@ -116,13 +117,12 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	GlobalScheduler::activate();
 
 	// Idle loop  (read Idle.md)
-	while (true)
+	while(true)
 		asm("hlt");
 
 }
 
 /**
- * @todo Clean up warnings
- * @todo Test suite of common functions & other statics (paths)
  * @todo Thread storage (when clib)
+ * @todo Once kernel done, turn into mono repo and separate components
  */

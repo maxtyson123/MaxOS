@@ -9,95 +9,89 @@
 #ifndef MAXOS_GUI_WIDGETS_BUTTON_H
 #define MAXOS_GUI_WIDGETS_BUTTON_H
 
-#include <stdint.h>
+#include <cstdint>
 #include <common/eventHandler.h>
 #include <gui/widget.h>
 #include <gui/font.h>
 
 
-namespace MaxOS {
+namespace MaxOS::gui::widgets {
 
-    namespace gui {
+	//forward declaration
+	class Button;
 
-        namespace widgets {
+	/**
+	 * @enum ButtonEvents
+	 * @brief The events that a button can trigger
+	 */
+	enum class ButtonEvents {
+		PRESSED,
+		RELEASED
+	};
 
-            //forward declaration
-            class Button;
+	/**
+	 * @class ButtonPressedEvent
+	 * @brief Event that is triggered when a button is pressed
+	 */
+	class ButtonPressedEvent : public common::Event<ButtonEvents> {
+		public:
+			explicit ButtonPressedEvent(Button*);
+			~ButtonPressedEvent();
 
-			/**
-			 * @enum ButtonEvents
-			 * @brief The events that a button can trigger
-			 */
-            enum class ButtonEvents{
-                PRESSED,
-                RELEASED
-            };
+			Button* source; ///< The button that triggered the event
+	};
 
-            /**
-             * @class ButtonPressedEvent
-             * @brief Event that is triggered when a button is pressed
-             */
-            class ButtonPressedEvent : public common::Event<ButtonEvents>{
-                public:
-                    ButtonPressedEvent(Button*);
-                    ~ButtonPressedEvent();
+	/**
+	 * @class ButtonReleasedEvent
+	 * @brief Event that is triggered when a button is released
+	 */
+	class ButtonReleasedEvent : public common::Event<ButtonEvents> {
+		public:
+			explicit ButtonReleasedEvent(Button*);
+			~ButtonReleasedEvent();
 
-                    Button* source; ///< The button that triggered the event
-            };
+			Button* source; ///< The button that triggered the event
+	};
 
-            /**
-             * @class ButtonReleasedEvent
-             * @brief Event that is triggered when a button is released
-             */
-            class ButtonReleasedEvent : public common::Event<ButtonEvents>{
-                public:
-                    ButtonReleasedEvent(Button*);
-                    ~ButtonReleasedEvent();
+	/**
+	 * @class ButtonEventHandler
+	 *
+	 * @brief Handles button events
+	 */
+	class ButtonEventHandler : public common::EventHandler<ButtonEvents> {
+		public:
+			ButtonEventHandler();
+			~ButtonEventHandler();
 
-                    Button* source; ///< The button that triggered the event
-            };
+			common::Event<ButtonEvents>* on_event(common::Event<ButtonEvents>*) override;
 
-            /**
-             * @class ButtonEventHandler
-             *
-             * @brief Handles button events
-             */
-            class ButtonEventHandler : public common::EventHandler<ButtonEvents>{
-                public:
-                    ButtonEventHandler();
-                    ~ButtonEventHandler();
+			virtual void on_button_pressed(Button* source);
+			virtual void on_button_released(Button* source);
+	};
 
-                    common::Event<ButtonEvents>* on_event(common::Event<ButtonEvents>*) override;
+	/**
+	 * @class Button
+	 * @brief A button widget, can be clicked
+	 */
+	class Button : public Widget, public common::EventManager<ButtonEvents> {
 
-                    virtual void on_button_pressed(Button* source);
-                    virtual void on_button_released(Button* source);
-            };
+		public:
+			Button(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text);
+			~Button();
 
-            /**
-             * @class Button
-             * @brief A button widget, can be clicked
-             */
-            class Button : public Widget, public common::EventManager<ButtonEvents> {
+			// Widget Stuff
+			void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
+			drivers::peripherals::MouseEventHandler* on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) override;
+			void on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) override;
 
-                public:
-                    Button(int32_t left, int32_t top, uint32_t width, uint32_t height, const string& text);
-                    ~Button();
-
-                    // Widget Stuff
-                    void draw(common::GraphicsContext* gc, common::Rectangle<int32_t>& area) override;
-                    drivers::peripherals::MouseEventHandler* on_mouse_button_pressed(uint32_t x, uint32_t y, uint8_t button) override;
-                    void on_mouse_button_released(uint32_t x, uint32_t y, uint8_t button) override;
-
-                    // Button Stuff
-                    common::Colour background_colour;       ///< The colour of the button background
-                    common::Colour foreground_colour;       ///< The colour of the button text
-                    common::Colour border_colour;           ///< The colour of the bar around the button
-                    gui::Font font;                         ///< The font to use for the button text
-                    string text;                            ///< The text to display on the button
-            };
-        }
-    }
-
+			// Button Stuff
+			common::Colour background_colour;       ///< The colour of the button background
+			common::Colour foreground_colour;       ///< The colour of the button text
+			common::Colour border_colour;           ///< The colour of the bar around the button
+			gui::Font font;                         ///< The font to use for the button text
+			string text;                            ///< The text to display on the button
+	};
 }
+
 
 #endif //MAXOS_GUI_WIDGETS_BUTTON_H

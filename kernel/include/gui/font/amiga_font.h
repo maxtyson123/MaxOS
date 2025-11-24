@@ -11,7 +11,7 @@
 #ifndef MAXOS_AMIGA_FONT_H
 #define MAXOS_AMIGA_FONT_H
 
-#include <stdint.h>
+#include <cstdint>
 
 const static uint8_t AMIGA_FONT[2048] =  {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

@@ -17,7 +17,9 @@ using namespace MaxOS::system;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
 
-
+/**
+ * @brief Construct a new Syscall Manager object and register the syscall handlers. Registers to interrupt 0x80
+ */
 SyscallManager::SyscallManager()
 : InterruptHandler(0x80)
 {
@@ -140,7 +142,12 @@ syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 
 	s_lock.lock();
 
+	// Ensure a message was provided
 	char* message = (char*) args->arg0;
+	if(!message){
+		s_lock.unlock();
+		return args;
+	}
 
 	// If the first two characters are %h then no header
 	if (message[0] == '%' && message[1] == 'h')
@@ -154,7 +161,7 @@ syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 }
 
 /**
- * @brief System call to free a block of memory
+ * @brief System call to allocate a block of memory
  *
  * @param args Arg0 = size
  * @return The address of the memory block or null if failed

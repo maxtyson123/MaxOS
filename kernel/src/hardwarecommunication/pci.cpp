@@ -23,9 +23,9 @@ using namespace MaxOS::drivers::ethernet;
 using namespace MaxOS::drivers::video;
 using namespace MaxOS::drivers::disk;
 
-PeripheralComponentInterconnectDeviceDescriptor::PeripheralComponentInterconnectDeviceDescriptor() = default;
+PCIDeviceDescriptor::PCIDeviceDescriptor() = default;
 
-PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnectDeviceDescriptor() = default;
+PCIDeviceDescriptor::~PCIDeviceDescriptor() = default;
 
 /**
  * @brief Get the type of the device
@@ -34,7 +34,7 @@ PeripheralComponentInterconnectDeviceDescriptor::~PeripheralComponentInterconnec
  *
  * @return Type of the device as a string (or Unknown if the type is not known)
  */
-string PeripheralComponentInterconnectDeviceDescriptor::get_type() const {
+string PCIDeviceDescriptor::get_type() const {
 
 	switch (class_id) {
 		case 0x00:
@@ -93,7 +93,10 @@ string PeripheralComponentInterconnectDeviceDescriptor::get_type() const {
 	return "Unknown";
 }
 
-PeripheralComponentInterconnectController::PeripheralComponentInterconnectController()
+/**
+ * @brief Construct a new PCI Controller object
+ */
+PCIController::PCIController()
 : m_data_port(0xCFC),
   m_command_port(0xCF8)
 {
@@ -101,7 +104,7 @@ PeripheralComponentInterconnectController::PeripheralComponentInterconnectContro
 
 }
 
-PeripheralComponentInterconnectController::~PeripheralComponentInterconnectController() = default;
+PCIController::~PCIController() = default;
 
 /**
  * @brief read data from the PCI Controller
@@ -112,7 +115,7 @@ PeripheralComponentInterconnectController::~PeripheralComponentInterconnectContr
  * @param register_offset Register offset
  * @return data from the PCI Controller
  */
-uint32_t PeripheralComponentInterconnectController::read(uint16_t bus, uint16_t device, uint16_t function,
+uint32_t PCIController::read(uint16_t bus, uint16_t device, uint16_t function,
 														 uint32_t register_offset) {
 
 	// Calculate the id
@@ -138,7 +141,7 @@ uint32_t PeripheralComponentInterconnectController::read(uint16_t bus, uint16_t 
  * @param register_offset Register offset
  * @param value Value to write
  */
-void PeripheralComponentInterconnectController::write(uint16_t bus, uint16_t device, uint16_t function,
+void PCIController::write(uint16_t bus, uint16_t device, uint16_t function,
 													  uint32_t register_offset, uint32_t value) {
 
 	// Calculate the id
@@ -160,7 +163,7 @@ void PeripheralComponentInterconnectController::write(uint16_t bus, uint16_t dev
  * @param device Device number
  * @return true if the device has a function
  */
-bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bus, uint16_t device) {
+bool PCIController::device_has_functions(uint16_t bus, uint16_t device) {
 
 	return read(bus, device, 0, 0x0E) & (1 << 7);
 }
@@ -170,38 +173,38 @@ bool PeripheralComponentInterconnectController::device_has_functions(uint16_t bu
  *
  * @param handler device driver event manager
  */
-void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEventHandler* handler) {
+void PCIController::select_drivers(DriverSelectorEventHandler* handler) {
 
 	for (int bus = 0; bus < 8; ++bus) {
 		for (int device = 0; device < 32; ++device) {
 
-			int numFunctions = (device_has_functions(bus, device)) ? 8 : 1;
+			int num_functions = (device_has_functions(bus, device)) ? 8 : 1;
 
-			for (int function = 0; function < numFunctions; ++function) {
+			for (int function = 0; function < num_functions; ++function) {
 
 				// Get the device descriptor, if the vendor id is 0x0000 or 0xFFFF, the device is not present/ready
-				PeripheralComponentInterconnectDeviceDescriptor deviceDescriptor = get_device_descriptor(bus, device,
-																										 function);
-				if (deviceDescriptor.vendor_id == 0x0000 || deviceDescriptor.vendor_id == 0x0001 ||
-					deviceDescriptor.vendor_id == 0xFFFF)
+				PCIDeviceDescriptor device_descriptor = get_device_descriptor(bus, device,
+				                                                              function);
+				if (device_descriptor.vendor_id == 0x0000 || device_descriptor.vendor_id == 0x0001 ||
+				    device_descriptor.vendor_id == 0xFFFF)
 					continue;
 
 				// Get the earliest port number
-				for (int barNum = 5; barNum >= 0; barNum--) {
-					BaseAddressRegister bar = get_base_address_register(bus, device, function, barNum);
-					if (bar.address && (bar.type == BaseAddressRegisterType::InputOutput))
-						deviceDescriptor.port_base = (uint64_t) bar.address;
+				for (int bar_num = 5; bar_num >= 0; bar_num--) {
+					BaseAddressRegister bar = get_base_address_register(bus, device, function, bar_num);
+					if (bar.address && (bar.type == BARType::InputOutput))
+						device_descriptor.port_base = (uint64_t) bar.address;
 				}
 
-				Logger::DEBUG() << "DEVICE FOUND: " << deviceDescriptor.get_type() << " - ";
+				Logger::DEBUG() << "DEVICE FOUND: " << device_descriptor.get_type() << " - ";
 
 				// Select the driver and print information about the device
-				Driver* driver = get_driver(deviceDescriptor);
+				Driver* driver = get_driver(device_descriptor);
 				if (driver != nullptr) {
 					handler->on_driver_selected(driver);
 					Logger::Out() << driver->vendor_name() << " " << driver->device_name();
 				} else {
-					list_known_device(deviceDescriptor);
+					list_known_device(device_descriptor);
 				}
 
 				Logger::Out() << "\n";
@@ -218,9 +221,9 @@ void PeripheralComponentInterconnectController::select_drivers(DriverSelectorEve
  * @param function Function number
  * @return Device descriptor
  */
-PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectController::get_device_descriptor(uint16_t bus, uint16_t device, uint16_t function) {
+PCIDeviceDescriptor PCIController::get_device_descriptor(uint16_t bus, uint16_t device, uint16_t function) {
 
-	PeripheralComponentInterconnectDeviceDescriptor result;
+	PCIDeviceDescriptor result;
 
 	result.bus = bus;
 	result.device = device;
@@ -245,7 +248,7 @@ PeripheralComponentInterconnectDeviceDescriptor PeripheralComponentInterconnectC
  * @param dev Device descriptor
  * @return Driver for the device, null pointer if there is no driver
  */
-Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponentInterconnectDeviceDescriptor dev) {
+Driver* PCIController::get_driver(PCIDeviceDescriptor dev) {
 
 	switch (dev.vendor_id) {
 		case 0x1022:    //AMD
@@ -304,7 +307,7 @@ Driver* PeripheralComponentInterconnectController::get_driver(PeripheralComponen
  *
  * @param dev The device to print
  */
-void PeripheralComponentInterconnectController::list_known_device( const PeripheralComponentInterconnectDeviceDescriptor& dev) {
+void PCIController::list_known_device( const PCIDeviceDescriptor& dev) {
 
 	switch (dev.vendor_id) {
 		case 0x1022: {
@@ -432,18 +435,18 @@ void PeripheralComponentInterconnectController::list_known_device( const Periphe
  * @param barNum base address register number
  * @return base address register
  */
-BaseAddressRegister PeripheralComponentInterconnectController::get_base_address_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
+BaseAddressRegister PCIController::get_base_address_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar) {
 
 	BaseAddressRegister result{};
 
 	// Only types 0x00 (normal devices) and 0x01 (PCI-to-PCI bridges) are supported:
-	uint32_t headerType = read(bus, device, function, 0x0E);
-	if (headerType & 0x3F)
+	uint32_t header_type = read(bus, device, function, 0x0E);
+	if (header_type & 0x3F)
 		return result;
 
 	// read the base address register
 	uint64_t bar_value = read(bus, device, function, 0x10 + 4 * bar);
-	result.type = (bar_value & 0x1) ? BaseAddressRegisterType::InputOutput : BaseAddressRegisterType::MemoryMapped;
+	result.type = (bar_value & 0x1) ? BARType::InputOutput : BARType::MemoryMapped;
 	result.address = (uint8_t*) (bar_value & ~0xF);
 
 	// Read the size of the base address register

@@ -5,17 +5,17 @@
 #ifndef SYSCORE_IPC_SHAREDMEMORY_H
 #define SYSCORE_IPC_SHAREDMEMORY_H
 
-#include <stdint.h>
-#include <stddef.h>
+#include <cstdint>
+#include <cstddef>
 #include <syscalls.h>
 
-namespace syscore {
-	namespace ipc {
 
-		void* create_shared_memory(const char* name, size_t size);
+namespace syscore::ipc {
 
-		void* open_shared_memory(const char* name);
-	}
+	void* create_shared_memory(const char* name, size_t size);
+
+	void* open_shared_memory(const char* name);
 }
+
 
 #endif //SYSCORE_IPC_SHAREDMEMORY_H

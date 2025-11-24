@@ -9,148 +9,155 @@
 #ifndef MAXOS_PROCESSES_RESOURCE_H
 #define MAXOS_PROCESSES_RESOURCE_H
 
-#include <stddef.h>
+#include <cstddef>
 #include <common/map.h>
 #include <common/vector.h>
 #include <common/string.h>
 #include <common/logger.h>
 #include <syscalls.h>
 
-namespace MaxOS {
-	namespace processes {
 
-		typedef ::syscore::ResourceType resource_type_t;
-		typedef ::syscore::ResourceErrorBase resource_error_base_t;
+namespace MaxOS::processes {
 
-		/**
-		 * @class Resource
-		 * @brief Represents a generic resource that can be opened, closed, read from and written to
-		 */
-		class Resource {
+	typedef ::syscore::ResourceType resource_type_t;                    ///< Alias to make the libsyscore ResourceType accessible here
+	typedef ::syscore::ResourceErrorBase resource_error_base_t;         ///< Alias to make the libsyscore ResourceErrorBase accessible here
 
-			private:
-				string m_name;
-				resource_type_t m_type;
+	/**
+	 * @class Resource
+	 * @brief Represents a generic resource that can be opened, closed, read from and written to
+	 */
+	class Resource {
 
-			public:
+		private:
+			string m_name;
+			resource_type_t m_type;
 
-				Resource(const string &name, size_t flags, resource_type_t type);
-				virtual ~Resource();
+		public:
 
-				string name();
-				resource_type_t type();
+			Resource(const string& name, size_t flags, resource_type_t type);
+			virtual ~Resource();
 
-				virtual void open(size_t flags);
-				virtual void close(size_t flags);
+			string name();
+			resource_type_t type();
 
-				virtual int read(void* buffer, size_t size, size_t flags);
-				virtual int write(const void* buffer, size_t size, size_t flags);
-		};
+			virtual void open(size_t flags);
+			virtual void close(size_t flags);
 
-		/**
-		 * @class BaseResourceRegistry
-		 * @brief Manages the creation, retention and destruction of resources of a certain type. Should be subclassed for each resource type
-		 */
-		class BaseResourceRegistry {
+			virtual int read(void* buffer, size_t size, size_t flags);
+			virtual int write(const void* buffer, size_t size, size_t flags);
+	};
 
-			protected:
-				common::Map<string, Resource*> m_resources;         ///< The map of resource names to resource instances
-				common::Map<string, uint64_t> m_resource_uses;      ///< The map of resource names to how many processes are using them
+	/**
+	 * @class BaseResourceRegistry
+	 * @brief Manages the creation, retention and destruction of resources of a certain type. Should be subclassed for each resource type
+	 */
+	class BaseResourceRegistry {
 
-				resource_type_t m_type;                             ///< The resource type that this registry manages
+		protected:
+			common::Map<string, Resource*> m_resources;         ///< The map of resource names to resource instances
+			common::Map<string, uint64_t> m_resource_uses;      ///< The map of resource names to how many processes are using them
 
-			public:
-				explicit BaseResourceRegistry(resource_type_t type);
-				~BaseResourceRegistry();
+			resource_type_t m_type;                             ///< The resource type that this registry manages
 
-				resource_type_t type();
+		public:
+			explicit BaseResourceRegistry(resource_type_t type);
+			~BaseResourceRegistry();
 
-				virtual Resource* get_resource(const string &name);
-				virtual bool register_resource(Resource* resource);
+			resource_type_t type();
 
-				virtual void close_resource(Resource* resource, size_t flags);
-				virtual Resource* create_resource(const string &name, size_t flags);
-		};
+			virtual Resource* get_resource(const string& name);
+			virtual bool register_resource(Resource* resource);
 
-		/**
-		 * @class ResourceRegistry
-		 * @brief A resource registry for a specific resource type
-		 *
-		 * @tparam Type The resource type that this registry manages
-		 */
-		template<class Type> class ResourceRegistry : public BaseResourceRegistry {
+			virtual void close_resource(Resource* resource, size_t flags);
+			virtual Resource* create_resource(const string& name, size_t flags);
+	};
 
-			public:
-				explicit ResourceRegistry(resource_type_t type);
-				~ResourceRegistry() = default;
+	/**
+	 * @class ResourceRegistry
+	 * @brief A resource registry for a specific resource type
+	 *
+	 * @tparam Type The resource type that this registry manages
+	 */
+	template<class Type> class ResourceRegistry : public BaseResourceRegistry {
 
-				/// Creates a resource of the specific type
-				Resource* create_resource(const string &name, size_t flags) override {
+		public:
+			explicit ResourceRegistry(resource_type_t type);
+			~ResourceRegistry() = default;
 
-					auto resource = new Type(name, flags, type());
+			/**
+			 * @brief Create a new resource of the specific type
+			 *
+			 * @param name The name of the resource
+			 * @param flags The flags to open the resource with
+			 * @return The created resource, or nullptr on failure
+			 */
+			Resource* create_resource(const string& name, size_t flags) override {
 
-					// Creation failed
-					if (!register_resource(resource)) {
-						delete resource;
-						return nullptr;
-					}
+				auto resource = new Type(name, flags, type());
 
-					return resource;
+				// Creation failed
+				if(!register_resource(resource)) {
+					delete resource;
+					return nullptr;
 				}
-		};
 
-		/**
-		 * @brief Constructor for ResourceRegistry of a specific type
-		 *
-		 * @tparam Type The resource type that this registry manages
-		 * @param type The resource type enum value
-		 */
-		template<class Type> ResourceRegistry<Type>::ResourceRegistry(resource_type_t type):BaseResourceRegistry(type) {}
+				return resource;
+			}
+	};
 
-		/**
-		 * @class GlobalResourceRegistry
-		 * @brief Manages all the resource registries for each resource type
-		 */
-		class GlobalResourceRegistry {
+	/**
+	 * @brief Constructor for ResourceRegistry of a specific type
+	 *
+	 * @tparam Type The resource type that this registry manages
+	 * @param type The resource type enum value
+	 */
+	template<class Type> ResourceRegistry<Type>::ResourceRegistry(resource_type_t type)
+			:BaseResourceRegistry(type) { }
 
-			private:
-				common::Map<resource_type_t, BaseResourceRegistry*> m_registries;
-				inline static GlobalResourceRegistry* s_current;
+	/**
+	 * @class GlobalResourceRegistry
+	 * @brief Manages all the resource registries for each resource type
+	 */
+	class GlobalResourceRegistry {
 
-			public:
-				GlobalResourceRegistry();
-				~GlobalResourceRegistry();
+		private:
+			common::Map<resource_type_t, BaseResourceRegistry*> m_registries;
+			inline static GlobalResourceRegistry* s_current;
 
-				static BaseResourceRegistry* get_registry(resource_type_t type);
+		public:
+			GlobalResourceRegistry();
+			~GlobalResourceRegistry();
 
-				static void add_registry(resource_type_t type, BaseResourceRegistry* registry);
-				static void remove_registry(BaseResourceRegistry* registry);
-		};
+			static BaseResourceRegistry* get_registry(resource_type_t type);
 
-		/**
-		 * @class ResourceManager
-		 * @brief Manages the open resources for a process
-		 */
-		class ResourceManager {
+			static void add_registry(resource_type_t type, BaseResourceRegistry* registry);
+			static void remove_registry(BaseResourceRegistry* registry);
+	};
 
-			private:
-				common::Map<uint64_t, Resource*> m_resources;
+	/**
+	 * @class ResourceManager
+	 * @brief Manages the open resources for a process
+	 */
+	class ResourceManager {
 
-				uint64_t m_next_handle = 1;
+		private:
+			common::Map<uint64_t, Resource*> m_resources;
 
-			public:
-				ResourceManager();
-				~ResourceManager();
+			uint64_t m_next_handle = 1;
 
-				common::Map<uint64_t, Resource*> resources();
+		public:
+			ResourceManager();
+			~ResourceManager();
 
-				uint64_t open_resource(resource_type_t type, const string &name, size_t flags);
-				void close_resource(uint64_t handle, size_t flags);
+			common::Map<uint64_t, Resource*> resources();
 
-				Resource* get_resource(uint64_t handle);
-				Resource* get_resource(const string &name);
-		};
-	}
+			uint64_t open_resource(resource_type_t type, const string& name, size_t flags);
+			void close_resource(uint64_t handle, size_t flags);
+
+			Resource* get_resource(uint64_t handle);
+			Resource* get_resource(const string& name);
+	};
 }
+
 
 #endif //MAXOS_PROCESSES_RESOURCE_H

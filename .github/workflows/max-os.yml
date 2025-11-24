@@ -44,10 +44,11 @@ jobs:
         run: |
           cd toolchain/pre_process
           ./version.sh --force
+          ./symbols.sh pre ../../kernel/include/common/symbols.h
           cd ../../
-          mkdir -p cmake-build
-          cd cmake-build
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt
+          mkdir -p cmake-release
+          cd cmake-release
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt -DCMAKE_BUILD_TYPE=Release
           make install
 
       - name: Upload binary
@@ -66,6 +67,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+
+      - name: Install epstopdf
+        run: sudo apt-get update && sudo apt-get install -y texlive-font-utils
 
       - name: Generate Docs
         run: |

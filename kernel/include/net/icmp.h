@@ -10,44 +10,47 @@
 #define MAXOS_NET_ICMP_H
 
 #include <net/ipv4.h>
-#include <stdint.h>
+#include <cstdint>
 #include <common/outputStream.h>
 
-namespace MaxOS {
 
-	namespace net {
+namespace MaxOS::net {
 
 
-		/**
-		 * @struct ICMPHeader
-		 * @brief The header of an ICMP packet
-		 */
-		struct ICMPHeader {
-			uint8_t type;           ///< The type of ICMP message
-			uint8_t code;           ///< The code of the ICMP message
+	/**
+	 * @struct ICMPHeader
+	 * @brief The header of an ICMP packet
+	 *
+	 * @typedef icmp_header_t
+	 * @brief Alias for ICMPHeader struct
+	 */
+	typedef struct PACKED ICMPHeader {
 
-			uint16_t checksum;      ///< Checksum to verify integrity
-			uint32_t data;          ///< Payload data (Varies by type and code)
-		}__attribute__((packed));
+		uint8_t type;           ///< The type of ICMP message
+		uint8_t code;           ///< The code of the ICMP message
 
-		/**
-		 * @class InternetControlMessageProtocol
-		 * @brief Handles ICMP packets
-		 */
-		class InternetControlMessageProtocol : IPV4PayloadHandler {
+		uint16_t checksum;      ///< checksum to verify integrity
+		uint32_t data;          ///< Payload data (Varies by type and code)
 
-				common::OutputStream* errorMessages;
+	} icmp_header_t;
 
-			public:
-				InternetControlMessageProtocol(InternetProtocolHandler* internetProtocolHandler, common::OutputStream* errorMessages);
-				~InternetControlMessageProtocol();
+	/**
+	 * @class InternetControlMessageProtocol
+	 * @brief Handles ICMP packets
+	 */
+	class InternetControlMessageProtocol : IPV4PayloadHandler {
 
-				bool handleInternetProtocolPayload(InternetProtocolAddress sourceIP, InternetProtocolAddress destinationIP, uint8_t* payloadData, uint32_t size) final;
-				void RequestEchoReply(InternetProtocolAddress ip_be);
-		};
+			common::OutputStream* error_messages;
 
-	}
+		public:
+			InternetControlMessageProtocol(InternetProtocolHandler* internet_protocol_handler, common::OutputStream* error_messages);
+			~InternetControlMessageProtocol();
+
+			bool handle_internet_protocol_payload(net::InternetProtocolAddress src_ip_be, net::InternetProtocolAddress dst_ip_be, uint8_t* payload_data, uint32_t size) final;
+			void request_echo_reply(uint32_t ip_be);
+	};
 
 }
+
 
 #endif //MAXOS_NET_ICMP_H

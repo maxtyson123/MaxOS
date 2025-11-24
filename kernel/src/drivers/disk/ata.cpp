@@ -21,17 +21,16 @@ using namespace MaxOS::drivers::disk;
  * @param master True if the device is master, false if slave
  */
 AdvancedTechnologyAttachment::AdvancedTechnologyAttachment(uint16_t port_base, bool master)
-: m_data_port(port_base),
-  m_error_port(port_base + 1),
-  m_sector_count_port(port_base + 2),
-  m_LBA_low_port(port_base + 3),
-  m_LBA_mid_port(port_base + 4),
-  m_LBA_high_Port(port_base + 5),
-  m_device_port(port_base + 6),
-  m_command_port(port_base + 7),
-  m_control_port(port_base + 0x206),
-  m_is_master(master)
-{
+		: m_data_port(port_base),
+		m_error_port(port_base + 1),
+		m_sector_count_port(port_base + 2),
+		m_LBA_low_port(port_base + 3),
+		m_LBA_mid_port(port_base + 4),
+		m_LBA_high_Port(port_base + 5),
+		m_device_port(port_base + 6),
+		m_command_port(port_base + 7),
+		m_control_port(port_base + 0x206),
+		m_is_master(master) {
 
 }
 
@@ -83,22 +82,25 @@ bool AdvancedTechnologyAttachment::identify() {
 		return false;
 	}
 
-	// Read the rest of the data as a whole sector needs to be read
-	for (uint16_t i = 0; i < 256; ++i)
-		uint16_t data = m_data_port.read();
+	// Read the rest of the data as a whole sector needs to be read (force the compiler to do so)
+	for (uint16_t i = 0; i < 256; ++i) {
+		volatile uint16_t data = m_data_port.read();
+		(void) data;
+	}
+
 
 	// Device is present and ready
 	return true;
 }
 
 /**
- * @brief Read a sector from the ATA device
+ * @brief read a sector from the ATA device
  *
  * @param sector The sector to read
  * @param data_buffer The data to read into
  * @param amount The amount of bytes to read from that sector
  */
-void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t *data_buffer, size_t amount) {
+void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t* data_buffer, size_t amount) {
 
 	// Don't allow reading more than a sector
 	if (sector & 0xF0000000 || amount > m_bytes_per_sector)
@@ -107,7 +109,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t *data_buffer, 
 	// Select the device (master or slave)
 	m_device_port.write((m_is_master ? 0xE0 : 0xF0) | ((sector & 0x0F000000) >> 24));
 
-	// Device is busy @todo yeild
+	// Device is busy @todo yield
 	while ((m_command_port.read() & 0x80) != 0);
 
 	// Reset the device
@@ -158,7 +160,7 @@ void AdvancedTechnologyAttachment::read(uint32_t sector, buffer_t *data_buffer, 
  * @param data The data to write
  * @param count The amount of data to write to that sector
  */
-void AdvancedTechnologyAttachment::write(uint32_t sector, const buffer_t *data, size_t count) {
+void AdvancedTechnologyAttachment::write(uint32_t sector, buffer_t* data, size_t count) {
 
 	// Don't allow writing more than a sector
 	if (sector > 0x0FFFFFFF || count > m_bytes_per_sector)
@@ -188,19 +190,19 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, const buffer_t *data, 
 		status = m_command_port.read();
 
 	// Write the data to the device
-	for (uint16_t i = 0; i < m_bytes_per_sector; i += 2) {
+	for (size_t i = 0; i < m_bytes_per_sector; i += 2) {
 
-		uint16_t writeData = data->read();
+		uint16_t write_data = data->read();
 
 		// Place the next byte in the array if there is one
 		if (i + 1 < count)
-			writeData |= (uint16_t) (data->read()) << 8;
+			write_data |= (uint16_t) (data->read()) << 8;
 
-		m_data_port.write(writeData);
+		m_data_port.write(write_data);
 	}
 
 	// Write the remaining bytes as a full sector has to be written
-	for (int i = count + (count % 2); i < m_bytes_per_sector; i += 2)
+	for (size_t i = count + (count % 2); i < m_bytes_per_sector; i += 2)
 		m_data_port.write(0x0000);
 
 	// Wait for the device to finish writing @todo YIELD

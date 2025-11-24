@@ -25,11 +25,6 @@ IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 ENDIF()
 
-# Set flags based on build type
-IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    ADD_DEFINITIONS(-DTARGET_DEBUG)
-ENDIF()
-
 # Function to make a library easier
 function(MAKE_LIBRARY LIBNAME)
 

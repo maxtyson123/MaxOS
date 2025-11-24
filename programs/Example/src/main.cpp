@@ -1,8 +1,8 @@
 //
 // Created by 98max on 21/03/2025.
 //
-#include <stdint.h>
-#include <stddef.h>
+#include <cstdint>
+#include <cstddef>
 #include <ipc/messages.h>
 #include <filesystem/file.h>
 
@@ -31,7 +31,7 @@ void close()
 			);
 }
 
-extern "C" [[noreturn]] void _start(void) {
+extern "C" void _start(void) {
 
 	// Write to the console
 	write("MaxOS Test Program v3\n");

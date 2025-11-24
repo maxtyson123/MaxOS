@@ -13,6 +13,11 @@ using namespace MaxOS;
 using namespace MaxOS::filesystem;
 using namespace MaxOS::common;
 
+/**
+ * @brief Construct a new Virtual File System object and set it as the current file system
+ *
+ * @note Only call once
+ */
 VirtualFileSystem::VirtualFileSystem() {
 
 	// Set the current file system to this instance
@@ -20,6 +25,9 @@ VirtualFileSystem::VirtualFileSystem() {
 
 }
 
+/**
+ * @brief Destroy the Virtual File System object and unmount all filesystems
+ */
 VirtualFileSystem::~VirtualFileSystem() {
 
 	// Remove all mounted filesystems
@@ -396,7 +404,7 @@ void VirtualFileSystem::delete_directory(Directory* parent, Directory* directory
 	}
 
 	// Delete the directory from the bottom of the tree
-	for (int i = to_delete.size() - 1; i >= 0; --i) {
+	for (uint32_t i = to_delete.size() - 1; i >= 0; --i) {
 
 		// Get the parent and child
 		const auto &current = to_delete[i];
@@ -435,6 +443,7 @@ File* VirtualFileSystem::create_file(const string &path) {
  *
  * @param parent The directory where the file should be created
  * @param name The name of the file to create
+ * @return The created file or null pointer if it could not be created
  */
 File* VirtualFileSystem::create_file(Directory* parent, string const &name) {
 	return parent->create_file(name);

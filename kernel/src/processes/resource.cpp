@@ -47,7 +47,7 @@ void Resource::close(size_t flags) {
 }
 
 /**
- * @brief Read a certain amount of bytes from a resource
+ * @brief read a certain amount of bytes from a resource
  *
  * @param buffer The buffer to read into
  * @param size How many bytes to read
@@ -59,7 +59,7 @@ int Resource::read(void* buffer, size_t size, size_t flags) {
 }
 
 /**
- * @brief Write a certain amount of bytes to a resource
+ * @brief write a certain amount of bytes to a resource
  *
  * @param buffer The buffer to read from
  * @param size How many bytes to write
@@ -101,6 +101,9 @@ BaseResourceRegistry::BaseResourceRegistry(resource_type_t type)
 	GlobalResourceRegistry::add_registry(type, this);
 }
 
+/**
+ * @brief Destructor for BaseResourceRegistry, removes it from the global list
+ */
 BaseResourceRegistry::~BaseResourceRegistry(){
 
 	GlobalResourceRegistry::remove_registry(this);
@@ -188,11 +191,17 @@ Resource* BaseResourceRegistry::create_resource(string const& name, size_t flags
 	return nullptr;
 }
 
+/**
+ * @brief Constructs a new GlobalResourceRegistry and sets it as the current global registry
+ */
 GlobalResourceRegistry::GlobalResourceRegistry() {
 	s_current = this;
 
 }
 
+/**
+ * @brief Destructor for GlobalResourceRegistry, unsets it as the current global registry if it is
+ */
 GlobalResourceRegistry::~GlobalResourceRegistry() {
 	if(s_current == this)
 		s_current = nullptr;
@@ -246,6 +255,9 @@ void GlobalResourceRegistry::remove_registry(BaseResourceRegistry* registry) {
 
 ResourceManager::ResourceManager() = default;
 
+/**
+ * @brief Destructor for ResourceManager, closes all open resources
+ */
 ResourceManager::~ResourceManager(){
 
 	// Collect all resources (as closing will break iteration)
@@ -257,7 +269,7 @@ ResourceManager::~ResourceManager(){
 	for (auto h : handles)
 		close_resource(h, 0);
 
-};
+}
 
 /**
  * @brief Get the resources currently open

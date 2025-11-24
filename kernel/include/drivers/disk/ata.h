@@ -13,48 +13,43 @@
 #include <common/outputStream.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/disk/disk.h>
-#include <stdint.h>
+#include <cstdint>
 
 
-namespace MaxOS{
+namespace MaxOS::drivers::disk {
 
-    namespace drivers{
+	/**
+	 * @class AdvancedTechnologyAttachment
+	 * @brief Driver for the ATA controller, handles the reading and writing of data to the hard drive
+	 */
+	class AdvancedTechnologyAttachment : public Disk {
 
-        namespace disk{
+		private:
+			hardwarecommunication::Port16Bit m_data_port;
+			hardwarecommunication::Port8Bit m_error_port;
+			hardwarecommunication::Port8Bit m_sector_count_port;
+			hardwarecommunication::Port8Bit m_LBA_low_port;
+			hardwarecommunication::Port8Bit m_LBA_mid_port;
+			hardwarecommunication::Port8Bit m_LBA_high_Port;
+			hardwarecommunication::Port8Bit m_device_port;
+			hardwarecommunication::Port8Bit m_command_port;
+			hardwarecommunication::Port8Bit m_control_port;
+			bool m_is_master;
+			uint16_t m_bytes_per_sector { 512 };
 
-            /**
-             * @class AdvancedTechnologyAttachment
-             * @brief Driver for the ATA controller, handles the reading and writing of data to the hard drive
-             */
-            class AdvancedTechnologyAttachment : public Disk {
+		public:
+			AdvancedTechnologyAttachment(uint16_t port_base, bool master);
+			virtual ~AdvancedTechnologyAttachment();
 
-	            private:
-                    hardwarecommunication::Port16Bit m_data_port;
-                    hardwarecommunication::Port8Bit m_error_port;
-                    hardwarecommunication::Port8Bit m_sector_count_port;
-                    hardwarecommunication::Port8Bit m_LBA_low_port;
-                    hardwarecommunication::Port8Bit m_LBA_mid_port;
-                    hardwarecommunication::Port8Bit m_LBA_high_Port;
-                    hardwarecommunication::Port8Bit m_device_port;
-                    hardwarecommunication::Port8Bit m_command_port;
-                    hardwarecommunication::Port8Bit m_control_port;
-                    bool m_is_master;
-                    uint16_t m_bytes_per_sector { 512 };
+			bool identify();
+			void read(uint32_t sector, common::buffer_t* data_buffer, size_t amount) final;
+			void write(uint32_t sector, common::buffer_t* data, size_t count) final;
+			void flush() final;
 
-                public:
-                    AdvancedTechnologyAttachment(uint16_t port_base, bool master);
-                    ~AdvancedTechnologyAttachment();
-
-                    bool identify();
-                    void read(uint32_t sector, common::buffer_t* data_buffer, size_t amount) final;
-                    void write(uint32_t sector, const common::buffer_t* data, size_t count) final;
-                    void flush() final;
-
-                    string device_name() final;
-                    string vendor_name() final;
-            };
-       }
-    }
+			string device_name() final;
+			string vendor_name() final;
+	};
 }
+
 
 #endif //MAXOS_DRIVERS_DISK_ATA_H

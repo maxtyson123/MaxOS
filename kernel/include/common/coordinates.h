@@ -9,21 +9,19 @@
 #ifndef MAXOS_COMMON_COORDINATES_H
 #define MAXOS_COMMON_COORDINATES_H
 
-#include <stdint.h>
+#include <cstdint>
 #include <common/pair.h>
 
-namespace MaxOS{
 
-    namespace common{
+namespace MaxOS::common {
 
-		/**
-		 * @typedef Coordinates
-		 * @brief A type representing 2D coordinates as a pair of int32_t
-		 */
-        typedef Pair<int32_t, int32_t> Coordinates;
-
-    }
+	/**
+	 * @typedef Coordinates
+	 * @brief A type representing 2D coordinates as a pair of int32_t
+	 */
+	typedef Pair<int32_t, int32_t> Coordinates;
 
 }
+
 
 #endif //MAXOS_COMMON_COORDINATES_H

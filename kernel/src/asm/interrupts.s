@@ -10,62 +10,7 @@
 ; */
 
 [bits  64]
-[extern _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE]
-
-%macro HandleException 1
-[global _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev]
-_ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev:
-    ; When this macro is called the status registers are already on the stack
-    push 0	; since we have no error code, to keep things consistent we push a default EC of 0
-    push %1 ; pushing the interrupt number for easier identification by the handler
-    save_context ; Now we can save the general purpose registers
-    mov rdi, rsp    ; Let's set the current stack pointer as a parameter of the interrupts_handler
-    cld ; Clear the direction flag
-    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE ; Now we call the interrupt handler
-    mov rsp, rax    ; use the returned context
-    restore_context ; We served the interrupt let's restore the previous context
-    add rsp, 16 ; We can discard the interrupt number and the error code
-    iretq ; Now we can return from the interrupt
-%endmacro
-
-%macro HandleInterruptRequest 1
-[global _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev]
-_ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev:
-    ; When this macro is called the status registers are already on the stack
-    push 0	; since we have no error code, to keep things consistent we push a default EC of 0
-    push (%1 + 0x20) ; pushing the interrupt number for easier identification by the handler
-    save_context ; Now we can save the general purpose registers
-    mov rdi, rsp    ; Let's set the current stack pointer as a parameter of the interrupts_handler
-    cld ; Clear the direction flag
-    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE ; Now we call the interrupt handler
-    mov rsp, rax    ; use the returned context
-    restore_context ; We served the interrupt let's restore the previous context
-    add rsp, 16 ; We can discard the interrupt number and the error code
-    iretq ; Now we can return from the interrupt
-%endmacro
-
-%macro HandleInterruptError 1
-[global _ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev]
-_ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev:
-    push %1 ; In this case the error code is already present on the stack
-    save_context
-    mov rdi, rsp
-    cld
-    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system12cpu_status_tE
-    mov rsp, rax    ; use the returned context
-    restore_context
-    add rsp, 16
-    iretq
-%endmacro
-
-
-[global _ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system12cpu_status_tE]
-_ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system12cpu_status_tE:
-
-    mov rsp, rdi         ; use the returned context
-    restore_context
-    add rsp, 16
-    iretq
+[extern _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system9CPUStatusE]
 
 %macro save_context 0
     push rax
@@ -102,6 +47,61 @@ _ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6sy
     pop rbx
     pop rax
 %endmacro
+
+%macro HandleException 1
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev]
+_ZN5MaxOS21hardwarecommunication16InterruptManager19HandleException%1Ev:
+    ; When this macro is called the status registers are already on the stack
+    push 0	; since we have no error code, to keep things consistent we push a default EC of 0
+    push %1 ; pushing the interrupt number for easier identification by the handler
+    save_context ; Now we can save the general purpose registers
+    mov rdi, rsp    ; Let's set the current stack pointer as a parameter of the interrupts_handler
+    cld ; Clear the direction flag
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system9CPUStatusE ; Now we call the interrupt handler
+    mov rsp, rax    ; use the returned context
+    restore_context ; We served the interrupt let's restore the previous context
+    add rsp, 16 ; We can discard the interrupt number and the error code
+    iretq ; Now we can return from the interrupt
+%endmacro
+
+%macro HandleInterruptRequest 1
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev]
+_ZN5MaxOS21hardwarecommunication16InterruptManager26HandleInterruptRequest%1Ev:
+    ; When this macro is called the status registers are already on the stack
+    push 0	; since we have no error code, to keep things consistent we push a default EC of 0
+    push (%1 + 0x20) ; pushing the interrupt number for easier identification by the handler
+    save_context ; Now we can save the general purpose registers
+    mov rdi, rsp    ; Let's set the current stack pointer as a parameter of the interrupts_handler
+    cld ; Clear the direction flag
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system9CPUStatusE ; Now we call the interrupt handler
+    mov rsp, rax    ; use the returned context
+    restore_context ; We served the interrupt let's restore the previous context
+    add rsp, 16 ; We can discard the interrupt number and the error code
+    iretq ; Now we can return from the interrupt
+%endmacro
+
+%macro HandleInterruptError 1
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev]
+_ZN5MaxOS21hardwarecommunication16InterruptManager24HandleInterruptError%1Ev:
+    push %1 ; In this case the error code is already present on the stack
+    save_context
+    mov rdi, rsp
+    cld
+    call _ZN5MaxOS21hardwarecommunication16InterruptManager15HandleInterruptEPNS_6system9CPUStatusE
+    mov rsp, rax    ; use the returned context
+    restore_context
+    add rsp, 16
+    iretq
+%endmacro
+
+
+[global _ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system9CPUStatusE]
+_ZN5MaxOS21hardwarecommunication16InterruptManager20ForceInterruptReturnEPNS_6system9CPUStatusE:
+
+    mov rsp, rdi         ; use the returned context
+    restore_context
+    add rsp, 16
+    iretq
 
 ; Exception handlers
 HandleException 0x00

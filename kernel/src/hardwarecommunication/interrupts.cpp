@@ -49,7 +49,9 @@ InterruptHandler::InterruptHandler(uint8_t interrupt_number, int64_t redirect, u
 	io_apic->set_redirect(&temp);
 }
 
-
+/**
+ * @brief Destroys the interrupt handler and unregisters it from the interrupt manager
+ */
 InterruptHandler::~InterruptHandler() {
 
 	// Get the interrupt manager
@@ -82,6 +84,9 @@ system::cpu_status_t* InterruptHandler::handle_interrupt(system::cpu_status_t* s
 	return status;
 }
 
+/**
+ * @brief Constructs the Interrupt Manager and sets up the interrupt descriptor table (does not activate interrupts)
+ */
 InterruptManager::InterruptManager() {
 
 	Logger::INFO() << "Setting up Interrupt Manager\n";
@@ -144,6 +149,9 @@ InterruptManager::InterruptManager() {
 	load_current();
 }
 
+/**
+ * @brief Destroys the Interrupt Manager and deactivates interrupts
+ */
 InterruptManager::~InterruptManager() {
 	deactivate();
 }
@@ -195,8 +203,7 @@ void InterruptManager::activate() {
 	Logger::INFO() << "Activating Interrupts \n";
 
 	// Deactivate the current (old) interrupt manager
-	if (s_active_interrupt_manager != nullptr)
-		s_active_interrupt_manager->deactivate();
+	InterruptManager::deactivate();
 
 	// Set the current interrupt manager and start interrupts
 	s_active_interrupt_manager = this;
