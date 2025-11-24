@@ -1,8 +1,8 @@
 var classMaxOS_1_1net_1_1AddressResolutionProtocol =
 [
-    [ "AddressResolutionProtocol", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#af89ec96fda818531345f775d6e45fb3a", null ],
-    [ "handleEthernetframePayload", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#a36888e01bde039f9c8ebadea34a880f2", null ],
-    [ "RequestMACAddress", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#ad84350376c832ffd8519595245eb9f7f", null ],
-    [ "Resolve", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#a062601e6274055b5d0550a3a85c87ac5", null ],
-    [ "Store", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#a582357dfbc8c99148b7d2c39233381e7", null ]
+    [ "AddressResolutionProtocol", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#a76fbff6174dfdfdc5a96b381bdf6c8a7", null ],
+    [ "handle_ethernetframe_payload", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#ab7f16cbe012c9dfa5fa88ffb158c8aa6", null ],
+    [ "request_mac_address", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#a1ada08d3caa334e3587159c893308532", null ],
+    [ "resolve", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#a218804ea32d9617b797b0828709db31f", null ],
+    [ "store", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html#a4d40d82d266a16a33f6f201988002a16", null ]
 ];

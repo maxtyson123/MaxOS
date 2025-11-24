@@ -3,7 +3,6 @@ var string_8h =
     [ "MaxOS::String", "classMaxOS_1_1String.html", "classMaxOS_1_1String" ],
     [ "MaxOS::StringBuilder", "classMaxOS_1_1StringBuilder.html", "classMaxOS_1_1StringBuilder" ],
     [ "string", "string_8h.html#a4a6e5834af96b66d8015f5a24c09e1b3", null ],
-    [ "ftoa", "string_8h.html#a67b7d920f0d5f6764f9d0a58f771a126", null ],
     [ "htoa", "string_8h.html#aa45db8c9bd3e58972f39d4a5e0defa44", null ],
     [ "itoa", "string_8h.html#a100df116078d0e34de582fc45d2e7df2", null ],
     [ "strcmp", "string_8h.html#a82efc5a6f65207e2120b326554db0ee9", null ],

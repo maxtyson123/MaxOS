@@ -11,434 +11,430 @@
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00014}00014\ \textcolor{keyword}{using\ namespace\ }MaxOS::common;}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00015}00015\ \textcolor{keyword}{using\ namespace\ }MaxOS::processes;}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00016}00016\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00017}00017\ VirtualMemoryManager::VirtualMemoryManager()\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00018}00018\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00019}00019\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ kernel\ flag}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00020}00020\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_kernel\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{MemoryManager::s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00021}00021\ \ \ \ \ \textcolor{keywordflow}{if}\ (!is\_kernel)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00022}00022\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00023}00023\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ a\ new\ pml4\ table}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00024}00024\ \ \ \ \ \ \ \ \ m\_pml4\_root\_physical\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00025}00025\ \ \ \ \ \ \ \ \ m\_pml4\_root\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a061e07bff657447294f4005f550d87ac}{PhysicalMemoryManager::to\_dm\_region}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_pml4\_root\_physical\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00026}00026\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00027}00027\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ table}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00028}00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a66d5d1a4c7c019d77fcee0aa3c128d07}{PhysicalMemoryManager::clean\_page\_table}}(m\_pml4\_root\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00029}00029\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Map\ the\ higher\ half\ of\ the\ kernel\ (p4\ 256\ -\/\ 511)}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00031}00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 256;\ i\ <\ 512;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00032}00032\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00033}00033\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Recursive\ Map\ the\ pml4\ table\ (so\ that\ we\ can\ access\ the\ new\ pml4\ table\ later\ on)}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ ==\ 510)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00035}00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_pml4\_root\_address[i]\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_pml4\_root\_physical\_address\ |\ PRESENT\ |\ WRITE;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00038}00038\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ new\ pml4\ table\ to\ the\ old\ (kernel)\ pml4\ table}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ m\_pml4\_root\_address[i]\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>pml4\_root\_address()[i];}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00041}00041\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Mapped\ higher\ half\ of\ kernel\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00044}00044\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00045}00045\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00046}00046\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ m\_pml4\_root\_address\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>pml4\_root\_address();}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ m\_pml4\_root\_physical\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a92723ea076c394a848f7f95bca9a86b6}{PhysicalMemoryManager::to\_lower\_region}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_pml4\_root\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00049}00049\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00022}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a1b906972aec924522e630490ff0a8de2}{00022}}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a1b906972aec924522e630490ff0a8de2}{VirtualMemoryManager::VirtualMemoryManager}}()\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00024}00024\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ kernel\ flag}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00025}00025\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_kernel\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{MemoryManager::s\_kernel\_memory\_manager}}\ ==\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00026}00026\ \ \ \ \ \textcolor{keywordflow}{if}\ (!is\_kernel)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00028}00028\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ a\ new\ pml4\ table}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00029}00029\ \ \ \ \ \ \ \ \ m\_pml4\_root\_physical\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ m\_pml4\_root\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a061e07bff657447294f4005f550d87ac}{PhysicalMemoryManager::to\_dm\_region}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_pml4\_root\_physical\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00032}00032\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ table}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00033}00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a66d5d1a4c7c019d77fcee0aa3c128d07}{PhysicalMemoryManager::clean\_page\_table}}(m\_pml4\_root\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Map\ the\ higher\ half\ of\ the\ kernel\ (p4\ 256\ -\/\ 511)}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 256;\ i\ <\ 512;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Recursive\ Map\ the\ pml4\ table\ (so\ that\ we\ can\ access\ the\ new\ pml4\ table\ later\ on)}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ ==\ 510)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_pml4\_root\_address[i]\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_pml4\_root\_physical\_address\ |\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ |\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70}{WRITE}};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ new\ pml4\ table\ to\ the\ old\ (kernel)\ pml4\ table}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ m\_pml4\_root\_address[i]\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>pml4\_root\_address()[i];}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Mapped\ higher\ half\ of\ kernel\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00049}00049\ }
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00050}00050\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{comment}{//\ Allocate\ space\ for\ the\ vmm}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00052}00052\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}{PhysicalMemoryManager::align\_to\_page}}(HIGHER\_HALF\_DIRECT\_MAP\ +\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>memory\_size()\ +\ PAGE\_SIZE);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00053}00053\ \ \ \ \ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00054}00054\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}},\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}},\ PRESENT\ |\ WRITE,\ m\_pml4\_root\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00055}00055\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}VMM\ space:\ physical\ -\/\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}}\ <<\ \textcolor{stringliteral}{"{},\ virtual\ -\/\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00056}00056\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00057}00057\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ everything\ is\ mapped\ correctly}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00058}00058\ \ \ \ \ \textcolor{keywordflow}{if}\ (!is\_kernel)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00059}00059\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}}\ !=\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>get\_physical\_address((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}},\ m\_pml4\_root\_address),\ \textcolor{stringliteral}{"{}Physical\ address\ does\ not\ match\ mapped\ address:\ 0x\%x\ !=\ 0x\%x\(\backslash\)n"{}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}},}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>get\_physical\_address((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}},\ m\_pml4\_root\_address));}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00051}00051\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00052}00052\ \ \ \ \ \ \ \ \ m\_pml4\_root\_address\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>pml4\_root\_address();}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00053}00053\ \ \ \ \ \ \ \ \ m\_pml4\_root\_physical\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a92723ea076c394a848f7f95bca9a86b6}{PhysicalMemoryManager::to\_lower\_region}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_pml4\_root\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00054}00054\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00056}00056\ \ \ \ \ \textcolor{comment}{//\ Allocate\ space\ for\ the\ vmm}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00057}00057\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}{PhysicalMemoryManager::align\_to\_page}}(\mbox{\hyperlink{physical_8h_a209a1e2709f9aac5d70eb43e198608d5}{HIGHER\_HALF\_DIRECT\_MAP}}\ +\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>memory\_size()\ +\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00058}00058\ \ \ \ \ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00059}00059\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}},\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}},\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ |\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70}{WRITE}},\ m\_pml4\_root\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00060}00060\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}VMM\ space:\ physical\ -\/\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}}\ <<\ \textcolor{stringliteral}{"{},\ virtual\ -\/\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00061}00061\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00062}00062\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ first\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00063}00063\ \ \ \ \ m\_first\_region\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_memory\_region\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00064}00064\ \ \ \ \ m\_current\_region\ =\ m\_first\_region;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00065}00065\ \ \ \ \ m\_first\_region-\/>next\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00062}00062\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ everything\ is\ mapped\ correctly}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00063}00063\ \ \ \ \ \textcolor{keywordflow}{if}\ (!is\_kernel)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00064}00064\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}}\ !=\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>get\_physical\_address((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}},\ m\_pml4\_root\_address),\ \textcolor{stringliteral}{"{}Physical\ address\ does\ not\ match\ mapped\ address:\ 0x\%x\ !=\ 0x\%x\(\backslash\)n"{}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space\_physical}},}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>get\_physical\_address((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}},\ m\_pml4\_root\_address));}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00066}00066\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00067}00067\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ next\ available\ address\ (kernel\ needs\ to\ reserve\ space\ for\ the\ higher\ half)}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00068}00068\ \ \ \ \ m\_next\_available\_address\ =\ is\_kernel\ ?\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}}\ +\ VMM\_RESERVED\ :\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00069}00069\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Next\ available\ address:\ 0x"{}}\ <<\ m\_next\_available\_address\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00070}00070\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00071}00071\ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00072}00072\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00073}00073\ VirtualMemoryManager::\string~VirtualMemoryManager()\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00074}00074\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00075}00075\ \ \ \ \ \textcolor{comment}{//\ Free\ all\ the\ frames\ used\ by\ the\ VMM}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00076}00076\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_memory\_region\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ m\_first\_region;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00067}00067\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ first\ region}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00068}00068\ \ \ \ \ m\_first\_region\ =\ (\mbox{\hyperlink{virtual_8h_a0c2f8355820427cecb751d5b4e1c93fb}{virtual\_memory\_region\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00069}00069\ \ \ \ \ m\_current\_region\ =\ m\_first\_region;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00070}00070\ \ \ \ \ m\_first\_region-\/>next\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00072}00072\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ next\ available\ address\ (kernel\ needs\ to\ reserve\ space\ for\ the\ higher\ half)}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00073}00073\ \ \ \ \ m\_next\_available\_address\ =\ is\_kernel\ ?\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vmm\_space}}\ +\ VMM\_RESERVED\ :\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00074}00074\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Next\ available\ address:\ 0x"{}}\ <<\ m\_next\_available\_address\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00076}00076\ \}}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00077}00077\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00078}00078\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ regions}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00079}00079\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00080}00080\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00081}00081\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ chunks}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00082}00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ CHUNKS\_PER\_PAGE;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00083}00083\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Have\ reached\ the\ end?}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00085}00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ ==\ m\_current\_chunk\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ ==\ m\_current\_region)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00087}00087\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ pages}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00089}00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].size);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00090}00090\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ j++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00081}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a77e2717ead1bd12e12da9c824b0c7921}{00081}}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a77e2717ead1bd12e12da9c824b0c7921}{VirtualMemoryManager::\string~VirtualMemoryManager}}()\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00083}00083\ \ \ \ \ \textcolor{comment}{//\ Free\ all\ the\ frames\ used\ by\ the\ VMM}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00084}00084\ \ \ \ \ \mbox{\hyperlink{virtual_8h_a0c2f8355820427cecb751d5b4e1c93fb}{virtual\_memory\_region\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ m\_first\_region;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00086}00086\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ regions}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00087}00087\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00089}00089\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ chunks}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00090}00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ CHUNKS\_PER\_PAGE;\ i++)\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00091}00091\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00092}00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ frame}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00093}00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>get\_physical\_address((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].start\_address\ +\ (j\ *\ PAGE\_SIZE),\ m\_pml4\_root\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00094}00094\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00095}00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Free\ the\ frame}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>free\_frame(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00097}00097\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00098}00098\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00099}00099\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00100}00100\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00101}00101\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00102}00102\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>next;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00092}00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Have\ reached\ the\ end?}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00093}00093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ ==\ m\_current\_chunk\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ ==\ m\_current\_region)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Free\ each\ page\ in\ the\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].size);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00098}00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ j++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Convert\ the\ virtual\ address\ to\ a\ physical\ address\ and\ free\ it}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>get\_physical\_address((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].start\_address\ +\ (j\ *\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}}),\ m\_pml4\_root\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>free\_frame(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}});}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00103}00103\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00104}00104\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00105}00105\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00105}00105\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00106}00106\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00107}00107\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00115}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{00115}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{VirtualMemoryManager::allocate}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00116}00116\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00117}00117\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{allocate}}(0,\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00118}00118\ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00107}00107\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>next;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00108}00108\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00109}00109\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00119}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{00119}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{VirtualMemoryManager::allocate}}(\textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{size\_t}\ flags)\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00120}00120\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00129}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a4c1a63b53f6acbba12095a1a13fc0ecf}{00129}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{VirtualMemoryManager::allocate}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ address,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00130}00130\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00131}00131\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ allocating\ something}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00132}00132\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ ==\ 0)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00133}00133\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00121}00121\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{allocate}}(0,\ size,\ flags);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00122}00122\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00133}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a4c1a63b53f6acbba12095a1a13fc0ecf}{00133}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{VirtualMemoryManager::allocate}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ address,\ \textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{size\_t}\ flags)\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00134}00134\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00135}00135\ \ \ \ \ \textcolor{comment}{//\ If\ specific\ address\ is\ given}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00136}00136\ \ \ \ \ \textcolor{keywordflow}{if}\ (address\ !=\ 0)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00137}00137\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00138}00138\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ isn't\ already\ allocated}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00139}00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (address\ <\ m\_next\_available\_address)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00135}00135\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ allocating\ something}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00136}00136\ \ \ \ \ \textcolor{keywordflow}{if}\ (size\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00137}00137\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00139}00139\ \ \ \ \ \textcolor{comment}{//\ If\ specific\ address\ is\ given}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00140}00140\ \ \ \ \ \textcolor{keywordflow}{if}\ (address\ !=\ 0)\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00141}00141\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00142}00142\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ its\ aligned}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aa7f389d1b15d109bd5669d0475ebc912}{PhysicalMemoryManager::check\_aligned}}(address))}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00142}00142\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ isn't\ already\ allocated}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (address\ <\ m\_next\_available\_address)}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00145}00145\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00146}00146\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00147}00147\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00148}00148\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ size\ is\ aligned}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00149}00149\ \ \ \ \ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab9f9868ea17c935bf249e47371e97fb5}{PhysicalMemoryManager::align\_up\_to\_page}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00150}00150\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00151}00151\ \ \ \ \ \textcolor{comment}{//\ Check\ the\ free\ list\ for\ a\ chunk\ (if\ not\ asking\ for\ a\ specific\ address)}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00152}00152\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reusable\_chunk}}\ =\ address\ ==\ 0\ ?\ find\_and\_remove\_free\_chunk(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})\ :\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00153}00153\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reusable\_chunk}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00146}00146\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ its\ aligned}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aa7f389d1b15d109bd5669d0475ebc912}{PhysicalMemoryManager::check\_aligned}}(address))}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00148}00148\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00150}00150\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00152}00152\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ size\ is\ aligned}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00153}00153\ \ \ \ \ size\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ab9f9868ea17c935bf249e47371e97fb5}{PhysicalMemoryManager::align\_up\_to\_page}}(size,\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}});}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00154}00154\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00155}00155\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ chunk\ is\ not\ being\ reserved\ then\ the\ old\ memory\ needs\ to\ be\ unmapped}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00156}00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}\ \&\ VirtualFlags::RESERVE)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00157}00157\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Unmap\ the\ memory}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00155}00155\ \ \ \ \ \textcolor{comment}{//\ Check\ the\ free\ list\ for\ a\ chunk\ (if\ not\ asking\ for\ a\ specific\ address)}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00156}00156\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reusable\_chunk}}\ =\ address\ ==\ 0\ ?\ find\_and\_remove\_free\_chunk(size)\ :\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00157}00157\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reusable\_chunk}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00159}00159\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ chunk\ is\ not\ being\ reserved\ then\ the\ old\ memory\ needs\ to\ be\ unmapped}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00160}00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (flags\ \&\ VirtualFlags::RESERVE)\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00161}00161\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ frame}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>get\_physical\_address((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reusable\_chunk}}-\/>start\_address\ +\ (i\ *\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}}),\ m\_pml4\_root\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00164}00164\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00165}00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Free\ the\ frame}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>free\_frame(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00167}00167\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00168}00168\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00169}00169\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00170}00170\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00171}00171\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return\ the\ address}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00172}00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{void}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reusable\_chunk}}-\/>start\_address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00173}00173\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Unmap\ the\ memory}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(size);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ frame}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>get\_physical\_address((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reusable\_chunk}}-\/>start\_address\ +\ (i\ *\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}}),\ m\_pml4\_root\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Free\ the\ frame}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>free\_frame(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00172}00172\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00173}00173\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00174}00174\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00175}00175\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00176}00176\ \ \ \ \ \textcolor{comment}{//\ Is\ there\ space\ in\ the\ current\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00177}00177\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_current\_chunk\ >=\ CHUNKS\_PER\_PAGE)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00178}00178\ \ \ \ \ \ \ \ \ new\_region();}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00175}00175\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return\ the\ address}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00176}00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{void}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reusable\_chunk}}-\/>start\_address;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00177}00177\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00178}00178\ }
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00179}00179\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00180}00180\ \ \ \ \ \textcolor{comment}{//\ If\ needed\ to\ allocate\ at\ a\ specific\ address,\ fill\ with\ free\ memory\ up\ to\ that\ address\ to\ prevent\ fragmentation}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00181}00181\ \ \ \ \ \textcolor{keywordflow}{if}\ (address\ !=\ 0)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00182}00182\ \ \ \ \ \ \ \ \ fill\_up\_to\_address(address,\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00180}00180\ \ \ \ \ \textcolor{comment}{//\ Is\ there\ space\ in\ the\ current\ region}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00181}00181\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_current\_chunk\ >=\ CHUNKS\_PER\_PAGE)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00182}00182\ \ \ \ \ \ \ \ \ new\_region();}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00183}00183\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00184}00184\ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ memory}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00185}00185\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \&m\_current\_region-\/>chunks[m\_current\_chunk];}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00186}00186\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00187}00187\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>flags\ =\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00188}00188\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ =\ m\_next\_available\_address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00189}00189\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00190}00190\ \ \ \ \ \textcolor{comment}{//\ Update\ the\ next\ available\ address}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00191}00191\ \ \ \ \ m\_next\_available\_address\ +=\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00192}00192\ \ \ \ \ m\_current\_chunk++;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00184}00184\ \ \ \ \ \textcolor{comment}{//\ If\ needed\ to\ allocate\ at\ a\ specific\ address,\ fill\ with\ free\ memory\ up\ to\ that\ address\ to\ prevent\ fragmentation}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00185}00185\ \ \ \ \ \textcolor{keywordflow}{if}\ (address\ !=\ 0)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00186}00186\ \ \ \ \ \ \ \ \ fill\_up\_to\_address(address,\ flags,\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00188}00188\ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ memory}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00189}00189\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \&m\_current\_region-\/>chunks[m\_current\_chunk];}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00190}00190\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ =\ size;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00191}00191\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>flags\ =\ flags;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00192}00192\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ =\ m\_next\_available\_address;}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00193}00193\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00194}00194\ \ \ \ \ \textcolor{comment}{//\ If\ just\ reserving\ the\ space\ don't\ map\ it}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00195}00195\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}\ \&\ \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380a9b2ec1c1148770ef7ebf973def754e7c}{RESERVE}})}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00196}00196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{void}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00194}00194\ \ \ \ \ \textcolor{comment}{//\ Update\ the\ next\ available\ address}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00195}00195\ \ \ \ \ m\_next\_available\_address\ +=\ size;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00196}00196\ \ \ \ \ m\_current\_chunk++;}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00197}00197\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00198}00198\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ memory}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00199}00199\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00200}00200\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00198}00198\ \ \ \ \ \textcolor{comment}{//\ If\ just\ reserving\ the\ space\ don't\ map\ it}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00199}00199\ \ \ \ \ \textcolor{keywordflow}{if}\ (flags\ \&\ \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380a9b2ec1c1148770ef7ebf973def754e7c}{RESERVE}})}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00200}00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{void}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address;}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00201}00201\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00202}00202\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ a\ new\ frame}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00203}00203\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00204}00204\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}Failed\ to\ allocate\ frame\ (from\ current\ region)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00202}00202\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ memory}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00203}00203\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(size);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00204}00204\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ i++)\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00205}00205\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00206}00206\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Map\ the\ frame}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00207}00207\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}},\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ +\ (i\ *\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}}),\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ |\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70}{WRITE}},\ m\_pml4\_root\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00208}00208\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00209}00209\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00210}00210\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00211}00211\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ address}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00212}00212\ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{void}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00213}00213\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00206}00206\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ a\ new\ frame}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00207}00207\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00208}00208\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}Failed\ to\ allocate\ frame\ (from\ current\ region)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00210}00210\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Map\ the\ frame}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00211}00211\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}},\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ +\ (i\ *\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}}),\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ |\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70}{WRITE}},\ m\_pml4\_root\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00213}00213\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00214}00214\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00218}00218\ \textcolor{keywordtype}{void}\ VirtualMemoryManager::new\_region()\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00219}00219\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00220}00220\ \ \ \ \ \textcolor{comment}{//\ Space\ for\ the\ new\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00221}00221\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_region\_physical}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00222}00222\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_region\_physical}}\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}Failed\ to\ allocate\ new\ VMM\ region\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00215}00215\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ address}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00216}00216\ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{void}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00217}00217\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00218}00218\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00222}00222\ \textcolor{keywordtype}{void}\ VirtualMemoryManager::new\_region()\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00223}00223\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00224}00224\ \ \ \ \ \textcolor{comment}{//\ Align\ the\ new\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00225}00225\ \ \ \ \ \textcolor{keyword}{auto}*\ new\_region\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_memory\_region\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}{PhysicalMemoryManager::align\_to\_page}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_current\_region\ +\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00226}00226\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00227}00227\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ new\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00228}00228\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_region\_physical}},\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ new\_region,\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ |\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70}{WRITE}},\ m\_pml4\_root\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00229}00229\ \ \ \ \ new\_region-\/>next\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00224}00224\ \ \ \ \ \textcolor{comment}{//\ Space\ for\ the\ new\ region}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00225}00225\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_region\_physical}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00226}00226\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_region\_physical}}\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}Failed\ to\ allocate\ new\ VMM\ region\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00227}00227\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00228}00228\ \ \ \ \ \textcolor{comment}{//\ Align\ the\ new\ region}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00229}00229\ \ \ \ \ \textcolor{keyword}{auto}*\ new\_region\ =\ (\mbox{\hyperlink{virtual_8h_a0c2f8355820427cecb751d5b4e1c93fb}{virtual\_memory\_region\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}{PhysicalMemoryManager::align\_to\_page}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ m\_current\_region\ +\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}});}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00230}00230\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00231}00231\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ new\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00232}00232\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ CHUNKS\_PER\_PAGE;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00233}00233\ \ \ \ \ \ \ \ \ new\_region-\/>chunks[i].size\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00234}00234\ \ \ \ \ \ \ \ \ new\_region-\/>chunks[i].flags\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00235}00235\ \ \ \ \ \ \ \ \ new\_region-\/>chunks[i].start\_address\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00236}00236\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00237}00237\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00238}00238\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ current\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00239}00239\ \ \ \ \ m\_current\_region-\/>next\ =\ new\_region;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00240}00240\ \ \ \ \ m\_current\_chunk\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00241}00241\ \ \ \ \ m\_current\_region\ =\ new\_region;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00242}00242\ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00243}00243\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00249}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a96b3efdb246def1b85d311a61e401af6}{00249}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a96b3efdb246def1b85d311a61e401af6}{VirtualMemoryManager::free}}(\textcolor{keywordtype}{void}*\ address)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00250}00250\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00251}00251\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ freeing\ something}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00252}00252\ \ \ \ \ \textcolor{keywordflow}{if}\ (address\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00253}00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00231}00231\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ new\ region}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00232}00232\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_region\_physical}},\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ new\_region,\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ |\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70}{WRITE}},\ m\_pml4\_root\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00233}00233\ \ \ \ \ new\_region-\/>next\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00235}00235\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ new\ region}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00236}00236\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ CHUNKS\_PER\_PAGE;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00237}00237\ \ \ \ \ \ \ \ \ new\_region-\/>chunks[i].size\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00238}00238\ \ \ \ \ \ \ \ \ new\_region-\/>chunks[i].flags\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00239}00239\ \ \ \ \ \ \ \ \ new\_region-\/>chunks[i].start\_address\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00240}00240\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00241}00241\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00242}00242\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ current\ region}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00243}00243\ \ \ \ \ m\_current\_region-\/>next\ =\ new\_region;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00244}00244\ \ \ \ \ m\_current\_chunk\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00245}00245\ \ \ \ \ m\_current\_region\ =\ new\_region;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00246}00246\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00247}00247\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00253}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a96b3efdb246def1b85d311a61e401af6}{00253}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a96b3efdb246def1b85d311a61e401af6}{VirtualMemoryManager::free}}(\textcolor{keywordtype}{void}*\ address)\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00254}00254\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00255}00255\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00256}00256\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_memory\_region\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ m\_first\_region;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00257}00257\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00258}00258\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00259}00259\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00260}00260\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ chunks}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00261}00261\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ CHUNKS\_PER\_PAGE;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00262}00262\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ address\ is\ in\ the\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].start\_address\ ==\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}})\ address)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00265}00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i];}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00268}00268\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00269}00269\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00270}00270\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ chunk\ was\ found}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00271}00271\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ !=\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00272}00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00255}00255\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ freeing\ something}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00256}00256\ \ \ \ \ \textcolor{keywordflow}{if}\ (address\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00257}00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00258}00258\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00259}00259\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00260}00260\ \ \ \ \ \mbox{\hyperlink{virtual_8h_a0c2f8355820427cecb751d5b4e1c93fb}{virtual\_memory\_region\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ m\_first\_region;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00261}00261\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00262}00262\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00263}00263\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00264}00264\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ chunks}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00265}00265\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ CHUNKS\_PER\_PAGE;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00266}00266\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ address\ is\ in\ the\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].start\_address\ ==\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}})\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i];}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00271}00271\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00272}00272\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00273}00273\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00274}00274\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00275}00275\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>next;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00276}00276\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00274}00274\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ chunk\ was\ found}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00275}00275\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00277}00277\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00278}00278\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ chunk\ was\ found}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00279}00279\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00280}00280\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00278}00278\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ region}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00279}00279\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>next;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00280}00280\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00281}00281\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00282}00282\ \ \ \ \ \textcolor{comment}{//\ If\ the\ chunk\ is\ shared,\ don't\ unmap\ it\ incase\ other\ processes\ are\ using\ it}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00283}00283\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>flags\ \&\ VirtualFlags::SHARED)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00284}00284\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00285}00285\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ resource}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00286}00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}\ :\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>resource\_manager.resources())\{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00287}00287\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00288}00288\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Skip\ non-\/shared\ memory\ resources}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00289}00289\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}.second-\/>type()\ !=\ resource\_type\_t::SHARED\_MEMORY)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00290}00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00282}00282\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ chunk\ was\ found}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00283}00283\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00284}00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00285}00285\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00286}00286\ \ \ \ \ \textcolor{comment}{//\ If\ the\ chunk\ is\ shared,\ don't\ unmap\ it\ incase\ other\ processes\ are\ using\ it}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00287}00287\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>flags\ \&\ VirtualFlags::SHARED)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00288}00288\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00289}00289\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ resource}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00290}00290\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}\ :\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>resource\_manager.resources())\{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00291}00291\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00292}00292\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Skip\ shared\ memory\ that\ points\ elsewhere}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00293}00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{shared}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory}{SharedMemory}}*)\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}.second;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((\textcolor{keywordtype}{void}*)\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{shared}}-\/>physical\_address()\ !=\ address)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00295}00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00296}00296\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Close\ the\ resource}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>resource\_manager.close\_resource(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}.first,\ 0);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00299}00299\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00300}00300\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00301}00301\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00302}00302\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ chunk\ to\ the\ free\ list}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00303}00303\ \ \ \ \ add\_free\_chunk(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00304}00304\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00305}00305\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00306}00306\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00307}00307\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>flags\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00308}00308\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00309}00309\ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00310}00310\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00316}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a4ae320422dd476cfbf63d810fc725bd5}{00316}}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a4ae320422dd476cfbf63d810fc725bd5}{VirtualMemoryManager::memory\_used}}()\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00317}00317\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00318}00318\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ all\ the\ regions\ and\ add\ up\ the\ size\ of\ the\ allocated\ chunks}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00319}00319\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00320}00320\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00321}00321\ \ \ \ \ \textcolor{comment}{//\ Iterate\ through\ the\ regions}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00322}00322\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_memory\_region\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ m\_first\_region;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00323}00323\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00292}00292\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Skip\ non-\/shared\ memory\ resources}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00293}00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}.second-\/>type()\ !=\ resource\_type\_t::SHARED\_MEMORY)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00295}00295\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Skip\ shared\ memory\ that\ points\ elsewhere}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{shared}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory}{SharedMemory}}*)\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}.second;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((\textcolor{keywordtype}{void}*)\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{shared}}-\/>physical\_address()\ !=\ address)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00299}00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00300}00300\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00301}00301\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Close\ the\ resource}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>resource\_manager.close\_resource(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{resource}}.first,\ 0);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00303}00303\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00304}00304\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00305}00305\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00306}00306\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ chunk\ to\ the\ free\ list}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00307}00307\ \ \ \ \ add\_free\_chunk(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00308}00308\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00309}00309\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00310}00310\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00311}00311\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>flags\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00312}00312\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00313}00313\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00314}00314\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00320}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a4ae320422dd476cfbf63d810fc725bd5}{00320}}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a4ae320422dd476cfbf63d810fc725bd5}{VirtualMemoryManager::memory\_used}}()\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00321}00321\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00322}00322\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ all\ the\ regions\ and\ add\ up\ the\ size\ of\ the\ allocated\ chunks}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00323}00323\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ =\ 0;}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00324}00324\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00325}00325\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ chunks}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00326}00326\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ CHUNKS\_PER\_PAGE;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00327}00327\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00328}00328\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ address\ is\ in\ the\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00329}00329\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].size\ !=\ 0)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00330}00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].size;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00331}00331\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00332}00332\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00333}00333\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ region}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00334}00334\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>next;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00335}00335\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00325}00325\ \ \ \ \ \textcolor{comment}{//\ Iterate\ through\ the\ regions}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00326}00326\ \ \ \ \ \mbox{\hyperlink{virtual_8h_a0c2f8355820427cecb751d5b4e1c93fb}{virtual\_memory\_region\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ m\_first\_region;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00327}00327\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00328}00328\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00329}00329\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ chunks}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00330}00330\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ CHUNKS\_PER\_PAGE;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00331}00331\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00332}00332\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ address\ is\ in\ the\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00333}00333\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].size\ !=\ 0)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00334}00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}}\ +=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>chunks[i].size;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00335}00335\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00336}00336\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00337}00337\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00338}00338\ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00339}00339\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00346}00346\ \textcolor{keywordtype}{void}\ VirtualMemoryManager::add\_free\_chunk(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ start\_address,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00347}00347\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00348}00348\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ new\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00349}00349\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}}\ =\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*)\ start\_address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00350}00350\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}}-\/>start\_address\ =\ start\_address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00351}00351\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}}-\/>size\ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00352}00352\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}}-\/>next\ =\ m\_free\_chunks;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00353}00353\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00354}00354\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ new\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00355}00355\ \ \ \ \ m\_free\_chunks\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00356}00356\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00337}00337\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ region}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00338}00338\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region}}-\/>next;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00339}00339\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00340}00340\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00341}00341\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{result}};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00342}00342\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00343}00343\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00350}00350\ \textcolor{keywordtype}{void}\ VirtualMemoryManager::add\_free\_chunk(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ start\_address,\ \textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00351}00351\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00352}00352\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ new\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00353}00353\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}}\ =\ (\mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*)\ start\_address;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00354}00354\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}}-\/>start\_address\ =\ start\_address;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00355}00355\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}}-\/>size\ =\ size;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00356}00356\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}}-\/>next\ =\ m\_free\_chunks;}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00357}00357\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00366}00366\ \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*\ VirtualMemoryManager::find\_and\_remove\_free\_chunk(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00367}00367\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00368}00368\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00369}00369\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}\ =\ m\_free\_chunks;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00370}00370\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00371}00371\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00372}00372\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00373}00373\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ chunk\ is\ big\ enough}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00374}00374\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}-\/>size\ >=\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00375}00375\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00376}00376\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00377}00377\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00378}00378\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}-\/>next;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00379}00379\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00380}00380\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_free\_chunks\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}-\/>next;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00381}00381\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00382}00382\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00383}00383\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return\ the\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00384}00384\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00385}00385\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00386}00386\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00387}00387\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00388}00388\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ chunk}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00389}00389\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00390}00390\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}-\/>next;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00391}00391\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00392}00392\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00393}00393\ \ \ \ \ \textcolor{comment}{//\ No\ chunk\ found}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00394}00394\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00395}00395\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00396}00396\ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00397}00397\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00403}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a569e9f953df4b59d853219009a2f232f}{00403}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a569e9f953df4b59d853219009a2f232f}{VirtualMemoryManager::pml4\_root\_address\_physical}}()\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00404}00404\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00405}00405\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_pml4\_root\_physical\_address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00406}00406\ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00407}00407\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00414}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_aeb6cda8549b46a97ef761d10a7e21b32}{00414}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_aeb6cda8549b46a97ef761d10a7e21b32}{VirtualMemoryManager::load\_shared\_memory}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00415}00415\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00416}00416\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ shared\ memory\ block}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00417}00417\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory}{SharedMemory}}*)\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>resource\_manager.get\_resource(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00418}00418\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00419}00419\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ shared\ memory}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00420}00420\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ !=\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00421}00421\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_aeb6cda8549b46a97ef761d10a7e21b32}{load\_shared\_memory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}-\/>physical\_address(),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}-\/>size());}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00358}00358\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ new\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00359}00359\ \ \ \ \ m\_free\_chunks\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_chunk}};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00360}00360\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00361}00361\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00370}00370\ \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*\ VirtualMemoryManager::find\_and\_remove\_free\_chunk(\textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00371}00371\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00372}00372\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00373}00373\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}\ =\ m\_free\_chunks;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00374}00374\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{free\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00375}00375\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00376}00376\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00377}00377\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ chunk\ is\ big\ enough}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00378}00378\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}-\/>size\ >=\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00379}00379\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00380}00380\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00381}00381\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00382}00382\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}-\/>next\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}-\/>next;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00383}00383\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00384}00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_free\_chunks\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}-\/>next;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00385}00385\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00386}00386\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00387}00387\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return\ the\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00388}00388\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00389}00389\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00390}00390\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00391}00391\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00392}00392\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ to\ the\ next\ chunk}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00393}00393\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{previous}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00394}00394\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{current}}-\/>next;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00395}00395\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00396}00396\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00397}00397\ \ \ \ \ \textcolor{comment}{//\ No\ chunk\ found}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00398}00398\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00399}00399\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00400}00400\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00401}00401\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00407}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a569e9f953df4b59d853219009a2f232f}{00407}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a569e9f953df4b59d853219009a2f232f}{VirtualMemoryManager::pml4\_root\_address\_physical}}()\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00408}00408\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00409}00409\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_pml4\_root\_physical\_address;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00410}00410\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00411}00411\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00418}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_aeb6cda8549b46a97ef761d10a7e21b32}{00418}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_aeb6cda8549b46a97ef761d10a7e21b32}{VirtualMemoryManager::load\_shared\_memory}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ name)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00419}00419\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00420}00420\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ shared\ memory\ block}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00421}00421\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory}{SharedMemory}}*)\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>resource\_manager.get\_resource(name);}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00422}00422\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00423}00423\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00424}00424\ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00425}00425\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00433}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a3c0629ad1bc52a1263e23974845f45b3}{00433}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_aeb6cda8549b46a97ef761d10a7e21b32}{VirtualMemoryManager::load\_shared\_memory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00434}00434\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00435}00435\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ somthing\ to\ map}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00436}00436\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ ==\ 0\ ||\ \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}\ ==\ 0)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00437}00437\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00423}00423\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ shared\ memory}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00424}00424\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00425}00425\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_aeb6cda8549b46a97ef761d10a7e21b32}{load\_shared\_memory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}-\/>physical\_address(),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block}}-\/>size());}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00426}00426\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00427}00427\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00428}00428\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00429}00429\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00437}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a3c0629ad1bc52a1263e23974845f45b3}{00437}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_aeb6cda8549b46a97ef761d10a7e21b32}{VirtualMemoryManager::load\_shared\_memory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ physical\_address,\ \textcolor{keywordtype}{size\_t}\ size)\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00438}00438\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00439}00439\ \ \ \ \ \textcolor{comment}{//\ Load\ it\ into\ physical\ memory}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00440}00440\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a2e0c30587858d4cfaad1cf6fc0fe75e7}{load\_physical\_into\_address\_space}}(\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}},\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380a997819290df7a1861b890d56d9f7c973}{SHARED}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00441}00441\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00439}00439\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ there\ is\ somthing\ to\ map}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00440}00440\ \ \ \ \ \textcolor{keywordflow}{if}\ (size\ ==\ 0\ ||\ physical\_address\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00441}00441\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00442}00442\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00451}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a2e0c30587858d4cfaad1cf6fc0fe75e7}{00451}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a2e0c30587858d4cfaad1cf6fc0fe75e7}{VirtualMemoryManager::load\_physical\_into\_address\_space}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00452}00452\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00453}00453\ \ \ \ \ \textcolor{comment}{//\ Reserve\ some\ space}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00454}00454\ \ \ \ \ \textcolor{keywordtype}{void}*\ address\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{allocate}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}},\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}}\ |\ \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380a9b2ec1c1148770ef7ebf973def754e7c}{RESERVE}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00455}00455\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00456}00456\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ shared\ memory}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00457}00457\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00458}00458\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ i++)}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00459}00459\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*)\ (\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}\ +\ (i\ *\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}})),\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}})\ address\ +\ (i\ *\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}})),\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ |\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70}{WRITE}},\ m\_pml4\_root\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00460}00460\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00461}00461\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00462}00462\ \ \ \ \ \textcolor{comment}{//\ All\ done}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00463}00463\ \ \ \ \ \textcolor{keywordflow}{return}\ address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00464}00464\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00443}00443\ \ \ \ \ \textcolor{comment}{//\ Load\ it\ into\ physical\ memory}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00444}00444\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a2e0c30587858d4cfaad1cf6fc0fe75e7}{load\_physical\_into\_address\_space}}(physical\_address,\ size,\ \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380a997819290df7a1861b890d56d9f7c973}{SHARED}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00445}00445\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00446}00446\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00455}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a2e0c30587858d4cfaad1cf6fc0fe75e7}{00455}}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a2e0c30587858d4cfaad1cf6fc0fe75e7}{VirtualMemoryManager::load\_physical\_into\_address\_space}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ physical\_address,\ \textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{size\_t}\ flags)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00456}00456\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00457}00457\ \ \ \ \ \textcolor{comment}{//\ Reserve\ some\ space}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00458}00458\ \ \ \ \ \textcolor{keywordtype}{void}*\ address\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a433396979e1b088454eefbce0964b709}{allocate}}(size,\ flags\ |\ \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380a9b2ec1c1148770ef7ebf973def754e7c}{RESERVE}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00459}00459\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00460}00460\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ shared\ memory}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00461}00461\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(size);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00462}00462\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ i++)}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00463}00463\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*)\ (physical\_address\ +\ (i\ *\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}})),\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}})\ address\ +\ (i\ *\ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}})),\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ |\ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba285023a2e7a9895313648efac340db70}{WRITE}},\ m\_pml4\_root\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00464}00464\ }
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00465}00465\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00473}00473\ \textcolor{keywordtype}{void}\ VirtualMemoryManager::fill\_up\_to\_address(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ address,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mark\_used}})\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00474}00474\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00475}00475\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ address\ is\ aligned}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00476}00476\ \ \ \ \ address\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}{PhysicalMemoryManager::align\_to\_page}}(address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00477}00477\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00478}00478\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ address\ is\ not\ before\ the\ next\ available\ address}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00479}00479\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(address\ >=\ m\_next\_available\_address,\ \textcolor{stringliteral}{"{}FAILED\ TO\ FILL:\ Address\ is\ before\ the\ next\ available\ address\ -\/\ 0x\%x\ <\ 0x\%x\(\backslash\)n"{}},\ address,\ m\_next\_available\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00480}00480\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00481}00481\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ size}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00482}00482\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}}\ =\ address\ -\/\ m\_next\_available\_address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00483}00483\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00484}00484\ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ memory}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00485}00485\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \&m\_current\_region-\/>chunks[m\_current\_chunk];}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00486}00486\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ =\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00487}00487\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>flags\ =\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00488}00488\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ =\ m\_next\_available\_address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00489}00489\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00490}00490\ \ \ \ \ \textcolor{comment}{//\ Update\ the\ next\ available\ address}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00491}00491\ \ \ \ \ m\_next\_available\_address\ +=\ \mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}};}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00492}00492\ \ \ \ \ m\_current\_chunk++;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00466}00466\ \ \ \ \ \textcolor{comment}{//\ All\ done}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00467}00467\ \ \ \ \ \textcolor{keywordflow}{return}\ address;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00468}00468\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00469}00469\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00477}00477\ \textcolor{keywordtype}{void}\ VirtualMemoryManager::fill\_up\_to\_address(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ address,\ \textcolor{keywordtype}{size\_t}\ flags,\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mark\_used}})\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00478}00478\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00479}00479\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ address\ is\ aligned}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00480}00480\ \ \ \ \ address\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a5caa4d8e8944cd72c5a01635b056be9c}{PhysicalMemoryManager::align\_to\_page}}(address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00481}00481\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00482}00482\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ address\ is\ not\ before\ the\ next\ available\ address}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00483}00483\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(address\ >=\ m\_next\_available\_address,\ \textcolor{stringliteral}{"{}FAILED\ TO\ FILL:\ Address\ is\ before\ the\ next\ available\ address\ -\/\ 0x\%x\ <\ 0x\%x\(\backslash\)n"{}},\ address,\ m\_next\_available\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00484}00484\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00485}00485\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ size}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00486}00486\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ size\ =\ address\ -\/\ m\_next\_available\_address;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00487}00487\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00488}00488\ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ memory}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00489}00489\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{virtual\_memory\_chunk\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}\ =\ \&m\_current\_region-\/>chunks[m\_current\_chunk];}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00490}00490\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>size\ =\ size;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00491}00491\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>flags\ =\ flags;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00492}00492\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ =\ m\_next\_available\_address;}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00493}00493\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00494}00494\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ memory}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00495}00495\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(\mbox{\hyperlink{ext2_8h_aaba88b24a21a6c70c895c0d55f4a69a0}{size}});}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00496}00496\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00494}00494\ \ \ \ \ \textcolor{comment}{//\ Update\ the\ next\ available\ address}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00495}00495\ \ \ \ \ m\_next\_available\_address\ +=\ size;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00496}00496\ \ \ \ \ m\_current\_chunk++;}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00497}00497\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00498}00498\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ a\ new\ frame}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00499}00499\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00500}00500\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}Failed\ to\ allocate\ frame\ (from\ fill\ up)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00498}00498\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ memory}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00499}00499\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad09e22d0fe86e952a3eb92718fcd3c32}{PhysicalMemoryManager::size\_to\_frames}}(size);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00500}00500\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pages}};\ i++)\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00501}00501\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00502}00502\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Map\ the\ frame}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00503}00503\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}},\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ +\ (i\ *\ PAGE\_SIZE),\ PRESENT\ |\ WRITE,\ m\_pml4\_root\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00504}00504\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00505}00505\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00506}00506\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00507}00507\ \ \ \ \ \textcolor{comment}{//\ Mark\ as\ free\ if\ needed}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00508}00508\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mark\_used}})}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00509}00509\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{ext2_8h_a047d6d6c3bceaea709fe00e953a0c52f}{free}}((\textcolor{keywordtype}{void}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address);}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00510}00510\ \}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00511}00511\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00517}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a89aed6e936e4089ff4355568f0ee32ee}{00517}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a89aed6e936e4089ff4355568f0ee32ee}{VirtualMemoryManager::pml4\_root\_address}}()\ \{}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00518}00518\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00519}00519\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ address\ is\ valid}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00520}00520\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_pml4\_root\_address\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00521}00521\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00502}00502\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ a\ new\ frame}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00503}00503\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_frame();}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00504}00504\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}}\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}Failed\ to\ allocate\ frame\ (from\ fill\ up)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00505}00505\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00506}00506\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Map\ the\ frame}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00507}00507\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>map(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{frame}},\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address\ +\ (i\ *\ PAGE\_SIZE),\ PRESENT\ |\ WRITE,\ m\_pml4\_root\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00508}00508\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00509}00509\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00510}00510\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00511}00511\ \ \ \ \ \textcolor{comment}{//\ Mark\ as\ free\ if\ needed}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00512}00512\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mark\_used}})}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00513}00513\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a96b3efdb246def1b85d311a61e401af6}{free}}((\textcolor{keywordtype}{void}*)\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{chunk}}-\/>start\_address);}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00514}00514\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00515}00515\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00521}\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a89aed6e936e4089ff4355568f0ee32ee}{00521}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_a89aed6e936e4089ff4355568f0ee32ee}{VirtualMemoryManager::pml4\_root\_address}}()\ \{}
 \DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00522}00522\ }
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00523}00523\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ address}}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00524}00524\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_pml4\_root\_address;}
-\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00525}00525\ \}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00523}00523\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ address\ is\ valid}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00524}00524\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_pml4\_root\_address\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00525}00525\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00526}00526\ }
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00527}00527\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ address}}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00528}00528\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_pml4\_root\_address;}
+\DoxyCodeLine{\Hypertarget{virtual_8cpp_source_l00529}00529\ \}}
 
 \end{DoxyCode}

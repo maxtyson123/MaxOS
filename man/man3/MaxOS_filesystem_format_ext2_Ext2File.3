@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::format::ext2::Ext2File" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::format::ext2::Ext2File" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,17 +15,17 @@ Inherits \fBMaxOS::filesystem::File\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBExt2File\fP (\fBExt2Volume\fP *\fBvolume\fP, \fBuint32_t\fP \fBinode\fP, \fBconst\fP \fBstring\fP &\fBname\fP)"
+.RI "\fBExt2File\fP (\fBExt2Volume\fP *\fBvolume\fP, \fBuint32_t\fP inode, \fBconst\fP \fBstring\fP &\fBname\fP)"
 .br
 .RI "Construct a new Ext2 \fBFile\fP object\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBwrite\fP (\fBconst\fP \fBcommon::buffer_t\fP *\fBdata\fP, \fBsize_t\fP \fBamount\fP) \fBfinal\fP"
+.RI "\fBvoid\fP \fBwrite\fP (\fBcommon::buffer_t\fP *data, \fBsize_t\fP \fBamount\fP) \fBfinal\fP"
 .br
-.RI "Write data to the file (at the current seek position, updated to be += amount) "
+.RI "write data to the file (at the current seek position, updated to be += amount) "
 .ti -1c
-.RI "\fBvoid\fP \fBread\fP (\fBcommon::buffer_t\fP *\fBdata\fP, \fBsize_t\fP \fBamount\fP) \fBfinal\fP"
+.RI "\fBvoid\fP \fBread\fP (\fBcommon::buffer_t\fP *data, \fBsize_t\fP \fBamount\fP) \fBfinal\fP"
 .br
-.RI "Read data from the file (at the current seek position, updated to be += amount) "
+.RI "read data from the file (at the current seek position, updated to be += amount) "
 .ti -1c
 .RI "\fBvoid\fP \fBflush\fP () \fBfinal\fP"
 .br
@@ -35,15 +35,15 @@ Inherits \fBMaxOS::filesystem::File\fP\&.
 Public Member Functions inherited from \fBMaxOS::filesystem::File\fP
 .in +1c
 .ti -1c
-.RI "\fBvoid\fP \fBseek\fP (SeekType \fBseek_type\fP, \fBsize_t\fP offset)"
+.RI "\fBvoid\fP \fBseek\fP (\fBSeekType\fP \fBseek_type\fP, \fBsize_t\fP offset)"
 .br
 .RI "Seek to a position in the file\&. "
 .ti -1c
-.RI "\fBuint32_t\fP \fBposition\fP ()"
+.RI "\fBuint32_t\fP \fBposition\fP () \fBconst\fP"
 .br
 .RI "Get where the file is currently at (amount read/write/seeked) "
 .ti -1c
-.RI "\fBsize_t\fP \fBsize\fP ()"
+.RI "\fBsize_t\fP \fBsize\fP () \fBconst\fP"
 .br
 .RI "Get the size of the file\&. "
 .ti -1c
@@ -57,7 +57,7 @@ Public Member Functions inherited from \fBMaxOS::filesystem::File\fP
 Protected Attributes inherited from \fBMaxOS::filesystem::File\fP
 .in +1c
 .ti -1c
-.RI "uint32_t \fBm_offset\fP"
+.RI "uint32_t \fBm_offset\fP = 0"
 .br
 .RI "The current offset in the file\&. "
 .ti -1c
@@ -65,7 +65,7 @@ Protected Attributes inherited from \fBMaxOS::filesystem::File\fP
 .br
 .RI "The name of the file\&. "
 .ti -1c
-.RI "size_t \fBm_size\fP"
+.RI "size_t \fBm_size\fP = 0"
 .br
 .RI "The size of the file\&. "
 .in -1c
@@ -73,7 +73,7 @@ Protected Attributes inherited from \fBMaxOS::filesystem::File\fP
 .PP 
 Handles the file operations on the ext2 filesystem\&. 
 .PP
-Definition at line \fB388\fP of file \fBext2\&.h\fP\&.
+Definition at line \fB402\fP of file \fBext2\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Ext2File::Ext2File (\fBExt2Volume\fP * volume, \fBuint32_t\fP inode, \fBconst\fP \fBstring\fP & name)"
@@ -92,17 +92,16 @@ Construct a new Ext2 \fBFile\fP object\&.
 .PP
 
 .PP
-Definition at line \fB723\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB725\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-724 : m_volume(volume),
-725   m_inode(volume, inode)
-726 {
-727 
-728     // Set up the base information
-729     m_name = name;
-730     m_size = m_inode\&.size();
-731 
-732 }
+726         : m_volume(volume),
+727         m_inode(volume, inode) {
+728 
+729     // Set up the base information
+730     m_name = name;
+731     m_size = m_inode\&.size();
+732 
+733 }
 .fi
 
 .PP
@@ -116,11 +115,11 @@ Flush the file to the disk\&.
 .PP
 Reimplemented from \fBMaxOS::filesystem::File\fP\&.
 .PP
-Definition at line \fB840\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB841\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-840                      {
-841     File::flush();
-842 }
+841                      {
+842     File::flush();
+843 }
 .fi
 
 .PP
@@ -128,7 +127,7 @@ References \fBMaxOS::filesystem::File::flush()\fP\&.
 .SS "\fBvoid\fP Ext2File::read (\fBcommon::buffer_t\fP * data, \fBsize_t\fP amount)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Read data from the file (at the current seek position, updated to be += amount) 
+read data from the file (at the current seek position, updated to be += amount) 
 .PP
 \fBParameters\fP
 .RS 4
@@ -141,60 +140,60 @@ Read data from the file (at the current seek position, updated to be += amount)
 .PP
 Reimplemented from \fBMaxOS::filesystem::File\fP\&.
 .PP
-Definition at line \fB794\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB795\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-794                                                  {
-795 
-796     // Nothing to read
-797     if (m_size == 0 || amount == 0)
-798         return;
-799 
-800     // Prepare for reading
-801     m_volume\->ext2_lock\&.lock();
-802     const uint32_t block_size = m_volume\->block_size;
-803     buffer_t buffer(block_size);
-804 
-805     // Force bounds
-806     if (m_offset + amount > m_size)
-807         amount = m_size \- m_offset;
-808 
-809     // Convert bytes to blocks
-810     uint32_t block_start = m_offset / block_size;
-811     uint32_t block_offset = m_offset % block_size;
-812 
-813     // Read each block
-814     size_t current_block = block_start;
-815     size_t read = 0;
-816     while (read < amount) {
-817 
-818         // Read the block
-819         uint32_t block = m_inode\&.block_cache[current_block++];
-820         m_volume\->read_block(block, &buffer);
-821 
-822         // Where in this block to start reading
-823         size_t buffer_start = (current_block \- 1 == block_start) ? block_offset : 0;
-824         size_t readable = (amount \- read < block_size \- buffer_start) ? (amount \- read) : (block_size \- buffer_start);
-825 
-826         // Read the block
-827         buffer\&.copy_to(data, readable, buffer_start, read);
-828         read += readable;
-829 
-830     }
-831 
-832     // Clean up
-833     m_offset += amount;
-834     m_volume\->ext2_lock\&.unlock();
-835 }
+795                                                  {
+796 
+797     // Nothing to read
+798     if(m_size == 0 || amount == 0)
+799         return;
+800 
+801     // Prepare for reading
+802     m_volume\->ext2_lock\&.lock();
+803     const uint32_t block_size = m_volume\->block_size;
+804     buffer_t buffer(block_size);
+805 
+806     // Force bounds
+807     if(m_offset + amount > m_size)
+808         amount = m_size \- m_offset;
+809 
+810     // Convert bytes to blocks
+811     uint32_t block_start = m_offset / block_size;
+812     uint32_t block_offset = m_offset % block_size;
+813 
+814     // Read each block
+815     size_t current_block = block_start;
+816     size_t read = 0;
+817     while(read < amount) {
+818 
+819         // Read the block
+820         uint32_t block = m_inode\&.block_cache[current_block++];
+821         m_volume\->read_block(block, &buffer);
+822 
+823         // Where in this block to start reading
+824         size_t buffer_start = (current_block \- 1 == block_start) ? block_offset : 0;
+825         size_t readable = (amount \- read < block_size \- buffer_start) ? (amount \- read) : (block_size \- buffer_start);
+826 
+827         // Read the block
+828         buffer\&.copy_to(data, readable, buffer_start, read);
+829         read += readable;
+830 
+831     }
+832 
+833     // Clean up
+834     m_offset += amount;
+835     m_volume\->ext2_lock\&.unlock();
+836 }
 .fi
 
 .PP
-References \fBMaxOS::filesystem::format::ext2::InodeHandler::block_cache\fP, \fBblock_size\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::block_size\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBdata\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::ext2_lock\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::filesystem::File::m_offset\fP, \fBMaxOS::filesystem::File::m_size\fP, \fBread()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_block()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+References \fBMaxOS::filesystem::format::ext2::InodeHandler::block_cache\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::block_size\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::ext2_lock\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::filesystem::File::m_offset\fP, \fBMaxOS::filesystem::File::m_size\fP, \fBread()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_block()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .PP
 Referenced by \fBread()\fP\&.
-.SS "\fBvoid\fP Ext2File::write (\fBconst\fP \fBcommon::buffer_t\fP * data, \fBsize_t\fP amount)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBvoid\fP Ext2File::write (\fBcommon::buffer_t\fP * data, \fBsize_t\fP amount)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Write data to the file (at the current seek position, updated to be += amount) 
+write data to the file (at the current seek position, updated to be += amount) 
 .PP
 \fBParameters\fP
 .RS 4
@@ -207,59 +206,59 @@ Write data to the file (at the current seek position, updated to be += amount)
 .PP
 Reimplemented from \fBMaxOS::filesystem::File\fP\&.
 .PP
-Definition at line \fB740\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB741\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-740                                                         {
-741 
-742     // Nothing to write
-743     if (amount == 0)
-744         return;
-745 
-746     // Prepare for writing
-747     m_volume\->ext2_lock\&.lock();
-748     const uint32_t block_size = m_volume\->block_size;
-749     buffer_t buffer(block_size);
-750 
-751     // Expand the file
-752     if (m_offset + amount > m_size)
-753         m_size = m_inode\&.grow((m_offset + amount) \- m_size, false);
-754 
-755     // Save the updated metadata
-756     m_inode\&.inode\&.last_modification_time = time_to_epoch(Clock::active_clock()\->get_time());
-757     m_inode\&.save();
-758 
-759     // Convert bytes to blocks
-760     uint32_t block_start = m_offset / block_size;
-761     uint32_t block_offset = m_offset % block_size;
-762 
-763     // Write each block
-764     size_t current_block = block_start;
-765     size_t written = 0;
-766     while (written < amount) {
-767 
-768         // Read the block
-769         uint32_t block = m_inode\&.block_cache[current_block++];
-770         m_volume\->read_block(block, &buffer);
-771 
-772         // Where in this block to start writing
-773         size_t buffer_start = (current_block \- 1 == block_start) ? block_offset : 0;
-774         size_t writable = (amount \- written < block_size \- buffer_start) ? (amount \- written) : (block_size \-
-775                                                                                                  buffer_start);
-776 
-777         // Update the block
-778         buffer\&.copy_from(data, writable, buffer_start, written);
-779         m_volume\->write_block(block, &buffer);
-780         written += writable;
-781     }
-782 
-783     // Clean up
-784     m_offset += amount;
-785     m_volume\->ext2_lock\&.unlock();
-786 }
+741                                                   {
+742 
+743     // Nothing to write
+744     if(amount == 0)
+745         return;
+746 
+747     // Prepare for writing
+748     m_volume\->ext2_lock\&.lock();
+749     const uint32_t block_size = m_volume\->block_size;
+750     buffer_t buffer(block_size);
+751 
+752     // Expand the file
+753     if(m_offset + amount > m_size)
+754         m_size = m_inode\&.grow((m_offset + amount) \- m_size, false);
+755 
+756     // Save the updated metadata
+757     m_inode\&.inode\&.last_modification_time = time_to_epoch(Clock::active_clock()\->get_time());
+758     m_inode\&.save();
+759 
+760     // Convert bytes to blocks
+761     uint32_t block_start = m_offset / block_size;
+762     uint32_t block_offset = m_offset % block_size;
+763 
+764     // Write each block
+765     size_t current_block = block_start;
+766     size_t written = 0;
+767     while(written < amount) {
+768 
+769         // Read the block
+770         uint32_t block = m_inode\&.block_cache[current_block++];
+771         m_volume\->read_block(block, &buffer);
+772 
+773         // Where in this block to start writing
+774         size_t buffer_start = (current_block \- 1 == block_start) ? block_offset : 0;
+775         size_t writable = (amount \- written < block_size \- buffer_start) ? (amount \- written) : (block_size \-
+776                                                                                                  buffer_start);
+777 
+778         // Update the block
+779         buffer\&.copy_from(data, writable, buffer_start, written);
+780         m_volume\->write_block(block, &buffer);
+781         written += writable;
+782     }
+783 
+784     // Clean up
+785     m_offset += amount;
+786     m_volume\->ext2_lock\&.unlock();
+787 }
 .fi
 
 .PP
-References \fBMaxOS::drivers::clock::Clock::active_clock()\fP, \fBMaxOS::filesystem::format::ext2::InodeHandler::block_cache\fP, \fBblock_size\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::block_size\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBdata\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::ext2_lock\fP, \fBMaxOS::filesystem::format::ext2::InodeHandler::grow()\fP, \fBMaxOS::filesystem::format::ext2::InodeHandler::inode\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::filesystem::File::m_offset\fP, \fBMaxOS::filesystem::File::m_size\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_block()\fP, \fBMaxOS::filesystem::format::ext2::InodeHandler::save()\fP, \fBMaxOS::common::Spinlock::unlock()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_block()\fP\&.
+References \fBMaxOS::drivers::clock::Clock::active_clock()\fP, \fBMaxOS::filesystem::format::ext2::InodeHandler::block_cache\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::block_size\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::ext2_lock\fP, \fBMaxOS::filesystem::format::ext2::InodeHandler::grow()\fP, \fBMaxOS::filesystem::format::ext2::InodeHandler::inode\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::filesystem::File::m_offset\fP, \fBMaxOS::filesystem::File::m_size\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_block()\fP, \fBMaxOS::filesystem::format::ext2::InodeHandler::save()\fP, \fBMaxOS::common::Spinlock::unlock()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_block()\fP\&.
 
 .SH "Author"
 .PP 

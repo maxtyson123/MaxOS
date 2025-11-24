@@ -36,7 +36,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
+   <div id="projectname">Max OS<span id="projectnumber">&#160;0.3</span>
    </div>
   </td>
  </tr>
@@ -108,372 +108,365 @@ $(document).ready(function(){initNavTree('msdos_8h_source.html',''); initResizab
   <div class="headertitle"><div class="title">msdos.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="msdos_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno"><a class="line" href="msdos_8h.html#a473a1483ecee72b5fb823dd28190cef8">    1</a></span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="msdos_8h.html#aa8928d79fa39385e4e726185713fc356">    9</a></span><span class="preprocessor">#ifndef MAXOS_FILESYSTEM_PARTITION_MSDOS_H</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="msdos_8h.html#aed0439ad723570765c1e40b8efd1dd61">   10</a></span><span class="preprocessor">#define MAXOS_FILESYSTEM_PARTITION_MSDOS_H</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="msdos_8h.html#a4673ec2e07d66b72d0744129d4e89b87">   11</a></span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="msdos_8h.html#a48084b77fa49c552983824a90b0110e4">   13</a></span><span class="preprocessor">#include &lt;<a class="code" href="disk_8h.html">drivers/disk/disk.h</a>&gt;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="msdos_8h.html#aebb70c2aab3407a9f05334c47131a43b">   14</a></span><span class="preprocessor">#include &lt;<a class="code" href="fat32_8h.html">filesystem/format/fat32.h</a>&gt;</span></div>
+<a href="msdos_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifndef MAXOS_FILESYSTEM_PARTITION_MSDOS_H</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define MAXOS_FILESYSTEM_PARTITION_MSDOS_H</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;<a class="code" href="disk_8h.html">drivers/disk/disk.h</a>&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;<a class="code" href="fat32_8h.html">filesystem/format/fat32.h</a>&gt;</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;<a class="code" href="ext2_8h.html">filesystem/format/ext2.h</a>&gt;</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;<a class="code" href="vfs_8h.html">filesystem/vfs.h</a>&gt;</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span>MaxOS {</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keyword">namespace </span>filesystem {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">namespace </span>partition {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="msdos_8h.html#a2e4fb19c764ea277199e32724975df93">   26</a></span>            <span class="keyword">enum class</span> <a class="code hl_enumeration" href="msdos_8h.html#a2e4fb19c764ea277199e32724975df93">PartitionType</a> {</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                EMPTY,                 <span class="comment">// 0x00</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                FAT12,                 <span class="comment">// 0x01</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                XENIX_ROOT,            <span class="comment">// 0x02</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                XENIX_USR,             <span class="comment">// 0x03</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>                FAT16,                 <span class="comment">// 0x04</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                EXTENDED,              <span class="comment">// 0x05</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>                FAT16_32MB,            <span class="comment">// 0x06</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                NTFS,                  <span class="comment">// 0x07</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                QNX_QNY,               <span class="comment">// 0x08</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                AIX_DATA,              <span class="comment">// 0x09</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                OS2_BOOT_MANAGER,      <span class="comment">// 0x0A</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>                FAT32,                 <span class="comment">// 0x0B</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                FAT32_LBA,             <span class="comment">// 0x0C</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                UNUSED_1,              <span class="comment">// 0x0D</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                FAT16_LBA,             <span class="comment">// 0x0E</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                EXTENDED_LBA,          <span class="comment">// 0x0F</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>                OPUS,                  <span class="comment">// 0x10</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                FAT12_HIDDEN,          <span class="comment">// 0x11</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                COMPAQ,                <span class="comment">// 0x12</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                UNUSED_2,              <span class="comment">// 0x13</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                FAT16_HIDDEN,          <span class="comment">// 0x14</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                UNUSED_3,              <span class="comment">// 0x15</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                FAT16_32MB_HIDDEN,     <span class="comment">// 0x16</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                IFS_HIDDEN,            <span class="comment">// 0x17</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                AST_SMART_SLEEP,       <span class="comment">// 0x18</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                UNUSED_4,              <span class="comment">// 0x19</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                UNUSED_5,              <span class="comment">// 0x1A</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                FAT32_HIDDEN,          <span class="comment">// 0x1B</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                FAT32_LBA_HIDDEN,      <span class="comment">// 0x1C</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                UNUSED_6,              <span class="comment">// 0x1D</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                FAT16_LBA_HIDDEN,      <span class="comment">// 0x1E</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                UNUSED_7,              <span class="comment">// 0x1F</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                UNUSED_8,              <span class="comment">// 0x20</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                RESERVED_1,            <span class="comment">// 0x21</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                UNUSED_10,             <span class="comment">// 0x22</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                RESERVED_2,            <span class="comment">// 0x23</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                NEC_DOS,               <span class="comment">// 0x24</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                UNUSED_11,             <span class="comment">// 0x25</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                RESERVED_3,            <span class="comment">// 0x26</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                <span class="comment">// 0x27 - 0x30: unassigned</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                UNUSED_12,             <span class="comment">// 0x27</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                UNUSED_13,             <span class="comment">// 0x28</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                UNUSED_14,             <span class="comment">// 0x29</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                UNUSED_15,             <span class="comment">// 0x2A</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                UNUSED_16,             <span class="comment">// 0x2B</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                UNUSED_17,             <span class="comment">// 0x2C</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                UNUSED_18,             <span class="comment">// 0x2D</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                UNUSED_19,             <span class="comment">// 0x2E</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                UNUSED_20,             <span class="comment">// 0x2F</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                UNUSED_21,             <span class="comment">// 0x30</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                RESERVED_4,            <span class="comment">// 0x31</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                NOS,                   <span class="comment">// 0x32</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                RESERVED_5,            <span class="comment">// 0x33</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>                RESERVED_6,            <span class="comment">// 0x34</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>                JFS,                   <span class="comment">// 0x35</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>                RESERVED_7,            <span class="comment">// 0x36</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>                UNUSED_22,             <span class="comment">// 0x37</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                THEOS_3_2,             <span class="comment">// 0x38</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                PLAN9,                 <span class="comment">// 0x39</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>                THEOS_4_4GB,           <span class="comment">// 0x3A</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>                THEOS_4_EXTENDED,      <span class="comment">// 0x3B</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>                PARTITIONMAGIC_RECOVERY, <span class="comment">// 0x3C</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>                HIDDEN_NETWARE,        <span class="comment">// 0x3D</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>                UNUSED_23,             <span class="comment">// 0x3E</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>                UNUSED_24,             <span class="comment">// 0x3F</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>                VENIX,                 <span class="comment">// 0x40</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>                LINUX_MINIX,           <span class="comment">// 0x41</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>                LINUX_SWAP,            <span class="comment">// 0x42</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>                LINUX_NATIVE,          <span class="comment">// 0x43</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                GOBACK,                <span class="comment">// 0x44</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                BOOT_US,               <span class="comment">// 0x45</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>                EUMEL_ELAN_46,         <span class="comment">// 0x46</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>                EUMEL_ELAN_47,         <span class="comment">// 0x47</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>                EUMEL_ELAN_48,         <span class="comment">// 0x48</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>                UNUSED_25,             <span class="comment">// 0x49</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>                ADAOS,                 <span class="comment">// 0x4A</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>                UNUSED_26,             <span class="comment">// 0x4B</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>                OBERON,                <span class="comment">// 0x4C</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                QNX4,                  <span class="comment">// 0x4D</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>                QNX4_SECOND,           <span class="comment">// 0x4E</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>                QNX4_THIRD,            <span class="comment">// 0x4F</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>                ONTRACK_DM,            <span class="comment">// 0x50</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>                ONTRACK_DM_RW,         <span class="comment">// 0x51</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                CPM,                   <span class="comment">// 0x52</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>                DISK_MANAGER_AUX3,     <span class="comment">// 0x53</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>                DISK_MANAGER_DDO,      <span class="comment">// 0x54</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>                EZ_DRIVE,              <span class="comment">// 0x55</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>                GOLDEN_BOW,            <span class="comment">// 0x56</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>                DRIVE_PRO,             <span class="comment">// 0x57</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>                UNUSED_27,             <span class="comment">// 0x58</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>                UNUSED_28,             <span class="comment">// 0x59</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>                UNUSED_29,             <span class="comment">// 0x5A</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>                UNUSED_30,             <span class="comment">// 0x5B</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>                PRIAM_EDISK,           <span class="comment">// 0x5C</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>                UNUSED_31,             <span class="comment">// 0x5D</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>                UNUSED_32,             <span class="comment">// 0x5E</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>                UNUSED_33,             <span class="comment">// 0x5F</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>                UNUSED_34,             <span class="comment">// 0x60</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>                SPEEDSTOR,             <span class="comment">// 0x61</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>                UNUSED_35,             <span class="comment">// 0x62</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>                UNIX,                  <span class="comment">// 0x63</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>                PC_ARMOUR,             <span class="comment">// 0x64</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                NOVELL_NETWARE386,     <span class="comment">// 0x65</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>                NOVELL_SMS,            <span class="comment">// 0x66</span></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>                NOVELL,                <span class="comment">// 0x67</span></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>                NOVELL_OLD,            <span class="comment">// 0x68</span></div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>                NOVELL_NETWARE_NSS,    <span class="comment">// 0x69</span></div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>                UNUSED_36,             <span class="comment">// 0x6A</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>                UNUSED_37,             <span class="comment">// 0x6B</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>                UNUSED_38,             <span class="comment">// 0x6C</span></div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>                UNUSED_39,             <span class="comment">// 0x6D</span></div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>                UNUSED_40,             <span class="comment">// 0x6E</span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>                UNUSED_41,             <span class="comment">// 0x6F</span></div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>                DISKSECURE,            <span class="comment">// 0x70</span></div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>                RESERVED_8,            <span class="comment">// 0x71</span></div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>                UNUSED_42,             <span class="comment">// 0x72</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>                RESERVED_9,            <span class="comment">// 0x73</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>                SCRAMDISK,             <span class="comment">// 0x74</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>                IBM_PCIX,              <span class="comment">// 0x75</span></div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>                RESERVED_10,           <span class="comment">// 0x76</span></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>                M2FS,                  <span class="comment">// 0x77</span></div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>                XOSL_FS,               <span class="comment">// 0x78</span></div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>                UNUSED_43,             <span class="comment">// 0x79</span></div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                UNUSED_44,             <span class="comment">// 0x7A</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>                UNUSED_45,             <span class="comment">// 0x7B</span></div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>                UNUSED_46,             <span class="comment">// 0x7C</span></div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>                UNUSED_47,             <span class="comment">// 0x7D</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>                UNUSED_48,             <span class="comment">// 0x7E</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>                UNUSED_49,             <span class="comment">// 0x7F</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>                MINIX,                 <span class="comment">// 0x80</span></div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>                MINIX2,                <span class="comment">// 0x81</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>                LINUX_SWAP_ALT,        <span class="comment">// 0x82</span></div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>                LINUX_EXT2,            <span class="comment">// 0x83</span></div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>                HIBERNATION,           <span class="comment">// 0x84</span></div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>                LINUX_EXTENDED,        <span class="comment">// 0x85</span></div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>                LINUX_RAID,            <span class="comment">// 0x86</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>                NTFS_VOLUME_SET,       <span class="comment">// 0x87</span></div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>                UNUSED_50,             <span class="comment">// 0x88</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>                UNUSED_51,             <span class="comment">// 0x89</span></div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>                LINUX_KERNEL,          <span class="comment">// 0x8A</span></div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                FAULT_TOLERANT_FAT32,  <span class="comment">// 0x8B</span></div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>                FT_FAT32_LBA,          <span class="comment">// 0x8C</span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>                FREEFDISK_FAT12,       <span class="comment">// 0x8D</span></div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                LINUX_LVM,             <span class="comment">// 0x8E</span></div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                UNUSED_52,             <span class="comment">// 0x8F</span></div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>                FREEFDISK_FAT16,       <span class="comment">// 0x90</span></div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>                FREEFDISK_EXTENDED,    <span class="comment">// 0x91</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>                FREEFDISK_FAT16_LARGE, <span class="comment">// 0x92</span></div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>                HIDDEN_LINUX_NATIVE,   <span class="comment">// 0x93</span></div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>                AMOEBA_BAD_BLOCK,      <span class="comment">// 0x94</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>                MIT_EXOPC,             <span class="comment">// 0x95</span></div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>                UNUSED_53,             <span class="comment">// 0x96</span></div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>                FREEFDISK_FAT32,       <span class="comment">// 0x97</span></div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                FREEFDISK_FAT32_LBA,   <span class="comment">// 0x98</span></div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>                DCE376,                <span class="comment">// 0x99</span></div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>                FREEFDISK_FAT16_LBA,   <span class="comment">// 0x9A</span></div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                FREEFDISK_EXTENDED_LBA,<span class="comment">// 0x9B</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">namespace </span>MaxOS::filesystem::partition {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="foldopen" id="foldopen00022" data-start="{" data-end="};">
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="msdos_8h.html#a2e4fb19c764ea277199e32724975df93">   22</a></span>    <span class="keyword">enum class</span> <a class="code hl_enumeration" href="msdos_8h.html#a2e4fb19c764ea277199e32724975df93">PartitionType</a> {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        EMPTY,                 <span class="comment">// 0x00</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        FAT12,                 <span class="comment">// 0x01</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        XENIX_ROOT,            <span class="comment">// 0x02</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        XENIX_USR,             <span class="comment">// 0x03</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        FAT16,                 <span class="comment">// 0x04</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        EXTENDED,              <span class="comment">// 0x05</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        FAT16_32MB,            <span class="comment">// 0x06</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        NTFS,                  <span class="comment">// 0x07</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        QNX_QNY,               <span class="comment">// 0x08</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        AIX_DATA,              <span class="comment">// 0x09</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        OS2_BOOT_MANAGER,      <span class="comment">// 0x0A</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        FAT32,                 <span class="comment">// 0x0B</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        FAT32_LBA,             <span class="comment">// 0x0C</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        UNUSED_1,              <span class="comment">// 0x0D</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        FAT16_LBA,             <span class="comment">// 0x0E</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        EXTENDED_LBA,          <span class="comment">// 0x0F</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        OPUS,                  <span class="comment">// 0x10</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        FAT12_HIDDEN,          <span class="comment">// 0x11</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        COMPAQ,                <span class="comment">// 0x12</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        UNUSED_2,              <span class="comment">// 0x13</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        FAT16_HIDDEN,          <span class="comment">// 0x14</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        UNUSED_3,              <span class="comment">// 0x15</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        FAT16_32MB_HIDDEN,     <span class="comment">// 0x16</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        IFS_HIDDEN,            <span class="comment">// 0x17</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        AST_SMART_SLEEP,       <span class="comment">// 0x18</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        UNUSED_4,              <span class="comment">// 0x19</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        UNUSED_5,              <span class="comment">// 0x1A</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        FAT32_HIDDEN,          <span class="comment">// 0x1B</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        FAT32_LBA_HIDDEN,      <span class="comment">// 0x1C</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        UNUSED_6,              <span class="comment">// 0x1D</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        FAT16_LBA_HIDDEN,      <span class="comment">// 0x1E</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        UNUSED_7,              <span class="comment">// 0x1F</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        UNUSED_8,              <span class="comment">// 0x20</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        RESERVED_1,            <span class="comment">// 0x21</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        UNUSED_10,             <span class="comment">// 0x22</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        RESERVED_2,            <span class="comment">// 0x23</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        NEC_DOS,               <span class="comment">// 0x24</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        UNUSED_11,             <span class="comment">// 0x25</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        RESERVED_3,            <span class="comment">// 0x26</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="comment">// 0x27 - 0x30: unassigned</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        UNUSED_12,             <span class="comment">// 0x27</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        UNUSED_13,             <span class="comment">// 0x28</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        UNUSED_14,             <span class="comment">// 0x29</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        UNUSED_15,             <span class="comment">// 0x2A</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        UNUSED_16,             <span class="comment">// 0x2B</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        UNUSED_17,             <span class="comment">// 0x2C</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        UNUSED_18,             <span class="comment">// 0x2D</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        UNUSED_19,             <span class="comment">// 0x2E</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        UNUSED_20,             <span class="comment">// 0x2F</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        UNUSED_21,             <span class="comment">// 0x30</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        RESERVED_4,            <span class="comment">// 0x31</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        NOS,                   <span class="comment">// 0x32</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        RESERVED_5,            <span class="comment">// 0x33</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        RESERVED_6,            <span class="comment">// 0x34</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        JFS,                   <span class="comment">// 0x35</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        RESERVED_7,            <span class="comment">// 0x36</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        UNUSED_22,             <span class="comment">// 0x37</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        THEOS_3_2,             <span class="comment">// 0x38</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        PLAN9,                 <span class="comment">// 0x39</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        THEOS_4_4GB,           <span class="comment">// 0x3A</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        THEOS_4_EXTENDED,      <span class="comment">// 0x3B</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        PARTITIONMAGIC_RECOVERY, <span class="comment">// 0x3C</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        HIDDEN_NETWARE,        <span class="comment">// 0x3D</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        UNUSED_23,             <span class="comment">// 0x3E</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        UNUSED_24,             <span class="comment">// 0x3F</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        VENIX,                 <span class="comment">// 0x40</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        LINUX_MINIX,           <span class="comment">// 0x41</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        LINUX_SWAP,            <span class="comment">// 0x42</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        LINUX_NATIVE,          <span class="comment">// 0x43</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        GOBACK,                <span class="comment">// 0x44</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        BOOT_US,               <span class="comment">// 0x45</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        EUMEL_ELAN_46,         <span class="comment">// 0x46</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        EUMEL_ELAN_47,         <span class="comment">// 0x47</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        EUMEL_ELAN_48,         <span class="comment">// 0x48</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        UNUSED_25,             <span class="comment">// 0x49</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        ADAOS,                 <span class="comment">// 0x4A</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        UNUSED_26,             <span class="comment">// 0x4B</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        OBERON,                <span class="comment">// 0x4C</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        QNX4,                  <span class="comment">// 0x4D</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        QNX4_SECOND,           <span class="comment">// 0x4E</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        QNX4_THIRD,            <span class="comment">// 0x4F</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        ONTRACK_DM,            <span class="comment">// 0x50</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        ONTRACK_DM_RW,         <span class="comment">// 0x51</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        CPM,                   <span class="comment">// 0x52</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        DISK_MANAGER_AUX3,     <span class="comment">// 0x53</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        DISK_MANAGER_DDO,      <span class="comment">// 0x54</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        EZ_DRIVE,              <span class="comment">// 0x55</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        GOLDEN_BOW,            <span class="comment">// 0x56</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        DRIVE_PRO,             <span class="comment">// 0x57</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        UNUSED_27,             <span class="comment">// 0x58</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        UNUSED_28,             <span class="comment">// 0x59</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        UNUSED_29,             <span class="comment">// 0x5A</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        UNUSED_30,             <span class="comment">// 0x5B</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        PRIAM_EDISK,           <span class="comment">// 0x5C</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        UNUSED_31,             <span class="comment">// 0x5D</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        UNUSED_32,             <span class="comment">// 0x5E</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        UNUSED_33,             <span class="comment">// 0x5F</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        UNUSED_34,             <span class="comment">// 0x60</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        SPEEDSTOR,             <span class="comment">// 0x61</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        UNUSED_35,             <span class="comment">// 0x62</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        UNIX,                  <span class="comment">// 0x63</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        PC_ARMOUR,             <span class="comment">// 0x64</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        NOVELL_NETWARE386,     <span class="comment">// 0x65</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        NOVELL_SMS,            <span class="comment">// 0x66</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        NOVELL,                <span class="comment">// 0x67</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        NOVELL_OLD,            <span class="comment">// 0x68</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        NOVELL_NETWARE_NSS,    <span class="comment">// 0x69</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        UNUSED_36,             <span class="comment">// 0x6A</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        UNUSED_37,             <span class="comment">// 0x6B</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        UNUSED_38,             <span class="comment">// 0x6C</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        UNUSED_39,             <span class="comment">// 0x6D</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        UNUSED_40,             <span class="comment">// 0x6E</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        UNUSED_41,             <span class="comment">// 0x6F</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        DISKSECURE,            <span class="comment">// 0x70</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        RESERVED_8,            <span class="comment">// 0x71</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        UNUSED_42,             <span class="comment">// 0x72</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        RESERVED_9,            <span class="comment">// 0x73</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        SCRAMDISK,             <span class="comment">// 0x74</span></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>        IBM_PCIX,              <span class="comment">// 0x75</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        RESERVED_10,           <span class="comment">// 0x76</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        M2FS,                  <span class="comment">// 0x77</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        XOSL_FS,               <span class="comment">// 0x78</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        UNUSED_43,             <span class="comment">// 0x79</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        UNUSED_44,             <span class="comment">// 0x7A</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        UNUSED_45,             <span class="comment">// 0x7B</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        UNUSED_46,             <span class="comment">// 0x7C</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        UNUSED_47,             <span class="comment">// 0x7D</span></div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        UNUSED_48,             <span class="comment">// 0x7E</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        UNUSED_49,             <span class="comment">// 0x7F</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        MINIX,                 <span class="comment">// 0x80</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        MINIX2,                <span class="comment">// 0x81</span></div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        LINUX_SWAP_ALT,        <span class="comment">// 0x82</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        LINUX_EXT2,            <span class="comment">// 0x83</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        HIBERNATION,           <span class="comment">// 0x84</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        LINUX_EXTENDED,        <span class="comment">// 0x85</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        LINUX_RAID,            <span class="comment">// 0x86</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        NTFS_VOLUME_SET,       <span class="comment">// 0x87</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        UNUSED_50,             <span class="comment">// 0x88</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        UNUSED_51,             <span class="comment">// 0x89</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        LINUX_KERNEL,          <span class="comment">// 0x8A</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        FAULT_TOLERANT_FAT32,  <span class="comment">// 0x8B</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        FT_FAT32_LBA,          <span class="comment">// 0x8C</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        FREEFDISK_FAT12,       <span class="comment">// 0x8D</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        LINUX_LVM,             <span class="comment">// 0x8E</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        UNUSED_52,             <span class="comment">// 0x8F</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        FREEFDISK_FAT16,       <span class="comment">// 0x90</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        FREEFDISK_EXTENDED,    <span class="comment">// 0x91</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        FREEFDISK_FAT16_LARGE, <span class="comment">// 0x92</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        HIDDEN_LINUX_NATIVE,   <span class="comment">// 0x93</span></div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        AMOEBA_BAD_BLOCK,      <span class="comment">// 0x94</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        MIT_EXOPC,             <span class="comment">// 0x95</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        UNUSED_53,             <span class="comment">// 0x96</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        FREEFDISK_FAT32,       <span class="comment">// 0x97</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        FREEFDISK_FAT32_LBA,   <span class="comment">// 0x98</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        DCE376,                <span class="comment">// 0x99</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        FREEFDISK_FAT16_LBA,   <span class="comment">// 0x9A</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        FREEFDISK_EXTENDED_LBA,<span class="comment">// 0x9B</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        UNUSED_54,             <span class="comment">// 0x9C</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        UNUSED_55,             <span class="comment">// 0x9D</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        UNUSED_56,             <span class="comment">// 0x9E</span></div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>                UNUSED_54,             <span class="comment">// 0x9C</span></div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>                UNUSED_55,             <span class="comment">// 0x9D</span></div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>                UNUSED_56,             <span class="comment">// 0x9E</span></div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>                BSD_OS,                <span class="comment">// 0x9F</span></div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>                LAPTOP_HIBERNATION,    <span class="comment">// 0xA0</span></div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>                HP_VOLUME_EXPANSION,   <span class="comment">// 0xA1</span></div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>                UNUSED_57,             <span class="comment">// 0xA2</span></div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>                RESERVED_11,           <span class="comment">// 0xA3</span></div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>                RESERVED_12,           <span class="comment">// 0xA4</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>                BSD_386,               <span class="comment">// 0xA5</span></div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>                OPENBSD,               <span class="comment">// 0xA6</span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>                NEXTSTEP,              <span class="comment">// 0xA7</span></div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>                MAC_OS_X,              <span class="comment">// 0xA8</span></div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>                NETBSD,                <span class="comment">// 0xA9</span></div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>                OLIVETTI_SERVICE,      <span class="comment">// 0xAA</span></div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>                MAC_OS_X_BOOT,         <span class="comment">// 0xAB</span></div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>                UNUSED_58,             <span class="comment">// 0xAC</span></div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>                UNUSED_59,             <span class="comment">// 0xAD</span></div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>                SHAGOS,                <span class="comment">// 0xAE</span></div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>                SHAGOS_SWAP,           <span class="comment">// 0xAF</span></div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>                BOOTSTAR,              <span class="comment">// 0xB0</span></div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>                RESERVED_13,           <span class="comment">// 0xB1</span></div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>                UNUSED_60,             <span class="comment">// 0xB2</span></div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>                RESERVED_14,           <span class="comment">// 0xB3</span></div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>                RESERVED_15,           <span class="comment">// 0xB4</span></div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>                UNUSED_61,             <span class="comment">// 0xB5</span></div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>                RESERVED_16,           <span class="comment">// 0xB6</span></div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>                BSDI_BSD386_FS,        <span class="comment">// 0xB7</span></div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>                BSDI_BSD386_SWAP,      <span class="comment">// 0xB8</span></div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>                UNUSED_62,             <span class="comment">// 0xB9</span></div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>                UNUSED_63,             <span class="comment">// 0xBA</span></div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>                BOOT_WIZARD_HIDDEN,    <span class="comment">// 0xBB</span></div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>                UNUSED_64,             <span class="comment">// 0xBC</span></div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>                UNUSED_65,             <span class="comment">// 0xBD</span></div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>                SOLARIS8_BOOT,         <span class="comment">// 0xBE</span></div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>                UNUSED_66,             <span class="comment">// 0xBF</span></div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>                CTOS,                  <span class="comment">// 0xC0</span></div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>                DRDOS_FAT12,           <span class="comment">// 0xC1</span></div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>                RESERVED_17,           <span class="comment">// 0xC2</span></div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>                HIDDEN_LINUX_SWAP,     <span class="comment">// 0xC3</span></div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>                DRDOS_FAT16,           <span class="comment">// 0xC4</span></div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>                DRDOS_EXTENDED,        <span class="comment">// 0xC5</span></div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>                DRDOS_FAT16_LARGE,     <span class="comment">// 0xC6</span></div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                NTFS_CORRUPT,          <span class="comment">// 0xC7</span></div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        BSD_OS,                <span class="comment">// 0x9F</span></div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        LAPTOP_HIBERNATION,    <span class="comment">// 0xA0</span></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        HP_VOLUME_EXPANSION,   <span class="comment">// 0xA1</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        UNUSED_57,             <span class="comment">// 0xA2</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        RESERVED_11,           <span class="comment">// 0xA3</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        RESERVED_12,           <span class="comment">// 0xA4</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        BSD_386,               <span class="comment">// 0xA5</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        OPENBSD,               <span class="comment">// 0xA6</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        NEXTSTEP,              <span class="comment">// 0xA7</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        MAC_OS_X,              <span class="comment">// 0xA8</span></div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>        NETBSD,                <span class="comment">// 0xA9</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        OLIVETTI_SERVICE,      <span class="comment">// 0xAA</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        MAC_OS_X_BOOT,         <span class="comment">// 0xAB</span></div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>        UNUSED_58,             <span class="comment">// 0xAC</span></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        UNUSED_59,             <span class="comment">// 0xAD</span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        SHAGOS,                <span class="comment">// 0xAE</span></div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        SHAGOS_SWAP,           <span class="comment">// 0xAF</span></div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        BOOTSTAR,              <span class="comment">// 0xB0</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span> </div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        RESERVED_13,           <span class="comment">// 0xB1</span></div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        UNUSED_60,             <span class="comment">// 0xB2</span></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        RESERVED_14,           <span class="comment">// 0xB3</span></div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        RESERVED_15,           <span class="comment">// 0xB4</span></div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        UNUSED_61,             <span class="comment">// 0xB5</span></div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        RESERVED_16,           <span class="comment">// 0xB6</span></div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        BSDI_BSD386_FS,        <span class="comment">// 0xB7</span></div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        BSDI_BSD386_SWAP,      <span class="comment">// 0xB8</span></div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        UNUSED_62,             <span class="comment">// 0xB9</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        UNUSED_63,             <span class="comment">// 0xBA</span></div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        BOOT_WIZARD_HIDDEN,    <span class="comment">// 0xBB</span></div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        UNUSED_64,             <span class="comment">// 0xBC</span></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>        UNUSED_65,             <span class="comment">// 0xBD</span></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        SOLARIS8_BOOT,         <span class="comment">// 0xBE</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        UNUSED_66,             <span class="comment">// 0xBF</span></div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        CTOS,                  <span class="comment">// 0xC0</span></div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        DRDOS_FAT12,           <span class="comment">// 0xC1</span></div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>        RESERVED_17,           <span class="comment">// 0xC2</span></div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>        HIDDEN_LINUX_SWAP,     <span class="comment">// 0xC3</span></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        DRDOS_FAT16,           <span class="comment">// 0xC4</span></div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>        DRDOS_EXTENDED,        <span class="comment">// 0xC5</span></div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        DRDOS_FAT16_LARGE,     <span class="comment">// 0xC6</span></div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>        NTFS_CORRUPT,          <span class="comment">// 0xC7</span></div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>        UNUSED_67,             <span class="comment">// 0xC8</span></div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        UNUSED_68,             <span class="comment">// 0xC9</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        UNUSED_69,             <span class="comment">// 0xCA</span></div>
 <div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                UNUSED_67,             <span class="comment">// 0xC8</span></div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>                UNUSED_68,             <span class="comment">// 0xC9</span></div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                UNUSED_69,             <span class="comment">// 0xCA</span></div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>                DRDOS_FAT32,           <span class="comment">// 0xCB</span></div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>                DRDOS_FAT32_LBA,       <span class="comment">// 0xCC</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>                CTOS_MEMDUMP,          <span class="comment">// 0xCD</span></div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>                DRDOS_FAT16_LBA,       <span class="comment">// 0xCE</span></div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>                UNUSED_70,             <span class="comment">// 0xCF</span></div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                REAL32_SECURE_BIG,     <span class="comment">// 0xD0</span></div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>                OLD_MULTIUSER_DOS_FAT12,<span class="comment">// 0xD1</span></div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>                UNUSED_71,             <span class="comment">// 0xD2</span></div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>                UNUSED_72,             <span class="comment">// 0xD3</span></div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>                OLD_MULTIUSER_DOS_FAT16,<span class="comment">// 0xD4</span></div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>                OLD_MULTIUSER_DOS_EXTENDED,<span class="comment">// 0xD5</span></div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>                OLD_MULTIUSER_DOS_FAT16_LARGE,<span class="comment">// 0xD6</span></div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>                UNUSED_73,             <span class="comment">// 0xD7</span></div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>                CPM86,                 <span class="comment">// 0xD8</span></div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>                UNUSED_74,             <span class="comment">// 0xD9</span></div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                NON_FS_DATA,           <span class="comment">// 0xDA</span></div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>                DIGITAL_RESEARCH_CPM,  <span class="comment">// 0xDB</span></div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>                UNUSED_75,             <span class="comment">// 0xDC</span></div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>                HIDDEN_CTOS_MEMDUMP,   <span class="comment">// 0xDD</span></div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>                DELL_POWEREDGE,        <span class="comment">// 0xDE</span></div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>                DGUX,                  <span class="comment">// 0xDF</span></div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>                STM_AVFS,              <span class="comment">// 0xE0</span></div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                SPEEDSTOR_FAT_EXTENDED,<span class="comment">// 0xE1</span></div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                UNUSED_76,             <span class="comment">// 0xE2</span></div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                SPEEDSTOR_RO,          <span class="comment">// 0xE3</span></div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                SPEEDSTOR_EXTENDED,    <span class="comment">// 0xE4</span></div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                TANDY_DOS,             <span class="comment">// 0xE5</span></div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                RESERVED_18,           <span class="comment">// 0xE6</span></div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>                UNUSED_77,             <span class="comment">// 0xE7</span></div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>                UNUSED_78,             <span class="comment">// 0xE8</span></div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>                UNUSED_79,             <span class="comment">// 0xE9</span></div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>                BEFS,                  <span class="comment">// 0xEA</span></div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>                SPRYTIX,               <span class="comment">// 0xEB</span></div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>                EFI_PROTECTIVE,        <span class="comment">// 0xEE</span></div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>                EFI_SYSTEM,            <span class="comment">// 0xEF</span></div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>                LINUX_PA_RISC,         <span class="comment">// 0xF0</span></div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>                SPEEDSTOR_2,           <span class="comment">// 0xF1</span></div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>                DOS_3_3_SECONDARY,     <span class="comment">// 0xF2</span></div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>                RESERVED_19,           <span class="comment">// 0xF3</span></div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>                SPEEDSTOR_LARGE,       <span class="comment">// 0xF4</span></div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>                PROLOGUE_MULTI,        <span class="comment">// 0xF5</span></div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>                RESERVED_20,           <span class="comment">// 0xF6</span></div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>                UNUSED_80,             <span class="comment">// 0xF7</span></div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>                UNUSED_81,             <span class="comment">// 0xF8</span></div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>                UNUSED_82,             <span class="comment">// 0xF9</span></div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>                BOCHS,                 <span class="comment">// 0xFA</span></div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>                VMFS,                  <span class="comment">// 0xFB</span></div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>                VMWARE_SWAP,           <span class="comment">// 0xFC</span></div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>                LINUX_RAID_AUTO,       <span class="comment">// 0xFD</span></div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>                NT_HIDDEN,             <span class="comment">// 0xFE</span></div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>                XENIX_BAD_BLOCK        <span class="comment">// 0xFF</span></div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>            };</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        DRDOS_FAT32,           <span class="comment">// 0xCB</span></div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        DRDOS_FAT32_LBA,       <span class="comment">// 0xCC</span></div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        CTOS_MEMDUMP,          <span class="comment">// 0xCD</span></div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        DRDOS_FAT16_LBA,       <span class="comment">// 0xCE</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        UNUSED_70,             <span class="comment">// 0xCF</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>        REAL32_SECURE_BIG,     <span class="comment">// 0xD0</span></div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        OLD_MULTIUSER_DOS_FAT12,<span class="comment">// 0xD1</span></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>        UNUSED_71,             <span class="comment">// 0xD2</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        UNUSED_72,             <span class="comment">// 0xD3</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        OLD_MULTIUSER_DOS_FAT16,<span class="comment">// 0xD4</span></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>        OLD_MULTIUSER_DOS_EXTENDED,<span class="comment">// 0xD5</span></div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        OLD_MULTIUSER_DOS_FAT16_LARGE,<span class="comment">// 0xD6</span></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>        UNUSED_73,             <span class="comment">// 0xD7</span></div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        CPM86,                 <span class="comment">// 0xD8</span></div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>        UNUSED_74,             <span class="comment">// 0xD9</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>        NON_FS_DATA,           <span class="comment">// 0xDA</span></div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>        DIGITAL_RESEARCH_CPM,  <span class="comment">// 0xDB</span></div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>        UNUSED_75,             <span class="comment">// 0xDC</span></div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>        HIDDEN_CTOS_MEMDUMP,   <span class="comment">// 0xDD</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>        DELL_POWEREDGE,        <span class="comment">// 0xDE</span></div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        DGUX,                  <span class="comment">// 0xDF</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>        STM_AVFS,              <span class="comment">// 0xE0</span></div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>        SPEEDSTOR_FAT_EXTENDED,<span class="comment">// 0xE1</span></div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>        UNUSED_76,             <span class="comment">// 0xE2</span></div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>        SPEEDSTOR_RO,          <span class="comment">// 0xE3</span></div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        SPEEDSTOR_EXTENDED,    <span class="comment">// 0xE4</span></div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>        TANDY_DOS,             <span class="comment">// 0xE5</span></div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>        RESERVED_18,           <span class="comment">// 0xE6</span></div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        UNUSED_77,             <span class="comment">// 0xE7</span></div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>        UNUSED_78,             <span class="comment">// 0xE8</span></div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        UNUSED_79,             <span class="comment">// 0xE9</span></div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span> </div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>        BEFS,                  <span class="comment">// 0xEA</span></div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>        SPRYTIX,               <span class="comment">// 0xEB</span></div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>        EFI_PROTECTIVE,        <span class="comment">// 0xEE</span></div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>        EFI_SYSTEM,            <span class="comment">// 0xEF</span></div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        LINUX_PA_RISC,         <span class="comment">// 0xF0</span></div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>        SPEEDSTOR_2,           <span class="comment">// 0xF1</span></div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>        DOS_3_3_SECONDARY,     <span class="comment">// 0xF2</span></div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>        RESERVED_19,           <span class="comment">// 0xF3</span></div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        SPEEDSTOR_LARGE,       <span class="comment">// 0xF4</span></div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>        PROLOGUE_MULTI,        <span class="comment">// 0xF5</span></div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        RESERVED_20,           <span class="comment">// 0xF6</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>        UNUSED_80,             <span class="comment">// 0xF7</span></div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>        UNUSED_81,             <span class="comment">// 0xF8</span></div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>        UNUSED_82,             <span class="comment">// 0xF9</span></div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>        BOCHS,                 <span class="comment">// 0xFA</span></div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>        VMFS,                  <span class="comment">// 0xFB</span></div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        VMWARE_SWAP,           <span class="comment">// 0xFC</span></div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        LINUX_RAID_AUTO,       <span class="comment">// 0xFD</span></div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>        NT_HIDDEN,             <span class="comment">// 0xFE</span></div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        XENIX_BAD_BLOCK        <span class="comment">// 0xFF</span></div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    };</div>
 </div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
-<div class="foldopen" id="foldopen00306" data-start="{" data-end="};">
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html">  306</a></span>            <span class="keyword">struct </span><a class="code hl_struct" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html">PartitionTableEntry</a> {</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span> </div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a8725bdb588c9780ab0addffb0f625315">  308</a></span>                uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a8725bdb588c9780ab0addffb0f625315">bootable</a>;                   </div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span> </div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a02ee927f621c1619ede40773636c2932">  310</a></span>                uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a02ee927f621c1619ede40773636c2932">start_head</a>;                 </div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a845bd56fcf2e251f0e947f05ab9fd8bb">  311</a></span>                uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a845bd56fcf2e251f0e947f05ab9fd8bb">start_sector</a>: 6;            </div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a72f83d36543c76a2c261c11d06b4a780">  312</a></span>                uint16_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a72f83d36543c76a2c261c11d06b4a780">start_cylinder</a>: 10;        </div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span> </div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aff8dbfddfd68ea8688dde9efef38e3b7">  314</a></span>                uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aff8dbfddfd68ea8688dde9efef38e3b7">type</a>;                       </div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span> </div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a00c366db400072092380cddd0c723763">  316</a></span>                uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a00c366db400072092380cddd0c723763">end_head</a>;                   </div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#acbec0b75af9183d57815051b6d94ba42">  317</a></span>                uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#acbec0b75af9183d57815051b6d94ba42">end_sector</a>: 6;              </div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aa7826538c540ce28c6a193f0e180abb7">  318</a></span>                uint16_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aa7826538c540ce28c6a193f0e180abb7">end_cylinder</a>: 10;          </div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a0823615696504143a5551db9321b27e3">  320</a></span>                uint32_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a0823615696504143a5551db9321b27e3">start_LBA</a>;                 </div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aca114b01e7c2a12d6876148aad1dd57d">  321</a></span>                uint32_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aca114b01e7c2a12d6876148aad1dd57d">length</a>;                    </div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span> </div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>            } __attribute__((packed));</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span> </div>
+<div class="foldopen" id="foldopen00305" data-start="{" data-end="};">
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html">  305</a></span>    <span class="keyword">typedef</span> <span class="keyword">struct </span>PACKED <a class="code hl_struct" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html">PartitionTableEntry</a> {</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span> </div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a8725bdb588c9780ab0addffb0f625315">  307</a></span>        uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a8725bdb588c9780ab0addffb0f625315">bootable</a>;                    </div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a02ee927f621c1619ede40773636c2932">  309</a></span>        uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a02ee927f621c1619ede40773636c2932">start_head</a>;                 </div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a845bd56fcf2e251f0e947f05ab9fd8bb">  310</a></span>        uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a845bd56fcf2e251f0e947f05ab9fd8bb">start_sector</a> : 6;            </div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a72f83d36543c76a2c261c11d06b4a780">  311</a></span>        uint16_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a72f83d36543c76a2c261c11d06b4a780">start_cylinder</a> : 10;        </div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span> </div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aff8dbfddfd68ea8688dde9efef38e3b7">  313</a></span>        uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aff8dbfddfd68ea8688dde9efef38e3b7">type</a>;                       </div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a00c366db400072092380cddd0c723763">  315</a></span>        uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a00c366db400072092380cddd0c723763">end_head</a>;                   </div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#acbec0b75af9183d57815051b6d94ba42">  316</a></span>        uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#acbec0b75af9183d57815051b6d94ba42">end_sector</a> : 6;              </div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aa7826538c540ce28c6a193f0e180abb7">  317</a></span>        uint16_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aa7826538c540ce28c6a193f0e180abb7">end_cylinder</a> : 10;          </div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a0823615696504143a5551db9321b27e3">  319</a></span>        uint32_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a0823615696504143a5551db9321b27e3">start_LBA</a>;                 </div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aca114b01e7c2a12d6876148aad1dd57d">  320</a></span>        uint32_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aca114b01e7c2a12d6876148aad1dd57d">length</a>;                    </div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span> </div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno"><a class="line" href="msdos_8h.html#ab1ba6e33a1f0304ba3ef76f48d44b6e7">  322</a></span>    } partition_table_entry_t;</div>
 </div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span> </div>
-<div class="foldopen" id="foldopen00329" data-start="{" data-end="};">
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html">  329</a></span>            <span class="keyword">struct </span><a class="code hl_struct" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html">MasterBootRecord</a> {</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span> </div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#ad78bbe214491a5e1a96be896c0c1a33e">  331</a></span>                uint8_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#ad78bbe214491a5e1a96be896c0c1a33e">bootloader</a>[440];                        </div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a4a6d18b4d3e01152d818ffd100cf0af9">  332</a></span>                uint32_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a4a6d18b4d3e01152d818ffd100cf0af9">disk_signature</a>;                        </div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a7898843bd9d618d516916b820bf34dea">  333</a></span>                uint16_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a7898843bd9d618d516916b820bf34dea">unused</a>;                                </div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span> </div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#aba85114cfbd24d295908fbd0019323d3">  335</a></span>                <a class="code hl_struct" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html">PartitionTableEntry</a> <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#aba85114cfbd24d295908fbd0019323d3">primary_partition</a>[4];       </div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
+<div class="foldopen" id="foldopen00331" data-start="{" data-end="};">
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html">  331</a></span>    <span class="keyword">typedef</span> <span class="keyword">struct </span>PACKED <a class="code hl_struct" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html">MasterBootRecord</a> {</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span> </div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#ad78bbe214491a5e1a96be896c0c1a33e">  333</a></span>        uint8_t bootloader[440];                        </div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a4a6d18b4d3e01152d818ffd100cf0af9">  334</a></span>        uint32_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a4a6d18b4d3e01152d818ffd100cf0af9">disk_signature</a>;                        </div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a7898843bd9d618d516916b820bf34dea">  335</a></span>        uint16_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a7898843bd9d618d516916b820bf34dea">unused</a>;                                </div>
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span> </div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a33a95e642c2d7c035e1cf9048309e7c3">  337</a></span>                uint16_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a33a95e642c2d7c035e1cf9048309e7c3">magic</a>;                                 </div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#aba85114cfbd24d295908fbd0019323d3">  337</a></span>        <a class="code hl_struct" href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html">PartitionTableEntry</a> primary_partition[4];       </div>
 <div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>            } __attribute__((packed));</div>
-</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno"><a class="line" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a33a95e642c2d7c035e1cf9048309e7c3">  339</a></span>        uint16_t <a class="code hl_variable" href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a33a95e642c2d7c035e1cf9048309e7c3">magic</a>;                                 </div>
 <div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span> </div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
-<div class="foldopen" id="foldopen00348" data-start="{" data-end="};">
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno"><a class="line" href="classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html">  348</a></span>            <span class="keyword">class </span><a class="code hl_class" href="classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html">MSDOSPartition</a> {</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>                <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>                    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html#ab24b24647bf8d7da1ef45b2f42c9b347">mount_partitions</a>(<a class="code hl_class" href="classMaxOS_1_1drivers_1_1disk_1_1Disk.html">drivers::disk::Disk</a>* disk);</div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>            };</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno"><a class="line" href="msdos_8h.html#ac818b8d6a6e48d402765748016bddb85">  341</a></span>    } master_boot_record_t;</div>
 </div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>        }</div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    }</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
+<div class="foldopen" id="foldopen00350" data-start="{" data-end="};">
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno"><a class="line" href="classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html">  350</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html">MSDOSPartition</a> {</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>            <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html#ab24b24647bf8d7da1ef45b2f42c9b347">mount_partitions</a>(<a class="code hl_class" href="classMaxOS_1_1drivers_1_1disk_1_1Disk.html">drivers::disk::Disk</a>* disk);</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    };</div>
+</div>
 <div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>}</div>
 <div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span> </div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span><span class="preprocessor">#endif </span><span class="comment">//MSDOS_H</span></div>
-<div class="ttc" id="aclassMaxOS_1_1drivers_1_1disk_1_1Disk_html"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1disk_1_1Disk.html">MaxOS::drivers::disk::Disk</a></div><div class="ttdoc">Generic Disk, handles the reading and writing of data to the hard drive.</div><div class="ttdef"><b>Definition</b> <a href="disk_8h_source.html#l00028">disk.h:28</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition_html"><div class="ttname"><a href="classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html">MaxOS::filesystem::partition::MSDOSPartition</a></div><div class="ttdoc">Handles mounting of partitions documented in an MSDOS partition table.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00348">msdos.h:348</a></div></div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span><span class="preprocessor">#endif </span><span class="comment">//MAXOS_FILESYSTEM_PARTITION_MSDOS_H</span></div>
+<div class="ttc" id="aclassMaxOS_1_1drivers_1_1disk_1_1Disk_html"><div class="ttname"><a href="classMaxOS_1_1drivers_1_1disk_1_1Disk.html">MaxOS::drivers::disk::Disk</a></div><div class="ttdoc">Generic Disk, handles the reading and writing of data to the hard drive.</div><div class="ttdef"><b>Definition</b> <a href="disk_8h_source.html#l00024">disk.h:24</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition_html"><div class="ttname"><a href="classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html">MaxOS::filesystem::partition::MSDOSPartition</a></div><div class="ttdoc">Handles mounting of partitions documented in an MSDOS partition table.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00350">msdos.h:350</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition_html_ab24b24647bf8d7da1ef45b2f42c9b347"><div class="ttname"><a href="classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html#ab24b24647bf8d7da1ef45b2f42c9b347">MaxOS::filesystem::partition::MSDOSPartition::mount_partitions</a></div><div class="ttdeci">static void mount_partitions(drivers::disk::Disk *disk)</div><div class="ttdoc">read the partition table of a given hard disk</div><div class="ttdef"><b>Definition</b> <a href="msdos_8cpp_source.html#l00023">msdos.cpp:23</a></div></div>
 <div class="ttc" id="adisk_8h_html"><div class="ttname"><a href="disk_8h.html">disk.h</a></div><div class="ttdoc">Defines a generic Disk driver for reading and writing data to disk drives.</div></div>
 <div class="ttc" id="aext2_8h_html"><div class="ttname"><a href="ext2_8h.html">ext2.h</a></div><div class="ttdoc">Defines structures and enums for the Extended 2 (ext2) filesystem format and relevant Filesystem,...</div></div>
 <div class="ttc" id="afat32_8h_html"><div class="ttname"><a href="fat32_8h.html">fat32.h</a></div><div class="ttdoc">Defines structures and constants for the File Allocation Table 32 (FAT32) filesystem format and the r...</div></div>
-<div class="ttc" id="amsdos_8h_html_a2e4fb19c764ea277199e32724975df93"><div class="ttname"><a href="msdos_8h.html#a2e4fb19c764ea277199e32724975df93">MaxOS::filesystem::partition::PartitionType</a></div><div class="ttdeci">PartitionType</div><div class="ttdoc">Credit: http://www.osdever.net/documents/pdf/partitiontypes.pdf.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00026">msdos.h:26</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html">MaxOS::filesystem::partition::MasterBootRecord</a></div><div class="ttdoc">Stores information about the master boot record.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00329">msdos.h:329</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html_a33a95e642c2d7c035e1cf9048309e7c3"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a33a95e642c2d7c035e1cf9048309e7c3">MaxOS::filesystem::partition::MasterBootRecord::magic</a></div><div class="ttdeci">uint16_t magic</div><div class="ttdoc">The magic number that identifies this as a valid MBR (0xAA55)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00337">msdos.h:337</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html_a4a6d18b4d3e01152d818ffd100cf0af9"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a4a6d18b4d3e01152d818ffd100cf0af9">MaxOS::filesystem::partition::MasterBootRecord::disk_signature</a></div><div class="ttdeci">uint32_t disk_signature</div><div class="ttdoc">Unique disk signature (optional)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00332">msdos.h:332</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html_a7898843bd9d618d516916b820bf34dea"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a7898843bd9d618d516916b820bf34dea">MaxOS::filesystem::partition::MasterBootRecord::unused</a></div><div class="ttdeci">uint16_t unused</div><div class="ttdoc">Reserved (usually zero)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00333">msdos.h:333</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html_aba85114cfbd24d295908fbd0019323d3"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#aba85114cfbd24d295908fbd0019323d3">MaxOS::filesystem::partition::MasterBootRecord::primary_partition</a></div><div class="ttdeci">PartitionTableEntry primary_partition[4]</div><div class="ttdoc">The partition table entries.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00335">msdos.h:335</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html_ad78bbe214491a5e1a96be896c0c1a33e"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#ad78bbe214491a5e1a96be896c0c1a33e">MaxOS::filesystem::partition::MasterBootRecord::bootloader</a></div><div class="ttdeci">uint8_t bootloader[440]</div><div class="ttdoc">The assembly bytes that make up the bootloader software.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00331">msdos.h:331</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html">MaxOS::filesystem::partition::PartitionTableEntry</a></div><div class="ttdoc">Stores information about a partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00306">msdos.h:306</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a00c366db400072092380cddd0c723763"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a00c366db400072092380cddd0c723763">MaxOS::filesystem::partition::PartitionTableEntry::end_head</a></div><div class="ttdeci">uint8_t end_head</div><div class="ttdoc">The last head of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00316">msdos.h:316</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a02ee927f621c1619ede40773636c2932"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a02ee927f621c1619ede40773636c2932">MaxOS::filesystem::partition::PartitionTableEntry::start_head</a></div><div class="ttdeci">uint8_t start_head</div><div class="ttdoc">The starting head of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00310">msdos.h:310</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a0823615696504143a5551db9321b27e3"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a0823615696504143a5551db9321b27e3">MaxOS::filesystem::partition::PartitionTableEntry::start_LBA</a></div><div class="ttdeci">uint32_t start_LBA</div><div class="ttdoc">The starting LBA of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00320">msdos.h:320</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a72f83d36543c76a2c261c11d06b4a780"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a72f83d36543c76a2c261c11d06b4a780">MaxOS::filesystem::partition::PartitionTableEntry::start_cylinder</a></div><div class="ttdeci">uint16_t start_cylinder</div><div class="ttdoc">The starting cylinder of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00312">msdos.h:312</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a845bd56fcf2e251f0e947f05ab9fd8bb"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a845bd56fcf2e251f0e947f05ab9fd8bb">MaxOS::filesystem::partition::PartitionTableEntry::start_sector</a></div><div class="ttdeci">uint8_t start_sector</div><div class="ttdoc">The first sector of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00311">msdos.h:311</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a8725bdb588c9780ab0addffb0f625315"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a8725bdb588c9780ab0addffb0f625315">MaxOS::filesystem::partition::PartitionTableEntry::bootable</a></div><div class="ttdeci">uint8_t bootable</div><div class="ttdoc">Is this partition bootable? (0x80 = bootable, 0x00 = not bootable)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00308">msdos.h:308</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_aa7826538c540ce28c6a193f0e180abb7"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aa7826538c540ce28c6a193f0e180abb7">MaxOS::filesystem::partition::PartitionTableEntry::end_cylinder</a></div><div class="ttdeci">uint16_t end_cylinder</div><div class="ttdoc">The last cylinder of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00318">msdos.h:318</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_aca114b01e7c2a12d6876148aad1dd57d"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aca114b01e7c2a12d6876148aad1dd57d">MaxOS::filesystem::partition::PartitionTableEntry::length</a></div><div class="ttdeci">uint32_t length</div><div class="ttdoc">The length of the partition in sectors.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00321">msdos.h:321</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_acbec0b75af9183d57815051b6d94ba42"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#acbec0b75af9183d57815051b6d94ba42">MaxOS::filesystem::partition::PartitionTableEntry::end_sector</a></div><div class="ttdeci">uint8_t end_sector</div><div class="ttdoc">The last sector of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00317">msdos.h:317</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_aff8dbfddfd68ea8688dde9efef38e3b7"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aff8dbfddfd68ea8688dde9efef38e3b7">MaxOS::filesystem::partition::PartitionTableEntry::type</a></div><div class="ttdeci">uint8_t type</div><div class="ttdoc">The partition type (see PartitionType enum)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00314">msdos.h:314</a></div></div>
+<div class="ttc" id="amsdos_8h_html_a2e4fb19c764ea277199e32724975df93"><div class="ttname"><a href="msdos_8h.html#a2e4fb19c764ea277199e32724975df93">MaxOS::filesystem::partition::PartitionType</a></div><div class="ttdeci">PartitionType</div><div class="ttdoc">Credit: http://www.osdever.net/documents/pdf/partitiontypes.pdf.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00022">msdos.h:22</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html">MaxOS::filesystem::partition::MasterBootRecord</a></div><div class="ttdoc">Stores information about the master boot record.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00331">msdos.h:331</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html_a33a95e642c2d7c035e1cf9048309e7c3"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a33a95e642c2d7c035e1cf9048309e7c3">MaxOS::filesystem::partition::MasterBootRecord::magic</a></div><div class="ttdeci">uint16_t magic</div><div class="ttdoc">The magic number that identifies this as a valid MBR (0xAA55)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00339">msdos.h:339</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html_a4a6d18b4d3e01152d818ffd100cf0af9"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a4a6d18b4d3e01152d818ffd100cf0af9">MaxOS::filesystem::partition::MasterBootRecord::disk_signature</a></div><div class="ttdeci">uint32_t disk_signature</div><div class="ttdoc">Unique disk signature (optional)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00334">msdos.h:334</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord_html_a7898843bd9d618d516916b820bf34dea"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html#a7898843bd9d618d516916b820bf34dea">MaxOS::filesystem::partition::MasterBootRecord::unused</a></div><div class="ttdeci">uint16_t unused</div><div class="ttdoc">Reserved (usually zero)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00335">msdos.h:335</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html">MaxOS::filesystem::partition::PartitionTableEntry</a></div><div class="ttdoc">Stores information about a partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00305">msdos.h:305</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a00c366db400072092380cddd0c723763"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a00c366db400072092380cddd0c723763">MaxOS::filesystem::partition::PartitionTableEntry::end_head</a></div><div class="ttdeci">uint8_t end_head</div><div class="ttdoc">The last head of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00315">msdos.h:315</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a02ee927f621c1619ede40773636c2932"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a02ee927f621c1619ede40773636c2932">MaxOS::filesystem::partition::PartitionTableEntry::start_head</a></div><div class="ttdeci">uint8_t start_head</div><div class="ttdoc">The starting head of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00309">msdos.h:309</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a0823615696504143a5551db9321b27e3"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a0823615696504143a5551db9321b27e3">MaxOS::filesystem::partition::PartitionTableEntry::start_LBA</a></div><div class="ttdeci">uint32_t start_LBA</div><div class="ttdoc">The starting LBA of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00319">msdos.h:319</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a72f83d36543c76a2c261c11d06b4a780"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a72f83d36543c76a2c261c11d06b4a780">MaxOS::filesystem::partition::PartitionTableEntry::start_cylinder</a></div><div class="ttdeci">uint16_t start_cylinder</div><div class="ttdoc">The starting cylinder of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00311">msdos.h:311</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a845bd56fcf2e251f0e947f05ab9fd8bb"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a845bd56fcf2e251f0e947f05ab9fd8bb">MaxOS::filesystem::partition::PartitionTableEntry::start_sector</a></div><div class="ttdeci">uint8_t start_sector</div><div class="ttdoc">The first sector of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00310">msdos.h:310</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_a8725bdb588c9780ab0addffb0f625315"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#a8725bdb588c9780ab0addffb0f625315">MaxOS::filesystem::partition::PartitionTableEntry::bootable</a></div><div class="ttdeci">uint8_t bootable</div><div class="ttdoc">Is this partition bootable? (0x80 = bootable, 0x00 = not bootable)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00307">msdos.h:307</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_aa7826538c540ce28c6a193f0e180abb7"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aa7826538c540ce28c6a193f0e180abb7">MaxOS::filesystem::partition::PartitionTableEntry::end_cylinder</a></div><div class="ttdeci">uint16_t end_cylinder</div><div class="ttdoc">The last cylinder of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00317">msdos.h:317</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_aca114b01e7c2a12d6876148aad1dd57d"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aca114b01e7c2a12d6876148aad1dd57d">MaxOS::filesystem::partition::PartitionTableEntry::length</a></div><div class="ttdeci">uint32_t length</div><div class="ttdoc">The length of the partition in sectors.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00320">msdos.h:320</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_acbec0b75af9183d57815051b6d94ba42"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#acbec0b75af9183d57815051b6d94ba42">MaxOS::filesystem::partition::PartitionTableEntry::end_sector</a></div><div class="ttdeci">uint8_t end_sector</div><div class="ttdoc">The last sector of the partition.</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00316">msdos.h:316</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry_html_aff8dbfddfd68ea8688dde9efef38e3b7"><div class="ttname"><a href="structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html#aff8dbfddfd68ea8688dde9efef38e3b7">MaxOS::filesystem::partition::PartitionTableEntry::type</a></div><div class="ttdeci">uint8_t type</div><div class="ttdoc">The partition type (see PartitionType enum)</div><div class="ttdef"><b>Definition</b> <a href="msdos_8h_source.html#l00313">msdos.h:313</a></div></div>
 <div class="ttc" id="avfs_8h_html"><div class="ttname"><a href="vfs_8h.html">vfs.h</a></div><div class="ttdoc">Defines a Virtual File System (VFS) class for managing multiple filesystems and providing a unified i...</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

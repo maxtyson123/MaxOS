@@ -9,13 +9,13 @@ Implementation of memory-\/mapped I/O operations.
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{memoryIO_8cpp_a5d860365491e432b125606a6f8e464bc}{memcpy}} (void \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}}, const void \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}}, uint64\+\_\+t num)
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{memoryIO_8cpp_a5d860365491e432b125606a6f8e464bc}{memcpy}} (void \texorpdfstring{$\ast$}{*}destination, const void \texorpdfstring{$\ast$}{*}source, uint64\+\_\+t num)
 \begin{DoxyCompactList}\small\item\em Copies a block of memory from one location to another. \end{DoxyCompactList}\item 
 void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{memoryIO_8cpp_ae1b3e3155ea52fab09024ec46abeb6d9}{memset}} (void \texorpdfstring{$\ast$}{*}ptr, unsigned char value, uint64\+\_\+t num)
 \begin{DoxyCompactList}\small\item\em Fills a block of memory with a specified value. \end{DoxyCompactList}\item 
 void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{memoryIO_8cpp_af609697d85ef5a91e8be47ffa4c20f94}{memset}} (void \texorpdfstring{$\ast$}{*}ptr, uint32\+\_\+t value, uint64\+\_\+t num)
 \begin{DoxyCompactList}\small\item\em Fills a block of memory with a specified value. \end{DoxyCompactList}\item 
-void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{memoryIO_8cpp_a337c480eed50c49c1db8e51a1e0acf15}{memmove}} (void \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}}, const void \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}}, uint64\+\_\+t num)
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{memoryIO_8cpp_a337c480eed50c49c1db8e51a1e0acf15}{memmove}} (void \texorpdfstring{$\ast$}{*}destination, const void \texorpdfstring{$\ast$}{*}source, uint64\+\_\+t num)
 \begin{DoxyCompactList}\small\item\em Copies a block of memory from one location to another. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{memoryIO_8cpp_a72ee1a94489c3ecc654b0d9d4a70a0d1}{memcmp}} (const void \texorpdfstring{$\ast$}{*}ptr1, const void \texorpdfstring{$\ast$}{*}ptr2, uint64\+\_\+t num)
 \begin{DoxyCompactList}\small\item\em Compares two blocks of memory. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -117,33 +117,29 @@ Definition at line \mbox{\hyperlink{memoryIO_8cpp_source_l00165}{165}} of file \
 \DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{00166\ }
 \DoxyCodeLine{00167\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ source\ and\ destination\ are\ not\ the\ same}}
-\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}}\ ==\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}})}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}};}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keywordflow}{if}\ (destination\ ==\ source)}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ destination;}
 \DoxyCodeLine{00170\ }
 \DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ they\ exist}}
-\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}}\ ==\ \textcolor{keyword}{nullptr}\ ||\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}};}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keywordflow}{if}\ (destination\ ==\ \textcolor{keyword}{nullptr}\ ||\ source\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ destination;}
 \DoxyCodeLine{00174\ }
 \DoxyCodeLine{00175\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ source\ and\ destination}}
-\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{auto}*\ dst\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}};}
-\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ src\ =\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}};}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{auto}*\ dst\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)\ destination;}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ src\ =\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)\ source;}
 \DoxyCodeLine{00178\ }
 \DoxyCodeLine{00179\ \ \ \ \ \textcolor{comment}{//\ Copy\ the\ data}}
 \DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ num;\ i++)}
 \DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ dst[i]\ =\ src[i];}
 \DoxyCodeLine{00182\ }
 \DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{//\ Usefully\ for\ easier\ code\ writing}}
-\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}};}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordflow}{return}\ destination;}
 \DoxyCodeLine{00185\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{apic_8h_source_l00009}{destination}}, and \mbox{\hyperlink{apic_8h_source_l00001}{source}}.
-
-
-
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00247}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00262}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00336}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00352}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+to()}}, \mbox{\hyperlink{ext2_8cpp_source_l00027}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::\+Ext2\+Volume()}}, \mbox{\hyperlink{ipc_8cpp_source_l00133}{Max\+OS\+::processes\+::\+Shared\+Message\+Endpoint\+::read()}}, \mbox{\hyperlink{buffer_8cpp_source_l00101}{Max\+OS\+::common\+::\+Buffer\+::resize()}}, and \mbox{\hyperlink{process_8cpp_source_l00021}{Max\+OS\+::processes\+::\+Thread\+::\+Thread()}}.
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00253}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00268}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+from()}}, \mbox{\hyperlink{buffer_8cpp_source_l00342}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+to()}}, \mbox{\hyperlink{buffer_8cpp_source_l00358}{Max\+OS\+::common\+::\+Buffer\+::copy\+\_\+to()}}, \mbox{\hyperlink{ipc_8cpp_source_l00136}{Max\+OS\+::processes\+::\+Shared\+Message\+Endpoint\+::read()}}, \mbox{\hyperlink{buffer_8cpp_source_l00104}{Max\+OS\+::common\+::\+Buffer\+::resize()}}, and \mbox{\hyperlink{process_8cpp_source_l00026}{Max\+OS\+::processes\+::\+Thread\+::\+Thread()}}.
 
 \Hypertarget{memoryIO_8cpp_a337c480eed50c49c1db8e51a1e0acf15}\label{memoryIO_8cpp_a337c480eed50c49c1db8e51a1e0acf15} 
 \index{memoryIO.cpp@{memoryIO.cpp}!memmove@{memmove}}
@@ -176,15 +172,15 @@ Definition at line \mbox{\hyperlink{memoryIO_8cpp_source_l00235}{235}} of file \
 \DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{00236\ }
 \DoxyCodeLine{00237\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ source\ and\ destination\ are\ not\ the\ same}}
-\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}}\ ==\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}})}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}};}
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordflow}{if}\ (destination\ ==\ source)}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ destination;}
 \DoxyCodeLine{00240\ }
 \DoxyCodeLine{00241\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ they\ exist}}
-\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}}\ ==\ \textcolor{keyword}{nullptr}\ ||\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}}\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}};}
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keywordflow}{if}\ (destination\ ==\ \textcolor{keyword}{nullptr}\ ||\ source\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ destination;}
 \DoxyCodeLine{00244\ }
-\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keyword}{auto}*\ dst\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}};}
-\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ src\ =\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)\ \mbox{\hyperlink{apic_8h_a36a99c772ae64e186f5264a662834eef}{source}};}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keyword}{auto}*\ dst\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)\ destination;}
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ src\ =\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)\ source;}
 \DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordflow}{if}\ (dst\ <\ src)\ \{}
 \DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ num;\ i++)}
 \DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ dst[i]\ =\ src[i];}
@@ -192,17 +188,13 @@ Definition at line \mbox{\hyperlink{memoryIO_8cpp_source_l00235}{235}} of file \
 \DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ num;\ i\ !=\ 0;\ i-\/-\/)}
 \DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ dst[i\ -\/\ 1]\ =\ src[i\ -\/\ 1];}
 \DoxyCodeLine{00253\ \ \ \ \ \}}
-\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{apic_8h_a59b2eeb879f61d30d114944a05683844}{destination}};}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordflow}{return}\ destination;}
 \DoxyCodeLine{00255\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{apic_8h_source_l00009}{destination}}, and \mbox{\hyperlink{apic_8h_source_l00001}{source}}.
-
-
-
-Referenced by \mbox{\hyperlink{vesaboot_8cpp_source_l00294}{Max\+OS\+::drivers\+::console\+::\+VESABoot\+Console\+::scroll\+\_\+up()}}.
+Referenced by \mbox{\hyperlink{vesaboot_8cpp_source_l00295}{Max\+OS\+::drivers\+::console\+::\+VESABoot\+Console\+::scroll\+\_\+up()}}.
 
 \Hypertarget{memoryIO_8cpp_af609697d85ef5a91e8be47ffa4c20f94}\label{memoryIO_8cpp_af609697d85ef5a91e8be47ffa4c20f94} 
 \index{memoryIO.cpp@{memoryIO.cpp}!memset@{memset}}
@@ -247,7 +239,7 @@ Definition at line \mbox{\hyperlink{memoryIO_8cpp_source_l00215}{215}} of file \
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00065}{Max\+OS\+::common\+::\+Buffer\+::clear()}}, \mbox{\hyperlink{buffer_8cpp_source_l00078}{Max\+OS\+::common\+::\+Buffer\+::full()}}, and \mbox{\hyperlink{vesaboot_8cpp_source_l00249}{Max\+OS\+::drivers\+::console\+::\+VESABoot\+Console\+::print\+\_\+logo()}}.
+Referenced by \mbox{\hyperlink{buffer_8cpp_source_l00065}{Max\+OS\+::common\+::\+Buffer\+::clear()}}, \mbox{\hyperlink{buffer_8cpp_source_l00078}{Max\+OS\+::common\+::\+Buffer\+::full()}}, and \mbox{\hyperlink{vesaboot_8cpp_source_l00250}{Max\+OS\+::drivers\+::console\+::\+VESABoot\+Console\+::print\+\_\+logo()}}.
 
 \Hypertarget{memoryIO_8cpp_ae1b3e3155ea52fab09024ec46abeb6d9}\label{memoryIO_8cpp_ae1b3e3155ea52fab09024ec46abeb6d9} 
 \index{memoryIO.cpp@{memoryIO.cpp}!memset@{memset}}

@@ -1,0 +1,271 @@
+.TH "MaxOS::hardwarecommunication::PCIDeviceDescriptor" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::PCIDeviceDescriptor \- Stores information about a PCI device\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <pci\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBstring\fP \fBget_type\fP () \fBconst\fP"
+.br
+.RI "Get the type of the device\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBhas_port_base\fP = false"
+.br
+.RI "Whether the device has an IO port base address\&. "
+.ti -1c
+.RI "uint32_t \fBport_base\fP = 0"
+.br
+.RI "The IO port base address\&. "
+.ti -1c
+.RI "bool \fBhas_memory_base\fP = false"
+.br
+.RI "Whether the device has a memory base address\&. "
+.ti -1c
+.RI "uint32_t \fBmemory_base\fP = 0"
+.br
+.RI "The memory base address\&. "
+.ti -1c
+.RI "uint32_t \fBinterrupt\fP = 0"
+.br
+.RI "The interrupt number the device uses to communicate with the CPU\&. "
+.ti -1c
+.RI "uint16_t \fBbus\fP = 0"
+.br
+.RI "The PCI bus the device is connected to\&. "
+.ti -1c
+.RI "uint16_t \fBdevice\fP = 0"
+.br
+.RI "The device number on the PCI bus\&. "
+.ti -1c
+.RI "uint16_t \fBfunction\fP = 0"
+.br
+.RI "The function number of the device\&. "
+.ti -1c
+.RI "uint16_t \fBvendor_id\fP = 0"
+.br
+.RI "The company's that made the device unique identifier\&. "
+.ti -1c
+.RI "uint16_t \fBdevice_id\fP = 0"
+.br
+.RI "The device's unique identifier\&. "
+.ti -1c
+.RI "uint8_t \fBclass_id\fP = 0"
+.br
+.RI "The class type of the device\&. "
+.ti -1c
+.RI "uint8_t \fBsubclass_id\fP = 0"
+.br
+.RI "The subclass type of the device\&. "
+.ti -1c
+.RI "uint8_t \fBinterface_id\fP = 0"
+.br
+.RI "The interface type of the device\&. "
+.ti -1c
+.RI "uint8_t \fBrevision\fP = 0"
+.br
+.RI "The device version number\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Stores information about a PCI device\&. 
+
+
+.PP
+\fBTodo\fP
+.RS 4
+Should be a struct aswell 
+.RE
+.PP
+
+.PP
+Definition at line \fB54\fP of file \fBpci\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBstring\fP PCIDeviceDescriptor::get_type () const"
+
+.PP
+Get the type of the device\&. 
+.PP
+\fBTodo\fP
+.RS 4
+See wiki for more types to add
+.RE
+.PP
+.PP
+\fBReturns\fP
+.RS 4
+Type of the device as a string (or Unknown if the type is not known) 
+.RE
+.PP
+
+.PP
+Definition at line \fB37\fP of file \fBpci\&.cpp\fP\&..PP
+.nf
+37                                            {
+38 
+39     switch (class_id) {
+40         case 0x00:
+41             return (subclass_id == 0x01) ? "VGA" : "Legacy";
+42         case 0x01:
+43             switch (subclass_id) {
+44                 case 0x01:
+45                     return "IDE interface";
+46                 case 0x06:
+47                     return "SATA controller";
+48                 default:
+49                     return "Storage";
+50             }
+51         case 0x02:
+52             return "Network";
+53         case 0x03:
+54             return "Display";
+55         case 0x04:
+56             switch (subclass_id) {
+57                 case 0x00:
+58                     return "Video";
+59                 case 0x01:
+60                 case 0x03:
+61                     return "Audio";
+62                 default:
+63                     return "Multimedia";
+64             }
+65         case 0x06:
+66             switch (subclass_id) {
+67                 case 0x00:
+68                     return "Host bridge";
+69                 case 0x01:
+70                     return "ISA bridge";
+71                 case 0x04:
+72                     return "PCI bridge";
+73                 default:
+74                     return "Bridge";
+75             }
+76         case 0x07:
+77             switch (subclass_id) {
+78                 case 0x00:
+79                     return "Serial controller";
+80                 case 0x80:
+81                     return "Communication controller";
+82             }
+83             break;
+84         case 0x0C:
+85             switch (subclass_id) {
+86                 case 0x03:
+87                     return "USB";
+88                 case 0x05:
+89                     return "System Management Bus";
+90             }
+91             break;
+92     }
+93     return "Unknown";
+94 }
+.fi
+
+.PP
+References \fBclass_id\fP, and \fBsubclass_id\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint16_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::bus = 0"
+
+.PP
+The PCI bus the device is connected to\&. 
+.PP
+Definition at line \fB64\fP of file \fBpci\&.h\fP\&.
+.SS "uint8_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::class_id = 0"
+
+.PP
+The class type of the device\&. 
+.PP
+Definition at line \fB71\fP of file \fBpci\&.h\fP\&.
+.PP
+Referenced by \fBget_type()\fP\&.
+.SS "uint16_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::device = 0"
+
+.PP
+The device number on the PCI bus\&. 
+.PP
+Definition at line \fB65\fP of file \fBpci\&.h\fP\&.
+.SS "uint16_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::device_id = 0"
+
+.PP
+The device's unique identifier\&. 
+.PP
+Definition at line \fB69\fP of file \fBpci\&.h\fP\&.
+.SS "uint16_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::function = 0"
+
+.PP
+The function number of the device\&. 
+.PP
+Definition at line \fB66\fP of file \fBpci\&.h\fP\&.
+.SS "bool MaxOS::hardwarecommunication::PCIDeviceDescriptor::has_memory_base = false"
+
+.PP
+Whether the device has a memory base address\&. 
+.PP
+Definition at line \fB59\fP of file \fBpci\&.h\fP\&.
+.SS "bool MaxOS::hardwarecommunication::PCIDeviceDescriptor::has_port_base = false"
+
+.PP
+Whether the device has an IO port base address\&. 
+.PP
+Definition at line \fB56\fP of file \fBpci\&.h\fP\&.
+.SS "uint8_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::interface_id = 0"
+
+.PP
+The interface type of the device\&. 
+.PP
+Definition at line \fB73\fP of file \fBpci\&.h\fP\&.
+.SS "uint32_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::interrupt = 0"
+
+.PP
+The interrupt number the device uses to communicate with the CPU\&. 
+.PP
+Definition at line \fB62\fP of file \fBpci\&.h\fP\&.
+.SS "uint32_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::memory_base = 0"
+
+.PP
+The memory base address\&. 
+.PP
+Definition at line \fB60\fP of file \fBpci\&.h\fP\&.
+.SS "uint32_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::port_base = 0"
+
+.PP
+The IO port base address\&. 
+.PP
+Definition at line \fB57\fP of file \fBpci\&.h\fP\&.
+.SS "uint8_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::revision = 0"
+
+.PP
+The device version number\&. 
+.PP
+Definition at line \fB75\fP of file \fBpci\&.h\fP\&.
+.SS "uint8_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::subclass_id = 0"
+
+.PP
+The subclass type of the device\&. 
+.PP
+Definition at line \fB72\fP of file \fBpci\&.h\fP\&.
+.PP
+Referenced by \fBget_type()\fP\&.
+.SS "uint16_t MaxOS::hardwarecommunication::PCIDeviceDescriptor::vendor_id = 0"
+
+.PP
+The company's that made the device unique identifier\&. 
+.PP
+Definition at line \fB68\fP of file \fBpci\&.h\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

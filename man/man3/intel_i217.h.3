@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/ethernet/intel_i217.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/ethernet/intel_i217.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,9 +7,11 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stddef\&.h>\fP
+\fC#include <cstddef>\fP
 .br
 \fC#include <common/outputStream\&.h>\fP
+.br
+\fC#include <common/macros\&.h>\fP
 .br
 \fC#include <drivers/driver\&.h>\fP
 .br
@@ -30,42 +32,29 @@
 
 .in +1c
 .ti -1c
+.RI "struct \fBMaxOS::drivers::ethernet::ReceiveDescriptor\fP"
+.br
+.RI "The receive descriptor for the Intel I217 Ethernet Controller\&. "
+.ti -1c
+.RI "struct \fBMaxOS::drivers::ethernet::SendDescriptor\fP"
+.br
+.RI "The send descriptor for the Intel I217 Ethernet Controller\&. "
+.ti -1c
 .RI "class \fBMaxOS::drivers::ethernet::IntelI217\fP"
 .br
 .RI "\fBDriver\fP for the Intel I217 Ethernet Controller\&. "
 .in -1c
-.SS "Variables"
+.SS "Typedefs"
 
 .in +1c
 .ti -1c
-.RI "uint64_t \fBbufferAddress\fP"
+.RI "typedef struct PACKED \fBMaxOS::drivers::ethernet::ReceiveDescriptor\fP \fBMaxOS::drivers::ethernet::receive_descriptor_t\fP"
 .br
+.RI "Alias for \fBReceiveDescriptor\fP struct\&. "
 .ti -1c
-.RI "uint16_t \fBlength\fP"
+.RI "typedef struct PACKED \fBMaxOS::drivers::ethernet::SendDescriptor\fP \fBMaxOS::drivers::ethernet::send_descriptor_t\fP"
 .br
-.RI "The size of the entire table, including the header, in bytes\&. "
-.ti -1c
-.RI "uint16_t \fBchecksum\fP"
-.br
-.RI "This byte added to all bytes in the table must equal zero mod 0x100 for the table to be valid (including the header) "
-.ti -1c
-.RI "uint8_t \fBstatus\fP"
-.br
-.ti -1c
-.RI "uint8_t \fBerrors\fP"
-.br
-.ti -1c
-.RI "uint16_t \fBspecial\fP"
-.br
-.ti -1c
-.RI "uint8_t \fBcso\fP"
-.br
-.ti -1c
-.RI "uint8_t \fBcmd\fP"
-.br
-.ti -1c
-.RI "uint8_t \fBcss\fP"
-.br
+.RI "Alias for \fBSendDescriptor\fP struct\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -86,52 +75,6 @@ Max Tyson
 
 .PP
 Definition in file \fBintel_i217\&.h\fP\&.
-.SH "Variable Documentation"
-.PP 
-.SS "uint64_t bufferAddress"
-
-.PP
-Definition at line \fB0\fP of file \fBintel_i217\&.h\fP\&.
-.SS "uint8_t checksum"
-
-.PP
-This byte added to all bytes in the table must equal zero mod 0x100 for the table to be valid (including the header) 
-.PP
-Definition at line \fB2\fP of file \fBintel_i217\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, and \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
-.SS "uint8_t cmd"
-
-.PP
-Definition at line \fB3\fP of file \fBintel_i217\&.h\fP\&.
-.SS "uint8_t cso"
-
-.PP
-Definition at line \fB2\fP of file \fBintel_i217\&.h\fP\&.
-.SS "uint8_t css"
-
-.PP
-Definition at line \fB5\fP of file \fBintel_i217\&.h\fP\&.
-.SS "uint8_t errors"
-
-.PP
-Definition at line \fB4\fP of file \fBintel_i217\&.h\fP\&.
-.SS "uint32_t length"
-
-.PP
-The size of the entire table, including the header, in bytes\&. 
-.PP
-Definition at line \fB1\fP of file \fBintel_i217\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::common::Buffer::copy_from()\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::drivers::ethernet::IntelI217::DoSend()\fP, \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map_area()\fP, \fBMaxOS::gui::widgets::InputBox::on_key_down()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, \fBMaxOS::String::String()\fP, \fBstrncmp()\fP, \fBstrncmp()\fP, \fBstrncmp()\fP, \fBstrncmp()\fP, \fBMaxOS::String::substring()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::unmap_area()\fP\&.
-.SS "uint16_t special"
-
-.PP
-Definition at line \fB5\fP of file \fBintel_i217\&.h\fP\&.
-.SS "uint8_t status"
-
-.PP
-Definition at line \fB3\fP of file \fBintel_i217\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

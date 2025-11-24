@@ -1,4 +1,4 @@
-.TH "MaxOS::net::TCPSocket" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::TCPSocket" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,27 +15,27 @@ Inherits \fBMaxOS::common::EventManager< TCPPayloadHandlerEvents >\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBTCPSocket\fP (\fBTransmissionControlProtocolHandler\fP *\fBtransmissionControlProtocolHandler\fP)"
+.RI "\fBTCPSocket\fP (\fBTransmissionControlProtocolHandler\fP *\fBtransmission_control_protocol_handler\fP)"
 .br
-.RI "\fBSocket\fP/// "
+.RI "Construct a new TCP Socket object\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBSend\fP (\fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBsend\fP (\fBuint8_t\fP *data, \fBuint16_t\fP size)"
 .br
-.RI "Send data over the socket\&. "
+.RI "send data over the socket "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBDisconnect\fP ()"
+.RI "\fBvirtual\fP \fBvoid\fP \fBdisconnect\fP ()"
 .br
-.RI "Disconnect the socket\&. "
+.RI "disconnect the socket "
 .ti -1c
-.RI "\fBvoid\fP \fBDisconnected\fP ()"
+.RI "\fBvoid\fP \fBdisconnected\fP ()"
 .br
 .RI "Raise the disconnected event\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBConnected\fP ()"
+.RI "\fBvoid\fP \fBconnected\fP ()"
 .br
 .RI "Raise the connected event\&. "
 .ti -1c
-.RI "\fBbool\fP \fBhandleTransmissionControlProtocolPayload\fP (\fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
+.RI "\fBbool\fP \fBhandle_transmission_control_protocol_payload\fP (\fBuint8_t\fP *data, \fBuint16_t\fP size)"
 .br
 .RI "Handle the TCP message (socket end) "
 .in -1c
@@ -45,11 +45,11 @@ Public Member Functions inherited from \fBMaxOS::common::EventManager< TCPPayloa
 .ti -1c
 .RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< TCPPayloadHandlerEvents > *\fBhandler\fP)"
 .br
-.RI "Connect an event handler to the event manager if it is not already connected\&. "
+.RI "connect an event handler to the event manager if it is not already connected "
 .ti -1c
 .RI "\fBvoid\fP \fBdisconnect_event_handler\fP (\fBEventHandler\fP< TCPPayloadHandlerEvents > *\fBhandler\fP)"
 .br
-.RI "Disconnect an event handler from the event manager if it is connected\&. "
+.RI "disconnect an event handler from the event manager if it is connected "
 .ti -1c
 .RI "\fBVector\fP< \fBEvent\fP< TCPPayloadHandlerEvents > * > \fBraise_event\fP (\fBEvent\fP< TCPPayloadHandlerEvents > *\fBevent\fP)"
 .br
@@ -63,27 +63,27 @@ Public Member Functions inherited from \fBMaxOS::common::EventManager< TCPPayloa
 .br
 .RI "The port on the external device\&. "
 .ti -1c
-.RI "uint32_t \fBremoteIP\fP = 0"
+.RI "uint32_t \fBremote_ip\fP = 0"
 .br
 .RI "The IP address of the external device\&. "
 .ti -1c
-.RI "uint16_t \fBlocalPort\fP = 0"
+.RI "uint16_t \fBlocal_port\fP = 0"
 .br
 .RI "The port on this device\&. "
 .ti -1c
-.RI "uint32_t \fBlocalIP\fP = 0"
+.RI "uint32_t \fBlocal_ip\fP = 0"
 .br
 .RI "The IP address of this device\&. "
 .ti -1c
-.RI "uint32_t \fBsequenceNumber\fP = 0"
+.RI "uint32_t \fBsequence_number\fP = 0"
 .br
 .RI "The current order number of the data being sent\&. "
 .ti -1c
-.RI "uint32_t \fBacknowledgementNumber\fP = 0"
+.RI "uint32_t \fBacknowledgement_number\fP = 0"
 .br
 .RI "The number used to keep track of what has been received, incremented by 1 each time\&. "
 .ti -1c
-.RI "\fBTransmissionControlProtocolHandler\fP * \fBtransmissionControlProtocolHandler\fP"
+.RI "\fBTransmissionControlProtocolHandler\fP * \fBtransmission_control_protocol_handler\fP"
 .br
 .RI "The TCP handler this socket is using\&. "
 .ti -1c
@@ -112,82 +112,89 @@ Protected Attributes inherited from \fBMaxOS::common::EventManager< TCPPayloadHa
 .PP 
 A TCP socket\&. Allows for sending and receiving data over TCP at a port\&. 
 .PP
-Definition at line \fB164\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB174\fP of file \fBtcp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "TCPSocket::TCPSocket (\fBTransmissionControlProtocolHandler\fP * transmissionControlProtocolHandler)"
+.SS "TCPSocket::TCPSocket (\fBTransmissionControlProtocolHandler\fP * transmission_control_protocol_handler)\fC [explicit]\fP"
 
 .PP
-\fBSocket\fP/// 
+Construct a new TCP Socket object\&. 
 .PP
-Definition at line \fB61\fP of file \fBtcp\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fItransmission_control_protocol_handler\fP the TCP handler the socket is associated with 
+.RE
+.PP
+
+.PP
+Definition at line \fB83\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-61                                                                                            {
-62     //Set the default values
-63     this\->transmissionControlProtocolHandler = transmissionControlProtocolHandler;
-64 
-65     //Closed as default
-66     state = TCPSocketState::CLOSED;
-67 }
+83                                                                                               {
+84     //Set the default values
+85     this\->transmission_control_protocol_handler = transmission_control_protocol_handler;
+86 
+87     //Closed as default
+88     state = TCPSocketState::CLOSED;
+89 }
 .fi
 
 .PP
-References \fBstate\fP, and \fBtransmissionControlProtocolHandler\fP\&.
+References \fBstate\fP, and \fBtransmission_control_protocol_handler\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBvoid\fP TCPSocket::Connected ()"
+.SS "\fBvoid\fP TCPSocket::connected ()"
 
 .PP
 Raise the connected event\&. 
 .PP
-Definition at line \fB121\fP of file \fBtcp\&.cpp\fP\&..PP
+Definition at line \fB143\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-121                           {
-122     auto* event = new ConnectedEvent(this);
-123     raise_event(event);
-124     MemoryManager::kfree(event);
-125 
-126 }
+143                           {
+144     auto* event = new ConnectedEvent(this);
+145     raise_event(event);
+146     MemoryManager::kfree(event);
+147 
+148 }
 .fi
 
 .PP
 References \fBMaxOS::memory::MemoryManager::kfree()\fP, and \fBMaxOS::common::EventManager< TCPPayloadHandlerEvents >::raise_event()\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP\&.
-.SS "\fBvoid\fP TCPSocket::Disconnect ()\fC [virtual]\fP"
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP\&.
+.SS "\fBvoid\fP TCPSocket::disconnect ()\fC [virtual]\fP"
 
 .PP
-Disconnect the socket\&. 
+disconnect the socket 
 .PP
-Definition at line \fB104\fP of file \fBtcp\&.cpp\fP\&..PP
+Definition at line \fB126\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-104                            {
-105     transmissionControlProtocolHandler\->Disconnect(this);
-106 }
+126                            {
+127     transmission_control_protocol_handler\->disconnect(this);
+128 }
 .fi
 
 .PP
-References \fBMaxOS::net::TransmissionControlProtocolHandler::Disconnect()\fP, and \fBtransmissionControlProtocolHandler\fP\&.
-.SS "\fBvoid\fP TCPSocket::Disconnected ()"
+References \fBMaxOS::net::TransmissionControlProtocolHandler::disconnect()\fP, and \fBtransmission_control_protocol_handler\fP\&.
+.SS "\fBvoid\fP TCPSocket::disconnected ()"
 
 .PP
 Raise the disconnected event\&. 
 .PP
-Definition at line \fB111\fP of file \fBtcp\&.cpp\fP\&..PP
+Definition at line \fB133\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-111                              {
-112     auto* event = new DisconnectedEvent(this);
-113     raise_event(event);
-114     MemoryManager::kfree(event);
-115 
-116 }
+133                              {
+134     auto* event = new DisconnectedEvent(this);
+135     raise_event(event);
+136     MemoryManager::kfree(event);
+137 
+138 }
 .fi
 
 .PP
 References \fBMaxOS::memory::MemoryManager::kfree()\fP, and \fBMaxOS::common::EventManager< TCPPayloadHandlerEvents >::raise_event()\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP\&.
-.SS "\fBbool\fP TCPSocket::handleTransmissionControlProtocolPayload (\fBuint8_t\fP * data, \fBuint16_t\fP size)"
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP\&.
+.SS "\fBbool\fP TCPSocket::handle_transmission_control_protocol_payload (\fBuint8_t\fP * data, \fBuint16_t\fP size)"
 
 .PP
 Handle the TCP message (socket end) 
@@ -206,24 +213,24 @@ True if the connection is to be terminated after hadnling or false if not
 .PP
 
 .PP
-Definition at line \fB78\fP of file \fBtcp\&.cpp\fP\&..PP
+Definition at line \fB100\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-78                                                                                      {
-79     auto* event = new DataReceivedEvent(this, data, size);
-80     raise_event(event);
-81     MemoryManager::kfree(event);
-82     return true;
-83 }
+100                                                                                          {
+101     auto* event = new DataReceivedEvent(this, data, size);
+102     raise_event(event);
+103     MemoryManager::kfree(event);
+104     return true;
+105 }
 .fi
 
 .PP
-References \fBdata\fP, \fBMaxOS::memory::MemoryManager::kfree()\fP, \fBMaxOS::common::EventManager< TCPPayloadHandlerEvents >::raise_event()\fP, and \fBsize\fP\&.
+References \fBMaxOS::memory::MemoryManager::kfree()\fP, and \fBMaxOS::common::EventManager< TCPPayloadHandlerEvents >::raise_event()\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP\&.
-.SS "\fBvoid\fP TCPSocket::Send (\fBuint8_t\fP * data, \fBuint16_t\fP size)\fC [virtual]\fP"
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP\&.
+.SS "\fBvoid\fP TCPSocket::send (\fBuint8_t\fP * data, \fBuint16_t\fP size)\fC [virtual]\fP"
 
 .PP
-Send data over the socket\&. 
+send data over the socket 
 .PP
 \fBParameters\fP
 .RS 4
@@ -234,97 +241,97 @@ Send data over the socket\&.
 .PP
 
 .PP
-Definition at line \fB91\fP of file \fBtcp\&.cpp\fP\&..PP
+Definition at line \fB113\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-91                                                  {
-92     //Wait for the socket to be connected
-93     while (state != TCPSocketState::ESTABLISHED);
-94 
-95     //Pass the data to the backend
-96     transmissionControlProtocolHandler\->sendTransmissionControlProtocolPacket(this, data, size,
-97                                                                               (uint16_t) TCPFlag::PSH |
-98                                                                               (uint16_t) TCPFlag::ACK);
-99 }
+113                                                  {
+114     //Wait for the socket to be connected
+115     while(state != TCPSocketState::ESTABLISHED);
+116 
+117     //Pass the data to the backend
+118     transmission_control_protocol_handler\->send_transmission_control_protocol_packet(this, data, size,
+119                                                                                      (uint16_t) TCPFlag::PSH |
+120                                                                                      (uint16_t) TCPFlag::ACK);
+121 }
 .fi
 
 .PP
-References \fBdata\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP, \fBsize\fP, \fBstate\fP, and \fBtransmissionControlProtocolHandler\fP\&.
+References \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP, \fBstate\fP, and \fBtransmission_control_protocol_handler\fP\&.
 .SH "Friends And Related Symbol Documentation"
 .PP 
 .SS "friend class \fBTransmissionControlProtocolHandler\fP\fC [friend]\fP"
 
 .PP
-Definition at line \fB165\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB175\fP of file \fBtcp\&.h\fP\&.
 .SS "friend class TransmissionControlProtocolPortListener\fC [friend]\fP"
 
 .PP
-Definition at line \fB166\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB177\fP of file \fBtcp\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "uint32_t MaxOS::net::TCPSocket::acknowledgementNumber = 0\fC [protected]\fP"
+.SS "uint32_t MaxOS::net::TCPSocket::acknowledgement_number = 0\fC [protected]\fP"
 
 .PP
 The number used to keep track of what has been received, incremented by 1 each time\&. 
 .PP
-Definition at line \fB174\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB185\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
-.SS "uint32_t MaxOS::net::TCPSocket::localIP = 0\fC [protected]\fP"
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
+.SS "uint32_t MaxOS::net::TCPSocket::local_ip = 0\fC [protected]\fP"
 
 .PP
 The IP address of this device\&. 
 .PP
-Definition at line \fB172\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB183\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
-.SS "uint16_t MaxOS::net::TCPSocket::localPort = 0\fC [protected]\fP"
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
+.SS "uint16_t MaxOS::net::TCPSocket::local_port = 0\fC [protected]\fP"
 
 .PP
 The port on this device\&. 
 .PP
-Definition at line \fB171\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB182\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
-.SS "uint32_t MaxOS::net::TCPSocket::remoteIP = 0\fC [protected]\fP"
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
+.SS "uint32_t MaxOS::net::TCPSocket::remote_ip = 0\fC [protected]\fP"
 
 .PP
 The IP address of the external device\&. 
 .PP
-Definition at line \fB170\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB181\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
 .SS "uint16_t MaxOS::net::TCPSocket::remotePort = 0\fC [protected]\fP"
 
 .PP
 The port on the external device\&. 
 .PP
-Definition at line \fB169\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB180\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::Connect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
-.SS "uint32_t MaxOS::net::TCPSocket::sequenceNumber = 0\fC [protected]\fP"
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::connect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
+.SS "uint32_t MaxOS::net::TCPSocket::sequence_number = 0\fC [protected]\fP"
 
 .PP
 The current order number of the data being sent\&. 
 .PP
-Definition at line \fB173\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB184\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::Disconnect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::disconnect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
 .SS "\fBTCPSocketState\fP MaxOS::net::TCPSocket::state\fC [protected]\fP"
 
 .PP
 The state of the socket\&. 
 .PP
-Definition at line \fB177\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB188\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::Disconnect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::Listen()\fP, \fBSend()\fP, and \fBTCPSocket()\fP\&.
-.SS "\fBTransmissionControlProtocolHandler\fP* MaxOS::net::TCPSocket::transmissionControlProtocolHandler\fC [protected]\fP"
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::disconnect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::listen()\fP, \fBsend()\fP, and \fBTCPSocket()\fP\&.
+.SS "\fBTransmissionControlProtocolHandler\fP* MaxOS::net::TCPSocket::transmission_control_protocol_handler\fC [protected]\fP"
 
 .PP
 The TCP handler this socket is using\&. 
 .PP
-Definition at line \fB176\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB187\fP of file \fBtcp\&.h\fP\&.
 .PP
-Referenced by \fBDisconnect()\fP, \fBSend()\fP, and \fBTCPSocket()\fP\&.
+Referenced by \fBdisconnect()\fP, \fBsend()\fP, and \fBTCPSocket()\fP\&.
 
 .SH "Author"
 .PP 

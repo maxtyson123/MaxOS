@@ -1,5 +1,7 @@
 var classMaxOS_1_1filesystem_1_1VirtualFileSystem =
 [
+    [ "VirtualFileSystem", "classMaxOS_1_1filesystem_1_1VirtualFileSystem.html#aecd1015fa61653d78dd46f22daf72c5a", null ],
+    [ "~VirtualFileSystem", "classMaxOS_1_1filesystem_1_1VirtualFileSystem.html#a0e503b0710d92b6c5032800c83fb2920", null ],
     [ "create_directory", "classMaxOS_1_1filesystem_1_1VirtualFileSystem.html#a75ac07b8f87ec1c20be8d4002699602e", null ],
     [ "create_file", "classMaxOS_1_1filesystem_1_1VirtualFileSystem.html#ad3f7dbfbd99ea30b5dc879bef308bbbf", null ],
     [ "delete_directory", "classMaxOS_1_1filesystem_1_1VirtualFileSystem.html#ada5d02dc8232eb89317c2013e8b82a27", null ],

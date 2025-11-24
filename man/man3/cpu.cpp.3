@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/system/cpu.cpp" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/system/cpu.cpp" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -26,11 +26,9 @@
 
 .in +1c
 .ti -1c
-.RI "\fBvolatile\fP \fB__attribute__\fP ((\fBaligned\fP(4096))) \fBunsigned\fP \fBchar\fP \fBp4_table\fP[]"
-.br
-.ti -1c
 .RI "\fBvoid\fP \fBcore_start\fP ()"
 .br
+.RI "The entry point for the core startup assembly code\&. "
 .in -1c
 .SS "Variables"
 
@@ -38,10 +36,15 @@
 .ti -1c
 .RI "uint64_t \fBstack\fP []"
 .br
-.RI "The stack pointer for the core\&. "
+.RI "The stack setup for the core in loader\&.s\&. "
+.ti -1c
+.RI "volatile PAGE_ALIGNED unsigned char \fBp4_table\fP []"
+.br
+.RI "The PML4 table setup in loader\&.s\&. "
 .ti -1c
 .RI "\fBuint8_t\fP \fBcore_boot_info\fP []"
 .br
+.RI "The info passed between the bsp c++ and booting core assembly code\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -67,15 +70,9 @@ Definition in file \fBcpu\&.cpp\fP\&.
 .SS "\fBuint8_t\fP core_boot_info[]"
 
 .PP
+The info passed between the bsp c++ and booting core assembly code\&. 
+.PP
 Definition at line \fB30\fP of file \fBcpu\&.cpp\fP\&.
-.SS "uint64_t stack[]\fC [extern]\fP"
-
-.PP
-The stack pointer for the core\&. 
-.PP
-Definition at line \fB0\fP of file \fBcpu\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::VirtualFileSystem::delete_directory()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

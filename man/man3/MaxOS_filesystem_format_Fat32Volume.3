@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::format::Fat32Volume" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::format::Fat32Volume" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,19 +13,19 @@ MaxOS::filesystem::format::Fat32Volume \- Handles the FAT table that stores the 
 
 .in +1c
 .ti -1c
-.RI "\fBFat32Volume\fP (\fBdrivers::disk::Disk\fP *\fBdisk\fP, lba_t partition_offset)"
+.RI "\fBFat32Volume\fP (\fBdrivers::disk::Disk\fP *\fBdisk\fP, \fBlba_t\fP partition_offset)"
 .br
 .RI "Construct a new Fat32 Volume object\&. "
 .ti -1c
-.RI "\fBuint32_t\fP \fBnext_cluster\fP (\fBuint32_t\fP \fBcluster\fP)"
+.RI "\fBuint32_t\fP \fBnext_cluster\fP (\fBuint32_t\fP \fBcluster\fP) \fBconst\fP"
 .br
 .RI "Take the cluster and gets the next cluster in the chain\&. "
 .ti -1c
-.RI "\fBuint32_t\fP \fBset_next_cluster\fP (\fBuint32_t\fP \fBcluster\fP, \fBuint32_t\fP \fBnext_cluster\fP)"
+.RI "\fBuint32_t\fP \fBset_next_cluster\fP (\fBuint32_t\fP \fBcluster\fP, \fBuint32_t\fP \fBnext_cluster\fP) \fBconst\fP"
 .br
 .RI "Sets the next cluster in the chain (where the base cluster should point) "
 .ti -1c
-.RI "\fBuint32_t\fP \fBfind_free_cluster\fP ()"
+.RI "\fBuint32_t\fP \fBfind_free_cluster\fP () \fBconst\fP"
 .br
 .RI "Searches the fat table for a free cluster starting from the first free cluster in the fsinfo, will then wrap around\&. "
 .ti -1c
@@ -49,11 +49,11 @@ MaxOS::filesystem::format::Fat32Volume \- Handles the FAT table that stores the 
 
 .in +1c
 .ti -1c
-.RI "bpb32_t \fBbpb\fP"
+.RI "\fBbpb32_t\fP \fBbpb\fP = { }"
 .br
 .RI "The BIOS Parameter Block for the FAT32 volume\&. "
 .ti -1c
-.RI "fs_info_t \fBfsinfo\fP"
+.RI "\fBfs_info_t\fP \fBfsinfo\fP = { }"
 .br
 .RI "The \fBFSInfo\fP structure for the FAT32 volume\&. "
 .ti -1c
@@ -61,23 +61,23 @@ MaxOS::filesystem::format::Fat32Volume \- Handles the FAT table that stores the 
 .br
 .RI "How many clusters are in the FAT table\&. "
 .ti -1c
-.RI "lba_t \fBfat_lba\fP"
+.RI "\fBlba_t\fP \fBfat_lba\fP"
 .br
 .RI "The starting LBA of the FAT table\&. "
 .ti -1c
-.RI "lba_t \fBfat_info_lba\fP"
+.RI "\fBlba_t\fP \fBfat_info_lba\fP"
 .br
 .RI "The LBA of the \fBFSInfo\fP structure\&. "
 .ti -1c
-.RI "lba_t \fBfat_copies\fP"
+.RI "\fBlba_t\fP \fBfat_copies\fP"
 .br
 .RI "How many FAT tables are present\&. "
 .ti -1c
-.RI "lba_t \fBdata_lba\fP"
+.RI "\fBlba_t\fP \fBdata_lba\fP"
 .br
 .RI "The starting LBA of the data region\&. "
 .ti -1c
-.RI "lba_t \fBroot_lba\fP"
+.RI "\fBlba_t\fP \fBroot_lba\fP"
 .br
 .RI "The starting LBA of the root directory\&. "
 .ti -1c
@@ -89,10 +89,10 @@ MaxOS::filesystem::format::Fat32Volume \- Handles the FAT table that stores the 
 .PP 
 Handles the FAT table that stores the information about the files on the disk and operations on the disk\&. 
 .PP
-Definition at line \fB159\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB171\fP of file \fBfat32\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Fat32Volume::Fat32Volume (\fBdrivers::disk::Disk\fP * disk, lba_t partition_offset)"
+.SS "Fat32Volume::Fat32Volume (\fBdrivers::disk::Disk\fP * disk, \fBlba_t\fP partition_offset)"
 
 .PP
 Construct a new Fat32 Volume object\&. 
@@ -108,29 +108,29 @@ Construct a new Fat32 Volume object\&.
 .PP
 Definition at line \fB26\fP of file \fBfat32\&.cpp\fP\&..PP
 .nf
-27 : disk(disk)
-28 {
-29 
-30     // Read the BIOS parameter block
-31     buffer_t bpb_buffer(&bpb, sizeof(bpb32_t));
-32     disk\->read(partition_offset, &bpb_buffer);
-33 
-34     // Parse the FAT info
-35     uint32_t total_data_sectors = bpb\&.total_sectors_32 \- (bpb\&.reserved_sectors + (bpb\&.table_copies * bpb\&.table_size_32));
-36     fat_total_clusters          = total_data_sectors / bpb\&.sectors_per_cluster;
-37     fat_lba                     = partition_offset + bpb\&.reserved_sectors;
-38     fat_copies                  = bpb\&.table_copies;
-39     fat_info_lba                = partition_offset + bpb\&.fat_info;
-40     data_lba                    = fat_lba + (bpb\&.table_copies * bpb\&.table_size_32);
-41     root_lba                    = data_lba + bpb\&.sectors_per_cluster * (bpb\&.root_cluster \- 2);
+27         : disk(disk) {
+28 
+29     // Read the BIOS parameter block
+30     buffer_t bpb_buffer(&bpb, sizeof(bpb32_t));
+31     disk\->read(partition_offset, &bpb_buffer);
+32 
+33     // Parse the FAT info
+34     uint32_t total_data_sectors =
+35             bpb\&.total_sectors_32 \- (bpb\&.reserved_sectors + (bpb\&.table_copies * bpb\&.table_size_32));
+36     fat_total_clusters = total_data_sectors / bpb\&.sectors_per_cluster;
+37     fat_lba = partition_offset + bpb\&.reserved_sectors;
+38     fat_copies = bpb\&.table_copies;
+39     fat_info_lba = partition_offset + bpb\&.fat_info;
+40     data_lba = fat_lba + (bpb\&.table_copies * bpb\&.table_size_32);
+41     root_lba = data_lba + bpb\&.sectors_per_cluster * (bpb\&.root_cluster \- 2);
 42 
 43     // Read the fs info
 44     buffer_t fs_buffer(&fsinfo, sizeof(fs_info_t));
 45     disk\->read(fat_info_lba, &fs_buffer);
 46 
 47     // Validate the fat information
-48     if (fsinfo\&.lead_signature != 0x41615252 || fsinfo\&.structure_signature != 0x61417272 ||
-49         fsinfo\&.trail_signature != 0xAA550000) {
+48     if(fsinfo\&.lead_signature != 0x41615252 || fsinfo\&.structure_signature != 0x61417272 ||
+49        fsinfo\&.trail_signature != 0xAA550000) {
 50         Logger::ERROR() << "Invalid FAT32 filesystem information TODO: Handle this\\n";
 51         return;
 52     }
@@ -138,7 +138,7 @@ Definition at line \fB26\fP of file \fBfat32\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBbpb\fP, \fBdata_lba\fP, \fBdisk\fP, \fBLogger::ERROR()\fP, \fBfat_copies\fP, \fBfat_info_lba\fP, \fBfat_lba\fP, \fBfat_total_clusters\fP, \fBfsinfo\fP, \fBMaxOS::drivers::disk::Disk::read()\fP, and \fBroot_lba\fP\&.
+References \fBbpb\fP, \fBdata_lba\fP, \fBdisk\fP, \fBMaxOS::Logger::ERROR()\fP, \fBfat_copies\fP, \fBfat_info_lba\fP, \fBfat_lba\fP, \fBfat_total_clusters\fP, \fBfsinfo\fP, \fBMaxOS::drivers::disk::Disk::read()\fP, and \fBroot_lba\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBuint32_t\fP Fat32Volume::allocate_cluster (\fBuint32_t\fP cluster)"
@@ -195,11 +195,11 @@ Definition at line \fB154\fP of file \fBfat32\&.cpp\fP\&..PP
 154                                                                       {
 155 
 156     // Make sure within bounds
-157     if (cluster > fat_total_clusters || cluster + amount > fat_total_clusters)
+157     if(cluster > fat_total_clusters || cluster + amount > fat_total_clusters)
 158         return 0;
 159 
 160     // Go through allocating the clusters
-161     for (size_t i = 0; i < amount; i++) {
+161     for(size_t i = 0; i < amount; i++) {
 162         uint32_t next_cluster = find_free_cluster();
 163 
 164         // Update the fsinfo
@@ -207,7 +207,7 @@ Definition at line \fB154\fP of file \fBfat32\&.cpp\fP\&..PP
 166         fsinfo\&.free_cluster_count \-= 1;
 167 
 168         // If there is an existing chain it needs to be updated
-169         if (cluster != 0)
+169         if(cluster != 0)
 170             set_next_cluster(cluster, next_cluster);
 171 
 172         cluster = next_cluster;
@@ -217,16 +217,15 @@ Definition at line \fB154\fP of file \fBfat32\&.cpp\fP\&..PP
 176     buffer_t fs_info_buffer(&fsinfo, sizeof(fs_info_t));
 177     disk\->write(fat_info_lba, &fs_info_buffer);
 178 
-179     // Finish the chin
+179     // Finish the chain
 180     set_next_cluster(cluster, (uint32_t) ClusterState::END_OF_CHAIN);
-181     uint32_t next = next_cluster(cluster);
-182     return cluster;
-183 }
+181     return cluster;
+182 }
 .fi
 
 .PP
-References \fBdisk\fP, \fBfat_info_lba\fP, \fBfat_total_clusters\fP, \fBfind_free_cluster()\fP, \fBfsinfo\fP, \fBnext\fP, \fBnext_cluster()\fP, \fBset_next_cluster()\fP, and \fBMaxOS::drivers::disk::Disk::write()\fP\&.
-.SS "\fBuint32_t\fP Fat32Volume::find_free_cluster ()"
+References \fBdisk\fP, \fBfat_info_lba\fP, \fBfat_total_clusters\fP, \fBfind_free_cluster()\fP, \fBfsinfo\fP, \fBnext_cluster()\fP, \fBset_next_cluster()\fP, and \fBMaxOS::drivers::disk::Disk::write()\fP\&.
+.SS "\fBuint32_t\fP Fat32Volume::find_free_cluster () const"
 
 .PP
 Searches the fat table for a free cluster starting from the first free cluster in the fsinfo, will then wrap around\&. 
@@ -240,16 +239,16 @@ The first free cluster in the FAT table
 .PP
 Definition at line \fB119\fP of file \fBfat32\&.cpp\fP\&..PP
 .nf
-119                                         {
+119                                               {
 120 
 121     // Get the first free cluster
-122     for (uint32_t start = fsinfo\&.next_free_cluster; start < fat_total_clusters + 1; start++)
-123         if (next_cluster(start) == 0)
+122     for(uint32_t start = fsinfo\&.next_free_cluster; start < fat_total_clusters + 1; start++)
+123         if(next_cluster(start) == 0)
 124             return start;
 125 
 126     // Check any clusters before the first free cluster
-127     for (uint32_t start = 2; start < fsinfo\&.next_free_cluster; start++)
-128         if (next_cluster(start) == 0)
+127     for(uint32_t start = 2; start < fsinfo\&.next_free_cluster; start++)
+128         if(next_cluster(start) == 0)
 129             return start;
 130 
 131     ASSERT(false, "No free clusters found in the FAT table");
@@ -273,14 +272,14 @@ Free a cluster in the FAT table\&.
 .PP
 
 .PP
-Definition at line \fB190\fP of file \fBfat32\&.cpp\fP\&..PP
+Definition at line \fB189\fP of file \fBfat32\&.cpp\fP\&..PP
 .nf
-190                                             {
-191 
-192     // Free 1 cluster
-193     free_cluster(cluster, 1);
-194 
-195 }
+189                                             {
+190 
+191     // Free 1 cluster
+192     free_cluster(cluster, 1);
+193 
+194 }
 .fi
 
 .PP
@@ -301,41 +300,41 @@ Free a number of clusters in the FAT table\&.
 .PP
 
 .PP
-Definition at line \fB203\fP of file \fBfat32\&.cpp\fP\&..PP
+Definition at line \fB202\fP of file \fBfat32\&.cpp\fP\&..PP
 .nf
-203                                                               {
-204 
-205     // Make sure within bounds
-206     if (cluster < 2 || cluster > fat_total_clusters || cluster + amount > fat_total_clusters)
-207         return;
-208 
-209     // Go through freeing the clusters
-210     for (size_t i = 0; i < amount; i++) {
-211 
-212         // Find the next cluster before it is removed from the chain
-213         uint32_t next_in_chain = next_cluster(cluster);
-214 
-215         // Update the fsinfo
-216         fsinfo\&.next_free_cluster = cluster;
-217         fsinfo\&.free_cluster_count += 1;
-218 
-219         // Update the chain
-220         set_next_cluster(cluster, (lba_t) ClusterState::FREE);
-221         cluster = next_in_chain;
-222     }
-223 
-224     // Save the fsinfo
-225     buffer_t fs_info_buffer(&fsinfo, sizeof(fs_info_t));
-226     disk\->write(fat_info_lba, &fs_info_buffer);
-227 
-228     // Mark the end of the chain
-229     set_next_cluster(cluster, (uint32_t) ClusterState::END_OF_CHAIN);
-230 }
+202                                                               {
+203 
+204     // Make sure within bounds
+205     if(cluster < 2 || cluster > fat_total_clusters || cluster + amount > fat_total_clusters)
+206         return;
+207 
+208     // Go through freeing the clusters
+209     for(size_t i = 0; i < amount; i++) {
+210 
+211         // Find the next cluster before it is removed from the chain
+212         uint32_t next_in_chain = next_cluster(cluster);
+213 
+214         // Update the fsinfo
+215         fsinfo\&.next_free_cluster = cluster;
+216         fsinfo\&.free_cluster_count += 1;
+217 
+218         // Update the chain
+219         set_next_cluster(cluster, (lba_t) ClusterState::FREE);
+220         cluster = next_in_chain;
+221     }
+222 
+223     // Save the fsinfo
+224     buffer_t fs_info_buffer(&fsinfo, sizeof(fs_info_t));
+225     disk\->write(fat_info_lba, &fs_info_buffer);
+226 
+227     // Mark the end of the chain
+228     set_next_cluster(cluster, (uint32_t) ClusterState::END_OF_CHAIN);
+229 }
 .fi
 
 .PP
 References \fBdisk\fP, \fBfat_info_lba\fP, \fBfat_total_clusters\fP, \fBfsinfo\fP, \fBnext_cluster()\fP, \fBset_next_cluster()\fP, and \fBMaxOS::drivers::disk::Disk::write()\fP\&.
-.SS "lba_t Fat32Volume::next_cluster (\fBuint32_t\fP cluster)"
+.SS "\fBlba_t\fP Fat32Volume::next_cluster (\fBuint32_t\fP cluster) const"
 
 .PP
 Take the cluster and gets the next cluster in the chain\&. 
@@ -359,7 +358,7 @@ The auto entry = uint32_t* '&' is weird, fix it
 .PP
 Definition at line \fB65\fP of file \fBfat32\&.cpp\fP\&..PP
 .nf
-65                                              {
+65                                                    {
 66 
 67     // Get the location in the FAT table
 68     lba_t offset = cluster * sizeof(uint32_t);
@@ -371,7 +370,7 @@ Definition at line \fB65\fP of file \fBfat32\&.cpp\fP\&..PP
 74     disk\->read(sector, &fat);
 75 
 76     // Get the next cluster info (mask the upper 4 bits)
-77     auto entry = (uint32_t *) (&(fat\&.raw()[entry_index]));
+77     auto entry = (uint32_t*) (&(fat\&.raw()[entry_index]));
 78     return *entry & 0x0FFFFFFF;
 79 }
 .fi
@@ -380,7 +379,7 @@ Definition at line \fB65\fP of file \fBfat32\&.cpp\fP\&..PP
 References \fBbpb\fP, \fBdisk\fP, \fBfat_lba\fP, and \fBMaxOS::drivers::disk::Disk::read()\fP\&.
 .PP
 Referenced by \fBallocate_cluster()\fP, \fBfind_free_cluster()\fP, \fBfree_cluster()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBset_next_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP, and \fBMaxOS::filesystem::format::Fat32File::write()\fP\&.
-.SS "\fBuint32_t\fP Fat32Volume::set_next_cluster (\fBuint32_t\fP cluster, \fBuint32_t\fP next_cluster)"
+.SS "\fBuint32_t\fP Fat32Volume::set_next_cluster (\fBuint32_t\fP cluster, \fBuint32_t\fP next_cluster) const"
 
 .PP
 Sets the next cluster in the chain (where the base cluster should point) 
@@ -406,12 +405,12 @@ when in userspace: For performance cache fat entirely, cache file data, cache cl
 .PP
 Definition at line \fB90\fP of file \fBfat32\&.cpp\fP\&..PP
 .nf
-90                                                                               {
+90                                                                                     {
 91 
 92     // Get the location in the FAT table
 93     lba_t offset = cluster * sizeof(uint32_t);
 94 
-95     for (int i = 0; i < fat_copies; ++i) {
+95     for(uint32_t i = 0; i < fat_copies; ++i) {
 96 
 97         lba_t sector = (fat_lba + i * bpb\&.table_size_32) + (offset / bpb\&.bytes_per_sector);
 98         uint32_t entry_index = offset % bpb\&.bytes_per_sector;
@@ -421,7 +420,7 @@ Definition at line \fB90\fP of file \fBfat32\&.cpp\fP\&..PP
 102         disk\->read(sector, &fat);
 103 
 104         // Set the next cluster info (mask the upper 4 bits)
-105         auto entry = (uint32_t *) (&(fat\&.raw()[entry_index]));
+105         auto entry = (uint32_t*) (&(fat\&.raw()[entry_index]));
 106         *entry = next_cluster & 0x0FFFFFFF;
 107         disk\->write(sector, &fat);
 108 
@@ -437,20 +436,24 @@ References \fBbpb\fP, \fBdisk\fP, \fBfat_copies\fP, \fBfat_lba\fP, \fBnext_clust
 Referenced by \fBallocate_cluster()\fP, and \fBfree_cluster()\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "bpb32_t MaxOS::filesystem::format::Fat32Volume::bpb"
+.SS "\fBbpb32_t\fP MaxOS::filesystem::format::Fat32Volume::bpb = { }"
 
 .PP
 The BIOS Parameter Block for the FAT32 volume\&. 
 .PP
-Definition at line \fB164\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB176\fP of file \fBfat32\&.h\fP\&..PP
+.nf
+176 { };                   
+.fi
+
 .PP
 Referenced by \fBMaxOS::filesystem::format::Fat32FileSystem::Fat32FileSystem()\fP, \fBFat32Volume()\fP, \fBnext_cluster()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBset_next_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP, and \fBMaxOS::filesystem::format::Fat32File::write()\fP\&.
-.SS "lba_t MaxOS::filesystem::format::Fat32Volume::data_lba"
+.SS "\fBlba_t\fP MaxOS::filesystem::format::Fat32Volume::data_lba"
 
 .PP
 The starting LBA of the data region\&. 
 .PP
-Definition at line \fB172\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB184\fP of file \fBfat32\&.h\fP\&.
 .PP
 Referenced by \fBFat32Volume()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP, and \fBMaxOS::filesystem::format::Fat32File::write()\fP\&.
 .SS "\fBdrivers::disk::Disk\fP* MaxOS::filesystem::format::Fat32Volume::disk"
@@ -458,31 +461,31 @@ Referenced by \fBFat32Volume()\fP, \fBMaxOS::filesystem::format::Fat32File::read
 .PP
 The disk that this volume is on\&. 
 .PP
-Definition at line \fB175\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB187\fP of file \fBfat32\&.h\fP\&.
 .PP
 Referenced by \fBallocate_cluster()\fP, \fBFat32Volume()\fP, \fBfree_cluster()\fP, \fBnext_cluster()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBset_next_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP, and \fBMaxOS::filesystem::format::Fat32File::write()\fP\&.
-.SS "lba_t MaxOS::filesystem::format::Fat32Volume::fat_copies"
+.SS "\fBlba_t\fP MaxOS::filesystem::format::Fat32Volume::fat_copies"
 
 .PP
 How many FAT tables are present\&. 
 .PP
-Definition at line \fB170\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB182\fP of file \fBfat32\&.h\fP\&.
 .PP
 Referenced by \fBFat32Volume()\fP, and \fBset_next_cluster()\fP\&.
-.SS "lba_t MaxOS::filesystem::format::Fat32Volume::fat_info_lba"
+.SS "\fBlba_t\fP MaxOS::filesystem::format::Fat32Volume::fat_info_lba"
 
 .PP
 The LBA of the \fBFSInfo\fP structure\&. 
 .PP
-Definition at line \fB169\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB181\fP of file \fBfat32\&.h\fP\&.
 .PP
 Referenced by \fBallocate_cluster()\fP, \fBFat32Volume()\fP, and \fBfree_cluster()\fP\&.
-.SS "lba_t MaxOS::filesystem::format::Fat32Volume::fat_lba"
+.SS "\fBlba_t\fP MaxOS::filesystem::format::Fat32Volume::fat_lba"
 
 .PP
 The starting LBA of the FAT table\&. 
 .PP
-Definition at line \fB168\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB180\fP of file \fBfat32\&.h\fP\&.
 .PP
 Referenced by \fBFat32Volume()\fP, \fBnext_cluster()\fP, and \fBset_next_cluster()\fP\&.
 .SS "size_t MaxOS::filesystem::format::Fat32Volume::fat_total_clusters"
@@ -490,23 +493,27 @@ Referenced by \fBFat32Volume()\fP, \fBnext_cluster()\fP, and \fBset_next_cluster
 .PP
 How many clusters are in the FAT table\&. 
 .PP
-Definition at line \fB167\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB179\fP of file \fBfat32\&.h\fP\&.
 .PP
 Referenced by \fBallocate_cluster()\fP, \fBFat32Volume()\fP, \fBfind_free_cluster()\fP, and \fBfree_cluster()\fP\&.
-.SS "fs_info_t MaxOS::filesystem::format::Fat32Volume::fsinfo"
+.SS "\fBfs_info_t\fP MaxOS::filesystem::format::Fat32Volume::fsinfo = { }"
 
 .PP
 The \fBFSInfo\fP structure for the FAT32 volume\&. 
 .PP
-Definition at line \fB165\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB177\fP of file \fBfat32\&.h\fP\&..PP
+.nf
+177 { };              
+.fi
+
 .PP
 Referenced by \fBallocate_cluster()\fP, \fBFat32Volume()\fP, \fBfind_free_cluster()\fP, and \fBfree_cluster()\fP\&.
-.SS "lba_t MaxOS::filesystem::format::Fat32Volume::root_lba"
+.SS "\fBlba_t\fP MaxOS::filesystem::format::Fat32Volume::root_lba"
 
 .PP
 The starting LBA of the root directory\&. 
 .PP
-Definition at line \fB173\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB185\fP of file \fBfat32\&.h\fP\&.
 .PP
 Referenced by \fBFat32Volume()\fP\&.
 

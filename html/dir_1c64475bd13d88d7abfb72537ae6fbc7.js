@@ -10,6 +10,7 @@ var dir_1c64475bd13d88d7abfb72537ae6fbc7 =
     [ "logger.h", "logger_8h.html", "logger_8h" ],
     [ "logo.h", "logo_8h.html", "logo_8h" ],
     [ "logo_kp.h", "logo__kp_8h.html", "logo__kp_8h" ],
+    [ "macros.h", "macros_8h_source.html", null ],
     [ "map.h", "map_8h.html", "map_8h" ],
     [ "math.h", "math_8h.html", null ],
     [ "outputStream.h", "outputStream_8h.html", "outputStream_8h" ],

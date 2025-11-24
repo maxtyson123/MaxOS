@@ -1,0 +1,1062 @@
+\doxysection{/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/tests/common.cpp File Reference}
+\hypertarget{common_8cpp}{}\label{common_8cpp}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/tests/common.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/tests/common.cpp}}
+
+
+Defines the tests for all common components of Max\+OS.  
+
+
+{\ttfamily \#include $<$tests/common.\+h$>$}\newline
+{\ttfamily \#include $<$common/buffer.\+h$>$}\newline
+{\ttfamily \#include $<$common/colour.\+h$>$}\newline
+{\ttfamily \#include $<$common/graphics\+Context.\+h$>$}\newline
+{\ttfamily \#include $<$common/input\+Stream.\+h$>$}\newline
+{\ttfamily \#include $<$common/logger.\+h$>$}\newline
+{\ttfamily \#include $<$common/map.\+h$>$}\newline
+{\ttfamily \#include $<$common/output\+Stream.\+h$>$}\newline
+{\ttfamily \#include $<$common/rectangle.\+h$>$}\newline
+{\ttfamily \#include $<$common/string.\+h$>$}\newline
+{\ttfamily \#include $<$common/time.\+h$>$}\newline
+{\ttfamily \#include $<$common/vector.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{common_8cpp_ae4156bf721a89318f7de7e6a773df52e}{register\+\_\+buffer\+\_\+tests}} ()
+\begin{DoxyCompactList}\small\item\em Registers all buffer tests. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{common_8cpp_ac35968f884ecf2eb41bfe56eade68eb9}{register\+\_\+colour\+\_\+tests}} ()
+\begin{DoxyCompactList}\small\item\em Registers all colour tests. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{common_8cpp_a966d85331c61305c97d655101eb4c1ee}{register\+\_\+map\+\_\+tests}} ()
+\begin{DoxyCompactList}\small\item\em Registers all map tests. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{common_8cpp_a843e36de789b2e0f4d676a28f5321d3b}{register\+\_\+rectangle\+\_\+tests}} ()
+\begin{DoxyCompactList}\small\item\em Registers all rectangle tests. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{common_8cpp_a643d227075937c7518cb811d96041102}{register\+\_\+string\+\_\+tests}} ()
+\begin{DoxyCompactList}\small\item\em Registers all string tests. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{common_8cpp_a708e7d8c9c591669e31c7db5828fc4ee}{register\+\_\+time\+\_\+tests}} ()
+\begin{DoxyCompactList}\small\item\em Registers all time tests. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{common_8cpp_ae6057e7117d7aad3185980607b543aa3}{register\+\_\+vector\+\_\+tests}} ()
+\begin{DoxyCompactList}\small\item\em Registers all vector tests. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines the tests for all common components of Max\+OS. 
+
+Implements the tests for all common components of Max\+OS.
+
+\begin{DoxyDate}{Date}
+23rd November 2025 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Max Tyson 
+\end{DoxyAuthor}
+
+
+Definition in file \mbox{\hyperlink{common_8cpp_source}{common.\+cpp}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{common_8cpp_ae4156bf721a89318f7de7e6a773df52e}\label{common_8cpp_ae4156bf721a89318f7de7e6a773df52e} 
+\index{common.cpp@{common.cpp}!register\_buffer\_tests@{register\_buffer\_tests}}
+\index{register\_buffer\_tests@{register\_buffer\_tests}!common.cpp@{common.cpp}}
+\doxysubsubsection{\texorpdfstring{register\_buffer\_tests()}{register\_buffer\_tests()}}
+{\footnotesize\ttfamily void register\+\_\+buffer\+\_\+tests (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Registers all buffer tests. 
+
+
+
+Definition at line \mbox{\hyperlink{common_8cpp_source_l00029}{29}} of file \mbox{\hyperlink{common_8cpp_source}{common.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_Construct\_Size,\ TestType::COMMON)}
+\DoxyCodeLine{00032\ \ \ \ \ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ Buffer\ buf(10);}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.capacity(),\ 10);}
+\DoxyCodeLine{00035\ \ \ \ \ \});}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_Construct\_FromSource,\ TestType::COMMON)}
+\DoxyCodeLine{00038\ \ \ \ \ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ from\ existing\ data}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ uint8\_t\ data[5]\ =\ \{\ 1,\ 2,\ 3,\ 4,\ 5\ \};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ Buffer\ buf(data,\ 5);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ data\ matches}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ 5;\ i++)}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(0),\ data[i]))}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00049\ \ \ \ \ \});}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_Clear,\ TestType::COMMON)}
+\DoxyCodeLine{00052\ \ \ \ \ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ buffer\ and\ fill\ with\ non-\/zero\ data}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ Buffer\ buf(5);}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ buf.full(0xFF);}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ensure\ buffer\ is\ cleared\ to\ zeroes}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ buf.clear();}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ buf.capacity();\ i++)}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(0),\ 0x00))}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00064\ \ \ \ \ \});}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_Full,\ TestType::COMMON)}
+\DoxyCodeLine{00067\ \ \ \ \ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ buffer\ and\ fill\ with\ specific\ byte}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ Buffer\ buf(5);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ buf.full(0xAA);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ensure\ buffer\ is\ filled\ with\ the\ correct\ byte}}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ buf.capacity();\ i++)}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(0),\ 0xAA))}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00078\ \ \ \ \ \});}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_WriteRead\_Offset,\ TestType::COMMON)}
+\DoxyCodeLine{00081\ \ \ \ \ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Setup\ buffer\ with\ byes\ at\ specific\ offsets}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ Buffer\ buf(3);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ buf.write(0x12);}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ buf.write(1,\ 0x34);}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Read\ back\ bytes\ and\ verify}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(0),\ 0x12))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(1),\ 0x34))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00091\ \ \ \ \ \});}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_Resize,\ TestType::COMMON)}
+\DoxyCodeLine{00094\ \ \ \ \ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ Buffer\ buf(5);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ buf.resize(10);}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.capacity(),\ 10);}
+\DoxyCodeLine{00098\ \ \ \ \ \});}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_CopyFromBuffer,\ TestType::COMMON)}
+\DoxyCodeLine{00101\ \ \ \ \ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ source\ and\ destination\ buffers\ with\ known\ data}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ Buffer\ src(5);}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ Buffer\ dst(5);}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ src.full(0x55);}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ensure\ data\ is\ copied\ correctly}}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ dst.copy\_from(\&src);}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ dst.capacity();\ i++)}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(dst.read(0),\ 0x55))}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00114\ \ \ \ \ \});}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_CopyToBuffer,\ TestType::COMMON)}
+\DoxyCodeLine{00117\ \ \ \ \ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ source\ and\ destination\ buffers\ with\ known\ data}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ Buffer\ src(5);}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ Buffer\ dst(5);}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ src.full(0x77);}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ensure\ data\ is\ copied\ correctly}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ src.copy\_to(\&dst);}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ dst.capacity();\ i++)}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(dst.read(0),\ 0x77))}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00130\ \ \ \ \ \});}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_CopyFromRawPointer,\ TestType::COMMON)}
+\DoxyCodeLine{00133\ \ \ \ \ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ raw\ data\ and\ copy\ into\ buffer}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ uint8\_t\ data[3]\ =\ \{\ 0x01,\ 0x02,\ 0x03\ \};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ Buffer\ buf(3);}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ buf.copy\_from(data,\ 3);}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ensure\ data\ is\ copied\ correctly}}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(0),\ 0x01)}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(1),\ 0x02)}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(2),\ 0x03);}
+\DoxyCodeLine{00143\ \ \ \ \ \});}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_CopyToRawPointer,\ TestType::COMMON)}
+\DoxyCodeLine{00146\ \ \ \ \ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ buffer\ with\ known\ data}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ Buffer\ buf(3);}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ buf.full(0x99);}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Copy\ data\ to\ raw\ pointer}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ uint8\_t\ out[3]\ =\ \{\ 0\ \};}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ buf.copy\_to(out,\ 3);}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(out[0],\ 0x99)}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(out[1],\ 0x99)}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(out[2],\ 0x99);}
+\DoxyCodeLine{00158\ \ \ \ \ \});}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_Offset\_Update,\ TestType::COMMON)}
+\DoxyCodeLine{00161\ \ \ \ \ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ a\ buffer\ and\ fill\ with\ data\ that\ will\ move\ the\ offset}}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ Buffer\ buf(3,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ buf.write(0x10);}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ buf.write(0x20);}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Overwrite\ first\ byte\ and\ check\ offset\ moved\ correctly}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ buf.set\_offset(0);}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ buf.write(0x30);}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(0),\ 0x30)}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(1),\ 0x20)}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(2),\ 0x00);}
+\DoxyCodeLine{00173\ \ \ \ \ \});}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_Offset\_Disabled,\ TestType::COMMON)}
+\DoxyCodeLine{00176\ \ \ \ \ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ a\ buffer\ and\ fill\ with\ data\ that\ will\ move\ the\ offset}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ Buffer\ buf(3,\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ buf.write(0x11);}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ buf.write(0x22);}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Overwrite\ first\ byte\ and\ check\ offset\ did\ not\ move}}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ buf.set\_offset(0);}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ buf.write(0x33);}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(0),\ 0x33)}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(1),\ 0x22)}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(2),\ 0x00);}
+\DoxyCodeLine{00188\ \ \ \ \ \});}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_CopyPartial\_FromBuffer,\ TestType::COMMON)}
+\DoxyCodeLine{00191\ \ \ \ \ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Setup\ source\ and\ destination\ buffers}}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ Buffer\ src(5);}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ Buffer\ dst(5);}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ src.full(0x55);}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ that\ only\ part\ of\ the\ buffer\ is\ copied}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ dst.copy\_from(\&src,\ 3);}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dst.read(0)\ ==\ 0x55\ \&\&\ dst.read(1)\ ==\ 0x55\ \&\&\ dst.read(2)\ ==\ 0x55\ \&\&\ dst.read(3)\ ==\ 0x00;}
+\DoxyCodeLine{00200\ \ \ \ \ \});}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_CopyPartial\_ToBuffer,\ TestType::COMMON)}
+\DoxyCodeLine{00203\ \ \ \ \ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Setup\ source\ and\ destination\ buffers}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ Buffer\ src(5);}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ Buffer\ dst(5);}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ src.full(0x66);}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ that\ only\ part\ of\ the\ buffer\ is\ copied}}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ src.copy\_to(\&dst,\ 3);}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(dst.read(0),\ 0x66)}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(dst.read(1),\ 0x66)}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(dst.read(2),\ 0x66)}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(dst.read(3),\ 0x00);}
+\DoxyCodeLine{00215\ \ \ \ \ \});}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Buffer\_Full\_Partial,\ TestType::COMMON)}
+\DoxyCodeLine{00218\ \ \ \ \ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ Buffer\ buf(5);}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ buf.full(0x99,\ 1,\ 3);}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(0),\ 0x00)}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(1),\ 0x99)}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(2),\ 0x99)}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(3),\ 0x99)}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(buf.read(4),\ 0x00);}
+\DoxyCodeLine{00226\ \ \ \ \ \});}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{comment}{//\ TODO:\ Test\ bounds\ checking\ (some\ sorta\ exception\ handling)}}
+\DoxyCodeLine{00229\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{test_8h_source_l00017}{MAXOS\+\_\+\+CONDITIONAL\+\_\+\+TEST}}.
+
+\Hypertarget{common_8cpp_ac35968f884ecf2eb41bfe56eade68eb9}\label{common_8cpp_ac35968f884ecf2eb41bfe56eade68eb9} 
+\index{common.cpp@{common.cpp}!register\_colour\_tests@{register\_colour\_tests}}
+\index{register\_colour\_tests@{register\_colour\_tests}!common.cpp@{common.cpp}}
+\doxysubsubsection{\texorpdfstring{register\_colour\_tests()}{register\_colour\_tests()}}
+{\footnotesize\ttfamily void register\+\_\+colour\+\_\+tests (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Registers all colour tests. 
+
+
+
+Definition at line \mbox{\hyperlink{common_8cpp_source_l00234}{234}} of file \mbox{\hyperlink{common_8cpp_source}{common.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Colour\_DefaultConstructor,\ TestType::COMMON)}
+\DoxyCodeLine{00237\ \ \ \ \ \{}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ Colour\ c;}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.red,\ 0)}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.green,\ 0)}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.blue,\ 0)}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.alpha,\ 0);}
+\DoxyCodeLine{00243\ \ \ \ \ \});}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Colour\_RGBConstructor,\ TestType::COMMON)}
+\DoxyCodeLine{00246\ \ \ \ \ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ Colour\ c(10,\ 20,\ 30);}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.red,\ 10)}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.green,\ 20)}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.blue,\ 30)}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.alpha,\ 0);}
+\DoxyCodeLine{00252\ \ \ \ \ \});}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Colour\_RGBAConstructor,\ TestType::COMMON)}
+\DoxyCodeLine{00255\ \ \ \ \ \{}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ Colour\ c(10,\ 20,\ 30,\ 40);}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.red,\ 10)}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.green,\ 20)}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.blue,\ 30)}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.alpha,\ 40);}
+\DoxyCodeLine{00261\ \ \ \ \ \});}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Colour\_ConsoleColourConstructor\_Red,\ TestType::COMMON)}
+\DoxyCodeLine{00264\ \ \ \ \ \{}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ Colour\ c(ConsoleColour::Red);}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.red,\ 255)}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.green,\ 0)}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.blue,\ 0);}
+\DoxyCodeLine{00269\ \ \ \ \ \});}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Colour\_HexStringConstructor\_Magenta,\ TestType::COMMON)}
+\DoxyCodeLine{00272\ \ \ \ \ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ Colour\ c(\textcolor{stringliteral}{"{}FF00FF"{}});}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.red,\ 255)}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.green,\ 0)}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.blue,\ 255);}
+\DoxyCodeLine{00277\ \ \ \ \ \});}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Colour\_ANSIStringConstructor\_FGGreen,\ TestType::COMMON)}
+\DoxyCodeLine{00280\ \ \ \ \ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ Colour\ c(\textcolor{stringliteral}{"{}\(\backslash\)033[0;32m"{}});}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.red,\ 0)}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.green,\ 255)}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.blue,\ 0);}
+\DoxyCodeLine{00285\ \ \ \ \ \});}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Colour\_ToConsoleColour\_Red,\ TestType::COMMON)}
+\DoxyCodeLine{00288\ \ \ \ \ \{}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ Colour\ c(255,\ 0,\ 0);}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ c.to\_console\_colour()\ ==\ ConsoleColour::Red;}
+\DoxyCodeLine{00291\ \ \ \ \ \});}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Colour\_ConsoleColourRoundTrip\_Blue,\ TestType::COMMON)}
+\DoxyCodeLine{00294\ \ \ \ \ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ Colour\ c(ConsoleColour::Blue);}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ c.to\_console\_colour()\ ==\ ConsoleColour::Blue;}
+\DoxyCodeLine{00297\ \ \ \ \ \});}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Colour\_AlphaPreservation,\ TestType::COMMON)}
+\DoxyCodeLine{00300\ \ \ \ \ \{}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ Colour\ c(10,\ 20,\ 30,\ 128);}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c.alpha,\ 128);}
+\DoxyCodeLine{00303\ \ \ \ \ \});}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{test_8h_source_l00017}{MAXOS\+\_\+\+CONDITIONAL\+\_\+\+TEST}}.
+
+\Hypertarget{common_8cpp_a966d85331c61305c97d655101eb4c1ee}\label{common_8cpp_a966d85331c61305c97d655101eb4c1ee} 
+\index{common.cpp@{common.cpp}!register\_map\_tests@{register\_map\_tests}}
+\index{register\_map\_tests@{register\_map\_tests}!common.cpp@{common.cpp}}
+\doxysubsubsection{\texorpdfstring{register\_map\_tests()}{register\_map\_tests()}}
+{\footnotesize\ttfamily void register\+\_\+map\+\_\+tests (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Registers all map tests. 
+
+
+
+Definition at line \mbox{\hyperlink{common_8cpp_source_l00310}{310}} of file \mbox{\hyperlink{common_8cpp_source}{common.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Map\_EmptyOnConstruct,\ TestType::COMMON)}
+\DoxyCodeLine{00313\ \ \ \ \ \{}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ Map<int,\ int>\ m;}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.empty(),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00316\ \ \ \ \ \});}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Map\_PushBack\_SizeAndFind,\ TestType::COMMON)}
+\DoxyCodeLine{00319\ \ \ \ \ \{}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ map\ and\ add\ an\ element}}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ Map<int,\ int>\ m;}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ m.push\_back(1,\ 100);}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size\ is\ correct}}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 1))}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ element\ can\ be\ found}}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ m.find(1);}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ it\ !=\ m.end()\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(it-\/>first,\ 1)\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(it-\/>second,\ 100);}
+\DoxyCodeLine{00331\ \ \ \ \ \});}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Map\_PushBack\_PopBack,\ TestType::COMMON)}
+\DoxyCodeLine{00334\ \ \ \ \ \{}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ map\ and\ add\ elements}}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ Map<int,\ int>\ m;}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ m.push\_back(1,\ 10);}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ m.push\_back(2,\ 20);}
+\DoxyCodeLine{00339\ }
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size}}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 2))}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Confirm\ last\ element\ is\ correct}}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ Pair<int,\ int>\ last\ =\ m.pop\_back();}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(last.first,\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(last.second,\ 20))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size\ after\ pop}}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 1);}
+\DoxyCodeLine{00351\ \ \ \ \ \});}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Map\_PushFront\_PopFront,\ TestType::COMMON)}
+\DoxyCodeLine{00354\ \ \ \ \ \{}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ map\ and\ add\ elements}}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ Map<int,\ int>\ m;}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ m.push\_back(2,\ 20);}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ m.push\_front(1,\ 10);}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size}}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 2))}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Confirm\ first\ element\ is\ correct}}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ Pair<int,\ int>\ first\ =\ m.pop\_front();}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(first.first,\ 1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(first.second,\ 10))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size\ after\ pop}}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 1);}
+\DoxyCodeLine{00371\ \ \ \ \ \});}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Map\_Insert\_AddAndUpdate,\ TestType::COMMON)}
+\DoxyCodeLine{00374\ \ \ \ \ \{}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ map\ and\ add\ an\ element}}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ Map<int,\ int>\ m;}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ m.insert(1,\ 100);}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size\ after\ insert}}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 1))}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ the\ existing\ element\ and\ verify\ size\ remains\ the\ same}}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ m.insert(1,\ 200);}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ the\ value\ was\ updated}}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ m.find(1);}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(it\ ==\ m.end())\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(it-\/>second,\ 200);}
+\DoxyCodeLine{00391\ \ \ \ \ \});}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Map\_Erase\_ByKey,\ TestType::COMMON)}
+\DoxyCodeLine{00394\ \ \ \ \ \{}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ map\ and\ add\ elements}}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ Map<int,\ int>\ m;}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ m.push\_back(1,\ 10);}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ m.push\_back(2,\ 20);}
+\DoxyCodeLine{00399\ }
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size\ before\ erase}}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00402\ }
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Erase\ one\ element\ and\ verify\ size\ and\ contents}}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ m.erase(1);}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (m.find(1)\ ==\ m.end())\ \&\&\ (m.find(2)\ !=\ m.end());}
+\DoxyCodeLine{00407\ \ \ \ \ \});}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Map\_Erase\_ByIterator,\ TestType::COMMON)}
+\DoxyCodeLine{00410\ \ \ \ \ \{}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ map\ and\ add\ elements}}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ Map<int,\ int>\ m;}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ m.push\_back(1,\ 11);}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ m.push\_back(2,\ 22);}
+\DoxyCodeLine{00415\ }
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size\ before\ erase}}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00418\ }
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Erase\ one\ element}}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ m.find(1);}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(it\ ==\ m.end())\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ m.erase(it);}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size\ and\ contents\ after\ erase}}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (m.find(1)\ ==\ m.end())\ \&\&\ (m.find(2)\ !=\ m.end());}
+\DoxyCodeLine{00427\ \ \ \ \ \});}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Map\_Clear\_Empties,\ TestType::COMMON)}
+\DoxyCodeLine{00430\ \ \ \ \ \{}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ map\ and\ add\ elements}}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ Map<int,\ int>\ m;}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ m.push\_back(1,\ 1);}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ m.push\_back(2,\ 2);}
+\DoxyCodeLine{00435\ }
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ map\ and\ verify\ it's\ empty}}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ m.clear();}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.empty(),\ \textcolor{keyword}{true})\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 0);}
+\DoxyCodeLine{00439\ \ \ \ \ \});}
+\DoxyCodeLine{00440\ }
+\DoxyCodeLine{00441\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Map\_ReserveAndIncreaseSize,\ TestType::COMMON)}
+\DoxyCodeLine{00442\ \ \ \ \ \{}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ map\ and\ reserve\ space}}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ Map<int,\ int>\ m;}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ m.reserve(16);}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ size\ is\ still\ zero}}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 0))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00449\ }
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Increase\ size\ and\ verify\ still\ zero\ //TODO:\ also\ verify\ capacity\ increased?}}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ m.increase\_size();}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(m.size(),\ 0);}
+\DoxyCodeLine{00453\ \ \ \ \ \});}
+\DoxyCodeLine{00454\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{test_8h_source_l00017}{MAXOS\+\_\+\+CONDITIONAL\+\_\+\+TEST}}.
+
+\Hypertarget{common_8cpp_a843e36de789b2e0f4d676a28f5321d3b}\label{common_8cpp_a843e36de789b2e0f4d676a28f5321d3b} 
+\index{common.cpp@{common.cpp}!register\_rectangle\_tests@{register\_rectangle\_tests}}
+\index{register\_rectangle\_tests@{register\_rectangle\_tests}!common.cpp@{common.cpp}}
+\doxysubsubsection{\texorpdfstring{register\_rectangle\_tests()}{register\_rectangle\_tests()}}
+{\footnotesize\ttfamily void register\+\_\+rectangle\+\_\+tests (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Registers all rectangle tests. 
+
+
+
+Definition at line \mbox{\hyperlink{common_8cpp_source_l00459}{459}} of file \mbox{\hyperlink{common_8cpp_source}{common.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_DefaultConstructor,\ TestType::COMMON)}
+\DoxyCodeLine{00462\ \ \ \ \ \{}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ Rectangle<int>\ r;}
+\DoxyCodeLine{00464\ }
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.left,\ 0))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.top,\ 0))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.width,\ 0))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.height,\ 0))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00470\ \ \ \ \ \});}
+\DoxyCodeLine{00471\ }
+\DoxyCodeLine{00472\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Construct\_PositiveValues,\ TestType::COMMON)}
+\DoxyCodeLine{00473\ \ \ \ \ \{}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ Rectangle<int>\ r(1,\ 2,\ 3,\ 4);}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.left,\ 1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.top,\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.width,\ 3))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.height,\ 4))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00481\ \ \ \ \ \});}
+\DoxyCodeLine{00482\ }
+\DoxyCodeLine{00483\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Construct\_NegativeSize\_Normalises,\ TestType::COMMON)}
+\DoxyCodeLine{00484\ \ \ \ \ \{}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ Rectangle<int>\ r(-\/2,\ -\/3,\ -\/4,\ -\/5);}
+\DoxyCodeLine{00486\ }
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.left,\ -\/6))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.top,\ -\/8))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.width,\ 4))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.height,\ 5))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00492\ \ \ \ \ \});}
+\DoxyCodeLine{00493\ }
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Intersects\_Overlaps,\ TestType::COMMON)}
+\DoxyCodeLine{00496\ \ \ \ \ \{}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ Rectangle<int>\ a(0,\ 0,\ 10,\ 10);}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ Rectangle<int>\ b(5,\ 5,\ 2,\ 2);}
+\DoxyCodeLine{00499\ }
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(a.intersects(b),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00501\ \ \ \ \ \});}
+\DoxyCodeLine{00502\ }
+\DoxyCodeLine{00503\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Intersects\_EdgeTouch\_NoIntersect,\ TestType::COMMON)}
+\DoxyCodeLine{00504\ \ \ \ \ \{}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ Rectangle<int>\ a(0,\ 0,\ 10,\ 10);}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ Rectangle<int>\ b(10,\ 10,\ 5,\ 5);}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ Rectangle<int>\ c(11,\ 0,\ 2,\ 2);}
+\DoxyCodeLine{00508\ }
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(a.intersects(b),\ \textcolor{keyword}{false}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(a.intersects(c),\ \textcolor{keyword}{false}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00512\ \ \ \ \ \});}
+\DoxyCodeLine{00513\ }
+\DoxyCodeLine{00514\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Intersection\_CorrectValues,\ TestType::COMMON)}
+\DoxyCodeLine{00515\ \ \ \ \ \{}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ Rectangle<int>\ a(0,\ 0,\ 10,\ 10);}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ Rectangle<int>\ b(5,\ 5,\ 10,\ 10);}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ Rectangle<int>\ inter\ =\ a.intersection(b);}
+\DoxyCodeLine{00519\ }
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(inter.left,\ 5))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(inter.top,\ 5))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(inter.width,\ 5))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(inter.height,\ 5))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00525\ \ \ \ \ \});}
+\DoxyCodeLine{00526\ }
+\DoxyCodeLine{00527\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Contains\_Rectangle\_Inside,\ TestType::COMMON)}
+\DoxyCodeLine{00528\ \ \ \ \ \{}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ Rectangle<int>\ outer(0,\ 0,\ 10,\ 10);}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ Rectangle<int>\ inner(2,\ 2,\ 3,\ 3);}
+\DoxyCodeLine{00531\ }
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(outer.contains(inner),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00533\ \ \ \ \ \});}
+\DoxyCodeLine{00534\ }
+\DoxyCodeLine{00535\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Contains\_Rectangle\_EdgeTouch\_False,\ TestType::COMMON)}
+\DoxyCodeLine{00536\ \ \ \ \ \{}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ Rectangle<int>\ a(0,\ 0,\ 4,\ 4);}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ Rectangle<int>\ b(4,\ 1,\ 2,\ 2);}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ Rectangle<int>\ c(-\/1,\ -\/1,\ 1,\ 1);}
+\DoxyCodeLine{00540\ }
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(a.contains(b),\ \textcolor{keyword}{false}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(a.contains(c),\ \textcolor{keyword}{false}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00544\ \ \ \ \ \});}
+\DoxyCodeLine{00545\ }
+\DoxyCodeLine{00546\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Contains\_Point,\ TestType::COMMON)}
+\DoxyCodeLine{00547\ \ \ \ \ \{}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ Rectangle<int>\ r(1,\ 1,\ 4,\ 4);}
+\DoxyCodeLine{00549\ }
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.contains(1,\ 1),\ \textcolor{keyword}{true}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.contains(4,\ 1),\ \textcolor{keyword}{false}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.contains(3,\ 3),\ \textcolor{keyword}{true}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.contains(0,\ 0),\ \textcolor{keyword}{false}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00555\ \ \ \ \ \});}
+\DoxyCodeLine{00556\ }
+\DoxyCodeLine{00557\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Subtract\_NoIntersection\_ReturnsOriginal,\ TestType::COMMON)}
+\DoxyCodeLine{00558\ \ \ \ \ \{}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ Rectangle<int>\ a(0,\ 0,\ 4,\ 4);}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ Rectangle<int>\ b(5,\ 5,\ 2,\ 2);}
+\DoxyCodeLine{00561\ }
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ res\ =\ a.subtract(b);}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ Rectangle<int>\&\ r\ =\ res[0];}
+\DoxyCodeLine{00564\ }
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{int})res.size(),\ 1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.left,\ a.left))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.top,\ a.top))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.width,\ a.width))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.height,\ a.height))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00571\ \ \ \ \ \});}
+\DoxyCodeLine{00572\ }
+\DoxyCodeLine{00573\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Rectangle\_Subtract\_FullyCovered\_EmptyResult,\ TestType::COMMON)}
+\DoxyCodeLine{00574\ \ \ \ \ \{}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ Rectangle<int>\ a(0,\ 0,\ 4,\ 4);}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ Rectangle<int>\ b(0,\ 0,\ 4,\ 4);}
+\DoxyCodeLine{00577\ }
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ res\ =\ a.subtract(b);}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{int})res.size(),\ 0);}
+\DoxyCodeLine{00580\ \ \ \ \ \});}
+\DoxyCodeLine{00581\ }
+\DoxyCodeLine{00582\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{test_8h_source_l00017}{MAXOS\+\_\+\+CONDITIONAL\+\_\+\+TEST}}.
+
+\Hypertarget{common_8cpp_a643d227075937c7518cb811d96041102}\label{common_8cpp_a643d227075937c7518cb811d96041102} 
+\index{common.cpp@{common.cpp}!register\_string\_tests@{register\_string\_tests}}
+\index{register\_string\_tests@{register\_string\_tests}!common.cpp@{common.cpp}}
+\doxysubsubsection{\texorpdfstring{register\_string\_tests()}{register\_string\_tests()}}
+{\footnotesize\ttfamily void register\+\_\+string\+\_\+tests (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Registers all string tests. 
+
+
+
+Definition at line \mbox{\hyperlink{common_8cpp_source_l00587}{587}} of file \mbox{\hyperlink{common_8cpp_source}{common.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00587\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00588\ }
+\DoxyCodeLine{00589\ }
+\DoxyCodeLine{00590\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_DefaultConstructor,\ TestType::COMMON)}
+\DoxyCodeLine{00591\ \ \ \ \ \{}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ String\ s;}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(s.length(),\ (\textcolor{keywordtype}{size\_t})0);}
+\DoxyCodeLine{00594\ \ \ \ \ \});}
+\DoxyCodeLine{00595\ }
+\DoxyCodeLine{00596\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_CharConstructor,\ TestType::COMMON)}
+\DoxyCodeLine{00597\ \ \ \ \ \{}
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ String\ s(\textcolor{charliteral}{'A'});}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(s.length(),\ (\textcolor{keywordtype}{size\_t})1)\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(s[0],\ \textcolor{charliteral}{'A'});}
+\DoxyCodeLine{00600\ \ \ \ \ \});}
+\DoxyCodeLine{00601\ }
+\DoxyCodeLine{00602\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_CStringConstructor,\ TestType::COMMON)}
+\DoxyCodeLine{00603\ \ \ \ \ \{}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ String\ s(\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(s.length(),\ (\textcolor{keywordtype}{size\_t})5)\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(s,\ String(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{00606\ \ \ \ \ \});}
+\DoxyCodeLine{00607\ }
+\DoxyCodeLine{00608\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_CopyConstructor\_Assignment,\ TestType::COMMON)}
+\DoxyCodeLine{00609\ \ \ \ \ \{}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ String\ a(\textcolor{stringliteral}{"{}CopyMe"{}});}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ String\ b(a);}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ String\ c;}
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ c\ =\ a;}
+\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(b,\ a)\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(c,\ a);}
+\DoxyCodeLine{00615\ \ \ \ \ \});}
+\DoxyCodeLine{00616\ }
+\DoxyCodeLine{00617\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_Concat\_Plus\_PlusEquals,\ TestType::COMMON)}
+\DoxyCodeLine{00618\ \ \ \ \ \{}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ String\ a(\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ String\ b(\textcolor{stringliteral}{"{}World"{}});}
+\DoxyCodeLine{00621\ }
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ String\ combined\ =\ a\ +\ String(\textcolor{stringliteral}{"{}\ "{}})\ +\ b;}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ a\ +=\ String(\textcolor{stringliteral}{"{}\ "{}});}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ a\ +=\ b;}
+\DoxyCodeLine{00625\ }
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(combined,\ String(\textcolor{stringliteral}{"{}Hello\ World"{}}))\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(a,\ combined);}
+\DoxyCodeLine{00627\ \ \ \ \ \});}
+\DoxyCodeLine{00628\ }
+\DoxyCodeLine{00629\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_Substring\_StartsWith,\ TestType::COMMON)}
+\DoxyCodeLine{00630\ \ \ \ \ \{}
+\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ String\ s(\textcolor{stringliteral}{"{}This\ is\ a\ test"{}});}
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ String\ sub\ =\ s.substring(5,\ 2);}
+\DoxyCodeLine{00633\ }
+\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(sub,\ String(\textcolor{stringliteral}{"{}is"{}}))\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(s.starts\_with(String(\textcolor{stringliteral}{"{}This"{}})),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00635\ \ \ \ \ \});}
+\DoxyCodeLine{00636\ }
+\DoxyCodeLine{00637\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_Split\_Simple,\ TestType::COMMON)}
+\DoxyCodeLine{00638\ \ \ \ \ \{}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ String\ s(\textcolor{stringliteral}{"{}one,two,three"{}});}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ parts\ =\ s.split(String(\textcolor{stringliteral}{"{},"{}}));}
+\DoxyCodeLine{00641\ }
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})parts.size(),\ (\textcolor{keywordtype}{size\_t})3))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(parts[0],\ String(\textcolor{stringliteral}{"{}one"{}})))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(parts[1],\ String(\textcolor{stringliteral}{"{}two"{}})))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(parts[2],\ String(\textcolor{stringliteral}{"{}three"{}}));}
+\DoxyCodeLine{00646\ \ \ \ \ \});}
+\DoxyCodeLine{00647\ }
+\DoxyCodeLine{00648\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_Strip\_Center,\ TestType::COMMON)}
+\DoxyCodeLine{00649\ \ \ \ \ \{}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ String\ s(\textcolor{stringliteral}{"{}\ \ \ padded\ \ \ "{}});}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ String\ stripped\ =\ s.strip(\textcolor{charliteral}{'\ '});}
+\DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ String\ centered\ =\ String(\textcolor{stringliteral}{"{}hi"{}}).center(6,\ \textcolor{charliteral}{'.'});}
+\DoxyCodeLine{00653\ }
+\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(stripped,\ String(\textcolor{stringliteral}{"{}\ \ \ padded"{}})))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(centered,\ String(\textcolor{stringliteral}{"{}..hi.."{}}));}
+\DoxyCodeLine{00656\ \ \ \ \ \});}
+\DoxyCodeLine{00657\ }
+\DoxyCodeLine{00658\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_Formatted\_Integer\_Hex\_String,\ TestType::COMMON)}
+\DoxyCodeLine{00659\ \ \ \ \ \{}
+\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ String\ f\ =\ String::formatted(\textcolor{stringliteral}{"{}num:\%d\ hex:\%x\ str:\%s"{}},\ 42,\ (uint64\_t)0x2A,\ (\textcolor{keywordtype}{char}*)\textcolor{stringliteral}{"{}ok"{}});}
+\DoxyCodeLine{00661\ }
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(f,\ String(\textcolor{stringliteral}{"{}num:42\ hex:2A\ str:ok"{}}));}
+\DoxyCodeLine{00663\ \ \ \ \ \});}
+\DoxyCodeLine{00664\ }
+\DoxyCodeLine{00665\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_Length\_AnsiHandling,\ TestType::COMMON)}
+\DoxyCodeLine{00666\ \ \ \ \ \{}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ String\ s\ =\ String(\textcolor{stringliteral}{"{}\(\backslash\)033[0;31m"{}})\ +\ String(\textcolor{stringliteral}{"{}X"{}})\ +\ String(\textcolor{stringliteral}{"{}\(\backslash\)033[0m"{}})\ +\ String(\textcolor{stringliteral}{"{}Y"{}});}
+\DoxyCodeLine{00668\ }
+\DoxyCodeLine{00669\ }
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(s.length(\textcolor{keyword}{true}),\ (\textcolor{keywordtype}{size\_t})8))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(s.length(\textcolor{keyword}{false}),\ (\textcolor{keywordtype}{size\_t})2);}
+\DoxyCodeLine{00672\ \ \ \ \ \});}
+\DoxyCodeLine{00673\ }
+\DoxyCodeLine{00674\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_OperatorMultiply,\ TestType::COMMON)}
+\DoxyCodeLine{00675\ \ \ \ \ \{}
+\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ String\ s(\textcolor{stringliteral}{"{}ab"{}});}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ String\ r\ =\ s\ *\ 3;}
+\DoxyCodeLine{00678\ }
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r,\ String(\textcolor{stringliteral}{"{}ababab"{}}))\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(r.length(),\ (\textcolor{keywordtype}{size\_t})6);}
+\DoxyCodeLine{00680\ \ \ \ \ \});}
+\DoxyCodeLine{00681\ }
+\DoxyCodeLine{00682\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_Comparisons\_LexValue,\ TestType::COMMON)}
+\DoxyCodeLine{00683\ \ \ \ \ \{}
+\DoxyCodeLine{00684\ \ \ \ \ \ \ \ \ String\ a(\textcolor{stringliteral}{"{}aaa"{}});}
+\DoxyCodeLine{00685\ \ \ \ \ \ \ \ \ String\ b(\textcolor{stringliteral}{"{}bbb"{}});}
+\DoxyCodeLine{00686\ }
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(a\ <\ b,\ \textcolor{keyword}{true}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(b\ >\ a,\ \textcolor{keyword}{true}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(a\ <=\ a,\ \textcolor{keyword}{true}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(b\ >=\ a,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00691\ \ \ \ \ \});}
+\DoxyCodeLine{00692\ }
+\DoxyCodeLine{00693\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(String\_StringBuilder\_Append,\ TestType::COMMON)}
+\DoxyCodeLine{00694\ \ \ \ \ \{}
+\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ StringBuilder\ sb;}
+\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ sb\ <<\ \textcolor{stringliteral}{"{}val:"{}}\ <<\ 123\ <<\ (uint64\_t)0x10\ <<\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00697\ \ \ \ \ \ \ \ \ String\ out\ =\ sb.out;}
+\DoxyCodeLine{00698\ }
+\DoxyCodeLine{00699\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(out.starts\_with(String(\textcolor{stringliteral}{"{}val:"{}})),\ \textcolor{keyword}{true}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(out.length()\ >\ (\textcolor{keywordtype}{size\_t})5,\ \textcolor{keyword}{true}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00701\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00702\ \ \ \ \ \});}
+\DoxyCodeLine{00703\ }
+\DoxyCodeLine{00704\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{test_8h_source_l00017}{MAXOS\+\_\+\+CONDITIONAL\+\_\+\+TEST}}.
+
+\Hypertarget{common_8cpp_a708e7d8c9c591669e31c7db5828fc4ee}\label{common_8cpp_a708e7d8c9c591669e31c7db5828fc4ee} 
+\index{common.cpp@{common.cpp}!register\_time\_tests@{register\_time\_tests}}
+\index{register\_time\_tests@{register\_time\_tests}!common.cpp@{common.cpp}}
+\doxysubsubsection{\texorpdfstring{register\_time\_tests()}{register\_time\_tests()}}
+{\footnotesize\ttfamily void register\+\_\+time\+\_\+tests (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Registers all time tests. 
+
+
+
+Definition at line \mbox{\hyperlink{common_8cpp_source_l00709}{709}} of file \mbox{\hyperlink{common_8cpp_source}{common.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00710\ }
+\DoxyCodeLine{00711\ }
+\DoxyCodeLine{00712\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Time\_IsLeapYear\_True,\ TestType::COMMON)}
+\DoxyCodeLine{00713\ \ \ \ \ \{}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ Time\ t\ \{\ 2020,\ 2,\ 1,\ 0,\ 0,\ 0\ \};}
+\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(t.is\_leap\_year(),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00716\ \ \ \ \ \});}
+\DoxyCodeLine{00717\ }
+\DoxyCodeLine{00718\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Time\_IsLeapYear\_False,\ TestType::COMMON)}
+\DoxyCodeLine{00719\ \ \ \ \ \{}
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ Time\ t\ \{\ 2019,\ 3,\ 1,\ 0,\ 0,\ 0\ \};}
+\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(t.is\_leap\_year(),\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00722\ \ \ \ \ \});}
+\DoxyCodeLine{00723\ }
+\DoxyCodeLine{00724\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Time\_Epoch\_1970\_01\_01,\ TestType::COMMON)}
+\DoxyCodeLine{00725\ \ \ \ \ \{}
+\DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ Time\ t\ \{\ 1970,\ 1,\ 1,\ 0,\ 0,\ 0\ \};}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(time\_to\_epoch(t),\ (uint64\_t)0ULL);}
+\DoxyCodeLine{00728\ \ \ \ \ \});}
+\DoxyCodeLine{00729\ }
+\DoxyCodeLine{00730\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Time\_Epoch\_1970\_01\_02,\ TestType::COMMON)}
+\DoxyCodeLine{00731\ \ \ \ \ \{}
+\DoxyCodeLine{00732\ \ \ \ \ \ \ \ \ Time\ t\ \{\ 1970,\ 1,\ 2,\ 0,\ 0,\ 0\ \};}
+\DoxyCodeLine{00733\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(time\_to\_epoch(t),\ (uint64\_t)86400ULL);}
+\DoxyCodeLine{00734\ \ \ \ \ \});}
+\DoxyCodeLine{00735\ }
+\DoxyCodeLine{00736\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Time\_Epoch\_1971\_01\_01,\ TestType::COMMON)}
+\DoxyCodeLine{00737\ \ \ \ \ \{}
+\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ Time\ t\ \{\ 1971,\ 1,\ 1,\ 0,\ 0,\ 0\ \};}
+\DoxyCodeLine{00739\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(time\_to\_epoch(t),\ (uint64\_t)31536000ULL);}
+\DoxyCodeLine{00740\ \ \ \ \ \});}
+\DoxyCodeLine{00741\ }
+\DoxyCodeLine{00742\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Time\_Epoch\_1972\_03\_01\_LeapYear,\ TestType::COMMON)}
+\DoxyCodeLine{00743\ \ \ \ \ \{}
+\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ Time\ t\ \{\ 1972,\ 3,\ 1,\ 0,\ 0,\ 0\ \};}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(time\_to\_epoch(t),\ (uint64\_t)68256000ULL);}
+\DoxyCodeLine{00746\ \ \ \ \ \});}
+\DoxyCodeLine{00747\ }
+\DoxyCodeLine{00748\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Time\_MonthsArray\_Bounds,\ TestType::COMMON)}
+\DoxyCodeLine{00749\ \ \ \ \ \{}
+\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(\textcolor{keywordtype}{string}(Months[0]),\ \textcolor{keywordtype}{string}(\textcolor{stringliteral}{"{}January"{}}))\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(\textcolor{keywordtype}{string}(Months[11]),\ \textcolor{keywordtype}{string}(\textcolor{stringliteral}{"{}December"{}}));}
+\DoxyCodeLine{00751\ \ \ \ \ \});}
+\DoxyCodeLine{00752\ }
+\DoxyCodeLine{00753\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{test_8h_source_l00017}{MAXOS\+\_\+\+CONDITIONAL\+\_\+\+TEST}}.
+
+\Hypertarget{common_8cpp_ae6057e7117d7aad3185980607b543aa3}\label{common_8cpp_ae6057e7117d7aad3185980607b543aa3} 
+\index{common.cpp@{common.cpp}!register\_vector\_tests@{register\_vector\_tests}}
+\index{register\_vector\_tests@{register\_vector\_tests}!common.cpp@{common.cpp}}
+\doxysubsubsection{\texorpdfstring{register\_vector\_tests()}{register\_vector\_tests()}}
+{\footnotesize\ttfamily void register\+\_\+vector\+\_\+tests (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Registers all vector tests. 
+
+
+
+Definition at line \mbox{\hyperlink{common_8cpp_source_l00758}{758}} of file \mbox{\hyperlink{common_8cpp_source}{common.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00759\ }
+\DoxyCodeLine{00760\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_Default\_Construct\_Empty,\ TestType::COMMON)}
+\DoxyCodeLine{00761\ \ \ \ \ \{}
+\DoxyCodeLine{00762\ \ \ \ \ \ \ \ \ Vector<int>\ v;}
+\DoxyCodeLine{00763\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{int})v.size(),\ 0)\ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v.empty(),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00764\ \ \ \ \ \});}
+\DoxyCodeLine{00765\ }
+\DoxyCodeLine{00766\ }
+\DoxyCodeLine{00767\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_Construct\_Size\_Fill,\ TestType::COMMON)}
+\DoxyCodeLine{00768\ \ \ \ \ \{}
+\DoxyCodeLine{00769\ \ \ \ \ \ \ \ \ Vector<int>\ v(4,\ 7);}
+\DoxyCodeLine{00770\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})v.size(),\ 4)}
+\DoxyCodeLine{00771\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[0],\ 7)}
+\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[1],\ 7)}
+\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[2],\ 7)}
+\DoxyCodeLine{00774\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[3],\ 7);}
+\DoxyCodeLine{00775\ \ \ \ \ \});}
+\DoxyCodeLine{00776\ }
+\DoxyCodeLine{00777\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_PushBack\_PopBack,\ TestType::COMMON)}
+\DoxyCodeLine{00778\ \ \ \ \ \{}
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ Vector<int>\ v;}
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ v.push\_back(1);}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ v.push\_back(2);}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ v.push\_back(3);}
+\DoxyCodeLine{00783\ }
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})v.size(),\ 3))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00785\ }
+\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ popped\ =\ v.pop\_back();}
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(popped,\ 3))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})v.size(),\ 2);}
+\DoxyCodeLine{00789\ \ \ \ \ \});}
+\DoxyCodeLine{00790\ }
+\DoxyCodeLine{00791\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_PushFront\_PopFront,\ TestType::COMMON)}
+\DoxyCodeLine{00792\ \ \ \ \ \{}
+\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ Vector<int>\ v;}
+\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ v.push\_back(2);}
+\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ v.push\_back(3);}
+\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ v.push\_front(1);}
+\DoxyCodeLine{00797\ }
+\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})v.size(),\ 3))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[0],\ 1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00800\ }
+\DoxyCodeLine{00801\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ front\ =\ v.pop\_front();}
+\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(front,\ 1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00803\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})v.size(),\ 2);}
+\DoxyCodeLine{00804\ \ \ \ \ \});}
+\DoxyCodeLine{00805\ }
+\DoxyCodeLine{00806\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_Reserve\_IncreaseSize\_Preserves,\ TestType::COMMON)}
+\DoxyCodeLine{00807\ \ \ \ \ \{}
+\DoxyCodeLine{00808\ \ \ \ \ \ \ \ \ Vector<int>\ v;}
+\DoxyCodeLine{00809\ \ \ \ \ \ \ \ \ v.push\_back(9);}
+\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ v.push\_back(8);}
+\DoxyCodeLine{00811\ \ \ \ \ \ \ \ \ v.reserve(16);}
+\DoxyCodeLine{00812\ }
+\DoxyCodeLine{00813\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})v.size(),\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00814\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[0],\ 9))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00815\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[1],\ 8))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00816\ }
+\DoxyCodeLine{00817\ \ \ \ \ \ \ \ \ v.increase\_size();}
+\DoxyCodeLine{00818\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[0],\ 9);}
+\DoxyCodeLine{00819\ \ \ \ \ \});}
+\DoxyCodeLine{00820\ }
+\DoxyCodeLine{00821\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_CopyConstructor\_Independent,\ TestType::COMMON)}
+\DoxyCodeLine{00822\ \ \ \ \ \{}
+\DoxyCodeLine{00823\ \ \ \ \ \ \ \ \ Vector<int>\ original;}
+\DoxyCodeLine{00824\ \ \ \ \ \ \ \ \ original.push\_back(4);}
+\DoxyCodeLine{00825\ \ \ \ \ \ \ \ \ original.push\_back(5);}
+\DoxyCodeLine{00826\ \ \ \ \ \ \ \ \ Vector<int>\ copy\ =\ original;}
+\DoxyCodeLine{00827\ }
+\DoxyCodeLine{00828\ \ \ \ \ \ \ \ \ original.pop\_back();}
+\DoxyCodeLine{00829\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})original.size(),\ 1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00830\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})copy.size(),\ 2)}
+\DoxyCodeLine{00831\ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(copy[1],\ 5);}
+\DoxyCodeLine{00832\ \ \ \ \ \});}
+\DoxyCodeLine{00833\ }
+\DoxyCodeLine{00834\ }
+\DoxyCodeLine{00835\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_MoveConstructor\_Transfers,\ TestType::COMMON)}
+\DoxyCodeLine{00836\ \ \ \ \ \{}
+\DoxyCodeLine{00837\ \ \ \ \ \ \ \ \ Vector<int>\ src;}
+\DoxyCodeLine{00838\ \ \ \ \ \ \ \ \ src.push\_back(10);}
+\DoxyCodeLine{00839\ \ \ \ \ \ \ \ \ src.push\_back(11);}
+\DoxyCodeLine{00840\ \ \ \ \ \ \ \ \ Vector<int>\ moved\ =\ \textcolor{keyword}{static\_cast<}Vector<int>\&\&\textcolor{keyword}{>}(src);}
+\DoxyCodeLine{00841\ }
+\DoxyCodeLine{00842\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})moved.size(),\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00843\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})src.size(),\ 0);}
+\DoxyCodeLine{00844\ \ \ \ \ \});}
+\DoxyCodeLine{00845\ }
+\DoxyCodeLine{00846\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_Assignment\_Copy\_And\_Move,\ TestType::COMMON)}
+\DoxyCodeLine{00847\ \ \ \ \ \{}
+\DoxyCodeLine{00848\ \ \ \ \ \ \ \ \ Vector<int>\ a;}
+\DoxyCodeLine{00849\ \ \ \ \ \ \ \ \ a.push\_back(1);}
+\DoxyCodeLine{00850\ \ \ \ \ \ \ \ \ a.push\_back(2);}
+\DoxyCodeLine{00851\ }
+\DoxyCodeLine{00852\ \ \ \ \ \ \ \ \ Vector<int>\ b;}
+\DoxyCodeLine{00853\ \ \ \ \ \ \ \ \ b\ =\ a;}
+\DoxyCodeLine{00854\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})b.size(),\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00855\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(b[1],\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00856\ }
+\DoxyCodeLine{00857\ \ \ \ \ \ \ \ \ Vector<int>\ c;}
+\DoxyCodeLine{00858\ \ \ \ \ \ \ \ \ c\ =\ \textcolor{keyword}{static\_cast<}Vector<int>\&\&\textcolor{keyword}{>}(b);\ \textcolor{comment}{//\ move\ assign}}
+\DoxyCodeLine{00859\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})c.size(),\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00860\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})b.size(),\ 0);}
+\DoxyCodeLine{00861\ \ \ \ \ \});}
+\DoxyCodeLine{00862\ }
+\DoxyCodeLine{00863\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_Erase\_ByValue\_RemovesAll,\ TestType::COMMON)}
+\DoxyCodeLine{00864\ \ \ \ \ \{}
+\DoxyCodeLine{00865\ \ \ \ \ \ \ \ \ Vector<int>\ v;}
+\DoxyCodeLine{00866\ \ \ \ \ \ \ \ \ v.push\_back(3);}
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ v.push\_back(4);}
+\DoxyCodeLine{00868\ \ \ \ \ \ \ \ \ v.push\_back(3);}
+\DoxyCodeLine{00869\ \ \ \ \ \ \ \ \ v.push\_back(5);}
+\DoxyCodeLine{00870\ \ \ \ \ \ \ \ \ v.erase(3);}
+\DoxyCodeLine{00871\ }
+\DoxyCodeLine{00872\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})v.size(),\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00873\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[0],\ 4)}
+\DoxyCodeLine{00874\ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[1],\ 5);}
+\DoxyCodeLine{00875\ \ \ \ \ \});}
+\DoxyCodeLine{00876\ }
+\DoxyCodeLine{00877\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_Erase\_ByIterator\_RemovesSingle,\ TestType::COMMON)}
+\DoxyCodeLine{00878\ \ \ \ \ \{}
+\DoxyCodeLine{00879\ \ \ \ \ \ \ \ \ Vector<int>\ v;}
+\DoxyCodeLine{00880\ \ \ \ \ \ \ \ \ v.push\_back(7);}
+\DoxyCodeLine{00881\ \ \ \ \ \ \ \ \ v.push\_back(8);}
+\DoxyCodeLine{00882\ \ \ \ \ \ \ \ \ v.push\_back(9);}
+\DoxyCodeLine{00883\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ v.begin()\ +\ 1;}
+\DoxyCodeLine{00884\ \ \ \ \ \ \ \ \ v.erase(it);}
+\DoxyCodeLine{00885\ }
+\DoxyCodeLine{00886\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}((\textcolor{keywordtype}{size\_t})v.size(),\ 2))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00887\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[0],\ 7)}
+\DoxyCodeLine{00888\ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(v[1],\ 9);}
+\DoxyCodeLine{00889\ \ \ \ \ \});}
+\DoxyCodeLine{00890\ }
+\DoxyCodeLine{00891\ \ \ \ \ \mbox{\hyperlink{test_8h_a1d6a580c00284460e38a0952657ce94a}{MAXOS\_CONDITIONAL\_TEST}}(Vector\_Find\_Present\_And\_Absent,\ TestType::COMMON)}
+\DoxyCodeLine{00892\ \ \ \ \ \{}
+\DoxyCodeLine{00893\ \ \ \ \ \ \ \ \ Vector<int>\ v;}
+\DoxyCodeLine{00894\ \ \ \ \ \ \ \ \ v.push\_back(21);}
+\DoxyCodeLine{00895\ \ \ \ \ \ \ \ \ v.push\_back(22);}
+\DoxyCodeLine{00896\ \ \ \ \ \ \ \ \ v.push\_back(23);}
+\DoxyCodeLine{00897\ }
+\DoxyCodeLine{00898\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ found22\ =\ (v.find(22)\ !=\ v.end());}
+\DoxyCodeLine{00899\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ found99\ =\ (v.find(99)\ !=\ v.end());}
+\DoxyCodeLine{00900\ }
+\DoxyCodeLine{00901\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(found22,\ \textcolor{keyword}{true}))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00902\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{test_8h_af3decfa862b4832e3857d74015139c05}{compare}}(found99,\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00903\ \ \ \ \ \});}
+\DoxyCodeLine{00904\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{test_8h_source_l00017}{MAXOS\+\_\+\+CONDITIONAL\+\_\+\+TEST}}.
+

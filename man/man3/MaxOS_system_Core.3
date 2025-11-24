@@ -1,4 +1,4 @@
-.TH "MaxOS::system::Core" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system::Core" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,7 +13,7 @@ MaxOS::system::Core \- Represents a \fBCPU\fP core in the system\&.
 
 .in +1c
 .ti -1c
-.RI "\fBCore\fP (hardwarecommunication::madt_processor_apic_t *\fBmadt_item\fP)"
+.RI "\fBCore\fP (\fBhardwarecommunication::madt_processor_apic_t\fP *\fBmadt_item\fP)"
 .br
 .RI "Constructs a new \fBCore\fP object from the MADT entry\&. "
 .ti -1c
@@ -41,7 +41,7 @@ MaxOS::system::Core \- Represents a \fBCPU\fP core in the system\&.
 .br
 .RI "The ID of this core\&. "
 .ti -1c
-.RI "tss_t \fBtss\fP = { }"
+.RI "\fBtss_t\fP \fBtss\fP = { }"
 .br
 .RI "The Task State Segment for this core\&. "
 .ti -1c
@@ -49,15 +49,15 @@ MaxOS::system::Core \- Represents a \fBCPU\fP core in the system\&.
 .br
 .RI "Whether this core is active\&. "
 .ti -1c
-.RI "\fBhardwarecommunication::LocalAPIC\fP * \fBlocal_apic\fP"
+.RI "\fBhardwarecommunication::LocalAPIC\fP * \fBlocal_apic\fP = nullptr"
 .br
 .RI "The local APIC for this core\&. "
 .ti -1c
-.RI "\fBGlobalDescriptorTable\fP * \fBgdt\fP"
+.RI "\fBGlobalDescriptorTable\fP * \fBgdt\fP = nullptr"
 .br
 .RI "The GDT for this core\&. "
 .ti -1c
-.RI "\fBprocesses::Scheduler\fP * \fBscheduler\fP"
+.RI "\fBprocesses::Scheduler\fP * \fBscheduler\fP = nullptr"
 .br
 .RI "The scheduler for this core\&. "
 .in -1c
@@ -77,7 +77,7 @@ MaxOS::system::Core \- Represents a \fBCPU\fP core in the system\&.
 
 .in +1c
 .ti -1c
-.RI "hardwarecommunication::madt_processor_apic_t * \fBm_madt\fP"
+.RI "\fBhardwarecommunication::madt_processor_apic_t\fP * \fBm_madt\fP"
 .br
 .RI "The MADT entry for this core\&. "
 .ti -1c
@@ -97,7 +97,7 @@ MaxOS::system::Core \- Represents a \fBCPU\fP core in the system\&.
 .br
 .RI "The ID of the apic for this core\&. "
 .ti -1c
-.RI "uint64_t \fBm_stack\fP"
+.RI "uint64_t \fBm_stack\fP = 0"
 .br
 .RI "The stack pointer for this core\&. "
 .in -1c
@@ -112,10 +112,10 @@ MaxOS::system::Core \- Represents a \fBCPU\fP core in the system\&.
 .PP 
 Represents a \fBCPU\fP core in the system\&. 
 .PP
-Definition at line \fB188\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB213\fP of file \fBcpu\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Core::Core (hardwarecommunication::madt_processor_apic_t * madt_item)\fC [explicit]\fP"
+.SS "Core::Core (\fBhardwarecommunication::madt_processor_apic_t\fP * madt_item)\fC [explicit]\fP"
 
 .PP
 Constructs a new \fBCore\fP object from the MADT entry\&. 
@@ -144,7 +144,7 @@ Definition at line \fB37\fP of file \fBcpu\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBLogger::DEBUG()\fP\&.
+References \fBMaxOS::Logger::DEBUG()\fP, \fBm_apic_id\fP, \fBm_can_enable\fP, \fBm_enabled\fP, and \fBm_madt\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP Core::init ()"
@@ -241,7 +241,7 @@ Definition at line \fB167\fP of file \fBcpu\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBASSERT\fP, \fBavx_enabled\fP, \fBMaxOS::system::CPU::check_cpu_feature()\fP, \fBLogger::DEBUG()\fP, and \fBxsave_enabled\fP\&.
+References \fBASSERT\fP, \fBavx_enabled\fP, \fBMaxOS::system::CPU::check_cpu_feature()\fP, \fBMaxOS::Logger::DEBUG()\fP, and \fBxsave_enabled\fP\&.
 .PP
 Referenced by \fBinit()\fP\&.
 .SS "\fBvoid\fP Core::init_tss ()\fC [protected]\fP"
@@ -291,7 +291,7 @@ Definition at line \fB110\fP of file \fBcpu\&.cpp\fP\&..PP
 140     uint8_t base_3 = (base >> 24) & 0xFF;
 141     uint32_t base_4 = (base >> 32) & 0xFFFFFFFF;
 142 
-143     uint16_t limit_low = (uint16_t)(sizeof(tss) \- 1);
+143     auto limit_low = (uint16_t)(sizeof(tss) \- 1);
 144 
 145     // Flags: 1 \- Type = 0x9, Descriptor Privilege Level = 0, Present = 1, 2 \- Available = 0, Granularity = 0
 146     uint8_t flags_1 = 0x89;
@@ -314,7 +314,7 @@ Definition at line \fB110\fP of file \fBcpu\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBbase\fP, \fBMaxOS::system::BOOT_STACK_SIZE\fP, \fBLogger::DEBUG()\fP, \fBgdt\fP, \fBm_stack\fP, and \fBtss\fP\&.
+References \fBMaxOS::system::BOOT_STACK_SIZE\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBgdt\fP, \fBm_stack\fP, and \fBtss\fP\&.
 .PP
 Referenced by \fBinit()\fP\&.
 .SS "\fBvoid\fP Core::wake_up (\fBCPU\fP * cpu)"
@@ -384,13 +384,13 @@ Definition at line \fB59\fP of file \fBcpu\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBactive\fP, \fBMaxOS::drivers::clock::Clock::active_clock()\fP, \fBMaxOS::system::BOOT_STACK_SIZE\fP, \fBcore_boot_info\fP, \fBLogger::DEBUG()\fP, \fBid\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBm_apic_id\fP, \fBm_bsp\fP, \fBm_stack\fP, and \fBLogger::WARNING()\fP\&.
+References \fBactive\fP, \fBMaxOS::drivers::clock::Clock::active_clock()\fP, \fBMaxOS::system::BOOT_STACK_SIZE\fP, \fBcore_boot_info\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBid\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBm_apic_id\fP, \fBm_bsp\fP, \fBm_stack\fP, and \fBMaxOS::Logger::WARNING()\fP\&.
 .SH "Friends And Related Symbol Documentation"
 .PP 
 .SS "friend class \fBCPU\fP\fC [friend]\fP"
 
 .PP
-Definition at line \fB190\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB215\fP of file \fBcpu\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "bool MaxOS::system::Core::active = false"
@@ -398,7 +398,7 @@ Definition at line \fB190\fP of file \fBcpu\&.h\fP\&.
 .PP
 Whether this core is active\&. 
 .PP
-Definition at line \fB217\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB242\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBinit()\fP, and \fBwake_up()\fP\&.
 .SS "bool MaxOS::system::Core::avx_enabled = false"
@@ -406,15 +406,15 @@ Referenced by \fBinit()\fP, and \fBwake_up()\fP\&.
 .PP
 Whether AVX is enabled\&. 
 .PP
-Definition at line \fB210\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB235\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBinit_sse()\fP\&.
-.SS "\fBGlobalDescriptorTable\fP* MaxOS::system::Core::gdt"
+.SS "\fBGlobalDescriptorTable\fP* MaxOS::system::Core::gdt = nullptr"
 
 .PP
 The GDT for this core\&. 
 .PP
-Definition at line \fB220\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB245\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBinit()\fP, and \fBinit_tss()\fP\&.
 .SS "uint8_t MaxOS::system::Core::id"
@@ -422,15 +422,15 @@ Referenced by \fBinit()\fP, and \fBinit_tss()\fP\&.
 .PP
 The ID of this core\&. 
 .PP
-Definition at line \fB215\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB240\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::GlobalScheduler::print_running_header()\fP, and \fBwake_up()\fP\&.
-.SS "\fBhardwarecommunication::LocalAPIC\fP* MaxOS::system::Core::local_apic"
+.SS "\fBhardwarecommunication::LocalAPIC\fP* MaxOS::system::Core::local_apic = nullptr"
 
 .PP
 The local APIC for this core\&. 
 .PP
-Definition at line \fB219\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB244\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBinit()\fP\&.
 .SS "uint8_t MaxOS::system::Core::m_apic_id\fC [protected]\fP"
@@ -438,15 +438,15 @@ Referenced by \fBinit()\fP\&.
 .PP
 The ID of the apic for this core\&. 
 .PP
-Definition at line \fB199\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB224\fP of file \fBcpu\&.h\fP\&.
 .PP
-Referenced by \fBwake_up()\fP\&.
+Referenced by \fBCore()\fP, and \fBwake_up()\fP\&.
 .SS "bool MaxOS::system::Core::m_bsp = false\fC [protected]\fP"
 
 .PP
 Whether this core is the bootstrap processor\&. 
 .PP
-Definition at line \fB197\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB222\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBwake_up()\fP\&.
 .SS "bool MaxOS::system::Core::m_can_enable = false\fC [protected]\fP"
@@ -454,43 +454,49 @@ Referenced by \fBwake_up()\fP\&.
 .PP
 Whether the core can be enabled\&. 
 .PP
-Definition at line \fB196\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB221\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBCore()\fP\&.
 .SS "bool MaxOS::system::Core::m_enabled = false\fC [protected]\fP"
 
 .PP
 Whether the core is enabled\&. 
 .PP
-Definition at line \fB195\fP of file \fBcpu\&.h\fP\&.
-.SS "hardwarecommunication::madt_processor_apic_t* MaxOS::system::Core::m_madt\fC [protected]\fP"
+Definition at line \fB220\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBCore()\fP\&.
+.SS "\fBhardwarecommunication::madt_processor_apic_t\fP* MaxOS::system::Core::m_madt\fC [protected]\fP"
 
 .PP
 The MADT entry for this core\&. 
 .PP
-Definition at line \fB193\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t MaxOS::system::Core::m_stack\fC [protected]\fP"
+Definition at line \fB218\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBCore()\fP\&.
+.SS "uint64_t MaxOS::system::Core::m_stack = 0\fC [protected]\fP"
 
 .PP
 The stack pointer for this core\&. 
 .PP
-Definition at line \fB200\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB225\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBinit_tss()\fP, and \fBwake_up()\fP\&.
-.SS "\fBprocesses::Scheduler\fP* MaxOS::system::Core::scheduler"
+.SS "\fBprocesses::Scheduler\fP* MaxOS::system::Core::scheduler = nullptr"
 
 .PP
 The scheduler for this core\&. 
 .PP
-Definition at line \fB221\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB246\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::GlobalScheduler::core_scheduler()\fP\&.
-.SS "tss_t MaxOS::system::Core::tss = { }"
+.SS "\fBtss_t\fP MaxOS::system::Core::tss = { }"
 
 .PP
 The Task State Segment for this core\&. 
 .PP
-Definition at line \fB216\fP of file \fBcpu\&.h\fP\&..PP
+Definition at line \fB241\fP of file \fBcpu\&.h\fP\&..PP
 .nf
-216 { };            
+241 { };            
 .fi
 
 .PP
@@ -500,7 +506,7 @@ Referenced by \fBinit_tss()\fP\&.
 .PP
 Whether XSAVE is enabled\&. 
 .PP
-Definition at line \fB209\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB234\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBinit_sse()\fP\&.
 

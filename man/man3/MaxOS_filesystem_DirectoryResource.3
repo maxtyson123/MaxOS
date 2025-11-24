@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::DirectoryResource" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::DirectoryResource" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,23 +15,23 @@ Inherits \fBMaxOS::processes::Resource\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBDirectoryResource\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP \fBflags\fP, processes::resource_type_t \fBtype\fP)"
+.RI "\fBDirectoryResource\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP flags, \fBprocesses::resource_type_t\fP \fBtype\fP)"
 .br
 .RI "Construct a new \fBDirectory\fP Resource object\&. "
 .ti -1c
-.RI "\fBint\fP \fBread\fP (\fBvoid\fP *buffer, \fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.RI "\fBint\fP \fBread\fP (\fBvoid\fP *buffer, \fBsize_t\fP size, \fBsize_t\fP flags) \fBfinal\fP"
 .br
-.RI "Read from a directory resource\&. "
+.RI "read from a directory resource "
 .ti -1c
-.RI "\fBint\fP \fBwrite\fP (\fBconst\fP \fBvoid\fP *buffer, \fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.RI "\fBint\fP \fBwrite\fP (\fBconst\fP \fBvoid\fP *buffer, \fBsize_t\fP size, \fBsize_t\fP flags) \fBfinal\fP"
 .br
-.RI "Write to a directory resource\&. "
+.RI "write to a directory resource "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::processes::Resource\fP
 .in +1c
 .ti -1c
-.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t \fBflags\fP, resource_type_t \fBtype\fP)"
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBresource_type_t\fP \fBtype\fP)"
 .br
 .RI "Constructs a new \fBResource\fP object\&. "
 .ti -1c
@@ -39,15 +39,15 @@ Public Member Functions inherited from \fBMaxOS::processes::Resource\fP
 .br
 .RI "Gets the name of this resource\&. "
 .ti -1c
-.RI "resource_type_t \fBtype\fP ()"
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
 .br
 .RI "Gets the type of this resource\&. "
 .ti -1c
-.RI "virtual void \fBopen\fP (size_t \fBflags\fP)"
+.RI "virtual void \fBopen\fP (size_t flags)"
 .br
 .RI "Opens the resource\&. "
 .ti -1c
-.RI "virtual void \fBclose\fP (size_t \fBflags\fP)"
+.RI "virtual void \fBclose\fP (size_t flags)"
 .br
 .RI "Closes the resource\&. "
 .in -1c
@@ -66,7 +66,7 @@ A wrapper for a \fBDirectory\fP which exposes \fBDirectory\fP operations as Reso
 Definition at line \fB49\fP of file \fBvfsresource\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "DirectoryResource::DirectoryResource (\fBconst\fP \fBstring\fP & name, \fBsize_t\fP flags, processes::resource_type_t type)"
+.SS "DirectoryResource::DirectoryResource (\fBconst\fP \fBstring\fP & name, \fBsize_t\fP flags, \fBprocesses::resource_type_t\fP type)"
 
 .PP
 Construct a new \fBDirectory\fP Resource object\&. 
@@ -96,7 +96,7 @@ Definition at line \fB134\fP of file \fBvfsresource\&.cpp\fP\&..PP
 .SS "\fBint\fP DirectoryResource::read (\fBvoid\fP * buffer, \fBsize_t\fP size, \fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Read from a directory resource\&. 
+read from a directory resource 
 .PP
 \fBParameters\fP
 .RS 4
@@ -144,11 +144,11 @@ Definition at line \fB230\fP of file \fBvfsresource\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBdirectory\fP, \fBflags\fP, and \fBsize\fP\&.
+References \fBdirectory\fP\&.
 .SS "\fBint\fP DirectoryResource::write (\fBconst\fP \fBvoid\fP * buffer, \fBsize_t\fP size, \fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Write to a directory resource\&. 
+write to a directory resource 
 .PP
 \fBParameters\fP
 .RS 4
@@ -229,7 +229,7 @@ Definition at line \fB262\fP of file \fBvfsresource\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::filesystem::Directory::create_file()\fP, \fBMaxOS::filesystem::Directory::create_subdirectory()\fP, \fBdirectory\fP, \fBflags\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, \fBMaxOS::processes::Resource::name()\fP, \fBMaxOS::filesystem::Path::parent_directory()\fP, \fBMaxOS::filesystem::Directory::remove_file()\fP, \fBMaxOS::filesystem::Directory::remove_subdirectory()\fP, and \fBsize\fP\&.
+References \fBMaxOS::filesystem::Directory::create_file()\fP, \fBMaxOS::filesystem::Directory::create_subdirectory()\fP, \fBdirectory\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, \fBMaxOS::processes::Resource::name()\fP, \fBMaxOS::filesystem::Path::parent_directory()\fP, \fBMaxOS::filesystem::Directory::remove_file()\fP, and \fBMaxOS::filesystem::Directory::remove_subdirectory()\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBDirectory\fP* MaxOS::filesystem::DirectoryResource::directory"

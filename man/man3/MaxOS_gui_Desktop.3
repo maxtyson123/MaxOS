@@ -1,4 +1,4 @@
-.TH "MaxOS::gui::Desktop" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::gui::Desktop" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -43,11 +43,11 @@ Inherits \fBMaxOS::gui::CompositeWidget\fP, and \fBMaxOS::drivers::peripherals::
 .br
 .RI "When the mouse button is released pass the event to the widget that the mouse is over\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBon_key_down\fP (\fBdrivers::peripherals::KeyCode\fP \fBkeyDownCode\fP, \fBdrivers::peripherals::KeyboardState\fP \fBkeyDownState\fP) \fBfinal\fP"
+.RI "\fBvoid\fP \fBon_key_down\fP (\fBdrivers::peripherals::KeyCode\fP \fBkey_down_code\fP, \fBconst\fP \fBdrivers::peripherals::KeyboardState\fP &\fBkey_down_state\fP) \fBfinal\fP"
 .br
 .RI "When a key is pressed pass the event to the widget that is currently focussed\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBon_key_up\fP (\fBdrivers::peripherals::KeyCode\fP \fBkeyUpCode\fP, \fBdrivers::peripherals::KeyboardState\fP \fBkeyUpState\fP) \fBfinal\fP"
+.RI "\fBvoid\fP \fBon_key_up\fP (\fBdrivers::peripherals::KeyCode\fP \fBkey_up_code\fP, \fBconst\fP \fBdrivers::peripherals::KeyboardState\fP &\fBkey_up_state\fP) \fBfinal\fP"
 .br
 .RI "When a key is pressed pass the event to the widget that is currently focussed\&. "
 .in -1c
@@ -63,15 +63,15 @@ Public Member Functions inherited from \fBMaxOS::gui::CompositeWidget\fP
 .br
 .RI "Draws a section of the widget and its m_children\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBon_mouse_enter_widget\fP (\fBuint32_t\fP \fBtoX\fP, \fBuint32_t\fP \fBtoY\fP) \fBoverride\fP"
+.RI "\fBvoid\fP \fBon_mouse_enter_widget\fP (\fBuint32_t\fP \fBto_x\fP, \fBuint32_t\fP \fBto_y\fP) \fBoverride\fP"
 .br
 .RI "Passes the event to the child that the mouse is over\&. (Event handling should be done by the derived class) "
 .ti -1c
-.RI "\fBvoid\fP \fBon_mouse_leave_widget\fP (\fBuint32_t\fP \fBfromX\fP, \fBuint32_t\fP \fBfromY\fP) \fBoverride\fP"
+.RI "\fBvoid\fP \fBon_mouse_leave_widget\fP (\fBuint32_t\fP \fBfrom_x\fP, \fBuint32_t\fP \fBfrom_y\fP) \fBoverride\fP"
 .br
 .RI "Passes the event to the child that the mouse is over\&. (Event handling should be done by the derived class) "
 .ti -1c
-.RI "\fBvoid\fP \fBon_mouse_move_widget\fP (\fBuint32_t\fP \fBfromX\fP, \fBuint32_t\fP \fBfromY\fP, \fBuint32_t\fP \fBtoX\fP, \fBuint32_t\fP \fBtoY\fP) \fBoverride\fP"
+.RI "\fBvoid\fP \fBon_mouse_move_widget\fP (\fBuint32_t\fP \fBfrom_x\fP, \fBuint32_t\fP \fBfrom_y\fP, \fBuint32_t\fP \fBto_x\fP, \fBuint32_t\fP \fBto_y\fP) \fBoverride\fP"
 .br
 .RI "Passes the event to the child that the mouse is over, also generates a leave/enter event for children\&. "
 .ti -1c
@@ -86,6 +86,10 @@ Public Member Functions inherited from \fBMaxOS::gui::CompositeWidget\fP
 
 Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .in +1c
+.ti -1c
+.RI "\fBWidget\fP ()"
+.br
+.RI "Construct a new \fBWidget\fP object\&. "
 .ti -1c
 .RI "\fBWidget\fP (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height)"
 .br
@@ -135,7 +139,7 @@ Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 Public Member Functions inherited from \fBMaxOS::drivers::peripherals::KeyboardEventHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBcommon::Event\fP< KeyboardEvents > * \fBon_event\fP (\fBcommon::Event\fP< KeyboardEvents > *) \fBoverride\fP"
+.RI "\fBcommon::Event\fP< \fBKeyboardEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBKeyboardEvents\fP > *) \fBoverride\fP"
 .br
 .RI "Handle the trigger of an event\&. "
 .in -1c
@@ -207,11 +211,11 @@ Protected Member Functions inherited from \fBMaxOS::gui::CompositeWidget\fP
 
 .in +1c
 .ti -1c
-.RI "int32_t \fBm_mouse_x\fP"
+.RI "uint32_t \fBm_mouse_x\fP"
 .br
 .RI "The horizontal position of the mouse cursor\&. "
 .ti -1c
-.RI "int32_t \fBm_mouse_y\fP"
+.RI "uint32_t \fBm_mouse_y\fP"
 .br
 .RI "The vertical position of the mouse cursor\&. "
 .ti -1c
@@ -284,10 +288,10 @@ It is not a good idea to hardcode the mouse into the desktop as a tablet or touc
 .PP
 
 .PP
-Definition at line \fB28\fP of file \fBdesktop\&.h\fP\&.
+Definition at line \fB27\fP of file \fBdesktop\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Desktop::Desktop (\fBcommon::GraphicsContext\fP * gc)"
+.SS "Desktop::Desktop (\fBcommon::GraphicsContext\fP * gc)\fC [explicit]\fP"
 
 .PP
 Creates a new desktop with the given graphics context\&. 
@@ -301,22 +305,21 @@ Creates a new desktop with the given graphics context\&.
 .PP
 Definition at line \fB25\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-26 : CompositeWidget(0, 0, gc\->width(), gc\->height()),
-27   MouseEventHandler(),
-28   m_graphics_context(gc),
-29   colour(Colour(0xA8, 0xA8, 0xA8))
-30 {
-31 
-32     // Set the mouse m_position to the center of the screen
-33     m_mouse_x = gc\->width() / 2;
-34     m_mouse_y = gc\->height() / 2;
-35 
-36     // Draw the initial mouse cursor
-37     invert_mouse_cursor();
-38 
-39     // Draw the desktop
-40     Widget::invalidate();
-41 }
+26         : CompositeWidget(0, 0, gc\->width(), gc\->height()),
+27         MouseEventHandler(),
+28         m_graphics_context(gc),
+29         colour(Colour(0xA8, 0xA8, 0xA8)) {
+30 
+31     // Set the mouse m_position to the center of the screen
+32     m_mouse_x = gc\->width() / 2;
+33     m_mouse_y = gc\->height() / 2;
+34 
+35     // Draw the initial mouse cursor
+36     invert_mouse_cursor();
+37 
+38     // Draw the desktop
+39     Widget::invalidate();
+40 }
 .fi
 
 .PP
@@ -337,24 +340,24 @@ Adds a child widget to the desktop\&.
 .PP
 Reimplemented from \fBMaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line \fB156\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB154\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-156                                             {
-157 
-158     // Check if the new widget is under the mouse
-159     bool underMouse = child_widget\->contains_coordinate(m_mouse_x, m_mouse_y);
-160 
-161     // If the mouse is over the widget then send a mouse leave event to the child widget as it is no longer under the mouse
-162     if (underMouse)
-163         CompositeWidget::on_mouse_leave_widget(m_mouse_x, m_mouse_y);
-164 
-165     // Add the widget to the desktop
-166     CompositeWidget::add_child(child_widget);
-167 
-168     // If the mouse is over the new widget then send a mouse enter event to the child widget
-169     if (underMouse)
-170         CompositeWidget::on_mouse_enter_widget(m_mouse_x, m_mouse_y);
-171 }
+154                                             {
+155 
+156     // Check if the new widget is under the mouse
+157     bool under_mouse = child_widget\->contains_coordinate(m_mouse_x, m_mouse_y);
+158 
+159     // If the mouse is over the widget then send a mouse leave event to the child widget as it is no longer under the mouse
+160     if(under_mouse)
+161         CompositeWidget::on_mouse_leave_widget(m_mouse_x, m_mouse_y);
+162 
+163     // Add the widget to the desktop
+164     CompositeWidget::add_child(child_widget);
+165 
+166     // If the mouse is over the new widget then send a mouse enter event to the child widget
+167     if(under_mouse)
+168         CompositeWidget::on_mouse_enter_widget(m_mouse_x, m_mouse_y);
+169 }
 .fi
 
 .PP
@@ -373,16 +376,16 @@ Brings the given widget to the front of the desktop\&.
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line \fB66\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB65\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-66                                                  {
-67 
-68     // Remove the widget from where ever it already is
-69     m_children\&.erase(front_widget);
-70 
-71     // Add it back in the front
-72     m_children\&.push_front(front_widget);
-73 }
+65                                                  {
+66 
+67     // Remove the widget from where ever it already is
+68     m_children\&.erase(front_widget);
+69 
+70     // Add it back in the front
+71     m_children\&.push_front(front_widget);
+72 }
 .fi
 
 .PP
@@ -403,19 +406,19 @@ Draws a certain area of the desktop\&.
 .PP
 Reimplemented from \fBMaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line \fB139\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB137\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-139                                                                                  {
-140 
-141     // Calculate the rectangle
-142     int32_t topCornerX = area\&.left;
-143     int32_t topCornerY = area\&.top;
-144     int32_t bottomCornerX = area\&.left + area\&.width;
-145     int32_t bottomCornerY = area\&.top + area\&.height;
-146 
-147     // Draw the background, a rectangle the size of the desktop of the given colour
-148     gc\->fill_rectangle(topCornerX, topCornerY, bottomCornerX, bottomCornerY, colour);
-149 }
+137                                                                                  {
+138 
+139     // Calculate the rectangle
+140     int32_t top_corner_x = area\&.left;
+141     int32_t top_corner_y = area\&.top;
+142     int32_t bottom_corner_x = area\&.left + area\&.width;
+143     int32_t bottom_corner_y = area\&.top + area\&.height;
+144 
+145     // Draw the background, a rectangle the size of the desktop of the given colour
+146     gc\->fill_rectangle(top_corner_x, top_corner_y, bottom_corner_x, bottom_corner_y, colour);
+147 }
 .fi
 
 .PP
@@ -436,41 +439,41 @@ Goes through the passed areas and invalidates the areas that are covered by the 
 .PP
 
 .PP
-Definition at line \fB98\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB97\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-99                                                                            {
-100 
-101     // Loop through the invalid rectangles
-102     for (Vector<Rectangle<int32_t>>::iterator invaild_rect = start; invaild_rect != stop; invaild_rect++) {
-103 
-104         // Check if the area intersects with the invalid rectangle
-105         if (!area\&.intersects(*invaild_rect))
-106             continue;
-107 
-108         // Get the parts of the area that are covered by the invalid rectangle
-109         Vector<Rectangle<int32_t>> coveredAreas = area\&.subtract(*invaild_rect);
-110 
-111         // Invalidate the covered areas
-112         for (auto& coveredArea: coveredAreas)
-113             internal_invalidate(coveredArea, invaild_rect + 1, stop);
-114 
-115         // The entire area will be invalidated by now
-116         return;
+97                                                                                                                                                    {
+98 
+99     // Loop through the invalid rectangles
+100     for(Vector<Rectangle<int32_t>>::iterator invaild_rect = start; invaild_rect != stop; invaild_rect++) {
+101 
+102         // Check if the area intersects with the invalid rectangle
+103         if(!area\&.intersects(*invaild_rect))
+104             continue;
+105 
+106         // Get the parts of the area that are covered by the invalid rectangle
+107         Vector<Rectangle<int32_t>> covered_areas = area\&.subtract(*invaild_rect);
+108 
+109         // Invalidate the covered areas
+110         for(auto& covered_area : covered_areas)
+111             internal_invalidate(covered_area, invaild_rect + 1, stop);
+112 
+113         // The entire area will be invalidated by now
+114         return;
+115 
+116     }
 117 
-118     }
-119 
-120     // Add the area to the invalid areas, store where it was added
-121     Vector<Rectangle<int32_t>>::iterator vectorPosition = m_invalid_areas\&.push_back(area);
-122 
-123     // If the m_position is the last item then the invalidation buffer is full
-124     if (vectorPosition == m_invalid_areas\&.end()) {
-125 
-126         // Invalidate the entire desktop
-127         m_invalid_areas\&.clear();
-128         Widget::invalidate();
-129 
-130     }
-131 }
+118     // Add the area to the invalid areas, store where it was added
+119     Vector<Rectangle<int32_t>>::iterator vector_position = m_invalid_areas\&.push_back(area);
+120 
+121     // If the m_position is the last item then the invalidation buffer is full
+122     if(vector_position == m_invalid_areas\&.end()) {
+123 
+124         // Invalidate the entire desktop
+125         m_invalid_areas\&.clear();
+126         Widget::invalidate();
+127 
+128     }
+129 }
 .fi
 
 .PP
@@ -491,14 +494,14 @@ Invalidate the given area of the desktop\&.
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line \fB207\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB205\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-207                                                  {
-208 
-209     // Invalidate the area
-210     internal_invalidate(area, m_invalid_areas\&.begin(), m_invalid_areas\&.end());
-211 
-212 }
+205                                                  {
+206 
+207     // Invalidate the area
+208     internal_invalidate(area, m_invalid_areas\&.begin(), m_invalid_areas\&.end());
+209 
+210 }
 .fi
 
 .PP
@@ -508,78 +511,78 @@ References \fBinternal_invalidate()\fP, and \fBm_invalid_areas\fP\&.
 .PP
 Draws the mouse cursor at the current mouse m_position by inverting the pixels (mouse is a plus sign) 
 .PP
-Definition at line \fB78\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB77\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-78                                   {
-79 
-80     // Draw the horizontal line
-81     for (int32_t x = m_mouse_x \- 3; x <= m_mouse_x + 3; ++x) {
-82         m_graphics_context\->invert_pixel(x, m_mouse_y);
-83     }
-84 
-85     // Draw the vertical line
-86     for (int32_t y = m_mouse_y \- 3; y <= m_mouse_y + 3; ++y) {
-87         m_graphics_context\->invert_pixel(m_mouse_x, y);
-88     }
-89 }
+77                                   {
+78 
+79     // Draw the horizontal line
+80     for(uint32_t x = m_mouse_x \- 3; x <= m_mouse_x + 3; ++x) {
+81         m_graphics_context\->invert_pixel(x, m_mouse_y);
+82     }
+83 
+84     // Draw the vertical line
+85     for(uint32_t y = m_mouse_y \- 3; y <= m_mouse_y + 3; ++y) {
+86         m_graphics_context\->invert_pixel(m_mouse_x, y);
+87     }
+88 }
 .fi
 
 .PP
 References \fBMaxOS::common::GraphicsContext::invert_pixel()\fP, \fBm_graphics_context\fP, \fBm_mouse_x\fP, and \fBm_mouse_y\fP\&.
 .PP
 Referenced by \fBDesktop()\fP, \fBon_mouse_move_event()\fP, and \fBon_time()\fP\&.
-.SS "\fBvoid\fP Desktop::on_key_down (\fBdrivers::peripherals::KeyCode\fP keyDownCode, \fBdrivers::peripherals::KeyboardState\fP keyDownState)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBvoid\fP Desktop::on_key_down (\fBdrivers::peripherals::KeyCode\fP key_down_code, \fBconst\fP \fBdrivers::peripherals::KeyboardState\fP & key_down_state)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 When a key is pressed pass the event to the widget that is currently focussed\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIkeyDownCode\fP The key that was pressed 
+\fIkey_down_code\fP The key that was pressed 
 .br
-\fIkeyDownState\fP The state of the keyboard 
+\fIkey_down_state\fP The state of the keyboard 
 .RE
 .PP
 
 .PP
 Reimplemented from \fBMaxOS::drivers::peripherals::KeyboardEventHandler\fP\&.
 .PP
-Definition at line \fB283\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB279\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-283                                                                          {
-284 
-285     // Pass the event to the widget that is  in focus
-286     if (m_focussed_widget != nullptr)
-287         m_focussed_widget\->on_key_down(keyDownCode, keyDownState);
-288 }
+279                                                                                     {
+280 
+281     // Pass the event to the widget that is  in focus
+282     if(m_focussed_widget != nullptr)
+283         m_focussed_widget\->on_key_down(key_down_code, key_down_state);
+284 }
 .fi
 
 .PP
 References \fBm_focussed_widget\fP, and \fBMaxOS::drivers::peripherals::KeyboardEventHandler::on_key_down()\fP\&.
-.SS "\fBvoid\fP Desktop::on_key_up (\fBdrivers::peripherals::KeyCode\fP keyUpCode, \fBdrivers::peripherals::KeyboardState\fP keyUpState)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBvoid\fP Desktop::on_key_up (\fBdrivers::peripherals::KeyCode\fP key_up_code, \fBconst\fP \fBdrivers::peripherals::KeyboardState\fP & key_up_state)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 When a key is pressed pass the event to the widget that is currently focussed\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIkeyUpCode\fP The key that was pressed 
+\fIkey_up_code\fP The key that was pressed 
 .br
-\fIkeyUpState\fP The state of the keyboard 
+\fIkey_up_state\fP The state of the keyboard 
 .RE
 .PP
 
 .PP
 Reimplemented from \fBMaxOS::drivers::peripherals::KeyboardEventHandler\fP\&.
 .PP
-Definition at line \fB295\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB291\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-295                                                                    {
-296 
-297     // Pass the event to the widget that is  in focus
-298     if (m_focussed_widget != nullptr)
-299         m_focussed_widget\->on_key_up(keyUpCode, keyUpState);
-300 }
+291                                                                               {
+292 
+293     // Pass the event to the widget that is  in focus
+294     if(m_focussed_widget != nullptr)
+295         m_focussed_widget\->on_key_up(key_up_code, key_up_state);
+296 }
 .fi
 
 .PP
@@ -598,13 +601,13 @@ When the mouse button is pressed pass the event to the widget that the mouse is 
 .PP
 Reimplemented from \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 .PP
-Definition at line \fB258\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB254\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-258                                                 {
-259 
-260     // The widget that handled the event becomes the widget being dragged
-261     m_dragged_widget = CompositeWidget::on_mouse_button_pressed(m_mouse_x, m_mouse_y, button);
-262 }
+254                                                 {
+255 
+256     // The widget that handled the event becomes the widget being dragged
+257     m_dragged_widget = CompositeWidget::on_mouse_button_pressed(m_mouse_x, m_mouse_y, button);
+258 }
 .fi
 
 .PP
@@ -625,39 +628,37 @@ When the mouse moves on the desktop update the m_position of the mouse and redra
 .PP
 Reimplemented from \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 .PP
-Definition at line \fB221\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB219\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-221                                                     {
-222 
-223     // Calculate the m_position of the mouse on the desktop
-224     Rectangle<int32_t> desktopPosition = position();
-225     int32_t newMouseX = m_mouse_x + x;
-226     int32_t newMouseY = m_mouse_y + y;
-227 
-228     // Restrain the mouse to the desktop
-229     if (newMouseX < 0) newMouseX = 0;
-230     if (newMouseY < 0) newMouseY = 0;
-231     if (newMouseX > desktopPosition\&.width) newMouseX = desktopPosition\&.width \- 1;
-232     if (newMouseY > desktopPosition\&.height) newMouseY = desktopPosition\&.height \- 1;
-233 
-234     // Remove the old cursor from the screen as it will be redrawn in the new m_position
-235     invert_mouse_cursor();
+219                                                     {
+220 
+221     // Calculate the m_position of the mouse on the desktop
+222     Rectangle<int32_t> desktop_position = position();
+223     uint32_t new_mouse_x = m_mouse_x + x;
+224     uint32_t new_mouse_y = m_mouse_y + y;
+225 
+226     // Restrain the mouse to the desktop
+227     if(new_mouse_x > desktop_position\&.width) new_mouse_x = desktop_position\&.width \- 1;
+228     if(new_mouse_y > desktop_position\&.height) new_mouse_y = desktop_position\&.height \- 1;
+229 
+230     // Remove the old cursor from the screen as it will be redrawn in the new m_position
+231     invert_mouse_cursor();
+232 
+233     // If a widget is being dragged then pass the event to it
+234     if(m_dragged_widget != nullptr)
+235         m_dragged_widget\->on_mouse_move_event(new_mouse_x \- m_mouse_x, new_mouse_y \- m_mouse_y);
 236 
-237     // If a widget is being dragged then pass the event to it
-238     if (m_dragged_widget != nullptr)
-239         m_dragged_widget\->on_mouse_move_event(newMouseX \- m_mouse_x, newMouseY \- m_mouse_y);
+237     // Handle the mouse moving event (pass it to the widget that the mouse is over)
+238     CompositeWidget::on_mouse_move_widget(m_mouse_x, m_mouse_y, new_mouse_x,
+239                                           new_mouse_y);
 240 
-241     // Handle the mouse moving event (pass it to the widget that the mouse is over)
-242     CompositeWidget::on_mouse_move_widget(m_mouse_x, m_mouse_y, newMouseX,
-243                                           newMouseY);
+241     // Update the mouse m_position
+242     m_mouse_x = new_mouse_x;
+243     m_mouse_y = new_mouse_y;
 244 
-245     // Update the mouse m_position
-246     m_mouse_x = newMouseX;
-247     m_mouse_y = newMouseY;
-248 
-249     // Draw the new cursor
-250     invert_mouse_cursor();
-251 }
+245     // Draw the new cursor
+246     invert_mouse_cursor();
+247 }
 .fi
 
 .PP
@@ -676,16 +677,16 @@ When the mouse button is released pass the event to the widget that the mouse is
 .PP
 Reimplemented from \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 .PP
-Definition at line \fB269\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB265\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-269                                               {
-270 
-271     // Pass the event to the widget
-272     CompositeWidget::on_mouse_button_released(m_mouse_x, m_mouse_y, button);
-273 
-274     // Dragging has stopped
-275     m_dragged_widget = nullptr;
-276 }
+265                                               {
+266 
+267     // Pass the event to the widget
+268     CompositeWidget::on_mouse_button_released(m_mouse_x, m_mouse_y, button);
+269 
+270     // Dragging has stopped
+271     m_dragged_widget = nullptr;
+272 }
 .fi
 
 .PP
@@ -702,31 +703,31 @@ Redraws the desktop when a time event occurs\&.
 .PP
 
 .PP
-Definition at line \fB178\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB176\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-178                                        {
-179 
-180     // Check if anything is invalid and needs to be redrawn
-181     if (m_invalid_areas\&.empty())
-182         return;
-183 
-184     // Erase the mouse cursor
-185     invert_mouse_cursor();
-186 
-187     // Loop through the invalid areas
-188     while (!m_invalid_areas\&.empty()) {
-189 
-190         // Redraw the m_first_memory_chunk area
-191         Rectangle<int32_t> invalidArea = *(m_invalid_areas\&.begin());
-192         m_invalid_areas\&.pop_front();
-193         draw(m_graphics_context, invalidArea);
+176                                        {
+177 
+178     // Check if anything is invalid and needs to be redrawn
+179     if(m_invalid_areas\&.empty())
+180         return;
+181 
+182     // Erase the mouse cursor
+183     invert_mouse_cursor();
+184 
+185     // Loop through the invalid areas
+186     while(!m_invalid_areas\&.empty()) {
+187 
+188         // Redraw the m_first_memory_chunk area
+189         Rectangle<int32_t> invalid_area = *(m_invalid_areas\&.begin());
+190         m_invalid_areas\&.pop_front();
+191         draw(m_graphics_context, invalid_area);
+192 
+193     }
 194 
-195     }
-196 
-197     // Can now draw the mouse cursor
-198     invert_mouse_cursor();
-199 
-200 }
+195     // Can now draw the mouse cursor
+196     invert_mouse_cursor();
+197 
+198 }
 .fi
 
 .PP
@@ -745,18 +746,18 @@ Updates the currently focussed widget to be the given widget\&.
 .PP
 Reimplemented from \fBMaxOS::gui::Widget\fP\&.
 .PP
-Definition at line \fB50\fP of file \fBdesktop\&.cpp\fP\&..PP
+Definition at line \fB49\fP of file \fBdesktop\&.cpp\fP\&..PP
 .nf
-50                                       {
-51 
-52     // If there is a widget in focus then send a focus lost event to it
-53     if (this\->m_focussed_widget != nullptr)
-54         this\->m_focussed_widget\->on_focus_lost();
-55 
-56     // Focus the new widget and send a focus event to it
-57     this\->m_focussed_widget = widget;
-58     this\->m_focussed_widget\->on_focus();
-59 }
+49                                       {
+50 
+51     // If there is a widget in focus then send a focus lost event to it
+52     if(this\->m_focussed_widget != nullptr)
+53         this\->m_focussed_widget\->on_focus_lost();
+54 
+55     // Focus the new widget and send a focus event to it
+56     this\->m_focussed_widget = widget;
+57     this\->m_focussed_widget\->on_focus();
+58 }
 .fi
 
 .PP
@@ -775,7 +776,7 @@ The background colour of the desktop (\&.
 .PP
 
 .PP
-Definition at line \fB48\fP of file \fBdesktop\&.h\fP\&.
+Definition at line \fB47\fP of file \fBdesktop\&.h\fP\&.
 .PP
 Referenced by \fBdraw_self()\fP\&.
 .SS "\fBdrivers::peripherals::MouseEventHandler\fP* MaxOS::gui::Desktop::m_dragged_widget { nullptr }\fC [protected]\fP"
@@ -783,9 +784,9 @@ Referenced by \fBdraw_self()\fP\&.
 .PP
 The widget that the mouse is currently dragging\&. 
 .PP
-Definition at line \fB37\fP of file \fBdesktop\&.h\fP\&..PP
+Definition at line \fB36\fP of file \fBdesktop\&.h\fP\&..PP
 .nf
-37 { nullptr };          
+36 { nullptr };          
 .fi
 
 .PP
@@ -795,9 +796,9 @@ Referenced by \fBon_mouse_down_event()\fP, \fBon_mouse_move_event()\fP, and \fBo
 .PP
 The widget that currently is receiving keyboard input and is at the front\&. 
 .PP
-Definition at line \fB36\fP of file \fBdesktop\&.h\fP\&..PP
+Definition at line \fB35\fP of file \fBdesktop\&.h\fP\&..PP
 .nf
-36 { nullptr };                                          
+35 { nullptr };                                          
 .fi
 
 .PP
@@ -807,7 +808,7 @@ Referenced by \fBon_key_down()\fP, \fBon_key_up()\fP, and \fBset_focus()\fP\&.
 .PP
 Where to draw the desktop to\&. 
 .PP
-Definition at line \fB34\fP of file \fBdesktop\&.h\fP\&.
+Definition at line \fB33\fP of file \fBdesktop\&.h\fP\&.
 .PP
 Referenced by \fBinvert_mouse_cursor()\fP, and \fBon_time()\fP\&.
 .SS "\fBcommon::Vector\fP<\fBcommon::Rectangle\fP<int32_t> > MaxOS::gui::Desktop::m_invalid_areas\fC [protected]\fP"
@@ -815,23 +816,23 @@ Referenced by \fBinvert_mouse_cursor()\fP, and \fBon_time()\fP\&.
 .PP
 The areas of the desktop that need to be redrawn\&. 
 .PP
-Definition at line \fB43\fP of file \fBdesktop\&.h\fP\&.
+Definition at line \fB42\fP of file \fBdesktop\&.h\fP\&.
 .PP
 Referenced by \fBinternal_invalidate()\fP, \fBinvalidate()\fP, and \fBon_time()\fP\&.
-.SS "int32_t MaxOS::gui::Desktop::m_mouse_x\fC [protected]\fP"
+.SS "uint32_t MaxOS::gui::Desktop::m_mouse_x\fC [protected]\fP"
 
 .PP
 The horizontal position of the mouse cursor\&. 
 .PP
-Definition at line \fB31\fP of file \fBdesktop\&.h\fP\&.
+Definition at line \fB30\fP of file \fBdesktop\&.h\fP\&.
 .PP
 Referenced by \fBadd_child()\fP, \fBDesktop()\fP, \fBinvert_mouse_cursor()\fP, \fBon_mouse_down_event()\fP, \fBon_mouse_move_event()\fP, and \fBon_mouse_up_event()\fP\&.
-.SS "int32_t MaxOS::gui::Desktop::m_mouse_y\fC [protected]\fP"
+.SS "uint32_t MaxOS::gui::Desktop::m_mouse_y\fC [protected]\fP"
 
 .PP
 The vertical position of the mouse cursor\&. 
 .PP
-Definition at line \fB32\fP of file \fBdesktop\&.h\fP\&.
+Definition at line \fB31\fP of file \fBdesktop\&.h\fP\&.
 .PP
 Referenced by \fBadd_child()\fP, \fBDesktop()\fP, \fBinvert_mouse_cursor()\fP, \fBon_mouse_down_event()\fP, \fBon_mouse_move_event()\fP, and \fBon_mouse_up_event()\fP\&.
 

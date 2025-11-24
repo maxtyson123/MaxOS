@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::disk::Disk" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::disk::Disk" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,19 +19,19 @@ Inherited by \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment\fP\&.
 .ti -1c
 .RI "\fBvoid\fP \fBread\fP (\fBuint32_t\fP \fBsector\fP, \fBcommon::buffer_t\fP *\fBdata_buffer\fP)"
 .br
-.RI "Read data from the disk into a buffer (max capacity 512 bytes) "
+.RI "read data from the disk into a buffer (max capacity 512 bytes) "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBread\fP (\fBuint32_t\fP \fBsector\fP, \fBcommon::buffer_t\fP *\fBdata_buffer\fP, \fBsize_t\fP \fBamount\fP)"
 .br
-.RI "Read data from the disk\&. "
+.RI "read data from the disk "
 .ti -1c
-.RI "\fBvoid\fP \fBwrite\fP (\fBuint32_t\fP \fBsector\fP, \fBconst\fP \fBcommon::buffer_t\fP *\fBdata\fP)"
+.RI "\fBvoid\fP \fBwrite\fP (\fBuint32_t\fP \fBsector\fP, \fBcommon::buffer_t\fP *data)"
 .br
-.RI "Write data to the disk from a buffer (max capacity 512 bytes) "
+.RI "write data to the disk from a buffer (max capacity 512 bytes) "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBwrite\fP (\fBuint32_t\fP \fBsector\fP, \fBconst\fP \fBcommon::buffer_t\fP *\fBdata\fP, \fBsize_t\fP \fBcount\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBwrite\fP (\fBuint32_t\fP \fBsector\fP, \fBcommon::buffer_t\fP *data, \fBsize_t\fP \fBcount\fP)"
 .br
-.RI "Write data to the disk\&. "
+.RI "write data to the disk "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBflush\fP ()"
 .br
@@ -55,7 +55,7 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
-.RI "deactivate the driver "
+.RI "Deactivate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
 .br
@@ -69,7 +69,7 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .PP 
 Generic \fBDisk\fP, handles the reading and writing of data to the hard drive\&. 
 .PP
-Definition at line \fB28\fP of file \fBdisk\&.h\fP\&.
+Definition at line \fB24\fP of file \fBdisk\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP Disk::activate ()\fC [override]\fP, \fC [virtual]\fP"
@@ -125,7 +125,7 @@ Definition at line \fB72\fP of file \fBdisk\&.cpp\fP\&..PP
 .SS "\fBvoid\fP Disk::read (\fBuint32_t\fP sector, \fBcommon::buffer_t\fP * data_buffer)"
 
 .PP
-Read data from the disk into a buffer (max capacity 512 bytes) 
+read data from the disk into a buffer (max capacity 512 bytes) 
 .PP
 \fBParameters\fP
 .RS 4
@@ -149,11 +149,11 @@ Definition at line \fB26\fP of file \fBdisk\&.cpp\fP\&..PP
 .PP
 References \fBread()\fP\&.
 .PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Volume::Ext2Volume()\fP, \fBMaxOS::filesystem::format::Fat32Volume::Fat32Volume()\fP, \fBMaxOS::filesystem::partition::MSDOSPartition::mount_partitions()\fP, \fBMaxOS::filesystem::format::Fat32Volume::next_cluster()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBread()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_block()\fP, \fBMaxOS::filesystem::format::Fat32Volume::set_next_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP, and \fBMaxOS::filesystem::format::Fat32File::write()\fP\&.
+Referenced by \fBMaxOS::filesystem::format::Fat32Volume::Fat32Volume()\fP, \fBMaxOS::filesystem::partition::MSDOSPartition::mount_partitions()\fP, \fBMaxOS::filesystem::format::Fat32Volume::next_cluster()\fP, \fBMaxOS::filesystem::format::Fat32File::read()\fP, \fBread()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_block()\fP, \fBMaxOS::filesystem::format::Fat32Volume::set_next_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP, and \fBMaxOS::filesystem::format::Fat32File::write()\fP\&.
 .SS "\fBvoid\fP Disk::read (\fBuint32_t\fP sector, \fBcommon::buffer_t\fP * data_buffer, \fBsize_t\fP amount)\fC [virtual]\fP"
 
 .PP
-Read data from the disk\&. 
+read data from the disk 
 .PP
 \fBParameters\fP
 .RS 4
@@ -196,10 +196,10 @@ Definition at line \fB96\fP of file \fBdisk\&.cpp\fP\&..PP
 98 }
 .fi
 
-.SS "\fBvoid\fP Disk::write (\fBuint32_t\fP sector, \fBconst\fP \fBcommon::buffer_t\fP * data)"
+.SS "\fBvoid\fP Disk::write (\fBuint32_t\fP sector, \fBcommon::buffer_t\fP * data)"
 
 .PP
-Write data to the disk from a buffer (max capacity 512 bytes) 
+write data to the disk from a buffer (max capacity 512 bytes) 
 .PP
 \fBParameters\fP
 .RS 4
@@ -212,7 +212,7 @@ Write data to the disk from a buffer (max capacity 512 bytes)
 .PP
 Definition at line \fB50\fP of file \fBdisk\&.cpp\fP\&..PP
 .nf
-50                                                             {
+50                                                       {
 51 
 52     size_t amount = (data\->capacity() > 512) ? 512 : data\->capacity();
 53     write(sector, data, amount);
@@ -221,13 +221,13 @@ Definition at line \fB50\fP of file \fBdisk\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBdata\fP, and \fBwrite\fP\&.
+References \fBMaxOS::common::Buffer::capacity()\fP, and \fBwrite()\fP\&.
 .PP
-Referenced by \fBMaxOS::filesystem::format::Fat32Volume::allocate_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Volume::free_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Volume::set_next_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP, \fBMaxOS::filesystem::format::Fat32File::write()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_block()\fP\&.
-.SS "\fBvoid\fP Disk::write (\fBuint32_t\fP sector, \fBconst\fP \fBcommon::buffer_t\fP * data, \fBsize_t\fP count)\fC [virtual]\fP"
+Referenced by \fBMaxOS::filesystem::format::Fat32Volume::allocate_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Volume::free_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Volume::set_next_cluster()\fP, \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP, \fBMaxOS::filesystem::format::Fat32File::write()\fP, \fBwrite()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_block()\fP\&.
+.SS "\fBvoid\fP Disk::write (\fBuint32_t\fP sector, \fBcommon::buffer_t\fP * data, \fBsize_t\fP count)\fC [virtual]\fP"
 
 .PP
-Write data to the disk\&. 
+write data to the disk 
 .PP
 \fBParameters\fP
 .RS 4
@@ -244,7 +244,7 @@ Reimplemented in \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment\fP\&.
 .PP
 Definition at line \fB64\fP of file \fBdisk\&.cpp\fP\&..PP
 .nf
-64                                                                     {
+64                                                               {
 65 }
 .fi
 

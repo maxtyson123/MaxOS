@@ -2,6 +2,7 @@ var gdt_8h =
 [
     [ "MaxOS::system::GDTRegister", "structMaxOS_1_1system_1_1GDTRegister.html", "structMaxOS_1_1system_1_1GDTRegister" ],
     [ "MaxOS::system::GlobalDescriptorTable", "classMaxOS_1_1system_1_1GlobalDescriptorTable.html", "classMaxOS_1_1system_1_1GlobalDescriptorTable" ],
+    [ "gdtr_t", "gdt_8h.html#a922074ad0af798ffe772bf545d8d8553", null ],
     [ "DescriptorFlags", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0", [
       [ "Write", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0a1129c0e4d43f2d121652a7302712cff6", null ],
       [ "Execute", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0a40cd014b7b6251e3a22e6a45a73a64e1", null ],
@@ -10,7 +11,5 @@ var gdt_8h =
       [ "ConformFromLower", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0a3983b708674e3b09e525f99759cd9566", null ],
       [ "Present", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0add058df87f5c88e3285a28ad7406a3c6", null ],
       [ "LongMode", "gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0ab389522a2e7fd91e3edf722ab20fe9ec", null ]
-    ] ],
-    [ "address", "gdt_8h.html#ab6b52376c1b9d81e6ea6f95a1225f832", null ],
-    [ "size", "gdt_8h.html#aaba88b24a21a6c70c895c0d55f4a69a0", null ]
+    ] ]
 ];

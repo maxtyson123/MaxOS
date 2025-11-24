@@ -1,11 +1,11 @@
 var classMaxOS_1_1net_1_1UserDatagramProtocolHandler =
 [
-    [ "UserDatagramProtocolHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#aeb2e22e440fe7f48d9f835816cf912f0", null ],
-    [ "Connect", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#a4f48a0a3da3f93bbaf1de49468b1c316", null ],
-    [ "Disconnect", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#a2a3242e7be4cd26d72345c72f78bb2a1", null ],
-    [ "handleInternetProtocolPayload", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#aced74592dbf5f50fa9fa3f6ea75cd842", null ],
-    [ "Listen", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#a3786b02ca34e6d312115d00f7fa413b2", null ],
-    [ "Send", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#ace1fd5c811364a976e9e6c3801e3a96d", null ],
+    [ "UserDatagramProtocolHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#a2409877c189863ac8cbfa20fa22caca1", null ],
+    [ "connect", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#a4818e0611b6b82c63bad642ed6411190", null ],
+    [ "disconnect", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#a4335f3e7a955d85d8014fa856c8b236d", null ],
+    [ "handle_internet_protocol_payload", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#ab0ad7b1cf1620915edbadd42b1af6639", null ],
+    [ "listen", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#a779f0da0f3211d493fb5caa14063d84e", null ],
+    [ "send", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#ac90579f126c715f3ca88c818add4ae0f", null ],
     [ "errorMessages", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#ac81cf9554a9fa32b9435db1dd4c30c4d", null ],
     [ "sockets", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#a53f36b366144c23f079c8a01eeedf1dd", null ]
 ];

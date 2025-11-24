@@ -1,4 +1,4 @@
-.TH "MaxOS::common::InputStreamProcessor< Type, ProcessorType >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::InputStreamProcessor< Type, ProcessorType >" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -109,7 +109,7 @@ class MaxOS::common::InputStreamProcessor< Type, ProcessorType >"Converts one st
 .PP
 
 .PP
-Definition at line \fB52\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB49\fP of file \fBinputStream\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP , \fBclass\fP \fBProcessorType\fP > \fBMaxOS::common::InputStreamProcessor\fP< \fBType\fP, \fBProcessorType\fP >::InputStreamProcessor ()"
@@ -126,16 +126,15 @@ Creates a new \fBInputStreamProcessor\fP\&.
 .PP
 
 .PP
-Definition at line \fB204\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB197\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-205         : InputStreamEventHandler<Type>(),
-206           GenericInputStream<ProcessorType>()
-207         {
-208 
-209         }
+198             : InputStreamEventHandler<Type>(),
+199             GenericInputStream<ProcessorType>() {
+200 
+201     }
 .fi
 
-.SS "template<\fBclass\fP \fBType\fP , \fBclass\fP \fBProcessorType\fP > \fBMaxOS::common::InputStreamProcessor\fP< \fBType\fP, \fBProcessorType\fP >::InputStreamProcessor (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > * generic_stream_event_handler)"
+.SS "template<\fBclass\fP \fBType\fP , \fBclass\fP \fBProcessorType\fP > \fBMaxOS::common::InputStreamProcessor\fP< \fBType\fP, \fBProcessorType\fP >::InputStreamProcessor (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > * generic_stream_event_handler)\fC [explicit]\fP"
 
 .PP
 Creates a new \fBInputStreamProcessor\fP\&. 
@@ -154,13 +153,12 @@ Creates a new \fBInputStreamProcessor\fP\&.
 .PP
 
 .PP
-Definition at line \fB218\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB210\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-219         : InputStreamEventHandler<Type>(),
-220           GenericInputStream<ProcessorType>(generic_stream_event_handler)
-221         {
-222 
-223         }
+211             : InputStreamEventHandler<Type>(),
+212             GenericInputStream<ProcessorType>(generic_stream_event_handler) {
+213 
+214     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP , \fBclass\fP \fBProcessorType\fP > \fBMaxOS::common::InputStreamProcessor\fP< \fBType\fP, \fBProcessorType\fP >::~\fBInputStreamProcessor\fP ()\fC [default]\fP"
@@ -199,18 +197,18 @@ Called when a stream has finished\&. Passes the event on to the handlers and the
 .PP
 Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
 .PP
-Definition at line \fB240\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB231\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-240                                                                                                                                                    {
-241 
-242             // Pass the end of stream event on to the handlers
-243             for(auto& event_handler : this \-> m_input_stream_event_handlers)
-244               event_handler \-> on_end_of_stream(this);
-245 
-246             // Remove the stream
-247             InputStreamEventHandler<Type>::on_end_of_stream(stream);
-248 
-249         }
+231                                                                                                                                                {
+232 
+233         // Pass the end of stream event on to the handlers
+234         for(auto& event_handler : this\->m_input_stream_event_handlers)
+235             event_handler\->on_end_of_stream(this);
+236 
+237         // Remove the stream
+238         InputStreamEventHandler<Type>::on_end_of_stream(stream);
+239 
+240     }
 .fi
 
 .PP

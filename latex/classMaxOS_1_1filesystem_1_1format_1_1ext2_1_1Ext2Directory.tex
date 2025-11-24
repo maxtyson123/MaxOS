@@ -18,10 +18,10 @@ Inheritance diagram for Max\+OS\+::filesystem\+::format\+::ext2\+::Ext2\+Directo
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_aa7aa10cb91fef1d1430b3967133608f4}{Ext2\+Directory}} (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume}{Ext2\+Volume}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}}, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\+\_\+t}} \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}}, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{const}} \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}})
+\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_aa7aa10cb91fef1d1430b3967133608f4}{Ext2\+Directory}} (\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume}{Ext2\+Volume}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}}, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\+\_\+t}} inode, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{const}} \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}})
 \begin{DoxyCompactList}\small\item\em Construct a new Ext2 \doxylink{classMaxOS_1_1filesystem_1_1Directory}{Directory} object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a43d772d06ec8744ceb92cb4a31d57031}{read\+\_\+from\+\_\+disk}} () \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{final}}
-\begin{DoxyCompactList}\small\item\em Read the directory from the inode on the disk. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em read the directory from the inode on the disk \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File}{File}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a455b2c959db47dc1f36ddf7b6ad63221}{create\+\_\+file}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{const}} \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}}) \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{final}}
 \begin{DoxyCompactList}\small\item\em Create a new file in the directory. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a7dd41846b1429c109fe72564a445dc33}{remove\+\_\+file}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{const}} \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}}) \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{final}}
@@ -37,6 +37,8 @@ Inheritance diagram for Max\+OS\+::filesystem\+::format\+::ext2\+::Ext2\+Directo
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Max\+OS\+::filesystem\+::\+Directory}}}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual}} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_affbde8714685c61601421097d621341d}{\texorpdfstring{$\sim$}{\string~}\+Directory}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{classMaxOS_1_1filesystem_1_1Directory}{Directory}, frees all files and subdirectories. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Vector}{common\+::\+Vector}}$<$ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1File}{File}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a8e49f150798d8cdf054f8820921a00c2}{files}} ()
 \begin{DoxyCompactList}\small\item\em Get the files in the directory. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Vector}{common\+::\+Vector}}$<$ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a667ad1f997f7d82e0e9a1a530f580830}{subdirectories}} ()
@@ -68,7 +70,7 @@ Inheritance diagram for Max\+OS\+::filesystem\+::format\+::ext2\+::Ext2\+Directo
 \doxysubsection{Detailed Description}
 Handles the directory operations on the ext2 filesystem. 
 
-Definition at line \mbox{\hyperlink{ext2_8h_source_l00406}{406}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00420}{420}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 
 
@@ -94,20 +96,19 @@ Construct a new Ext2 \doxylink{classMaxOS_1_1filesystem_1_1Directory}{Directory}
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{ext2_8cpp_source_l00853}{853}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
+Definition at line \mbox{\hyperlink{ext2_8cpp_source_l00854}{854}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00854\ :\ m\_volume(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}}),}
-\DoxyCodeLine{00855\ \ \ m\_inode(m\_volume,\ \mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}})}
-\DoxyCodeLine{00856\ \{}
+\DoxyCodeLine{00855\ \ \ \ \ \ \ \ \ :\ m\_volume(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{volume}}),}
+\DoxyCodeLine{00856\ \ \ \ \ \ \ \ \ m\_inode(m\_volume,\ inode)\ \{}
 \DoxyCodeLine{00857\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a127c692574d856ebdfdd8badafef2eac}{m\_name}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}};}
 \DoxyCodeLine{00858\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{filesystem_8h_source_l00066}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+name}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00211}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
+References \mbox{\hyperlink{filesystem_8h_source_l00062}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+name}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00214}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
 
 
 
@@ -136,27 +137,27 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_af1f22
 
 
 
-Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01083}{1083}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
+Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01090}{1090}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{01083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{01084\ }
-\DoxyCodeLine{01085\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ file\ already\ exists}}
-\DoxyCodeLine{01086\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&file:\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}})}
-\DoxyCodeLine{01087\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{if}}\ (file-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}}()\ ==\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}})}
-\DoxyCodeLine{01088\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{return}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}};}
-\DoxyCodeLine{01089\ }
-\DoxyCodeLine{01090\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ file}}
-\DoxyCodeLine{01091\ \ \ \ \ \textcolor{keyword}{auto}\ file\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File}{Ext2File}}(m\_volume,\ create\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ 0,\ \textcolor{keyword}{false}).\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}});}
-\DoxyCodeLine{01092\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}}.push\_back(file);}
-\DoxyCodeLine{01093\ \ \ \ \ \textcolor{keywordflow}{return}\ file;}
-\DoxyCodeLine{01094\ \}}
+\DoxyCodeLine{01090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01091\ }
+\DoxyCodeLine{01092\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ file\ already\ exists}}
+\DoxyCodeLine{01093\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\&\ file\ :\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}})}
+\DoxyCodeLine{01094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{if}}(file-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}}()\ ==\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}})}
+\DoxyCodeLine{01095\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{return}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}};}
+\DoxyCodeLine{01096\ }
+\DoxyCodeLine{01097\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ file}}
+\DoxyCodeLine{01098\ \ \ \ \ \textcolor{keyword}{auto}\ file\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2File}{Ext2File}}(m\_volume,\ create\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ 0,\ \textcolor{keyword}{false}).inode,\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}});}
+\DoxyCodeLine{01099\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}}.push\_back(file);}
+\DoxyCodeLine{01100\ \ \ \ \ \textcolor{keywordflow}{return}\ file;}
+\DoxyCodeLine{01101\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{ext2_8h_source_l00000}{inode}}, \mbox{\hyperlink{filesystem_8h_source_l00063}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+files}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00211}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
+References \mbox{\hyperlink{filesystem_8h_source_l00059}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+files}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00214}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
 
 \Hypertarget{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a11d76223f5a89e099a1461c3e3600d7d}\label{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a11d76223f5a89e099a1461c3e3600d7d} 
 \index{MaxOS::filesystem::format::ext2::Ext2Directory@{MaxOS::filesystem::format::ext2::Ext2Directory}!create\_subdirectory@{create\_subdirectory}}
@@ -182,32 +183,32 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a1eeb9
 
 
 
-Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01121}{1121}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
+Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01128}{1128}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{01121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{01122\ }
-\DoxyCodeLine{01123\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ directory\ already\ exists}}
-\DoxyCodeLine{01124\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}:\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}})}
-\DoxyCodeLine{01125\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{if}}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}}()\ ==\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}})}
-\DoxyCodeLine{01126\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{return}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}};}
-\DoxyCodeLine{01127\ }
-\DoxyCodeLine{01128\ \ \ \ \ \textcolor{comment}{//\ Store\ the\ directory}}
-\DoxyCodeLine{01129\ \ \ \ \ \textcolor{keyword}{auto}\ directory\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory}{Ext2Directory}}(m\_volume,\ create\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ 0,\ \textcolor{keyword}{true}).\mbox{\hyperlink{ext2_8h_a84dc3916ea975b79482a6d01f78c3d9f}{inode}},\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}});}
-\DoxyCodeLine{01130\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}}.push\_back(directory);}
-\DoxyCodeLine{01131\ }
-\DoxyCodeLine{01132\ \ \ \ \ \textcolor{comment}{//\ Create\ self\ \&\ parent\ references}}
-\DoxyCodeLine{01133\ \ \ \ \ directory-\/>create\_entry(\textcolor{stringliteral}{"{}."{}},\ directory-\/>m\_inode.inode\_number,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{01134\ \ \ \ \ directory-\/>create\_entry(\textcolor{stringliteral}{"{}.."{}},\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a1243bf317b75eccc9fae0c42c2a472fa}{inode\_number}},\ \textcolor{keyword}{true});}
-\DoxyCodeLine{01135\ }
-\DoxyCodeLine{01136\ \ \ \ \ \textcolor{keywordflow}{return}\ directory;}
-\DoxyCodeLine{01137\ \}}
+\DoxyCodeLine{01128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01129\ }
+\DoxyCodeLine{01130\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ directory\ already\ exists}}
+\DoxyCodeLine{01131\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}\ :\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}})}
+\DoxyCodeLine{01132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{if}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}}()\ ==\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}})}
+\DoxyCodeLine{01133\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{return}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}};}
+\DoxyCodeLine{01134\ }
+\DoxyCodeLine{01135\ \ \ \ \ \textcolor{comment}{//\ Store\ the\ directory}}
+\DoxyCodeLine{01136\ \ \ \ \ \textcolor{keyword}{auto}\ directory\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory}{Ext2Directory}}(m\_volume,\ create\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ 0,\ \textcolor{keyword}{true}).inode,\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}});}
+\DoxyCodeLine{01137\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}}.push\_back(directory);}
+\DoxyCodeLine{01138\ }
+\DoxyCodeLine{01139\ \ \ \ \ \textcolor{comment}{//\ Create\ self\ \&\ parent\ references}}
+\DoxyCodeLine{01140\ \ \ \ \ directory-\/>create\_entry(\textcolor{stringliteral}{"{}."{}},\ directory-\/>m\_inode.inode\_number,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{01141\ \ \ \ \ directory-\/>create\_entry(\textcolor{stringliteral}{"{}.."{}},\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_a1243bf317b75eccc9fae0c42c2a472fa}{inode\_number}},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{01142\ }
+\DoxyCodeLine{01143\ \ \ \ \ \textcolor{keywordflow}{return}\ directory;}
+\DoxyCodeLine{01144\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{ext2_8h_source_l00000}{inode}}, \mbox{\hyperlink{ext2_8h_source_l00371}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Handler\+::inode\+\_\+number}}, \mbox{\hyperlink{filesystem_8h_source_l00064}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+subdirectories}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00211}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
+References \mbox{\hyperlink{ext2_8h_source_l00385}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Handler\+::inode\+\_\+number}}, \mbox{\hyperlink{filesystem_8h_source_l00060}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+subdirectories}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00214}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
 
 \Hypertarget{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a43d772d06ec8744ceb92cb4a31d57031}\label{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a43d772d06ec8744ceb92cb4a31d57031} 
 \index{MaxOS::filesystem::format::ext2::Ext2Directory@{MaxOS::filesystem::format::ext2::Ext2Directory}!read\_from\_disk@{read\_from\_disk}}
@@ -217,7 +218,7 @@ References \mbox{\hyperlink{ext2_8h_source_l00000}{inode}}, \mbox{\hyperlink{ext
 
 
 
-Read the directory from the inode on the disk. 
+read the directory from the inode on the disk 
 
 
 
@@ -236,35 +237,34 @@ Definition at line \mbox{\hyperlink{ext2_8cpp_source_l00959}{959}} of file \mbox
 \DoxyCodeLine{00963\ \ \ \ \ m\_entry\_names.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a5bf069cc64bfc346dcca404e8cc4015b}{clear}}();}
 \DoxyCodeLine{00964\ }
 \DoxyCodeLine{00965\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ old\ files\ \&\ Directories}}
-\DoxyCodeLine{00966\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&file:\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}})}
+\DoxyCodeLine{00966\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\&\ file\ :\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}})}
 \DoxyCodeLine{00967\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{delete}}\ file;}
 \DoxyCodeLine{00968\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a531f385ce71b562c5f8a6f62735f9111}{m\_files}}.clear();}
 \DoxyCodeLine{00969\ }
-\DoxyCodeLine{00970\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&directory:\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}})}
+\DoxyCodeLine{00970\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\&\ directory\ :\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}})}
 \DoxyCodeLine{00971\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{delete}}\ directory;}
 \DoxyCodeLine{00972\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a04a4da022f0ab483cbf194280e61626c}{m\_subdirectories}}.clear();}
 \DoxyCodeLine{00973\ }
 \DoxyCodeLine{00974\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ direct\ blocks\ (cant\ use\ for(\ :\ ))}}
 \DoxyCodeLine{00975\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}\ buffer(m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a10014d7b0ae0cc94ea281d0e6ca56500}{block\_size}});}
-\DoxyCodeLine{00976\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Vector_a26ab739162841be07b98088128ea4520}{size}}();\ ++i)\ \{}
-\DoxyCodeLine{00977\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_pointer}}\ =\ m\_inode.\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler_ac72b44dc162a6569a49869cc574007fd}{block\_cache}}[i];}
-\DoxyCodeLine{00978\ }
-\DoxyCodeLine{00979\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Invalid\ block}}
-\DoxyCodeLine{00980\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_pointer}}\ ==\ 0)}
-\DoxyCodeLine{00981\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00982\ }
-\DoxyCodeLine{00983\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parse\ the\ block}}
-\DoxyCodeLine{00984\ \ \ \ \ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_pointer}},\ \&buffer);}
-\DoxyCodeLine{00985\ \ \ \ \ \ \ \ \ parse\_block(\&buffer);}
-\DoxyCodeLine{00986\ \ \ \ \ \}}
-\DoxyCodeLine{00987\ }
-\DoxyCodeLine{00988\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
-\DoxyCodeLine{00989\ \}}
+\DoxyCodeLine{00976\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_pointer}}\ :\ m\_inode.block\_cache)\ \{}
+\DoxyCodeLine{00977\ }
+\DoxyCodeLine{00978\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Invalid\ block}}
+\DoxyCodeLine{00979\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_pointer}}\ ==\ 0)}
+\DoxyCodeLine{00980\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00981\ }
+\DoxyCodeLine{00982\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parse\ the\ block}}
+\DoxyCodeLine{00983\ \ \ \ \ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_ae4dc8f1dc35d79da9a4a577cf66792f3}{read\_block}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{block\_pointer}},\ \&buffer);}
+\DoxyCodeLine{00984\ \ \ \ \ \ \ \ \ parse\_block(\&buffer);}
+\DoxyCodeLine{00985\ \ \ \ \ \}}
+\DoxyCodeLine{00986\ }
+\DoxyCodeLine{00987\ \ \ \ \ m\_volume-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Volume_a07e488e15a650d14870a5d9654b23193}{ext2\_lock}}.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
+\DoxyCodeLine{00988\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{ext2_8h_source_l00373}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Handler\+::block\+\_\+cache}}, \mbox{\hyperlink{ext2_8h_source_l00328}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::block\+\_\+size}}, \mbox{\hyperlink{vector_8h_source_l00461}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::clear()}}, \mbox{\hyperlink{ext2_8h_source_l00336}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::ext2\+\_\+lock}}, \mbox{\hyperlink{spinlock_8cpp_source_l00024}{Max\+OS\+::common\+::\+Spinlock\+::lock()}}, \mbox{\hyperlink{filesystem_8h_source_l00063}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+files}}, \mbox{\hyperlink{filesystem_8h_source_l00064}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+subdirectories}}, \mbox{\hyperlink{ext2_8cpp_source_l00127}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::read\+\_\+block()}}, \mbox{\hyperlink{vector_8h_source_l00273}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::size()}}, and \mbox{\hyperlink{spinlock_8cpp_source_l00032}{Max\+OS\+::common\+::\+Spinlock\+::unlock()}}.
+References \mbox{\hyperlink{ext2_8h_source_l00387}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Inode\+Handler\+::block\+\_\+cache}}, \mbox{\hyperlink{ext2_8h_source_l00342}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::block\+\_\+size}}, \mbox{\hyperlink{vector_8h_source_l00461}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::clear()}}, \mbox{\hyperlink{ext2_8h_source_l00350}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::ext2\+\_\+lock}}, \mbox{\hyperlink{spinlock_8cpp_source_l00024}{Max\+OS\+::common\+::\+Spinlock\+::lock()}}, \mbox{\hyperlink{filesystem_8h_source_l00059}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+files}}, \mbox{\hyperlink{filesystem_8h_source_l00060}{Max\+OS\+::filesystem\+::\+Directory\+::m\+\_\+subdirectories}}, \mbox{\hyperlink{ext2_8cpp_source_l00129}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+Volume\+::read\+\_\+block()}}, and \mbox{\hyperlink{spinlock_8cpp_source_l00032}{Max\+OS\+::common\+::\+Spinlock\+::unlock()}}.
 
 \Hypertarget{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a7dd41846b1429c109fe72564a445dc33}\label{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a7dd41846b1429c109fe72564a445dc33} 
 \index{MaxOS::filesystem::format::ext2::Ext2Directory@{MaxOS::filesystem::format::ext2::Ext2Directory}!remove\_file@{remove\_file}}
@@ -287,18 +287,18 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a6b29d
 
 
 
-Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01101}{1101}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
+Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01108}{1108}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{01101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{01102\ \ \ \ \ remove\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ \textcolor{keyword}{false});}
-\DoxyCodeLine{01103\ \}}
+\DoxyCodeLine{01108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01109\ \ \ \ \ remove\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{01110\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{filesystem_8cpp_source_l00211}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
+References \mbox{\hyperlink{filesystem_8cpp_source_l00214}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
 
 \Hypertarget{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a203e8f2b78ee2babb478c9b1a4cdcbfb}\label{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_a203e8f2b78ee2babb478c9b1a4cdcbfb} 
 \index{MaxOS::filesystem::format::ext2::Ext2Directory@{MaxOS::filesystem::format::ext2::Ext2Directory}!remove\_subdirectory@{remove\_subdirectory}}
@@ -321,18 +321,18 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a41299
 
 
 
-Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01144}{1144}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
+Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01151}{1151}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{01144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{01145\ \ \ \ \ remove\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ \textcolor{keyword}{true});}
-\DoxyCodeLine{01146\ \}}
+\DoxyCodeLine{01151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01152\ \ \ \ \ remove\_entry(\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ac3e243e6b9d373feb0c31e4a153bab39}{name}},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{01153\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{filesystem_8cpp_source_l00211}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
+References \mbox{\hyperlink{filesystem_8cpp_source_l00214}{Max\+OS\+::filesystem\+::\+Directory\+::name()}}.
 
 \Hypertarget{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_abdb74feb2e623f86bb6f1a8efc538dbd}\label{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_abdb74feb2e623f86bb6f1a8efc538dbd} 
 \index{MaxOS::filesystem::format::ext2::Ext2Directory@{MaxOS::filesystem::format::ext2::Ext2Directory}!rename\_file@{rename\_file}}
@@ -357,13 +357,13 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a01b7c
 
 
 
-Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01111}{1111}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
+Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01118}{1118}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{01111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{01112\ \ \ \ \ rename\_entry(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}},\ \textcolor{keyword}{false});}
-\DoxyCodeLine{01113\ \}}
+\DoxyCodeLine{01118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01119\ \ \ \ \ rename\_entry(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{01120\ \}}
 
 \end{DoxyCode}
 \Hypertarget{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_ac7578bac3d887efa8a854cbaf57733a6}\label{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory_ac7578bac3d887efa8a854cbaf57733a6} 
@@ -389,13 +389,13 @@ Reimplemented from \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a20ad5
 
 
 
-Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01154}{1154}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
+Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01161}{1161}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{01154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{01155\ \ \ \ \ rename\_entry(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}},\ \textcolor{keyword}{true});}
-\DoxyCodeLine{01156\ \}}
+\DoxyCodeLine{01161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01162\ \ \ \ \ rename\_entry(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{old\_name}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_name}},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{01163\ \}}
 
 \end{DoxyCode}
 

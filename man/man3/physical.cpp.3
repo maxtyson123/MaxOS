@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/memory/physical.cpp" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/memory/physical.cpp" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,25 +14,41 @@
 \fC#include <system/cpu\&.h>\fP
 .br
 
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "\fBvolatile\fP \fB__attribute__\fP ((\fBaligned\fP(4096))) \fBunsigned\fP \fBchar\fP \fBp4_table\fP[]"
-.br
-.in -1c
 .SS "Variables"
 
 .in +1c
 .ti -1c
+.RI "volatile PAGE_ALIGNED unsigned char \fBp4_table\fP []"
+.br
+.RI "The PML4 table setup in loader\&.s\&. "
+.ti -1c
+.RI "volatile PAGE_ALIGNED unsigned char \fBp3_table\fP []"
+.br
+.RI "The PDPT table setup in loader\&.s\&. "
+.ti -1c
+.RI "volatile PAGE_ALIGNED unsigned char \fBp3_table_hh\fP []"
+.br
+.RI "The PDPT table for higher half direct map setup in loader\&.s\&. "
+.ti -1c
+.RI "volatile PAGE_ALIGNED unsigned char \fBp2_table\fP []"
+.br
+.RI "The PD table setup in loader\&.s\&. "
+.ti -1c
+.RI "volatile PAGE_ALIGNED unsigned char \fBp1_table\fP []"
+.br
+.RI "The PT table setup in loader\&.s\&. "
+.ti -1c
 .RI "uint64_t \fB_kernel_end\fP"
 .br
+.RI "The virtual address of where the kernel ends\&. "
 .ti -1c
 .RI "uint64_t \fB_kernel_size\fP"
 .br
+.RI "The length of the memory region used by the kernel code\&. "
 .ti -1c
 .RI "uint64_t \fB_kernel_physical_end\fP"
 .br
+.RI "The physical address where the kernel ends\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

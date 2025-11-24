@@ -1,4 +1,4 @@
-.TH "MaxOS::common::InputStreamBuffer< Type >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::InputStreamBuffer< Type >" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -145,7 +145,7 @@ class MaxOS::common::InputStreamBuffer< Type >"Buffers data from a stream and fi
 .PP
 
 .PP
-Definition at line \fB85\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB80\fP of file \fBinputStream\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamBuffer\fP< \fBType\fP >::InputStreamBuffer (\fBType\fP event_fire_element, \fBType\fP termination_element)"
@@ -167,13 +167,12 @@ Creates a new \fBInputStreamBuffer\fP\&.
 .PP
 
 .PP
-Definition at line \fB298\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB288\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-299         : m_event_fire_element(event_fire_element),
-300           m_termination_element(termination_element)
-301         {
-302 
-303         }
+289             : m_event_fire_element(event_fire_element),
+290             m_termination_element(termination_element) {
+291 
+292     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamBuffer\fP< \fBType\fP >::~\fBInputStreamBuffer\fP ()\fC [default]\fP"
@@ -201,24 +200,24 @@ Flushes the buffer by adding the termination element and firing an on read event
 .PP
 
 .PP
-Definition at line \fB357\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB346\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-357                                                                  {
-358 
-359             // Ensure the buffer is not empty
-360             if(m_offset == 0)
-361                 return;
-362 
-363             // Add the termination element to the buffer
-364             m_buffer[m_offset] = m_termination_element;
-365 
-366             // Fire the on read event
-367             InputStreamProcessor<Type, Type *>::on_stream_read(m_buffer);
-368 
-369             // Reset the offset
-370             m_offset = 0;
-371 
-372         }
+346                                                              {
+347 
+348         // Ensure the buffer is not empty
+349         if(m_offset == 0)
+350             return;
+351 
+352         // Add the termination element to the buffer
+353         m_buffer[m_offset] = m_termination_element;
+354 
+355         // Fire the on read event
+356         InputStreamProcessor<Type, Type*>::on_stream_read(m_buffer);
+357 
+358         // Reset the offset
+359         m_offset = 0;
+360 
+361     }
 .fi
 
 .PP
@@ -242,17 +241,17 @@ Called when a stream has finished\&. Flushes the buffer if there is any data in 
 .PP
 Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
 .PP
-Definition at line \fB342\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB331\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-342                                                                                                             {
-343 
-344             // flush the buffer if there is any data in it
-345             if(m_offset > 0)
-346                 flush();
-347 
-348             // Pass the event on to the handlers and remove the stream
-349             InputStreamProcessor<Type, Type *>::on_end_of_stream(stream);
-350         }
+331                                                                                                         {
+332 
+333         // flush the buffer if there is any data in it
+334         if(m_offset > 0)
+335             flush();
+336 
+337         // Pass the event on to the handlers and remove the stream
+338         InputStreamProcessor<Type, Type*>::on_end_of_stream(stream);
+339     }
 .fi
 
 .PP
@@ -276,25 +275,25 @@ Called when data is read from a stream\&. Adds the data to the buffer and checks
 .PP
 Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
 .PP
-Definition at line \fB318\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB307\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-318                                                                                            {
+307                                                                                        {
+308 
+309         // flush the buffer if the event fire element is read
+310         if(read_element == m_event_fire_element) {
+311             flush();
+312             return;
+313         }
+314 
+315         // Ensure the buffer is not full
+316         if(m_offset >= 10238) {
+317             flush();
+318         }
 319 
-320             // flush the buffer if the event fire element is read
-321             if(read_element == m_event_fire_element){
-322                 flush();
-323                 return;
-324             }
-325 
-326             // Ensure the buffer is not full
-327             if(m_offset >= 10238){
-328                 flush();
-329             }
-330 
-331             // Add the element
-332             m_buffer[m_offset++] = read_element;
-333 
-334         }
+320         // Add the element
+321         m_buffer[m_offset++] = read_element;
+322 
+323     }
 .fi
 
 .SH "Member Data Documentation"
@@ -304,21 +303,21 @@ Definition at line \fB318\fP of file \fBinputStream\&.h\fP\&..PP
 .PP
 The buffer to store data in\&. 
 .PP
-Definition at line \fB88\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB82\fP of file \fBinputStream\&.h\fP\&.
 .SS "template<\fBclass\fP \fBType\fP > \fBType\fP \fBMaxOS::common::InputStreamBuffer\fP< \fBType\fP >::m_event_fire_element\fC [protected]\fP"
 
 .PP
 The element that will cause the buffer to flush and fire an event\&. 
 .PP
-Definition at line \fB90\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB84\fP of file \fBinputStream\&.h\fP\&.
 .SS "template<\fBclass\fP \fBType\fP > \fBint\fP \fBMaxOS::common::InputStreamBuffer\fP< \fBType\fP >::m_offset { 0 }\fC [protected]\fP"
 
 .PP
 The current position in the buffer\&. 
 .PP
-Definition at line \fB89\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB83\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-89 { 0 };                 
+83 { 0 };                 
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBType\fP \fBMaxOS::common::InputStreamBuffer\fP< \fBType\fP >::m_termination_element\fC [protected]\fP"
@@ -326,7 +325,7 @@ Definition at line \fB89\fP of file \fBinputStream\&.h\fP\&..PP
 .PP
 The element that will cause the buffer to flush and end the stream\&. 
 .PP
-Definition at line \fB91\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB85\fP of file \fBinputStream\&.h\fP\&.
 
 .SH "Author"
 .PP 

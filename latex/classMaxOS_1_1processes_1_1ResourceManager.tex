@@ -12,22 +12,24 @@ Manages the open resources for a process.
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a671c186e4630599e7e36d000c53eaf80}{\texorpdfstring{$\sim$}{\string~}\+Resource\+Manager}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{classMaxOS_1_1processes_1_1ResourceManager}{Resource\+Manager}, closes all open resources. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1common_1_1Map}{common\+::\+Map}}$<$ uint64\+\_\+t, \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a880fad47129f6b496047f991d5749fe7}{resources}} ()
 \begin{DoxyCompactList}\small\item\em Get the resources currently open. \end{DoxyCompactList}\item 
-uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_ab0f802921984197ca744db19a0767f9d}{open\+\_\+resource}} (resource\+\_\+type\+\_\+t \mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}, const \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}}, size\+\_\+t \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_ab0f802921984197ca744db19a0767f9d}{open\+\_\+resource}} (\mbox{\hyperlink{resource_8h_a9ac9ad12caad00b9d7eb53504318c263}{resource\+\_\+type\+\_\+t}} type, const \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&name, size\+\_\+t flags)
 \begin{DoxyCompactList}\small\item\em Registers a resource with the resource manager and then opens it. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a5dbfeb9d1bba0dd61691f05dba80bd5b}{close\+\_\+resource}} (uint64\+\_\+t handle, size\+\_\+t \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}})
+void \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a5dbfeb9d1bba0dd61691f05dba80bd5b}{close\+\_\+resource}} (uint64\+\_\+t handle, size\+\_\+t flags)
 \begin{DoxyCompactList}\small\item\em Un registers the resource and then closes it. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a5335d0554533ad45d00c6b2e2a37f115}{get\+\_\+resource}} (uint64\+\_\+t handle)
 \begin{DoxyCompactList}\small\item\em Gets a resource based on the handle id. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a292ad5e5955150f81c4e04c8ac5812de}{get\+\_\+resource}} (const \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})
+\mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a292ad5e5955150f81c4e04c8ac5812de}{get\+\_\+resource}} (const \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&name)
 \begin{DoxyCompactList}\small\item\em Finds a resource by name. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Manages the open resources for a process. 
 
-Definition at line \mbox{\hyperlink{resource_8h_source_l00134}{134}} of file \mbox{\hyperlink{resource_8h_source}{resource.\+h}}.
+Definition at line \mbox{\hyperlink{resource_8h_source_l00141}{141}} of file \mbox{\hyperlink{resource_8h_source}{resource.\+h}}.
 
 
 
@@ -40,24 +42,32 @@ Definition at line \mbox{\hyperlink{resource_8h_source_l00134}{134}} of file \mb
 
 
 
-Definition at line \mbox{\hyperlink{resource_8cpp_source_l00249}{249}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
+Destructor for \doxylink{classMaxOS_1_1processes_1_1ResourceManager}{Resource\+Manager}, closes all open resources. 
+
+
+
+Definition at line \mbox{\hyperlink{resource_8cpp_source_l00261}{261}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00250\ }
-\DoxyCodeLine{00251\ \ \ \ \ \textcolor{comment}{//\ Collect\ all\ resources\ (as\ closing\ will\ break\ iteration)}}
-\DoxyCodeLine{00252\ \ \ \ \ common::Vector<uint64\_t>\ handles;}
-\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ kv\ :\ m\_resources)}
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ handles.push\_back(kv.first);}
-\DoxyCodeLine{00255\ }
-\DoxyCodeLine{00256\ \ \ \ \ \textcolor{comment}{//\ Close\ the\ resources}}
-\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ h\ :\ handles)}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a5dbfeb9d1bba0dd61691f05dba80bd5b}{close\_resource}}(h,\ 0);}
-\DoxyCodeLine{00259\ }
-\DoxyCodeLine{00260\ \};}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{comment}{//\ Collect\ all\ resources\ (as\ closing\ will\ break\ iteration)}}
+\DoxyCodeLine{00264\ \ \ \ \ common::Vector<uint64\_t>\ handles;}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ kv\ :\ m\_resources)}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ handles.push\_back(kv.first);}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{comment}{//\ Close\ the\ resources}}
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ h\ :\ handles)}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a5dbfeb9d1bba0dd61691f05dba80bd5b}{close\_resource}}(h,\ 0);}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \}}
 
 \end{DoxyCode}
+
+
+References \mbox{\hyperlink{resource_8cpp_source_l00313}{close\+\_\+resource()}}.
+
 
 
 \doxysubsection{Member Function Documentation}
@@ -80,32 +90,32 @@ Un registers the resource and then closes it.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{resource_8cpp_source_l00301}{301}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
+Definition at line \mbox{\hyperlink{resource_8cpp_source_l00313}{313}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00302\ }
-\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ m\_resources.find(handle);}
-\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keywordflow}{if}(it\ ==\ m\_resources.end())}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00306\ }
-\DoxyCodeLine{00307\ \ \ \ \ \textcolor{comment}{//\ Remove\ it}}
-\DoxyCodeLine{00308\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}*\ resource\ =\ it-\/>second;}
-\DoxyCodeLine{00309\ \ \ \ \ m\_resources.erase(handle);}
-\DoxyCodeLine{00310\ }
-\DoxyCodeLine{00311\ \ \ \ \ \textcolor{comment}{//\ Close\ it}}
-\DoxyCodeLine{00312\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalResourceRegistry_a386a925d28d5ae188560586874bc9d32}{GlobalResourceRegistry::get\_registry}}(resource-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource_a87de16e1adbdafc3764341d85e0228b5}{type}}())\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a5dbfeb9d1bba0dd61691f05dba80bd5b}{close\_resource}}(resource,\ \mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
-\DoxyCodeLine{00313\ \}}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ m\_resources.find(handle);}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keywordflow}{if}(it\ ==\ m\_resources.end())}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{comment}{//\ Remove\ it}}
+\DoxyCodeLine{00320\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}*\ resource\ =\ it-\/>second;}
+\DoxyCodeLine{00321\ \ \ \ \ m\_resources.erase(handle);}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{//\ Close\ it}}
+\DoxyCodeLine{00324\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalResourceRegistry_a386a925d28d5ae188560586874bc9d32}{GlobalResourceRegistry::get\_registry}}(resource-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource_a87de16e1adbdafc3764341d85e0228b5}{type}}())\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a5dbfeb9d1bba0dd61691f05dba80bd5b}{close\_resource}}(resource,\ flags);}
+\DoxyCodeLine{00325\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{resource_8cpp_source_l00301}{close\+\_\+resource()}}, \mbox{\hyperlink{amd__am79c973_8h_source_l00002}{flags}}, \mbox{\hyperlink{resource_8cpp_source_l00208}{Max\+OS\+::processes\+::\+Global\+Resource\+Registry\+::get\+\_\+registry()}}, and \mbox{\hyperlink{resource_8cpp_source_l00088}{Max\+OS\+::processes\+::\+Resource\+::type()}}.
+References \mbox{\hyperlink{resource_8cpp_source_l00313}{close\+\_\+resource()}}, \mbox{\hyperlink{resource_8cpp_source_l00217}{Max\+OS\+::processes\+::\+Global\+Resource\+Registry\+::get\+\_\+registry()}}, and \mbox{\hyperlink{resource_8cpp_source_l00088}{Max\+OS\+::processes\+::\+Resource\+::type()}}.
 
 
 
-Referenced by \mbox{\hyperlink{resource_8cpp_source_l00301}{close\+\_\+resource()}}.
+Referenced by \mbox{\hyperlink{resource_8cpp_source_l00313}{close\+\_\+resource()}}, and \mbox{\hyperlink{resource_8cpp_source_l00261}{\texorpdfstring{$\sim$}{\string~}\+Resource\+Manager()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1ResourceManager_a292ad5e5955150f81c4e04c8ac5812de}\label{classMaxOS_1_1processes_1_1ResourceManager_a292ad5e5955150f81c4e04c8ac5812de} 
 \index{MaxOS::processes::ResourceManager@{MaxOS::processes::ResourceManager}!get\_resource@{get\_resource}}
@@ -127,24 +137,20 @@ The resource or nullptr if not found
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{resource_8cpp_source_l00335}{335}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
+Definition at line \mbox{\hyperlink{resource_8cpp_source_l00347}{347}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00336\ }
-\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ resource\ :\ m\_resources)}
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ if(resource.second-\/>\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}}()\ ==\ \mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}})}
-\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ return\ resource.second;}
-\DoxyCodeLine{00340\ }
-\DoxyCodeLine{00341\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00342\ \}}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ resource\ :\ m\_resources)}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ if(resource.second-\/>name()\ ==\ name)}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ return\ resource.second;}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00354\ \}}
 
 \end{DoxyCode}
-
-
-References \mbox{\hyperlink{fat32_8h_source_l00001}{name}}.
-
 \Hypertarget{classMaxOS_1_1processes_1_1ResourceManager_a5335d0554533ad45d00c6b2e2a37f115}\label{classMaxOS_1_1processes_1_1ResourceManager_a5335d0554533ad45d00c6b2e2a37f115} 
 \index{MaxOS::processes::ResourceManager@{MaxOS::processes::ResourceManager}!get\_resource@{get\_resource}}
 \index{get\_resource@{get\_resource}!MaxOS::processes::ResourceManager@{MaxOS::processes::ResourceManager}}
@@ -165,28 +171,28 @@ The resource or nullptr if not found
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{resource_8cpp_source_l00321}{321}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
+Definition at line \mbox{\hyperlink{resource_8cpp_source_l00333}{333}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00322\ }
-\DoxyCodeLine{00323\ \ \ \ \ \textcolor{keywordflow}{if}(m\_resources.find(handle)\ ==\ m\_resources.end())}
-\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00325\ }
-\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_resources[handle];}
-\DoxyCodeLine{00327\ \}}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keywordflow}{if}(m\_resources.find(handle)\ ==\ m\_resources.end())}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00337\ }
+\DoxyCodeLine{00338\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_resources[handle];}
+\DoxyCodeLine{00339\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{resource_8cpp_source_l00280}{open\+\_\+resource()}}.
+Referenced by \mbox{\hyperlink{resource_8cpp_source_l00292}{open\+\_\+resource()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1ResourceManager_ab0f802921984197ca744db19a0767f9d}\label{classMaxOS_1_1processes_1_1ResourceManager_ab0f802921984197ca744db19a0767f9d} 
 \index{MaxOS::processes::ResourceManager@{MaxOS::processes::ResourceManager}!open\_resource@{open\_resource}}
 \index{open\_resource@{open\_resource}!MaxOS::processes::ResourceManager@{MaxOS::processes::ResourceManager}}
 \doxysubsubsection{\texorpdfstring{open\_resource()}{open\_resource()}}
-{\footnotesize\ttfamily uint64\+\_\+t Resource\+Manager\+::open\+\_\+resource (\begin{DoxyParamCaption}\item[{resource\+\_\+type\+\_\+t}]{type,  }\item[{const \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&}]{name,  }\item[{size\+\_\+t}]{flags }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily uint64\+\_\+t Resource\+Manager\+::open\+\_\+resource (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{resource_8h_a9ac9ad12caad00b9d7eb53504318c263}{resource\+\_\+type\+\_\+t}}}]{type,  }\item[{const \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&}]{name,  }\item[{size\+\_\+t}]{flags }\end{DoxyParamCaption})}
 
 
 
@@ -206,29 +212,29 @@ The handle id of the resource or 0 if failed
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{resource_8cpp_source_l00280}{280}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
+Definition at line \mbox{\hyperlink{resource_8cpp_source_l00292}{292}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00281\ }
-\DoxyCodeLine{00282\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ resource}}
-\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keyword}{auto}\ resource\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalResourceRegistry_a386a925d28d5ae188560586874bc9d32}{GlobalResourceRegistry::get\_registry}}(\mbox{\hyperlink{ext2_8h_a1d127017fb298b889f4ba24752d08b8e}{type}})\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a5335d0554533ad45d00c6b2e2a37f115}{get\_resource}}(\mbox{\hyperlink{fat32_8h_abfa8a0ef7b1321866a7c4099554fdfb0}{name}});}
-\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keywordflow}{if}(!resource)}
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{00286\ }
-\DoxyCodeLine{00287\ \ \ \ \ \textcolor{comment}{//\ Store\ it}}
-\DoxyCodeLine{00288\ \ \ \ \ m\_resources.insert(m\_next\_handle,\ resource);}
-\DoxyCodeLine{00289\ }
-\DoxyCodeLine{00290\ \ \ \ \ \textcolor{comment}{//\ Open\ it}}
-\DoxyCodeLine{00291\ \ \ \ \ resource-\/>open(\mbox{\hyperlink{amd__am79c973_8h_a1e87af3c18a2fd36c61faf89949bdc3f}{flags}});}
-\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_next\_handle++;}
-\DoxyCodeLine{00293\ \}}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ resource}}
+\DoxyCodeLine{00295\ \ \ \ \ \textcolor{keyword}{auto}\ resource\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalResourceRegistry_a386a925d28d5ae188560586874bc9d32}{GlobalResourceRegistry::get\_registry}}(type)\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ResourceManager_a5335d0554533ad45d00c6b2e2a37f115}{get\_resource}}(name);}
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordflow}{if}(!resource)}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{comment}{//\ Store\ it}}
+\DoxyCodeLine{00300\ \ \ \ \ m\_resources.insert(m\_next\_handle,\ resource);}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{comment}{//\ Open\ it}}
+\DoxyCodeLine{00303\ \ \ \ \ resource-\/>open(flags);}
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_next\_handle++;}
+\DoxyCodeLine{00305\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{amd__am79c973_8h_source_l00002}{flags}}, \mbox{\hyperlink{resource_8cpp_source_l00208}{Max\+OS\+::processes\+::\+Global\+Resource\+Registry\+::get\+\_\+registry()}}, \mbox{\hyperlink{resource_8cpp_source_l00321}{get\+\_\+resource()}}, \mbox{\hyperlink{fat32_8h_source_l00001}{name}}, and \mbox{\hyperlink{ext2_8h_source_l00004}{type}}.
+References \mbox{\hyperlink{resource_8cpp_source_l00217}{Max\+OS\+::processes\+::\+Global\+Resource\+Registry\+::get\+\_\+registry()}}, and \mbox{\hyperlink{resource_8cpp_source_l00333}{get\+\_\+resource()}}.
 
 \Hypertarget{classMaxOS_1_1processes_1_1ResourceManager_a880fad47129f6b496047f991d5749fe7}\label{classMaxOS_1_1processes_1_1ResourceManager_a880fad47129f6b496047f991d5749fe7} 
 \index{MaxOS::processes::ResourceManager@{MaxOS::processes::ResourceManager}!resources@{resources}}
@@ -245,14 +251,14 @@ The resources
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{resource_8cpp_source_l00267}{267}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
+Definition at line \mbox{\hyperlink{resource_8cpp_source_l00279}{279}} of file \mbox{\hyperlink{resource_8cpp_source}{resource.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00268\ }
-\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_resources;}
-\DoxyCodeLine{00270\ \}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_resources;}
+\DoxyCodeLine{00282\ \}}
 
 \end{DoxyCode}
 

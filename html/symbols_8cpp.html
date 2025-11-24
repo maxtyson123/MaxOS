@@ -36,7 +36,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
+   <div id="projectname">Max OS<span id="projectnumber">&#160;0.3</span>
    </div>
   </td>
  </tr>
@@ -114,8 +114,8 @@ $(document).ready(function(){initNavTree('symbols_8cpp.html',''); initResizable(
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a4bfba91a61cfa3c1878b5c9861bbf05c" id="r_a4bfba91a61cfa3c1878b5c9861bbf05c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">const</a> <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">char</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbols_8cpp.html#a4bfba91a61cfa3c1878b5c9861bbf05c">MaxOS::common::resolve_symbol</a> (<a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="el" href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a>, <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">link_base</a>, <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">load_base</a>)</td></tr>
-<tr class="memdesc:a4bfba91a61cfa3c1878b5c9861bbf05c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolve an instruction pointer (rip) to a symbol name and optional offset.  <br /></td></tr>
+<tr class="memitem:a4bfba91a61cfa3c1878b5c9861bbf05c" id="r_a4bfba91a61cfa3c1878b5c9861bbf05c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">const</a> <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">char</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="symbols_8cpp.html#a4bfba91a61cfa3c1878b5c9861bbf05c">MaxOS::common::resolve_symbol</a> (<a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> rip, <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">link_base</a>, <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="el" href="classMaxOS_1_1common_1_1Rectangle.html">load_base</a>)</td></tr>
+<tr class="memdesc:a4bfba91a61cfa3c1878b5c9861bbf05c"><td class="mdescLeft">&#160;</td><td class="mdescRight">resolve an instruction pointer (rip) to a symbol name and optional offset.  <br /></td></tr>
 <tr class="separator:a4bfba91a61cfa3c1878b5c9861bbf05c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -157,7 +157,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Resolve an instruction pointer (rip) to a symbol name and optional offset. </p>
+<p>resolve an instruction pointer (rip) to a symbol name and optional offset. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rip</td><td>Instruction pointer </td></tr>
@@ -168,41 +168,40 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The symbol name </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="symbols_8cpp_source.html#l00024">24</a> of file <a class="el" href="symbols_8cpp_source.html">symbols.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   25</span>        {</div>
-<div class="line"><span class="lineno">   26</span> </div>
-<div class="line"><span class="lineno">   27</span>            <span class="comment">// No symbols</span></div>
-<div class="line"><span class="lineno">   28</span>            <span class="keywordflow">if</span> (KERNEL_SYMBOLS_COUNT == 0)</div>
-<div class="line"><span class="lineno">   29</span>                <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><span class="lineno">   30</span> </div>
-<div class="line"><span class="lineno">   31</span>            <span class="comment">// Convert load to linked</span></div>
-<div class="line"><span class="lineno">   32</span>            uintptr_t offset = 0;</div>
-<div class="line"><span class="lineno">   33</span>            <span class="keywordflow">if</span> (load_base &gt;= link_base)</div>
-<div class="line"><span class="lineno">   34</span>                offset = load_base - link_base;</div>
-<div class="line"><span class="lineno">   35</span> </div>
-<div class="line"><span class="lineno">   36</span>            <span class="comment">// Get the adjusted address</span></div>
-<div class="line"><span class="lineno">   37</span>            uintptr_t adjusted_address = <a class="code hl_variable" href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a>;</div>
-<div class="line"><span class="lineno">   38</span>            <span class="keywordflow">if</span> (<a class="code hl_variable" href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a> &gt;= offset)</div>
-<div class="line"><span class="lineno">   39</span>                adjusted_address = <a class="code hl_variable" href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a> - offset;</div>
-<div class="line"><span class="lineno">   40</span> </div>
-<div class="line"><span class="lineno">   41</span>            <span class="comment">// Binary Search for symbol</span></div>
-<div class="line"><span class="lineno">   42</span>            <span class="keywordtype">size_t</span> left = 0;</div>
-<div class="line"><span class="lineno">   43</span>            <span class="keywordtype">size_t</span> right = KERNEL_SYMBOLS_COUNT;</div>
-<div class="line"><span class="lineno">   44</span>            <span class="keywordflow">while</span> (left &lt; right) {</div>
-<div class="line"><span class="lineno">   45</span>                <span class="keywordtype">size_t</span> middle = (left + right) &gt;&gt; 1;</div>
-<div class="line"><span class="lineno">   46</span>                <span class="keywordflow">if</span> (kernel_symbols[middle].address &lt;= adjusted_address)</div>
-<div class="line"><span class="lineno">   47</span>                    left = middle + 1;</div>
-<div class="line"><span class="lineno">   48</span>                <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">   49</span>                    right = middle;</div>
-<div class="line"><span class="lineno">   50</span>            }</div>
-<div class="line"><span class="lineno">   51</span> </div>
-<div class="line"><span class="lineno">   52</span>            <span class="keywordflow">return</span> left == 0 ? nullptr : kernel_symbols[left - 1].name;</div>
-<div class="line"><span class="lineno">   53</span>        }</div>
-<div class="ttc" id="acpu_8h_html_ad37248eb45d2509df75a205d8412ac65"><div class="ttname"><a href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a></div><div class="ttdeci">uintptr_t rip</div><div class="ttdoc">The instruction pointer at this frame.</div><div class="ttdef"><b>Definition</b> <a href="cpu_8h_source.html#l00001">cpu.h:1</a></div></div>
+<p class="definition">Definition at line <a class="el" href="symbols_8cpp_source.html#l00023">23</a> of file <a class="el" href="symbols_8cpp_source.html">symbols.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   23</span>                                                                                        {</div>
+<div class="line"><span class="lineno">   24</span> </div>
+<div class="line"><span class="lineno">   25</span>        <span class="comment">// No symbols</span></div>
+<div class="line"><span class="lineno">   26</span>        <span class="keywordflow">if</span>(KERNEL_SYMBOLS_COUNT == 0)</div>
+<div class="line"><span class="lineno">   27</span>            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><span class="lineno">   28</span> </div>
+<div class="line"><span class="lineno">   29</span>        <span class="comment">// Convert load to linked</span></div>
+<div class="line"><span class="lineno">   30</span>        uintptr_t offset = 0;</div>
+<div class="line"><span class="lineno">   31</span>        <span class="keywordflow">if</span>(load_base &gt;= link_base)</div>
+<div class="line"><span class="lineno">   32</span>            offset = load_base - link_base;</div>
+<div class="line"><span class="lineno">   33</span> </div>
+<div class="line"><span class="lineno">   34</span>        <span class="comment">// Get the adjusted address</span></div>
+<div class="line"><span class="lineno">   35</span>        uintptr_t adjusted_address = rip;</div>
+<div class="line"><span class="lineno">   36</span>        <span class="keywordflow">if</span>(rip &gt;= offset)</div>
+<div class="line"><span class="lineno">   37</span>            adjusted_address = rip - offset;</div>
+<div class="line"><span class="lineno">   38</span> </div>
+<div class="line"><span class="lineno">   39</span>        <span class="comment">// Binary Search for symbol</span></div>
+<div class="line"><span class="lineno">   40</span>        <span class="keywordtype">size_t</span> left = 0;</div>
+<div class="line"><span class="lineno">   41</span>        <span class="keywordtype">size_t</span> right = KERNEL_SYMBOLS_COUNT;</div>
+<div class="line"><span class="lineno">   42</span>        <span class="keywordflow">while</span>(left &lt; right) {</div>
+<div class="line"><span class="lineno">   43</span>            <span class="keywordtype">size_t</span> middle = (left + right) &gt;&gt; 1;</div>
+<div class="line"><span class="lineno">   44</span>            <span class="keywordflow">if</span>(kernel_symbols[middle].address &lt;= adjusted_address)</div>
+<div class="line"><span class="lineno">   45</span>                left = middle + 1;</div>
+<div class="line"><span class="lineno">   46</span>            <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">   47</span>                right = middle;</div>
+<div class="line"><span class="lineno">   48</span>        }</div>
+<div class="line"><span class="lineno">   49</span> </div>
+<div class="line"><span class="lineno">   50</span>        <span class="keywordflow">return</span> left == 0 ? nullptr : kernel_symbols[left - 1].name;</div>
+<div class="line"><span class="lineno">   51</span>    }</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="symbols_8cpp_source.html#l00024">MaxOS::common::resolve_symbol()</a>, and <a class="el" href="cpu_8h_source.html#l00001">rip</a>.</p>
+<p class="reference">References <a class="el" href="symbols_8cpp_source.html#l00023">MaxOS::common::resolve_symbol()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="symbols_8cpp_source.html#l00024">MaxOS::common::resolve_symbol()</a>, and <a class="el" href="cpu_8cpp_source.html#l00411">MaxOS::system::CPU::stack_trace()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="symbols_8cpp_source.html#l00023">MaxOS::common::resolve_symbol()</a>, and <a class="el" href="cpu_8cpp_source.html#l00414">MaxOS::system::CPU::stack_trace()</a>.</p>
 
 </div>
 </div>

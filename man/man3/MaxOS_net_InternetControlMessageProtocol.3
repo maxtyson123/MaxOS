@@ -1,4 +1,4 @@
-.TH "MaxOS::net::InternetControlMessageProtocol" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::InternetControlMessageProtocol" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,15 +15,15 @@ Inherits \fBMaxOS::net::IPV4PayloadHandler\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBInternetControlMessageProtocol\fP (\fBInternetProtocolHandler\fP *\fBinternetProtocolHandler\fP, \fBcommon::OutputStream\fP *errorMessages)"
+.RI "\fBInternetControlMessageProtocol\fP (\fBInternetProtocolHandler\fP *\fBinternet_protocol_handler\fP, \fBcommon::OutputStream\fP *error_messages)"
 .br
 .RI "Constructs an \fBInternetControlMessageProtocol\fP handler\&. "
 .ti -1c
-.RI "\fBbool\fP \fBhandleInternetProtocolPayload\fP (InternetProtocolAddress \fBsourceIP\fP, InternetProtocolAddress \fBdestinationIP\fP, \fBuint8_t\fP *\fBpayloadData\fP, \fBuint32_t\fP \fBsize\fP) \fBfinal\fP"
+.RI "\fBbool\fP \fBhandle_internet_protocol_payload\fP (\fBnet::InternetProtocolAddress\fP \fBsrc_ip_be\fP, \fBnet::InternetProtocolAddress\fP \fBdst_ip_be\fP, \fBuint8_t\fP *\fBpayload_data\fP, \fBuint32_t\fP size) \fBfinal\fP"
 .br
 .RI "Called by the InternetProtocolProvider when a new packet has arrived\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBRequestEchoReply\fP (InternetProtocolAddress \fBip_be\fP)"
+.RI "\fBvoid\fP \fBrequest_echo_reply\fP (\fBuint32_t\fP \fBip_be\fP)"
 .br
 .RI "Sends an ICMP echo request to the specified IP address\&. "
 .in -1c
@@ -31,45 +31,45 @@ Inherits \fBMaxOS::net::IPV4PayloadHandler\fP\&.
 .PP 
 Handles ICMP packets\&. 
 .PP
-Definition at line \fB37\fP of file \fBicmp\&.h\fP\&.
+Definition at line \fB41\fP of file \fBicmp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "InternetControlMessageProtocol::InternetControlMessageProtocol (\fBInternetProtocolHandler\fP * internetProtocolHandler, \fBcommon::OutputStream\fP * errorMessages)"
+.SS "InternetControlMessageProtocol::InternetControlMessageProtocol (\fBInternetProtocolHandler\fP * internet_protocol_handler, \fBcommon::OutputStream\fP * error_messages)"
 
 .PP
 Constructs an \fBInternetControlMessageProtocol\fP handler\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIinternetProtocolHandler\fP The Internet protocol handler to use\&. 
+\fIinternet_protocol_handler\fP The Internet protocol handler to use\&. 
 .br
-\fIerrorMessages\fP The output stream to use for error messages\&. 
+\fIerror_messages\fP The output stream to use for error messages\&. 
 .RE
 .PP
 
 .PP
 Definition at line \fB21\fP of file \fBicmp\&.cpp\fP\&..PP
 .nf
-22 : IPV4PayloadHandler(internetProtocolHandler, 0x01)
+22 : IPV4PayloadHandler(internet_protocol_handler, 0x01)
 23 {
-24     this \-> errorMessages = errorMessages;
+24     this \-> error_messages = error_messages;
 25 }
 .fi
 
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBbool\fP InternetControlMessageProtocol::handleInternetProtocolPayload (InternetProtocolAddress srcIP_BE, InternetProtocolAddress dstIP_BE, \fBuint8_t\fP * payloadData, \fBuint32_t\fP size)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBbool\fP InternetControlMessageProtocol::handle_internet_protocol_payload (\fBnet::InternetProtocolAddress\fP src_ip_be, \fBnet::InternetProtocolAddress\fP dst_ip_be, \fBuint8_t\fP * payload_data, \fBuint32_t\fP size)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Called by the InternetProtocolProvider when a new packet has arrived\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIsrcIP_BE\fP The source IP address of the packet 
+\fIsrc_ip_be\fP The source IP address of the packet 
 .br
-\fIdstIP_BE\fP The destination IP address of the packet 
+\fIdst_ip_be\fP The destination IP address of the packet 
 .br
-\fIpayloadData\fP The payload of the packet 
+\fIpayload_data\fP The payload of the packet 
 .br
 \fIsize\fP The size of the payload
 .RE
@@ -94,7 +94,7 @@ Definition at line \fB43\fP of file \fBicmp\&.cpp\fP\&..PP
 .nf
 47 {
 48 
-49     errorMessages \-> write("ICMP received a packet\\n");
+49     error_messages \-> write("ICMP received a packet\\n");
 50 
 51     // Check if the size is at least the size of the header
 52     if(size < sizeof(ICMPHeader)){
@@ -102,7 +102,7 @@ Definition at line \fB43\fP of file \fBicmp\&.cpp\fP\&..PP
 54     }
 55 
 56     // Cast the payload to the ICMP header
-57     auto* icmp = (ICMPHeader*)payloadData;
+57     auto* icmp = (ICMPHeader*)payload_data;
 58 
 59     switch (icmp \-> type) {
 60 
@@ -114,7 +114,7 @@ Definition at line \fB43\fP of file \fBicmp\&.cpp\fP\&..PP
 66             // Create a response
 67             icmp \-> type = 0;                                                                                                                    // Echo reply
 68             icmp \-> checksum = 0;                                                                                                                // Reset the checksum
-69             icmp \-> checksum = InternetProtocolHandler::Checksum((uint16_t *)&icmp, sizeof(ICMPHeader));             // Calculate the checksum
+69             icmp \-> checksum = InternetProtocolHandler::checksum((uint16_t*) &icmp, sizeof(ICMPHeader));             // Calculate the checksum
 70 
 71             return true;    //Send data back
 72 
@@ -126,8 +126,8 @@ Definition at line \fB43\fP of file \fBicmp\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBchecksum\fP, \fBMaxOS::net::InternetProtocolHandler::Checksum()\fP, \fBsize\fP, \fBtype\fP, and \fBwrite\fP\&.
-.SS "\fBvoid\fP InternetControlMessageProtocol::RequestEchoReply (InternetProtocolAddress ip_be)"
+References \fBMaxOS::net::InternetProtocolHandler::checksum()\fP\&.
+.SS "\fBvoid\fP InternetControlMessageProtocol::request_echo_reply (\fBuint32_t\fP ip_be)"
 
 .PP
 Sends an ICMP echo request to the specified IP address\&. 
@@ -141,9 +141,9 @@ Sends an ICMP echo request to the specified IP address\&.
 .PP
 Definition at line \fB84\fP of file \fBicmp\&.cpp\fP\&..PP
 .nf
-84                                                                     {
+84                                                                       {
 85 
-86     errorMessages \-> write("ICMP: Sending echo request\\n");
+86     error_messages \-> write("ICMP: Sending echo request\\n");
 87 
 88     ICMPHeader icmp = {};
 89     icmp\&.type = 8;                      // Echo request
@@ -151,16 +151,16 @@ Definition at line \fB84\fP of file \fBicmp\&.cpp\fP\&..PP
 91     icmp\&.checksum = 0;                  // Checksum must be 0 to calculate it
 92     icmp\&.data = 0x69420;        // Data
 93 
-94     icmp\&.checksum = InternetProtocolHandler::Checksum((uint16_t *)&icmp, sizeof(ICMPHeader));
+94     icmp\&.checksum = InternetProtocolHandler::checksum((uint16_t*) &icmp, sizeof(ICMPHeader));
 95 
-96     Send(ip_be, (uint8_t *)&icmp, sizeof(ICMPHeader));
+96     send(ip_be, (uint8_t*) &icmp, sizeof(ICMPHeader));
 97 
-98     errorMessages \-> write("ICMP: Echo request sent\\n");
+98     error_messages \-> write("ICMP: Echo request sent\\n");
 99 }
 .fi
 
 .PP
-References \fBMaxOS::net::InternetProtocolHandler::Checksum()\fP, \fBMaxOS::net::IPV4PayloadHandler::Send()\fP, and \fBwrite\fP\&.
+References \fBMaxOS::net::InternetProtocolHandler::checksum()\fP, and \fBMaxOS::net::IPV4PayloadHandler::send()\fP\&.
 
 .SH "Author"
 .PP 

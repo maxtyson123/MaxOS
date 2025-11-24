@@ -1,4 +1,4 @@
-.TH "MaxOS::net::DataReceivedEvent" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::DataReceivedEvent" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,15 +17,15 @@ Inherits \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP\&.
 .ti -1c
 .RI "\fBDataReceivedEvent\fP (\fBTCPSocket\fP *\fBsocket\fP, \fBuint8_t\fP *\fBdata\fP, \fBuint16_t\fP \fBsize\fP)"
 .br
-.RI "___ EVENTS ___ /// "
+.RI "Construct a new Data Received Event object\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::common::Event< TCPPayloadHandlerEvents >\fP
 .in +1c
 .ti -1c
-.RI "\fBEvent\fP (TCPPayloadHandlerEvents \fBtype\fP)"
+.RI "\fBEvent\fP (TCPPayloadHandlerEvents type)"
 .br
-.RI "___________________________ Template Implementation ___________________________ "
+.RI "Constructs a new \fBEvent\fP object\&. "
 .in -1c
 .SS "Public Attributes"
 
@@ -50,25 +50,25 @@ Public Attributes inherited from \fBMaxOS::common::Event< TCPPayloadHandlerEvent
 .RI "TCPPayloadHandlerEvents \fBtype\fP"
 .br
 .ti -1c
-.RI "\fBuint8_t\fP * \fBbufferValue\fP"
+.RI "\fBuint8_t\fP * \fBbuffer_value\fP"
 .br
 .ti -1c
-.RI "\fBuint32_t\fP \fBintValue\fP"
+.RI "\fBuint32_t\fP \fBint_value\fP"
 .br
 .ti -1c
-.RI "\fBbool\fP \fBboolValue\fP"
+.RI "\fBbool\fP \fBbool_value\fP"
 .br
 .ti -1c
 .RI "union {"
 .br
 .ti -1c
-.RI "   \fBuint8_t\fP * \fBbufferValue\fP"
+.RI "   \fBuint8_t\fP * \fBbuffer_value\fP"
 .br
 .ti -1c
-.RI "   \fBuint32_t\fP \fBintValue\fP"
+.RI "   \fBuint32_t\fP \fBint_value\fP"
 .br
 .ti -1c
-.RI "   \fBbool\fP \fBboolValue\fP"
+.RI "   \fBbool\fP \fBbool_value\fP"
 .br
 .ti -1c
 .RI "} \fBreturn_value\fP"
@@ -78,21 +78,32 @@ Public Attributes inherited from \fBMaxOS::common::Event< TCPPayloadHandlerEvent
 .PP 
 Event for when data is received on a TCP socket\&. 
 .PP
-Definition at line \fB113\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB123\fP of file \fBtcp\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "DataReceivedEvent::DataReceivedEvent (\fBTCPSocket\fP * socket, \fBuint8_t\fP * data, \fBuint16_t\fP size)"
 
 .PP
-___ EVENTS ___ /// 
+Construct a new Data Received Event object\&. 
 .PP
-Definition at line \fB553\fP of file \fBtcp\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fIsocket\fP The socket that received the data 
+.br
+\fIdata\fP The data that was received 
+.br
+\fIsize\fP The size of the data 
+.RE
+.PP
+
+.PP
+Definition at line \fB594\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-554         : Event(TCPPayloadHandlerEvents::DATA_RECEIVED) {
-555     this\->socket = socket;
-556     this\->data = data;
-557     this\->size = size;
-558 }
+595         : Event(TCPPayloadHandlerEvents::DATA_RECEIVED) {
+596     this\->socket = socket;
+597     this\->data = data;
+598     this\->size = size;
+599 }
 .fi
 
 .PP
@@ -104,7 +115,7 @@ References \fBdata\fP, \fBsize\fP, and \fBsocket\fP\&.
 .PP
 The data received\&. 
 .PP
-Definition at line \fB116\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB126\fP of file \fBtcp\&.h\fP\&.
 .PP
 Referenced by \fBDataReceivedEvent()\fP\&.
 .SS "uint16_t MaxOS::net::DataReceivedEvent::size"
@@ -112,7 +123,7 @@ Referenced by \fBDataReceivedEvent()\fP\&.
 .PP
 The size of the data received\&. 
 .PP
-Definition at line \fB117\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB127\fP of file \fBtcp\&.h\fP\&.
 .PP
 Referenced by \fBDataReceivedEvent()\fP\&.
 .SS "\fBTCPSocket\fP* MaxOS::net::DataReceivedEvent::socket"
@@ -120,7 +131,7 @@ Referenced by \fBDataReceivedEvent()\fP\&.
 .PP
 The socket that received the data\&. 
 .PP
-Definition at line \fB115\fP of file \fBtcp\&.h\fP\&.
+Definition at line \fB125\fP of file \fBtcp\&.h\fP\&.
 .PP
 Referenced by \fBDataReceivedEvent()\fP\&.
 

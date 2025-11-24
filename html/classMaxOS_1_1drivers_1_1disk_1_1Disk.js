@@ -6,6 +6,6 @@ var classMaxOS_1_1drivers_1_1disk_1_1Disk =
     [ "read", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a9fa1c1952cece4f322ba0f2552f16c24", null ],
     [ "read", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a7756c834f62fb2905eb0f95e051ce430", null ],
     [ "vendor_name", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a3b372acc96a48a6235f7b5e522653917", null ],
-    [ "write", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a307fc8dc97cc4c8f3668a18a1e0257de", null ],
-    [ "write", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#aa34baee81b9b94cfb80f953434bf67e9", null ]
+    [ "write", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a849c586fbc52b1994c282492addc4772", null ],
+    [ "write", "classMaxOS_1_1drivers_1_1disk_1_1Disk.html#a762aa8c46c342fb675dbf9a272b334f3", null ]
 ];

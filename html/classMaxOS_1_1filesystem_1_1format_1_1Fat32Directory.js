@@ -8,5 +8,5 @@ var classMaxOS_1_1filesystem_1_1format_1_1Fat32Directory =
     [ "remove_file", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Directory.html#a164dbdf50cdb4ce9d6d6a8632476378e", null ],
     [ "remove_subdirectory", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Directory.html#adad800fc73464565cb55ed8360f8e98e", null ],
     [ "save_entry_to_disk", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Directory.html#af6a79f3a013a04d730d409bf317c2da4", null ],
-    [ "update_entry_on_disk", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Directory.html#af2215c14e916dd1f46527d9233190bd9", null ]
+    [ "update_entry_on_disk", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Directory.html#a5ef8f5879afb6956c68e15be2b6290a1", null ]
 ];

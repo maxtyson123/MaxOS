@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/net/ipv4.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/net/ipv4.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 \fC#include <net/ethernetframe\&.h>\fP
 .br
@@ -38,64 +38,15 @@
 .ti -1c
 .RI "typedef uint32_t \fBMaxOS::net::InternetProtocolAddress\fP"
 .br
+.RI "An IPv4 address\&. "
 .ti -1c
 .RI "typedef uint32_t \fBMaxOS::net::SubnetMask\fP"
 .br
-.in -1c
-.SS "Functions"
-
-.in +1c
+.RI "A subnet mask\&. "
 .ti -1c
-.RI "struct \fBMaxOS::net::ARPMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
+.RI "typedef struct PACKED \fBMaxOS::net::IPV4Header\fP \fBMaxOS::net::ipv4_header_t\fP"
 .br
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "uint8_t \fBheaderLength\fP"
-.br
-.RI "The length of the header in 32-bit words (min 5, max 15) "
-.ti -1c
-.RI "uint8_t \fBversion\fP"
-.br
-.RI "The version of the IP protocol (4 for IPv4) "
-.ti -1c
-.RI "uint8_t \fBtypeOfService\fP"
-.br
-.RI "The type of service (low delay, high throughput, high reliability, etc\&. "
-.ti -1c
-.RI "uint16_t \fBtotalLength\fP"
-.br
-.RI "The total length of the IP packet (header + data) in bytes\&. "
-.ti -1c
-.RI "uint16_t \fBidentifier\fP"
-.br
-.RI "Unique identifier for the group of fragments of a single IP packet\&. "
-.ti -1c
-.RI "uint16_t \fBflagsAndOffset\fP"
-.br
-.RI "Flags (3 bits) and Fragment Offset (13 bits) "
-.ti -1c
-.RI "uint8_t \fBtimeToLive\fP"
-.br
-.RI "The maximum hops between devices before the packet is discarded\&. "
-.ti -1c
-.RI "uint8_t \fBprotocol\fP"
-.br
-.RI "The protocol of the payload (TCP, UDP, ICMP, etc\&. "
-.ti -1c
-.RI "uint16_t \fBchecksum\fP"
-.br
-.RI "The checksum of the header\&. "
-.ti -1c
-.RI "uint32_t \fBsourceIP\fP"
-.br
-.RI "The IP of the sender\&. "
-.ti -1c
-.RI "uint32_t \fBdestinationIP\fP"
-.br
-.RI "The IP of the receiver\&. "
+.RI "Alias for \fBIPV4Header\fP struct\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -121,118 +72,29 @@ Definition in file \fBipv4\&.h\fP\&.
 .SS "typedef uint32_t \fBMaxOS::net::InternetProtocolAddress\fP"
 
 .PP
-Definition at line \fB19\fP of file \fBipv4\&.h\fP\&.
+An IPv4 address\&. 
+.PP
+\fBTodo\fP
+.RS 4
+: Make IPv4Address class and do ip_t 
+.RE
+.PP
+
+.PP
+Definition at line \fB18\fP of file \fBipv4\&.h\fP\&.
 .SS "typedef uint32_t \fBMaxOS::net::SubnetMask\fP"
 
 .PP
-Definition at line \fB20\fP of file \fBipv4\&.h\fP\&.
-.SH "Variable Documentation"
-.PP 
-.SS "uint16_t checksum"
-
-.PP
-The checksum of the header\&. 
-.PP
-Definition at line \fB10\fP of file \fBipv4\&.h\fP\&.
-.SS "uint32_t destinationIP"
-
-.PP
-The IP of the receiver\&. 
-.PP
-Definition at line \fB13\fP of file \fBipv4\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::net::IPV4PayloadHandler::Send()\fP, and \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
-.SS "uint16_t flagsAndOffset"
-
-.PP
-Flags (3 bits) and Fragment Offset (13 bits) 
+A subnet mask\&. 
 .PP
 \fBTodo\fP
 .RS 4
-: bitfield struct? 
+: Make SubnetMask class and do subnetmask_t 
 .RE
 .PP
 
 .PP
-Definition at line \fB6\fP of file \fBipv4\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
-.SS "uint8_t headerLength"
-
-.PP
-The length of the header in 32-bit words (min 5, max 15) 
-.PP
-Definition at line \fB0\fP of file \fBipv4\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, and \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
-.SS "uint16_t identifier"
-
-.PP
-Unique identifier for the group of fragments of a single IP packet\&. 
-.PP
-Definition at line \fB5\fP of file \fBipv4\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
-.SS "uint8_t protocol"
-
-.PP
-The protocol of the payload (TCP, UDP, ICMP, etc\&. 
-.PP
-\fBTodo\fP
-.RS 4
-: enum 
-.RE
-.PP
-
-.PP
-Definition at line \fB9\fP of file \fBipv4\&.h\fP\&.
-.SS "uint32_t sourceIP"
-
-.PP
-The IP of the sender\&. 
-.PP
-Definition at line \fB12\fP of file \fBipv4\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
-.SS "uint8_t timeToLive"
-
-.PP
-The maximum hops between devices before the packet is discarded\&. 
-.PP
-Definition at line \fB8\fP of file \fBipv4\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, and \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
-.SS "uint16_t totalLength"
-
-.PP
-The total length of the IP packet (header + data) in bytes\&. 
-.PP
-Definition at line \fB3\fP of file \fBipv4\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
-.SS "uint8_t typeOfService"
-
-.PP
-The type of service (low delay, high throughput, high reliability, etc\&. 
-.PP
-\fBTodo\fP
-.RS 4
-: enum 
-.RE
-.PP
-
-.PP
-Definition at line \fB2\fP of file \fBipv4\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
-.SS "uint8_t version"
-
-.PP
-The version of the IP protocol (4 for IPv4) 
-.PP
-Definition at line \fB1\fP of file \fBipv4\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP\&.
+Definition at line \fB19\fP of file \fBipv4\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

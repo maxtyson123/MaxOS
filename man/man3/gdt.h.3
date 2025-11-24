@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,9 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
+.br
+\fC#include <common/macros\&.h>\fP
 .br
 \fC#include <system/multiboot\&.h>\fP
 .br
@@ -24,6 +26,14 @@
 .br
 .RI "Sets up the GDT in the \fBCPU\fP\&. "
 .in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::system::GDTRegister\fP \fBMaxOS::system::gdtr_t\fP"
+.br
+.RI "Alias for \fBGDTRegister\fP struct\&. "
+.in -1c
 .SS "Enumerations"
 
 .in +1c
@@ -31,25 +41,6 @@
 .RI "enum class \fBMaxOS::system::DescriptorFlags\fP : uint64_t { \fBWrite\fP = (1ULL << 41), \fBExecute\fP = (1ULL << 43), \fBCodeOrDataSegment\fP = (1ULL << 44), \fBGrowDown\fP = (1ULL << 45), \fBConformFromLower\fP = (1ULL << 46), \fBPresent\fP = (1ULL << 47), \fBLongMode\fP = (1ULL << 53) }"
 .br
 .RI "Flags for the GDT entries\&. "
-.in -1c
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "struct \fBMaxOS::system::GDTRegister\fP \fBMaxOS::system::__attribute__\fP ((packed)) gdtr_t"
-.br
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "uint16_t \fBsize\fP"
-.br
-.RI "The size of the GDT\&. "
-.ti -1c
-.RI "uint64_t \fBaddress\fP"
-.br
-.RI "The address of the GDT\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -77,33 +68,19 @@ Definition in file \fBgdt\&.h\fP\&.
 .PP
 Flags for the GDT entries\&. DescriptorFlags 
 .PP
-Definition at line \fB23\fP of file \fBgdt\&.h\fP\&..PP
+Definition at line \fB24\fP of file \fBgdt\&.h\fP\&..PP
 .nf
-23                                     : uint64_t {
-24              Write               = (1ULL << 41),
-25              Execute             = (1ULL << 43),
-26              CodeOrDataSegment   = (1ULL << 44),
-27              GrowDown            = (1ULL << 45),
-28              ConformFromLower    = (1ULL << 46),
-29              Present             = (1ULL << 47),
-30              LongMode            = (1ULL << 53),
-31          };
+24                                : uint64_t {
+25         Write = (1ULL << 41),
+26         Execute = (1ULL << 43),
+27         CodeOrDataSegment = (1ULL << 44),
+28         GrowDown = (1ULL << 45),
+29         ConformFromLower = (1ULL << 46),
+30         Present = (1ULL << 47),
+31         LongMode = (1ULL << 53),
+32     };
 .fi
 
-.SH "Variable Documentation"
-.PP 
-.SS "uint64_t address"
-
-.PP
-The address of the GDT\&. 
-.PP
-Definition at line \fB1\fP of file \fBgdt\&.h\fP\&.
-.SS "uint16_t size"
-
-.PP
-The size of the GDT\&. 
-.PP
-Definition at line \fB0\fP of file \fBgdt\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

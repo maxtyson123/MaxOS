@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,7 +17,7 @@ MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface \- Handles 
 .br
 .RI "Construct a new Advanced Configuration And Power Interface object\&. Maps the ACPI headers and tables into the higher half\&. "
 .ti -1c
-.RI "\fBacpi_sdt_header_t\fP * \fBfind\fP (\fBconst\fP \fBchar\fP *\fBsignature\fP)"
+.RI "\fBacpi_sdt_header_t\fP * \fBfind\fP (\fBconst\fP \fBchar\fP *signature)"
 .br
 .RI "Finds a table with the given signature\&. "
 .in -1c
@@ -25,10 +25,10 @@ MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface \- Handles 
 .PP 
 Handles ACPI table parsing and retrieval\&. 
 .PP
-Definition at line \fB85\fP of file \fBacpi\&.h\fP\&.
+Definition at line \fB99\fP of file \fBacpi\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface (\fBsystem::Multiboot\fP * multiboot)"
+.SS "AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface (\fBsystem::Multiboot\fP * multiboot)\fC [explicit]\fP"
 
 .PP
 Construct a new Advanced Configuration And Power Interface object\&. Maps the ACPI headers and tables into the higher half\&. 
@@ -40,47 +40,48 @@ Construct a new Advanced Configuration And Power Interface object\&. Maps the AC
 .PP
 
 .PP
-Definition at line \fB22\fP of file \fBacpi\&.cpp\fP\&..PP
+Definition at line \fB23\fP of file \fBacpi\&.cpp\fP\&..PP
 .nf
-22                                                                                                          {
-23 
-24     Logger::INFO() << "Setting up ACPI\\n";
+24 : m_header(nullptr) {
 25 
-26     // If the new ACPI is not supported, panic
-27     ASSERT(multiboot\->new_acpi() != nullptr || multiboot\->old_acpi() != nullptr, "No ACPI found!");
-28 
-29     // Check if the new ACPI is supported
-30     m_using_new_acpi = multiboot\->old_acpi() == nullptr;
-31     Logger::DEBUG() << "CPU Supports " << (m_using_new_acpi ? "New" : "Old") << " ACPI\\n";
-32 
-33     if (m_using_new_acpi)
-34         m_rsdp2 = (RSDPDescriptor2*) (multiboot\->new_acpi() + 1);
-35     else
-36         m_rsdp = (RSDPDescriptor*) (multiboot\->old_acpi() + 1);
-37 
-38     // Map the XSDT/RSDT
-39     uint64_t physical_address = m_using_new_acpi ? m_rsdp2\->xsdt_address : m_rsdp\->rsdt_address;
-40     void* virtual_address = map_descriptor(physical_address);
-41     ASSERT(virtual_address != nullptr, "Failed to map ACPI table");
-42     Logger::DEBUG() << "XSDT/RSDT: physical: 0x" << physical_address << ", virtual: 0x" << (uint64_t)virtual_address << "\\n";
-43 
-44     // Load
-45     if (m_using_new_acpi)
-46         m_xsdt = (XSDT*)virtual_address;
-47     else
-48         m_rsdt = (RSDT*)virtual_address;
-49 
-50     // Map the Tables
-51     Logger::DEBUG() << "Mapping ACPI Tables\\n";
-52     map_tables(m_using_new_acpi ? sizeof(uint64_t) : sizeof(uint32_t));
-53 
-54     // Check if the checksum is valid
-55     ASSERT(valid_checksum(), "ACPI: Invalid checksum!");
-56 }
+26     Logger::INFO() << "Setting up ACPI\\n";
+27 
+28     // If the new ACPI is not supported, panic
+29     ASSERT(multiboot\->new_acpi() != nullptr || multiboot\->old_acpi() != nullptr, "No ACPI found!");
+30 
+31     // Check if the new ACPI is supported
+32     m_using_new_acpi = multiboot\->old_acpi() == nullptr;
+33     Logger::DEBUG() << "CPU Supports " << (m_using_new_acpi ? "New" : "Old") << " ACPI\\n";
+34 
+35     if(m_using_new_acpi)
+36         m_rsdp2 = (RSDPDescriptor2*) (multiboot\->new_acpi() + 1);
+37     else
+38         m_rsdp = (RSDPDescriptor*) (multiboot\->old_acpi() + 1);
+39 
+40     // Map the XSDT/RSDT
+41     uint64_t physical_address = m_using_new_acpi ? m_rsdp2\->xsdt_address : m_rsdp\->rsdt_address;
+42     void* virtual_address = map_descriptor(physical_address);
+43     ASSERT(virtual_address != nullptr, "Failed to map ACPI table");
+44     Logger::DEBUG() << "XSDT/RSDT: physical: 0x" << physical_address << ", virtual: 0x" << (uint64_t) virtual_address
+45                     << "\\n";
+46 
+47     // Load
+48     if(m_using_new_acpi)
+49         m_xsdt = (XSDT*) virtual_address;
+50     else
+51         m_rsdt = (RSDT*) virtual_address;
+52 
+53     // Map the Tables
+54     Logger::DEBUG() << "Mapping ACPI Tables\\n";
+55     map_tables(m_using_new_acpi ? sizeof(uint64_t) : sizeof(uint32_t));
+56 
+57     // Check if the checksum is valid
+58     ASSERT(valid_checksum(), "ACPI: Invalid checksum!");
+59 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBLogger::DEBUG()\fP, \fBLogger::INFO()\fP, and \fBphysical_address\fP\&.
+References \fBASSERT\fP, \fBMaxOS::Logger::DEBUG()\fP, and \fBMaxOS::Logger::INFO()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBACPISDTHeader\fP * AdvancedConfigurationAndPowerInterface::find (\fBconst\fP \fBchar\fP * signature)"
@@ -100,35 +101,35 @@ The table with the given signature, or nullptr if not found
 .PP
 
 .PP
-Definition at line \fB160\fP of file \fBacpi\&.cpp\fP\&..PP
+Definition at line \fB163\fP of file \fBacpi\&.cpp\fP\&..PP
 .nf
-160                                                                                  {
-161 
-162     // Get the number of entries
-163     size_t entries = (m_header\->length \- sizeof(ACPISDTHeader)) / sizeof(uint32_t);
-164     if (m_using_new_acpi) entries = (m_header\->length \- sizeof(ACPISDTHeader)) / sizeof(uint64_t);
-165 
-166     // Loop through all the entries
-167     for (size_t i = 0; i < entries; ++i) {
+163                                                                                  {
+164 
+165     // Get the number of entries
+166     size_t entries = (m_header\->length \- sizeof(ACPISDTHeader)) / sizeof(uint32_t);
+167     if(m_using_new_acpi) entries = (m_header\->length \- sizeof(ACPISDTHeader)) / sizeof(uint64_t);
 168 
-169         // Get the entry
-170         auto* header = (ACPISDTHeader*) (m_using_new_acpi ? m_xsdt\->pointers[i] : get_rsdt_pointer(i));
+169     // Loop through all the entries
+170     for(size_t i = 0; i < entries; ++i) {
 171 
-172         // Move the header to the higher half
-173         header = (ACPISDTHeader*) PhysicalMemoryManager::to_io_region((uint64_t) header);
+172         // Get the entry
+173         auto* header = (ACPISDTHeader*) (m_using_new_acpi ? m_xsdt\->pointers[i] : get_rsdt_pointer(i));
 174 
-175         // Check if the signature matches
-176         if (strncmp(header\->signature, signature, 4))
-177             return header;
-178     }
-179 
-180     // Return null if no entry was found
-181     return nullptr;
-182 }
+175         // Move the header to the higher half
+176         header = (ACPISDTHeader*) PhysicalMemoryManager::to_io_region((uint64_t) header);
+177 
+178         // Check if the signature matches
+179         if(strncmp(header\->signature, signature, 4))
+180             return header;
+181     }
+182 
+183     // Return null if no entry was found
+184     return nullptr;
+185 }
 .fi
 
 .PP
-References \fBentries\fP, \fBheader\fP, \fBMaxOS::hardwarecommunication::XSDT::pointers\fP, \fBsignature\fP, \fBMaxOS::hardwarecommunication::ACPISDTHeader::signature\fP, \fBstrncmp()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP\&.
+References \fBMaxOS::hardwarecommunication::XSDT::pointers\fP, \fBstrncmp()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP\&.
 .PP
 Referenced by \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP\&.
 

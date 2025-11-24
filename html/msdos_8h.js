@@ -3,6 +3,8 @@ var msdos_8h =
     [ "MaxOS::filesystem::partition::PartitionTableEntry", "structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html", "structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry" ],
     [ "MaxOS::filesystem::partition::MasterBootRecord", "structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord.html", "structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord" ],
     [ "MaxOS::filesystem::partition::MSDOSPartition", "classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition.html", null ],
+    [ "master_boot_record_t", "msdos_8h.html#ac818b8d6a6e48d402765748016bddb85", null ],
+    [ "partition_table_entry_t", "msdos_8h.html#ab1ba6e33a1f0304ba3ef76f48d44b6e7", null ],
     [ "PartitionType", "msdos_8h.html#a2e4fb19c764ea277199e32724975df93", [
       [ "EMPTY", "msdos_8h.html#a2e4fb19c764ea277199e32724975df93aba2b45bdc11e2a4a6e86aab2ac693cbb", null ],
       [ "FAT12", "msdos_8h.html#a2e4fb19c764ea277199e32724975df93ab87f6ac155836889d32e6caf9be6256e", null ],
@@ -258,20 +260,5 @@ var msdos_8h =
       [ "LINUX_RAID_AUTO", "msdos_8h.html#a2e4fb19c764ea277199e32724975df93a1c062c8eba59d717db8e106fd6284c95", null ],
       [ "NT_HIDDEN", "msdos_8h.html#a2e4fb19c764ea277199e32724975df93af9093a629863e160a59f374bf64c1807", null ],
       [ "XENIX_BAD_BLOCK", "msdos_8h.html#a2e4fb19c764ea277199e32724975df93ab2fa4e5e5e99d97ece2166c438e8288d", null ]
-    ] ],
-    [ "bootable", "msdos_8h.html#a473a1483ecee72b5fb823dd28190cef8", null ],
-    [ "bootloader", "msdos_8h.html#a09835f758bb5328b55a01068bbc4c972", null ],
-    [ "disk_signature", "msdos_8h.html#a2eda13dfaaf6d61d3bbad4f0dc86c845", null ],
-    [ "end_cylinder", "msdos_8h.html#a4673ec2e07d66b72d0744129d4e89b87", null ],
-    [ "end_head", "msdos_8h.html#aa8928d79fa39385e4e726185713fc356", null ],
-    [ "end_sector", "msdos_8h.html#aed0439ad723570765c1e40b8efd1dd61", null ],
-    [ "length", "msdos_8h.html#aebb70c2aab3407a9f05334c47131a43b", null ],
-    [ "magic", "msdos_8h.html#a8c61e64b8675498cee79c59d3f8131e2", null ],
-    [ "primary_partition", "msdos_8h.html#ae82a748207fb88709bb65e8a13096863", null ],
-    [ "start_cylinder", "msdos_8h.html#a461c61c9b56efe9ccccb9ddcafc7039e", null ],
-    [ "start_head", "msdos_8h.html#a7b0643284eda403a636341c87b08e850", null ],
-    [ "start_LBA", "msdos_8h.html#a48084b77fa49c552983824a90b0110e4", null ],
-    [ "start_sector", "msdos_8h.html#a7194a9ec4359f80228f38427074b0e79", null ],
-    [ "type", "msdos_8h.html#a1d127017fb298b889f4ba24752d08b8e", null ],
-    [ "unused", "msdos_8h.html#a69f7e996ff7ce0531e893a56c8515e6b", null ]
+    ] ]
 ];

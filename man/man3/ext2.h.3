@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/ext2.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/ext2.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,17 +7,19 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <drivers/disk/disk\&.h>\fP
-.br
-\fC#include <filesystem/filesystem\&.h>\fP
-.br
-\fC#include <stdint\&.h>\fP
-.br
-\fC#include <memory/memoryIO\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 \fC#include <common/spinlock\&.h>\fP
 .br
+\fC#include <common/macros\&.h>\fP
+.br
+\fC#include <drivers/disk/disk\&.h>\fP
+.br
 \fC#include <drivers/clock/clock\&.h>\fP
+.br
+\fC#include <filesystem/filesystem\&.h>\fP
+.br
+\fC#include <memory/memoryIO\&.h>\fP
 .br
 
 .SS "Classes"
@@ -63,6 +65,30 @@
 .RI "class \fBMaxOS::filesystem::format::ext2::Ext2FileSystem\fP"
 .br
 .RI "Handles the ext2 filesystem operations\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::filesystem::format::ext2::SuperBlock\fP \fBMaxOS::filesystem::format::ext2::superblock_t\fP"
+.br
+.RI "Alias for \fBSuperBlock\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::filesystem::format::ext2::BlockGroupDescriptor\fP \fBMaxOS::filesystem::format::ext2::block_group_descriptor_t\fP"
+.br
+.RI "Alias for \fBBlockGroupDescriptor\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::filesystem::format::ext2::Inode\fP \fBMaxOS::filesystem::format::ext2::inode_t\fP"
+.br
+.RI "Alias for \fBInode\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::filesystem::format::ext2::InodeOS2Linux\fP \fBMaxOS::filesystem::format::ext2::linux_os_2_t\fP"
+.br
+.RI "Alias for \fBInodeOS2Linux\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::filesystem::format::ext2::DirectoryEntry\fP \fBMaxOS::filesystem::format::ext2::directory_entry_t\fP"
+.br
+.RI "Alias for \fBDirectoryEntry\fP struct\&. "
 .in -1c
 .SS "Enumerations"
 
@@ -112,348 +138,6 @@
 .br
 .RI "The type of a directory entry\&. "
 .in -1c
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "struct \fBMaxOS::filesystem::format::ext2::SuperBlock\fP \fBMaxOS::filesystem::format::ext2::__attribute__\fP ((packed)) superblock_t"
-.br
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "uint32_t \fBtotal_inodes\fP"
-.br
-.RI "Total number of inodes\&. "
-.ti -1c
-.RI "uint32_t \fBtotal_blocks\fP"
-.br
-.RI "Total number of blocks\&. "
-.ti -1c
-.RI "uint32_t \fBreserved_blocks\fP"
-.br
-.RI "Number of reserved blocks for superuser\&. "
-.ti -1c
-.RI "uint32_t \fBunallocated_blocks\fP"
-.br
-.RI "Number of free blocks\&. "
-.ti -1c
-.RI "uint32_t \fBunallocated_inodes\fP"
-.br
-.RI "Number of free inodes\&. "
-.ti -1c
-.RI "uint32_t \fBstarting_block\fP"
-.br
-.RI "Where the superblock starts (normally 0 but not always) "
-.ti -1c
-.RI "uint32_t \fBblock_size\fP"
-.br
-.RI "Block size (as a power of 2, so 1024 << block_size) "
-.ti -1c
-.RI "uint32_t \fBfragment_size\fP"
-.br
-.RI "Fragment size (as a power of 2, so 1024 << fragment_size) "
-.ti -1c
-.RI "uint32_t \fBblocks_per_group\fP"
-.br
-.RI "Number of blocks per group\&. "
-.ti -1c
-.RI "uint32_t \fBfragments_per_group\fP"
-.br
-.RI "Number of fragments per group\&. "
-.ti -1c
-.RI "uint32_t \fBinodes_per_group\fP"
-.br
-.RI "Number of inodes per group\&. "
-.ti -1c
-.RI "uint32_t \fBlast_mount_time\fP"
-.br
-.RI "Last time the filesystem was mounted (in seconds since the epoch) "
-.ti -1c
-.RI "uint32_t \fBlate_write_time\fP"
-.br
-.RI "Last time a block was written to (in seconds since the epoch) "
-.ti -1c
-.RI "uint16_t \fBmounts_since_check\fP"
-.br
-.RI "Number of mounts since the last consistency check\&. "
-.ti -1c
-.RI "uint16_t \fBmounts_until_check\fP"
-.br
-.RI "Number of mounts allowed before a consistency check is needed (fsck) "
-.ti -1c
-.RI "uint16_t \fBsignature\fP"
-.br
-.RI "Filesystem magic signature (0xEF53) "
-.ti -1c
-.RI "uint16_t \fBstate\fP"
-.br
-.RI "The state of the filesystem (see FileSystemState) "
-.ti -1c
-.RI "uint16_t \fBerror_operation\fP"
-.br
-.RI "What to do when an error is detected (see ErrorOperation) "
-.ti -1c
-.RI "uint16_t \fBversion_minor\fP"
-.br
-.RI "Minor version number (combined with version_major to make version number) "
-.ti -1c
-.RI "uint32_t \fBlast_check_time\fP"
-.br
-.RI "Time of last consistency check (in seconds since the epoch) "
-.ti -1c
-.RI "uint32_t \fBtime_until_check\fP"
-.br
-.RI "Maximum time between checks (in seconds) "
-.ti -1c
-.RI "uint32_t \fBos_id\fP"
-.br
-.RI "ID of the OS which created the filesystem (see CreatorOS) "
-.ti -1c
-.RI "uint32_t \fBversion_major\fP"
-.br
-.RI "Major version number (combined with version_minor to make version number) "
-.ti -1c
-.RI "uint16_t \fBreserved_user\fP"
-.br
-.RI "User ID that can use reserved blocks\&. "
-.ti -1c
-.RI "uint16_t \fBreserved_group\fP"
-.br
-.RI "Group ID that can use reserved blocks\&. "
-.ti -1c
-.RI "uint32_t \fBfirst_inode\fP"
-.br
-.RI "Number of the first non-reserved inode (version < 1 this is 11) "
-.ti -1c
-.RI "uint16_t \fBinode_size\fP"
-.br
-.RI "Size of each inode structure (version < 1 this is 128 bytes) "
-.ti -1c
-.RI "uint16_t \fBsuperblock_group\fP"
-.br
-.RI "If there is a backup superblock, which group it is stored in\&. "
-.ti -1c
-.RI "uint32_t \fBoptional_features\fP"
-.br
-.RI "Features that are not required for read/write support but can help performance (see OptionalFeatures) "
-.ti -1c
-.RI "uint32_t \fBrequired_features\fP"
-.br
-.RI "Features that must be present for read/write support (see RequiredFeatures) "
-.ti -1c
-.RI "uint16_t \fBread_only_features\fP"
-.br
-.RI "Features that are only required in read-only mode (see ReadOnlyFeatures) "
-.ti -1c
-.RI "uint8_t \fBfilesystem_id\fP [16]"
-.br
-.RI "A unique identifier for the filesystem\&. "
-.ti -1c
-.RI "uint8_t \fBvolume_name\fP [16]"
-.br
-.RI "The volume name (is null-terminated) "
-.ti -1c
-.RI "uint8_t \fBlast_mount_path\fP [64]"
-.br
-.RI "The path where the filesystem was last mounted (is null-terminated) "
-.ti -1c
-.RI "uint32_t \fBcompression\fP"
-.br
-.RI "Compression algorithm used (0 = none, see RequiredFeatures) "
-.ti -1c
-.RI "uint8_t \fBfile_preallocation_blocks\fP"
-.br
-.RI "How many blocks should be allocated when creating a file\&. "
-.ti -1c
-.RI "uint8_t \fBdirectory_preallocation_blocks\fP"
-.br
-.RI "How many blocks should be allocated when creating a directory\&. "
-.ti -1c
-.RI "uint16_t \fBunused\fP"
-.br
-.RI "Reserved\&. "
-.ti -1c
-.RI "uint8_t \fBjournal_id\fP [16]"
-.br
-.RI "A unique identifier for the journal\&. "
-.ti -1c
-.RI "uint32_t \fBjournal_inode\fP"
-.br
-.RI "The inode number of the journal file\&. "
-.ti -1c
-.RI "uint32_t \fBjournal_device\fP"
-.br
-.RI "The device number of the journal file\&. "
-.ti -1c
-.RI "uint32_t \fBorphan_inodes_start\fP"
-.br
-.RI "The start of the list of inodes without a directory entry that need to be deleted\&. "
-.ti -1c
-.RI "uint8_t \fBfree\fP [276]"
-.br
-.RI "Reserved for future expansion\&. "
-.ti -1c
-.RI "enum \fBMaxOS::filesystem::format::ext2::FileSystemState\fP \fBMaxOS::filesystem::format::ext2::__attribute__\fP"
-.br
-.ti -1c
-.RI "uint32_t \fBblock_usage_bitmap\fP"
-.br
-.RI "The block address of the block usage bitmap\&. "
-.ti -1c
-.RI "uint32_t \fBblock_inode_bitmap\fP"
-.br
-.RI "The block address of the inode usage bitmap\&. "
-.ti -1c
-.RI "uint32_t \fBinode_table_address\fP"
-.br
-.RI "The starting block address of the inode table\&. "
-.ti -1c
-.RI "uint16_t \fBfree_blocks\fP"
-.br
-.RI "How many free blocks are in this block group\&. "
-.ti -1c
-.RI "uint16_t \fBfree_inodes\fP"
-.br
-.RI "How many free inodes are in this block group\&. "
-.ti -1c
-.RI "uint16_t \fBdirectory_count\fP"
-.br
-.RI "How many directories are in this block group\&. "
-.ti -1c
-.RI "union {"
-.br
-.ti -1c
-.RI "   uint16_t \fBtype_permissions\fP"
-.br
-.RI "The type and permissions of the inode\&. "
-.ti -1c
-.RI "   struct {"
-.br
-.ti -1c
-.RI "      uint16_t \fBpermissions\fP: 12"
-.br
-.RI "The permissions of the inode\&. "
-.ti -1c
-.RI "      uint16_t \fBtype\fP: 4"
-.br
-.RI "The type of the inode\&. "
-.ti -1c
-.RI "   } "
-.br
-.ti -1c
-.RI "}; "
-.br
-.ti -1c
-.RI "uint16_t \fBuser_id\fP"
-.br
-.RI "The ID of the user who owns the inode\&. "
-.ti -1c
-.RI "uint32_t \fBsize_lower\fP"
-.br
-.RI "The lower 32 bits of the size of the file in bytes\&. "
-.ti -1c
-.RI "uint32_t \fBlast_access_time\fP"
-.br
-.RI "The seconds (since the epoch) of the last access time\&. "
-.ti -1c
-.RI "uint32_t \fBcreation_time\fP"
-.br
-.RI "The seconds (since the epoch) of the time the inode was first allocated\&. "
-.ti -1c
-.RI "uint32_t \fBlast_modification_time\fP"
-.br
-.RI "The seconds (since the epoch) of the last time the inode was written to\&. "
-.ti -1c
-.RI "uint32_t \fBdeletion_time\fP"
-.br
-.RI "The seconds (since the epoch) of the time the inode was marked as not used\&. "
-.ti -1c
-.RI "uint16_t \fBgroup_id\fP"
-.br
-.RI "The ID of the group who owns the inode\&. "
-.ti -1c
-.RI "uint16_t \fBhard_links\fP"
-.br
-.RI "How many directory entries point to this inode\&. "
-.ti -1c
-.RI "uint32_t \fBsectors_used\fP"
-.br
-.RI "How many 512 byte sectors are used by this inode (not blocks) (not including this struct or directory entries linked to it) "
-.ti -1c
-.RI "uint32_t \fBflags\fP"
-.br
-.RI "Flags for the inode (see InodeFlags) "
-.ti -1c
-.RI "uint32_t \fBos_1\fP"
-.br
-.RI "OS specific value (0 for Linux/HURD, 'transaltor' for Masix) "
-.ti -1c
-.RI "uint32_t \fBblock_pointers\fP [12]"
-.br
-.RI "Pointers to the blocks that store the file's data (0 marks unused) "
-.ti -1c
-.RI "uint32_t \fBl1_indirect\fP"
-.br
-.RI "Pointer to a block that contains more block pointers (see block_pointers) "
-.ti -1c
-.RI "uint32_t \fBl2_indirect\fP"
-.br
-.RI "Pointer to a block that contains more l1_indirect pointers\&. "
-.ti -1c
-.RI "uint32_t \fBl3_indirect\fP"
-.br
-.RI "Pointer to a block that contains more l2_indirect pointers\&. "
-.ti -1c
-.RI "uint32_t \fBgeneration\fP"
-.br
-.RI "File version (used by NFS) "
-.ti -1c
-.RI "uint32_t \fBextended_attribute\fP"
-.br
-.RI "File extended attribute block (Access Control List) "
-.ti -1c
-.RI "uint32_t \fBsize_upper\fP"
-.br
-.RI "The upper 32 bits of the size of the file in bytes (for files larger than 4GB)\&. If this is a directory, this is the Directory Access Control List\&. "
-.ti -1c
-.RI "uint32_t \fBos_2\fP [3]"
-.br
-.RI "Second OS specific value (see InodeOS2Linux, \&.\&.\&.) "
-.ti -1c
-.RI "uint8_t \fBfragment\fP"
-.br
-.RI "The fragment number\&. "
-.ti -1c
-.RI "uint16_t \fBhigh_type_permissions\fP"
-.br
-.RI "The high bits of the type & permissions\&. "
-.ti -1c
-.RI "uint16_t \fBhigh_user_id\fP"
-.br
-.RI "The high bits of the user ID\&. "
-.ti -1c
-.RI "uint16_t \fBhigh_group_id\fP"
-.br
-.RI "The high bits of the group ID\&. "
-.ti -1c
-.RI "uint32_t \fBauthor_id\fP"
-.br
-.RI "The user who created the inode (0xFFFFFFFF if use UID/GID fields) "
-.ti -1c
-.RI "uint32_t \fBinode\fP"
-.br
-.RI "The inode number this entry points to (0 = unused) "
-.ti -1c
-.RI "uint16_t \fBsize\fP"
-.br
-.RI "The total size of this entry (including name) "
-.ti -1c
-.RI "uint8_t \fBname_length\fP"
-.br
-.RI "The length of the name\&. "
-.in -1c
 .SH "Detailed Description"
 .PP 
 Defines structures and enums for the Extended 2 (ext2) filesystem format and relevant Filesystem, Directory and File classes\&. 
@@ -473,6 +157,30 @@ Max Tyson
 
 .PP
 Definition in file \fBext2\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "\fBMaxOS::filesystem::format::ext2::block_group_descriptor_t\fP"
+
+.PP
+Alias for BlockGroupDescriptor struct\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Support updating directory_count when creating/deleting directories 
+.RE
+.PP
+
+.SS "\fBMaxOS::filesystem::format::ext2::linux_os_2_t\fP"
+
+.PP
+Alias for InodeOS2Linux struct\&. 
+.PP
+\fBTodo\fP
+.RS 4
+HURD, MASIX 
+.RE
+.PP
+
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::CreatorOS\fP\fC [strong]\fP"
@@ -487,15 +195,15 @@ Add MaxOS
 .PP
 
 .PP
-Definition at line \fB102\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB104\fP of file \fBext2\&.h\fP\&..PP
 .nf
-102                                      {
-103                     LINUX,
-104                     GNU_HURD,
-105                     MASIX,
-106                     FREE_BSD,
-107                     OTHER_LITES,
-108                 };
+104                          {
+105         LINUX,
+106         GNU_HURD,
+107         MASIX,
+108         FREE_BSD,
+109         OTHER_LITES,
+110     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::EntryType\fP\fC [strong]\fP"
@@ -515,18 +223,18 @@ Support more
 .PP
 
 .PP
-Definition at line \fB291\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB305\fP of file \fBext2\&.h\fP\&..PP
 .nf
-291                                      {
-292                     UNKNOWN,
-293                     FILE,
-294                     DIRECTORY,
-295                     CHARACTER_DEVICE,
-296                     BLOCK_DEVICE,
-297                     FIFO,
-298                     SOCKET,
-299                     SYMBOLIC_LINK
-300                 };
+305                          {
+306         UNKNOWN,
+307         FILE,
+308         DIRECTORY,
+309         CHARACTER_DEVICE,
+310         BLOCK_DEVICE,
+311         FIFO,
+312         SOCKET,
+313         SYMBOLIC_LINK
+314     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::ErrorOperation\fP\fC [strong]\fP"
@@ -534,13 +242,13 @@ Definition at line \fB291\fP of file \fBext2\&.h\fP\&..PP
 .PP
 What to do when an error occurs\&. 
 .PP
-Definition at line \fB90\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB92\fP of file \fBext2\&.h\fP\&..PP
 .nf
-90                                           {
-91                     IGNORE  = 1,
-92                     REMOUNT = 2,
-93                     PANIC   = 3,
-94                 };
+92                               {
+93         IGNORE = 1,
+94         REMOUNT = 2,
+95         PANIC = 3,
+96     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::FileSystemState\fP\fC [strong]\fP"
@@ -548,12 +256,12 @@ Definition at line \fB90\fP of file \fBext2\&.h\fP\&..PP
 .PP
 The state of the filesystem\&. 
 .PP
-Definition at line \fB81\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB83\fP of file \fBext2\&.h\fP\&..PP
 .nf
-81                                            {
-82                     CLEAN = 1,
-83                     ERROR = 2,
-84                 };
+83                                {
+84         CLEAN = 1,
+85         ERROR = 2,
+86     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::InodeFlags\fP\fC [strong]\fP"
@@ -561,21 +269,21 @@ Definition at line \fB81\fP of file \fBext2\&.h\fP\&..PP
 .PP
 The flags that can be set on an inode\&. 
 .PP
-Definition at line \fB243\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB251\fP of file \fBext2\&.h\fP\&..PP
 .nf
-243                                       {
-244                     SECURE_DELETE     = 0x1,  // Zero out data on deletion
-245                     KEEP_DATA         = 0x2,
-246                     FILE_COMPRESSION  = 0x4,
-247                     SYNC_UPDATES      = 0x8,
-248                     FILE_IMMUTABLE    = 0x10,
-249                     APPEND_ONLY       = 0x20,
-250                     DONT_DUMP         = 0x40,
-251                     NO_LAST_ACCESS    = 0x80,
-252                     HASH_INDEXED      = 0x10000,
-253                     AFS_DIRECTORY     = 0x20000,
-254                     JOURNAL_FILE_DATA = 0x40000,
-255                 };
+251                           {
+252         SECURE_DELETE = 0x1,  // Zero out data on deletion
+253         KEEP_DATA = 0x2,
+254         FILE_COMPRESSION = 0x4,
+255         SYNC_UPDATES = 0x8,
+256         FILE_IMMUTABLE = 0x10,
+257         APPEND_ONLY = 0x20,
+258         DONT_DUMP = 0x40,
+259         NO_LAST_ACCESS = 0x80,
+260         HASH_INDEXED = 0x10000,
+261         AFS_DIRECTORY = 0x20000,
+262         JOURNAL_FILE_DATA = 0x40000,
+263     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::InodePermissions\fP\fC [strong]\fP"
@@ -583,22 +291,22 @@ Definition at line \fB243\fP of file \fBext2\&.h\fP\&..PP
 .PP
 The permissions that an inode can have\&. 
 .PP
-Definition at line \fB213\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB221\fP of file \fBext2\&.h\fP\&..PP
 .nf
-213                                            {
-214                     OTHER_EXECUTE = 0x1,
-215                     OTHER_WRITE   = 0x2,
-216                     OTHER_READ    = 0x4,
-217                     GROUP_EXECUTE = 0x8,
-218                     GROUP_WRITE   = 0x10,
-219                     GROUP_READ    = 0x20,
-220                     USER_EXECUTE  = 0x40,
-221                     USER_WRITE    = 0x80,
-222                     USER_READ     = 0x100,
-223                     STICKY        = 0x200,
-224                     GROUP_ID      = 0x400,
-225                     USER_ID       = 0x800,
-226                 };
+221                                 {
+222         OTHER_EXECUTE = 0x1,
+223         OTHER_WRITE = 0x2,
+224         OTHER_READ = 0x4,
+225         GROUP_EXECUTE = 0x8,
+226         GROUP_WRITE = 0x10,
+227         GROUP_READ = 0x20,
+228         USER_EXECUTE = 0x40,
+229         USER_WRITE = 0x80,
+230         USER_READ = 0x100,
+231         STICKY = 0x200,
+232         GROUP_ID = 0x400,
+233         USER_ID = 0x800,
+234     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::InodePermissionsDefaults\fP\fC [strong]\fP"
@@ -613,12 +321,12 @@ Document these values
 .PP
 
 .PP
-Definition at line \fB234\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB242\fP of file \fBext2\&.h\fP\&..PP
 .nf
-234                                                     {
-235                     FILE        = 0x1A4,
-236                     DIRECTORY   = 0x1ED,
-237                 };
+242                                         {
+243         FILE = 0x1A4,
+244         DIRECTORY = 0x1ED,
+245     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::InodeType\fP\fC [strong]\fP"
@@ -626,18 +334,18 @@ Definition at line \fB234\fP of file \fBext2\&.h\fP\&..PP
 .PP
 The type of an inode\&. 
 .PP
-Definition at line \fB198\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB206\fP of file \fBext2\&.h\fP\&..PP
 .nf
-198                                      {
-199                     UNKNOWN,
-200                     FIFO              = 0x1000,
-201                     CHARACTER_DEVICE  = 0x2000,
-202                     DIRECTORY         = 0x4000,
-203                     BLOCK_DEVICE      = 0x6000,
-204                     FILE              = 0x8000,
-205                     SYMBOLIC_LINK     = 0xA000,
-206                     SOCKET            = 0xC000,
-207                 };
+206                          {
+207         UNKNOWN,
+208         FIFO = 0x1000,
+209         CHARACTER_DEVICE = 0x2000,
+210         DIRECTORY = 0x4000,
+211         BLOCK_DEVICE = 0x6000,
+212         FILE = 0x8000,
+213         SYMBOLIC_LINK = 0xA000,
+214         SOCKET = 0xC000,
+215     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::OptionalFeatures\fP\fC [strong]\fP"
@@ -645,16 +353,16 @@ Definition at line \fB198\fP of file \fBext2\&.h\fP\&..PP
 .PP
 What features that are optional are supported by this filesystem\&. 
 .PP
-Definition at line \fB114\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB116\fP of file \fBext2\&.h\fP\&..PP
 .nf
-114                                             {
-115                     PREALLOCATE_DIRECTORY   = 0x1,
-116                     AFS_SERVER_INODES       = 0x2,
-117                     JOURNAL_ENABLED         = 0x4,
-118                     ATTRIBUTES_EXTENDED     = 0x8,
-119                     RESIZEABLE              = 0x10,
-120                     HASH_INDEXING           = 0x20,
-121                 };
+116                                 {
+117         PREALLOCATE_DIRECTORY = 0x1,
+118         AFS_SERVER_INODES = 0x2,
+119         JOURNAL_ENABLED = 0x4,
+120         ATTRIBUTES_EXTENDED = 0x8,
+121         RESIZEABLE = 0x10,
+122         HASH_INDEXING = 0x20,
+123     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::ReadOnlyFeatures\fP\fC [strong]\fP"
@@ -662,13 +370,13 @@ Definition at line \fB114\fP of file \fBext2\&.h\fP\&..PP
 .PP
 What features that are only required in read-only mode\&. 
 .PP
-Definition at line \fB138\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB140\fP of file \fBext2\&.h\fP\&..PP
 .nf
-138                                             {
-139                     SPARSE_SUPER_BLOCKS     = 0x1,
-140                     FILES_64_BIT            = 0x2,
-141                     BINARY_TREE_DIRECTORIES = 0x4,
-142                 };
+140                                 {
+141         SPARSE_SUPER_BLOCKS = 0x1,
+142         FILES_64_BIT = 0x2,
+143         BINARY_TREE_DIRECTORIES = 0x4,
+144     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::ext2::RequiredFeatures\fP\fC [strong]\fP"
@@ -676,506 +384,16 @@ Definition at line \fB138\fP of file \fBext2\&.h\fP\&..PP
 .PP
 What features that are required are supported by this filesystem\&. 
 .PP
-Definition at line \fB127\fP of file \fBext2\&.h\fP\&..PP
+Definition at line \fB129\fP of file \fBext2\&.h\fP\&..PP
 .nf
-127                                             {
-128                     COMPRESSION           = 0x1,
-129                     DIRECTORY_HAS_TYPE    = 0x2,
-130                     MUST_REPLAY_JOURNAL   = 0x4,
-131                     JOURNAL_DEVICE        = 0x8,
-132                 };
+129                                 {
+130         COMPRESSION = 0x1,
+131         DIRECTORY_HAS_TYPE = 0x2,
+132         MUST_REPLAY_JOURNAL = 0x4,
+133         JOURNAL_DEVICE = 0x8,
+134     };
 .fi
 
-.SH "Variable Documentation"
-.PP 
-.SS "uint32_t author_id"
-
-.PP
-The user who created the inode (0xFFFFFFFF if use UID/GID fields) 
-.PP
-Definition at line \fB5\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t block_inode_bitmap"
-
-.PP
-The block address of the inode usage bitmap\&. 
-.PP
-Definition at line \fB1\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t block_pointers[12]"
-
-.PP
-Pointers to the blocks that store the file's data (0 marks unused) 
-.PP
-Definition at line \fB18\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t block_size"
-
-.PP
-Block size (as a power of 2, so 1024 << block_size) 
-.PP
-Definition at line \fB6\fP of file \fBext2\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2File::read()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
-.SS "uint32_t block_usage_bitmap"
-
-.PP
-The block address of the block usage bitmap\&. 
-.PP
-Definition at line \fB0\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t blocks_per_group"
-
-.PP
-Number of blocks per group\&. 
-.PP
-Definition at line \fB8\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t compression"
-
-.PP
-Compression algorithm used (0 = none, see RequiredFeatures) 
-.PP
-Definition at line \fB36\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t creation_time"
-
-.PP
-The seconds (since the epoch) of the time the inode was first allocated\&. 
-.PP
-Definition at line \fB10\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t deletion_time"
-
-.PP
-The seconds (since the epoch) of the time the inode was marked as not used\&. 
-.PP
-Definition at line \fB12\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t directory_count"
-
-.PP
-How many directories are in this block group\&. 
-.PP
-Definition at line \fB5\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t directory_preallocation_blocks"
-
-.PP
-How many blocks should be allocated when creating a directory\&. 
-.PP
-Definition at line \fB38\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t error_operation"
-
-.PP
-What to do when an error is detected (see ErrorOperation) 
-.PP
-Definition at line \fB17\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t extended_attribute"
-
-.PP
-File extended attribute block (Access Control List) 
-.PP
-Definition at line \fB23\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t file_preallocation_blocks"
-
-.PP
-How many blocks should be allocated when creating a file\&. 
-.PP
-Definition at line \fB37\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t filesystem_id[16]"
-
-.PP
-A unique identifier for the filesystem\&. 
-.PP
-Definition at line \fB33\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t first_inode"
-
-.PP
-Number of the first non-reserved inode (version < 1 this is 11) 
-.PP
-Definition at line \fB27\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t flags"
-
-.PP
-Flags for the inode (see InodeFlags) 
-.PP
-Definition at line \fB16\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t fragment"
-
-.PP
-The fragment number\&. 
-.PP
-Definition at line \fB0\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t fragment_size"
-
-.PP
-Fragment size (as a power of 2, so 1024 << fragment_size) How many 1024 byte fragments are in the file\&. 
-.PP
-Definition at line \fB7\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t fragments_per_group"
-
-.PP
-Number of fragments per group\&. 
-.PP
-Definition at line \fB9\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t free"
-
-.PP
-Reserved for future expansion\&. 
-.PP
-Definition at line \fB44\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t free_blocks"
-
-.PP
-How many free blocks are in this block group\&. 
-.PP
-Definition at line \fB3\fP of file \fBext2\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Volume::allocate_blocks()\fP\&.
-.SS "uint16_t free_inodes"
-
-.PP
-How many free inodes are in this block group\&. 
-.PP
-Definition at line \fB4\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t generation"
-
-.PP
-File version (used by NFS) 
-.PP
-Definition at line \fB22\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t group_id"
-
-.PP
-The ID of the group who owns the inode\&. 
-.PP
-Definition at line \fB13\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t hard_links"
-
-.PP
-How many directory entries point to this inode\&. 
-.PP
-Definition at line \fB14\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t high_group_id"
-
-.PP
-The high bits of the group ID\&. 
-.PP
-Definition at line \fB4\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t high_type_permissions"
-
-.PP
-The high bits of the type & permissions\&. 
-.PP
-Definition at line \fB2\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t high_user_id"
-
-.PP
-The high bits of the user ID\&. 
-.PP
-Definition at line \fB3\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t inode"
-
-.PP
-The inode number this entry points to (0 = unused) 
-.PP
-Definition at line \fB0\fP of file \fBext2\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_file()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::create_inode()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::free_inode()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_inode()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_inode()\fP\&.
-.SS "uint16_t inode_size"
-
-.PP
-Size of each inode structure (version < 1 this is 128 bytes) 
-.PP
-Definition at line \fB28\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t inode_table_address"
-
-.PP
-The starting block address of the inode table\&. 
-.PP
-Definition at line \fB2\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t inodes_per_group"
-
-.PP
-Number of inodes per group\&. 
-.PP
-Definition at line \fB10\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t journal_device"
-
-.PP
-The device number of the journal file\&. 
-.PP
-Definition at line \fB42\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t journal_id[16]"
-
-.PP
-A unique identifier for the journal\&. 
-.PP
-Definition at line \fB40\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t journal_inode"
-
-.PP
-The inode number of the journal file\&. 
-.PP
-Definition at line \fB41\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t l1_indirect"
-
-.PP
-Pointer to a block that contains more block pointers (see block_pointers) 
-.PP
-Definition at line \fB19\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t l2_indirect"
-
-.PP
-Pointer to a block that contains more l1_indirect pointers\&. 
-.PP
-Definition at line \fB20\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t l3_indirect"
-
-.PP
-Pointer to a block that contains more l2_indirect pointers\&. 
-.PP
-Definition at line \fB21\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t last_access_time"
-
-.PP
-The seconds (since the epoch) of the last access time\&. 
-.PP
-Definition at line \fB9\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t last_check_time"
-
-.PP
-Time of last consistency check (in seconds since the epoch) 
-.PP
-Definition at line \fB19\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t last_modification_time"
-
-.PP
-The seconds (since the epoch) of the last time the inode was written to\&. 
-.PP
-Definition at line \fB11\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t last_mount_path[64]"
-
-.PP
-The path where the filesystem was last mounted (is null-terminated) 
-.PP
-Definition at line \fB35\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t last_mount_time"
-
-.PP
-Last time the filesystem was mounted (in seconds since the epoch) 
-.PP
-Definition at line \fB11\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t late_write_time"
-
-.PP
-Last time a block was written to (in seconds since the epoch) 
-.PP
-Definition at line \fB12\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t mounts_since_check"
-
-.PP
-Number of mounts since the last consistency check\&. 
-.PP
-Definition at line \fB13\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t mounts_until_check"
-
-.PP
-Number of mounts allowed before a consistency check is needed (fsck) 
-.PP
-Definition at line \fB14\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t name_length"
-
-.PP
-The length of the name\&. 
-.PP
-Definition at line \fB2\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t optional_features"
-
-.PP
-Features that are not required for read/write support but can help performance (see OptionalFeatures) 
-.PP
-Definition at line \fB30\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t orphan_inodes_start"
-
-.PP
-The start of the list of inodes without a directory entry that need to be deleted\&. 
-.PP
-Definition at line \fB43\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t os_1"
-
-.PP
-OS specific value (0 for Linux/HURD, 'transaltor' for Masix) 
-.PP
-Definition at line \fB17\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t os_2[3]"
-
-.PP
-Second OS specific value (see InodeOS2Linux, \&.\&.\&.) 
-.PP
-Definition at line \fB25\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t os_id"
-
-.PP
-ID of the OS which created the filesystem (see CreatorOS) 
-.PP
-Definition at line \fB21\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t permissions"
-
-.PP
-The permissions of the inode\&. 
-.PP
-Definition at line \fB3\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t read_only_features"
-
-.PP
-Features that are only required in read-only mode (see ReadOnlyFeatures) 
-.PP
-Definition at line \fB32\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t required_features"
-
-.PP
-Features that must be present for read/write support (see RequiredFeatures) 
-.PP
-Definition at line \fB31\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t reserved_blocks"
-
-.PP
-Number of reserved blocks for superuser\&. 
-.PP
-Definition at line \fB2\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t reserved_group"
-
-.PP
-Group ID that can use reserved blocks\&. 
-.PP
-Definition at line \fB24\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t reserved_user"
-
-.PP
-User ID that can use reserved blocks\&. 
-.PP
-Definition at line \fB23\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t sectors_used"
-
-.PP
-How many 512 byte sectors are used by this inode (not blocks) (not including this struct or directory entries linked to it) 
-.PP
-Definition at line \fB15\fP of file \fBext2\&.h\fP\&.
-.SS "char signature"
-
-.PP
-Filesystem magic signature (0xEF53) The signature that identifies the type of the table\&. 
-.PP
-Definition at line \fB15\fP of file \fBext2\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()\fP\&.
-.SS "uint16_t size"
-
-.PP
-The total size of this entry (including name) 
-.PP
-Definition at line \fB1\fP of file \fBext2\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::memory::MemoryManager::align()\fP, \fBMaxOS::memory::PhysicalMemoryManager::align_direct_to_page()\fP, \fBMaxOS::memory::PhysicalMemoryManager::align_to_page()\fP, \fBMaxOS::memory::PhysicalMemoryManager::align_up_to_page()\fP, \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::PhysicalMemoryManager::allocate_area()\fP, \fBMaxOS::common::Buffer::Buffer()\fP, \fBMaxOS::common::Buffer::Buffer()\fP, \fBMaxOS::memory::PhysicalMemoryManager::check_aligned()\fP, \fBMaxOS::net::EthernetFrameHandler::DataReceived()\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973::DoSend()\fP, \fBMaxOS::drivers::ethernet::IntelI217::DoSend()\fP, \fBMaxOS::drivers::ethernet::EthernetDriver::FireDataReceived()\fP, \fBMaxOS::drivers::ethernet::EthernetDriver::FireDataSent()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_area()\fP, \fBMaxOS::memory::MemoryManager::handle_malloc()\fP, \fBMaxOS::net::AddressResolutionProtocol::handleEthernetframePayload()\fP, \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP, \fBMaxOS::net::TCPSocket::handleTransmissionControlProtocolPayload()\fP, \fBMaxOS::net::UDPSocket::handleUserDatagramProtocolPayload()\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::memory::MemoryManager::malloc()\fP, \fBMaxOS::drivers::ethernet::EthernetDriverEventHandler::on_event()\fP, \fBMaxOS::net::TCPPayloadHandler::on_event()\fP, \fBMaxOS::net::UDPPayloadHandler::on_event()\fP, \fBoperator new()\fP, \fBoperator new[]()\fP, \fBMaxOS::filesystem::FileResource::read()\fP, \fBMaxOS::filesystem::DirectoryResource::read()\fP, \fBMaxOS::processes::SharedMessageEndpoint::read()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::common::Buffer::resize()\fP, \fBMaxOS::net::IPV4PayloadHandler::Send()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, \fBMaxOS::net::EthernetFramePayloadHandler::Send()\fP, \fBMaxOS::drivers::ethernet::EthernetDriver::Send()\fP, \fBMaxOS::net::TCPSocket::Send()\fP, \fBMaxOS::net::UDPSocket::Send()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, \fBMaxOS::system::SyscallManager::syscall_allocate_memory()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_read()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_write()\fP, \fBMaxOS::common::Vector< Type >::Vector()\fP, \fBMaxOS::filesystem::FileResource::write()\fP, \fBMaxOS::filesystem::DirectoryResource::write()\fP, and \fBMaxOS::processes::SharedMessageEndpoint::write()\fP\&.
-.SS "uint32_t size_lower"
-
-.PP
-The lower 32 bits of the size of the file in bytes\&. 
-.PP
-Definition at line \fB8\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t size_upper"
-
-.PP
-The upper 32 bits of the size of the file in bytes (for files larger than 4GB)\&. If this is a directory, this is the Directory Access Control List\&. 
-.PP
-Definition at line \fB24\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t starting_block"
-
-.PP
-Where the superblock starts (normally 0 but not always) 
-.PP
-Definition at line \fB5\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t state"
-
-.PP
-The state of the filesystem (see FileSystemState) 
-.PP
-Definition at line \fB16\fP of file \fBext2\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreter::on_key_read()\fP\&.
-.SS "uint16_t superblock_group"
-
-.PP
-If there is a backup superblock, which group it is stored in\&. 
-.PP
-Definition at line \fB29\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t time_until_check"
-
-.PP
-Maximum time between checks (in seconds) 
-.PP
-Definition at line \fB20\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t total_blocks"
-
-.PP
-Total number of blocks\&. 
-.PP
-Definition at line \fB1\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t total_inodes"
-
-.PP
-Total number of inodes\&. 
-.PP
-Definition at line \fB0\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t type"
-
-.PP
-The type of the inode\&. The type of the entry (see EntryType) (only if the high bit of the superblock's optional_features is set) 
-.PP
-Definition at line \fB4\fP of file \fBext2\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::processes::GlobalResourceRegistry::add_registry()\fP, \fBMaxOS::common::Event< EventType >::Event()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::get_madt_item()\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, \fBMaxOS::net::InternetControlMessageProtocol::handleInternetProtocolPayload()\fP, \fBMaxOS::processes::ELF64::is_valid()\fP, \fBMaxOS::net::UDPPayloadHandler::on_event()\fP, \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\fP, \fBMaxOS::processes::ResourceManager::open_resource()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_create()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_open()\fP, and \fBMaxOS::processes::ELF64::to_vmm_flags()\fP\&.
-.SS "uint16_t type_permissions"
-
-.PP
-The type and permissions of the inode\&. 
-.PP
-Definition at line \fB1\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t unallocated_blocks"
-
-.PP
-Number of free blocks\&. 
-.PP
-Definition at line \fB3\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t unallocated_inodes"
-
-.PP
-Number of free inodes\&. 
-.PP
-Definition at line \fB4\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t unused"
-
-.PP
-Reserved\&. 
-.PP
-Definition at line \fB39\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t user_id"
-
-.PP
-The ID of the user who owns the inode\&. 
-.PP
-Definition at line \fB7\fP of file \fBext2\&.h\fP\&.
-.SS "uint32_t version_major"
-
-.PP
-Major version number (combined with version_minor to make version number) 
-.PP
-Definition at line \fB22\fP of file \fBext2\&.h\fP\&.
-.SS "uint16_t version_minor"
-
-.PP
-Minor version number (combined with version_major to make version number) 
-.PP
-Definition at line \fB18\fP of file \fBext2\&.h\fP\&.
-.SS "uint8_t volume_name[16]"
-
-.PP
-The volume name (is null-terminated) 
-.PP
-Definition at line \fB34\fP of file \fBext2\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

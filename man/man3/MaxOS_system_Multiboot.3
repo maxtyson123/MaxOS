@@ -1,4 +1,4 @@
-.TH "MaxOS::system::Multiboot" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system::Multiboot" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,7 +13,7 @@ MaxOS::system::Multiboot \- Parses and provides access to \fBMultiboot\fP 2 info
 
 .in +1c
 .ti -1c
-.RI "\fBMultiboot\fP (\fBunsigned\fP \fBlong\fP address, \fBunsigned\fP \fBlong\fP \fBmagic\fP)"
+.RI "\fBMultiboot\fP (\fBunsigned\fP \fBlong\fP address, \fBunsigned\fP \fBlong\fP magic)"
 .br
 .RI "Constructor for the \fBMultiboot\fP class\&. Parses the multiboot info struct and loads the tags\&. "
 .ti -1c
@@ -44,7 +44,7 @@ MaxOS::system::Multiboot \- Parses and provides access to \fBMultiboot\fP 2 info
 .RI "\fBmultiboot_tag\fP * \fBstart_tag\fP () \fBconst\fP"
 .br
 .ti -1c
-.RI "\fBbool\fP \fBis_reserved\fP (multiboot_uint64_t address)"
+.RI "\fBbool\fP \fBis_reserved\fP (multiboot_uint64_t address) \fBconst\fP"
 .br
 .RI "Check if an address is reserved by a multiboot module\&. "
 .in -1c
@@ -153,7 +153,7 @@ Definition at line \fB24\fP of file \fBmultiboot\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBASSERT\fP, \fBLogger::DEBUG()\fP, \fBend_address\fP, \fBmagic\fP, \fBstart_tag()\fP, \fBmultiboot_tag_string::string\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_lower_region()\fP\&.
+References \fBASSERT\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBend_address\fP, \fBstart_tag()\fP, \fBmultiboot_tag_string::string\fP, and \fBMaxOS::memory::PhysicalMemoryManager::to_lower_region()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBmultiboot_tag_basic_meminfo\fP * Multiboot::basic_meminfo ()"
@@ -216,7 +216,7 @@ Definition at line \fB99\fP of file \fBmultiboot\&.cpp\fP\&..PP
 102 }
 .fi
 
-.SS "\fBbool\fP Multiboot::is_reserved (multiboot_uint64_t address)"
+.SS "\fBbool\fP Multiboot::is_reserved (multiboot_uint64_t address) const"
 
 .PP
 Check if an address is reserved by a multiboot module\&. 
@@ -235,7 +235,7 @@ True if the address is reserved
 .PP
 Definition at line \fB154\fP of file \fBmultiboot\&.cpp\fP\&..PP
 .nf
-154                                                       {
+154                                                             {
 155 
 156     // Loop through the tags checking if the address is reserved
 157     for (multiboot_tag* tag = start_tag(); tag\->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag\->size + 7) & ~7))) {
@@ -281,6 +281,8 @@ Definition at line \fB126\fP of file \fBmultiboot\&.cpp\fP\&..PP
 129 }
 .fi
 
+.PP
+Referenced by \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP\&.
 .SS "\fBmultiboot_tag_new_acpi\fP * Multiboot::new_acpi ()"
 
 .PP

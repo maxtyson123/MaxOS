@@ -1,4 +1,4 @@
-.TH "MaxOS::common::Vector< Type >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::Vector< Type >" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,7 +25,7 @@ MaxOS::common::Vector< Type > \- Dynamically stores an array of elements\&.
 .br
 .RI "______________________________________Implementation__________________________________________________ "
 .ti -1c
-.RI "\fBVector\fP (\fBint\fP \fBSize\fP, \fBType\fP \fBelement\fP)"
+.RI "\fBVector\fP (\fBint\fP \fBsize\fP, \fBType\fP \fBelement\fP)"
 .br
 .RI "Constructor for \fBVector\fP\&. "
 .ti -1c
@@ -36,6 +36,10 @@ MaxOS::common::Vector< Type > \- Dynamically stores an array of elements\&.
 .RI "\fBVector\fP (\fBVector\fP< \fBType\fP > &&\fBother\fP)"
 .br
 .RI "Move constructor for \fBVector\fP\&. "
+.ti -1c
+.RI "\fB~Vector\fP ()"
+.br
+.RI "Destructor for \fBVector\fP, de-allocates the array\&. "
 .ti -1c
 .RI "\fBType\fP & \fBoperator[]\fP (\fBuint32_t\fP index) \fBconst\fP"
 .br
@@ -109,7 +113,7 @@ MaxOS::common::Vector< Type > \- Dynamically stores an array of elements\&.
 .br
 .RI "Iterates over the \fBVector\fP and calls the OnRead function of the handler for each element\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBIterate\fP (\fBvoid\fP \fBcallback\fP(\fBType\fP &))"
+.RI "\fBvoid\fP \fBiterate\fP (\fBvoid\fP \fBcallback\fP(\fBType\fP &))"
 .br
 .RI "Iterates over the \fBVector\fP and calls the callback function for each element\&. "
 .in -1c
@@ -145,7 +149,7 @@ class MaxOS::common::Vector< Type >"Dynamically stores an array of elements\&.
 .PP
 
 .PP
-Definition at line \fB41\fP of file \fBvector\&.h\fP\&.
+Definition at line \fB39\fP of file \fBvector\&.h\fP\&.
 .SH "Member Typedef Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBtypedef\fP \fBType\fP* \fBMaxOS::common::Vector\fP< \fBType\fP >::iterator"
@@ -153,7 +157,7 @@ Definition at line \fB41\fP of file \fBvector\&.h\fP\&.
 .PP
 The iterator type for the \fBVector\fP\&. 
 .PP
-Definition at line \fB49\fP of file \fBvector\&.h\fP\&.
+Definition at line \fB46\fP of file \fBvector\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::Vector\fP< \fBType\fP >::Vector ()"
@@ -168,14 +172,14 @@ ______________________________________Implementation____________________________
 .PP
 
 .PP
-Definition at line \fB91\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB88\fP of file \fBvector\&.h\fP\&..PP
 .nf
-91                                                   {
+88                                               {
+89 
+90         // Allocate space for the array
+91         m_elements = new Type[m_capacity];
 92 
-93             // Allocate space for the array
-94             m_elements = new Type[m_capacity];
-95 
-96         }
+93     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::Vector\fP< \fBType\fP >::Vector (\fBint\fP size, \fBType\fP element)"
@@ -197,23 +201,21 @@ Constructor for \fBVector\fP\&.
 .PP
 
 .PP
-Definition at line \fB105\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB102\fP of file \fBvector\&.h\fP\&..PP
 .nf
-105                                                                         {
-106 
-107             // Allocate space for the array
-108             m_elements = new Type[size];
-109             m_capacity = size > 0 ? size : 1;
-110             m_size     = 0;
-111 
-112             // Push all the elements to the Vector
-113             for (int i = 0; i < size; ++i)
-114                     push_back(element);
-115         }
+102                                                                     {
+103 
+104         // Allocate space for the array
+105         m_elements = new Type[size];
+106         m_capacity = size > 0 ? size : 1;
+107         m_size = 0;
+108 
+109         // Push all the elements to the Vector
+110         for(int i = 0; i < size; ++i)
+111             push_back(element);
+112     }
 .fi
 
-.PP
-References \fBsize\fP\&.
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::Vector\fP< \fBType\fP >::Vector (\fBconst\fP \fBVector\fP< \fBType\fP > & other)"
 
 .PP
@@ -231,16 +233,15 @@ Copy constructor for \fBVector\fP\&.
 .PP
 
 .PP
-Definition at line \fB123\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB120\fP of file \fBvector\&.h\fP\&..PP
 .nf
-124         : m_size(other\&.m_size),
-125           m_capacity(other\&.m_capacity)
-126         {
-127             // Copy each element into a new array
-128             m_elements = new Type[m_capacity];
-129             for (uint32_t i = 0; i < m_size; ++i)
-130                 m_elements[i] = other\&.m_elements[i];
-131         }
+121             : m_size(other\&.m_size),
+122             m_capacity(other\&.m_capacity) {
+123         // Copy each element into a new array
+124         m_elements = new Type[m_capacity];
+125         for(uint32_t i = 0; i < m_size; ++i)
+126             m_elements[i] = other\&.m_elements[i];
+127     }
 .fi
 
 .PP
@@ -262,32 +263,40 @@ Move constructor for \fBVector\fP\&.
 .PP
 
 .PP
-Definition at line \fB139\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB135\fP of file \fBvector\&.h\fP\&..PP
 .nf
-140         : m_elements(other\&.m_elements),
-141           m_size(other\&.m_size),
-142           m_capacity(other\&.m_capacity)
-143         {
+136             : m_elements(other\&.m_elements),
+137             m_size(other\&.m_size),
+138             m_capacity(other\&.m_capacity) {
+139 
+140         // Clear the other Vector
+141         other\&.m_elements = nullptr;
+142         other\&.m_size = 0;
+143         other\&.m_capacity = 0;
 144 
-145             // Clear the other Vector
-146             other\&.m_elements = nullptr;
-147             other\&.m_size = 0;
-148             other\&.m_capacity = 0;
-149 
-150         }
+145     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::Vector\fP< \fBType\fP >::~\fBVector\fP ()"
 
 .PP
+Destructor for \fBVector\fP, de-allocates the array\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type data stored in the \fBVector\fP 
+.RE
+.PP
+
+.PP
 Definition at line \fB152\fP of file \fBvector\&.h\fP\&..PP
 .nf
-152                                                    {
+152                                                {
 153 
-154             // De\-allocate the array
-155             delete[] m_elements;
+154         // De\-allocate the array
+155         delete[] m_elements;
 156 
-157         }
+157     }
 .fi
 
 .SH "Member Function Documentation"
@@ -311,9 +320,9 @@ The first element of the \fBVector\fP
 .PP
 Definition at line \fB283\fP of file \fBvector\&.h\fP\&..PP
 .nf
-283                                                                                     {
-284             return &m_elements[0];
-285         }
+283                                                                                  {
+284         return &m_elements[0];
+285     }
 .fi
 
 .PP
@@ -332,9 +341,9 @@ Removes all elements from the \fBVector\fP\&.
 .PP
 Definition at line \fB461\fP of file \fBvector\&.h\fP\&..PP
 .nf
-461                                                       {
-462           m_size = 0;
-463         }
+461                                                   {
+462         m_size = 0;
+463     }
 .fi
 
 .PP
@@ -358,9 +367,9 @@ True if the \fBVector\fP is empty, false otherwise
 .PP
 Definition at line \fB321\fP of file \fBvector\&.h\fP\&..PP
 .nf
-321                                                            {
-322             return begin() == end();
-323         }
+321                                                         {
+322         return begin() == end();
+323     }
 .fi
 
 .PP
@@ -384,9 +393,9 @@ The last element of the \fBVector\fP
 .PP
 Definition at line \fB293\fP of file \fBvector\&.h\fP\&..PP
 .nf
-293                                                                                    {
-294             return &m_elements[0] + m_size;
-295          }
+293                                                                                {
+294         return &m_elements[0] + m_size;
+295     }
 .fi
 
 .PP
@@ -408,30 +417,28 @@ Removes all elements from the \fBVector\fP that are equal to the element\&.
 .PP
 
 .PP
-Definition at line \fB413\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB415\fP of file \fBvector\&.h\fP\&..PP
 .nf
-413                                                                   {
-414 
-415             // Search for the element
-416             int hits = 0;
-417             for (iterator i = begin(); i != end(); ++i)
-418             {
-419                 // If it is the element we are looking for
-420                 if (*i == element)
-421                 {
-422                     ++hits;
-423                 } else {
+415                                                               {
+416 
+417         // Search for the element
+418         int hits = 0;
+419         for(iterator i = begin(); i != end(); ++i) {
+420             // If it is the element we are looking for
+421             if(*i == element) {
+422                 ++hits;
+423             } else {
 424 
-425                     // If there are hits move the element to the left
-426                     if (hits > 0)
-427                         *(i \- hits) = *i;
-428                 }
+425                 // If there are hits move the element to the left
+426                 if(hits > 0)
+427                     *(i \- hits) = *i;
+428             }
 429 
-430             }
+430         }
 431 
-432             // Decrease the size of the Vector
-433             m_size \-= hits;
-434         }
+432         // Decrease the size of the Vector
+433         m_size \-= hits;
+434     }
 .fi
 
 .PP
@@ -457,19 +464,19 @@ Removes the element at the m_position\&.
 .PP
 Definition at line \fB442\fP of file \fBvector\&.h\fP\&..PP
 .nf
-442                                                                                             {
+442                                                                                         {
 443 
-444             // If the m_position is not in the Vector
-445             if (position < begin() || position >= end())
-446                 return;
+444         // If the m_position is not in the Vector
+445         if(position < begin() || position >= end())
+446             return;
 447 
-448             // Move all elements one index to the left
-449             for (++position; position != end(); ++position)
-450                 *(position \- 1) = *position;
+448         // Move all elements one index to the left
+449         for(++position; position != end(); ++position)
+450             *(position \- 1) = *position;
 451 
-452             // Decrease the size of the Vector
-453             \-\-m_size;
-454         }
+452         // Decrease the size of the Vector
+453         \-\-m_size;
+454     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBVector\fP< \fBType\fP >\fB::iterator\fP \fBMaxOS::common::Vector\fP< \fBType\fP >::find (\fBType\fP element) const"
@@ -496,16 +503,16 @@ The iterator of the element or the end of the \fBVector\fP if the element is not
 .PP
 Definition at line \fB304\fP of file \fBvector\&.h\fP\&..PP
 .nf
-304                                                                                                {
+304                                                                                             {
 305 
-306             // Find the element
-307             for (iterator i = begin(); i != end(); ++i)
-308               if (*i == element)
-309                       return i;
+306         // Find the element
+307         for(iterator i = begin(); i != end(); ++i)
+308             if(*i == element)
+309                 return i;
 310 
-311             // The element must not be in the Vector
-312             return end();
-313         }
+311         // The element must not be in the Vector
+312         return end();
+313     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::Vector\fP< \fBType\fP >::increase_size ()"
@@ -522,9 +529,9 @@ Increases the size of the \fBVector\fP by doubling the capacity\&.
 .PP
 Definition at line \fB164\fP of file \fBvector\&.h\fP\&..PP
 .nf
-164                                                                {
-165             reserve(m_capacity * 2);
-166         }
+164                                                           {
+165         reserve(m_capacity * 2);
+166     }
 .fi
 
 .PP
@@ -548,18 +555,18 @@ Iterates over the \fBVector\fP and calls the OnRead function of the handler for 
 .PP
 Definition at line \fB471\fP of file \fBvector\&.h\fP\&..PP
 .nf
-471                                                                                                               {
+471                                                                                                           {
 472 
-473           // Call the OnRead function of the handler for each element
-474           for(auto& element : m_elements)
+473         // Call the OnRead function of the handler for each element
+474         for(auto& element : m_elements)
 475             vector_iteration_handler\->on_read(element);
 476 
-477           // Call the OnEndOfStream function of the handler
-478           vector_iteration_handler\->on_end_of_stream();
-479         }
+477         // Call the OnEndOfStream function of the handler
+478         vector_iteration_handler\->on_end_of_stream();
+479     }
 .fi
 
-.SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::Vector\fP< \fBType\fP >::Iterate (\fBvoid\fP  callbackType &)"
+.SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::Vector\fP< \fBType\fP >::iterate (\fBvoid\fP  callbackType &)"
 
 .PP
 Iterates over the \fBVector\fP and calls the callback function for each element\&. 
@@ -578,12 +585,12 @@ Iterates over the \fBVector\fP and calls the callback function for each element\
 .PP
 Definition at line \fB488\fP of file \fBvector\&.h\fP\&..PP
 .nf
-488                                                                              {
+488                                                                         {
 489 
-490            // Call the callback function for each element
-491            for(auto& element : m_elements)
-492               callback(element);
-493         }
+490         // Call the callback function for each element
+491         for(auto& element : m_elements)
+492             callback(element);
+493     }
 .fi
 
 .PP
@@ -612,27 +619,27 @@ This vector, with the copied elements
 .PP
 Definition at line \fB221\fP of file \fBvector\&.h\fP\&..PP
 .nf
-221                                                                                             {
+221                                                                                          {
 222 
-223             // Setting to itself?
-224             if (this == &other)
-225                 return *this;
+223         // Setting to itself?
+224         if(this == &other)
+225             return *this;
 226 
-227             // Create a new buffer to store the elements
-228             delete[] m_elements;
-229             m_elements = new Type[other\&.m_capacity];
+227         // Create a new buffer to store the elements
+228         delete[] m_elements;
+229         m_elements = new Type[other\&.m_capacity];
 230 
-231             // Copy data
-232             m_size = other\&.m_size;
-233             m_capacity = other\&.m_capacity;
-234             for (uint32_t i = 0; i < m_size; ++i)
-235                 m_elements[i] = other\&.m_elements[i];
+231         // Copy data
+232         m_size = other\&.m_size;
+233         m_capacity = other\&.m_capacity;
+234         for(uint32_t i = 0; i < m_size; ++i)
+235             m_elements[i] = other\&.m_elements[i];
 236 
-237             return *this;
-238         }
+237         return *this;
+238     }
 .fi
 
-.SS "template<\fBclass\fP \fBType\fP > \fBVector\fP< \fBType\fP > & \fBMaxOS::common::Vector\fP< \fBType\fP >::operator= (\fBVector\fP< \fBType\fP > && other)\fC [noexcept]\fP"
+.SS "template<\fBclass\fP \fBType\fP > \fBVector\fP< \fBType\fP > & \fBMaxOS::common::Vector\fP< \fBType\fP >::operator= (\fBVector\fP< \fBType\fP > && other)"
 
 .PP
 Assignment by move, data is moved into the buffer stored in this vector and the other vector is cleared\&. 
@@ -656,25 +663,25 @@ This vector, with the copied elements
 .PP
 Definition at line \fB247\fP of file \fBvector\&.h\fP\&..PP
 .nf
-247                                                                                                 {
+247                                                                                     {
 248 
-249             // Moving to itself?
-250             if (this == &other)
-251                 return *this;
+249         // Moving to itself?
+250         if(this == &other)
+251             return *this;
 252 
-253             // Move into this vector
-254             delete[] m_elements;
-255             m_elements = other\&.m_elements;
-256             m_size = other\&.m_size;
-257             m_capacity = other\&.m_capacity;
+253         // Move into this vector
+254         delete[] m_elements;
+255         m_elements = other\&.m_elements;
+256         m_size = other\&.m_size;
+257         m_capacity = other\&.m_capacity;
 258 
-259             // Remove from other vector
-260             other\&.m_elements = nullptr;
-261             other\&.m_size = 0;
-262             other\&.m_capacity = 0;
+259         // Remove from other vector
+260         other\&.m_elements = nullptr;
+261         other\&.m_size = 0;
+262         other\&.m_capacity = 0;
 263 
-264             return *this;
-265         }
+264         return *this;
+265     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBType\fP & \fBMaxOS::common::Vector\fP< \fBType\fP >::operator[] (\fBuint32_t\fP index) const"
@@ -701,16 +708,16 @@ the element at the index or the end of the \fBVector\fP if the index is out of b
 .PP
 Definition at line \fB203\fP of file \fBvector\&.h\fP\&..PP
 .nf
-203                                                                                {
+203                                                                              {
 204 
-205             // If the index is in the Vector
-206             if (index < m_size)
-207                 return m_elements[index];
+205         // If the index is in the Vector
+206         if(index < m_size)
+207             return m_elements[index];
 208 
-209             // Return the last element of the Vector
-210             return m_elements[m_size \- 1];
+209         // Return the last element of the Vector
+210         return m_elements[m_size \- 1];
 211 
-212         }
+212     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBType\fP \fBMaxOS::common::Vector\fP< \fBType\fP >::pop_back ()"
@@ -720,21 +727,26 @@ Removes the last element from the \fBVector\fP\&.
 .PP
 \fBTemplate Parameters\fP
 .RS 4
-\fIType\fP Type of the \fBVector\fP 
+\fIType\fP Type of the \fBVector\fP
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The element that was removed 
 .RE
 .PP
 
 .PP
-Definition at line \fB348\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB350\fP of file \fBvector\&.h\fP\&..PP
 .nf
-348                                                          {
-349 
-350             // Remove the last element from the Vector
-351             if (m_size > 0)
-352                     \-\-m_size;
-353 
-354             return m_elements[m_size];
-355         }
+350                                                      {
+351 
+352         // Remove the last element from the Vector
+353         if(m_size > 0)
+354             \-\-m_size;
+355 
+356         return m_elements[m_size];
+357     }
 .fi
 
 .PP
@@ -756,26 +768,26 @@ The element that was removed, or a default constructed element if the \fBVector\
 .PP
 
 .PP
-Definition at line \fB388\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB390\fP of file \fBvector\&.h\fP\&..PP
 .nf
-388                                                           {
-389 
-390             // Make sure the Vector is not empty
-391             if (m_size == 0)
-392               return Type();
-393 
-394             // Store the element to return
+390                                                       {
+391 
+392         // Make sure the Vector is not empty
+393         if(m_size == 0)
+394             return Type();
 395 
-396             Type element = m_elements[0];
+396         // Store the element to return
 397 
-398             // Move all elements one index to the left
-399             for (uint32_t i = 0; i < m_size \- 1; ++i)
-400                 m_elements[i] = m_elements[i + 1];
-401 
-402             // Decrease the size of the Vector
-403             \-\-m_size;
-404             return element;
-405         }
+398         Type element = m_elements[0];
+399 
+400         // Move all elements one index to the left
+401         for(uint32_t i = 0; i < m_size \- 1; ++i)
+402             m_elements[i] = m_elements[i + 1];
+403 
+404         // Decrease the size of the Vector
+405         \-\-m_size;
+406         return element;
+407     }
 .fi
 
 .PP
@@ -806,16 +818,16 @@ The iterator of the element, if the \fBVector\fP is full it returns the end of t
 .PP
 Definition at line \fB333\fP of file \fBvector\&.h\fP\&..PP
 .nf
-333                                                                                                {
+333                                                                                            {
 334 
-335             // Check if we need to allocate more space for the array
-336             if(m_size == m_capacity)
-337                 increase_size();
+335         // Check if we need to allocate more space for the array
+336         if(m_size == m_capacity)
+337             increase_size();
 338 
-339             // Add the element to the Vector and return the iterator of the element
-340             m_elements[m_size++] = element;
-341             return end() \- 1;
-342         }
+339         // Add the element to the Vector and return the iterator of the element
+340         m_elements[m_size++] = element;
+341         return end() \- 1;
+342     }
 .fi
 
 .PP
@@ -844,25 +856,25 @@ The iterator of the element, if the \fBVector\fP is full it returns the end of t
 .PP
 
 .PP
-Definition at line \fB364\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB366\fP of file \fBvector\&.h\fP\&..PP
 .nf
-364                                                                                                 {
-365 
-366             // Check if we need to allocate more space for the array
-367             if(m_size == m_capacity)
-368                     increase_size();
-369 
-370             // Move all elements one index to the right
-371             for (iterator i = end(); i > begin(); \-\-i)
-372                 *i = *(i \- 1);
-373 
-374             // Add the element to the front of the Vector
-375             m_elements[0] = element;
-376             ++m_size;
-377 
-378             // Return the iterator of the element
-379             return begin();
-380         }
+366                                                                                             {
+367 
+368         // Check if we need to allocate more space for the array
+369         if(m_size == m_capacity)
+370             increase_size();
+371 
+372         // Move all elements one index to the right
+373         for(iterator i = end(); i > begin(); \-\-i)
+374             *i = *(i \- 1);
+375 
+376         // Add the element to the front of the Vector
+377         m_elements[0] = element;
+378         ++m_size;
+379 
+380         // Return the iterator of the element
+381         return begin();
+382     }
 .fi
 
 .PP
@@ -888,26 +900,26 @@ Reserves space in the \fBVector\fP for a certain amount of elements\&.
 .PP
 Definition at line \fB174\fP of file \fBvector\&.h\fP\&..PP
 .nf
-174                                                                      {
+174                                                                  {
 175 
 176 
-177             // Increase the capacity of the Vector
-178             if(m_capacity < amount)
-179                 m_capacity = amount;
+177         // Increase the capacity of the Vector
+178         if(m_capacity < amount)
+179             m_capacity = amount;
 180 
-181             // Allocate more space for the array
-182             Type* new_elements = new Type[amount];
+181         // Allocate more space for the array
+182         Type* new_elements = new Type[amount];
 183 
-184             // Copy the elements to the new array
-185             for (uint32_t i = 0; i < m_size; ++i)
-186                 new_elements[i] = m_elements[i];
+184         // Copy the elements to the new array
+185         for(uint32_t i = 0; i < m_size; ++i)
+186             new_elements[i] = m_elements[i];
 187 
-188             // De\-allocate the old array
-189             delete[] m_elements;
+188         // De\-allocate the old array
+189         delete[] m_elements;
 190 
-191             // Set the new array
-192             m_elements = new_elements;
-193         }
+191         // Set the new array
+192         m_elements = new_elements;
+193     }
 .fi
 
 .PP
@@ -933,13 +945,13 @@ The size of the \fBVector\fP
 .PP
 Definition at line \fB273\fP of file \fBvector\&.h\fP\&..PP
 .nf
-273                                                               {
-274             return m_size;
-275         }
+273                                                            {
+274         return m_size;
+275     }
 .fi
 
 .PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk()\fP, and \fBMaxOS::common::Map< Key, Value >::size()\fP\&.
+Referenced by \fBMaxOS::common::Map< Key, Value >::size()\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBuint32_t\fP \fBMaxOS::common::Vector\fP< \fBType\fP >::m_capacity { 1 }\fC [protected]\fP"
@@ -947,9 +959,9 @@ Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk(
 .PP
 How many elements can be stored without resizing\&. 
 .PP
-Definition at line \fB46\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB43\fP of file \fBvector\&.h\fP\&..PP
 .nf
-46 { 1 };          
+43 { 1 };          
 .fi
 
 .PP
@@ -959,7 +971,7 @@ Referenced by \fBMaxOS::common::Vector< Type >::Vector()\fP\&.
 .PP
 The array of elements\&. 
 .PP
-Definition at line \fB44\fP of file \fBvector\&.h\fP\&.
+Definition at line \fB41\fP of file \fBvector\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::common::Vector< Type >::Vector()\fP\&.
 .SS "template<\fBclass\fP \fBType\fP > \fBuint32_t\fP \fBMaxOS::common::Vector\fP< \fBType\fP >::m_size { 0 }\fC [protected]\fP"
@@ -967,9 +979,9 @@ Referenced by \fBMaxOS::common::Vector< Type >::Vector()\fP\&.
 .PP
 How many elements are currently stored\&. 
 .PP
-Definition at line \fB45\fP of file \fBvector\&.h\fP\&..PP
+Definition at line \fB42\fP of file \fBvector\&.h\fP\&..PP
 .nf
-45 { 0 };              
+42 { 0 };              
 .fi
 
 .PP

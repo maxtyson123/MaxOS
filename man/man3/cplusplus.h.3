@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/runtime/cplusplus.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/runtime/cplusplus.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 
 .SS "Classes"
@@ -24,9 +24,11 @@
 .ti -1c
 .RI "typedef void(* \fBMaxOS::runtime::constructor\fP) ()"
 .br
+.RI "A pointer to a constructor function\&. "
 .ti -1c
 .RI "typedef unsigned \fBMaxOS::runtime::uarch_t\fP"
 .br
+.RI "An unsigned architecture specific type\&. "
 .in -1c
 .SS "Functions"
 
@@ -34,12 +36,15 @@
 .ti -1c
 .RI "int \fBMaxOS::runtime::__cxa_atexit\fP (void(*f)(void *), void *objptr, void *dso)"
 .br
+.RI "Register a function to be called at program exit\&. "
 .ti -1c
 .RI "void \fBMaxOS::runtime::__cxa_finalize\fP (void *f)"
 .br
+.RI "Finalise all global objects by calling their destructors\&. "
 .ti -1c
 .RI "void \fBMaxOS::runtime::__stack_chk_fail\fP (void)"
 .br
+.RI "Called when a stack buffer overflow is detected\&. "
 .in -1c
 .SS "Variables"
 
@@ -47,6 +52,7 @@
 .ti -1c
 .RI "uintptr_t \fBMaxOS::runtime::__stack_chk_guard\fP = 0x595e9fbd94fda766"
 .br
+.RI "The stack canary value used to detect stack buffer overflows (\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -56,7 +62,7 @@ Defines C++ runtime functions and structures needed for linking C++ code in the 
 .PP
 \fBSee also\fP
 .RS 4
-https://wiki.osdev.org/C%2B%2B - \fBcode\fP adapted from here
+https://wiki.osdev.org/C%2B%2B - code adapted from here
 .RE
 .PP
 \fBDate\fP
@@ -77,17 +83,71 @@ Definition in file \fBcplusplus\&.h\fP\&.
 .SS "typedef void(* MaxOS::runtime::constructor) ()"
 
 .PP
+A pointer to a constructor function\&. 
+.PP
 Definition at line \fB19\fP of file \fBcplusplus\&.h\fP\&.
-.SS "typedef unsigned MaxOS::runtime::uarch_t"
+.SS "typedef unsigned \fBMaxOS::runtime::uarch_t\fP"
 
 .PP
+An unsigned architecture specific type\&. 
+.PP
 Definition at line \fB20\fP of file \fBcplusplus\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int MaxOS::runtime::__cxa_atexit (void(*)(void *) f, void * objptr, void * dso)"
+
+.PP
+Register a function to be called at program exit\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIf\fP The function to call 
+.br
+\fIobjptr\fP The object pointer to pass to the function 
+.br
+\fIdso\fP The DSO handle (not used) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+int 0 on success, non-zero on failure 
+.RE
+.PP
+
+.PP
+References \fBMaxOS::runtime::__cxa_atexit()\fP\&.
+.PP
+Referenced by \fBMaxOS::runtime::__cxa_atexit()\fP\&.
+.SS "void MaxOS::runtime::__cxa_finalize (void * f)"
+
+.PP
+Finalise all global objects by calling their destructors\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIf\fP The DSO handle to finalise (nullptr for all) 
+.RE
+.PP
+
+.PP
+References \fBMaxOS::runtime::__cxa_finalize()\fP\&.
+.PP
+Referenced by \fBMaxOS::runtime::__cxa_finalize()\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "uintptr_t MaxOS::runtime::__stack_chk_guard = 0x595e9fbd94fda766"
 
 .PP
-Definition at line \fB38\fP of file \fBcplusplus\&.h\fP\&.
+The stack canary value used to detect stack buffer overflows (\&. 
+.PP
+\fBTodo\fP
+.RS 4
+make random at runtime) 
+.RE
+.PP
+
+.PP
+Definition at line \fB52\fP of file \fBcplusplus\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

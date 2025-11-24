@@ -6,5 +6,5 @@ var classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment =
     [ "identify", "classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment.html#a3afae769420a2fcf2e76e56828a539ed", null ],
     [ "read", "classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment.html#a7c6c355a66f7202759ab78f107750b3d", null ],
     [ "vendor_name", "classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment.html#a8edbbadb1879bd330ec1f1855972c559", null ],
-    [ "write", "classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment.html#ae5759fe67787971b2d3774c283c21fe9", null ]
+    [ "write", "classMaxOS_1_1drivers_1_1disk_1_1AdvancedTechnologyAttachment.html#ae9010ee61003b367414a839fe83c9ee4", null ]
 ];

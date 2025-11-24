@@ -1,6 +1,5 @@
 var string_8cpp =
 [
-    [ "ftoa", "string_8cpp.html#a67b7d920f0d5f6764f9d0a58f771a126", null ],
     [ "htoa", "string_8cpp.html#aa45db8c9bd3e58972f39d4a5e0defa44", null ],
     [ "itoa", "string_8cpp.html#a100df116078d0e34de582fc45d2e7df2", null ],
     [ "strcmp", "string_8cpp.html#a82efc5a6f65207e2120b326554db0ee9", null ],

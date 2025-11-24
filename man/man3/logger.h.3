@@ -1,8 +1,8 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/logger.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/logger.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/common/logger.h \- Defines a \fBLogger\fP class for logging messages with different severity levels to multiple output streams\&.  
+/home/runner/work/MaxOS/MaxOS/kernel/include/common/logger.h \- Defines a Logger class for logging messages with different severity levels to multiple output streams\&.  
 
 .SH SYNOPSIS
 .br
@@ -18,7 +18,7 @@
 
 .in +1c
 .ti -1c
-.RI "class \fBLogger\fP"
+.RI "class \fBMaxOS::Logger\fP"
 .br
 .RI "A class that handles logging messages to the console and files\&. "
 .in -1c
@@ -34,7 +34,7 @@
 
 .in +1c
 .ti -1c
-.RI "enum class \fBLogLevel\fP { \fBWARNING\fP, \fBERROR\fP, \fBHEADER\fP, \fBINFO\fP, \fBDEBUG\fP }"
+.RI "enum class \fBMaxOS::LogLevel\fP { \fBERROR\fP, \fBWARNING\fP, \fBHEADER\fP, \fBINFO\fP, \fBTEST\fP, \fBDEBUG\fP }"
 .br
 .RI "Priority levels for logging messages\&. Different levels may be used to filter messages based on their importance depending on build type\&. "
 .in -1c
@@ -42,17 +42,17 @@
 
 .in +1c
 .ti -1c
-.RI "constexpr uint8_t \fBMAX_LOG_WRITERS\fP = 5"
+.RI "constexpr uint8_t \fBMaxOS::MAX_LOG_WRITERS\fP = 5"
 .br
 .RI "The maximum number of log writers that can be added to the logger\&. "
 .ti -1c
-.RI "constexpr \fBLogLevel\fP \fBMAX_LOG_LEVEL\fP = LogLevel::DEBUG"
+.RI "constexpr \fBLogLevel\fP \fBMaxOS::MAX_LOG_LEVEL\fP = LogLevel::DEBUG"
 .br
 .RI "The maximum log level for this build (messages above this level will not be logged) "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Defines a \fBLogger\fP class for logging messages with different severity levels to multiple output streams\&. 
+Defines a Logger class for logging messages with different severity levels to multiple output streams\&. 
 
 
 .PP
@@ -74,7 +74,7 @@ Definition in file \fBlogger\&.h\fP\&.
 .SS "#define ASSERT(condition, format,  \&.\&.\&.)   Logger::ASSERT(condition, format, ##__VA_ARGS__)"
 
 .PP
-If the specified condition is not met then the kernel will crash with the specified message\&. This macro wraps \fBLogger::ASSERT\fP and supports printf-style formatting with variadic arguments\&.
+If the specified condition is not met then the kernel will crash with the specified message\&. This macro wraps Logger::ASSERT and supports printf-style formatting with variadic arguments\&.
 .PP
 \fBParameters\fP
 .RS 4
@@ -87,48 +87,49 @@ If the specified condition is not met then the kernel will crash with the specif
 .PP
 \fBSee also\fP
 .RS 4
-\fBLogger::ASSERT\fP 
+Logger::ASSERT 
 .RE
 .PP
 
 .PP
-Definition at line \fB95\fP of file \fBlogger\&.h\fP\&.
+Definition at line \fB100\fP of file \fBlogger\&.h\fP\&.
 .SH "Enumeration Type Documentation"
 .PP 
-.SS "enum class \fBLogLevel\fP\fC [strong]\fP"
+.SS "enum class \fBMaxOS::LogLevel\fP\fC [strong]\fP"
 
 .PP
 Priority levels for logging messages\&. Different levels may be used to filter messages based on their importance depending on build type\&. 
 .PP
-Definition at line \fB22\fP of file \fBlogger\&.h\fP\&..PP
+Definition at line \fB23\fP of file \fBlogger\&.h\fP\&..PP
 .nf
-23          {
-24              WARNING,
-25              ERROR,
-26              HEADER,
-27              INFO,
-28              DEBUG,
-29          };
+23                         {
+24         ERROR,
+25         WARNING,
+26         HEADER,
+27         INFO,
+28         TEST,
+29         DEBUG,
+30     };
 .fi
 
 .SH "Variable Documentation"
 .PP 
-.SS "constexpr \fBLogLevel\fP MAX_LOG_LEVEL = LogLevel::DEBUG\fC [constexpr]\fP"
+.SS "constexpr LogLevel MaxOS::MAX_LOG_LEVEL = LogLevel::DEBUG\fC [constexpr]\fP"
 
 .PP
 The maximum log level for this build (messages above this level will not be logged) 
 .PP
-Definition at line \fB33\fP of file \fBlogger\&.h\fP\&.
+Definition at line \fB37\fP of file \fBlogger\&.h\fP\&.
 .PP
-Referenced by \fBLogger::write_char()\fP\&.
-.SS "constexpr uint8_t MAX_LOG_WRITERS = 5\fC [constexpr]\fP"
+Referenced by \fBMaxOS::Logger::write_char()\fP\&.
+.SS "constexpr uint8_t MaxOS::MAX_LOG_WRITERS = 5\fC [constexpr]\fP"
 
 .PP
 The maximum number of log writers that can be added to the logger\&. 
 .PP
-Definition at line \fB32\fP of file \fBlogger\&.h\fP\&.
+Definition at line \fB33\fP of file \fBlogger\&.h\fP\&.
 .PP
-Referenced by \fBLogger::add_log_writer()\fP\&.
+Referenced by \fBMaxOS::Logger::add_log_writer()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

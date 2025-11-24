@@ -36,7 +36,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
+   <div id="projectname">Max OS<span id="projectnumber">&#160;0.3</span>
    </div>
   </td>
  </tr>
@@ -108,63 +108,67 @@ $(document).ready(function(){initNavTree('gdt_8h_source.html',''); initResizable
   <div class="headertitle"><div class="title">gdt.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="gdt_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno"><a class="line" href="gdt_8h.html#ab6b52376c1b9d81e6ea6f95a1225f832">    1</a></span> </div>
+<a href="gdt_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifndef MAX_OS_SYSTEM_GDT_H</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define MAX_OS_SYSTEM_GDT_H</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;system/multiboot.h&gt;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span>MaxOS {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">namespace </span>system {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;common/macros.h&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;system/multiboot.h&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span>MaxOS::system {</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="foldopen" id="foldopen00023" data-start="{" data-end="};">
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0">   23</a></span>         <span class="keyword">enum class</span> <a class="code hl_enumeration" href="gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0">DescriptorFlags</a> : uint64_t {</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>             Write               = (1ULL &lt;&lt; 41),</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>             Execute             = (1ULL &lt;&lt; 43),</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>             CodeOrDataSegment   = (1ULL &lt;&lt; 44),</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>             GrowDown            = (1ULL &lt;&lt; 45),</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>             ConformFromLower    = (1ULL &lt;&lt; 46),</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>             Present             = (1ULL &lt;&lt; 47),</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>             LongMode            = (1ULL &lt;&lt; 53),</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>         };</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="foldopen" id="foldopen00024" data-start="{" data-end="};">
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0">   24</a></span>    <span class="keyword">enum class</span> <a class="code hl_enumeration" href="gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0">DescriptorFlags</a> : uint64_t {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        Write = (1ULL &lt;&lt; 41),</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        Execute = (1ULL &lt;&lt; 43),</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        CodeOrDataSegment = (1ULL &lt;&lt; 44),</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        GrowDown = (1ULL &lt;&lt; 45),</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        ConformFromLower = (1ULL &lt;&lt; 46),</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        Present = (1ULL &lt;&lt; 47),</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        LongMode = (1ULL &lt;&lt; 53),</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    };</div>
 </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="foldopen" id="foldopen00038" data-start="{" data-end="};">
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="structMaxOS_1_1system_1_1GDTRegister.html">   38</a></span>        <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structMaxOS_1_1system_1_1GDTRegister.html">GDTRegister</a> {</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="structMaxOS_1_1system_1_1GDTRegister.html#a9b3997c207851168d964e6067c13dd55">   39</a></span>            uint16_t <a class="code hl_variable" href="structMaxOS_1_1system_1_1GDTRegister.html#a9b3997c207851168d964e6067c13dd55">size</a>;      </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="structMaxOS_1_1system_1_1GDTRegister.html#a2f7694833e3316d80542b25095f44730">   40</a></span>            uint64_t <a class="code hl_variable" href="structMaxOS_1_1system_1_1GDTRegister.html#a2f7694833e3316d80542b25095f44730">address</a>;   </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        } <a class="code hl_struct" href="structMaxOS_1_1system_1_1____attribute____.html">__attribute__</a>((packed)) gdtr_t;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="foldopen" id="foldopen00042" data-start="{" data-end="};">
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="structMaxOS_1_1system_1_1GDTRegister.html">   42</a></span>    <span class="keyword">typedef</span> <span class="keyword">struct </span>PACKED <a class="code hl_struct" href="structMaxOS_1_1system_1_1GDTRegister.html">GDTRegister</a> {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structMaxOS_1_1system_1_1GDTRegister.html#a9b3997c207851168d964e6067c13dd55">   44</a></span>        uint16_t <a class="code hl_variable" href="structMaxOS_1_1system_1_1GDTRegister.html#a9b3997c207851168d964e6067c13dd55">size</a>;      </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="structMaxOS_1_1system_1_1GDTRegister.html#a2f7694833e3316d80542b25095f44730">   45</a></span>        uint64_t <a class="code hl_variable" href="structMaxOS_1_1system_1_1GDTRegister.html#a2f7694833e3316d80542b25095f44730">address</a>;   </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="gdt_8h.html#a922074ad0af798ffe772bf545d8d8553">   47</a></span>    } gdtr_t;</div>
 </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="foldopen" id="foldopen00047" data-start="{" data-end="};">
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html">   47</a></span>        <span class="keyword">class </span><a class="code hl_class" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html">GlobalDescriptorTable</a> {</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>          <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>              <a class="code hl_class" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html">GlobalDescriptorTable</a>();</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>              <a class="code hl_class" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html">~GlobalDescriptorTable</a>();</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a9bdb65faac2492d14a9a981d24848aed">   53</a></span>              uint64_t <a class="code hl_variable" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a9bdb65faac2492d14a9a981d24848aed">table</a>[7];    </div>
+<div class="foldopen" id="foldopen00053" data-start="{" data-end="};">
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html">   53</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html">GlobalDescriptorTable</a> {</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a86d433c249e84554b491fa0c69c71089">   55</a></span>              gdtr_t <a class="code hl_variable" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a86d433c249e84554b491fa0c69c71089">gdtr</a> = {};     </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>              <span class="keywordtype">void</span> <a class="code hl_function" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a69a4066581f829e6e47d169879aa4749">load</a>();</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>          };</div>
-</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    }</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>}</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <a class="code hl_function" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#af965f61a6b95b05608d27385fee17f4e">GlobalDescriptorTable</a>();</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            <a class="code hl_class" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html">~GlobalDescriptorTable</a>();</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a9bdb65faac2492d14a9a981d24848aed">   59</a></span>            uint64_t <a class="code hl_variable" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a9bdb65faac2492d14a9a981d24848aed">table</a>[7];    </div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="preprocessor">#endif </span><span class="comment">//MAX_OS_SYSTEM_GDT_H</span></div>
-<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html">MaxOS::system::GlobalDescriptorTable</a></div><div class="ttdoc">Sets up the GDT in the CPU.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00047">gdt.h:47</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html_a69a4066581f829e6e47d169879aa4749"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a69a4066581f829e6e47d169879aa4749">MaxOS::system::GlobalDescriptorTable::load</a></div><div class="ttdeci">void load()</div><div class="ttdoc">Loads the GDT into the CPU.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8cpp_source.html#l00074">gdt.cpp:74</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html_a86d433c249e84554b491fa0c69c71089"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a86d433c249e84554b491fa0c69c71089">MaxOS::system::GlobalDescriptorTable::gdtr</a></div><div class="ttdeci">gdtr_t gdtr</div><div class="ttdoc">The GDTR structure.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00055">gdt.h:55</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html_a9bdb65faac2492d14a9a981d24848aed"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a9bdb65faac2492d14a9a981d24848aed">MaxOS::system::GlobalDescriptorTable::table</a></div><div class="ttdeci">uint64_t table[7]</div><div class="ttdoc">The GDT entries.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00053">gdt.h:53</a></div></div>
-<div class="ttc" id="agdt_8h_html_a9939ce6f20f93eab7ad3ae6ee5d164c0"><div class="ttname"><a href="gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0">MaxOS::system::DescriptorFlags</a></div><div class="ttdeci">DescriptorFlags</div><div class="ttdoc">Flags for the GDT entries.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00023">gdt.h:23</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1system_1_1GDTRegister_html"><div class="ttname"><a href="structMaxOS_1_1system_1_1GDTRegister.html">MaxOS::system::GDTRegister</a></div><div class="ttdoc">How the CPU stores the GDT.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00038">gdt.h:38</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1system_1_1GDTRegister_html_a2f7694833e3316d80542b25095f44730"><div class="ttname"><a href="structMaxOS_1_1system_1_1GDTRegister.html#a2f7694833e3316d80542b25095f44730">MaxOS::system::GDTRegister::address</a></div><div class="ttdeci">uint64_t address</div><div class="ttdoc">The address of the GDT.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00040">gdt.h:40</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1system_1_1GDTRegister_html_a9b3997c207851168d964e6067c13dd55"><div class="ttname"><a href="structMaxOS_1_1system_1_1GDTRegister.html#a9b3997c207851168d964e6067c13dd55">MaxOS::system::GDTRegister::size</a></div><div class="ttdeci">uint16_t size</div><div class="ttdoc">The size of the GDT.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00039">gdt.h:39</a></div></div>
-<div class="ttc" id="astructMaxOS_1_1system_1_1____attribute_____html"><div class="ttname"><a href="structMaxOS_1_1system_1_1____attribute____.html">MaxOS::system::__attribute__</a></div><div class="ttdoc">The state of the CPU when an interrupt occurs (must align with the interrupt handler assembly code)</div><div class="ttdef"><b>Definition</b> <a href="cpu_8h_source.html#l00032">cpu.h:32</a></div></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a86d433c249e84554b491fa0c69c71089">   61</a></span>            <a class="code hl_typedef" href="gdt_8h.html#a922074ad0af798ffe772bf545d8d8553">gdtr_t</a> <a class="code hl_variable" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a86d433c249e84554b491fa0c69c71089">gdtr</a> = { };     </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            <span class="keywordtype">void</span> <a class="code hl_function" href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a69a4066581f829e6e47d169879aa4749">load</a>();</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    };</div>
+</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>}</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="preprocessor">#endif </span><span class="comment">//MAX_OS_SYSTEM_GDT_H</span></div>
+<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html">MaxOS::system::GlobalDescriptorTable</a></div><div class="ttdoc">Sets up the GDT in the CPU.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00053">gdt.h:53</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html_a69a4066581f829e6e47d169879aa4749"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a69a4066581f829e6e47d169879aa4749">MaxOS::system::GlobalDescriptorTable::load</a></div><div class="ttdeci">void load()</div><div class="ttdoc">Loads the GDT into the CPU.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8cpp_source.html#l00077">gdt.cpp:77</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html_a86d433c249e84554b491fa0c69c71089"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a86d433c249e84554b491fa0c69c71089">MaxOS::system::GlobalDescriptorTable::gdtr</a></div><div class="ttdeci">gdtr_t gdtr</div><div class="ttdoc">The GDTR structure.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00061">gdt.h:61</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html_a9bdb65faac2492d14a9a981d24848aed"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#a9bdb65faac2492d14a9a981d24848aed">MaxOS::system::GlobalDescriptorTable::table</a></div><div class="ttdeci">uint64_t table[7]</div><div class="ttdoc">The GDT entries.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00059">gdt.h:59</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1system_1_1GlobalDescriptorTable_html_af965f61a6b95b05608d27385fee17f4e"><div class="ttname"><a href="classMaxOS_1_1system_1_1GlobalDescriptorTable.html#af965f61a6b95b05608d27385fee17f4e">MaxOS::system::GlobalDescriptorTable::GlobalDescriptorTable</a></div><div class="ttdeci">GlobalDescriptorTable()</div><div class="ttdoc">Construct a new Global Descriptor Table object and set up the GDT entries and load it into the CPU,...</div><div class="ttdef"><b>Definition</b> <a href="gdt_8cpp_source.html#l00018">gdt.cpp:18</a></div></div>
+<div class="ttc" id="agdt_8h_html_a922074ad0af798ffe772bf545d8d8553"><div class="ttname"><a href="gdt_8h.html#a922074ad0af798ffe772bf545d8d8553">MaxOS::system::gdtr_t</a></div><div class="ttdeci">struct PACKED MaxOS::system::GDTRegister gdtr_t</div><div class="ttdoc">Alias for GDTRegister struct.</div></div>
+<div class="ttc" id="agdt_8h_html_a9939ce6f20f93eab7ad3ae6ee5d164c0"><div class="ttname"><a href="gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0">MaxOS::system::DescriptorFlags</a></div><div class="ttdeci">DescriptorFlags</div><div class="ttdoc">Flags for the GDT entries.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00024">gdt.h:24</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1system_1_1GDTRegister_html"><div class="ttname"><a href="structMaxOS_1_1system_1_1GDTRegister.html">MaxOS::system::GDTRegister</a></div><div class="ttdoc">How the CPU stores the GDT.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00042">gdt.h:42</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1system_1_1GDTRegister_html_a2f7694833e3316d80542b25095f44730"><div class="ttname"><a href="structMaxOS_1_1system_1_1GDTRegister.html#a2f7694833e3316d80542b25095f44730">MaxOS::system::GDTRegister::address</a></div><div class="ttdeci">uint64_t address</div><div class="ttdoc">The address of the GDT.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00045">gdt.h:45</a></div></div>
+<div class="ttc" id="astructMaxOS_1_1system_1_1GDTRegister_html_a9b3997c207851168d964e6067c13dd55"><div class="ttname"><a href="structMaxOS_1_1system_1_1GDTRegister.html#a9b3997c207851168d964e6067c13dd55">MaxOS::system::GDTRegister::size</a></div><div class="ttdeci">uint16_t size</div><div class="ttdoc">The size of the GDT.</div><div class="ttdef"><b>Definition</b> <a href="gdt_8h_source.html#l00044">gdt.h:44</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

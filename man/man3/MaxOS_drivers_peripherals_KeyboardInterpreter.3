@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::peripherals::KeyboardInterpreter" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::peripherals::KeyboardInterpreter" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,6 +16,10 @@ Inherited by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
+.ti -1c
+.RI "\fBKeyboardInterpreter\fP ()"
+.br
+.RI "Construct a new Keyboard Interpreter object\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBon_key_read\fP (\fBbool\fP, \fBconst\fP \fBKeyboardState\fP &, \fBKeyCode\fP)"
 .br
@@ -47,11 +51,11 @@ Public Member Functions inherited from \fBMaxOS::common::EventManager< KeyboardE
 .ti -1c
 .RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< KeyboardEvents > *\fBhandler\fP)"
 .br
-.RI "Connect an event handler to the event manager if it is not already connected\&. "
+.RI "connect an event handler to the event manager if it is not already connected "
 .ti -1c
 .RI "\fBvoid\fP \fBdisconnect_event_handler\fP (\fBEventHandler\fP< KeyboardEvents > *\fBhandler\fP)"
 .br
-.RI "Disconnect an event handler from the event manager if it is connected\&. "
+.RI "disconnect an event handler from the event manager if it is connected "
 .ti -1c
 .RI "\fBVector\fP< \fBEvent\fP< KeyboardEvents > * > \fBraise_event\fP (\fBEvent\fP< KeyboardEvents > *\fBevent\fP)"
 .br
@@ -96,18 +100,20 @@ Protected Attributes inherited from \fBMaxOS::common::EventManager< KeyboardEven
 .PP 
 Interprets the scan codes from the keyboard\&. 
 .PP
-Definition at line \fB279\fP of file \fBkeyboard\&.h\fP\&.
+Definition at line \fB289\fP of file \fBkeyboard\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "KeyboardInterpreter::KeyboardInterpreter ()"
 
 .PP
-Definition at line \fB122\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Construct a new Keyboard Interpreter object\&. 
+.PP
+Definition at line \fB128\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-123 : InputStreamEventHandler<uint8_t>()
-124 {
-125 
-126 }
+129 : InputStreamEventHandler<uint8_t>()
+130 {
+131 
+132 }
 .fi
 
 .SH "Member Function Documentation"
@@ -128,21 +134,21 @@ Handle the key event\&.
 .PP
 
 .PP
-Definition at line \fB137\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB143\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-137                                                                                                  {
-138 
-139     // Pass the key event to the handlers
-140     if (released)
-141         raise_event(new KeyUpEvent(key_code, state));
-142     else
-143         raise_event(new KeyDownEvent(key_code, state));
+143                                                                                                  {
 144 
-145 }
+145     // Pass the key event to the handlers
+146     if (released)
+147         raise_event(new KeyUpEvent(key_code, state));
+148     else
+149         raise_event(new KeyDownEvent(key_code, state));
+150 
+151 }
 .fi
 
 .PP
-References \fBMaxOS::common::EventManager< KeyboardEvents >::raise_event()\fP, and \fBstate\fP\&.
+References \fBMaxOS::common::EventManager< KeyboardEvents >::raise_event()\fP\&.
 .PP
 Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
 .SH "Member Data Documentation"
@@ -152,7 +158,7 @@ Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_strea
 .PP
 The storage for scan codes that take more than one byte\&. 
 .PP
-Definition at line \fB286\fP of file \fBkeyboard\&.h\fP\&.
+Definition at line \fB296\fP of file \fBkeyboard\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
 .SS "uint8_t MaxOS::drivers::peripherals::KeyboardInterpreter::m_extended_scan_code_bytes = 0\fC [protected]\fP"
@@ -160,7 +166,7 @@ Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_strea
 .PP
 How many bytes are left to read for the current extended scan code\&. 
 .PP
-Definition at line \fB285\fP of file \fBkeyboard\&.h\fP\&.
+Definition at line \fB295\fP of file \fBkeyboard\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
 .SS "\fBKeyboardState\fP MaxOS::drivers::peripherals::KeyboardInterpreter::m_keyboard_state\fC [protected]\fP"
@@ -168,7 +174,7 @@ Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_strea
 .PP
 The current state of what special keys are pressed on the keyboard\&. 
 .PP
-Definition at line \fB282\fP of file \fBkeyboard\&.h\fP\&.
+Definition at line \fB292\fP of file \fBkeyboard\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
 .SS "bool MaxOS::drivers::peripherals::KeyboardInterpreter::m_next_is_first_extended_code = false\fC [protected]\fP"
@@ -176,7 +182,7 @@ Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_strea
 .PP
 If true, the next code should be interpreted as an extended code (set when receiving 0xE0) 
 .PP
-Definition at line \fB284\fP of file \fBkeyboard\&.h\fP\&.
+Definition at line \fB294\fP of file \fBkeyboard\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::drivers::peripherals::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
 

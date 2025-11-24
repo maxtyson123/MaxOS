@@ -5,7 +5,7 @@
 Defines a Interrupt\+Manager and Interrupt\+Handler for managing hardware and software interrupts.  
 
 
-{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/port.\+h$>$}\newline
 {\ttfamily \#include $<$system/gdt.\+h$>$}\newline
 {\ttfamily \#include $<$common/input\+Stream.\+h$>$}\newline
@@ -24,33 +24,18 @@ struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescrip
 \begin{DoxyCompactList}\small\item\em An entry in the Interrupt Descriptor Table (IDT) \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager}}
 \begin{DoxyCompactList}\small\item\em Handles all interrupts and passes them to the correct handler. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Functions}
+\doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{acpi_8h_aa1f9def1bb675ba6c602952683c7a8d6}\label{acpi_8h_aa1f9def1bb675ba6c602952683c7a8d6} 
-struct \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor}{Max\+OS\+::hardwarecommunication\+::\+RSDPDescriptor}} {\bfseries Max\+OS\+::hardwarecommunication\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed)) rsdp\+\_\+descriptor\+\_\+t
-\end{DoxyCompactItemize}
+\Hypertarget{interrupts_8h_a8e0044a6c1baddf6cb8a77cf98787d81}\label{interrupts_8h_a8e0044a6c1baddf6cb8a77cf98787d81} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1IDTR}{Max\+OS\+::hardwarecommunication\+::\+IDTR}} {\bfseries Max\+OS\+::hardwarecommunication\+::idtr\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1hardwarecommunication_1_1IDTR}{IDTR} struct. \end{DoxyCompactList}\item 
+\Hypertarget{interrupts_8h_a318bd93151a55a5a79e0d506b75bc677}\label{interrupts_8h_a318bd93151a55a5a79e0d506b75bc677} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Descriptor}} {\bfseries Max\+OS\+::hardwarecommunication\+::interrupt\+\_\+descriptor\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor}{Interrupt\+Descriptor} struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_ab28e82ae69032cb4ad3ec3a0be3d7129}{limit}}
-\begin{DoxyCompactList}\small\item\em The size of the IDT. \end{DoxyCompactList}\item 
-uint64\+\_\+t \mbox{\hyperlink{interrupts_8h_aeca790c0426654358d031f8180e84aca}{base}}
-\begin{DoxyCompactList}\small\item\em The start address of the IDT. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_aa5e05ff0f00929c5e92891ae639afd68}{address\+\_\+low\+\_\+bits}}
-\begin{DoxyCompactList}\small\item\em The low bits of the handler function address. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_a9a563b8f33f9e079c734090d746d1b74}{segment\+\_\+selector}}
-\begin{DoxyCompactList}\small\item\em The code segment selector in the GDT to use when this interrupt fires. \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{interrupts_8h_a254d5bd1552992f9c17e038f363987ec}{ist}}
-\begin{DoxyCompactList}\small\item\em The offset into the Interrupt Stack Table (0 if not used) (see TSS) \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{interrupts_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}}
-\begin{DoxyCompactList}\small\item\em Flags\+: The type of gate this entry represents (0xE for interrupt gate, 0xF for trap gate), The privilege level required to invoke this interrupt and whether the interrupt is present (. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_a710ed0fcadd36b325b4e5345bc0724af}{address\+\_\+mid\+\_\+bits}}
-\begin{DoxyCompactList}\small\item\em The middle bits of the handler function address. \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{interrupts_8h_a881797a814e5d4e40f36e556939ebb11}{address\+\_\+high\+\_\+bits}}
-\begin{DoxyCompactList}\small\item\em The high bits of the handler function address. \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{interrupts_8h_aa43c4c21b173ada1b6b7568956f0d650}{reserved}}
-\begin{DoxyCompactList}\small\item\em Reserved, must be zero. \end{DoxyCompactList}\item 
 constexpr uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_a42e9ab6346c6fdafff29023c4377e213}{Max\+OS\+::hardwarecommunication\+::\+HARDWARE\+\_\+\+INTERRUPT\+\_\+\+OFFSET}} = 0x20
 \begin{DoxyCompactList}\small\item\em The offset in the IDT where interrupts from hardware start. \end{DoxyCompactList}\item 
 constexpr uint16\+\_\+t \mbox{\hyperlink{interrupts_8h_a3f470603200cff56da4a14d4470b95dc}{Max\+OS\+::hardwarecommunication\+::\+MAX\+\_\+\+INTERRUPT\+\_\+\+HANDLERS}} = 256
@@ -73,82 +58,6 @@ Definition in file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
 
 
 \doxysubsection{Variable Documentation}
-\Hypertarget{interrupts_8h_a881797a814e5d4e40f36e556939ebb11}\label{interrupts_8h_a881797a814e5d4e40f36e556939ebb11} 
-\index{interrupts.h@{interrupts.h}!address\_high\_bits@{address\_high\_bits}}
-\index{address\_high\_bits@{address\_high\_bits}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{address\_high\_bits}{address\_high\_bits}}
-{\footnotesize\ttfamily uint32\+\_\+t address\+\_\+high\+\_\+bits}
-
-
-
-The high bits of the handler function address. 
-
-
-
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00005}{5}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
-
-\Hypertarget{interrupts_8h_aa5e05ff0f00929c5e92891ae639afd68}\label{interrupts_8h_aa5e05ff0f00929c5e92891ae639afd68} 
-\index{interrupts.h@{interrupts.h}!address\_low\_bits@{address\_low\_bits}}
-\index{address\_low\_bits@{address\_low\_bits}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{address\_low\_bits}{address\_low\_bits}}
-{\footnotesize\ttfamily uint16\+\_\+t address\+\_\+low\+\_\+bits}
-
-
-
-The low bits of the handler function address. 
-
-
-
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00000}{0}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
-
-\Hypertarget{interrupts_8h_a710ed0fcadd36b325b4e5345bc0724af}\label{interrupts_8h_a710ed0fcadd36b325b4e5345bc0724af} 
-\index{interrupts.h@{interrupts.h}!address\_mid\_bits@{address\_mid\_bits}}
-\index{address\_mid\_bits@{address\_mid\_bits}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{address\_mid\_bits}{address\_mid\_bits}}
-{\footnotesize\ttfamily uint16\+\_\+t address\+\_\+mid\+\_\+bits}
-
-
-
-The middle bits of the handler function address. 
-
-
-
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00004}{4}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
-
-\Hypertarget{interrupts_8h_aeca790c0426654358d031f8180e84aca}\label{interrupts_8h_aeca790c0426654358d031f8180e84aca} 
-\index{interrupts.h@{interrupts.h}!base@{base}}
-\index{base@{base}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{base}{base}}
-{\footnotesize\ttfamily uint64\+\_\+t base}
-
-
-
-The start address of the IDT. 
-
-
-
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00001}{1}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00110}{Max\+OS\+::system\+::\+Core\+::init\+\_\+tss()}}, \mbox{\hyperlink{string_8cpp_source_l00720}{itoa()}}, and \mbox{\hyperlink{path_8cpp_source_l00208}{Max\+OS\+::filesystem\+::\+Path\+::join\+\_\+path()}}.
-
-\Hypertarget{interrupts_8h_aa2585d779da0ab21273a8d92de9a0ebe}\label{interrupts_8h_aa2585d779da0ab21273a8d92de9a0ebe} 
-\index{interrupts.h@{interrupts.h}!flags@{flags}}
-\index{flags@{flags}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{flags}{flags}}
-{\footnotesize\ttfamily uint8\+\_\+t flags}
-
-
-
-Flags\+: The type of gate this entry represents (0xE for interrupt gate, 0xF for trap gate), The privilege level required to invoke this interrupt and whether the interrupt is present (. 
-
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000024}{Todo}}]substruct this) \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00003}{3}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
-
 \Hypertarget{interrupts_8h_a42e9ab6346c6fdafff29023c4377e213}\label{interrupts_8h_a42e9ab6346c6fdafff29023c4377e213} 
 \index{interrupts.h@{interrupts.h}!HARDWARE\_INTERRUPT\_OFFSET@{HARDWARE\_INTERRUPT\_OFFSET}}
 \index{HARDWARE\_INTERRUPT\_OFFSET@{HARDWARE\_INTERRUPT\_OFFSET}!interrupts.h@{interrupts.h}}
@@ -161,39 +70,11 @@ The offset in the IDT where interrupts from hardware start.
 
 
 
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00068}{68}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
+Definition at line \mbox{\hyperlink{interrupts_8h_source_l00074}{74}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{interrupts_8cpp_source_l00277}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::handle\+\_\+interrupt\+\_\+request()}}.
-
-\Hypertarget{interrupts_8h_a254d5bd1552992f9c17e038f363987ec}\label{interrupts_8h_a254d5bd1552992f9c17e038f363987ec} 
-\index{interrupts.h@{interrupts.h}!ist@{ist}}
-\index{ist@{ist}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{ist}{ist}}
-{\footnotesize\ttfamily uint8\+\_\+t ist}
-
-
-
-The offset into the Interrupt Stack Table (0 if not used) (see TSS) 
-
-
-
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00002}{2}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
-
-\Hypertarget{interrupts_8h_ab28e82ae69032cb4ad3ec3a0be3d7129}\label{interrupts_8h_ab28e82ae69032cb4ad3ec3a0be3d7129} 
-\index{interrupts.h@{interrupts.h}!limit@{limit}}
-\index{limit@{limit}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{limit}{limit}}
-{\footnotesize\ttfamily uint16\+\_\+t limit}
-
-
-
-The size of the IDT. 
-
-
-
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00000}{0}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
+Referenced by \mbox{\hyperlink{interrupts_8cpp_source_l00284}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::handle\+\_\+interrupt\+\_\+request()}}, and \mbox{\hyperlink{interrupts_8cpp_source_l00090}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Interrupt\+Manager()}}.
 
 \Hypertarget{interrupts_8h_a3f470603200cff56da4a14d4470b95dc}\label{interrupts_8h_a3f470603200cff56da4a14d4470b95dc} 
 \index{interrupts.h@{interrupts.h}!MAX\_INTERRUPT\_HANDLERS@{MAX\_INTERRUPT\_HANDLERS}}
@@ -207,33 +88,5 @@ The maximum number of interrupt handlers.
 
 
 
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00069}{69}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
-
-\Hypertarget{interrupts_8h_aa43c4c21b173ada1b6b7568956f0d650}\label{interrupts_8h_aa43c4c21b173ada1b6b7568956f0d650} 
-\index{interrupts.h@{interrupts.h}!reserved@{reserved}}
-\index{reserved@{reserved}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{reserved}{reserved}}
-{\footnotesize\ttfamily uint32\+\_\+t reserved}
-
-
-
-Reserved, must be zero. 
-
-
-
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00006}{6}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
-
-\Hypertarget{interrupts_8h_a9a563b8f33f9e079c734090d746d1b74}\label{interrupts_8h_a9a563b8f33f9e079c734090d746d1b74} 
-\index{interrupts.h@{interrupts.h}!segment\_selector@{segment\_selector}}
-\index{segment\_selector@{segment\_selector}!interrupts.h@{interrupts.h}}
-\doxysubsubsection{\texorpdfstring{segment\_selector}{segment\_selector}}
-{\footnotesize\ttfamily uint16\+\_\+t segment\+\_\+selector}
-
-
-
-The code segment selector in the GDT to use when this interrupt fires. 
-
-
-
-Definition at line \mbox{\hyperlink{interrupts_8h_source_l00001}{1}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
+Definition at line \mbox{\hyperlink{interrupts_8h_source_l00075}{75}} of file \mbox{\hyperlink{interrupts_8h_source}{interrupts.\+h}}.
 

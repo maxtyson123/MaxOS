@@ -14,14 +14,14 @@ Handles ACPI table parsing and retrieval.
 \item 
 \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_ab0d645dc0379eb65dd58b97ef13d7af8}{Advanced\+Configuration\+And\+Power\+Interface}} (\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}})
 \begin{DoxyCompactList}\small\item\em Construct a new Advanced Configuration And Power Interface object. Maps the ACPI headers and tables into the higher half. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{acpi\+\_\+sdt\+\_\+header\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a8e9d8bd9fbb18e25419101be8d56aee2}{find}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{const}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{char}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{ext2_8h_a969f26a406a283e0b763d249c5c86bd8}{signature}})
+\mbox{\hyperlink{acpi_8h_a139ce3bc2b7412df9abe428c218fd5e0}{acpi\+\_\+sdt\+\_\+header\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a8e9d8bd9fbb18e25419101be8d56aee2}{find}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{const}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{char}} \texorpdfstring{$\ast$}{*}signature)
 \begin{DoxyCompactList}\small\item\em Finds a table with the given signature. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Handles ACPI table parsing and retrieval. 
 
-Definition at line \mbox{\hyperlink{acpi_8h_source_l00085}{85}} of file \mbox{\hyperlink{acpi_8h_source}{acpi.\+h}}.
+Definition at line \mbox{\hyperlink{acpi_8h_source_l00099}{99}} of file \mbox{\hyperlink{acpi_8h_source}{acpi.\+h}}.
 
 
 
@@ -30,7 +30,7 @@ Definition at line \mbox{\hyperlink{acpi_8h_source_l00085}{85}} of file \mbox{\h
 \index{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}!AdvancedConfigurationAndPowerInterface@{AdvancedConfigurationAndPowerInterface}}
 \index{AdvancedConfigurationAndPowerInterface@{AdvancedConfigurationAndPowerInterface}!MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface@{MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface}}
 \doxysubsubsection{\texorpdfstring{AdvancedConfigurationAndPowerInterface()}{AdvancedConfigurationAndPowerInterface()}}
-{\footnotesize\ttfamily Advanced\+Configuration\+And\+Power\+Interface\+::\+Advanced\+Configuration\+And\+Power\+Interface (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} \texorpdfstring{$\ast$}{*}}]{multiboot }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily Advanced\+Configuration\+And\+Power\+Interface\+::\+Advanced\+Configuration\+And\+Power\+Interface (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{system\+::\+Multiboot}} \texorpdfstring{$\ast$}{*}}]{multiboot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
 
 
@@ -43,50 +43,51 @@ Construct a new Advanced Configuration And Power Interface object. Maps the ACPI
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{acpi_8cpp_source_l00022}{22}} of file \mbox{\hyperlink{acpi_8cpp_source}{acpi.\+cpp}}.
+Definition at line \mbox{\hyperlink{acpi_8cpp_source_l00023}{23}} of file \mbox{\hyperlink{acpi_8cpp_source}{acpi.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classLogger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ ACPI\(\backslash\)n"{}};}
+\DoxyCodeLine{00024\ :\ m\_header(\textcolor{keyword}{nullptr})\ \{}
 \DoxyCodeLine{00025\ }
-\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ If\ the\ new\ ACPI\ is\ not\ supported,\ panic}}
-\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>new\_acpi()\ !=\ \textcolor{keyword}{nullptr}\ ||\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>old\_acpi()\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}No\ ACPI\ found!"{}});}
-\DoxyCodeLine{00028\ }
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ new\ ACPI\ is\ supported}}
-\DoxyCodeLine{00030\ \ \ \ \ m\_using\_new\_acpi\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>old\_acpi()\ ==\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}CPU\ Supports\ "{}}\ <<\ (m\_using\_new\_acpi\ ?\ \textcolor{stringliteral}{"{}New"{}}\ :\ \textcolor{stringliteral}{"{}Old"{}})\ <<\ \textcolor{stringliteral}{"{}\ ACPI\(\backslash\)n"{}};}
-\DoxyCodeLine{00032\ }
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_using\_new\_acpi)}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ m\_rsdp2\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2}{RSDPDescriptor2}}*)\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>new\_acpi()\ +\ 1);}
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ m\_rsdp\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor}{RSDPDescriptor}}*)\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>old\_acpi()\ +\ 1);}
-\DoxyCodeLine{00037\ }
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ XSDT/RSDT}}
-\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}\ =\ m\_using\_new\_acpi\ ?\ m\_rsdp2-\/>xsdt\_address\ :\ m\_rsdp-\/>rsdt\_address;}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}*\ virtual\_address\ =\ map\_descriptor(\mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}});}
-\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(virtual\_address\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}Failed\ to\ map\ ACPI\ table"{}});}
-\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}XSDT/RSDT:\ physical:\ 0x"{}}\ <<\ \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\_address}}\ <<\ \textcolor{stringliteral}{"{},\ virtual:\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})virtual\_address\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{00043\ }
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ Load}}
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_using\_new\_acpi)}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ m\_xsdt\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1XSDT}{XSDT}}*)virtual\_address;}
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ m\_rsdt\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDT}{RSDT}}*)virtual\_address;}
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ Tables}}
-\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Mapping\ ACPI\ Tables\(\backslash\)n"{}};}
-\DoxyCodeLine{00052\ \ \ \ \ map\_tables(m\_using\_new\_acpi\ ?\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sizeof}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}));}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ checksum\ is\ valid}}
-\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(valid\_checksum(),\ \textcolor{stringliteral}{"{}ACPI:\ Invalid\ checksum!"{}});}
-\DoxyCodeLine{00056\ \}}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ ACPI\(\backslash\)n"{}};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ If\ the\ new\ ACPI\ is\ not\ supported,\ panic}}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>new\_acpi()\ !=\ \textcolor{keyword}{nullptr}\ ||\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>old\_acpi()\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}No\ ACPI\ found!"{}});}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ new\ ACPI\ is\ supported}}
+\DoxyCodeLine{00032\ \ \ \ \ m\_using\_new\_acpi\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>old\_acpi()\ ==\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}CPU\ Supports\ "{}}\ <<\ (m\_using\_new\_acpi\ ?\ \textcolor{stringliteral}{"{}New"{}}\ :\ \textcolor{stringliteral}{"{}Old"{}})\ <<\ \textcolor{stringliteral}{"{}\ ACPI\(\backslash\)n"{}};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordflow}{if}(m\_using\_new\_acpi)}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ m\_rsdp2\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2}{RSDPDescriptor2}}*)\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>new\_acpi()\ +\ 1);}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ m\_rsdp\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor}{RSDPDescriptor}}*)\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}-\/>old\_acpi()\ +\ 1);}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ XSDT/RSDT}}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ physical\_address\ =\ m\_using\_new\_acpi\ ?\ m\_rsdp2-\/>xsdt\_address\ :\ m\_rsdp-\/>rsdt\_address;}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}*\ virtual\_address\ =\ map\_descriptor(physical\_address);}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(virtual\_address\ !=\ \textcolor{keyword}{nullptr},\ \textcolor{stringliteral}{"{}Failed\ to\ map\ ACPI\ table"{}});}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}XSDT/RSDT:\ physical:\ 0x"{}}\ <<\ physical\_address\ <<\ \textcolor{stringliteral}{"{},\ virtual:\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ virtual\_address}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{//\ Load}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordflow}{if}(m\_using\_new\_acpi)}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ m\_xsdt\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1XSDT}{XSDT}}*)\ virtual\_address;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ m\_rsdt\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1RSDT}{RSDT}}*)\ virtual\_address;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ Tables}}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Mapping\ ACPI\ Tables\(\backslash\)n"{}};}
+\DoxyCodeLine{00055\ \ \ \ \ map\_tables(m\_using\_new\_acpi\ ?\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{sizeof}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}));}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ checksum\ is\ valid}}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(valid\_checksum(),\ \textcolor{stringliteral}{"{}ACPI:\ Invalid\ checksum!"{}});}
+\DoxyCodeLine{00059\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00095}{ASSERT}}, \mbox{\hyperlink{logger_8cpp_source_l00178}{Logger\+::\+DEBUG()}}, \mbox{\hyperlink{logger_8cpp_source_l00167}{Logger\+::\+INFO()}}, and \mbox{\hyperlink{physical_8h_source_l00010}{physical\+\_\+address}}.
+References \mbox{\hyperlink{logger_8h_source_l00100}{ASSERT}}, \mbox{\hyperlink{logger_8cpp_source_l00193}{Max\+OS\+::\+Logger\+::\+DEBUG()}}, and \mbox{\hyperlink{logger_8cpp_source_l00171}{Max\+OS\+::\+Logger\+::\+INFO()}}.
 
 
 
@@ -111,42 +112,42 @@ The table with the given signature, or nullptr if not found
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{acpi_8cpp_source_l00160}{160}} of file \mbox{\hyperlink{acpi_8cpp_source}{acpi.\+cpp}}.
+Definition at line \mbox{\hyperlink{acpi_8cpp_source_l00163}{163}} of file \mbox{\hyperlink{acpi_8cpp_source}{acpi.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00161\ }
-\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ number\ of\ entries}}
-\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}{entries}}\ =\ (m\_header-\/>length\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}))\ /\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}});}
-\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_using\_new\_acpi)\ \mbox{\hyperlink{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}{entries}}\ =\ (m\_header-\/>length\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}))\ /\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}});}
-\DoxyCodeLine{00165\ }
-\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ all\ the\ entries}}
-\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}{entries}};\ ++i)\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ number\ of\ entries}}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ entries\ =\ (m\_header-\/>length\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}))\ /\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}});}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordflow}{if}(m\_using\_new\_acpi)\ entries\ =\ (m\_header-\/>length\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}))\ /\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}});}
 \DoxyCodeLine{00168\ }
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ entry}}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}}\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}*)\ (m\_using\_new\_acpi\ ?\ m\_xsdt-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1XSDT_a014b986aaf9a0eb72742a00f1c2474d9}{pointers}}[i]\ :\ get\_rsdt\_pointer(i));}
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ all\ the\ entries}}
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ entries;\ ++i)\ \{}
 \DoxyCodeLine{00171\ }
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ the\ header\ to\ the\ higher\ half}}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}}\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1ad616354df4569df849c6f1331cd4b4}{PhysicalMemoryManager::to\_io\_region}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ \mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}});}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ entry}}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ header\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}*)\ (m\_using\_new\_acpi\ ?\ m\_xsdt-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1XSDT_a014b986aaf9a0eb72742a00f1c2474d9}{pointers}}[i]\ :\ get\_rsdt\_pointer(i));}
 \DoxyCodeLine{00174\ }
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ signature\ matches}}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{string_8h_a9a382141e88fb589c55148c54fa45d64}{strncmp}}(\mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}}-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader_a2bb6b416f4a277e32ecb683a70a726a3}{signature}},\ \mbox{\hyperlink{ext2_8h_a969f26a406a283e0b763d249c5c86bd8}{signature}},\ 4))}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{apic_8h_ac1917477d23b262f1ffcc1694ee8f44c}{header}};}
-\DoxyCodeLine{00178\ \ \ \ \ \}}
-\DoxyCodeLine{00179\ }
-\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{//\ Return\ null\ if\ no\ entry\ was\ found}}
-\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00182\ \}}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ the\ header\ to\ the\ higher\ half}}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ header\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader}{ACPISDTHeader}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1ad616354df4569df849c6f1331cd4b4}{PhysicalMemoryManager::to\_io\_region}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ header);}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ signature\ matches}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{string_8h_a9a382141e88fb589c55148c54fa45d64}{strncmp}}(header-\/>signature,\ signature,\ 4))}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ header;}
+\DoxyCodeLine{00181\ \ \ \ \ \}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{//\ Return\ null\ if\ no\ entry\ was\ found}}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00185\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{physical_8h_source_l00000}{entries}}, \mbox{\hyperlink{apic_8h_source_l00000}{header}}, \mbox{\hyperlink{acpi_8h_source_l00078}{Max\+OS\+::hardwarecommunication\+::\+XSDT\+::pointers}}, \mbox{\hyperlink{ext2_8h_source_l00015}{signature}}, \mbox{\hyperlink{acpi_8h_source_l00052}{Max\+OS\+::hardwarecommunication\+::\+ACPISDTHeader\+::signature}}, \mbox{\hyperlink{string_8cpp_source_l00902}{strncmp()}}, and \mbox{\hyperlink{physical_8cpp_source_l00893}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+io\+\_\+region()}}.
+References \mbox{\hyperlink{acpi_8h_source_l00092}{Max\+OS\+::hardwarecommunication\+::\+XSDT\+::pointers}}, \mbox{\hyperlink{string_8cpp_source_l00826}{strncmp()}}, and \mbox{\hyperlink{physical_8cpp_source_l00915}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+io\+\_\+region()}}.
 
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00195}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::\+IOAPIC()}}.
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00198}{Max\+OS\+::hardwarecommunication\+::\+IOAPIC\+::\+IOAPIC()}}.
 
 
 

@@ -1,4 +1,4 @@
-.TH "MaxOS::gui::widgets::ButtonEventHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::gui::widgets::ButtonEventHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,11 +19,11 @@ Inherits \fBMaxOS::common::EventHandler< ButtonEvents >\fP\&.
 .br
 .RI "Handles the button events\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_button_pressed\fP (\fBButton\fP *\fBsource\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_button_pressed\fP (\fBButton\fP *source)"
 .br
 .RI "Handles the button pressed event\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_button_released\fP (\fBButton\fP *\fBsource\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_button_released\fP (\fBButton\fP *source)"
 .br
 .RI "Handles the button released event\&. "
 .in -1c
@@ -39,7 +39,7 @@ Public Member Functions inherited from \fBMaxOS::common::EventHandler< ButtonEve
 .PP 
 Handles button events\&. 
 .PP
-Definition at line \fB65\fP of file \fBbutton\&.h\fP\&.
+Definition at line \fB61\fP of file \fBbutton\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP ButtonEventHandler::on_button_pressed (\fBButton\fP * source)\fC [virtual]\fP"
@@ -54,11 +54,11 @@ Handles the button pressed event\&.
 .PP
 
 .PP
-Definition at line \fB48\fP of file \fBbutton\&.cpp\fP\&..PP
+Definition at line \fB49\fP of file \fBbutton\&.cpp\fP\&..PP
 .nf
-48                                                   {
-49 
-50 }
+49                                                   {
+50 
+51 }
 .fi
 
 .PP
@@ -75,11 +75,11 @@ Handles the button released event\&.
 .PP
 
 .PP
-Definition at line \fB57\fP of file \fBbutton\&.cpp\fP\&..PP
+Definition at line \fB58\fP of file \fBbutton\&.cpp\fP\&..PP
 .nf
-57                                                    {
-58 
-59 }
+58                                                    {
+59 
+60 }
 .fi
 
 .PP
@@ -94,29 +94,34 @@ Handles the button events\&.
 \fIevent\fP The event to handle 
 .RE
 .PP
+\fBReturns\fP
+.RS 4
+The handled event 
+.RE
+.PP
 
 .PP
-Definition at line \fB27\fP of file \fBbutton\&.cpp\fP\&..PP
+Definition at line \fB28\fP of file \fBbutton\&.cpp\fP\&..PP
 .nf
-27                                                                             {
-28 
-29     switch (event\->type) {
-30 
-31         case ButtonEvents::PRESSED:
-32             on_button_pressed(((ButtonPressedEvent*) event)\->source);
-33             break;
-34 
-35         case ButtonEvents::RELEASED:
-36             on_button_released(((ButtonReleasedEvent*) event)\->source);
-37             break;
-38 
-39     }
-40     return event;
-41 }
+28                                                                             {
+29 
+30     switch (event\->type) {
+31 
+32         case ButtonEvents::PRESSED:
+33             on_button_pressed(((ButtonPressedEvent*) event)\->source);
+34             break;
+35 
+36         case ButtonEvents::RELEASED:
+37             on_button_released(((ButtonReleasedEvent*) event)\->source);
+38             break;
+39 
+40     }
+41     return event;
+42 }
 .fi
 
 .PP
-References \fBon_button_pressed()\fP, \fBon_button_released()\fP, and \fBsource\fP\&.
+References \fBon_button_pressed()\fP, and \fBon_button_released()\fP\&.
 
 .SH "Author"
 .PP 

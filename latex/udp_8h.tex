@@ -5,7 +5,7 @@
 Defines the User Datagram Protocol (UDP) for network communication.  
 
 
-{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$common/event\+Handler.\+h$>$}\newline
 {\ttfamily \#include $<$net/ipv4.\+h$>$}\newline
 {\ttfamily \#include $<$memory/memorymanagement.\+h$>$}\newline
@@ -25,31 +25,17 @@ class \mbox{\hyperlink{classMaxOS_1_1net_1_1UserDatagramProtocolHandler}{Max\+OS
 \doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
+\Hypertarget{udp_8h_a14f04580216ea4f555e2a55dca317c8a}\label{udp_8h_a14f04580216ea4f555e2a55dca317c8a} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1net_1_1UDPHeader}{Max\+OS\+::net\+::\+UDPHeader}} {\bfseries Max\+OS\+::net\+::udp\+\_\+header\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1net_1_1UDPHeader}{UDPHeader} struct. \end{DoxyCompactList}\item 
 typedef uint16\+\_\+t \mbox{\hyperlink{udp_8h_a1e02f448b921ead1ac5c22bd5c83ead9}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Port}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em UDP port. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
 enum class \mbox{\hyperlink{udp_8h_a51eed3696313ac8c5d8ae054d331fe8f}{Max\+OS\+::net\+::\+UDPEvents}} \{ {\bfseries DATA\+\_\+\+RECEIVED}
  \}
 \begin{DoxyCompactList}\small\item\em The events that can be fired by the UDP protocol. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Functions}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{arp_8h_a706e75e7063d1ccca9baadb0f52f98bd}\label{arp_8h_a706e75e7063d1ccca9baadb0f52f98bd} 
-struct \mbox{\hyperlink{structMaxOS_1_1net_1_1ARPMessage}{Max\+OS\+::net\+::\+ARPMessage}} {\bfseries Max\+OS\+::net\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed))
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Variables}
-\begin{DoxyCompactItemize}
-\item 
-uint16\+\_\+t \mbox{\hyperlink{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}{source\+Port}}
-\begin{DoxyCompactList}\small\item\em The port of the sender. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}{destination\+Port}}
-\begin{DoxyCompactList}\small\item\em The port of the receiver. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{udp_8h_a1892eba2086d12ac2b09005aeb09ea3b}{length}}
-\begin{DoxyCompactList}\small\item\em The length of the UDP header and data. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{udp_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}}
-\begin{DoxyCompactList}\small\item\em The checksum of the header and data. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -72,11 +58,17 @@ Definition in file \mbox{\hyperlink{udp_8h_source}{udp.\+h}}.
 \index{udp.h@{udp.h}!UserDatagramProtocolPort@{UserDatagramProtocolPort}}
 \index{UserDatagramProtocolPort@{UserDatagramProtocolPort}!udp.h@{udp.h}}
 \doxysubsubsection{\texorpdfstring{UserDatagramProtocolPort}{UserDatagramProtocolPort}}
-{\footnotesize\ttfamily typedef uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Port}}}
+{\footnotesize\ttfamily typedef uint16\+\_\+t \mbox{\hyperlink{udp_8h_a1e02f448b921ead1ac5c22bd5c83ead9}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Port}}}
 
 
 
-Definition at line \mbox{\hyperlink{udp_8h_source_l00046}{46}} of file \mbox{\hyperlink{udp_8h_source}{udp.\+h}}.
+UDP port. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000042}{Todo}}]\+: Make UDPPort class and do udp\+\_\+port\+\_\+t (or generic port that can be used for TCP and UDP) \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{udp_8h_source_l00050}{50}} of file \mbox{\hyperlink{udp_8h_source}{udp.\+h}}.
 
 
 
@@ -93,79 +85,12 @@ The events that can be fired by the UDP protocol.
 
 
 
-Definition at line \mbox{\hyperlink{udp_8h_source_l00038}{38}} of file \mbox{\hyperlink{udp_8h_source}{udp.\+h}}.
+Definition at line \mbox{\hyperlink{udp_8h_source_l00041}{41}} of file \mbox{\hyperlink{udp_8h_source}{udp.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ DATA\_RECEIVED,}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ DATA\_RECEIVED,}
+\DoxyCodeLine{00043\ \ \ \ \ \};}
 
 \end{DoxyCode}
-
-
-\doxysubsection{Variable Documentation}
-\Hypertarget{udp_8h_a6796c847bbd16253ce2538754c250bd6}\label{udp_8h_a6796c847bbd16253ce2538754c250bd6} 
-\index{udp.h@{udp.h}!checksum@{checksum}}
-\index{checksum@{checksum}!udp.h@{udp.h}}
-\doxysubsubsection{\texorpdfstring{checksum}{checksum}}
-{\footnotesize\ttfamily uint16\+\_\+t checksum}
-
-
-
-The checksum of the header and data. 
-
-
-
-Definition at line \mbox{\hyperlink{udp_8h_source_l00004}{4}} of file \mbox{\hyperlink{udp_8h_source}{udp.\+h}}.
-
-\Hypertarget{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f}\label{udp_8h_a84228f7bb29cdf373cea70683dd4cd3f} 
-\index{udp.h@{udp.h}!destinationPort@{destinationPort}}
-\index{destinationPort@{destinationPort}!udp.h@{udp.h}}
-\doxysubsubsection{\texorpdfstring{destinationPort}{destinationPort}}
-{\footnotesize\ttfamily uint16\+\_\+t destination\+Port}
-
-
-
-The port of the receiver. 
-
-
-
-Definition at line \mbox{\hyperlink{udp_8h_source_l00002}{2}} of file \mbox{\hyperlink{udp_8h_source}{udp.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{udp_8cpp_source_l00127}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, and \mbox{\hyperlink{udp_8cpp_source_l00266}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}.
-
-\Hypertarget{udp_8h_a1892eba2086d12ac2b09005aeb09ea3b}\label{udp_8h_a1892eba2086d12ac2b09005aeb09ea3b} 
-\index{udp.h@{udp.h}!length@{length}}
-\index{length@{length}!udp.h@{udp.h}}
-\doxysubsubsection{\texorpdfstring{length}{length}}
-{\footnotesize\ttfamily uint16\+\_\+t length}
-
-
-
-The length of the UDP header and data. 
-
-
-
-Definition at line \mbox{\hyperlink{udp_8h_source_l00003}{3}} of file \mbox{\hyperlink{udp_8h_source}{udp.\+h}}.
-
-\Hypertarget{udp_8h_a4040a0b3a7d034b2d45153e8651a9139}\label{udp_8h_a4040a0b3a7d034b2d45153e8651a9139} 
-\index{udp.h@{udp.h}!sourcePort@{sourcePort}}
-\index{sourcePort@{sourcePort}!udp.h@{udp.h}}
-\doxysubsubsection{\texorpdfstring{sourcePort}{sourcePort}}
-{\footnotesize\ttfamily uint16\+\_\+t source\+Port}
-
-
-
-The port of the sender. 
-
-
-
-Definition at line \mbox{\hyperlink{udp_8h_source_l00001}{1}} of file \mbox{\hyperlink{udp_8h_source}{udp.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{udp_8cpp_source_l00127}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::handle\+Internet\+Protocol\+Payload()}}, and \mbox{\hyperlink{udp_8cpp_source_l00266}{Max\+OS\+::net\+::\+User\+Datagram\+Protocol\+Handler\+::\+Send()}}.
-

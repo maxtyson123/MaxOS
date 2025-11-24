@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::video::VideoGraphicsArray" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::video::VideoGraphicsArray" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,6 +14,10 @@ Inherits \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
+.ti -1c
+.RI "\fBVideoGraphicsArray\fP ()"
+.br
+.RI "Constructs a new Video Graphics Array (VGA) driver object, initializing the necessary I/O ports for VGA register access\&. "
 .ti -1c
 .RI "\fBstring\fP \fBvendor_name\fP () final"
 .br
@@ -31,7 +35,7 @@ Inherits \fBMaxOS::drivers::video::VideoDriver\fP\&.
 Public Member Functions inherited from \fBMaxOS::drivers::video::VideoDriver\fP
 .in +1c
 .ti -1c
-.RI "\fBbool\fP \fBset_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolorDepth\fP)"
+.RI "\fBbool\fP \fBset_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolor_depth\fP)"
 .br
 .RI "Set the mode of the video driver\&. "
 .in -1c
@@ -41,11 +45,11 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
 .br
-.RI "activate the driver "
+.RI "Activate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
-.RI "deactivate the driver "
+.RI "Deactivate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
 .br
@@ -58,6 +62,10 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 
 Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 .in +1c
+.ti -1c
+.RI "\fBGraphicsContext\fP ()"
+.br
+.RI "Constructs a \fBGraphicsContext\fP object and initializes the color palette\&. "
 .ti -1c
 .RI "\fBuint32_t\fP \fBcolour_to_int\fP (\fBconst\fP \fBColour\fP &)"
 .br
@@ -83,59 +91,59 @@ Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 .br
 .RI "Gets the address of the context's framebuffer to draw on\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBput_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBput_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Renders a pixel to the screen (automatically converts the colour to an integer) "
 .ti -1c
-.RI "\fBvoid\fP \fBputPixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBput_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
 .br
 .RI "Renders a pixel to the screen (automatically converts the colour to an integer), will not render the pixel if it is outside the screen\&. "
 .ti -1c
-.RI "\fBColour\fP \fBget_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.RI "\fBColour\fP \fBget_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
 .br
 .RI "Gets the colour of a pixel, or returns black if the pixel is outside the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBinvert_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.RI "\fBvoid\fP \fBinvert_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
 .br
 .RI "Inverts a pixel\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_line\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBdraw_line\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a line on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdrawLine\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBdraw_line\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a line on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a rectangle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a rectangle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a rectangle on the screen, filled with a colour\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a rectangle on the screen, filled with a colour\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a circle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a circle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfill_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBfill_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a circle on the screen, filled with a colour\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfillCircle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBfill_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a circle on the screen, filled with a colour\&. "
 .in -1c
@@ -181,15 +189,15 @@ Protected Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 Protected Attributes inherited from \fBMaxOS::common::GraphicsContext\fP
 .in +1c
 .ti -1c
-.RI "\fBbool\fP \fBmirror_y_axis\fP { \fBfalse\fP }"
+.RI "\fBbool\fP \fBmirror_y_axis\fP"
 .br
 .RI "Should the y axis be mirrored (0,0 is top left if false, bottom left if true) "
 .ti -1c
-.RI "\fBint32_t\fP \fBm_width\fP { 0 }"
+.RI "\fBuint32_t\fP \fBm_width\fP { 0 }"
 .br
 .RI "The width of the screen in pixels\&. "
 .ti -1c
-.RI "\fBint32_t\fP \fBm_height\fP { 0 }"
+.RI "\fBuint32_t\fP \fBm_height\fP { 0 }"
 .br
 .RI "The height of the screen in pixels\&. "
 .ti -1c
@@ -215,21 +223,23 @@ Definition at line \fB28\fP of file \fBvga\&.h\fP\&.
 .SS "VideoGraphicsArray::VideoGraphicsArray ()"
 
 .PP
-Definition at line \fB18\fP of file \fBvga\&.cpp\fP\&..PP
+Constructs a new Video Graphics Array (VGA) driver object, initializing the necessary I/O ports for VGA register access\&. 
+.PP
+Definition at line \fB22\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-19 : m_misc_port(0x3C2),
-20   m_crtc_index_port(0x3D4),
-21   crtc_data_port(0x3D5),
-22   m_sequence_index_port(0x3C4),
-23   m_sequence_data_port(0x3C5),
-24   m_graphics_controller_index_port(0x3CE),
-25   m_graphics_controller_data_port(0x3CF),
-26   m_attribute_controller_index_port(0x3C0),
-27   m_attribute_controller_read_port(0x3C1),
-28   m_attribute_controller_write_port(0x3C0),
-29   m_attribute_controller_reset_port(0x3DA)
-30 {
-31 }
+23 : m_misc_port(0x3C2),
+24   m_crtc_index_port(0x3D4),
+25   crtc_data_port(0x3D5),
+26   m_sequence_index_port(0x3C4),
+27   m_sequence_data_port(0x3C5),
+28   m_graphics_controller_index_port(0x3CE),
+29   m_graphics_controller_data_port(0x3CF),
+30   m_attribute_controller_index_port(0x3C0),
+31   m_attribute_controller_read_port(0x3C1),
+32   m_attribute_controller_write_port(0x3C0),
+33   m_attribute_controller_reset_port(0x3DA)
+34 {
+35 }
 .fi
 
 .SH "Member Function Documentation"
@@ -248,17 +258,26 @@ The name of the device\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB201\fP of file \fBvga\&.cpp\fP\&..PP
+Definition at line \fB208\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-201                                        {
-202     return "VGA compatible graphics card";
-203 }
+208                                        {
+209     return "VGA compatible graphics card";
+210 }
 .fi
 
 .SS "bool VideoGraphicsArray::supports_mode (uint32_t width, uint32_t height, uint32_t colour_depth)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Checks if the specified resolution is supported\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwidth\fP The width of the resolution\&. 
+.br
+\fIheight\fP The height of the resolution\&. 
+.br
+\fIcolour_depth\fP The byte depth of the resolution\&. 
+.RE
 .PP
 \fBReturns\fP
 .RS 4
@@ -269,11 +288,11 @@ True if the specified resolution is supported, otherwise false\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::video::VideoDriver\fP\&.
 .PP
-Definition at line \fB91\fP of file \fBvga\&.cpp\fP\&..PP
+Definition at line \fB98\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-91                                                                                              {
-92     return width == 320 && height == 200 && colour_depth == 8;
-93 }
+98                                                                                              {
+99     return width == 320 && height == 200 && colour_depth == 8;
+100 }
 .fi
 
 .PP
@@ -292,13 +311,13 @@ The name of the vendor\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB190\fP of file \fBvga\&.cpp\fP\&..PP
+Definition at line \fB197\fP of file \fBvga\&.cpp\fP\&..PP
 .nf
-190                                        {
-191 
-192     // VGA was made by IBM
-193     return "IBM";
-194 }
+197                                        {
+198 
+199     // VGA was made by IBM
+200     return "IBM";
+201 }
 .fi
 
 

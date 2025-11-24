@@ -5,7 +5,7 @@
 Defines the Transmission Control Protocol (TCP) structures and classes for handling TCP sockets and payloads.  
 
 
-{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$net/ipv4.\+h$>$}\newline
 {\ttfamily \#include $<$memory/memorymanagement.\+h$>$}\newline
 \doxysubsubsection*{Classes}
@@ -31,7 +31,13 @@ class \mbox{\hyperlink{classMaxOS_1_1net_1_1TransmissionControlProtocolHandler}{
 \begin{DoxyCompactItemize}
 \item 
 typedef uint16\+\_\+t \mbox{\hyperlink{tcp_8h_a8e668c17241c6c0ed8e9f6df338b2307}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Port}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em TCP port. \end{DoxyCompactList}\item 
+\Hypertarget{tcp_8h_ade01f39cc741b9a05603f75bbebdf93d}\label{tcp_8h_ade01f39cc741b9a05603f75bbebdf93d} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1net_1_1TCPHeader}{Max\+OS\+::net\+::\+TCPHeader}} {\bfseries Max\+OS\+::net\+::tcp\+\_\+header\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1net_1_1TCPHeader}{TCPHeader} struct. \end{DoxyCompactList}\item 
+\Hypertarget{tcp_8h_ac72a8e333ba07816fd07ba87cca7fa8c}\label{tcp_8h_ac72a8e333ba07816fd07ba87cca7fa8c} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1net_1_1TCPPseudoHeader}{Max\+OS\+::net\+::\+TCPPseudo\+Header}} {\bfseries Max\+OS\+::net\+::tcp\+\_\+pseudo\+\_\+header\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1net_1_1TCPPseudoHeader}{TCPPseudo\+Header} struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
@@ -70,45 +76,6 @@ enum class \mbox{\hyperlink{tcp_8h_a1a687a489ef1200d6bb31f22ffff77cf}{Max\+OS\+:
 , {\bfseries DATA\+\_\+\+RECEIVED}
  \}
 \begin{DoxyCompactList}\small\item\em Events for the TCPPayload\+Handler. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Functions}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{arp_8h_a706e75e7063d1ccca9baadb0f52f98bd}\label{arp_8h_a706e75e7063d1ccca9baadb0f52f98bd} 
-struct \mbox{\hyperlink{structMaxOS_1_1net_1_1ARPMessage}{Max\+OS\+::net\+::\+ARPMessage}} {\bfseries Max\+OS\+::net\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed))
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Variables}
-\begin{DoxyCompactItemize}
-\item 
-uint16\+\_\+t \mbox{\hyperlink{tcp_8h_a26ebbf4f65c3f6fd9959d9cecef5c9d8}{src\+Port}}
-\begin{DoxyCompactList}\small\item\em The port of the sender. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{tcp_8h_ac01766720e5781a418710ebf1ba5379e}{dst\+Port}}
-\begin{DoxyCompactList}\small\item\em The port of the receiver. \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}{sequence\+Number}}
-\begin{DoxyCompactList}\small\item\em Where this packet\textquotesingle{}s data fits in the overall order of the data stream. \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}{acknowledgement\+Number}}
-\begin{DoxyCompactList}\small\item\em The next expected sequence number from the sender (used by the receiver to request the next data) \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{tcp_8h_acb7bc06bed6f6408d719334fc41698c7}{reserved}}
-\begin{DoxyCompactList}\small\item\em Unused, must be 0. \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}{header\+Size32}}
-\begin{DoxyCompactList}\small\item\em The size of the header in 32-\/bit words. \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}{flags}}
-\begin{DoxyCompactList}\small\item\em The flags of the TCP packet (see TCPFlag enum) \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{tcp_8h_a6b2a31b20954529dabfe0f32eda1cf11}{window\+Size}}
-\begin{DoxyCompactList}\small\item\em How many bytes the sender is willing to receive. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{tcp_8h_a6796c847bbd16253ce2538754c250bd6}{checksum}}
-\begin{DoxyCompactList}\small\item\em The checksum of the header. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{tcp_8h_aca974d34b50135a7d9b524a8fc2f5d00}{urgent\+Ptr}}
-\begin{DoxyCompactList}\small\item\em Where in the data the urgent data {\itshape ends} (if the URG flag is set) \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{tcp_8h_a2ba60f781746d31baf29e8c5a35d07e7}{options}}
-\begin{DoxyCompactList}\small\item\em The options for the TCP packet (MSS, Window Scale, SACK Permitted) \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{tcp_8h_a2c21b87d7d19b79e094d74112253a776}{src\+IP}}
-\begin{DoxyCompactList}\small\item\em The IP address of the sender. \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{tcp_8h_a2287eab8c0183320980c7a0addb74a5a}{dst\+IP}}
-\begin{DoxyCompactList}\small\item\em The IP address of the receiver. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{tcp_8h_ab551400c74271f35d0c79f81d29cffbb}{protocol}}
-\begin{DoxyCompactList}\small\item\em The protocol (set to 6 for TCP) \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{tcp_8h_a46d6b08cf598408355fa1fc5c1de902a}{total\+Length}}
-\begin{DoxyCompactList}\small\item\em The total length of the TCP header and data. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -131,11 +98,17 @@ Definition in file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
 \index{tcp.h@{tcp.h}!TransmissionControlProtocolPort@{TransmissionControlProtocolPort}}
 \index{TransmissionControlProtocolPort@{TransmissionControlProtocolPort}!tcp.h@{tcp.h}}
 \doxysubsubsection{\texorpdfstring{TransmissionControlProtocolPort}{TransmissionControlProtocolPort}}
-{\footnotesize\ttfamily typedef uint16\+\_\+t \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Port}}}
+{\footnotesize\ttfamily typedef uint16\+\_\+t \mbox{\hyperlink{tcp_8h_a8e668c17241c6c0ed8e9f6df338b2307}{Max\+OS\+::net\+::\+Transmission\+Control\+Protocol\+Port}}}
 
 
 
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00020}{20}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
+TCP port. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000040}{Todo}}]\+: Make TCPPort class and do tcp\+\_\+port\+\_\+t \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{tcp_8h_source_l00019}{19}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
 
 
 
@@ -152,21 +125,21 @@ The flags in a TCP header.
 
 
 
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00047}{47}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
+Definition at line \mbox{\hyperlink{tcp_8h_source_l00046}{46}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ FIN\ =\ 1,}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ SYN\ =\ 2,}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ RST\ =\ 4,}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ PSH\ =\ 8,}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ ACK\ =\ 16,}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ URG\ =\ 32,}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ ECE\ =\ 64,}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ CWR\ =\ 128,}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ NS\ =\ 256}
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ FIN\ =\ 1,}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ SYN\ =\ 2,}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ RST\ =\ 4,}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ PSH\ =\ 8,}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ ACK\ =\ 16,}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ URG\ =\ 32,}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ ECE\ =\ 64,}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ CWR\ =\ 128,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ NS\ =\ 256}
+\DoxyCodeLine{00056\ \ \ \ \ \};}
 
 \end{DoxyCode}
 \Hypertarget{tcp_8h_a1a687a489ef1200d6bb31f22ffff77cf}\label{tcp_8h_a1a687a489ef1200d6bb31f22ffff77cf} 
@@ -181,15 +154,15 @@ Events for the TCPPayload\+Handler.
 
 
 
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00103}{103}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
+Definition at line \mbox{\hyperlink{tcp_8h_source_l00113}{113}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ CONNECTED,}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ DISCONNECTED,}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ DATA\_RECEIVED}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ CONNECTED,}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ DISCONNECTED,}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ DATA\_RECEIVED}
+\DoxyCodeLine{00117\ \ \ \ \ \};}
 
 \end{DoxyCode}
 \Hypertarget{tcp_8h_aef1bb382dd5d6cdaecb7ffe20b234a44}\label{tcp_8h_aef1bb382dd5d6cdaecb7ffe20b234a44} 
@@ -204,240 +177,25 @@ The state of a TCP socket.
 
 
 
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00026}{26}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
+Definition at line \mbox{\hyperlink{tcp_8h_source_l00025}{25}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ CLOSED,}
-\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ LISTEN,}
-\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ SYN\_SENT,}
-\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ SYN\_RECEIVED,}
-\DoxyCodeLine{00031\ }
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ ESTABLISHED,}
-\DoxyCodeLine{00033\ }
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ FIN\_WAIT1,}
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ FIN\_WAIT2,}
-\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ CLOSING,}
-\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ TIME\_WAIT,}
-\DoxyCodeLine{00038\ }
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ CLOSE\_WAIT,}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ LAST\_ACK}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ CLOSED,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ LISTEN,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ SYN\_SENT,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ SYN\_RECEIVED,}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ ESTABLISHED,}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ FIN\_WAIT1,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ FIN\_WAIT2,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ CLOSING,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ TIME\_WAIT,}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ CLOSE\_WAIT,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ LAST\_ACK}
+\DoxyCodeLine{00040\ \ \ \ \ \};}
 
 \end{DoxyCode}
-
-
-\doxysubsection{Variable Documentation}
-\Hypertarget{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a}\label{tcp_8h_ac41c406579d1214f4a1f0338bca28b6a} 
-\index{tcp.h@{tcp.h}!acknowledgementNumber@{acknowledgementNumber}}
-\index{acknowledgementNumber@{acknowledgementNumber}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{acknowledgementNumber}{acknowledgementNumber}}
-{\footnotesize\ttfamily uint32\+\_\+t acknowledgement\+Number}
-
-
-
-The next expected sequence number from the sender (used by the receiver to request the next data) 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00003}{3}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_a6796c847bbd16253ce2538754c250bd6}\label{tcp_8h_a6796c847bbd16253ce2538754c250bd6} 
-\index{tcp.h@{tcp.h}!checksum@{checksum}}
-\index{checksum@{checksum}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{checksum}{checksum}}
-{\footnotesize\ttfamily uint16\+\_\+t checksum}
-
-
-
-The checksum of the header. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00010}{10}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_a2287eab8c0183320980c7a0addb74a5a}\label{tcp_8h_a2287eab8c0183320980c7a0addb74a5a} 
-\index{tcp.h@{tcp.h}!dstIP@{dstIP}}
-\index{dstIP@{dstIP}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{dstIP}{dstIP}}
-{\footnotesize\ttfamily uint32\+\_\+t dst\+IP}
-
-
-
-The IP address of the receiver. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00001}{1}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_ac01766720e5781a418710ebf1ba5379e}\label{tcp_8h_ac01766720e5781a418710ebf1ba5379e} 
-\index{tcp.h@{tcp.h}!dstPort@{dstPort}}
-\index{dstPort@{dstPort}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{dstPort}{dstPort}}
-{\footnotesize\ttfamily uint16\+\_\+t dst\+Port}
-
-
-
-The port of the receiver. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00001}{1}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe}\label{tcp_8h_aa2585d779da0ab21273a8d92de9a0ebe} 
-\index{tcp.h@{tcp.h}!flags@{flags}}
-\index{flags@{flags}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{flags}{flags}}
-{\footnotesize\ttfamily uint8\+\_\+t flags}
-
-
-
-The flags of the TCP packet (see TCPFlag enum) 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00007}{7}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a}\label{tcp_8h_a3909a49a58301aec6d401cdd9ae76f5a} 
-\index{tcp.h@{tcp.h}!headerSize32@{headerSize32}}
-\index{headerSize32@{headerSize32}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{headerSize32}{headerSize32}}
-{\footnotesize\ttfamily uint8\+\_\+t header\+Size32}
-
-
-
-The size of the header in 32-\/bit words. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00006}{6}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_a2ba60f781746d31baf29e8c5a35d07e7}\label{tcp_8h_a2ba60f781746d31baf29e8c5a35d07e7} 
-\index{tcp.h@{tcp.h}!options@{options}}
-\index{options@{options}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{options}{options}}
-{\footnotesize\ttfamily uint32\+\_\+t options}
-
-
-
-The options for the TCP packet (MSS, Window Scale, SACK Permitted) 
-
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000040}{Todo}}]\+: make this a struct \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00013}{13}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_ab551400c74271f35d0c79f81d29cffbb}\label{tcp_8h_ab551400c74271f35d0c79f81d29cffbb} 
-\index{tcp.h@{tcp.h}!protocol@{protocol}}
-\index{protocol@{protocol}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{protocol}{protocol}}
-{\footnotesize\ttfamily uint16\+\_\+t protocol}
-
-
-
-The protocol (set to 6 for TCP) 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00002}{2}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_acb7bc06bed6f6408d719334fc41698c7}\label{tcp_8h_acb7bc06bed6f6408d719334fc41698c7} 
-\index{tcp.h@{tcp.h}!reserved@{reserved}}
-\index{reserved@{reserved}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{reserved}{reserved}}
-{\footnotesize\ttfamily uint8\+\_\+t reserved}
-
-
-
-Unused, must be 0. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00005}{5}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0}\label{tcp_8h_a2d38c5cab4c11a0212dbc06554a6e1e0} 
-\index{tcp.h@{tcp.h}!sequenceNumber@{sequenceNumber}}
-\index{sequenceNumber@{sequenceNumber}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{sequenceNumber}{sequenceNumber}}
-{\footnotesize\ttfamily uint32\+\_\+t sequence\+Number}
-
-
-
-Where this packet\textquotesingle{}s data fits in the overall order of the data stream. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00002}{2}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_a2c21b87d7d19b79e094d74112253a776}\label{tcp_8h_a2c21b87d7d19b79e094d74112253a776} 
-\index{tcp.h@{tcp.h}!srcIP@{srcIP}}
-\index{srcIP@{srcIP}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{srcIP}{srcIP}}
-{\footnotesize\ttfamily uint32\+\_\+t src\+IP}
-
-
-
-The IP address of the sender. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00000}{0}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_a26ebbf4f65c3f6fd9959d9cecef5c9d8}\label{tcp_8h_a26ebbf4f65c3f6fd9959d9cecef5c9d8} 
-\index{tcp.h@{tcp.h}!srcPort@{srcPort}}
-\index{srcPort@{srcPort}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{srcPort}{srcPort}}
-{\footnotesize\ttfamily uint16\+\_\+t src\+Port}
-
-
-
-The port of the sender. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00000}{0}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_a46d6b08cf598408355fa1fc5c1de902a}\label{tcp_8h_a46d6b08cf598408355fa1fc5c1de902a} 
-\index{tcp.h@{tcp.h}!totalLength@{totalLength}}
-\index{totalLength@{totalLength}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{totalLength}{totalLength}}
-{\footnotesize\ttfamily uint16\+\_\+t total\+Length}
-
-
-
-The total length of the TCP header and data. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00003}{3}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_aca974d34b50135a7d9b524a8fc2f5d00}\label{tcp_8h_aca974d34b50135a7d9b524a8fc2f5d00} 
-\index{tcp.h@{tcp.h}!urgentPtr@{urgentPtr}}
-\index{urgentPtr@{urgentPtr}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{urgentPtr}{urgentPtr}}
-{\footnotesize\ttfamily uint16\+\_\+t urgent\+Ptr}
-
-
-
-Where in the data the urgent data {\itshape ends} (if the URG flag is set) 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00011}{11}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-
-\Hypertarget{tcp_8h_a6b2a31b20954529dabfe0f32eda1cf11}\label{tcp_8h_a6b2a31b20954529dabfe0f32eda1cf11} 
-\index{tcp.h@{tcp.h}!windowSize@{windowSize}}
-\index{windowSize@{windowSize}!tcp.h@{tcp.h}}
-\doxysubsubsection{\texorpdfstring{windowSize}{windowSize}}
-{\footnotesize\ttfamily uint16\+\_\+t window\+Size}
-
-
-
-How many bytes the sender is willing to receive. 
-
-
-
-Definition at line \mbox{\hyperlink{tcp_8h_source_l00009}{9}} of file \mbox{\hyperlink{tcp_8h_source}{tcp.\+h}}.
-

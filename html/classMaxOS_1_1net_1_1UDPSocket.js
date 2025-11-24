@@ -1,13 +1,13 @@
 var classMaxOS_1_1net_1_1UDPSocket =
 [
     [ "UDPSocket", "classMaxOS_1_1net_1_1UDPSocket.html#a4f86f3023f5a08f6355802599a10e100", null ],
-    [ "Disconnect", "classMaxOS_1_1net_1_1UDPSocket.html#aec73b7fd87732b9c6b88042c1c43371c", null ],
-    [ "handleUserDatagramProtocolPayload", "classMaxOS_1_1net_1_1UDPSocket.html#a24fe892e691c749ee6f80479f9a3dd63", null ],
-    [ "Send", "classMaxOS_1_1net_1_1UDPSocket.html#aa10565ce3c2443bf9c1adfdd0ef78b94", null ],
+    [ "disconnect", "classMaxOS_1_1net_1_1UDPSocket.html#a7482e8e61cef160e1a7c0d6ac15c01be", null ],
+    [ "handle_user_datagram_protocol_payload", "classMaxOS_1_1net_1_1UDPSocket.html#af9b2fcc1f9a7b871c287dbb6c10486c8", null ],
+    [ "send", "classMaxOS_1_1net_1_1UDPSocket.html#ae2d0ebe111143e88b038621602d0e461", null ],
     [ "listening", "classMaxOS_1_1net_1_1UDPSocket.html#ae604b79b521e651be0334c02cf4c3219", null ],
-    [ "localIP", "classMaxOS_1_1net_1_1UDPSocket.html#a3639e65d307ee56e76fa6f99326fd2f4", null ],
-    [ "localPort", "classMaxOS_1_1net_1_1UDPSocket.html#ab564d28cce144a85e8c89771ba3c387d", null ],
-    [ "remoteIP", "classMaxOS_1_1net_1_1UDPSocket.html#a1ef6378cd480614777323ad5d48184b7", null ],
-    [ "remotePort", "classMaxOS_1_1net_1_1UDPSocket.html#ac867871603de5626219648ad9eb9cf30", null ],
-    [ "userDatagramProtocolHandler", "classMaxOS_1_1net_1_1UDPSocket.html#a05309b1d54cff6ddae0a1b692f505d7d", null ]
+    [ "local_ip", "classMaxOS_1_1net_1_1UDPSocket.html#ae60e7983fce73dfdcf32763815ed3a44", null ],
+    [ "local_port", "classMaxOS_1_1net_1_1UDPSocket.html#aa1538e6a9662ff80b2c23b2b75fb80f0", null ],
+    [ "remote_ip", "classMaxOS_1_1net_1_1UDPSocket.html#a4e93771ea419d6623469d20e307d8d93", null ],
+    [ "remote_port", "classMaxOS_1_1net_1_1UDPSocket.html#a6e36137ae67f52da03abc54a65384967", null ],
+    [ "user_datagram_protocol_handler", "classMaxOS_1_1net_1_1UDPSocket.html#aa29cf15b00c9af652856aa715556bb10", null ]
 ];

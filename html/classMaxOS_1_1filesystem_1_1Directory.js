@@ -1,5 +1,6 @@
 var classMaxOS_1_1filesystem_1_1Directory =
 [
+    [ "~Directory", "classMaxOS_1_1filesystem_1_1Directory.html#affbde8714685c61601421097d621341d", null ],
     [ "create_file", "classMaxOS_1_1filesystem_1_1Directory.html#af1f22518129bc93c04e7f118102addd1", null ],
     [ "create_subdirectory", "classMaxOS_1_1filesystem_1_1Directory.html#a1eeb91d833c001f5e525b421e39927f3", null ],
     [ "files", "classMaxOS_1_1filesystem_1_1Directory.html#a8e49f150798d8cdf054f8820921a00c2", null ],

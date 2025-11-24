@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::format::ext2::Ext2FileSystem" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::format::ext2::Ext2FileSystem" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,10 +18,18 @@ Inherits \fBMaxOS::filesystem::FileSystem\fP\&.
 .RI "\fBExt2FileSystem\fP (\fBdrivers::disk::Disk\fP *disk, \fBuint32_t\fP partition_offset)"
 .br
 .RI "Construct a new Ext2 \fBFile\fP System object\&. "
+.ti -1c
+.RI "\fB~Ext2FileSystem\fP () \fBfinal\fP"
+.br
+.RI "Destroy the Ext2 \fBFile\fP System object and free the root directory\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::filesystem::FileSystem\fP
 .in +1c
+.ti -1c
+.RI "\fBvirtual\fP \fB~FileSystem\fP ()"
+.br
+.RI "Destructor for \fBFileSystem\fP, frees the root directory (Which in turn frees all files and subdirectories) "
 .ti -1c
 .RI "\fBDirectory\fP * \fBroot_directory\fP ()"
 .br
@@ -41,7 +49,7 @@ Public Member Functions inherited from \fBMaxOS::filesystem::FileSystem\fP
 Protected Attributes inherited from \fBMaxOS::filesystem::FileSystem\fP
 .in +1c
 .ti -1c
-.RI "\fBDirectory\fP * \fBm_root_directory\fP"
+.RI "\fBDirectory\fP * \fBm_root_directory\fP = nullptr"
 .br
 .RI "The fist directory in the file system (not be confused with the system root) "
 .in -1c
@@ -49,7 +57,7 @@ Protected Attributes inherited from \fBMaxOS::filesystem::FileSystem\fP
 .PP 
 Handles the ext2 filesystem operations\&. 
 .PP
-Definition at line \fB442\fP of file \fBext2\&.h\fP\&.
+Definition at line \fB456\fP of file \fBext2\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Ext2FileSystem::Ext2FileSystem (\fBdrivers::disk::Disk\fP * disk, \fBuint32_t\fP partition_offset)"
@@ -66,15 +74,15 @@ Construct a new Ext2 \fBFile\fP System object\&.
 .PP
 
 .PP
-Definition at line \fB1166\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB1173\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1167         : m_volume(disk, partition_offset) {
-1168 
-1169     // Create the root directory
-1170     m_root_directory = new Ext2Directory(&m_volume, 2, "/");
-1171     m_root_directory\->read_from_disk();
-1172 
-1173 }
+1174         : m_volume(disk, partition_offset) {
+1175 
+1176     // Create the root directory
+1177     m_root_directory = new Ext2Directory(&m_volume, 2, "/");
+1178     m_root_directory\->read_from_disk();
+1179 
+1180 }
 .fi
 
 .PP
@@ -82,13 +90,17 @@ References \fBMaxOS::filesystem::FileSystem::m_root_directory\fP, and \fBMaxOS::
 .SS "Ext2FileSystem::~Ext2FileSystem ()\fC [final]\fP"
 
 .PP
-Definition at line \fB1175\fP of file \fBext2\&.cpp\fP\&..PP
+Destroy the Ext2 \fBFile\fP System object and free the root directory\&. 
+.PP
+Definition at line \fB1185\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1175                                 {
-1176     delete m_root_directory;
-1177 }
+1185                                 {
+1186     delete m_root_directory;
+1187 }
 .fi
 
+.PP
+References \fBMaxOS::filesystem::FileSystem::m_root_directory\fP\&.
 
 .SH "Author"
 .PP 

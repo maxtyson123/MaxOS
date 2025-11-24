@@ -1,0 +1,175 @@
+.TH "MaxOS::tests::Test" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::tests::Test \- A basic test class\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <test\&.h>\fP
+.PP
+Inherited by \fBMaxOS::tests::ConditionalTest\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (const \fBstring\fP &\fBname\fP, \fBTestType\fP \fBtype\fP)"
+.br
+.RI "Constructs a \fBTest\fP with a name and type, and registers it with the \fBTestRunner\fP\&. "
+.ti -1c
+.RI "\fBTestStatus\fP \fBrun\fP ()"
+.br
+.RI "Runs the test and returns the result\&. "
+.ti -1c
+.RI "virtual \fBTestStatus\fP \fBexecute\fP ()=0"
+.br
+.RI "Executes the test and returns the status of the test\&. "
+.ti -1c
+.RI "const \fBstring\fP & \fBname\fP () const"
+.br
+.RI "Gets the name of the test\&. "
+.ti -1c
+.RI "\fBTestType\fP \fBtype\fP () const"
+.br
+.RI "Gets the type of the test\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A basic test class\&. 
+.PP
+Definition at line \fB69\fP of file \fBtest\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Test::Test (const \fBstring\fP & name, \fBTestType\fP type)"
+
+.PP
+Constructs a \fBTest\fP with a name and type, and registers it with the \fBTestRunner\fP\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the test 
+.br
+\fItype\fP The type of the test 
+.RE
+.PP
+
+.PP
+Definition at line \fB21\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+22 : m_name(name),
+23   m_type(type)
+24 {
+25     TestRunner::add_test(this);
+26 }
+.fi
+
+.PP
+References \fBMaxOS::tests::TestRunner::add_test()\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual \fBTestStatus\fP MaxOS::tests::Test::execute ()\fC [pure virtual]\fP"
+
+.PP
+Executes the test and returns the status of the test\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The result of the test execution 
+.RE
+.PP
+
+.PP
+Implemented in \fBMaxOS::tests::ConditionalTest\fP\&.
+.PP
+Referenced by \fBrun()\fP\&.
+.SS "const \fBstring\fP & Test::name () const"
+
+.PP
+Gets the name of the test\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the test 
+.RE
+.PP
+
+.PP
+Definition at line \fB68\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+68                                {
+69     return m_name;
+70 }
+.fi
+
+.SS "\fBTestStatus\fP Test::run ()"
+
+.PP
+Runs the test and returns the result\&. 
+.PP
+\fBReturns\fP
+.RS 4
+TestStatus The status of the test after running 
+.RE
+.PP
+
+.PP
+Definition at line \fB33\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+33                      {
+34 
+35     // Run the test
+36     auto result = execute();
+37     StringBuilder msg;
+38 
+39     // Build the message
+40     msg << "Test ";
+41     switch(result) {
+42         case TestStatus::PASS:
+43             msg << "PASSED";
+44             break;
+45         case TestStatus::SKIP:
+46             msg << "SKIPPED";
+47             break;
+48         case TestStatus::FAIL:
+49             msg << "FAILED";
+50             break;
+51     }
+52     msg << " \- " << m_name << "\\n";
+53 
+54     // Print the outcome
+55     if (result == TestStatus::FAIL)
+56         Logger::ERROR() << msg\&.out;
+57     else
+58         Logger::TEST() << msg\&.out;
+59 
+60     return result;
+61 }
+.fi
+
+.PP
+References \fBMaxOS::Logger::ERROR()\fP, \fBexecute()\fP, \fBMaxOS::StringBuilder::out\fP, and \fBMaxOS::Logger::TEST()\fP\&.
+.SS "\fBTestType\fP Test::type () const"
+
+.PP
+Gets the type of the test\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The type of the test 
+.RE
+.PP
+
+.PP
+Definition at line \fB77\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+77                           {
+78     return m_type;
+79 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,4 +1,4 @@
-.TH "MaxOS::gui::widgets::Text" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::gui::widgets::Text" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,6 +30,10 @@ Inherits \fBMaxOS::gui::Widget\fP\&.
 
 Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .in +1c
+.ti -1c
+.RI "\fBWidget\fP ()"
+.br
+.RI "Construct a new \fBWidget\fP object\&. "
 .ti -1c
 .RI "\fBWidget\fP (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height)"
 .br
@@ -83,15 +87,15 @@ Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .br
 .RI "Brings this widget to the front of the screen\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_enter_widget\fP (\fBuint32_t\fP \fBtoX\fP, \fBuint32_t\fP \fBtoY\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_enter_widget\fP (\fBuint32_t\fP \fBto_x\fP, \fBuint32_t\fP \fBto_y\fP)"
 .br
 .RI "Handles the event when the mouse is moved on to the widget\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_leave_widget\fP (\fBuint32_t\fP \fBfromX\fP, \fBuint32_t\fP \fBfromY\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_leave_widget\fP (\fBuint32_t\fP \fBfrom_x\fP, \fBuint32_t\fP \fBfrom_y\fP)"
 .br
 .RI "Handles the event when the mouse is moved out of the widget\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_move_widget\fP (\fBuint32_t\fP \fBfromX\fP, \fBuint32_t\fP \fBfromY\fP, \fBuint32_t\fP \fBtoX\fP, \fBuint32_t\fP \fBtoY\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_mouse_move_widget\fP (\fBuint32_t\fP \fBfrom_x\fP, \fBuint32_t\fP \fBfrom_y\fP, \fBuint32_t\fP \fBto_x\fP, \fBuint32_t\fP \fBto_y\fP)"
 .br
 .RI "Handles the event when the mouse is moved over the widget\&. "
 .ti -1c
@@ -107,15 +111,15 @@ Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 Public Member Functions inherited from \fBMaxOS::drivers::peripherals::KeyboardEventHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBcommon::Event\fP< KeyboardEvents > * \fBon_event\fP (\fBcommon::Event\fP< KeyboardEvents > *) \fBoverride\fP"
+.RI "\fBcommon::Event\fP< \fBKeyboardEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBKeyboardEvents\fP > *) \fBoverride\fP"
 .br
 .RI "Handle the trigger of an event\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_down\fP (\fBKeyCode\fP, \fBKeyboardState\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_down\fP (\fBKeyCode\fP, \fBconst\fP \fBKeyboardState\fP &)"
 .br
 .RI "Handle the key down event\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_up\fP (\fBKeyCode\fP, \fBKeyboardState\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_up\fP (\fBKeyCode\fP, \fBconst\fP \fBKeyboardState\fP &)"
 .br
 .RI "Handle the key up event\&. "
 .in -1c
@@ -193,7 +197,7 @@ Protected Attributes inherited from \fBMaxOS::gui::Widget\fP
 .PP 
 A box that can be used to display text\&. 
 .PP
-Definition at line \fB27\fP of file \fBtext\&.h\fP\&.
+Definition at line \fB24\fP of file \fBtext\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Text::Text (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height, \fBconst\fP \fBstring\fP & text)"
@@ -258,7 +262,7 @@ Definition at line \fB45\fP of file \fBtext\&.cpp\fP\&..PP
 49 
 50     // Get the absolute m_position of the text
 51     Coordinates textCoordinates = absolute_coordinates(Coordinates(0, 0));
-52     Rectangle<int32_t> textPosition = position();
+52     Rectangle<int32_t> text_position = position();
 53 
 54     // Get the x and y m_position of the text
 55     int32_t x = textCoordinates\&.first;
@@ -308,7 +312,7 @@ Referenced by \fBText()\fP\&.
 .PP
 The colour to draw behind the text characters\&. 
 .PP
-Definition at line \fB37\fP of file \fBtext\&.h\fP\&.
+Definition at line \fB34\fP of file \fBtext\&.h\fP\&.
 .PP
 Referenced by \fBdraw()\fP, \fBMaxOS::gui::Window::Window()\fP, and \fBMaxOS::gui::Window::Window()\fP\&.
 .SS "\fBgui::Font\fP MaxOS::gui::widgets::Text::font"
@@ -316,7 +320,7 @@ Referenced by \fBdraw()\fP, \fBMaxOS::gui::Window::Window()\fP, and \fBMaxOS::gu
 .PP
 The font to use for the text\&. 
 .PP
-Definition at line \fB34\fP of file \fBtext\&.h\fP\&.
+Definition at line \fB31\fP of file \fBtext\&.h\fP\&.
 .PP
 Referenced by \fBdraw()\fP\&.
 .SS "\fBcommon::Colour\fP MaxOS::gui::widgets::Text::foreground_colour"
@@ -324,7 +328,7 @@ Referenced by \fBdraw()\fP\&.
 .PP
 The colour of the text characters\&. 
 .PP
-Definition at line \fB36\fP of file \fBtext\&.h\fP\&.
+Definition at line \fB33\fP of file \fBtext\&.h\fP\&.
 .PP
 Referenced by \fBdraw()\fP, \fBMaxOS::gui::Window::Window()\fP, and \fBMaxOS::gui::Window::Window()\fP\&.
 

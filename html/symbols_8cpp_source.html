@@ -36,7 +36,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Max OS<span id="projectnumber">&#160;0.1</span>
+   <div id="projectname">Max OS<span id="projectnumber">&#160;0.3</span>
    </div>
   </td>
  </tr>
@@ -111,47 +111,43 @@ $(document).ready(function(){initNavTree('symbols_8cpp_source.html',''); initRes
 <a href="symbols_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;common/symbols.h&gt;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>MaxOS{</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">namespace </span>common{</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="foldopen" id="foldopen00024" data-start="{" data-end="}">
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="symbols_8cpp.html#a4bfba91a61cfa3c1878b5c9861bbf05c">   24</a></span>        <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_function" href="symbols_8cpp.html#a4bfba91a61cfa3c1878b5c9861bbf05c">resolve_symbol</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="code hl_variable" href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a>, <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">link_base</a>, <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">load_base</a>)</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        {</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>            <span class="comment">// No symbols</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            <span class="keywordflow">if</span> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">KERNEL_SYMBOLS_COUNT</a> == 0)</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <span class="comment">// Convert load to linked</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> offset = 0;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            <span class="keywordflow">if</span> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">load_base</a> &gt;= <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">link_base</a>)</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                offset = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">load_base</a> - <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">link_base</a>;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="comment">// Get the adjusted address</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">adjusted_address</a> = <a class="code hl_variable" href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a>;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <span class="keywordflow">if</span> (<a class="code hl_variable" href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a> &gt;= offset)</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">adjusted_address</a> = <a class="code hl_variable" href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a> - offset;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            <span class="comment">// Binary Search for symbol</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <span class="keywordtype">size_t</span> left = 0;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="keywordtype">size_t</span> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">right</a> = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">KERNEL_SYMBOLS_COUNT</a>;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <span class="keywordflow">while</span> (left &lt; <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">right</a>) {</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                <span class="keywordtype">size_t</span> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">middle</a> = (left + <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">right</a>) &gt;&gt; 1;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                <span class="keywordflow">if</span> (<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">kernel_symbols</a>[<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">middle</a>].address &lt;= <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">adjusted_address</a>)</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                    left = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">middle</a> + 1;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                    <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">right</a> = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">middle</a>;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            }</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>            <span class="keywordflow">return</span> left == 0 ? <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">nullptr</a> : <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">kernel_symbols</a>[left - 1].name;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        }</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">namespace </span>MaxOS::common {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="foldopen" id="foldopen00023" data-start="{" data-end="}">
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="symbols_8cpp.html#a4bfba91a61cfa3c1878b5c9861bbf05c">   23</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_function" href="symbols_8cpp.html#a4bfba91a61cfa3c1878b5c9861bbf05c">resolve_symbol</a>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> rip, <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">link_base</a>, <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">load_base</a>) {</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="comment">// No symbols</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keywordflow">if</span>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">KERNEL_SYMBOLS_COUNT</a> == 0)</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="comment">// Convert load to linked</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> offset = 0;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keywordflow">if</span>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">load_base</a> &gt;= <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">link_base</a>)</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            offset = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">load_base</a> - <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">link_base</a>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="comment">// Get the adjusted address</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">uintptr_t</a> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">adjusted_address</a> = rip;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="keywordflow">if</span>(rip &gt;= offset)</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">adjusted_address</a> = rip - offset;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="comment">// Binary Search for symbol</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordtype">size_t</span> left = 0;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keywordtype">size_t</span> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">right</a> = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">KERNEL_SYMBOLS_COUNT</a>;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keywordflow">while</span>(left &lt; <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">right</a>) {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="keywordtype">size_t</span> <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">middle</a> = (left + <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">right</a>) &gt;&gt; 1;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <span class="keywordflow">if</span>(<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">kernel_symbols</a>[<a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">middle</a>].address &lt;= <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">adjusted_address</a>)</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                left = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">middle</a> + 1;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">right</a> = <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">middle</a>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        }</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keywordflow">return</span> left == 0 ? <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">nullptr</a> : <a class="code hl_class" href="classMaxOS_1_1common_1_1Rectangle.html">kernel_symbols</a>[left - 1].name;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    }</div>
 </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    }</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>}</div>
-<div class="ttc" id="aclassMaxOS_1_1common_1_1Rectangle_html"><div class="ttname"><a href="classMaxOS_1_1common_1_1Rectangle.html">MaxOS::common::Rectangle</a></div><div class="ttdoc">Stores the left, top, width and height of a rectangle.</div><div class="ttdef"><b>Definition</b> <a href="rectangle_8h_source.html#l00024">rectangle.h:24</a></div></div>
-<div class="ttc" id="acpu_8h_html_ad37248eb45d2509df75a205d8412ac65"><div class="ttname"><a href="cpu_8h.html#ad37248eb45d2509df75a205d8412ac65">rip</a></div><div class="ttdeci">uintptr_t rip</div><div class="ttdoc">The instruction pointer at this frame.</div><div class="ttdef"><b>Definition</b> <a href="cpu_8h_source.html#l00001">cpu.h:1</a></div></div>
-<div class="ttc" id="asymbols_8cpp_html_a4bfba91a61cfa3c1878b5c9861bbf05c"><div class="ttname"><a href="symbols_8cpp.html#a4bfba91a61cfa3c1878b5c9861bbf05c">MaxOS::common::resolve_symbol</a></div><div class="ttdeci">const char * resolve_symbol(uintptr_t rip, uintptr_t link_base, uintptr_t load_base)</div><div class="ttdoc">Resolve an instruction pointer (rip) to a symbol name and optional offset.</div><div class="ttdef"><b>Definition</b> <a href="symbols_8cpp_source.html#l00024">symbols.cpp:24</a></div></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>}</div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1Rectangle_html"><div class="ttname"><a href="classMaxOS_1_1common_1_1Rectangle.html">MaxOS::common::Rectangle</a></div><div class="ttdoc">Stores the left, top, width and height of a rectangle.</div><div class="ttdef"><b>Definition</b> <a href="rectangle_8h_source.html#l00022">rectangle.h:22</a></div></div>
+<div class="ttc" id="asymbols_8cpp_html_a4bfba91a61cfa3c1878b5c9861bbf05c"><div class="ttname"><a href="symbols_8cpp.html#a4bfba91a61cfa3c1878b5c9861bbf05c">MaxOS::common::resolve_symbol</a></div><div class="ttdeci">const char * resolve_symbol(uintptr_t rip, uintptr_t link_base, uintptr_t load_base)</div><div class="ttdoc">resolve an instruction pointer (rip) to a symbol name and optional offset.</div><div class="ttdef"><b>Definition</b> <a href="symbols_8cpp_source.html#l00023">symbols.cpp:23</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

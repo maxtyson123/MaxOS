@@ -11,5 +11,16 @@ var ubsan_8h =
     [ "MaxOS::runtime::InvaildValueInfo", "structMaxOS_1_1runtime_1_1InvaildValueInfo.html", "structMaxOS_1_1runtime_1_1InvaildValueInfo" ],
     [ "MaxOS::runtime::VLABoundNotPositiveInfo", "structMaxOS_1_1runtime_1_1VLABoundNotPositiveInfo.html", "structMaxOS_1_1runtime_1_1VLABoundNotPositiveInfo" ],
     [ "MaxOS::runtime::UBSanHandler", "classMaxOS_1_1runtime_1_1UBSanHandler.html", null ],
+    [ "ubsan_aligned", "ubsan_8h.html#a4dd3c18b7406fa01fd4d60cd4485183a", null ],
+    [ "invalid_value_info_t", "ubsan_8h.html#aee5268b4d21f530a711e7a40db21f54f", null ],
+    [ "location_only_info_t", "ubsan_8h.html#a77879661cdbb44d6c6bcb58286f3c9cd", null ],
+    [ "out_of_bounds_info_t", "ubsan_8h.html#a60ce8dd6d2ee4741d479d6d6b3164d59", null ],
+    [ "overflow_info_t", "ubsan_8h.html#a64436df37739875ac15f4a4e7becee7c", null ],
+    [ "shift_out_of_bounds_info_t", "ubsan_8h.html#afbc159cbc9f16a8f54cef0722129177f", null ],
+    [ "source_location_t", "ubsan_8h.html#a1b4e9dffd1d17d13b0908f75ab29ed96", null ],
+    [ "type_descriptor_t", "ubsan_8h.html#add401cc85b27477debe9fa214b951da9", null ],
+    [ "type_mismatch_info_t", "ubsan_8h.html#ad5a16fe97973104ac8eaaa7da2ce38fc", null ],
+    [ "type_mismatch_info_v1_t", "ubsan_8h.html#aabcdc30f2b10037707cf8f8da176d196", null ],
+    [ "vla_bound_not_positive_info_t", "ubsan_8h.html#a43d0283ad819677eb829376fcacdd68c", null ],
     [ "TYPE_CHECK_KINDS", "ubsan_8h.html#aaa0a3253a821d4b90273d3163432fee5", null ]
 ];

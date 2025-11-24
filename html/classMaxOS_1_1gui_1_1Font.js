@@ -2,9 +2,9 @@ var classMaxOS_1_1gui_1_1Font =
 [
     [ "Font", "classMaxOS_1_1gui_1_1Font.html#abeb57db4a77270b9f16ed50486799954", null ],
     [ "draw_text", "classMaxOS_1_1gui_1_1Font.html#aa80fe1e9d019a378fdf59f901fc1d886", null ],
-    [ "draw_text", "classMaxOS_1_1gui_1_1Font.html#a33b99a6e0fc8abe3f8274a141d911f1d", null ],
-    [ "get_text_height", "classMaxOS_1_1gui_1_1Font.html#ad200a05cfe15761f01c749dba96c875f", null ],
-    [ "get_text_width", "classMaxOS_1_1gui_1_1Font.html#a176587716f7628f7f0f7bdcc382db9fe", null ],
+    [ "draw_text", "classMaxOS_1_1gui_1_1Font.html#a813e02f73e244a1e0ec5ac4dd2744b28", null ],
+    [ "get_text_height", "classMaxOS_1_1gui_1_1Font.html#aa86b8e50594f393e69e629719c9f73fe", null ],
+    [ "get_text_width", "classMaxOS_1_1gui_1_1Font.html#a8b9de0fe2bb69454a370235a197cd00e", null ],
     [ "is_bold", "classMaxOS_1_1gui_1_1Font.html#ae628044dacd9f0cd9c12080cc46d930c", null ],
     [ "is_italic", "classMaxOS_1_1gui_1_1Font.html#ac86ac1352a566c5daf61ce1c557054c8", null ],
     [ "is_strikethrough", "classMaxOS_1_1gui_1_1Font.html#a6f4e91cf21d739a2f3cbee42a011b649", null ],

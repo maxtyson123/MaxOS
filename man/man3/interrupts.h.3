@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/interrupts.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/interrupts.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 \fC#include <hardwarecommunication/port\&.h>\fP
 .br
@@ -44,52 +44,21 @@
 .br
 .RI "Handles all interrupts and passes them to the correct handler\&. "
 .in -1c
-.SS "Functions"
+.SS "Typedefs"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::hardwarecommunication::RSDPDescriptor\fP \fBMaxOS::hardwarecommunication::__attribute__\fP ((packed)) rsdp_descriptor_t"
+.RI "typedef struct PACKED \fBMaxOS::hardwarecommunication::IDTR\fP \fBMaxOS::hardwarecommunication::idtr_t\fP"
 .br
+.RI "Alias for \fBIDTR\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::hardwarecommunication::InterruptDescriptor\fP \fBMaxOS::hardwarecommunication::interrupt_descriptor_t\fP"
+.br
+.RI "Alias for \fBInterruptDescriptor\fP struct\&. "
 .in -1c
 .SS "Variables"
 
 .in +1c
-.ti -1c
-.RI "uint16_t \fBlimit\fP"
-.br
-.RI "The size of the IDT\&. "
-.ti -1c
-.RI "uint64_t \fBbase\fP"
-.br
-.RI "The start address of the IDT\&. "
-.ti -1c
-.RI "uint16_t \fBaddress_low_bits\fP"
-.br
-.RI "The low bits of the handler function address\&. "
-.ti -1c
-.RI "uint16_t \fBsegment_selector\fP"
-.br
-.RI "The code segment selector in the GDT to use when this interrupt fires\&. "
-.ti -1c
-.RI "uint8_t \fBist\fP"
-.br
-.RI "The offset into the Interrupt Stack Table (0 if not used) (see TSS) "
-.ti -1c
-.RI "uint8_t \fBflags\fP"
-.br
-.RI "Flags: The type of gate this entry represents (0xE for interrupt gate, 0xF for trap gate), The privilege level required to invoke this interrupt and whether the interrupt is present (\&. "
-.ti -1c
-.RI "uint16_t \fBaddress_mid_bits\fP"
-.br
-.RI "The middle bits of the handler function address\&. "
-.ti -1c
-.RI "uint32_t \fBaddress_high_bits\fP"
-.br
-.RI "The high bits of the handler function address\&. "
-.ti -1c
-.RI "uint32_t \fBreserved\fP"
-.br
-.RI "Reserved, must be zero\&. "
 .ti -1c
 .RI "constexpr uint16_t \fBMaxOS::hardwarecommunication::HARDWARE_INTERRUPT_OFFSET\fP = 0x20"
 .br
@@ -120,83 +89,20 @@ Max Tyson
 Definition in file \fBinterrupts\&.h\fP\&.
 .SH "Variable Documentation"
 .PP 
-.SS "uint32_t address_high_bits"
-
-.PP
-The high bits of the handler function address\&. 
-.PP
-Definition at line \fB5\fP of file \fBinterrupts\&.h\fP\&.
-.SS "uint16_t address_low_bits"
-
-.PP
-The low bits of the handler function address\&. 
-.PP
-Definition at line \fB0\fP of file \fBinterrupts\&.h\fP\&.
-.SS "uint16_t address_mid_bits"
-
-.PP
-The middle bits of the handler function address\&. 
-.PP
-Definition at line \fB4\fP of file \fBinterrupts\&.h\fP\&.
-.SS "uint64_t base"
-
-.PP
-The start address of the IDT\&. 
-.PP
-Definition at line \fB1\fP of file \fBinterrupts\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::system::Core::init_tss()\fP, \fBitoa()\fP, and \fBMaxOS::filesystem::Path::join_path()\fP\&.
-.SS "uint8_t flags"
-
-.PP
-Flags: The type of gate this entry represents (0xE for interrupt gate, 0xF for trap gate), The privilege level required to invoke this interrupt and whether the interrupt is present (\&. 
-.PP
-\fBTodo\fP
-.RS 4
-substruct this) 
-.RE
-.PP
-
-.PP
-Definition at line \fB3\fP of file \fBinterrupts\&.h\fP\&.
 .SS "constexpr uint16_t MaxOS::hardwarecommunication::HARDWARE_INTERRUPT_OFFSET = 0x20\fC [constexpr]\fP"
 
 .PP
 The offset in the IDT where interrupts from hardware start\&. 
 .PP
-Definition at line \fB68\fP of file \fBinterrupts\&.h\fP\&.
+Definition at line \fB74\fP of file \fBinterrupts\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\fP\&.
-.SS "uint8_t ist"
-
-.PP
-The offset into the Interrupt Stack Table (0 if not used) (see TSS) 
-.PP
-Definition at line \fB2\fP of file \fBinterrupts\&.h\fP\&.
-.SS "uint16_t limit"
-
-.PP
-The size of the IDT\&. 
-.PP
-Definition at line \fB0\fP of file \fBinterrupts\&.h\fP\&.
+Referenced by \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::InterruptManager()\fP\&.
 .SS "constexpr uint16_t MaxOS::hardwarecommunication::MAX_INTERRUPT_HANDLERS = 256\fC [constexpr]\fP"
 
 .PP
 The maximum number of interrupt handlers\&. 
 .PP
-Definition at line \fB69\fP of file \fBinterrupts\&.h\fP\&.
-.SS "uint32_t reserved"
-
-.PP
-Reserved, must be zero\&. 
-.PP
-Definition at line \fB6\fP of file \fBinterrupts\&.h\fP\&.
-.SS "uint16_t segment_selector"
-
-.PP
-The code segment selector in the GDT to use when this interrupt fires\&. 
-.PP
-Definition at line \fB1\fP of file \fBinterrupts\&.h\fP\&.
+Definition at line \fB75\fP of file \fBinterrupts\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

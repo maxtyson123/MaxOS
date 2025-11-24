@@ -1,0 +1,338 @@
+.TH "MaxOS::hardwarecommunication::PCIController" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::PCIController \- Handles the selecting and loading of drivers for PCI devices\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <pci\&.h>\fP
+.PP
+Inherits \fBMaxOS::drivers::DriverSelector\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPCIController\fP ()"
+.br
+.RI "Construct a new PCI Controller object\&. "
+.ti -1c
+.RI "\fBvoid\fP \fBselect_drivers\fP (\fBdrivers::DriverSelectorEventHandler\fP *\fBhandler\fP) \fBoverride\fP"
+.br
+.RI "Select the driver for the device\&. "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBstatic\fP \fBdrivers::Driver\fP * \fBget_driver\fP (\fBPCIDeviceDescriptor\fP \fBdev\fP)"
+.br
+.RI "Get the driver for the device\&. "
+.ti -1c
+.RI "\fBstatic\fP \fBvoid\fP \fBlist_known_device\fP (\fBconst\fP \fBPCIDeviceDescriptor\fP &\fBdev\fP)"
+.br
+.RI "Print the vednor and device id of known devices, or 'Unknown' + their ids if not known\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the selecting and loading of drivers for PCI devices\&. 
+.PP
+Definition at line \fB88\fP of file \fBpci\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "PCIController::PCIController ()"
+
+.PP
+Construct a new PCI Controller object\&. 
+.PP
+Definition at line \fB99\fP of file \fBpci\&.cpp\fP\&..PP
+.nf
+100 : m_data_port(0xCFC),
+101   m_command_port(0xCF8)
+102 {
+103 
+104 
+105 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBDriver\fP * PCIController::get_driver (\fBPCIDeviceDescriptor\fP dev)\fC [static]\fP"
+
+.PP
+Get the driver for the device\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdev\fP Device descriptor 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Driver for the device, null pointer if there is no driver 
+.RE
+.PP
+
+.PP
+Definition at line \fB251\fP of file \fBpci\&.cpp\fP\&..PP
+.nf
+251                                                          {
+252 
+253     switch (dev\&.vendor_id) {
+254         case 0x1022:    //AMD
+255         {
+256             switch (dev\&.device_id) {
+257                 case 0x2000: {
+258                     return new AMD_AM79C973(&dev);
+259 
+260                 }
+261                 default:
+262                     break;
+263             }
+264             break;
+265         }
+266         case 0x8086:  //Intel
+267         {
+268             switch (dev\&.device_id) {
+269 
+270                 case 0x100E: //i217 (Ethernet Controller)
+271                 {
+272                     return new IntelI217(&dev);
+273                 }
+274 
+275                 case 0x7010: // PIIX4 (IDE Controller)
+276                 {
+277                     return new IntegratedDriveElectronicsController(&dev);
+278                 }
+279 
+280                 default:
+281                     break;
+282             }
+283             break;
+284         }//End Intel
+285     }
+286 
+287     //If there is no driver for the particular device, go into generic devices
+288     switch (dev\&.class_id) {
+289         case 0x03: //Graphics
+290         {
+291 
+292             switch (dev\&.subclass_id) {
+293                 case 0x00:  //VGA
+294                 {
+295                     return new VideoGraphicsArray();
+296                 }
+297             }
+298             break;
+299         }
+300     }
+301 
+302     return nullptr;
+303 }
+.fi
+
+.PP
+Referenced by \fBselect_drivers()\fP\&.
+.SS "\fBvoid\fP PCIController::list_known_device (\fBconst\fP \fBPCIDeviceDescriptor\fP & dev)\fC [static]\fP"
+
+.PP
+Print the vednor and device id of known devices, or 'Unknown' + their ids if not known\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdev\fP The device to print 
+.RE
+.PP
+
+.PP
+Definition at line \fB310\fP of file \fBpci\&.cpp\fP\&..PP
+.nf
+310                                                                      {
+311 
+312     switch (dev\&.vendor_id) {
+313         case 0x1022: {
+314             // The vendor is AMD
+315             Logger::Out() << "AMD ";
+316 
+317             // List the device
+318             switch (dev\&.device_id) {
+319                 default:
+320                     Logger::Out() << "0x%x" << dev\&.device_id;
+321                     break;
+322             }
+323             break;
+324         }
+325 
+326         case 0x106B: {
+327             // The vendor is Apple
+328             Logger::Out() << "Apple ";
+329 
+330             // List the device
+331             switch (dev\&.device_id) {
+332                 case 0x003F: {
+333                     Logger::Out() << "KeyLargo/Intrepid USB";
+334                     break;
+335                 }
+336 
+337                 default:
+338                     Logger::Out() << "0x%x" << dev\&.device_id;
+339                     break;
+340             }
+341             break;
+342         }
+343 
+344         case 1234: {
+345             // The vendor is QEMU
+346             Logger::Out() << "QEMU ";
+347 
+348             // List the device
+349             switch (dev\&.device_id) {
+350 
+351                 case 0x1111: {
+352                     Logger::Out() << "Virtual Video Controller";
+353                     break;
+354                 }
+355             }
+356             break;
+357         }
+358 
+359         case 0x8086: {
+360             // The vendor is Intel
+361             Logger::Out() << "Intel ";
+362 
+363             // List the device
+364             switch (dev\&.device_id) {
+365 
+366                 case 0x1237: {
+367                     Logger::Out() << "440FX";
+368                     break;
+369                 }
+370 
+371                 case 0x2415: {
+372                     Logger::Out() << "AC'97";
+373                     break;
+374                 }
+375 
+376                 case 0x7000: {
+377                     Logger::Out() << "PIIX3";
+378                     break;
+379 
+380                 }
+381 
+382                 case 0x7111: {
+383                     Logger::Out() << "PIIX3 ACPI";
+384                     break;
+385                 }
+386 
+387                 case 0x7113: {
+388                     Logger::Out() << "PIIX4 ACPI";
+389                     break;
+390                 }
+391 
+392                 default:
+393                     Logger::Out() << "0x%x" << dev\&.device_id;
+394                     break;
+395 
+396             }
+397             break;
+398         }
+399 
+400         case 0x80EE: {
+401 
+402             // The vendor is VirtualBox
+403             Logger::Out() << "VirtualBox ";
+404 
+405             // List the device
+406             switch (dev\&.device_id) {
+407 
+408                 case 0xBEEF: {
+409                     Logger::Out() << "Graphics Adapter";
+410                     break;
+411                 }
+412 
+413                 case 0xCAFE: {
+414                     Logger::Out() << "Guest Service";
+415                     break;
+416                 }
+417             }
+418             break;
+419         }
+420 
+421             // Unknown
+422         default:
+423             Logger::Out() << "Unknown (0x" << dev\&.vendor_id << ":0x" << dev\&.device_id << ")";
+424             break;
+425 
+426     }
+427 }
+.fi
+
+.PP
+References \fBMaxOS::Logger::Out()\fP\&.
+.PP
+Referenced by \fBselect_drivers()\fP\&.
+.SS "\fBvoid\fP PCIController::select_drivers (\fBdrivers::DriverSelectorEventHandler\fP * handler)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Select the driver for the device\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandler\fP device driver event manager 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::drivers::DriverSelector\fP\&.
+.PP
+Definition at line \fB176\fP of file \fBpci\&.cpp\fP\&..PP
+.nf
+176                                                                       {
+177 
+178     for (int bus = 0; bus < 8; ++bus) {
+179         for (int device = 0; device < 32; ++device) {
+180 
+181             int num_functions = (device_has_functions(bus, device)) ? 8 : 1;
+182 
+183             for (int function = 0; function < num_functions; ++function) {
+184 
+185                 // Get the device descriptor, if the vendor id is 0x0000 or 0xFFFF, the device is not present/ready
+186                 PCIDeviceDescriptor device_descriptor = get_device_descriptor(bus, device,
+187                                                                               function);
+188                 if (device_descriptor\&.vendor_id == 0x0000 || device_descriptor\&.vendor_id == 0x0001 ||
+189                     device_descriptor\&.vendor_id == 0xFFFF)
+190                     continue;
+191 
+192                 // Get the earliest port number
+193                 for (int bar_num = 5; bar_num >= 0; bar_num\-\-) {
+194                     BaseAddressRegister bar = get_base_address_register(bus, device, function, bar_num);
+195                     if (bar\&.address && (bar\&.type == BARType::InputOutput))
+196                         device_descriptor\&.port_base = (uint64_t) bar\&.address;
+197                 }
+198 
+199                 Logger::DEBUG() << "DEVICE FOUND: " << device_descriptor\&.get_type() << " \- ";
+200 
+201                 // Select the driver and print information about the device
+202                 Driver* driver = get_driver(device_descriptor);
+203                 if (driver != nullptr) {
+204                     handler\->on_driver_selected(driver);
+205                     Logger::Out() << driver\->vendor_name() << " " << driver\->device_name();
+206                 } else {
+207                     list_known_device(device_descriptor);
+208                 }
+209 
+210                 Logger::Out() << "\\n";
+211             }
+212         }
+213     }
+214 }
+.fi
+
+.PP
+References \fBMaxOS::Logger::DEBUG()\fP, \fBget_driver()\fP, \fBlist_known_device()\fP, and \fBMaxOS::Logger::Out()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

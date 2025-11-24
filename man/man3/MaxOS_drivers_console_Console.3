@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::console::Console" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::console::Console" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -78,19 +78,19 @@ Inherited by \fBMaxOS::drivers::console::ConsoleArea\fP, \fBMaxOS::drivers::cons
 .PP 
 Abstract class for a console, allows for the printing of characters and strings with colours\&. 
 .PP
-Definition at line \fB27\fP of file \fBconsole\&.h\fP\&.
+Definition at line \fB24\fP of file \fBconsole\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP Console::clear ()\fC [virtual]\fP"
 Clear the entire console 
 .PP
-Definition at line \fB174\fP of file \fBconsole\&.cpp\fP\&..PP
+Definition at line \fB175\fP of file \fBconsole\&.cpp\fP\&..PP
 .nf
-174                     {
-175 
-176     clear(0, 0, width(), height());
-177 
-178 }
+175                     {
+176 
+177     clear(0, 0, width(), height());
+178 
+179 }
 .fi
 
 .PP
@@ -121,20 +121,20 @@ Clear an area of the console\&.
 .PP
 
 .PP
-Definition at line \fB191\fP of file \fBconsole\&.cpp\fP\&..PP
+Definition at line \fB192\fP of file \fBconsole\&.cpp\fP\&..PP
 .nf
-191                                                                                                                                                {
-192 
-193     // Check bounds
-194     if ( left > this \-> width() || top > this \-> height() || width > this \-> width() || height > this \-> height() )
-195         return;
-196 
-197     // Fill the area with the character
-198     for(uint16_t y = top; y < top + height; y++)
-199         for(uint16_t x = left; x < left + width; x++)
-200             put_character(x, y, fill, foreground, background);
-201 
-202 }
+192                                                                                                                                                {
+193 
+194     // Check bounds
+195     if(left > this\->width() || top > this\->height() || width > this\->width() || height > this\->height())
+196         return;
+197 
+198     // Fill the area with the character
+199     for(uint16_t y = top; y < top + height; y++)
+200         for(uint16_t x = left; x < left + width; x++)
+201             put_character(x, y, fill, foreground, background);
+202 
+203 }
 .fi
 
 .PP
@@ -266,18 +266,18 @@ Invert the colors of a character on the console\&.
 .PP
 
 .PP
-Definition at line \fB210\fP of file \fBconsole\&.cpp\fP\&..PP
+Definition at line \fB211\fP of file \fBconsole\&.cpp\fP\&..PP
 .nf
-210                                                   {
-211 
-212     // Get the colors of the character
-213     ConsoleColour foreground = get_foreground_color(x, y);
-214     ConsoleColour background = get_background_color(x, y);
-215 
-216     // Set the colors of the character
-217     set_foreground_color(x, y, background);
-218     set_background_color(x, y, foreground);
-219 }
+211                                                   {
+212 
+213     // Get the colors of the character
+214     ConsoleColour foreground = get_foreground_color(x, y);
+215     ConsoleColour background = get_background_color(x, y);
+216 
+217     // Set the colors of the character
+218     set_foreground_color(x, y, background);
+219     set_background_color(x, y, foreground);
+220 }
 .fi
 
 .PP
@@ -369,7 +369,7 @@ Definition at line \fB132\fP of file \fBconsole\&.cpp\fP\&..PP
 132                                                                                                                   {
 133 
 134     // Print each character on the screen
-135     for(int i = 0; i < string\&.length(); i++)
+135     for(size_t i = 0; i < string\&.length(); i++)
 136         put_character(x + i, y, string[i], foreground, background);
 137 }
 .fi
@@ -426,15 +426,16 @@ Definition at line \fB158\fP of file \fBconsole\&.cpp\fP\&..PP
 158                                                                                                                                                    {
 159 
 160     // Shift everything but the last line by getting what is below it
-161     for(uint32_t y = top; y < top+height\-1; y++)
-162         for(uint32_t x = left; x < left+width; x++)
-163             put_character(x, y, get_character(x, y + 1), get_foreground_color(x, y + 1), get_background_color(x, y + 1));
-164 
-165     // Fill the last line
-166     for(uint16_t x = left; x < left+width; x++)
-167         put_character(x, top + height \- 1, fill, foreground, background);
-168 
-169 }
+161     for(int y = top; y < top + height \- 1; y++)
+162         for(uint32_t x = left; x < left + width; x++)
+163             put_character(x, y, get_character(x, y + 1), get_foreground_color(x, y + 1),
+164                           get_background_color(x, y + 1));
+165 
+166     // Fill the last line
+167     for(uint16_t x = left; x < left + width; x++)
+168         put_character(x, top + height \- 1, fill, foreground, background);
+169 
+170 }
 .fi
 
 .PP

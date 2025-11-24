@@ -4,6 +4,9 @@ var elf_8h =
     [ "MaxOS::processes::ELFProgramHeader64", "structMaxOS_1_1processes_1_1ELFProgramHeader64.html", "structMaxOS_1_1processes_1_1ELFProgramHeader64" ],
     [ "MaxOS::processes::ELFSectionHeader64", "structMaxOS_1_1processes_1_1ELFSectionHeader64.html", "structMaxOS_1_1processes_1_1ELFSectionHeader64" ],
     [ "MaxOS::processes::ELF64", "classMaxOS_1_1processes_1_1ELF64.html", "classMaxOS_1_1processes_1_1ELF64" ],
+    [ "elf_64_header_t", "elf_8h.html#a15ae4c4d717d7300b416fde5b6aa60b0", null ],
+    [ "elf_64_program_header_t", "elf_8h.html#a09d9d7ba60153ffbe971339cfd7bf0c3", null ],
+    [ "elf_64_section_header_t", "elf_8h.html#ac3102ef92d344c3d420d40f1b4573fee", null ],
     [ "ELFClass", "elf_8h.html#af75820d94614aadd083f4b34ede3c6de", [
       [ "Invalid", "elf_8h.html#af75820d94614aadd083f4b34ede3c6dea4bbb8f967da6d1a610596d7257179c2b", null ],
       [ "Bits32", "elf_8h.html#af75820d94614aadd083f4b34ede3c6dea679d1f3ac1d9ed3e109b781a30020c98", null ],

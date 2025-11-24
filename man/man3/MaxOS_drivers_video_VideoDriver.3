@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::video::VideoDriver" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::video::VideoDriver" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,7 +21,7 @@ Inherited by \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation\fP, 
 .br
 .RI "Check if the video driver supports a certain mode\&. "
 .ti -1c
-.RI "\fBbool\fP \fBset_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolorDepth\fP)"
+.RI "\fBbool\fP \fBset_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolor_depth\fP)"
 .br
 .RI "Set the mode of the video driver\&. "
 .in -1c
@@ -31,11 +31,11 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
 .br
-.RI "activate the driver "
+.RI "Activate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
-.RI "deactivate the driver "
+.RI "Deactivate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
 .br
@@ -56,6 +56,10 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 
 Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 .in +1c
+.ti -1c
+.RI "\fBGraphicsContext\fP ()"
+.br
+.RI "Constructs a \fBGraphicsContext\fP object and initializes the color palette\&. "
 .ti -1c
 .RI "\fBuint32_t\fP \fBcolour_to_int\fP (\fBconst\fP \fBColour\fP &)"
 .br
@@ -81,59 +85,59 @@ Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 .br
 .RI "Gets the address of the context's framebuffer to draw on\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBput_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBput_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Renders a pixel to the screen (automatically converts the colour to an integer) "
 .ti -1c
-.RI "\fBvoid\fP \fBputPixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBput_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
 .br
 .RI "Renders a pixel to the screen (automatically converts the colour to an integer), will not render the pixel if it is outside the screen\&. "
 .ti -1c
-.RI "\fBColour\fP \fBget_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.RI "\fBColour\fP \fBget_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
 .br
 .RI "Gets the colour of a pixel, or returns black if the pixel is outside the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBinvert_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.RI "\fBvoid\fP \fBinvert_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
 .br
 .RI "Inverts a pixel\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_line\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBdraw_line\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a line on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdrawLine\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBdraw_line\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a line on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a rectangle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a rectangle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a rectangle on the screen, filled with a colour\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a rectangle on the screen, filled with a colour\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a circle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a circle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfill_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBfill_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a circle on the screen, filled with a colour\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfillCircle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBfill_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a circle on the screen, filled with a colour\&. "
 .in -1c
@@ -195,15 +199,15 @@ Protected Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 Protected Attributes inherited from \fBMaxOS::common::GraphicsContext\fP
 .in +1c
 .ti -1c
-.RI "\fBbool\fP \fBmirror_y_axis\fP { \fBfalse\fP }"
+.RI "\fBbool\fP \fBmirror_y_axis\fP"
 .br
 .RI "Should the y axis be mirrored (0,0 is top left if false, bottom left if true) "
 .ti -1c
-.RI "\fBint32_t\fP \fBm_width\fP { 0 }"
+.RI "\fBuint32_t\fP \fBm_width\fP { 0 }"
 .br
 .RI "The width of the screen in pixels\&. "
 .ti -1c
-.RI "\fBint32_t\fP \fBm_height\fP { 0 }"
+.RI "\fBuint32_t\fP \fBm_height\fP { 0 }"
 .br
 .RI "The height of the screen in pixels\&. "
 .ti -1c

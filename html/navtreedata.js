@@ -42,10 +42,9 @@ var NAVTREE =
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
-        [ "All", "globals.html", "globals_dup" ],
+        [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
-        [ "Variables", "globals_vars.html", "globals_vars" ],
-        [ "Enumerations", "globals_enum.html", null ],
+        [ "Variables", "globals_vars.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
@@ -55,20 +54,20 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "acpi_8cpp.html",
-"classMaxOS_1_1common_1_1GraphicsContext.html#acff19ddd77b6bf8dccaf5cff35ea4009",
-"classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973.html#ae13b08554a3a18a35ea5f4ff50aafcf2",
-"classMaxOS_1_1filesystem_1_1FileSystem.html#a7356a90ff2324a5236d2c130db8b328e",
-"classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface.html#ab0d645dc0379eb65dd58b97ef13d7af8",
-"classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html#ac81cf9554a9fa32b9435db1dd4c30c4d",
-"cpu_8h.html#a72b38046f765f14ce3d8f74ead10766b",
-"ext2_8h.html#a14eb0294ca61c16e1f1d1b944595d842aee86602a23e7a9a5136f6b2138894aa5",
-"functions_func_y.html",
-"keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebca64e4cda19b3f3ea4a7a56b5ba8cc33ca",
-"msdos_8h.html#a2e4fb19c764ea277199e32724975df93a3c052e9cca7dee179578e0f68237c798",
-"physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebae1a6e2c7dbcb7e2396a9ace3cd0f6719",
-"structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html#ade8814808af08139ac6bb7889ce5b74d",
-"structMaxOS_1_1system_1_1TaskStateSegment.html#a8d01b90bb8d1b5e021e6151a48f2fbf7",
-"tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5ade3c6ff049b54ae8ae5cdd53b7cfb1b5"
+"classMaxOS_1_1common_1_1InputStreamSocket.html#aa155c88f8dec1aa628a29c81a7ba33cf",
+"classMaxOS_1_1drivers_1_1ethernet_1_1IntelI217.html#a12da909ff23c9d93dd276f3bad7759d3",
+"classMaxOS_1_1filesystem_1_1VirtualFileSystem.html#acde53c9636cd5475f63dce87849bc08c",
+"classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html#af96fb9be587b8753b64904faf955da41",
+"classMaxOS_1_1processes_1_1BaseResourceRegistry.html#a9b50dfa4771a817813fe634902c58ae4",
+"cplusplus_8cpp.html#a051883e0ce55ef4ec9e2ac77874d4e5c",
+"ext2_8h.html#a09f7c48ee7cecf6e10cbccb4bc7ca238a860e643abf9378bb005b27c9aa2c0d85",
+"interrupts_8h_source.html",
+"memoryIO_8h.html#a72ee1a94489c3ecc654b0d9d4a70a0d1",
+"msdos_8h.html#a2e4fb19c764ea277199e32724975df93ad9c21cfdbfa48246096648a1dc580f02",
+"structMaxOS_1_1filesystem_1_1format_1_1DirectoryEntry.html#a0901bd6cc3811aae1889b8468f1feb39",
+"structMaxOS_1_1net_1_1ARPMessage.html#aebedb637d4b630ca937400a338434a66",
+"structmultiboot__tag__apm.html#a7a28a2d525d43caef08e4cd02de6d318",
+"vesaboot_8cpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

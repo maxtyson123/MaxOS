@@ -1,6 +1,5 @@
 var hierarchy =
 [
-    [ "MaxOS::system::__attribute__", "structMaxOS_1_1system_1_1____attribute____.html", null ],
     [ "MaxOS::hardwarecommunication::ACPISDTHeader", "structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html", null ],
     [ "MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface", "classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface.html", null ],
     [ "MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController", "classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController.html", null ],
@@ -17,6 +16,7 @@ var hierarchy =
     [ "MaxOS::filesystem::format::ext2::BlockGroupDescriptor", "structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1BlockGroupDescriptor.html", null ],
     [ "MaxOS::common::BlockingLock", "classMaxOS_1_1common_1_1BlockingLock.html", null ],
     [ "MaxOS::common::Buffer", "classMaxOS_1_1common_1_1Buffer.html", null ],
+    [ "MaxOS::drivers::ethernet::BufferDescriptor", "structMaxOS_1_1drivers_1_1ethernet_1_1BufferDescriptor.html", null ],
     [ "MaxOS::common::Colour", "classMaxOS_1_1common_1_1Colour.html", null ],
     [ "MaxOS::drivers::console::Console", "classMaxOS_1_1drivers_1_1console_1_1Console.html", [
       [ "MaxOS::drivers::console::ConsoleArea", "classMaxOS_1_1drivers_1_1console_1_1ConsoleArea.html", null ],
@@ -26,6 +26,7 @@ var hierarchy =
     [ "MaxOS::system::Core", "classMaxOS_1_1system_1_1Core.html", null ],
     [ "MaxOS::system::CoreBootInfo", "structMaxOS_1_1system_1_1CoreBootInfo.html", null ],
     [ "MaxOS::system::CPU", "classMaxOS_1_1system_1_1CPU.html", null ],
+    [ "MaxOS::system::CPUStatus", "structMaxOS_1_1system_1_1CPUStatus.html", null ],
     [ "MaxOS::filesystem::Directory", "classMaxOS_1_1filesystem_1_1Directory.html", [
       [ "MaxOS::filesystem::format::Fat32Directory", "classMaxOS_1_1filesystem_1_1format_1_1Fat32Directory.html", null ],
       [ "MaxOS::filesystem::format::ext2::Ext2Directory", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory.html", null ]
@@ -53,7 +54,7 @@ var hierarchy =
       ] ]
     ] ],
     [ "MaxOS::drivers::DriverSelector", "classMaxOS_1_1drivers_1_1DriverSelector.html", [
-      [ "MaxOS::hardwarecommunication::PeripheralComponentInterconnectController", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectController.html", null ]
+      [ "MaxOS::hardwarecommunication::PCIController", "classMaxOS_1_1hardwarecommunication_1_1PCIController.html", null ]
     ] ],
     [ "MaxOS::drivers::DriverSelectorEventHandler", "classMaxOS_1_1drivers_1_1DriverSelectorEventHandler.html", [
       [ "MaxOS::drivers::DriverManager", "classMaxOS_1_1drivers_1_1DriverManager.html", null ]
@@ -196,7 +197,7 @@ var hierarchy =
       [ "MaxOS::common::InputStreamProcessor< Type, ProcessorType >", "classMaxOS_1_1common_1_1InputStreamProcessor.html", [
         [ "MaxOS::common::GenericOutputStream< string >", "classMaxOS_1_1common_1_1GenericOutputStream.html", [
           [ "MaxOS::common::OutputStream", "classMaxOS_1_1common_1_1OutputStream.html", [
-            [ "Logger", "classLogger.html", null ],
+            [ "MaxOS::Logger", "classMaxOS_1_1Logger.html", null ],
             [ "MaxOS::drivers::SerialConsole", "classMaxOS_1_1drivers_1_1SerialConsole.html", null ],
             [ "MaxOS::drivers::console::ConsoleStream", "classMaxOS_1_1drivers_1_1console_1_1ConsoleStream.html", null ]
           ] ]
@@ -217,6 +218,7 @@ var hierarchy =
     ] ],
     [ "MaxOS::net::ICMPHeader", "structMaxOS_1_1net_1_1ICMPHeader.html", null ],
     [ "MaxOS::hardwarecommunication::IDTR", "structMaxOS_1_1hardwarecommunication_1_1IDTR.html", null ],
+    [ "MaxOS::drivers::ethernet::InitializationBlock", "structMaxOS_1_1drivers_1_1ethernet_1_1InitializationBlock.html", null ],
     [ "MaxOS::filesystem::format::ext2::Inode", "structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Inode.html", null ],
     [ "MaxOS::filesystem::format::ext2::InodeHandler", "classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeHandler.html", null ],
     [ "MaxOS::filesystem::format::ext2::InodeOS2Linux", "structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1InodeOS2Linux.html", null ],
@@ -256,6 +258,7 @@ var hierarchy =
       [ "MaxOS::net::TransmissionControlProtocolHandler", "classMaxOS_1_1net_1_1TransmissionControlProtocolHandler.html", null ],
       [ "MaxOS::net::UserDatagramProtocolHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html", null ]
     ] ],
+    [ "MaxOS::runtime::KASanHandler", "classMaxOS_1_1runtime_1_1KASanHandler.html", null ],
     [ "MaxOS::drivers::peripherals::KeyboardState", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html", null ],
     [ "MaxOS::hardwarecommunication::LocalAPIC", "classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html", null ],
     [ "MaxOS::runtime::LocationOnlyInfo", "structMaxOS_1_1runtime_1_1LocationOnlyInfo.html", null ],
@@ -325,6 +328,7 @@ var hierarchy =
     [ "MaxOS::runtime::OutOfBoundsInfo", "structMaxOS_1_1runtime_1_1OutOfBoundsInfo.html", null ],
     [ "MaxOS::runtime::OverflowInfo", "structMaxOS_1_1runtime_1_1OverflowInfo.html", null ],
     [ "MaxOS::hardwarecommunication::Override", "structMaxOS_1_1hardwarecommunication_1_1Override.html", null ],
+    [ "MaxOS::hardwarecommunication::RedirectionEntry::PACKED", "structMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_1_1PACKED.html", null ],
     [ "MaxOS::memory::PageMapLevel", "structMaxOS_1_1memory_1_1PageMapLevel.html", null ],
     [ "MaxOS::memory::PageTableEntry", "structMaxOS_1_1memory_1_1PageTableEntry.html", null ],
     [ "MaxOS::common::Pair< First, Second >", "classMaxOS_1_1common_1_1Pair.html", null ],
@@ -342,7 +346,7 @@ var hierarchy =
     [ "MaxOS::common::Pair< uint8_t, MaxOS::net::IPV4PayloadHandler * >", "classMaxOS_1_1common_1_1Pair.html", null ],
     [ "MaxOS::filesystem::partition::PartitionTableEntry", "structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry.html", null ],
     [ "MaxOS::filesystem::Path", "classMaxOS_1_1filesystem_1_1Path.html", null ],
-    [ "MaxOS::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor", "classMaxOS_1_1hardwarecommunication_1_1PeripheralComponentInterconnectDeviceDescriptor.html", null ],
+    [ "MaxOS::hardwarecommunication::PCIDeviceDescriptor", "classMaxOS_1_1hardwarecommunication_1_1PCIDeviceDescriptor.html", null ],
     [ "MaxOS::memory::PhysicalMemoryManager", "classMaxOS_1_1memory_1_1PhysicalMemoryManager.html", null ],
     [ "MaxOS::drivers::clock::PITCommand", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand.html", null ],
     [ "MaxOS::hardwarecommunication::Port", "classMaxOS_1_1hardwarecommunication_1_1Port.html", [
@@ -354,6 +358,7 @@ var hierarchy =
     ] ],
     [ "MaxOS::processes::Process", "classMaxOS_1_1processes_1_1Process.html", null ],
     [ "MaxOS::drivers::ethernet::RawDataHandler", "classMaxOS_1_1drivers_1_1ethernet_1_1RawDataHandler.html", null ],
+    [ "MaxOS::drivers::ethernet::ReceiveDescriptor", "structMaxOS_1_1drivers_1_1ethernet_1_1ReceiveDescriptor.html", null ],
     [ "MaxOS::common::Rectangle< Type >", "classMaxOS_1_1common_1_1Rectangle.html", null ],
     [ "MaxOS::common::Rectangle< int32_t >", "classMaxOS_1_1common_1_1Rectangle.html", null ],
     [ "MaxOS::hardwarecommunication::RedirectionEntry", "unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry.html", null ],
@@ -368,6 +373,7 @@ var hierarchy =
     [ "MaxOS::hardwarecommunication::RSDPDescriptor2", "structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2.html", null ],
     [ "MaxOS::hardwarecommunication::RSDT", "structMaxOS_1_1hardwarecommunication_1_1RSDT.html", null ],
     [ "MaxOS::processes::Scheduler", "classMaxOS_1_1processes_1_1Scheduler.html", null ],
+    [ "MaxOS::drivers::ethernet::SendDescriptor", "structMaxOS_1_1drivers_1_1ethernet_1_1SendDescriptor.html", null ],
     [ "MaxOS::runtime::ShiftOutOfBoundsInfo", "structMaxOS_1_1runtime_1_1ShiftOutOfBoundsInfo.html", null ],
     [ "MaxOS::runtime::SourceLocation", "structMaxOS_1_1runtime_1_1SourceLocation.html", null ],
     [ "MaxOS::common::Spinlock", "classMaxOS_1_1common_1_1Spinlock.html", null ],
@@ -379,6 +385,10 @@ var hierarchy =
     [ "MaxOS::system::TaskStateSegment", "structMaxOS_1_1system_1_1TaskStateSegment.html", null ],
     [ "MaxOS::net::TCPHeader", "structMaxOS_1_1net_1_1TCPHeader.html", null ],
     [ "MaxOS::net::TCPPseudoHeader", "structMaxOS_1_1net_1_1TCPPseudoHeader.html", null ],
+    [ "MaxOS::tests::Test", "classMaxOS_1_1tests_1_1Test.html", [
+      [ "MaxOS::tests::ConditionalTest", "classMaxOS_1_1tests_1_1ConditionalTest.html", null ]
+    ] ],
+    [ "MaxOS::tests::TestRunner", "classMaxOS_1_1tests_1_1TestRunner.html", null ],
     [ "MaxOS::processes::Thread", "classMaxOS_1_1processes_1_1Thread.html", null ],
     [ "MaxOS::common::Time", "structMaxOS_1_1common_1_1Time.html", null ],
     [ "MaxOS::runtime::TypeDescriptor", "structMaxOS_1_1runtime_1_1TypeDescriptor.html", null ],
@@ -431,6 +441,7 @@ var hierarchy =
     [ "MaxOS::common::Vector< MaxOS::processes::Process * >", "classMaxOS_1_1common_1_1Vector.html", null ],
     [ "MaxOS::common::Vector< MaxOS::processes::Thread * >", "classMaxOS_1_1common_1_1Vector.html", null ],
     [ "MaxOS::common::Vector< MaxOS::system::Core * >", "classMaxOS_1_1common_1_1Vector.html", null ],
+    [ "MaxOS::common::Vector< MaxOS::tests::Test * >", "classMaxOS_1_1common_1_1Vector.html", null ],
     [ "MaxOS::common::Vector< string >", "classMaxOS_1_1common_1_1Vector.html", null ],
     [ "MaxOS::common::Vector< uint32_t >", "classMaxOS_1_1common_1_1Vector.html", null ],
     [ "MaxOS::common::Vector< uint64_t >", "classMaxOS_1_1common_1_1Vector.html", null ],

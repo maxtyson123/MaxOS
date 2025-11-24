@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,7 +15,7 @@
 .br
 \fC#include <common/string\&.h>\fP
 .br
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 \fC#include <memory/virtual\&.h>\fP
 .br
@@ -44,15 +44,17 @@
 
 .in +1c
 .ti -1c
-.RI "typedef enum MaxOS::processes::ThreadState \fBMaxOS::processes::thread_state_t\fP"
+.RI "typedef enum \fBMaxOS::processes::ThreadState\fP \fBMaxOS::processes::thread_state_t\fP"
 .br
+.RI "Alias for ThreadState enum\&. "
 .in -1c
 .SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "enum class \fBThreadState\fP { \fBNEW\fP, \fBRUNNING\fP, \fBREADY\fP, \fBSLEEPING\fP, \fBWAITING\fP, \fBSTOPPED\fP }"
+.RI "enum class \fBMaxOS::processes::ThreadState\fP { \fBNEW\fP, \fBRUNNING\fP, \fBREADY\fP, \fBSLEEPING\fP, \fBWAITING\fP, \fBSTOPPED\fP }"
 .br
+.RI "The different operational states a thread can be in\&. "
 .in -1c
 .SS "Variables"
 
@@ -60,6 +62,7 @@
 .ti -1c
 .RI "constexpr size_t \fBMaxOS::processes::STACK_SIZE\fP = 0x10000"
 .br
+.RI "The size of the stack for each thread (4KB) "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -82,19 +85,21 @@ Max Tyson
 Definition in file \fBprocess\&.h\fP\&.
 .SH "Enumeration Type Documentation"
 .PP 
-.SS "enum class MaxOS::processes::ThreadState\fC [strong]\fP"
+.SS "enum class \fBMaxOS::processes::ThreadState\fP\fC [strong]\fP"
 
 .PP
-Definition at line \fB29\fP of file \fBprocess\&.h\fP\&..PP
+The different operational states a thread can be in\&. 
+.PP
+Definition at line \fB33\fP of file \fBprocess\&.h\fP\&..PP
 .nf
-29                                       {
-30             NEW,
-31             RUNNING,
-32             READY,
-33             SLEEPING,
-34             WAITING,
-35             STOPPED
-36         } thread_state_t;
+33                                    {
+34         NEW,
+35         RUNNING,
+36         READY,
+37         SLEEPING,
+38         WAITING,
+39         STOPPED
+40     } thread_state_t;
 .fi
 
 .SH "Variable Documentation"
@@ -102,7 +107,11 @@ Definition at line \fB29\fP of file \fBprocess\&.h\fP\&..PP
 .SS "constexpr size_t MaxOS::processes::STACK_SIZE = 0x10000\fC [constexpr]\fP"
 
 .PP
-Definition at line \fB41\fP of file \fBprocess\&.h\fP\&.
+The size of the stack for each thread (4KB) 
+.PP
+Definition at line \fB43\fP of file \fBprocess\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::Thread::Thread()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

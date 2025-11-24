@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::ethernet::AMD_AM79C973" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::ethernet::AMD_AM79C973" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,8 +15,9 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriver\fP, and \fBMaxOS::hardwarec
 
 .in +1c
 .ti -1c
-.RI "\fBAMD_AM79C973\fP (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP *\fBdevice_descriptor\fP)"
+.RI "\fBAMD_AM79C973\fP (\fBhardwarecommunication::PCIDeviceDescriptor\fP *\fBdev\fP)"
 .br
+.RI "Constructs a new \fBAMD_AM79C973\fP Ethernet driver, reads the MAC address and sets up the initialisation block and buffer descriptors\&. "
 .ti -1c
 .RI "\fBuint32_t\fP \fBreset\fP () \fBfinal\fP"
 .br
@@ -28,7 +29,7 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriver\fP, and \fBMaxOS::hardwarec
 .ti -1c
 .RI "\fBvoid\fP \fBdeactivate\fP () \fBfinal\fP"
 .br
-.RI "deactivate the driver "
+.RI "Deactivate the driver\&. "
 .ti -1c
 .RI "\fBstring\fP \fBvendor_name\fP () \fBfinal\fP"
 .br
@@ -42,11 +43,11 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriver\fP, and \fBMaxOS::hardwarec
 .br
 .RI "This function handles the interrupt for the device\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBDoSend\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP) \fBfinal\fP"
+.RI "\fBvoid\fP \fBdo_send\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size) \fBfinal\fP"
 .br
 .RI "This function sends a package\&. "
 .ti -1c
-.RI "\fBuint64_t\fP \fBGetMediaAccessControlAddress\fP () \fBfinal\fP"
+.RI "\fBuint64_t\fP \fBget_media_access_control_address\fP () \fBfinal\fP"
 .br
 .RI "This function gets the MAC address\&. "
 .in -1c
@@ -54,9 +55,9 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriver\fP, and \fBMaxOS::hardwarec
 Public Member Functions inherited from \fBMaxOS::drivers::ethernet::EthernetDriver\fP
 .in +1c
 .ti -1c
-.RI "\fBvoid\fP \fBSend\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBsend\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size)"
 .br
-.RI "Send data to the network via the driver backend\&. "
+.RI "send data to the network via the driver backend "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
@@ -72,11 +73,11 @@ Public Member Functions inherited from \fBMaxOS::common::EventManager< EthernetD
 .ti -1c
 .RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< EthernetDriverEvents > *\fBhandler\fP)"
 .br
-.RI "Connect an event handler to the event manager if it is not already connected\&. "
+.RI "connect an event handler to the event manager if it is not already connected "
 .ti -1c
 .RI "\fBvoid\fP \fBdisconnect_event_handler\fP (\fBEventHandler\fP< EthernetDriverEvents > *\fBhandler\fP)"
 .br
-.RI "Disconnect an event handler from the event manager if it is connected\&. "
+.RI "disconnect an event handler from the event manager if it is connected "
 .ti -1c
 .RI "\fBVector\fP< \fBEvent\fP< EthernetDriverEvents > * > \fBraise_event\fP (\fBEvent\fP< EthernetDriverEvents > *\fBevent\fP)"
 .br
@@ -86,7 +87,7 @@ Public Member Functions inherited from \fBMaxOS::common::EventManager< EthernetD
 Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
+.RI "\fBvirtual\fP \fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
 .in -1c
@@ -96,7 +97,7 @@ Public Member Functions inherited from \fBMaxOS::hardwarecommunication::Interrup
 Static Public Member Functions inherited from \fBMaxOS::drivers::ethernet::EthernetDriver\fP
 .in +1c
 .ti -1c
-.RI "\fBstatic\fP \fBMediaAccessControlAddress\fP \fBCreateMediaAccessControlAddress\fP (\fBuint8_t\fP \fBdigit1\fP, \fBuint8_t\fP \fBdigit2\fP, \fBuint8_t\fP \fBdigit3\fP, \fBuint8_t\fP \fBdigit4\fP, \fBuint8_t\fP \fBdigit5\fP, \fBuint8_t\fP \fBdigit6\fP)"
+.RI "\fBstatic\fP \fBMediaAccessControlAddress\fP \fBcreate_media_access_control_address\fP (\fBuint8_t\fP \fBdigit1\fP, \fBuint8_t\fP \fBdigit2\fP, \fBuint8_t\fP \fBdigit3\fP, \fBuint8_t\fP \fBdigit4\fP, \fBuint8_t\fP \fBdigit5\fP, \fBuint8_t\fP \fBdigit6\fP)"
 .br
 .RI "Create a Media Access Control Address\&. "
 .in -1c
@@ -104,13 +105,13 @@ Static Public Member Functions inherited from \fBMaxOS::drivers::ethernet::Ether
 Protected Member Functions inherited from \fBMaxOS::drivers::ethernet::EthernetDriver\fP
 .in +1c
 .ti -1c
-.RI "\fBvoid\fP \fBFireDataReceived\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBfire_data_received\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size)"
 .br
 .RI "Handle the recieved data\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBFireDataSent\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBfire_data_sent\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size)"
 .br
-.RI "Send data\&. "
+.RI "send data "
 .in -1c
 
 Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
@@ -119,6 +120,10 @@ Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::Inter
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
 .RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "\fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::common::EventManager< EthernetDriverEvents >\fP
@@ -139,103 +144,120 @@ Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHa
 .PP 
 \fBDriver\fP for the AMD AM79C973 Ethernet Controller\&. 
 .PP
-Definition at line \fB30\fP of file \fBamd_am79c973\&.h\fP\&.
+Definition at line \fB65\fP of file \fBamd_am79c973\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "AMD_AM79C973::AMD_AM79C973 (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP * device_descriptor)"
-MAX OS NET CODE: All the old (this) networking code poorly written and not used, this will be moved to userspace in the future but is kept here as a reference for now\&. 
+.SS "AMD_AM79C973::AMD_AM79C973 (\fBhardwarecommunication::PCIDeviceDescriptor\fP * dev)\fC [explicit]\fP"
+
 .PP
-Definition at line \fB22\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
+Constructs a new \fBAMD_AM79C973\fP Ethernet driver, reads the MAC address and sets up the initialisation block and buffer descriptors\&. MAX OS NET CODE: All the old (this) networking code poorly written and not used, this will be moved to userspace in the future but is kept here as a reference for now\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdev\fP The PCI device descriptor for this device 
+.RE
+.PP
+
+.PP
+\fBTodo\fP
+.RS 4
+move all this to initilise() 
+.RE
+.PP
+
+.PP
+Definition at line \fB26\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
 .nf
-23 : InterruptHandler(0x20 + dev \-> interrupt),
-24   MACAddress0Port(dev \->port_base),
-25   MACAddress2Port(dev \->port_base + 0x02),
-26   MACAddress4Port(dev \->port_base + 0x04),
-27   registerDataPort(dev \->port_base + 0x10),
-28   registerAddressPort(dev \->port_base + 0x12),
-29   busControlRegisterDataPort(dev \->port_base + 0x16),
-30   resetPort(dev \->port_base + 0x14),
-31   initBlock(),
-32   sendBuffers(),
-33   recvBuffers()
-34 {
-35     // No active buffer at the start
-36     currentSendBuffer = 0;
-37     currentRecvBuffer = 0;
-38 
-39     //Not active or initialized
-40     active = false;
-41     initDone = false;
-42 
-43     // Get the MAC addresses (split up in little endian order)
-44     uint64_t MAC0 = MACAddress0Port\&.read() % 256;
-45     uint64_t MAC1 = MACAddress0Port\&.read() / 256;
-46     uint64_t MAC2 = MACAddress2Port\&.read() % 256;
-47     uint64_t MAC3 = MACAddress2Port\&.read() / 256;
-48     uint64_t MAC4 = MACAddress4Port\&.read() % 256;
-49     uint64_t MAC5 = MACAddress4Port\&.read() / 256;
-50 
-51     // Combine MAC addresses into one 48 bit number
-52     ownMAC = MAC5 << 40
-53              | MAC4 << 32
-54              | MAC3 << 24
-55              | MAC2 << 16
-56              | MAC1 << 8
-57              | MAC0;
-58 
-59     // Set the device to 32 bit mode
-60     registerAddressPort\&.write(20);              // Tell device to write to register 20
-61     busControlRegisterDataPort\&.write(0x102);    // write desired data
-62 
-63     // Reset the stop bit (tell device it's not supposed to be reset now)
-64     registerAddressPort\&.write(0);               // Tell device to write to register 0
-65     registerDataPort\&.write(0x04);               // write desired data
-66 
-67     // Set the initialization block
-68     initBlock\&.mode = 0x0000;                         // Promiscuous mode = false   ( promiscuous mode tells it to receive all packets, not just broadcasts and those for its own MAC address)
-69     initBlock\&.reserved1 = 0;                         // Reserved
-70     initBlock\&.numSendBuffers = 3;                    // Means 8 because 2^8 (number of bits used)
-71     initBlock\&.reserved2 = 0;                         // Reserved
-72     initBlock\&.numRecvBuffers = 3;                    // Means 8 because 2^8 (number of bits used)
-73     initBlock\&.physicalAddress = ownMAC;              // Set the physical address to the MAC address
-74     initBlock\&.reserved3 = 0;                         // Reserved
-75     initBlock\&.logicalAddress = 0;                    // None for now
-76 
-77     // Set Buffer descriptors memory
-78     sendBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
-79     initBlock\&.sendBufferDescrAddress = (uint64_t)sendBufferDescr;
-80 
-81     recvBufferDescr = (BufferDescriptor*)(MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
-82     initBlock\&.recvBufferDescrAddress = (uint64_t)recvBufferDescr;
-83 
-84     for(uint8_t i = 0; i < 8; i++)
-85     {
-86 
-87         // Send buffer descriptors
-88         sendBufferDescr[i]\&.address = (((uint64_t)&sendBuffers[i]) + 15 ) & ~(uint32_t)0xF;       // Same as above
-89         sendBufferDescr[i]\&.flags = 0x7FF                                                         // Length of descriptor
-90                                    | 0xF000;                                                     // Set it to send buffer
-91         sendBufferDescr[i]\&.flags2 = 0;                                                           // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive
-92         sendBufferDescr[i]\&.avail = 0;                                                            // IF it is in use
-93 
-94         // Receive
-95         recvBufferDescr[i]\&.address = (((uint64_t)&recvBuffers[i]) + 15 ) & ~(uint32_t)0xF;   // Same as above
-96         recvBufferDescr[i]\&.flags = 0xF7FF                                                        // Length of descriptor        (This 0xF7FF is what was causing the problem, it used to be 0x7FF)
-97                                    | 0x80000000;                                                 // Set it to receive buffer
-98         recvBufferDescr[i]\&.flags2 = 0;                                                           // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive
-99         recvBufferDescr[i]\&.avail = 0;                                                            // IF it is in use
-100     }
-101 
-102     // Move initialization block into device
-103     registerAddressPort\&.write(1);                                     // Tell device to write to register 1
-104     registerDataPort\&.write((uint64_t)(&initBlock) &
-105                            0xFFFF);             // write address data
-106     registerAddressPort\&.write(2);                                     // Tell device to write to register 2
-107     registerDataPort\&.write(((uint64_t)(&initBlock) >> 16) &
-108                            0xFFFF);     // write shifted address data
-109 
-110 
-111 }
+27 : InterruptHandler(0x20 + dev\->interrupt),
+28 mac_address_0_port(dev\->port_base),
+29 mac_address_2_port(dev\->port_base + 0x02),
+30 mac_address_4_port(dev\->port_base + 0x04),
+31 register_data_port(dev\->port_base + 0x10),
+32 register_address_port(dev\->port_base + 0x12),
+33 bus_control_register_data_port(dev\->port_base + 0x16),
+34 reset_port(dev\->port_base + 0x14),
+35 init_block(),
+36 send_buffers(),
+37 recv_buffers() {
+38     // No active buffer at the start
+39     current_send_buffer = 0;
+40     current_recv_buffer = 0;
+41 
+42     //Not active or initialised
+43     active = false;
+44     init_done = false;
+45 
+47 
+48     // Get the MAC addresses (split up in little endian order)
+49     uint64_t mac_0 = mac_address_0_port\&.read() % 256;
+50     uint64_t mac_1 = mac_address_0_port\&.read() / 256;
+51     uint64_t mac_2 = mac_address_2_port\&.read() % 256;
+52     uint64_t mac_3 = mac_address_2_port\&.read() / 256;
+53     uint64_t mac_4 = mac_address_4_port\&.read() % 256;
+54     uint64_t mac_5 = mac_address_4_port\&.read() / 256;
+55 
+56     // Combine MAC addresses into one 48 bit number
+57     own_mac = mac_5 << 40
+58               | mac_4 << 32
+59               | mac_3 << 24
+60               | mac_2 << 16
+61               | mac_1 << 8
+62               | mac_0;
+63 
+64     // Set the device to 32 bit mode
+65     register_address_port\&.write(20);              // Tell device to write to register 20
+66     bus_control_register_data_port\&.write(0x102);    // write desired data
+67 
+68     // Reset the stop bit (tell device it's not supposed to be reset now)
+69     register_address_port\&.write(0);               // Tell device to write to register 0
+70     register_data_port\&.write(0x04);               // write desired data
+71 
+72     // Set the initialization block
+73     init_block\&.mode = 0x0000;                         // Promiscuous mode = false   ( promiscuous mode tells it to receive all packets, not just broadcasts and those for its own MAC address)
+74     init_block\&.reserved1 = 0;                         // Reserved
+75     init_block\&.num_send_buffers = 3;                    // Means 8 because 2^8 (number of bits used)
+76     init_block\&.reserved2 = 0;                         // Reserved
+77     init_block\&.num_recv_buffers = 3;                    // Means 8 because 2^8 (number of bits used)
+78     init_block\&.physical_address = own_mac;              // Set the physical address to the MAC address
+79     init_block\&.reserved3 = 0;                         // Reserved
+80     init_block\&.logical_address = 0;                    // None for now
+81 
+82     // Set Buffer descriptors memory
+83     send_buffer_descr = (BufferDescriptor*) (MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
+84     init_block\&.send_buffer_descr_address = (uint64_t) send_buffer_descr;
+85 
+86     recv_buffer_descr = (BufferDescriptor*) (MemoryManager::kmalloc((sizeof(BufferDescriptor) * 8) + 15));  // Allocate memory for 8 buffer descriptors
+87     init_block\&.recv_buffer_descr_address = (uint64_t) recv_buffer_descr;
+88 
+89     for(uint8_t i = 0; i < 8; i++) {
+90 
+91         // Send buffer descriptors
+92         send_buffer_descr[i]\&.address = (((uint64_t) &send_buffers[i]) + 15) & ~(uint32_t) 0xF;       // Same as above
+93         send_buffer_descr[i]\&.flags =
+94         0x7FF                                                         // Length of descriptor
+95         | 0xF000;                                                     // Set it to send buffer
+96         send_buffer_descr[i]\&.flags2 = 0;                                                           // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive
+97         send_buffer_descr[i]\&.avail = 0;                                                            // IF it is in use
+98 
+99         // Receive
+100         recv_buffer_descr[i]\&.address = (((uint64_t) &recv_buffers[i]) + 15) & ~(uint32_t) 0xF;   // Same as above
+101         recv_buffer_descr[i]\&.flags =
+102         0xF7FF                                                        // Length of descriptor        (This 0xF7FF is what was causing the problem, it used to be 0x7FF)
+103         | 0x80000000;                                                 // Set it to receive buffer
+104         recv_buffer_descr[i]\&.flags2 = 0;                                                           // "Flags2" shows whether an error occurred while sending and should therefore be set to 0 by the drive
+105         recv_buffer_descr[i]\&.avail = 0;                                                            // IF it is in use
+106     }
+107 
+108     // Move initialization block into device
+109     register_address_port\&.write(1);                                     // Tell device to write to register 1
+110     register_data_port\&.write((uint64_t) (&init_block) &
+111                              0xFFFF);             // write address data
+112     register_address_port\&.write(2);                                     // Tell device to write to register 2
+113     register_data_port\&.write(((uint64_t) (&init_block) >> 16) &
+114                              0xFFFF);     // write shifted address data
+115 
+116 
+117 }
 .fi
 
 .PP
@@ -256,28 +278,30 @@ Re-implement this class
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB122\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
+Definition at line \fB127\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
 .nf
-123 {
-124 
-125     return;
-126 
-127     initDone = false;                                            // Set initDone to false
-128     registerAddressPort\&.write(0);                           // Tell device to write to register 0
-129     registerDataPort\&.write(0x41);                           // Enable Interrupts and start the device
-130     while(!initDone);                                            // Wait for initDone to be set to true
-131 
-132     registerAddressPort\&.write(4);                           // Tell device to read from register 4
-133     uint32_t temp = registerDataPort\&.read();                     // Get current data
-134 
-135     registerAddressPort\&.write(4);                           // Tell device to write to register 4
-136     registerDataPort\&.write(temp | 0xC00);                   // Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets\&.)
-137 
-138     registerAddressPort\&.write(0);                           // Tell device to write to register 0
-139     registerDataPort\&.write(0x42);                           // Tell device that it is initialised and can begin operating
-140 
-141     active = true;                                               // Set active to true
-142 }
+127                             {
+128 
+129     return;
+130 
+131     init_done = false;                                            // Set initDone to false
+132     register_address_port\&.write(0);                           // Tell device to write to register 0
+133     register_data_port\&.write(0x41);                           // Enable Interrupts and start the device
+134     while(!init_done);                                            // Wait for initDone to be set to true
+135 
+136     register_address_port\&.write(4);                           // Tell device to read from register 4
+137     uint32_t temp = register_data_port\&.read();                     // Get current data
+138 
+139     register_address_port\&.write(4);                           // Tell device to write to register 4
+140     register_data_port\&.write(temp |
+141                              0xC00);                   // Bitwise OR function on data (This automatically enlarges packets smaller than 64 bytes to that size and removes some relatively superfluous information from received packets\&.)
+142 
+143     register_address_port\&.write(0);                           // Tell device to write to register 0
+144     register_data_port\&.write(
+145     0x42);                           // Tell device that it is initialised and can begin operating
+146 
+147     active = true;                                               // Set active to true
+148 }
 .fi
 
 .PP
@@ -285,15 +309,15 @@ References \fBMaxOS::hardwarecommunication::Port16Bit::read()\fP, and \fBMaxOS::
 .SS "\fBvoid\fP AMD_AM79C973::deactivate ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-deactivate the driver 
+Deactivate the driver\&. 
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB294\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
+Definition at line \fB305\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
 .nf
-294                               {
-295 
-296 }
+305                               {
+306 
+307 }
 .fi
 
 .SS "\fBstring\fP AMD_AM79C973::device_name ()\fC [final]\fP, \fC [virtual]\fP"
@@ -310,14 +334,14 @@ The device name of the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB302\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
+Definition at line \fB313\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
 .nf
-302                                  {
-303     return "PCnet\-Fast III (Am79C973)";
-304 }
+313                                  {
+314     return "PCnet\-Fast III (Am79C973)";
+315 }
 .fi
 
-.SS "\fBvoid\fP AMD_AM79C973::DoSend (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBvoid\fP AMD_AM79C973::do_send (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 This function sends a package\&. 
@@ -333,45 +357,49 @@ This function sends a package\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::ethernet::EthernetDriver\fP\&.
 .PP
-Definition at line \fB205\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
+Definition at line \fB210\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
 .nf
-205                                                         {
-206 
-207     while(!active);
-208 
-209     int sendDescriptor = currentSendBuffer;              // Get where data has been written to
-210     currentSendBuffer = (currentSendBuffer + 1) % 8;    // Move send buffer to next send buffer (div by 8 so that it is cycled) (this allows for data to be sent from different m_tasks in parallel)
+210                                                          {
 211 
-212     if(size > 1518){                                    // If attempt to send more than 1518 bytes at once it will be too large
-213         size = 1518;                                    // Discard all data after that  (Generally if data is bigger than that at driver level then a higher up network layer must have made a mistake)
-214 
-215     }
-216 
-217     // What this loop does is copy the information passed as the parameter buffer (src) to the send buffer in the ram (dst) which the card will then use to send the data
-218     for (uint8_t *src = buffer + size \-1,                                                   // Set src pointer to the end of the data that is being sent
-219          *dst = (uint8_t*)(sendBufferDescr[sendDescriptor]\&.address + size \-1);       // Take the buffer that has been selected
-220          src >= buffer;                                                             // While there is still information in the buffer that hasn't been written to src
-221          src\-\-,dst\-\-                                                                // Move 2 pointers to the end of the buffers
-222             )
-223     {
-224         *dst = *src;                                                                        // Copy data from source buffer to destination buffer
-225     }
-226 
-227 
-228     sendBufferDescr[sendDescriptor]\&.avail = 0;                               // Set that this buffer is in use
-229     sendBufferDescr[sendDescriptor]\&.flags2 = 0;                              // Clear any previous error messages
-230     sendBufferDescr[sendDescriptor]\&.flags = 0x8300F000                       // Encode the size of what is being sent
-231                                             | ((uint16_t)((\-size) & 0xFFF));
-232 
-233     registerAddressPort\&.write(0);                           // Tell device to write to register 0
-234     registerDataPort\&.write(
-235         0x48);                           // Tell device to send the data currently in the buffer
-236 }
+212     while(!active);
+213 
+214     int send_descriptor = current_send_buffer;              // Get where data has been written to
+215     current_send_buffer = (current_send_buffer + 1) %
+216                           8;    // Move send buffer to next send buffer (div by 8 so that it is cycled) (this allows for data to be sent from different m_tasks in parallel)
+217 
+218     if(size >
+219        1518) {                                    // If attempt to send more than 1518 bytes at once it will be too large
+220         size = 1518;                                    // Discard all data after that  (Generally if data is bigger than that at driver level then a higher up network layer must have made a mistake)
+221 
+222     }
+223 
+224     // What this loop does is copy the information passed as the parameter buffer (src) to the send buffer in the ram (dst) which the card will then use to send the data
+225     for(uint8_t* src = buffer + size \-
+226                        1,                                                   // Set src pointer to the end of the data that is being sent
+227         * dst = (uint8_t*) (send_buffer_descr[send_descriptor]\&.address + size \-
+228                             1);       // Take the buffer that has been selected
+229         src >=
+230         buffer;                                                             // While there is still information in the buffer that hasn't been written to src
+231         src\-\-, dst\-\-                                                                // Move 2 pointers to the end of the buffers
+232     ) {
+233         *dst = *src;                                                                        // Copy data from source buffer to destination buffer
+234     }
+235 
+236 
+237     send_buffer_descr[send_descriptor]\&.avail = 0;                               // Set that this buffer is in use
+238     send_buffer_descr[send_descriptor]\&.flags2 = 0;                              // Clear any previous error messages
+239     send_buffer_descr[send_descriptor]\&.flags = 0x8300F000                       // Encode the size of what is being sent
+240                                                | ((uint16_t) ((\-size) & 0xFFF));
+241 
+242     register_address_port\&.write(0);                           // Tell device to write to register 0
+243     register_data_port\&.write(
+244     0x48);                           // Tell device to send the data currently in the buffer
+245 }
 .fi
 
 .PP
-References \fBsize\fP, and \fBMaxOS::hardwarecommunication::Port16Bit::write()\fP\&.
-.SS "\fBuint64_t\fP AMD_AM79C973::GetMediaAccessControlAddress ()\fC [final]\fP, \fC [virtual]\fP"
+References \fBMaxOS::hardwarecommunication::Port16Bit::write()\fP\&.
+.SS "\fBuint64_t\fP AMD_AM79C973::get_media_access_control_address ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 This function gets the MAC address\&. 
@@ -385,12 +413,12 @@ The MAC address
 .PP
 Reimplemented from \fBMaxOS::drivers::ethernet::EthernetDriver\fP\&.
 .PP
-Definition at line \fB289\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
+Definition at line \fB300\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
 .nf
-289                                                     {
-290     while(ownMAC == 0);
-291     return ownMAC;
-292 }
+300                                                         {
+301     while(own_mac == 0);
+302     return own_mac;
+303 }
 .fi
 
 .SS "\fBvoid\fP AMD_AM79C973::handle_interrupt ()\fC [final]\fP, \fC [virtual]\fP"
@@ -400,40 +428,40 @@ This function handles the interrupt for the device\&.
 .PP
 Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .PP
-Definition at line \fB163\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
+Definition at line \fB168\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
 .nf
-163                                     {
-164 
-165     // Similar to PIC, data needs to be read when an interrupt is sent, or it hangs
-166     registerAddressPort\&.write(0);                           // Tell device to read from register 0
-167     uint32_t temp = registerDataPort\&.read();                     // Get current data
-168 
-169     // Note: Cant be switch case as multiple errors can occur at the same time
-170 
-171     // Errors
-172     if((temp & 0x8000) == 0x8000)
-173       Logger::WARNING() << "AMD am79c973 ERROR: ";
-174     if((temp & 0x2000) == 0x2000)
-175       Logger::WARNING() << "COLLISION ERROR\\n";
-176     if((temp & 0x1000) == 0x1000)
-177       Logger::WARNING() << "MISSED FRAME\\n";
-178     if((temp & 0x0800) == 0x0800)
-179       Logger::WARNING() << "MEMORY ERROR\\n";
-180 
-181 
-182     // Responses
-183     if((temp & 0x0400) == 0x0400) FetchDataReceived();
-184     if((temp & 0x0200) == 0x0200) FetchDataSent();
-185     if((temp & 0x0100) == 0x0100) initDone = true;//
+168                                     {
+169 
+170     // Similar to PIC, data needs to be read when an interrupt is sent, or it hangs
+171     register_address_port\&.write(0);                           // Tell device to read from register 0
+172     uint32_t temp = register_data_port\&.read();                     // Get current data
+173 
+174     // Note: Cant be switch case as multiple errors can occur at the same time
+175 
+176     // Errors
+177     if((temp & 0x8000) == 0x8000)
+178         Logger::WARNING() << "AMD am79c973 ERROR: ";
+179     if((temp & 0x2000) == 0x2000)
+180         Logger::WARNING() << "COLLISION ERROR\\n";
+181     if((temp & 0x1000) == 0x1000)
+182         Logger::WARNING() << "MISSED FRAME\\n";
+183     if((temp & 0x0800) == 0x0800)
+184         Logger::WARNING() << "MEMORY ERROR\\n";
+185 
 186 
-187     // Reply that it was received
-188     registerAddressPort\&.write(0);                           // Tell device to write to register 0
-189     registerDataPort\&.write(temp);                           // Tell device that the interrupt was received
-190 }
+187     // Responses
+188     if((temp & 0x0400) == 0x0400) fetch_data_received();
+189     if((temp & 0x0200) == 0x0200) fetch_data_sent();
+190     if((temp & 0x0100) == 0x0100) init_done = true;//
+191 
+192     // Reply that it was received
+193     register_address_port\&.write(0);                           // Tell device to write to register 0
+194     register_data_port\&.write(temp);                           // Tell device that the interrupt was received
+195 }
 .fi
 
 .PP
-References \fBMaxOS::hardwarecommunication::Port16Bit::read()\fP, \fBLogger::WARNING()\fP, and \fBMaxOS::hardwarecommunication::Port16Bit::write()\fP\&.
+References \fBMaxOS::hardwarecommunication::Port16Bit::read()\fP, \fBMaxOS::Logger::WARNING()\fP, and \fBMaxOS::hardwarecommunication::Port16Bit::write()\fP\&.
 .SS "\fBuint32_t\fP AMD_AM79C973::reset ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -448,15 +476,15 @@ The amount of ms to wait
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB149\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
+Definition at line \fB155\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
 .nf
-149                              {
-150 
-151   resetPort\&.read();
-152   resetPort\&.write(0);
-153   return 10;                      // 10 means wait for 10ms
-154 
-155 }
+155                              {
+156 
+157     reset_port\&.read();
+158     reset_port\&.write(0);
+159     return 10;                      // 10 means wait for 10ms
+160 
+161 }
 .fi
 
 .PP
@@ -475,11 +503,11 @@ The vendor name of the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB298\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
+Definition at line \fB309\fP of file \fBamd_am79c973\&.cpp\fP\&..PP
 .nf
-298                                  {
-299     return "AMD";
-300 }
+309                                  {
+310     return "AMD";
+311 }
 .fi
 
 

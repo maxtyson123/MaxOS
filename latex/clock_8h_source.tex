@@ -6,7 +6,7 @@
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00009}00009\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_DRIVERS\_CLOCK\_CLOCK\_H}}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00010}00010\ \textcolor{preprocessor}{\#define\ MAXOS\_DRIVERS\_CLOCK\_CLOCK\_H}}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00011}00011\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <cstdint>}}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{time_8h}{common/time.h}}>}}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{driver_8h}{drivers/driver.h}}>}}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{interrupts_8h}{hardwarecommunication/interrupts.h}}>}}
@@ -14,126 +14,123 @@
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00017}00017\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{vector_8h}{common/vector.h}}>}}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00018}00018\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{eventHandler_8h}{common/eventHandler.h}}>}}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00019}00019\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00020}00020\ \textcolor{keyword}{namespace\ }MaxOS\ \{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00021}00021\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00022}00022\ \ \ \ \ \textcolor{keyword}{namespace\ }drivers\ \{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00023}00023\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00024}00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{namespace\ }clock\ \{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00025}00025\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00032}\mbox{\hyperlink{clock_8h_abcf21589b606dd6e2b8a617cda1b0ac3}{00032}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{clock_8h_abcf21589b606dd6e2b8a617cda1b0ac3}{Channel}}\ \{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00033}00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ INTERRUPT,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRAM\_REFRESH,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPEAKER,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00037}00037\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00042}\mbox{\hyperlink{clock_8h_aec467a8b28cb0b1b17948364e6710844}{00042}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{clock_8h_aec467a8b28cb0b1b17948364e6710844}{AccessMode}}\ \{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LATCH\_COUNT,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LOW\_BYTE,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HIGH\_BYTE,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LOW\_HIGH\_BYTE,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00048}00048\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00053}\mbox{\hyperlink{clock_8h_a9e1786fd3419e0a129f79ffdf56154f7}{00053}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{clock_8h_a9e1786fd3419e0a129f79ffdf56154f7}{OperatingMode}}\ \{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ INTERRUPT\_ON\_TERMINAL\_COUNT,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ONE\_SHOT,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RATE\_GENERATOR,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQUARE\_WAVE,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SOFTWARE\_STROBE,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HARDWARE\_STROBE,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00061}00061\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00066}\mbox{\hyperlink{clock_8h_a138a8792ceb3e2bd560c677d54724b4c}{00066}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{clock_8h_a138a8792ceb3e2bd560c677d54724b4c}{BCDMode}}\ \{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BINARY,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BCD,}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00070}00070\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00075}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{00075}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{PITCommand}}\ \{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00076}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a295b9e6a60b893c40445a339c68920d2}{00076}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a295b9e6a60b893c40445a339c68920d2}{bcd\_mode}}:\ \ \ \ \ \ \ 1;\ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00077}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a810b3757ec0cdc45ebfa0a9887e5e762}{00077}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a810b3757ec0cdc45ebfa0a9887e5e762}{operating\_mode}}:\ 3;\ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00078}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a00caeba4fd2f096bc96694728782c83d}{00078}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a00caeba4fd2f096bc96694728782c83d}{access\_mode}}:\ \ \ \ 2;\ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00079}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a97099935a9336c87a62dfd29cf3e879b}{00079}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a97099935a9336c87a62dfd29cf3e879b}{channel}}:\ \ \ \ \ \ \ \ 2;\ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00080}00080\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{pit\_command\_t}};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00021}00021\ \textcolor{keyword}{namespace\ }MaxOS::drivers::clock\ \{}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00029}\mbox{\hyperlink{clock_8h_abcf21589b606dd6e2b8a617cda1b0ac3}{00029}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{clock_8h_abcf21589b606dd6e2b8a617cda1b0ac3}{Channel}}\ \{}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ INTERRUPT,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ DRAM\_REFRESH,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00032}00032\ \ \ \ \ \ \ \ \ SPEAKER,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00033}00033\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00039}\mbox{\hyperlink{clock_8h_aec467a8b28cb0b1b17948364e6710844}{00039}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{clock_8h_aec467a8b28cb0b1b17948364e6710844}{AccessMode}}\ \{}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00040}00040\ \ \ \ \ \ \ \ \ LATCH\_COUNT,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00041}00041\ \ \ \ \ \ \ \ \ LOW\_BYTE,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00042}00042\ \ \ \ \ \ \ \ \ HIGH\_BYTE,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00043}00043\ \ \ \ \ \ \ \ \ LOW\_HIGH\_BYTE,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00044}00044\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00050}\mbox{\hyperlink{clock_8h_a9e1786fd3419e0a129f79ffdf56154f7}{00050}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{clock_8h_a9e1786fd3419e0a129f79ffdf56154f7}{OperatingMode}}\ \{}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ INTERRUPT\_ON\_TERMINAL\_COUNT,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00052}00052\ \ \ \ \ \ \ \ \ ONE\_SHOT,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ RATE\_GENERATOR,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00054}00054\ \ \ \ \ \ \ \ \ SQUARE\_WAVE,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ SOFTWARE\_STROBE,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ HARDWARE\_STROBE,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00057}00057\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00063}\mbox{\hyperlink{clock_8h_a138a8792ceb3e2bd560c677d54724b4c}{00063}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{clock_8h_a138a8792ceb3e2bd560c677d54724b4c}{BCDMode}}\ \{}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ BINARY,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ BCD,}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00066}00066\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00075}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{00075}}\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand}{PITCommand}}\ \{}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00077}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a295b9e6a60b893c40445a339c68920d2}{00077}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a295b9e6a60b893c40445a339c68920d2}{bcd\_mode}}\ :\ 1;\ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00078}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a810b3757ec0cdc45ebfa0a9887e5e762}{00078}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a810b3757ec0cdc45ebfa0a9887e5e762}{operating\_mode}}\ :\ 3;\ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00079}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a00caeba4fd2f096bc96694728782c83d}{00079}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a00caeba4fd2f096bc96694728782c83d}{access\_mode}}\ :\ 2;\ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00080}\mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a97099935a9336c87a62dfd29cf3e879b}{00080}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1drivers_1_1clock_1_1PITCommand_a97099935a9336c87a62dfd29cf3e879b}{channel}}\ :\ 2;\ \ \ \ \ \ }
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00081}00081\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00082}00082\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00083}00083\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Forward\ declaration}}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00085}00085\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00087}\mbox{\hyperlink{clock_8h_a25cda667ba25c7e95b6d8f2a96efb9a6}{00087}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ uint16\_t\ \mbox{\hyperlink{clock_8h_a25cda667ba25c7e95b6d8f2a96efb9a6}{TICK\_CALIBRATE\_LENGTH}}\ =\ 10;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00088}00088\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00093}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{00093}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{PIT}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{hardwarecommunication::InterruptHandler}}\ \{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00095}00095\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ m\_ticks\ \{\ 0\ \};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00098}00098\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ports}}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_data\_port;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_command\_port;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00102}00102\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ APIC}}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication::LocalAPIC}}*\ m\_local\_apic;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{hardwarecommunication::IOAPIC}}*\ m\_io\_apic;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00106}00106\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Funcs}}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ handle\_interrupt()\ \textcolor{keyword}{final};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00109}00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ticks\_per\_ms();}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00110}00110\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{PIT}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication::AdvancedProgrammableInterruptController}}*\ apic);}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00113}00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{\string~PIT}}();}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00114}00114\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00082}\mbox{\hyperlink{clock_8h_aae05a963b516d75531106e7ac70d7b44}{00082}}\ \ \ \ \ \}\ pit\_command\_t;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00085}00085\ \ \ \ \ \textcolor{comment}{//\ Forward\ declaration}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00086}00086\ \ \ \ \ \textcolor{keyword}{class\ }Clock;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00089}\mbox{\hyperlink{clock_8h_a25cda667ba25c7e95b6d8f2a96efb9a6}{00089}}\ \ \ \ \ \textcolor{keyword}{constexpr}\ uint16\_t\ \mbox{\hyperlink{clock_8h_a25cda667ba25c7e95b6d8f2a96efb9a6}{TICK\_CALIBRATE\_LENGTH}}\ =\ 10;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00095}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{00095}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{PIT}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{hardwarecommunication::InterruptHandler}}\ \{}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00098}00098\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ m\_ticks\ \{\ 0\ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ports}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_data\_port;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_command\_port;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ APIC}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication::LocalAPIC}}*\ m\_local\_apic;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{hardwarecommunication::IOAPIC}}*\ m\_io\_apic;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00109}00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Funcs}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ handle\_interrupt()\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ ticks\_per\_ms();}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00113}00113\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{PIT}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication::AdvancedProgrammableInterruptController}}*\ apic);}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1PIT}{\string~PIT}}();}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00116}00116\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00121}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{00121}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver}{Driver}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{hardwarecommunication::InterruptHandler}}\{}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00122}00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00123}00123\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00124}00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ m\_ticks\ \{\ 0\ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00117}00117\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00123}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{00123}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver}{Driver}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{hardwarecommunication::InterruptHandler}}\ \{}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00124}00124\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00125}00125\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00126}00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_binary\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00127}00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_24\_hour\_clock\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00128}00128\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00129}00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ports}}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00130}00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_data\_port\ \{\ 0x71\ \};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00131}00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_command\_port\ \{\ 0x70\ \};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00132}00132\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00133}00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ APIC}}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00134}00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication::AdvancedProgrammableInterruptController}}*\ m\_apic;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00135}00135\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00136}00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Time\ between\ events}}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00137}00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ m\_ticks\_between\_events\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00138}00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ m\_ticks\_until\_next\_event\ =\ 1;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00139}00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ m\_pit\_ticks\_per\_ms\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00140}00140\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Other\ functions}}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ handle\_interrupt()\ \textcolor{keyword}{final};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ read\_hardware\_clock(uint8\_t\ address);}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [[nodiscard]]\ uint8\_t\ binary\_representation(uint8\_t\ number)\ \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00145}00145\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00146}00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}*\ s\_active\_clock\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00126}00126\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ m\_ticks\ \{\ 0\ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00128}00128\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_binary\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00129}00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_24\_hour\_clock\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00131}00131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ports}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00132}00132\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_data\_port\ \{\ 0x71\ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00133}00133\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_command\_port\ \{\ 0x70\ \};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00135}00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ APIC}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00136}00136\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication::AdvancedProgrammableInterruptController}}*\ m\_apic;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00138}00138\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Time\ between\ events}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00139}00139\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ m\_ticks\_between\_events\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ m\_ticks\_until\_next\_event\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ m\_pit\_ticks\_per\_ms\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00142}00142\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Other\ functions}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ handle\_interrupt()\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00145}00145\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ read\_hardware\_clock(uint8\_t\ address);}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00146}00146\ \ \ \ \ \ \ \ \ \ \ \ \ [[nodiscard]]\ uint8\_t\ binary\_representation(uint8\_t\ number)\ \textcolor{keyword}{const};}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00147}00147\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00148}00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00149}00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication::AdvancedProgrammableInterruptController}}*\ apic,\ uint16\_t\ time\_between\_events\ =\ 10);}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00150}00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{\string~Clock}}();}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00151}00151\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00153}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aecea13aad11f6fd54bc99bea83a076ee}{00153}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aecea13aad11f6fd54bc99bea83a076ee}{clock\_accuracy}}\ =\ 1;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00154}00154\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a7d105f260a9197c78e77e0ba437f0168}{activate}}()\ \textcolor{keyword}{override};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00156}00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aed23e6f62c03a9f35056a62e97daad69}{delay}}(uint32\_t\ milliseconds)\ \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00157}00157\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_afab69ba284bca41ae58a19b1821ad6c1}{calibrate}}(uint64\_t\ ms\_per\_tick\ =\ 1);}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ab780e51fe8d4680eaa20d7ce53936e90}{setup\_apic\_clock}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication::LocalAPIC}}*\ local\_apic)\ \textcolor{keyword}{const};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00160}00160\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6d0a67fe521cefba6d58d31eaeeaae1}{vendor\_name}}()\ final;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa090fa2a1970772e55c0064ed975a26a}{device\_name}}()\ final;}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00163}00163\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ static\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}*\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{active\_clock}}();}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00165}00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ common::Time\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a138de5b2eb0367cd755e9e32cac3628f}{get\_time}}();}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00167}00167\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00168}00168\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00148}00148\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}*\ s\_active\_clock\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00150}00150\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00151}00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication::AdvancedProgrammableInterruptController}}*\ apic,\ uint16\_t\ time\_between\_events\ =\ 10);}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00152}00152\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{\string~Clock}}();}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00155}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aecea13aad11f6fd54bc99bea83a076ee}{00155}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aecea13aad11f6fd54bc99bea83a076ee}{clock\_accuracy}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a7d105f260a9197c78e77e0ba437f0168}{activate}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aed23e6f62c03a9f35056a62e97daad69}{delay}}(uint32\_t\ milliseconds)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00159}00159\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_afab69ba284bca41ae58a19b1821ad6c1}{calibrate}}(uint64\_t\ ms\_per\_tick\ =\ 1);}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_ab780e51fe8d4680eaa20d7ce53936e90}{setup\_apic\_clock}}(\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication::LocalAPIC}}*\ local\_apic)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6d0a67fe521cefba6d58d31eaeeaae1}{vendor\_name}}()\ final;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_aa090fa2a1970772e55c0064ed975a26a}{device\_name}}()\ final;}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ static\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}*\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{active\_clock}}();}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ common::time\_t\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock_a0fa3464d6ab6a9a79b3c1149301b3cba}{get\_time}}();}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00168}00168\ \ \ \ \ \};}
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00169}00169\ }
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00170}00170\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{clock_8h_source_l00171}00171\ \}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00170}00170\ \}}
+\DoxyCodeLine{\Hypertarget{clock_8h_source_l00171}00171\ }
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00172}00172\ }
 \DoxyCodeLine{\Hypertarget{clock_8h_source_l00173}00173\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAXOS\_DRIVERS\_CLOCK\_CLOCK\_H}}
 

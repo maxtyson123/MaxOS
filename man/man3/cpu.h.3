@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/cpu.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/cpu.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,9 +9,9 @@
 .PP
 \fC#include <cpuid\&.h>\fP
 .br
-\fC#include <stddef\&.h>\fP
+\fC#include <cstddef>\fP
 .br
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 \fC#include <system/gdt\&.h>\fP
 .br
@@ -26,13 +26,13 @@
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::system::__attribute__\fP"
+.RI "struct \fBMaxOS::system::CPUStatus\fP"
 .br
-.RI "The state of the \fBCPU\fP when an interrupt occurs (must align with the interrupt handler assembly code) "
+.RI "Structure representing the \fBCPU\fP state during an interrupt\&. "
 .ti -1c
 .RI "struct \fBMaxOS::system::TaskStateSegment\fP"
 .br
-.RI "Task State Segment (TSS) structure for x86_64\&. "
+.RI "Structure representing the Task State Segment (TSS) "
 .ti -1c
 .RI "struct \fBMaxOS::system::StackFrame\fP"
 .br
@@ -50,6 +50,26 @@
 .br
 .RI "Manages the \fBCPU\fP and its cores\&. "
 .in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::system::CPUStatus\fP \fBMaxOS::system::cpu_status_t\fP"
+.br
+.RI "Alias for \fBCPUStatus\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::system::TaskStateSegment\fP \fBMaxOS::system::tss_t\fP"
+.br
+.RI "Alias for \fBTaskStateSegment\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::system::StackFrame\fP \fBMaxOS::system::stack_frame_t\fP"
+.br
+.RI "Alias for \fBStackFrame\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::system::CoreBootInfo\fP \fBMaxOS::system::core_boot_info_t\fP"
+.br
+.RI "Alias for \fBCoreBootInfo\fP struct\&. "
+.in -1c
 .SS "Enumerations"
 
 .in +1c
@@ -62,112 +82,9 @@
 .br
 .RI "CPU features indicated by the EDX register after calling CPUID with EAX = 1\&. "
 .in -1c
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "struct \fBMaxOS::system::TaskStateSegment\fP \fBMaxOS::system::__attribute__\fP ((__packed__)) tss_t"
-.br
-.RI "Task State Segment (TSS) structure for x86_64\&. "
-.in -1c
 .SS "Variables"
 
 .in +1c
-.ti -1c
-.RI "uint32_t \fBreserved0\fP"
-.br
-.RI "Unused, must be zero\&. "
-.ti -1c
-.RI "uint64_t \fBrsp0\fP"
-.br
-.RI "Stack pointer for ring 0\&. "
-.ti -1c
-.RI "uint64_t \fBrsp1\fP"
-.br
-.RI "Stack pointer for ring 1\&. "
-.ti -1c
-.RI "uint64_t \fBrsp2\fP"
-.br
-.RI "Stack pointer for ring 2\&. "
-.ti -1c
-.RI "uint64_t \fBreserved1\fP"
-.br
-.RI "Unused, must be zero\&. "
-.ti -1c
-.RI "uint64_t \fBreserved2\fP"
-.br
-.RI "Unused, must be zero\&. "
-.ti -1c
-.RI "uint64_t \fBist1\fP"
-.br
-.RI "Interrupt Stack Table entry 1\&. "
-.ti -1c
-.RI "uint64_t \fBist2\fP"
-.br
-.RI "Interrupt Stack Table entry 2\&. "
-.ti -1c
-.RI "uint64_t \fBist3\fP"
-.br
-.RI "Interrupt Stack Table entry 3\&. "
-.ti -1c
-.RI "uint64_t \fBist4\fP"
-.br
-.RI "Interrupt Stack Table entry 4\&. "
-.ti -1c
-.RI "uint64_t \fBist5\fP"
-.br
-.RI "Interrupt Stack Table entry 5\&. "
-.ti -1c
-.RI "uint64_t \fBist6\fP"
-.br
-.RI "Interrupt Stack Table entry 6\&. "
-.ti -1c
-.RI "uint64_t \fBist7\fP"
-.br
-.RI "Interrupt Stack Table entry 7\&. "
-.ti -1c
-.RI "uint64_t \fBreserved3\fP"
-.br
-.RI "Unused, must be zero\&. "
-.ti -1c
-.RI "uint16_t \fBreserved4\fP"
-.br
-.RI "Unused, must be zero\&. "
-.ti -1c
-.RI "uint16_t \fBio_bitmap_offset\fP"
-.br
-.RI "Offset to the I/O bitmap\&. "
-.ti -1c
-.RI "enum \fBMaxOS::system::CPU_FEATURE_ECX\fP \fBMaxOS::system::__attribute__\fP"
-.br
-.ti -1c
-.RI "StackFrame * \fBnext\fP"
-.br
-.RI "Pointer to the next stack frame (up the call stack) "
-.ti -1c
-.RI "uintptr_t \fBrip\fP"
-.br
-.RI "The instruction pointer at this frame\&. "
-.ti -1c
-.RI "uint64_t \fBstack\fP"
-.br
-.RI "The stack pointer for the core\&. "
-.ti -1c
-.RI "uint64_t \fBp4_table\fP"
-.br
-.RI "The physical address of the P4 page table\&. "
-.ti -1c
-.RI "uint8_t \fBid\fP"
-.br
-.RI "The ID of the core\&. "
-.ti -1c
-.RI "bool \fBactivated\fP"
-.br
-.RI "Whether the core has been activated\&. "
-.ti -1c
-.RI "void * \fBgdt_64_base\fP"
-.br
-.RI "The base of the 64-bit GDT\&. "
 .ti -1c
 .RI "constexpr size_t \fBMaxOS::system::BOOT_STACK_SIZE\fP = 16384"
 .br
@@ -206,41 +123,41 @@ https://wiki.osdev.org/CPUID as the original author
 .PP
 
 .PP
-Definition at line \fB85\fP of file \fBcpu\&.h\fP\&..PP
+Definition at line \fB100\fP of file \fBcpu\&.h\fP\&..PP
 .nf
-85                                    : int32_t {
-86             SSE3        = 1 << 0,
-87             PCLMUL      = 1 << 1,
-88             DTES64      = 1 << 2,
-89             MONITOR     = 1 << 3,
-90             DS_CPL      = 1 << 4,
-91             VMX         = 1 << 5,
-92             SMX         = 1 << 6,
-93             EST         = 1 << 7,
-94             TM2         = 1 << 8,
-95             SSSE3       = 1 << 9,
-96             CID         = 1 << 10,
-97             SDBG        = 1 << 11,
-98             FMA         = 1 << 12,
-99             CX16        = 1 << 13,
-100             XTPR        = 1 << 14,
-101             PDCM        = 1 << 15,
-102             PCID        = 1 << 17,
-103             DCA         = 1 << 18,
-104             SSE4_1      = 1 << 19,
-105             SSE4_2      = 1 << 20,
-106             X2APIC      = 1 << 21,
-107             MOVBE       = 1 << 22,
-108             POPCNT      = 1 << 23,
-109             TSC         = 1 << 24,
-110             AES         = 1 << 25,
-111             XSAVE       = 1 << 26,
-112             OSXSAVE     = 1 << 27,
-113             AVX         = 1 << 28,
-114             F16C        = 1 << 29,
-115             RDRAND      = 1 << 30,
-116             HYPERVISOR  = 1 << 31,
-117         };
+100                                : int32_t {
+101         SSE3 = 1 << 0,
+102         PCLMUL = 1 << 1,
+103         DTES64 = 1 << 2,
+104         MONITOR = 1 << 3,
+105         DS_CPL = 1 << 4,
+106         VMX = 1 << 5,
+107         SMX = 1 << 6,
+108         EST = 1 << 7,
+109         TM2 = 1 << 8,
+110         SSSE3 = 1 << 9,
+111         CID = 1 << 10,
+112         SDBG = 1 << 11,
+113         FMA = 1 << 12,
+114         CX16 = 1 << 13,
+115         XTPR = 1 << 14,
+116         PDCM = 1 << 15,
+117         PCID = 1 << 17,
+118         DCA = 1 << 18,
+119         SSE4_1 = 1 << 19,
+120         SSE4_2 = 1 << 20,
+121         X2APIC = 1 << 21,
+122         MOVBE = 1 << 22,
+123         POPCNT = 1 << 23,
+124         TSC = 1 << 24,
+125         AES = 1 << 25,
+126         XSAVE = 1 << 26,
+127         OSXSAVE = 1 << 27,
+128         AVX = 1 << 28,
+129         F16C = 1 << 29,
+130         RDRAND = 1 << 30,
+131         HYPERVISOR = 1 << 31,
+132     };
 .fi
 
 .SS "enum class \fBMaxOS::system::CPU_FEATURE_EDX\fP : int32_t\fC [strong]\fP"
@@ -255,198 +172,52 @@ https://wiki.osdev.org/CPUID as the original author
 .PP
 
 .PP
-Definition at line \fB125\fP of file \fBcpu\&.h\fP\&..PP
+Definition at line \fB140\fP of file \fBcpu\&.h\fP\&..PP
 .nf
-125                                    : int32_t {
-126             FPU     = 1 << 0,
-127             VME     = 1 << 1,
-128             DE      = 1 << 2,
-129             PSE     = 1 << 3,
-130             TSC     = 1 << 4,
-131             MSR     = 1 << 5,
-132             PAE     = 1 << 6,
-133             MCE     = 1 << 7,
-134             CX8     = 1 << 8,
-135             APIC    = 1 << 9,
-136             SEP     = 1 << 11,
-137             MTRR    = 1 << 12,
-138             PGE     = 1 << 13,
-139             MCA     = 1 << 14,
-140             CMOV    = 1 << 15,
-141             PAT     = 1 << 16,
-142             PSE36   = 1 << 17,
-143             PSN     = 1 << 18,
-144             CLFLUSH = 1 << 19,
-145             DS      = 1 << 21,
-146             ACPI    = 1 << 22,
-147             MMX     = 1 << 23,
-148             FXSR    = 1 << 24,
-149             SSE     = 1 << 25,
-150             SSE2    = 1 << 26,
-151             SS      = 1 << 27,
-152             HTT     = 1 << 28,
-153             TM      = 1 << 29,
-154             IA64    = 1 << 30,
-155             PBE     = 1 << 31
-156         };
+140                                : int32_t {
+141         FPU = 1 << 0,
+142         VME = 1 << 1,
+143         DE = 1 << 2,
+144         PSE = 1 << 3,
+145         TSC = 1 << 4,
+146         MSR = 1 << 5,
+147         PAE = 1 << 6,
+148         MCE = 1 << 7,
+149         CX8 = 1 << 8,
+150         APIC = 1 << 9,
+151         SEP = 1 << 11,
+152         MTRR = 1 << 12,
+153         PGE = 1 << 13,
+154         MCA = 1 << 14,
+155         CMOV = 1 << 15,
+156         PAT = 1 << 16,
+157         PSE36 = 1 << 17,
+158         PSN = 1 << 18,
+159         CLFLUSH = 1 << 19,
+160         DS = 1 << 21,
+161         ACPI = 1 << 22,
+162         MMX = 1 << 23,
+163         FXSR = 1 << 24,
+164         SSE = 1 << 25,
+165         SSE2 = 1 << 26,
+166         SS = 1 << 27,
+167         HTT = 1 << 28,
+168         TM = 1 << 29,
+169         IA64 = 1 << 30,
+170         PBE = 1 << 31
+171     };
 .fi
 
 .SH "Variable Documentation"
 .PP 
-.SS "bool activated"
-
-.PP
-Whether the core has been activated\&. 
-.PP
-Definition at line \fB3\fP of file \fBcpu\&.h\fP\&.
-.PP
-Referenced by \fBcore_main()\fP\&.
 .SS "constexpr size_t MaxOS::system::BOOT_STACK_SIZE = 16384\fC [constexpr]\fP"
 
 .PP
 The size of the stack allocated for booting a core (should align with the startup assembly code for the kernel) 
 .PP
-Definition at line \fB180\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB205\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::system::Core::init_tss()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
-.SS "void* gdt_64_base"
-
-.PP
-The base of the 64-bit GDT\&. 
-.PP
-Definition at line \fB4\fP of file \fBcpu\&.h\fP\&.
-.SS "uint8_t id"
-
-.PP
-The ID of the core\&. 
-.PP
-Definition at line \fB2\fP of file \fBcpu\&.h\fP\&.
-.SS "uint16_t io_bitmap_offset"
-
-.PP
-Offset to the I/O bitmap\&. 
-.PP
-Definition at line \fB15\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t ist1"
-
-.PP
-Interrupt Stack Table entry 1\&. 
-.PP
-Definition at line \fB6\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t ist2"
-
-.PP
-Interrupt Stack Table entry 2\&. 
-.PP
-Definition at line \fB7\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t ist3"
-
-.PP
-Interrupt Stack Table entry 3\&. 
-.PP
-Definition at line \fB8\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t ist4"
-
-.PP
-Interrupt Stack Table entry 4\&. 
-.PP
-Definition at line \fB9\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t ist5"
-
-.PP
-Interrupt Stack Table entry 5\&. 
-.PP
-Definition at line \fB10\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t ist6"
-
-.PP
-Interrupt Stack Table entry 6\&. 
-.PP
-Definition at line \fB11\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t ist7"
-
-.PP
-Interrupt Stack Table entry 7\&. 
-.PP
-Definition at line \fB12\fP of file \fBcpu\&.h\fP\&.
-.SS "StackFrame* next"
-
-.PP
-Pointer to the next stack frame (up the call stack) 
-.PP
-Definition at line \fB0\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t p4_table"
-
-.PP
-The physical address of the P4 page table\&. 
-.PP
-Definition at line \fB1\fP of file \fBcpu\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::system::CPU::init_cores()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::unmap_lower_kernel()\fP\&.
-.SS "uint32_t reserved0"
-
-.PP
-Unused, must be zero\&. 
-.PP
-Definition at line \fB0\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t reserved1"
-
-.PP
-Unused, must be zero\&. 
-.PP
-Definition at line \fB4\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t reserved2"
-
-.PP
-Unused, must be zero\&. 
-.PP
-Definition at line \fB5\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t reserved3"
-
-.PP
-Unused, must be zero\&. 
-.PP
-Definition at line \fB13\fP of file \fBcpu\&.h\fP\&.
-.SS "uint16_t reserved4"
-
-.PP
-Unused, must be zero\&. 
-.PP
-Definition at line \fB14\fP of file \fBcpu\&.h\fP\&.
-.SS "uintptr_t rip"
-
-.PP
-The instruction pointer at this frame\&. 
-.PP
-Definition at line \fB1\fP of file \fBcpu\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::common::resolve_symbol()\fP\&.
-.SS "uint64_t rsp0"
-
-.PP
-Stack pointer for ring 0\&. 
-.PP
-Definition at line \fB1\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t rsp1"
-
-.PP
-Stack pointer for ring 1\&. 
-.PP
-Definition at line \fB2\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t rsp2"
-
-.PP
-Stack pointer for ring 2\&. 
-.PP
-Definition at line \fB3\fP of file \fBcpu\&.h\fP\&.
-.SS "uint64_t stack"
-
-.PP
-The stack pointer for the core\&. 
-.PP
-Definition at line \fB0\fP of file \fBcpu\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::VirtualFileSystem::delete_directory()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

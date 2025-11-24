@@ -1,4 +1,4 @@
-.TH "MaxOS::system::GlobalDescriptorTable" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system::GlobalDescriptorTable" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,6 +13,10 @@ MaxOS::system::GlobalDescriptorTable \- Sets up the GDT in the \fBCPU\fP\&.
 
 .in +1c
 .ti -1c
+.RI "\fBGlobalDescriptorTable\fP ()"
+.br
+.RI "Construct a new Global Descriptor Table object and set up the GDT entries and load it into the \fBCPU\fP, reloading segment registers\&. "
+.ti -1c
 .RI "void \fBload\fP ()"
 .br
 .RI "Loads the GDT into the \fBCPU\fP\&. "
@@ -25,7 +29,7 @@ MaxOS::system::GlobalDescriptorTable \- Sets up the GDT in the \fBCPU\fP\&.
 .br
 .RI "The GDT entries\&. "
 .ti -1c
-.RI "gdtr_t \fBgdtr\fP = {}"
+.RI "\fBgdtr_t\fP \fBgdtr\fP = { }"
 .br
 .RI "The GDTR structure\&. "
 .in -1c
@@ -33,70 +37,74 @@ MaxOS::system::GlobalDescriptorTable \- Sets up the GDT in the \fBCPU\fP\&.
 .PP 
 Sets up the GDT in the \fBCPU\fP\&. 
 .PP
-Definition at line \fB47\fP of file \fBgdt\&.h\fP\&.
+Definition at line \fB53\fP of file \fBgdt\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "GlobalDescriptorTable::GlobalDescriptorTable ()"
 
 .PP
-Definition at line \fB15\fP of file \fBgdt\&.cpp\fP\&..PP
+Construct a new Global Descriptor Table object and set up the GDT entries and load it into the \fBCPU\fP, reloading segment registers\&. 
+.PP
+Definition at line \fB18\fP of file \fBgdt\&.cpp\fP\&..PP
 .nf
-16 {
-17 
-18     // Null descriptor
-19     table[0] = 0;
+19 {
 20 
-21     // Kernel Code Segment descriptor
-22     uint64_t kernel_cs = 0;
-23     kernel_cs |= (uint64_t) DescriptorFlags::Write;
-24     kernel_cs |= (uint64_t) DescriptorFlags::Execute;
-25     kernel_cs |= (uint64_t) DescriptorFlags::CodeOrDataSegment;
-26     kernel_cs |= (uint64_t) DescriptorFlags::Present;
-27     kernel_cs |= (uint64_t) DescriptorFlags::LongMode;
-28     table[1] = kernel_cs;
-29 
-30     // Kernel Data Segment descriptor
-31     uint64_t kernel_ds = 0;
-32     kernel_ds |= (uint64_t) DescriptorFlags::Write;
-33     kernel_ds |= (uint64_t) DescriptorFlags::CodeOrDataSegment;
-34     kernel_ds |= (uint64_t) DescriptorFlags::Present;
-35     table[2] = kernel_ds;
-36 
-37     // User code segment descriptor (Change the privilege level to 3)
-38     uint64_t user_cs = 0;
-39     user_cs |= (uint64_t) DescriptorFlags::Write;
-40     user_cs |= (uint64_t) DescriptorFlags::Execute;
-41     user_cs |= (uint64_t) DescriptorFlags::CodeOrDataSegment;
-42     user_cs |= (uint64_t) DescriptorFlags::Present;
-43     user_cs |= (uint64_t) DescriptorFlags::LongMode;
-44     user_cs |= (3ULL << 45);
-45     table[3] = user_cs;
-46 
-47     // User data segment descriptor (Change the privilege level to 3)
-48     uint64_t user_ds = 0;
-49     user_ds |= (uint64_t) DescriptorFlags::Write;
-50     user_ds |= (uint64_t) DescriptorFlags::CodeOrDataSegment;
-51     user_ds |= (uint64_t) DescriptorFlags::Present;
-52     user_ds |= (3ULL << 45);
-53     table[4] = user_ds;
-54 
-55     // Reserve space for the TSS
-56     table[5] = 0;
-57     table[6] = 0;
-58 
-59     // Load the GDT
-60     load();
+21     // Null descriptor
+22     table[0] = 0;
+23 
+24     // Kernel Code Segment descriptor
+25     uint64_t kernel_cs = 0;
+26     kernel_cs |= (uint64_t) DescriptorFlags::Write;
+27     kernel_cs |= (uint64_t) DescriptorFlags::Execute;
+28     kernel_cs |= (uint64_t) DescriptorFlags::CodeOrDataSegment;
+29     kernel_cs |= (uint64_t) DescriptorFlags::Present;
+30     kernel_cs |= (uint64_t) DescriptorFlags::LongMode;
+31     table[1] = kernel_cs;
+32 
+33     // Kernel Data Segment descriptor
+34     uint64_t kernel_ds = 0;
+35     kernel_ds |= (uint64_t) DescriptorFlags::Write;
+36     kernel_ds |= (uint64_t) DescriptorFlags::CodeOrDataSegment;
+37     kernel_ds |= (uint64_t) DescriptorFlags::Present;
+38     table[2] = kernel_ds;
+39 
+40     // User code segment descriptor (Change the privilege level to 3)
+41     uint64_t user_cs = 0;
+42     user_cs |= (uint64_t) DescriptorFlags::Write;
+43     user_cs |= (uint64_t) DescriptorFlags::Execute;
+44     user_cs |= (uint64_t) DescriptorFlags::CodeOrDataSegment;
+45     user_cs |= (uint64_t) DescriptorFlags::Present;
+46     user_cs |= (uint64_t) DescriptorFlags::LongMode;
+47     user_cs |= (3ULL << 45);
+48     table[3] = user_cs;
+49 
+50     // User data segment descriptor (Change the privilege level to 3)
+51     uint64_t user_ds = 0;
+52     user_ds |= (uint64_t) DescriptorFlags::Write;
+53     user_ds |= (uint64_t) DescriptorFlags::CodeOrDataSegment;
+54     user_ds |= (uint64_t) DescriptorFlags::Present;
+55     user_ds |= (3ULL << 45);
+56     table[4] = user_ds;
+57 
+58     // Reserve space for the TSS
+59     table[5] = 0;
+60     table[6] = 0;
 61 
-62     // Reload the segment registers
-63     asm volatile("mov %0, %%ds" : : "r"(0x10));
-64     asm volatile("mov %0, %%es" : : "r"(0x10));
-65     asm volatile("mov %0, %%fs" : : "r"(0x10));
-66     asm volatile("mov %0, %%gs" : : "r"(0x10));
-67     asm volatile("mov %0, %%ss" : : "r"(0x10));
-68     Logger::DEBUG() << "Reloaded segment registers\\n";
-69 }
+62     // Load the GDT
+63     load();
+64 
+65     // Reload the segment registers
+66     asm volatile("mov %0, %%ds" : : "r"(0x10));
+67     asm volatile("mov %0, %%es" : : "r"(0x10));
+68     asm volatile("mov %0, %%fs" : : "r"(0x10));
+69     asm volatile("mov %0, %%gs" : : "r"(0x10));
+70     asm volatile("mov %0, %%ss" : : "r"(0x10));
+71     Logger::DEBUG() << "Reloaded segment registers\\n";
+72 }
 .fi
 
+.PP
+References \fBMaxOS::Logger::DEBUG()\fP, \fBload()\fP, and \fBtable\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "void GlobalDescriptorTable::load ()"
@@ -104,31 +112,33 @@ Definition at line \fB15\fP of file \fBgdt\&.cpp\fP\&..PP
 .PP
 Loads the GDT into the \fBCPU\fP\&. 
 .PP
-Definition at line \fB74\fP of file \fBgdt\&.cpp\fP\&..PP
+Definition at line \fB77\fP of file \fBgdt\&.cpp\fP\&..PP
 .nf
-74                                  {
-75     gdtr = {
-76             \&.size    = sizeof(table) \- 1,
-77             \&.address = (uint64_t) table,
-78     };
-79     asm volatile("lgdt %0" : : "m"(gdtr));
-80     Logger::DEBUG() << "Loaded GDT of limit 0x" << (uint64_t) gdtr\&.size << " and address 0x" << (uint64_t) gdtr\&.address << "\\n";
-81 
-82 }
+77                                  {
+78     gdtr = {
+79             \&.size    = sizeof(table) \- 1,
+80             \&.address = (uint64_t) table,
+81     };
+82     asm volatile("lgdt %0" : : "m"(gdtr));
+83     Logger::DEBUG() << "Loaded GDT of limit 0x" << (uint64_t) gdtr\&.size << " and address 0x" << (uint64_t) gdtr\&.address << "\\n";
+84 
+85 }
 .fi
 
 .PP
-References \fBLogger::DEBUG()\fP, \fBgdtr\fP, and \fBtable\fP\&.
+References \fBMaxOS::Logger::DEBUG()\fP, \fBgdtr\fP, and \fBtable\fP\&.
+.PP
+Referenced by \fBGlobalDescriptorTable()\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "gdtr_t MaxOS::system::GlobalDescriptorTable::gdtr = {}"
+.SS "\fBgdtr_t\fP MaxOS::system::GlobalDescriptorTable::gdtr = { }"
 
 .PP
 The GDTR structure\&. 
 .PP
-Definition at line \fB55\fP of file \fBgdt\&.h\fP\&..PP
+Definition at line \fB61\fP of file \fBgdt\&.h\fP\&..PP
 .nf
-55 {};     
+61 { };     
 .fi
 
 .PP
@@ -138,9 +148,9 @@ Referenced by \fBload()\fP\&.
 .PP
 The GDT entries\&. 
 .PP
-Definition at line \fB53\fP of file \fBgdt\&.h\fP\&.
+Definition at line \fB59\fP of file \fBgdt\&.h\fP\&.
 .PP
-Referenced by \fBload()\fP\&.
+Referenced by \fBGlobalDescriptorTable()\fP, and \fBload()\fP\&.
 
 .SH "Author"
 .PP 

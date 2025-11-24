@@ -1,4 +1,4 @@
-.TH "MaxOS::gui::Font" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::gui::Font" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,15 +21,15 @@ MaxOS::gui::Font \- A class that can be used to draw text\&.
 .br
 .RI "write the entire text to the screen "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBdraw_text\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBcommon::Colour\fP foreground_colour, \fBcommon::Colour\fP background_colour, \fBcommon::GraphicsContext\fP *\fBcontext\fP, \fBstring\fP text, \fBcommon::Rectangle\fP< \fBint32_t\fP > \fBlimitArea\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBdraw_text\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBcommon::Colour\fP foreground_colour, \fBcommon::Colour\fP background_colour, \fBcommon::GraphicsContext\fP *\fBcontext\fP, \fBstring\fP text, \fBcommon::Rectangle\fP< \fBint32_t\fP > \fBlimit_area\fP)"
 .br
 .RI "write the entire text to the screen "
 .ti -1c
-.RI "\fBvirtual\fP \fBint32_t\fP \fBget_text_height\fP (\fBstring\fP)"
+.RI "\fBvirtual\fP \fBsize_t\fP \fBget_text_height\fP (\fBstring\fP)"
 .br
 .RI "Get the height of the text\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBint32_t\fP \fBget_text_width\fP (\fBstring\fP)"
+.RI "\fBvirtual\fP \fBsize_t\fP \fBget_text_width\fP (\fBstring\fP)"
 .br
 .RI "Get the width of the text\&. "
 .in -1c
@@ -61,7 +61,7 @@ MaxOS::gui::Font \- A class that can be used to draw text\&.
 .br
 .RI "Is the font 8 pixels by 8 pixels per character\&. "
 .ti -1c
-.RI "uint8_t \fBm_font8x8\fP [2048] = {0}"
+.RI "uint8_t \fBm_font8x8\fP [2048] = { 0 }"
 .br
 .RI "The 8x8 font data\&. "
 .in -1c
@@ -69,10 +69,10 @@ MaxOS::gui::Font \- A class that can be used to draw text\&.
 .PP 
 A class that can be used to draw text\&. 
 .PP
-Definition at line \fB29\fP of file \fBfont\&.h\fP\&.
+Definition at line \fB27\fP of file \fBfont\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Font::Font (\fBconst\fP \fBuint8_t\fP * font_data)"
+.SS "Font::Font (\fBconst\fP \fBuint8_t\fP * font_data)\fC [explicit]\fP"
 
 .PP
 Construct a new \fBFont\fP object\&. 
@@ -89,7 +89,7 @@ Definition at line \fB22\fP of file \fBfont\&.cpp\fP\&..PP
 22                                    {
 23 
 24     // Store the font data
-25     for (int i = 0; i < 2048; ++i) {
+25     for(int i = 0; i < 2048; ++i) {
 26         m_font8x8[i] = font_data[i];
 27     }
 28 }
@@ -143,7 +143,7 @@ Definition at line \fB41\fP of file \fBfont\&.cpp\fP\&..PP
 References \fBdraw_text()\fP, \fBget_text_height()\fP, and \fBget_text_width()\fP\&.
 .PP
 Referenced by \fBMaxOS::gui::widgets::Button::draw()\fP, \fBMaxOS::gui::widgets::InputBox::draw()\fP, \fBMaxOS::gui::widgets::Text::draw()\fP, \fBdraw_text()\fP, and \fBMaxOS::drivers::console::VESABootConsole::put_character()\fP\&.
-.SS "\fBvoid\fP Font::draw_text (\fBint32_t\fP x, \fBint32_t\fP y, \fBcommon::Colour\fP foreground_colour, \fBcommon::Colour\fP background_colour, \fBcommon::GraphicsContext\fP * context, \fBstring\fP text, \fBcommon::Rectangle\fP< \fBint32_t\fP > limitArea)\fC [virtual]\fP"
+.SS "\fBvoid\fP Font::draw_text (\fBint32_t\fP x, \fBint32_t\fP y, \fBcommon::Colour\fP foreground_colour, \fBcommon::Colour\fP background_colour, \fBcommon::GraphicsContext\fP * context, \fBstring\fP text, \fBcommon::Rectangle\fP< \fBint32_t\fP > limit_area)\fC [virtual]\fP"
 
 .PP
 write the entire text to the screen 
@@ -162,69 +162,69 @@ write the entire text to the screen
 .br
 \fItext\fP The text to draw 
 .br
-\fIlimitArea\fP The area of the text to draw 
+\fIlimit_area\fP The area of the text to draw 
 .RE
 .PP
 
 .PP
 Definition at line \fB70\fP of file \fBfont\&.cpp\fP\&..PP
 .nf
-73                                                          {
+73                                                           {
 74 
 75     // Convert the colours
 76     uint32_t foreground = context\->colour_to_int(foreground_colour);
 77     uint32_t background = context\->colour_to_int(background_colour);
 78 
 79     // Ensure the area is within the actual area of the text
-80     if (limitArea\&.top < 0) {
-81         limitArea\&.height += limitArea\&.top;
-82         limitArea\&.top = 0;
+80     if(limit_area\&.top < 0) {
+81         limit_area\&.height += limit_area\&.top;
+82         limit_area\&.top = 0;
 83     }
 84 
-85     if (limitArea\&.left < 0) {
-86         limitArea\&.width += limitArea\&.left;
-87         limitArea\&.left = 0;
+85     if(limit_area\&.left < 0) {
+86         limit_area\&.width += limit_area\&.left;
+87         limit_area\&.left = 0;
 88     }
 89 
 90     // Clamp the height and width max
-91     if (limitArea\&.top + limitArea\&.height > (int) get_text_height(text))
-92         limitArea\&.height = get_text_height(text) \- limitArea\&.top;
+91     if(limit_area\&.top + limit_area\&.height > (int) get_text_height(text))
+92         limit_area\&.height = get_text_height(text) \- limit_area\&.top;
 93 
-94     if (limitArea\&.left + limitArea\&.width > (int) get_text_width(text))
-95         limitArea\&.width = get_text_width(text) \- limitArea\&.left;
+94     if(limit_area\&.left + limit_area\&.width > (int) get_text_width(text))
+95         limit_area\&.width = get_text_width(text) \- limit_area\&.left;
 96 
 97     // Calculate limits
-98     int32_t xLimit = limitArea\&.left + limitArea\&.width;
-99     int32_t yLimit = limitArea\&.top + limitArea\&.height;
+98     int32_t x_limit = limit_area\&.left + limit_area\&.width;
+99     int32_t y_limit = limit_area\&.top + limit_area\&.height;
 100 
 101     // Draw the text from top to bottom
-102     for (int yBitMapOffset = limitArea\&.top; yBitMapOffset < yLimit; yBitMapOffset++) {
-103         for (int xBitMapOffset = limitArea\&.left; xBitMapOffset < xLimit; ++xBitMapOffset) {
+102     for(int y_bit_map_offset = limit_area\&.top; y_bit_map_offset < y_limit; y_bit_map_offset++) {
+103         for(int x_bit_map_offset = limit_area\&.left; x_bit_map_offset < x_limit; ++x_bit_map_offset) {
 104 
 105             // If the y is the middle then add a strikethrough
-106             if (is_strikethrough && yBitMapOffset == yLimit / 2) {
+106             if(is_strikethrough && y_bit_map_offset == y_limit / 2) {
 107 
 108                 // Draw the pixel
-109                 context\->putPixel(x + xBitMapOffset, y + yBitMapOffset, foreground);
+109                 context\->put_pixel(x + x_bit_map_offset, y + y_bit_map_offset, foreground);
 110                 continue;
 111             }
 112 
 113             // If the y is the bottom then add an underline
-114             if (is_underlined && yBitMapOffset == yLimit \- 1) {
+114             if(is_underlined && y_bit_map_offset == y_limit \- 1) {
 115 
 116                 // Draw the pixel
-117                 context\->putPixel(x + xBitMapOffset, y + yBitMapOffset, foreground);
+117                 context\->put_pixel(x + x_bit_map_offset, y + y_bit_map_offset, foreground);
 118                 continue;
 119             }
 120 
 121             // Get the character
-122             uint8_t character = text[xBitMapOffset / 8];
+122             uint8_t character = text[x_bit_map_offset / 8];
 123 
 124             // Check if this pixel  is set or not
-125             bool set = m_font8x8[(uint16_t) character * 8 + yBitMapOffset] & (128 >> (xBitMapOffset % 8));
+125             bool set = m_font8x8[(uint16_t) character * 8 + y_bit_map_offset] & (128 >> (x_bit_map_offset % 8));
 126 
 127             // Draw the pixel
-128             context\->putPixel(x + xBitMapOffset, y + yBitMapOffset, set ? foreground : background);
+128             context\->put_pixel(x + x_bit_map_offset, y + y_bit_map_offset, set ? foreground : background);
 129 
 130         }
 131     }
@@ -233,7 +233,7 @@ Definition at line \fB70\fP of file \fBfont\&.cpp\fP\&..PP
 
 .PP
 References \fBget_text_height()\fP, \fBget_text_width()\fP, \fBMaxOS::common::Rectangle< Type >::height\fP, \fBis_strikethrough\fP, \fBis_underlined\fP, \fBMaxOS::common::Rectangle< Type >::left\fP, \fBm_font8x8\fP, \fBMaxOS::common::Rectangle< Type >::top\fP, and \fBMaxOS::common::Rectangle< Type >::width\fP\&.
-.SS "\fBint32_t\fP Font::get_text_height (\fBstring\fP text)\fC [virtual]\fP"
+.SS "\fBsize_t\fP Font::get_text_height (\fBstring\fP text)\fC [virtual]\fP"
 
 .PP
 Get the height of the text\&. 
@@ -252,7 +252,7 @@ The height of the text
 .PP
 Definition at line \fB140\fP of file \fBfont\&.cpp\fP\&..PP
 .nf
-140                                          {
+140                                         {
 141 
 142     return 8;
 143 
@@ -261,7 +261,7 @@ Definition at line \fB140\fP of file \fBfont\&.cpp\fP\&..PP
 
 .PP
 Referenced by \fBdraw_text()\fP, and \fBdraw_text()\fP\&.
-.SS "\fBint32_t\fP Font::get_text_width (\fBstring\fP text)\fC [virtual]\fP"
+.SS "\fBsize_t\fP Font::get_text_width (\fBstring\fP text)\fC [virtual]\fP"
 
 .PP
 Get the width of the text\&. 
@@ -280,7 +280,7 @@ The width of the text
 .PP
 Definition at line \fB152\fP of file \fBfont\&.cpp\fP\&..PP
 .nf
-152                                         {
+152                                        {
 153 
 154     return text\&.length() * 8;
 155 }
@@ -295,9 +295,9 @@ Referenced by \fBdraw_text()\fP, and \fBdraw_text()\fP\&.
 .PP
 Should the font be drawn in bold\&. 
 .PP
-Definition at line \fB39\fP of file \fBfont\&.h\fP\&..PP
+Definition at line \fB37\fP of file \fBfont\&.h\fP\&..PP
 .nf
-39 { false };                     
+37 { false };                     
 .fi
 
 .SS "bool MaxOS::gui::Font::is_italic { false }"
@@ -305,9 +305,9 @@ Definition at line \fB39\fP of file \fBfont\&.h\fP\&..PP
 .PP
 Should the font be drawn in italic\&. 
 .PP
-Definition at line \fB40\fP of file \fBfont\&.h\fP\&..PP
+Definition at line \fB38\fP of file \fBfont\&.h\fP\&..PP
 .nf
-40 { false };                   
+38 { false };                   
 .fi
 
 .SS "bool MaxOS::gui::Font::is_strikethrough { false }"
@@ -315,9 +315,9 @@ Definition at line \fB40\fP of file \fBfont\&.h\fP\&..PP
 .PP
 Should the font be drawn with a strikethrough\&. 
 .PP
-Definition at line \fB42\fP of file \fBfont\&.h\fP\&..PP
+Definition at line \fB40\fP of file \fBfont\&.h\fP\&..PP
 .nf
-42 { false };            
+40 { false };            
 .fi
 
 .PP
@@ -327,21 +327,21 @@ Referenced by \fBdraw_text()\fP\&.
 .PP
 Should the font be drawn with an underline\&. 
 .PP
-Definition at line \fB41\fP of file \fBfont\&.h\fP\&..PP
+Definition at line \fB39\fP of file \fBfont\&.h\fP\&..PP
 .nf
-41 { false };               
+39 { false };               
 .fi
 
 .PP
 Referenced by \fBdraw_text()\fP\&.
-.SS "uint8_t MaxOS::gui::Font::m_font8x8[2048] = {0}\fC [protected]\fP"
+.SS "uint8_t MaxOS::gui::Font::m_font8x8[2048] = { 0 }\fC [protected]\fP"
 
 .PP
 The 8x8 font data\&. 
 .PP
-Definition at line \fB32\fP of file \fBfont\&.h\fP\&..PP
+Definition at line \fB30\fP of file \fBfont\&.h\fP\&..PP
 .nf
-32 {0};              
+30 { 0 };              
 .fi
 
 .PP
@@ -351,9 +351,9 @@ Referenced by \fBdraw_text()\fP, and \fBFont()\fP\&.
 .PP
 Is the font 8 pixels by 8 pixels per character\&. 
 .PP
-Definition at line \fB31\fP of file \fBfont\&.h\fP\&..PP
+Definition at line \fB29\fP of file \fBfont\&.h\fP\&..PP
 .nf
-31 { true };                
+29 { true };                
 .fi
 
 

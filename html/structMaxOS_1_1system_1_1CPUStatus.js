@@ -1,0 +1,25 @@
+var structMaxOS_1_1system_1_1CPUStatus =
+[
+    [ "cs", "structMaxOS_1_1system_1_1CPUStatus.html#ae93ca74ece02c434bcecc216f05b9774", null ],
+    [ "error_code", "structMaxOS_1_1system_1_1CPUStatus.html#a01db39eeebd9fa73b635282b83fa3c09", null ],
+    [ "interrupt_number", "structMaxOS_1_1system_1_1CPUStatus.html#a94c2c24764aafeaae4f90a812b8f7434", null ],
+    [ "r10", "structMaxOS_1_1system_1_1CPUStatus.html#a402486b375f900f92c2ffa787c3e0962", null ],
+    [ "r11", "structMaxOS_1_1system_1_1CPUStatus.html#ac405255d179c121c245076af16f3bc3c", null ],
+    [ "r12", "structMaxOS_1_1system_1_1CPUStatus.html#af9f79a22ab33a8c999bd2a40245fb32c", null ],
+    [ "r13", "structMaxOS_1_1system_1_1CPUStatus.html#adc57177f51f82d54937a6ddc01c4d413", null ],
+    [ "r14", "structMaxOS_1_1system_1_1CPUStatus.html#aa5094a70f8ddb18f611a9c5735c87568", null ],
+    [ "r15", "structMaxOS_1_1system_1_1CPUStatus.html#a1fa025d3c48a3aec275d8aacf1243873", null ],
+    [ "r8", "structMaxOS_1_1system_1_1CPUStatus.html#a372aa8b2edbc1cdfbf2cd2e8255caa57", null ],
+    [ "r9", "structMaxOS_1_1system_1_1CPUStatus.html#a7cbbb19fb0fb1332cc0aa52923af274d", null ],
+    [ "rax", "structMaxOS_1_1system_1_1CPUStatus.html#ae4ccc3f4aa1105ffc3a1126d2ec182b5", null ],
+    [ "rbp", "structMaxOS_1_1system_1_1CPUStatus.html#ab152ca5247a266f2eded2f90c8aa2f5c", null ],
+    [ "rbx", "structMaxOS_1_1system_1_1CPUStatus.html#ae1e9656972f0506b4be4f1f9f437fb24", null ],
+    [ "rcx", "structMaxOS_1_1system_1_1CPUStatus.html#a60f89d65a11836cf40422ee6a1fedb83", null ],
+    [ "rdi", "structMaxOS_1_1system_1_1CPUStatus.html#a2f8d6548adee4cecb0829095c3c79bc0", null ],
+    [ "rdx", "structMaxOS_1_1system_1_1CPUStatus.html#a75d55478daeb834a15c91392ee49d878", null ],
+    [ "rflags", "structMaxOS_1_1system_1_1CPUStatus.html#a4598f218b3c8f2fd675d64f930c006ff", null ],
+    [ "rip", "structMaxOS_1_1system_1_1CPUStatus.html#a3d81693bd6e2b928f9198e918f46f2ca", null ],
+    [ "rsi", "structMaxOS_1_1system_1_1CPUStatus.html#a9a53bc92bfaeeca36856a105aa429977", null ],
+    [ "rsp", "structMaxOS_1_1system_1_1CPUStatus.html#ad698c6c6ebd071280b1b98284a71fd04", null ],
+    [ "ss", "structMaxOS_1_1system_1_1CPUStatus.html#a85f449c1d568651ebc6c0d0732e20c53", null ]
+];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['string_0',['string',['../string_8h.html#a4a6e5834af96b66d8015f5a24c09e1b3',1,'MaxOS']]],
-  ['syscall_5ffunc_5ft_1',['syscall_func_t',['../syscalls_8h.html#a2bbff8c2e565180b9baa53c02b018ed5',1,'MaxOS::system']]]
+  ['dir_5fentry_5ft_0',['dir_entry_t',['../fat32_8h.html#abfb5b0d8f0d8f55352e5a36ace46c5e6',1,'MaxOS::filesystem::format']]],
+  ['directory_5fentry_5ft_1',['directory_entry_t',['../ext2_8h.html#a9496e00db030aebaabf58ff08f83a61a',1,'MaxOS::filesystem::format::ext2']]]
 ];

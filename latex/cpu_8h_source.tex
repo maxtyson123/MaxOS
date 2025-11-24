@@ -2,236 +2,241 @@
 \hypertarget{cpu_8h_source}{}\label{cpu_8h_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/system/cpu.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/system/cpu.h}}
 \mbox{\hyperlink{cpu_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00001}\mbox{\hyperlink{cpu_8h_a2d3ce0f98cbfe481d7597fef8f25a230}{00001}}\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00009}\mbox{\hyperlink{cpu_8h_aa9913c81119fe2e85184295729bb919f}{00009}}\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_SYSTEM\_CPU\_H}}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00010}\mbox{\hyperlink{cpu_8h_ad44d2330d19aca0011f83bd384e17ffb}{00010}}\ \textcolor{preprocessor}{\#define\ MAXOS\_SYSTEM\_CPU\_H}}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00011}\mbox{\hyperlink{cpu_8h_a50ceffaaa84b8c9e483ab22a3e446a25}{00011}}\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00012}\mbox{\hyperlink{cpu_8h_a92d8554e63dfe173bb1cdc79e6105b77}{00012}}\ \textcolor{preprocessor}{\#include\ <cpuid.h>}}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00013}\mbox{\hyperlink{cpu_8h_aa0c86982c9eef8033adb225c9f4c0458}{00013}}\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00014}\mbox{\hyperlink{cpu_8h_af9c80382144c72c09f80eb6458d5238e}{00014}}\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00015}\mbox{\hyperlink{cpu_8h_ac0cd4cbf2cda7bf0599dc6441efc8b3c}{00015}}\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{gdt_8h}{system/gdt.h}}>}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00009}00009\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_SYSTEM\_CPU\_H}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00010}00010\ \textcolor{preprocessor}{\#define\ MAXOS\_SYSTEM\_CPU\_H}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <cpuid.h>}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <cstddef>}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{gdt_8h}{system/gdt.h}}>}}
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00016}00016\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{acpi_8h}{hardwarecommunication/acpi.h}}>}}
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00017}00017\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{apic_8h}{hardwarecommunication/apic.h}}>}}
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00018}00018\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{physical_8h}{memory/physical.h}}>}}
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00019}00019\ }
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00020}00020\ \textcolor{comment}{//\ Forward\ declare}}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00021}00021\ \textcolor{keyword}{namespace\ }MaxOS\ \{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00022}00022\ \ \ \ \ \textcolor{keyword}{namespace\ }processes\ \{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00023}00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }Scheduler;}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00024}00024\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00025}00025\ \}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00022}00022\ \textcolor{keyword}{namespace\ }MaxOS::processes\ \{}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00023}00023\ \ \ \ \ \textcolor{keyword}{class\ }Scheduler;}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00024}00024\ \}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00025}00025\ }
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00026}00026\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00027}00027\ \textcolor{keyword}{namespace\ }MaxOS\ \{}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00027}00027\ \textcolor{keyword}{namespace\ }MaxOS::system\ \{}
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00028}00028\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00029}00029\ \ \ \ \ \textcolor{keyword}{namespace\ }system\ \{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00030}00030\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00032}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute____}{00032}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00033}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____afa3f9c0043871070e7afc805d68c68f8}{00033}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____afa3f9c0043871070e7afc805d68c68f8}{r15}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00034}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a35fb12c755f326edc1ec6ccb432fc978}{00034}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a35fb12c755f326edc1ec6ccb432fc978}{r14}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00035}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____ab5768098ebefeccc65dc00f6c8737fa3}{00035}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____ab5768098ebefeccc65dc00f6c8737fa3}{r13}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00036}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____aa7a58a40bf2f6176839c57cf77259eaf}{00036}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____aa7a58a40bf2f6176839c57cf77259eaf}{r12}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00037}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a2192b16b3e551059170650e178e1ea36}{00037}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a2192b16b3e551059170650e178e1ea36}{r11}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00038}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____adef2b2c09a1120a336a607be9fa508ea}{00038}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____adef2b2c09a1120a336a607be9fa508ea}{r10}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00039}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____acf221d0da7697195a02e26494f922018}{00039}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____acf221d0da7697195a02e26494f922018}{r9}};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00040}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a44397756b4a3480324ce231774618696}{00040}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a44397756b4a3480324ce231774618696}{r8}};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00041}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a20865a4e887a03653b0fe986c3f992cc}{00041}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a20865a4e887a03653b0fe986c3f992cc}{rdi}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00042}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a70bc08b6512d44f78346745a7e816f9d}{00042}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a70bc08b6512d44f78346745a7e816f9d}{rsi}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00043}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a047c16309f11215d1f36534f3d3731a7}{00043}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a047c16309f11215d1f36534f3d3731a7}{rbp}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00044}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a9872a5355210bb6b61bb524bed00bb0b}{00044}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a9872a5355210bb6b61bb524bed00bb0b}{rdx}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00045}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a50f3f613d4a7c17433c3a4c11a817635}{00045}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a50f3f613d4a7c17433c3a4c11a817635}{rcx}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00046}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a7506bec1a36724fd77b453765176fadc}{00046}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a7506bec1a36724fd77b453765176fadc}{rbx}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00047}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____ac3f89fdc078e57c0587bb58828da077d}{00047}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____ac3f89fdc078e57c0587bb58828da077d}{rax}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00048}00048\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00049}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a3b0abf62a99faf48d1fa08a0d20e496a}{00049}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a3b0abf62a99faf48d1fa08a0d20e496a}{interrupt\_number}};\ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00050}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a38c7f4e81900fca1601a08171aa7e606}{00050}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a38c7f4e81900fca1601a08171aa7e606}{error\_code}};\ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00051}00051\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00052}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a898902df98af64492bd14ea1bdcbc773}{00052}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a898902df98af64492bd14ea1bdcbc773}{rip}};\ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00053}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a7097a37ece7170bc19877a8c858aa593}{00053}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a7097a37ece7170bc19877a8c858aa593}{cs}};\ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00054}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____ab6bd03160be1efa818c11f05f70efea6}{00054}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____ab6bd03160be1efa818c11f05f70efea6}{rflags}};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00055}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____aa13fa322bce11a2bd987fe84c25737f5}{00055}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____aa13fa322bce11a2bd987fe84c25737f5}{rsp}};\ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00056}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a360bedd0cbc4e27914478264f567d358}{00056}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute_____a360bedd0cbc4e27914478264f567d358}{ss}};\ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute____}{\_\_attribute\_\_}}((\_\_packed\_\_))\ cpu\_status\_t;}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00058}00058\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00060}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment}{00060}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment}{TaskStateSegment}}\ \{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00061}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a31f8f92b3bc9bf978cba96a9111c78bd}{00061}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a31f8f92b3bc9bf978cba96a9111c78bd}{reserved0}};\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00062}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_acda8112eafb6d584ac8d25b7031cd853}{00062}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_acda8112eafb6d584ac8d25b7031cd853}{rsp0}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00063}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aaa6de6fcf9914c978dc6c6f8f5d12b2c}{00063}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aaa6de6fcf9914c978dc6c6f8f5d12b2c}{rsp1}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00064}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a14d5b2f2bf5d2c45bf7f006637b38ad3}{00064}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a14d5b2f2bf5d2c45bf7f006637b38ad3}{rsp2}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00065}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a0266c59852b5047c7532581ce101f53e}{00065}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a0266c59852b5047c7532581ce101f53e}{reserved1}};\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00066}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a155653954b23b766c6d8bcafa1390d29}{00066}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a155653954b23b766c6d8bcafa1390d29}{reserved2}};\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00067}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a8d01b90bb8d1b5e021e6151a48f2fbf7}{00067}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a8d01b90bb8d1b5e021e6151a48f2fbf7}{ist1}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00068}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aeb3e348465989a883dddb0de180c735f}{00068}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aeb3e348465989a883dddb0de180c735f}{ist2}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00069}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_ad6ac851b18a23ec7c3099d14b8374406}{00069}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_ad6ac851b18a23ec7c3099d14b8374406}{ist3}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00070}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a9c73f4cca3e5c5bf978901b5d707b2df}{00070}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a9c73f4cca3e5c5bf978901b5d707b2df}{ist4}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00071}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a562c13c79d6e76078f95f9d5b286fba4}{00071}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a562c13c79d6e76078f95f9d5b286fba4}{ist5}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00072}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a6895cc96435fb9d9822d60fda29bb9bd}{00072}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a6895cc96435fb9d9822d60fda29bb9bd}{ist6}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00073}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_ab955875a22489e6bd2949cbdb77e0a53}{00073}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_ab955875a22489e6bd2949cbdb77e0a53}{ist7}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00074}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a467bde19d244ce2434345bdfab497eb9}{00074}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a467bde19d244ce2434345bdfab497eb9}{reserved3}};\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00075}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aad8577b5d925bbf27b769920c536043e}{00075}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aad8577b5d925bbf27b769920c536043e}{reserved4}};\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00076}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a427ed86c3aaf8647d1aa6fea0353050f}{00076}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a427ed86c3aaf8647d1aa6fea0353050f}{io\_bitmap\_offset}};\ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00077}00077\ \ \ \ \ \ \ \ \ \}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute____}{\_\_attribute\_\_}}((\_\_packed\_\_))\ tss\_t;}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00078}00078\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00085}\mbox{\hyperlink{cpu_8h_a955509bd4aa295b6038a6812bf689200}{00085}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{cpu_8h_a955509bd4aa295b6038a6812bf689200}{CPU\_FEATURE\_ECX}}\ :\ int32\_t\ \{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ SSE3\ \ \ \ \ \ \ \ =\ 1\ <<\ 0,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ PCLMUL\ \ \ \ \ \ =\ 1\ <<\ 1,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ DTES64\ \ \ \ \ \ =\ 1\ <<\ 2,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00089}00089\ \ \ \ \ \ \ \ \ \ \ \ \ MONITOR\ \ \ \ \ =\ 1\ <<\ 3,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00090}00090\ \ \ \ \ \ \ \ \ \ \ \ \ DS\_CPL\ \ \ \ \ \ =\ 1\ <<\ 4,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00091}00091\ \ \ \ \ \ \ \ \ \ \ \ \ VMX\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 5,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00092}00092\ \ \ \ \ \ \ \ \ \ \ \ \ SMX\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 6,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00093}00093\ \ \ \ \ \ \ \ \ \ \ \ \ EST\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 7,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ TM2\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 8,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00095}00095\ \ \ \ \ \ \ \ \ \ \ \ \ SSSE3\ \ \ \ \ \ \ =\ 1\ <<\ 9,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ CID\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 10,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ SDBG\ \ \ \ \ \ \ \ =\ 1\ <<\ 11,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00098}00098\ \ \ \ \ \ \ \ \ \ \ \ \ FMA\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 12,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ CX16\ \ \ \ \ \ \ \ =\ 1\ <<\ 13,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ XTPR\ \ \ \ \ \ \ \ =\ 1\ <<\ 14,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ PDCM\ \ \ \ \ \ \ \ =\ 1\ <<\ 15,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ PCID\ \ \ \ \ \ \ \ =\ 1\ <<\ 17,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ \ \ \ \ DCA\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 18,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ SSE4\_1\ \ \ \ \ \ =\ 1\ <<\ 19,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ SSE4\_2\ \ \ \ \ \ =\ 1\ <<\ 20,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ X2APIC\ \ \ \ \ \ =\ 1\ <<\ 21,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ MOVBE\ \ \ \ \ \ \ =\ 1\ <<\ 22,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ \ \ POPCNT\ \ \ \ \ \ =\ 1\ <<\ 23,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00109}00109\ \ \ \ \ \ \ \ \ \ \ \ \ TSC\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 24,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ AES\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 25,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ XSAVE\ \ \ \ \ \ \ =\ 1\ <<\ 26,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ OSXSAVE\ \ \ \ \ =\ 1\ <<\ 27,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00113}00113\ \ \ \ \ \ \ \ \ \ \ \ \ AVX\ \ \ \ \ \ \ \ \ =\ 1\ <<\ 28,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ F16C\ \ \ \ \ \ \ \ =\ 1\ <<\ 29,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ RDRAND\ \ \ \ \ \ =\ 1\ <<\ 30,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00116}00116\ \ \ \ \ \ \ \ \ \ \ \ \ HYPERVISOR\ \ =\ 1\ <<\ 31,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00117}00117\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00118}00118\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00125}\mbox{\hyperlink{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}{00125}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}{CPU\_FEATURE\_EDX}}\ :\ int32\_t\ \{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00126}00126\ \ \ \ \ \ \ \ \ \ \ \ \ FPU\ \ \ \ \ =\ 1\ <<\ 0,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00127}00127\ \ \ \ \ \ \ \ \ \ \ \ \ VME\ \ \ \ \ =\ 1\ <<\ 1,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00128}00128\ \ \ \ \ \ \ \ \ \ \ \ \ DE\ \ \ \ \ \ =\ 1\ <<\ 2,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00129}00129\ \ \ \ \ \ \ \ \ \ \ \ \ PSE\ \ \ \ \ =\ 1\ <<\ 3,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00130}00130\ \ \ \ \ \ \ \ \ \ \ \ \ TSC\ \ \ \ \ =\ 1\ <<\ 4,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00131}00131\ \ \ \ \ \ \ \ \ \ \ \ \ MSR\ \ \ \ \ =\ 1\ <<\ 5,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00132}00132\ \ \ \ \ \ \ \ \ \ \ \ \ PAE\ \ \ \ \ =\ 1\ <<\ 6,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00133}00133\ \ \ \ \ \ \ \ \ \ \ \ \ MCE\ \ \ \ \ =\ 1\ <<\ 7,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00134}00134\ \ \ \ \ \ \ \ \ \ \ \ \ CX8\ \ \ \ \ =\ 1\ <<\ 8,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00135}00135\ \ \ \ \ \ \ \ \ \ \ \ \ APIC\ \ \ \ =\ 1\ <<\ 9,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00136}00136\ \ \ \ \ \ \ \ \ \ \ \ \ SEP\ \ \ \ \ =\ 1\ <<\ 11,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00137}00137\ \ \ \ \ \ \ \ \ \ \ \ \ MTRR\ \ \ \ =\ 1\ <<\ 12,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00138}00138\ \ \ \ \ \ \ \ \ \ \ \ \ PGE\ \ \ \ \ =\ 1\ <<\ 13,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00139}00139\ \ \ \ \ \ \ \ \ \ \ \ \ MCA\ \ \ \ \ =\ 1\ <<\ 14,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \ \ CMOV\ \ \ \ =\ 1\ <<\ 15,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ PAT\ \ \ \ \ =\ 1\ <<\ 16,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ \ \ PSE36\ \ \ =\ 1\ <<\ 17,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \ \ PSN\ \ \ \ \ =\ 1\ <<\ 18,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ CLFLUSH\ =\ 1\ <<\ 19,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00145}00145\ \ \ \ \ \ \ \ \ \ \ \ \ DS\ \ \ \ \ \ =\ 1\ <<\ 21,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00146}00146\ \ \ \ \ \ \ \ \ \ \ \ \ ACPI\ \ \ \ =\ 1\ <<\ 22,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00147}00147\ \ \ \ \ \ \ \ \ \ \ \ \ MMX\ \ \ \ \ =\ 1\ <<\ 23,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00148}00148\ \ \ \ \ \ \ \ \ \ \ \ \ FXSR\ \ \ \ =\ 1\ <<\ 24,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00149}00149\ \ \ \ \ \ \ \ \ \ \ \ \ SSE\ \ \ \ \ =\ 1\ <<\ 25,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00150}00150\ \ \ \ \ \ \ \ \ \ \ \ \ SSE2\ \ \ \ =\ 1\ <<\ 26,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00151}00151\ \ \ \ \ \ \ \ \ \ \ \ \ SS\ \ \ \ \ \ =\ 1\ <<\ 27,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00152}00152\ \ \ \ \ \ \ \ \ \ \ \ \ HTT\ \ \ \ \ =\ 1\ <<\ 28,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ TM\ \ \ \ \ \ =\ 1\ <<\ 29,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00154}00154\ \ \ \ \ \ \ \ \ \ \ \ \ IA64\ \ \ \ =\ 1\ <<\ 30,}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \ \ PBE\ \ \ \ \ =\ 1\ <<\ 31}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00156}00156\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00157}00157\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00162}\mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame}{00162}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame}{StackFrame}}\ \{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00163}\mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame_ac104c1f50f3d0ded0dc7ea7911418c89}{00163}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame}{StackFrame}}*\ \mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame_ac104c1f50f3d0ded0dc7ea7911418c89}{next}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00164}\mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame_a6ba80a1cabce3cc9acac26695ba3e5a2}{00164}}\ \ \ \ \ \ \ \ \ \ \ \ \ uintptr\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame_a6ba80a1cabce3cc9acac26695ba3e5a2}{rip}};\ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00165}00165\ \ \ \ \ \ \ \ \ \}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute____}{\_\_attribute\_\_}}((\_\_packed\_\_))\ stack\_frame\_t;}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00166}00166\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00171}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo}{00171}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo}{CoreBootInfo}}\ \{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00172}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a4ed178eeb2c317c777a97b2b93e0cf65}{00172}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a4ed178eeb2c317c777a97b2b93e0cf65}{stack}};\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00173}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a62bfb63c0e4ed43d8746bc82403e6f5f}{00173}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a62bfb63c0e4ed43d8746bc82403e6f5f}{p4\_table}};\ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00174}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a7a303ee7d596675b9ccccf56acf914d9}{00174}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a7a303ee7d596675b9ccccf56acf914d9}{id}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00175}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_aa90c8282dc9fbfeaa815f490946f1c10}{00175}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_aa90c8282dc9fbfeaa815f490946f1c10}{activated}};\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00176}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_ab8fbfb522fba966535a9b836b3d6778b}{00176}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_ab8fbfb522fba966535a9b836b3d6778b}{gdt\_64\_base}};\ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00177}00177\ \ \ \ \ \ \ \ \ \}\mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute____}{\_\_attribute\_\_}}((\_\_packed\_\_))\ core\_boot\_info\_t;}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00178}00178\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00180}\mbox{\hyperlink{cpu_8h_a0cdb341b2d45114c2d033ec00bc3b356}{00180}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{cpu_8h_a0cdb341b2d45114c2d033ec00bc3b356}{BOOT\_STACK\_SIZE}}\ =\ 16384;}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00037}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus}{00037}}\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }PACKED\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus}{CPUStatus}}\ \{}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00039}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a1fa025d3c48a3aec275d8aacf1243873}{00039}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a1fa025d3c48a3aec275d8aacf1243873}{r15}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00040}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_aa5094a70f8ddb18f611a9c5735c87568}{00040}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_aa5094a70f8ddb18f611a9c5735c87568}{r14}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00041}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_adc57177f51f82d54937a6ddc01c4d413}{00041}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_adc57177f51f82d54937a6ddc01c4d413}{r13}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00042}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_af9f79a22ab33a8c999bd2a40245fb32c}{00042}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_af9f79a22ab33a8c999bd2a40245fb32c}{r12}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00043}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ac405255d179c121c245076af16f3bc3c}{00043}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ac405255d179c121c245076af16f3bc3c}{r11}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00044}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a402486b375f900f92c2ffa787c3e0962}{00044}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a402486b375f900f92c2ffa787c3e0962}{r10}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00045}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a7cbbb19fb0fb1332cc0aa52923af274d}{00045}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a7cbbb19fb0fb1332cc0aa52923af274d}{r9}};\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00046}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a372aa8b2edbc1cdfbf2cd2e8255caa57}{00046}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a372aa8b2edbc1cdfbf2cd2e8255caa57}{r8}};\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00047}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a2f8d6548adee4cecb0829095c3c79bc0}{00047}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a2f8d6548adee4cecb0829095c3c79bc0}{rdi}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00048}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a9a53bc92bfaeeca36856a105aa429977}{00048}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a9a53bc92bfaeeca36856a105aa429977}{rsi}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00049}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ab152ca5247a266f2eded2f90c8aa2f5c}{00049}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ab152ca5247a266f2eded2f90c8aa2f5c}{rbp}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00050}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a75d55478daeb834a15c91392ee49d878}{00050}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a75d55478daeb834a15c91392ee49d878}{rdx}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00051}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a60f89d65a11836cf40422ee6a1fedb83}{00051}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a60f89d65a11836cf40422ee6a1fedb83}{rcx}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00052}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ae1e9656972f0506b4be4f1f9f437fb24}{00052}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ae1e9656972f0506b4be4f1f9f437fb24}{rbx}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00053}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ae4ccc3f4aa1105ffc3a1126d2ec182b5}{00053}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ae4ccc3f4aa1105ffc3a1126d2ec182b5}{rax}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00055}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a94c2c24764aafeaae4f90a812b8f7434}{00055}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a94c2c24764aafeaae4f90a812b8f7434}{interrupt\_number}};\ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00056}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a01db39eeebd9fa73b635282b83fa3c09}{00056}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a01db39eeebd9fa73b635282b83fa3c09}{error\_code}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00058}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a3d81693bd6e2b928f9198e918f46f2ca}{00058}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a3d81693bd6e2b928f9198e918f46f2ca}{rip}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00059}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ae93ca74ece02c434bcecc216f05b9774}{00059}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ae93ca74ece02c434bcecc216f05b9774}{cs}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00060}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a4598f218b3c8f2fd675d64f930c006ff}{00060}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a4598f218b3c8f2fd675d64f930c006ff}{rflags}};\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00061}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ad698c6c6ebd071280b1b98284a71fd04}{00061}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_ad698c6c6ebd071280b1b98284a71fd04}{rsp}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00062}\mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a85f449c1d568651ebc6c0d0732e20c53}{00062}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CPUStatus_a85f449c1d568651ebc6c0d0732e20c53}{ss}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00064}\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{00064}}\ \ \ \ \ \}\ cpu\_status\_t;}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00073}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment}{00073}}\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }PACKED\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment}{TaskStateSegment}}\ \{}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00075}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a31f8f92b3bc9bf978cba96a9111c78bd}{00075}}\ \ \ \ \ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a31f8f92b3bc9bf978cba96a9111c78bd}{reserved0}};\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00076}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_acda8112eafb6d584ac8d25b7031cd853}{00076}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_acda8112eafb6d584ac8d25b7031cd853}{rsp0}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00077}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aaa6de6fcf9914c978dc6c6f8f5d12b2c}{00077}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aaa6de6fcf9914c978dc6c6f8f5d12b2c}{rsp1}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00078}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a14d5b2f2bf5d2c45bf7f006637b38ad3}{00078}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a14d5b2f2bf5d2c45bf7f006637b38ad3}{rsp2}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00079}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a0266c59852b5047c7532581ce101f53e}{00079}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a0266c59852b5047c7532581ce101f53e}{reserved1}};\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00080}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a155653954b23b766c6d8bcafa1390d29}{00080}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a155653954b23b766c6d8bcafa1390d29}{reserved2}};\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00081}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a8d01b90bb8d1b5e021e6151a48f2fbf7}{00081}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a8d01b90bb8d1b5e021e6151a48f2fbf7}{ist1}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00082}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aeb3e348465989a883dddb0de180c735f}{00082}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aeb3e348465989a883dddb0de180c735f}{ist2}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00083}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_ad6ac851b18a23ec7c3099d14b8374406}{00083}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_ad6ac851b18a23ec7c3099d14b8374406}{ist3}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00084}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a9c73f4cca3e5c5bf978901b5d707b2df}{00084}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a9c73f4cca3e5c5bf978901b5d707b2df}{ist4}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00085}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a562c13c79d6e76078f95f9d5b286fba4}{00085}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a562c13c79d6e76078f95f9d5b286fba4}{ist5}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00086}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a6895cc96435fb9d9822d60fda29bb9bd}{00086}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a6895cc96435fb9d9822d60fda29bb9bd}{ist6}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00087}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_ab955875a22489e6bd2949cbdb77e0a53}{00087}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_ab955875a22489e6bd2949cbdb77e0a53}{ist7}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00088}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a467bde19d244ce2434345bdfab497eb9}{00088}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a467bde19d244ce2434345bdfab497eb9}{reserved3}};\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00089}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aad8577b5d925bbf27b769920c536043e}{00089}}\ \ \ \ \ \ \ \ \ uint16\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_aad8577b5d925bbf27b769920c536043e}{reserved4}};\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00090}\mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a427ed86c3aaf8647d1aa6fea0353050f}{00090}}\ \ \ \ \ \ \ \ \ uint16\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1TaskStateSegment_a427ed86c3aaf8647d1aa6fea0353050f}{io\_bitmap\_offset}};\ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00092}\mbox{\hyperlink{cpu_8h_adb56c35feb20bc6b4fc73b093a48a97c}{00092}}\ \ \ \ \ \}\ tss\_t;}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00100}\mbox{\hyperlink{cpu_8h_a955509bd4aa295b6038a6812bf689200}{00100}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{cpu_8h_a955509bd4aa295b6038a6812bf689200}{CPU\_FEATURE\_ECX}}\ :\ int32\_t\ \{}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00101}00101\ \ \ \ \ \ \ \ \ SSE3\ =\ 1\ <<\ 0,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00102}00102\ \ \ \ \ \ \ \ \ PCLMUL\ =\ 1\ <<\ 1,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ DTES64\ =\ 1\ <<\ 2,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00104}00104\ \ \ \ \ \ \ \ \ MONITOR\ =\ 1\ <<\ 3,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00105}00105\ \ \ \ \ \ \ \ \ DS\_CPL\ =\ 1\ <<\ 4,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00106}00106\ \ \ \ \ \ \ \ \ VMX\ =\ 1\ <<\ 5,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00107}00107\ \ \ \ \ \ \ \ \ SMX\ =\ 1\ <<\ 6,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00108}00108\ \ \ \ \ \ \ \ \ EST\ =\ 1\ <<\ 7,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00109}00109\ \ \ \ \ \ \ \ \ TM2\ =\ 1\ <<\ 8,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00110}00110\ \ \ \ \ \ \ \ \ SSSE3\ =\ 1\ <<\ 9,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00111}00111\ \ \ \ \ \ \ \ \ CID\ =\ 1\ <<\ 10,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00112}00112\ \ \ \ \ \ \ \ \ SDBG\ =\ 1\ <<\ 11,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00113}00113\ \ \ \ \ \ \ \ \ FMA\ =\ 1\ <<\ 12,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00114}00114\ \ \ \ \ \ \ \ \ CX16\ =\ 1\ <<\ 13,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00115}00115\ \ \ \ \ \ \ \ \ XTPR\ =\ 1\ <<\ 14,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00116}00116\ \ \ \ \ \ \ \ \ PDCM\ =\ 1\ <<\ 15,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00117}00117\ \ \ \ \ \ \ \ \ PCID\ =\ 1\ <<\ 17,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00118}00118\ \ \ \ \ \ \ \ \ DCA\ =\ 1\ <<\ 18,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00119}00119\ \ \ \ \ \ \ \ \ SSE4\_1\ =\ 1\ <<\ 19,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00120}00120\ \ \ \ \ \ \ \ \ SSE4\_2\ =\ 1\ <<\ 20,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00121}00121\ \ \ \ \ \ \ \ \ X2APIC\ =\ 1\ <<\ 21,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00122}00122\ \ \ \ \ \ \ \ \ MOVBE\ =\ 1\ <<\ 22,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00123}00123\ \ \ \ \ \ \ \ \ POPCNT\ =\ 1\ <<\ 23,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00124}00124\ \ \ \ \ \ \ \ \ TSC\ =\ 1\ <<\ 24,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00125}00125\ \ \ \ \ \ \ \ \ AES\ =\ 1\ <<\ 25,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00126}00126\ \ \ \ \ \ \ \ \ XSAVE\ =\ 1\ <<\ 26,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00127}00127\ \ \ \ \ \ \ \ \ OSXSAVE\ =\ 1\ <<\ 27,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00128}00128\ \ \ \ \ \ \ \ \ AVX\ =\ 1\ <<\ 28,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00129}00129\ \ \ \ \ \ \ \ \ F16C\ =\ 1\ <<\ 29,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00130}00130\ \ \ \ \ \ \ \ \ RDRAND\ =\ 1\ <<\ 30,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00131}00131\ \ \ \ \ \ \ \ \ HYPERVISOR\ =\ 1\ <<\ 31,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00132}00132\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00140}\mbox{\hyperlink{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}{00140}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}{CPU\_FEATURE\_EDX}}\ :\ int32\_t\ \{}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00141}00141\ \ \ \ \ \ \ \ \ FPU\ =\ 1\ <<\ 0,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00142}00142\ \ \ \ \ \ \ \ \ VME\ =\ 1\ <<\ 1,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00143}00143\ \ \ \ \ \ \ \ \ DE\ =\ 1\ <<\ 2,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00144}00144\ \ \ \ \ \ \ \ \ PSE\ =\ 1\ <<\ 3,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00145}00145\ \ \ \ \ \ \ \ \ TSC\ =\ 1\ <<\ 4,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00146}00146\ \ \ \ \ \ \ \ \ MSR\ =\ 1\ <<\ 5,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00147}00147\ \ \ \ \ \ \ \ \ PAE\ =\ 1\ <<\ 6,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00148}00148\ \ \ \ \ \ \ \ \ MCE\ =\ 1\ <<\ 7,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00149}00149\ \ \ \ \ \ \ \ \ CX8\ =\ 1\ <<\ 8,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00150}00150\ \ \ \ \ \ \ \ \ APIC\ =\ 1\ <<\ 9,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00151}00151\ \ \ \ \ \ \ \ \ SEP\ =\ 1\ <<\ 11,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00152}00152\ \ \ \ \ \ \ \ \ MTRR\ =\ 1\ <<\ 12,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00153}00153\ \ \ \ \ \ \ \ \ PGE\ =\ 1\ <<\ 13,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00154}00154\ \ \ \ \ \ \ \ \ MCA\ =\ 1\ <<\ 14,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00155}00155\ \ \ \ \ \ \ \ \ CMOV\ =\ 1\ <<\ 15,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00156}00156\ \ \ \ \ \ \ \ \ PAT\ =\ 1\ <<\ 16,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00157}00157\ \ \ \ \ \ \ \ \ PSE36\ =\ 1\ <<\ 17,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00158}00158\ \ \ \ \ \ \ \ \ PSN\ =\ 1\ <<\ 18,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00159}00159\ \ \ \ \ \ \ \ \ CLFLUSH\ =\ 1\ <<\ 19,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00160}00160\ \ \ \ \ \ \ \ \ DS\ =\ 1\ <<\ 21,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00161}00161\ \ \ \ \ \ \ \ \ ACPI\ =\ 1\ <<\ 22,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00162}00162\ \ \ \ \ \ \ \ \ MMX\ =\ 1\ <<\ 23,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00163}00163\ \ \ \ \ \ \ \ \ FXSR\ =\ 1\ <<\ 24,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00164}00164\ \ \ \ \ \ \ \ \ SSE\ =\ 1\ <<\ 25,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00165}00165\ \ \ \ \ \ \ \ \ SSE2\ =\ 1\ <<\ 26,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00166}00166\ \ \ \ \ \ \ \ \ SS\ =\ 1\ <<\ 27,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00167}00167\ \ \ \ \ \ \ \ \ HTT\ =\ 1\ <<\ 28,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00168}00168\ \ \ \ \ \ \ \ \ TM\ =\ 1\ <<\ 29,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00169}00169\ \ \ \ \ \ \ \ \ IA64\ =\ 1\ <<\ 30,}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00170}00170\ \ \ \ \ \ \ \ \ PBE\ =\ 1\ <<\ 31}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00171}00171\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00180}\mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame}{00180}}\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }PACKED\ \mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame}{StackFrame}}\ \{}
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00181}00181\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00182}00182\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}};}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00183}00183\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00188}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{00188}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{Core}}\ \{}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00189}00189\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}};}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00191}00191\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00193}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{00193}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hardwarecommunication::madt\_processor\_apic\_t*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{m\_madt}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00194}00194\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00195}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad919e4f6d0f47e60695127f2896e2bef}{00195}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad919e4f6d0f47e60695127f2896e2bef}{m\_enabled}}\ =\ \textcolor{keyword}{false};\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00196}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc6b3209c6549a4778c3be339c6f1d62}{00196}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc6b3209c6549a4778c3be339c6f1d62}{m\_can\_enable}}\ =\ \textcolor{keyword}{false};\ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00197}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a51cfe856f4f9c002fa0789dbc03741c3}{00197}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a51cfe856f4f9c002fa0789dbc03741c3}{m\_bsp}}\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00198}00198\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00199}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{00199}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{m\_apic\_id}};\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00200}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca}{00200}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca}{m\_stack}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00182}\mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame_ac104c1f50f3d0ded0dc7ea7911418c89}{00182}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame}{StackFrame}}*\ \mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame_ac104c1f50f3d0ded0dc7ea7911418c89}{next}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00183}\mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame_a6ba80a1cabce3cc9acac26695ba3e5a2}{00183}}\ \ \ \ \ \ \ \ \ uintptr\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1StackFrame_a6ba80a1cabce3cc9acac26695ba3e5a2}{rip}};\ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00184}00184\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00185}\mbox{\hyperlink{cpu_8h_a87e3471d15e54393e3055d6162c73f50}{00185}}\ \ \ \ \ \}\ stack\_frame\_t;}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00194}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo}{00194}}\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }PACKED\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo}{CoreBootInfo}}\ \{}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00196}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a4ed178eeb2c317c777a97b2b93e0cf65}{00196}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a4ed178eeb2c317c777a97b2b93e0cf65}{stack}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00197}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a62bfb63c0e4ed43d8746bc82403e6f5f}{00197}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a62bfb63c0e4ed43d8746bc82403e6f5f}{p4\_table}};\ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00198}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a7a303ee7d596675b9ccccf56acf914d9}{00198}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_a7a303ee7d596675b9ccccf56acf914d9}{id}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00199}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_aa90c8282dc9fbfeaa815f490946f1c10}{00199}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_aa90c8282dc9fbfeaa815f490946f1c10}{activated}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00200}\mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_ab8fbfb522fba966535a9b836b3d6778b}{00200}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{structMaxOS_1_1system_1_1CoreBootInfo_ab8fbfb522fba966535a9b836b3d6778b}{gdt\_64\_base}};\ \ \ \ \ \ }
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00201}00201\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4b3368da0cb3321587d4b9623fad2250}{init\_tss}}();}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a84092a638e6f4dba8cd08d109cf1649f}{init\_sse}}();}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00204}00204\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{Core}}(hardwarecommunication::madt\_processor\_apic\_t*\ madt\_item);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{\string~Core}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00202}\mbox{\hyperlink{cpu_8h_a8cc53adee7d9f2ae345e54f11cb80371}{00202}}\ \ \ \ \ \}\ core\_boot\_info\_t;}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00203}00203\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00205}\mbox{\hyperlink{cpu_8h_a0cdb341b2d45114c2d033ec00bc3b356}{00205}}\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{cpu_8h_a0cdb341b2d45114c2d033ec00bc3b356}{BOOT\_STACK\_SIZE}}\ =\ 16384;}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00207}00207\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}};}
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00208}00208\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00209}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317}{00209}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317}{xsave\_enabled}}\ =\ \textcolor{keyword}{false};\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00210}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e}{00210}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e}{avx\_enabled}}\ =\ \textcolor{keyword}{false};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00211}00211\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00212}00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a35cbdbb9c1e6716be75f57256c508333}{wake\_up}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}*\ cpu);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00213}00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a95b5c90a86bd4f1dec37edb1f32a6406}{init}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00213}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{00213}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{Core}}\ \{}
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00214}00214\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00215}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8}{00215}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8}{id}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00216}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{00216}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tss\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}\ =\ \{\ \};\ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00217}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ee72f36a1713b39bd328ab6a59f71e5}{00217}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ee72f36a1713b39bd328ab6a59f71e5}{active}}\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00218}00218\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00219}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aa217d5bc27a175b3533c223b7dd4136a}{00219}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication::LocalAPIC}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aa217d5bc27a175b3533c223b7dd4136a}{local\_apic}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00220}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}{00220}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}{gdt}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00221}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ab5f2cccadb50ecefe94cbb95eebea371}{00221}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{processes::Scheduler}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ab5f2cccadb50ecefe94cbb95eebea371}{scheduler}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00222}00222\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00215}00215\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}};}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00216}00216\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00217}00217\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00218}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{00218}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{apic_8h_a94e4882ca56ef94a1aad9129cb2424fd}{hardwarecommunication::madt\_processor\_apic\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aeef0861d7956dfc07915a806c8e16a3f}{m\_madt}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00220}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad919e4f6d0f47e60695127f2896e2bef}{00220}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad919e4f6d0f47e60695127f2896e2bef}{m\_enabled}}\ =\ \textcolor{keyword}{false};\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00221}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc6b3209c6549a4778c3be339c6f1d62}{00221}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc6b3209c6549a4778c3be339c6f1d62}{m\_can\_enable}}\ =\ \textcolor{keyword}{false};\ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00222}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a51cfe856f4f9c002fa0789dbc03741c3}{00222}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a51cfe856f4f9c002fa0789dbc03741c3}{m\_bsp}}\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ }
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00223}00223\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00228}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{00228}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}\ \{}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00224}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{00224}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_abd73d7ec51f0f8ce44e51057323e4ef0}{m\_apic\_id}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00225}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca}{00225}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4e5ac49555b8305c05229148c2d1d7ca}{m\_stack}}\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00227}00227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a4b3368da0cb3321587d4b9623fad2250}{init\_tss}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00228}00228\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a84092a638e6f4dba8cd08d109cf1649f}{init\_sse}}();}
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00229}00229\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00230}00230\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00231}00231\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00232}00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}*\ gdt,\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}}*\ multiboot);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00233}00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{\string~CPU}}();}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00234}00234\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00235}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a13d3b45c5ca62bf96e425e40ca113663}{00235}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface}{hardwarecommunication::AdvancedConfigurationAndPowerInterface}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a13d3b45c5ca62bf96e425e40ca113663}{acpi}};\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00236}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a7fef57a79ba623497c26b04e34cfedf6}{00236}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication::AdvancedProgrammableInterruptController}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a7fef57a79ba623497c26b04e34cfedf6}{apic}};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00237}00237\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00238}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae48969a59a3ae850353360f366166ca8}{00238}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{Core}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae48969a59a3ae850353360f366166ca8}{panic\_core}}\ =\ \textcolor{keyword}{nullptr};\ \ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00239}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_af7c9f38c5738cdaa2b57251577eea6d5}{00239}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock}{common::Spinlock}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_af7c9f38c5738cdaa2b57251577eea6d5}{panic\_lock}};\ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00240}00240\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00241}00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_aa008d61f4821a2e69fa636965fd5911b}{prepare\_for\_panic}}(cpu\_status\_t*\ status\ =\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&msg\ =\ \textcolor{stringliteral}{"{}"{}});}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00242}00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a0d33c5755fcbfd08c75ae68f3d62577a}{PANIC}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message,\ cpu\_status\_t*\ status\ =\ \textcolor{keyword}{nullptr});}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ [[noreturn]]\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a189729f4ca240ff52004a34b9057d448}{halt}}();}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00244}00244\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00245}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{00245}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Vector<Core*>}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{cores}};\ \ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00246}00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a794ab2a2883fab58ce204299a3ec556f}{find\_cores}}();}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00247}00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a599edada5a85faa0bcd689b8cff3f2ba}{init\_cores}}();}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00248}00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{Core}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{executing\_core}}();}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00249}00249\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_afbbc3348fa73228ef924e54a5dffcd5e}{check\_nx}}();}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00251}00251\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a2e9fe68995cb7e1e9943d7a3b3565c19}{get\_status}}(cpu\_status\_t*\ status);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ab2744288c9f3b196502d4ae0f6b49b8b}{set\_status}}(cpu\_status\_t*\ status);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00254}00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a07c84fcc01f83f35d50295b7828a54c3}{print\_registers}}(cpu\_status\_t*\ status);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00255}00255\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ac2eb28384db21eb3075768c17302fff4}{read\_msr}}(uint32\_t\ msr);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}{write\_msr}}(uint32\_t\ msr,\ uint64\_t\ value);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00258}00258\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00259}00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a9ff943a994f211939c9f1a907e73b0e1}{cpuid}}(uint32\_t\ leaf,\ uint32\_t*\ eax,\ uint32\_t*\ ebx,\ uint32\_t*\ ecx,\ uint32\_t*\ edx);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00260}00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a77b778d7ddb80332c33d4f2a14432230}{check\_cpu\_feature}}(\mbox{\hyperlink{cpu_8h_a955509bd4aa295b6038a6812bf689200}{CPU\_FEATURE\_ECX}}\ feature);}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a77b778d7ddb80332c33d4f2a14432230}{check\_cpu\_feature}}(\mbox{\hyperlink{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}{CPU\_FEATURE\_EDX}}\ feature);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00230}00230\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00231}00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{Core}}(\mbox{\hyperlink{apic_8h_a94e4882ca56ef94a1aad9129cb2424fd}{hardwarecommunication::madt\_processor\_apic\_t}}*\ madt\_item);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00232}00232\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{\string~Core}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00233}00233\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00234}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317}{00234}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ad14e156086c63771dc81f742a4fbe317}{xsave\_enabled}}\ =\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00235}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e}{00235}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_adc1e2b7f62caf819427aa50ff78b0a6e}{avx\_enabled}}\ =\ \textcolor{keyword}{false};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00236}00236\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00237}00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a35cbdbb9c1e6716be75f57256c508333}{wake\_up}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}*\ cpu);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00238}00238\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a95b5c90a86bd4f1dec37edb1f32a6406}{init}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00239}00239\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00240}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8}{00240}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8}{id}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00241}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{00241}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{cpu_8h_adb56c35feb20bc6b4fc73b093a48a97c}{tss\_t}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_af261c891127cebf9a94c12241f4a8ceb}{tss}}\ =\ \{\ \};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00242}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ee72f36a1713b39bd328ab6a59f71e5}{00242}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ee72f36a1713b39bd328ab6a59f71e5}{active}}\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00243}00243\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00244}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aa217d5bc27a175b3533c223b7dd4136a}{00244}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication::LocalAPIC}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_aa217d5bc27a175b3533c223b7dd4136a}{local\_apic}}\ =\ \textcolor{keyword}{nullptr};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00245}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}{00245}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a8e11acc360f4bb192a310c3390ee9550}{gdt}}\ =\ \textcolor{keyword}{nullptr};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00246}\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ab5f2cccadb50ecefe94cbb95eebea371}{00246}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{processes::Scheduler}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ab5f2cccadb50ecefe94cbb95eebea371}{scheduler}}\ =\ \textcolor{keyword}{nullptr};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00247}00247\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00248}00248\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00253}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{00253}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}\ \{}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00254}00254\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00255}00255\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00256}00256\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}*\ gdt,\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}}*\ multiboot);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{\string~CPU}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00259}00259\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00260}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a13d3b45c5ca62bf96e425e40ca113663}{00260}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface}{hardwarecommunication::AdvancedConfigurationAndPowerInterface}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a13d3b45c5ca62bf96e425e40ca113663}{acpi}};\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00261}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a7fef57a79ba623497c26b04e34cfedf6}{00261}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{hardwarecommunication::AdvancedProgrammableInterruptController}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a7fef57a79ba623497c26b04e34cfedf6}{apic}};\ \ \ \ }
 \DoxyCodeLine{\Hypertarget{cpu_8h_source_l00262}00262\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae67e18fdfbb6fcd51d0f2509c9c43ff2}{stack\_trace}}(\textcolor{keywordtype}{size\_t});}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00264}00264\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00265}00265\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00266}00266\ \}}
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00267}00267\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00268}00268\ }
-\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00269}00269\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MAXOS\_SYSTEM\_CPU\_H}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00263}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae48969a59a3ae850353360f366166ca8}{00263}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{Core}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae48969a59a3ae850353360f366166ca8}{panic\_core}}\ =\ \textcolor{keyword}{nullptr};\ \ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00264}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_af7c9f38c5738cdaa2b57251577eea6d5}{00264}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock}{common::Spinlock}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_af7c9f38c5738cdaa2b57251577eea6d5}{panic\_lock}};\ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_aa008d61f4821a2e69fa636965fd5911b}{prepare\_for\_panic}}(\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ status\ =\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ msg\ =\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a0d33c5755fcbfd08c75ae68f3d62577a}{PANIC}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message,\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ status\ =\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ [[noreturn]]\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a189729f4ca240ff52004a34b9057d448}{halt}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00269}00269\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00270}\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{00270}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Vector<Core*>}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{cores}};\ \ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00271}00271\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ab818085df41f77a2e7611e7f1c58e57e}{find\_cores}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00272}00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a599edada5a85faa0bcd689b8cff3f2ba}{init\_cores}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00273}00273\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1Core}{Core}}*\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{executing\_core}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_afbbc3348fa73228ef924e54a5dffcd5e}{check\_nx}}();}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00276}00276\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a2e9fe68995cb7e1e9943d7a3b3565c19}{get\_status}}(\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ status);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00278}00278\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ab2744288c9f3b196502d4ae0f6b49b8b}{set\_status}}(\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ status);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00279}00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a07c84fcc01f83f35d50295b7828a54c3}{print\_registers}}(\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ status);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00280}00280\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00281}00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ac2eb28384db21eb3075768c17302fff4}{read\_msr}}(uint32\_t\ msr);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00282}00282\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae37f29176f1bd55eb7401d1d34e7c69b}{write\_msr}}(uint32\_t\ msr,\ uint64\_t\ value);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00283}00283\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00284}00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a9ff943a994f211939c9f1a907e73b0e1}{cpuid}}(uint32\_t\ leaf,\ uint32\_t*\ eax,\ uint32\_t*\ ebx,\ uint32\_t*\ ecx,\ uint32\_t*\ edx);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00285}00285\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a77b778d7ddb80332c33d4f2a14432230}{check\_cpu\_feature}}(\mbox{\hyperlink{cpu_8h_a955509bd4aa295b6038a6812bf689200}{CPU\_FEATURE\_ECX}}\ feature);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00286}00286\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a77b778d7ddb80332c33d4f2a14432230}{check\_cpu\_feature}}(\mbox{\hyperlink{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}{CPU\_FEATURE\_EDX}}\ feature);}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00287}00287\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00288}00288\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_ae67e18fdfbb6fcd51d0f2509c9c43ff2}{stack\_trace}}(\textcolor{keywordtype}{size\_t});}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00289}00289\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00290}00290\ \}}
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00291}00291\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00292}00292\ }
+\DoxyCodeLine{\Hypertarget{cpu_8h_source_l00293}00293\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MAXOS\_SYSTEM\_CPU\_H}}
 
 \end{DoxyCode}

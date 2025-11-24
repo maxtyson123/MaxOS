@@ -1,0 +1,159 @@
+\doxysection{Max\+OS\+::runtime\+::KASan\+Handler Class Reference}
+\hypertarget{classMaxOS_1_1runtime_1_1KASanHandler}{}\label{classMaxOS_1_1runtime_1_1KASanHandler}\index{MaxOS::runtime::KASanHandler@{MaxOS::runtime::KASanHandler}}
+
+
+Handles kernel address sanitizer runtime errors.  
+
+
+
+
+{\ttfamily \#include $<$kasan.\+h$>$}
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{handle}} (bool write, uintptr\+\_\+t address, size\+\_\+t size, void \texorpdfstring{$\ast$}{*}rip)
+\begin{DoxyCompactList}\small\item\em Handles a KASan error by panicking and printing the details. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_acb851576cf57beb73ccf37e3b7432ef3}{initialize}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the KASan handler by setting up the shadow memory. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a5bfc92f363bfaa0e918b53f1f6298f6c}{poison\+\_\+stack}} (uintptr\+\_\+t address, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Marks a region of stack memory as poisoned (inaccessible) \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a11c56a03d25c08f6e75878a838b4af53}{unpoison\+\_\+stack}} (uintptr\+\_\+t address, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Marks a region of stack memory as unpoisoned (accessible) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Handles kernel address sanitizer runtime errors. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000044}{Todo}}]finish when cbf \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{kasan_8h_source_l00023}{23}} of file \mbox{\hyperlink{kasan_8h_source}{kasan.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}\label{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb} 
+\index{MaxOS::runtime::KASanHandler@{MaxOS::runtime::KASanHandler}!handle@{handle}}
+\index{handle@{handle}!MaxOS::runtime::KASanHandler@{MaxOS::runtime::KASanHandler}}
+\doxysubsubsection{\texorpdfstring{handle()}{handle()}}
+{\footnotesize\ttfamily void KASan\+Handler\+::handle (\begin{DoxyParamCaption}\item[{bool}]{write,  }\item[{uintptr\+\_\+t}]{address,  }\item[{size\+\_\+t}]{size,  }\item[{void \texorpdfstring{$\ast$}{*}}]{rip }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Handles a KASan error by panicking and printing the details. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em write} & Whether the access was a write (true) or read (false) \\
+\hline
+{\em address} & The address that was accessed \\
+\hline
+{\em size} & The size of the access in bytes \\
+\hline
+{\em rip} & The instruction pointer where the access occurred \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{kasan_8cpp_source_l00027}{27}} of file \mbox{\hyperlink{kasan_8cpp_source}{kasan.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}KASAN\ ERROR:\ \%s\ of\ size\ \%zu\ at\ address\ 0x\%lx\ from\ RIP\ 0x\%p"{}},\ write\ ?\ \textcolor{stringliteral}{"{}WRITE"{}}\ :\ \textcolor{stringliteral}{"{}READ"{}},\ size,\ address,\ rip);}
+\DoxyCodeLine{00029\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{logger_8h_source_l00100}{ASSERT}}.
+
+
+
+Referenced by \mbox{\hyperlink{kasan_8cpp_source_l00099}{\+\_\+\+\_\+asan\+\_\+load16\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00063}{\+\_\+\+\_\+asan\+\_\+load1\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00072}{\+\_\+\+\_\+asan\+\_\+load2\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00081}{\+\_\+\+\_\+asan\+\_\+load4\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00090}{\+\_\+\+\_\+asan\+\_\+load8\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00109}{\+\_\+\+\_\+asan\+\_\+load\+N\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00154}{\+\_\+\+\_\+asan\+\_\+store16\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00118}{\+\_\+\+\_\+asan\+\_\+store1\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00127}{\+\_\+\+\_\+asan\+\_\+store2\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00136}{\+\_\+\+\_\+asan\+\_\+store4\+\_\+noabort()}}, \mbox{\hyperlink{kasan_8cpp_source_l00145}{\+\_\+\+\_\+asan\+\_\+store8\+\_\+noabort()}}, and \mbox{\hyperlink{kasan_8cpp_source_l00164}{\+\_\+\+\_\+asan\+\_\+store\+N\+\_\+noabort()}}.
+
+\Hypertarget{classMaxOS_1_1runtime_1_1KASanHandler_acb851576cf57beb73ccf37e3b7432ef3}\label{classMaxOS_1_1runtime_1_1KASanHandler_acb851576cf57beb73ccf37e3b7432ef3} 
+\index{MaxOS::runtime::KASanHandler@{MaxOS::runtime::KASanHandler}!initialize@{initialize}}
+\index{initialize@{initialize}!MaxOS::runtime::KASanHandler@{MaxOS::runtime::KASanHandler}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily void KASan\+Handler\+::initialize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Initializes the KASan handler by setting up the shadow memory. 
+
+
+
+Definition at line \mbox{\hyperlink{kasan_8cpp_source_l00034}{34}} of file \mbox{\hyperlink{kasan_8cpp_source}{kasan.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \}}
+
+\end{DoxyCode}
+\Hypertarget{classMaxOS_1_1runtime_1_1KASanHandler_a5bfc92f363bfaa0e918b53f1f6298f6c}\label{classMaxOS_1_1runtime_1_1KASanHandler_a5bfc92f363bfaa0e918b53f1f6298f6c} 
+\index{MaxOS::runtime::KASanHandler@{MaxOS::runtime::KASanHandler}!poison\_stack@{poison\_stack}}
+\index{poison\_stack@{poison\_stack}!MaxOS::runtime::KASanHandler@{MaxOS::runtime::KASanHandler}}
+\doxysubsubsection{\texorpdfstring{poison\_stack()}{poison\_stack()}}
+{\footnotesize\ttfamily void KASan\+Handler\+::poison\+\_\+stack (\begin{DoxyParamCaption}\item[{uintptr\+\_\+t}]{address,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Marks a region of stack memory as poisoned (inaccessible) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The starting address of the region \\
+\hline
+{\em size} & The size of the region in bytes \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{kasan_8cpp_source_l00044}{44}} of file \mbox{\hyperlink{kasan_8cpp_source}{kasan.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \}}
+
+\end{DoxyCode}
+\Hypertarget{classMaxOS_1_1runtime_1_1KASanHandler_a11c56a03d25c08f6e75878a838b4af53}\label{classMaxOS_1_1runtime_1_1KASanHandler_a11c56a03d25c08f6e75878a838b4af53} 
+\index{MaxOS::runtime::KASanHandler@{MaxOS::runtime::KASanHandler}!unpoison\_stack@{unpoison\_stack}}
+\index{unpoison\_stack@{unpoison\_stack}!MaxOS::runtime::KASanHandler@{MaxOS::runtime::KASanHandler}}
+\doxysubsubsection{\texorpdfstring{unpoison\_stack()}{unpoison\_stack()}}
+{\footnotesize\ttfamily void KASan\+Handler\+::unpoison\+\_\+stack (\begin{DoxyParamCaption}\item[{uintptr\+\_\+t}]{address,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Marks a region of stack memory as unpoisoned (accessible) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The starting address of the region \\
+\hline
+{\em size} & The size of the region in bytes \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{kasan_8cpp_source_l00054}{54}} of file \mbox{\hyperlink{kasan_8cpp_source}{kasan.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/runtime/\mbox{\hyperlink{kasan_8h}{kasan.\+h}}\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/runtime/\mbox{\hyperlink{kasan_8cpp}{kasan.\+cpp}}\end{DoxyCompactItemize}

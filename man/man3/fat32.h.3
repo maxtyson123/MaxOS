@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/fat32.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/filesystem/format/fat32.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,11 +7,13 @@
 .SH SYNOPSIS
 .br
 .PP
+\fC#include <cstdint>\fP
+.br
+\fC#include <common/macros\&.h>\fP
+.br
 \fC#include <drivers/disk/disk\&.h>\fP
 .br
 \fC#include <filesystem/filesystem\&.h>\fP
-.br
-\fC#include <stdint\&.h>\fP
 .br
 
 .SS "Classes"
@@ -50,6 +52,26 @@
 .br
 .RI "Handles the FAT32 filesystem operations\&. "
 .in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::filesystem::format::BiosParameterBlock32\fP \fBMaxOS::filesystem::format::bpb32_t\fP"
+.br
+.RI "Alias for \fBBiosParameterBlock32\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::filesystem::format::FSInfo\fP \fBMaxOS::filesystem::format::fs_info_t\fP"
+.br
+.RI "Alias for \fBFSInfo\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::filesystem::format::DirectoryEntry\fP \fBMaxOS::filesystem::format::dir_entry_t\fP"
+.br
+.RI "Alias for \fBDirectoryEntry\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::filesystem::format::LongFileNameEntry\fP \fBMaxOS::filesystem::format::long_file_name_entry_t\fP"
+.br
+.RI "Alias for \fBLongFileNameEntry\fP struct\&. "
+.in -1c
 .SS "Enumerations"
 
 .in +1c
@@ -66,235 +88,9 @@
 .br
 .RI "The state of a cluster in the FAT32 filesystem\&. "
 .in -1c
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "struct \fBMaxOS::filesystem::format::BiosParameterBlock32\fP \fBMaxOS::filesystem::format::__attribute__\fP ((packed)) bpb32_t"
-.br
-.in -1c
 .SS "Variables"
 
 .in +1c
-.ti -1c
-.RI "uint8_t \fBjump\fP [3]"
-.br
-.RI "Jump instruction to boot code\&. "
-.ti -1c
-.RI "uint8_t \fBOEM_name\fP [8]"
-.br
-.RI "OEM Name in ASCII\&. "
-.ti -1c
-.RI "uint16_t \fBbytes_per_sector\fP"
-.br
-.RI "Bytes per sector\&. "
-.ti -1c
-.RI "uint8_t \fBsectors_per_cluster\fP"
-.br
-.RI "Sectors per cluster\&. "
-.ti -1c
-.RI "uint16_t \fBreserved_sectors\fP"
-.br
-.RI "Number of reserved sectors\&. "
-.ti -1c
-.RI "uint8_t \fBtable_copies\fP"
-.br
-.RI "Number of FAT tables\&. "
-.ti -1c
-.RI "uint16_t \fBroot_entries\fP"
-.br
-.RI "Number of root directory entries\&. "
-.ti -1c
-.RI "uint16_t \fBtotal_sectors_16\fP"
-.br
-.RI "Total number of sectors (if zero, use total_sectors_32) "
-.ti -1c
-.RI "uint8_t \fBmedia_type\fP"
-.br
-.RI "Media descriptor\&. "
-.ti -1c
-.RI "uint16_t \fBfat_sector_count\fP"
-.br
-.RI "Sectors per FAT (FAT12/FAT16 only) "
-.ti -1c
-.RI "uint16_t \fBsectors_per_track\fP"
-.br
-.RI "Sectors per track\&. "
-.ti -1c
-.RI "uint16_t \fBhead_count\fP"
-.br
-.RI "Number of heads/sides\&. "
-.ti -1c
-.RI "uint32_t \fBhidden_sectors\fP"
-.br
-.RI "Number of hidden sectors (LBA of start of partition) "
-.ti -1c
-.RI "uint32_t \fBtotal_sectors_32\fP"
-.br
-.RI "Total number of sectors (if total_sectors_16 is zero) "
-.ti -1c
-.RI "uint32_t \fBtable_size_32\fP"
-.br
-.RI "Sectors per FAT (FAT32 only) "
-.ti -1c
-.RI "uint16_t \fBextended_flags\fP"
-.br
-.RI "Extended flags\&. "
-.ti -1c
-.RI "uint16_t \fBfat_version\fP"
-.br
-.RI "FAT version number (high byte major, low byte minor) "
-.ti -1c
-.RI "uint32_t \fBroot_cluster\fP"
-.br
-.RI "Cluster number of root directory start\&. "
-.ti -1c
-.RI "uint16_t \fBfat_info\fP"
-.br
-.RI "Sector number of FSInfo structure\&. "
-.ti -1c
-.RI "uint16_t \fBbackup_sector\fP"
-.br
-.RI "Sector number of backup boot sector\&. "
-.ti -1c
-.RI "uint8_t \fBreserved0\fP [12]"
-.br
-.RI "Should be zero\&. "
-.ti -1c
-.RI "uint8_t \fBdrive_number\fP"
-.br
-.RI "Drive number (must be identical to BIOS drive number) (0x00 = floppy, 0x80 = first hard disk) "
-.ti -1c
-.RI "uint8_t \fBreserved_1\fP"
-.br
-.RI "Reserved (used by Windows NT) "
-.ti -1c
-.RI "uint8_t \fBboot_signature\fP"
-.br
-.RI "Extended boot signature (0x28 or 0x29) "
-.ti -1c
-.RI "uint32_t \fBvolume_id\fP"
-.br
-.RI "Volume serial number\&. "
-.ti -1c
-.RI "uint8_t \fBvolume_label\fP [11]"
-.br
-.RI "Volume label in ASCII (spaces padded) "
-.ti -1c
-.RI "uint8_t \fBfile_system_type\fP [8]"
-.br
-.RI "System type in ASCII (not null-terminated) "
-.ti -1c
-.RI "uint32_t \fBlead_signature\fP"
-.br
-.RI "FSInfo lead signature (0x41615252) "
-.ti -1c
-.RI "uint8_t \fBreserved1\fP [480]"
-.br
-.RI "Reserved (should be zero) "
-.ti -1c
-.RI "uint32_t \fBstructure_signature\fP"
-.br
-.RI "FSInfo structure signature (0x61417272) "
-.ti -1c
-.RI "uint32_t \fBfree_cluster_count\fP"
-.br
-.RI "Number of free clusters (or 0xFFFFFFFF if unknown) (not reliable, must range check) "
-.ti -1c
-.RI "uint32_t \fBnext_free_cluster\fP"
-.br
-.RI "Cluster number of the next free cluster (or 0xFFFFFFFF if unknown, start searching from cluster 2) "
-.ti -1c
-.RI "uint8_t \fBreserved2\fP [12]"
-.br
-.RI "Reserved (should be zero) "
-.ti -1c
-.RI "uint32_t \fBtrail_signature\fP"
-.br
-.RI "FSInfo trail signature (0xAA550000) "
-.ti -1c
-.RI "uint8_t \fBname\fP [8]"
-.br
-.RI "File name\&. "
-.ti -1c
-.RI "uint8_t \fBextension\fP [3]"
-.br
-.RI "File extension\&. "
-.ti -1c
-.RI "uint8_t \fBattributes\fP"
-.br
-.RI "File attributes (see DirectoryEntryAttributes) "
-.ti -1c
-.RI "uint8_t \fBreserved\fP"
-.br
-.RI "Reserved for Windows NT\&. "
-.ti -1c
-.RI "uint8_t \fBcreation_time_tenth\fP"
-.br
-.RI "Creation time in tenths of a second (or 100ths of a second) (0-199 on Windows, 0/100 on Linux) "
-.ti -1c
-.RI "uint16_t \fBcreation_time\fP"
-.br
-.RI "Creation time (HH:MM:SS) (multiply seconds by 2) "
-.ti -1c
-.RI "uint16_t \fBcreation_date\fP"
-.br
-.RI "Creation date (YYYY-MM-DD) "
-.ti -1c
-.RI "uint16_t \fBlast_access_date\fP"
-.br
-.RI "Last access date (YYYY-MM-DD) "
-.ti -1c
-.RI "uint16_t \fBfirst_cluster_high\fP"
-.br
-.RI "High word of this entry's first cluster number (usually 0 for FAT12/FAT16) "
-.ti -1c
-.RI "uint16_t \fBlast_write_time\fP"
-.br
-.RI "Last write time (HH:MM:SS) (multiply seconds by 2) "
-.ti -1c
-.RI "uint16_t \fBlast_write_date\fP"
-.br
-.RI "Last write date (YYYY-MM-DD) "
-.ti -1c
-.RI "uint16_t \fBfirst_cluster_low\fP"
-.br
-.RI "Low word of this entry's first cluster number\&. "
-.ti -1c
-.RI "uint32_t \fBsize\fP"
-.br
-.RI "File size in bytes\&. "
-.ti -1c
-.RI "enum \fBMaxOS::filesystem::format::DirectoryEntryAttributes\fP \fBMaxOS::filesystem::format::__attribute__\fP"
-.br
-.ti -1c
-.RI "uint8_t \fBorder\fP"
-.br
-.RI "Index of this entry in the sequence of LFN entries\&. "
-.ti -1c
-.RI "uint16_t \fBname1\fP [5]"
-.br
-.RI "First 5 characters of the long file name\&. "
-.ti -1c
-.RI "uint8_t \fBtype\fP"
-.br
-.RI "Type (always 0 for LFN entries) "
-.ti -1c
-.RI "uint8_t \fBchecksum\fP"
-.br
-.RI "Checksum of the corresponding short file name\&. "
-.ti -1c
-.RI "uint16_t \fBname2\fP [6]"
-.br
-.RI "Next 6 characters of the long file name\&. "
-.ti -1c
-.RI "uint16_t \fBzero\fP"
-.br
-.RI "Must be zero\&. "
-.ti -1c
-.RI "uint16_t \fBname3\fP [2]"
-.br
-.RI "Last 2 characters of the long file name\&. "
 .ti -1c
 .RI "constexpr uint16_t \fBMaxOS::filesystem::format::MAX_NAME_LENGTH\fP = 255"
 .br
@@ -333,13 +129,13 @@ Definition in file \fBfat32\&.h\fP\&.
 .PP
 The state of a cluster in the FAT32 filesystem\&. 
 .PP
-Definition at line \fB146\fP of file \fBfat32\&.h\fP\&..PP
+Definition at line \fB158\fP of file \fBfat32\&.h\fP\&..PP
 .nf
-146                                     : uint32_t {
-147                 FREE            = 0x00000000,
-148                 BAD             = 0x0FFFFFF7,
-149                 END_OF_CHAIN    = 0xFFFFFFFF,
-150             };
+158                             : uint32_t {
+159         FREE = 0x00000000,
+160         BAD = 0x0FFFFFF7,
+161         END_OF_CHAIN = 0xFFFFFFFF,
+162     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::DirectoryEntryAttributes\fP\fC [strong]\fP"
@@ -347,18 +143,18 @@ Definition at line \fB146\fP of file \fBfat32\&.h\fP\&..PP
 .PP
 Flags for a directory entry in a FAT32 System\&. 
 .PP
-Definition at line \fB106\fP of file \fBfat32\&.h\fP\&..PP
+Definition at line \fB115\fP of file \fBfat32\&.h\fP\&..PP
 .nf
-106                                                 {
-107                 FREE = 0x00,
-108                 READ_ONLY = 0x01,
-109                 HIDDEN = 0x02,
-110                 SYSTEM = 0x04,
-111                 VOLUME_ID = 0x08,
-112                 DIRECTORY = 0x10,
-113                 ARCHIVE = 0x20,
-114                 LONG_NAME = READ_ONLY | HIDDEN | SYSTEM | VOLUME_ID,
-115             };
+115                                         {
+116         FREE = 0x00,
+117         READ_ONLY = 0x01,
+118         HIDDEN = 0x02,
+119         SYSTEM = 0x04,
+120         VOLUME_ID = 0x08,
+121         DIRECTORY = 0x10,
+122         ARCHIVE = 0x20,
+123         LONG_NAME = READ_ONLY | HIDDEN | SYSTEM | VOLUME_ID,
+124     };
 .fi
 
 .SS "enum class \fBMaxOS::filesystem::format::DirectoryEntryType\fP\fC [strong]\fP"
@@ -366,352 +162,24 @@ Definition at line \fB106\fP of file \fBfat32\&.h\fP\&..PP
 .PP
 The type of a directory entry\&. 
 .PP
-Definition at line \fB121\fP of file \fBfat32\&.h\fP\&..PP
+Definition at line \fB130\fP of file \fBfat32\&.h\fP\&..PP
 .nf
-121                                           {
-122                 LAST = 0x00,
-123                 FREE = 0xE5,
-124             };
+130                                   {
+131         LAST = 0x00,
+132         FREE = 0xE5,
+133     };
 .fi
 
 .SH "Variable Documentation"
 .PP 
-.SS "uint8_t attributes"
-
-.PP
-File attributes (see DirectoryEntryAttributes) Attributes (always 0x0F for LFN entries) 
-.PP
-Definition at line \fB3\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t backup_sector"
-
-.PP
-Sector number of backup boot sector\&. 
-.PP
-Definition at line \fB21\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t boot_signature"
-
-.PP
-Extended boot signature (0x28 or 0x29) 
-.PP
-Definition at line \fB25\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t bytes_per_sector"
-
-.PP
-Bytes per sector\&. 
-.PP
-Definition at line \fB3\fP of file \fBfat32\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::format::Fat32Directory::update_entry_on_disk()\fP\&.
-.SS "uint8_t checksum"
-
-.PP
-Checksum of the corresponding short file name\&. 
-.PP
-Definition at line \fB4\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t creation_date"
-
-.PP
-Creation date (YYYY-MM-DD) 
-.PP
-Definition at line \fB8\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t creation_time"
-
-.PP
-Creation time (HH:MM:SS) (multiply seconds by 2) 
-.PP
-Definition at line \fB7\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t creation_time_tenth"
-
-.PP
-Creation time in tenths of a second (or 100ths of a second) (0-199 on Windows, 0/100 on Linux) 
-.PP
-Definition at line \fB6\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t drive_number"
-
-.PP
-Drive number (must be identical to BIOS drive number) (0x00 = floppy, 0x80 = first hard disk) 
-.PP
-Definition at line \fB23\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t extended_flags"
-
-.PP
-Extended flags\&. 
-.PP
-Definition at line \fB17\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t extension[3]"
-
-.PP
-File extension\&. 
-.PP
-Definition at line \fB2\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t fat_info"
-
-.PP
-Sector number of FSInfo structure\&. 
-.PP
-Definition at line \fB20\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t fat_sector_count"
-
-.PP
-Sectors per FAT (FAT12/FAT16 only) 
-.PP
-Definition at line \fB10\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t fat_version"
-
-.PP
-FAT version number (high byte major, low byte minor) 
-.PP
-Definition at line \fB18\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t file_system_type[8]"
-
-.PP
-System type in ASCII (not null-terminated) 
-.PP
-Definition at line \fB28\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t first_cluster_high"
-
-.PP
-High word of this entry's first cluster number (usually 0 for FAT12/FAT16) 
-.PP
-Definition at line \fB11\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t first_cluster_low"
-
-.PP
-Low word of this entry's first cluster number\&. 
-.PP
-Definition at line \fB16\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t free_cluster_count"
-
-.PP
-Number of free clusters (or 0xFFFFFFFF if unknown) (not reliable, must range check) 
-.PP
-Definition at line \fB3\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t head_count"
-
-.PP
-Number of heads/sides\&. 
-.PP
-Definition at line \fB12\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t hidden_sectors"
-
-.PP
-Number of hidden sectors (LBA of start of partition) 
-.PP
-Definition at line \fB13\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t jump[3]"
-
-.PP
-Jump instruction to boot code\&. 
-.PP
-Definition at line \fB1\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t last_access_date"
-
-.PP
-Last access date (YYYY-MM-DD) 
-.PP
-Definition at line \fB9\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t last_write_date"
-
-.PP
-Last write date (YYYY-MM-DD) 
-.PP
-Definition at line \fB14\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t last_write_time"
-
-.PP
-Last write time (HH:MM:SS) (multiply seconds by 2) 
-.PP
-Definition at line \fB13\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t lead_signature"
-
-.PP
-FSInfo lead signature (0x41615252) 
-.PP
-Definition at line \fB0\fP of file \fBfat32\&.h\fP\&.
 .SS "constexpr uint16_t MaxOS::filesystem::format::MAX_NAME_LENGTH = 255\fC [constexpr]\fP"
 
 .PP
 Highest number of characters in a file/directory name\&. 
 .PP
-Definition at line \fB153\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB165\fP of file \fBfat32\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::filesystem::format::Fat32Directory::create_file()\fP, and \fBMaxOS::filesystem::format::Fat32Directory::create_subdirectory()\fP\&.
-.SS "uint8_t media_type"
-
-.PP
-Media descriptor\&. 
-.PP
-Definition at line \fB9\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t name[8]"
-
-.PP
-File name\&. 
-.PP
-Definition at line \fB1\fP of file \fBfat32\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::VirtualFileSystem::create_directory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::create_file()\fP, \fBMaxOS::filesystem::VFSResourceRegistry::create_resource()\fP, \fBMaxOS::processes::ResourceRegistry< Type >::create_resource()\fP, \fBMaxOS::filesystem::VirtualFileSystem::delete_directory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::delete_file()\fP, \fBMaxOS::processes::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::processes::ResourceManager::get_resource()\fP, \fBMaxOS::filesystem::VFSResourceRegistry::get_resource()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::open_directory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::open_file()\fP, \fBMaxOS::processes::ResourceManager::open_resource()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_create()\fP, and \fBMaxOS::system::SyscallManager::syscall_resource_open()\fP\&.
-.SS "uint16_t name1[5]"
-
-.PP
-First 5 characters of the long file name\&. 
-.PP
-Definition at line \fB1\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t name2[6]"
-
-.PP
-Next 6 characters of the long file name\&. 
-.PP
-Definition at line \fB5\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t name3[2]"
-
-.PP
-Last 2 characters of the long file name\&. 
-.PP
-Definition at line \fB7\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t next_free_cluster"
-
-.PP
-Cluster number of the next free cluster (or 0xFFFFFFFF if unknown, start searching from cluster 2) 
-.PP
-Definition at line \fB4\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t OEM_name[8]"
-
-.PP
-OEM Name in ASCII\&. 
-.PP
-Definition at line \fB2\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t order"
-
-.PP
-Index of this entry in the sequence of LFN entries\&. 
-.PP
-Definition at line \fB0\fP of file \fBfat32\&.h\fP\&.
-.SS "uint64_t reserved"
-
-.PP
-Reserved for Windows NT\&. Reserved bits (should be zero) 
-.PP
-Definition at line \fB4\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t reserved0[12]"
-
-.PP
-Should be zero\&. 
-.PP
-Definition at line \fB22\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t reserved1[480]"
-
-.PP
-Reserved (should be zero) 
-.PP
-Definition at line \fB1\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t reserved2[12]"
-
-.PP
-Reserved (should be zero) 
-.PP
-Definition at line \fB5\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t reserved_1"
-
-.PP
-Reserved (used by Windows NT) 
-.PP
-Definition at line \fB24\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t reserved_sectors"
-
-.PP
-Number of reserved sectors\&. 
-.PP
-Definition at line \fB5\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t root_cluster"
-
-.PP
-Cluster number of root directory start\&. 
-.PP
-Definition at line \fB19\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t root_entries"
-
-.PP
-Number of root directory entries\&. 
-.PP
-Definition at line \fB7\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t sectors_per_cluster"
-
-.PP
-Sectors per cluster\&. 
-.PP
-Definition at line \fB4\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t sectors_per_track"
-
-.PP
-Sectors per track\&. 
-.PP
-Definition at line \fB11\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t size"
-
-.PP
-File size in bytes\&. 
-.PP
-Definition at line \fB18\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t structure_signature"
-
-.PP
-FSInfo structure signature (0x61417272) 
-.PP
-Definition at line \fB2\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t table_copies"
-
-.PP
-Number of FAT tables\&. 
-.PP
-Definition at line \fB6\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t table_size_32"
-
-.PP
-Sectors per FAT (FAT32 only) 
-.PP
-Definition at line \fB16\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t total_sectors_16"
-
-.PP
-Total number of sectors (if zero, use total_sectors_32) 
-.PP
-Definition at line \fB8\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t total_sectors_32"
-
-.PP
-Total number of sectors (if total_sectors_16 is zero) 
-.PP
-Definition at line \fB14\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t trail_signature"
-
-.PP
-FSInfo trail signature (0xAA550000) 
-.PP
-Definition at line \fB6\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t type"
-
-.PP
-Type (always 0 for LFN entries) 
-.PP
-Definition at line \fB3\fP of file \fBfat32\&.h\fP\&.
-.SS "uint32_t volume_id"
-
-.PP
-Volume serial number\&. 
-.PP
-Definition at line \fB26\fP of file \fBfat32\&.h\fP\&.
-.SS "uint8_t volume_label[11]"
-
-.PP
-Volume label in ASCII (spaces padded) 
-.PP
-Definition at line \fB27\fP of file \fBfat32\&.h\fP\&.
-.SS "uint16_t zero"
-
-.PP
-Must be zero\&. 
-.PP
-Definition at line \fB6\fP of file \fBfat32\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

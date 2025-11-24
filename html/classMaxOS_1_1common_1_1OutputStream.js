@@ -1,6 +1,7 @@
 var classMaxOS_1_1common_1_1OutputStream =
 [
-    [ "carriageReturn", "classMaxOS_1_1common_1_1OutputStream.html#a05cb085bde9354067ff988362e5a019f", null ],
+    [ "OutputStream", "classMaxOS_1_1common_1_1OutputStream.html#a1159b7032e052493fdec603a3deeff70", null ],
+    [ "carriage_return", "classMaxOS_1_1common_1_1OutputStream.html#a453a576e337f29620c2c7b2a32c4aac3", null ],
     [ "clear", "classMaxOS_1_1common_1_1OutputStream.html#af98bdc81afa2f8d1a9217685648fdda8", null ],
     [ "line_feed", "classMaxOS_1_1common_1_1OutputStream.html#afe15f38f41f33237dc4095ffb29fa090", null ],
     [ "operator<<", "classMaxOS_1_1common_1_1OutputStream.html#aea8e7faf2e86c47f2c43fb29d2d6c46a", null ],

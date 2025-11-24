@@ -5,7 +5,7 @@
 Defines structures and enums for handling Microsoft -\/ Desktop Operating System (MS-\/\+DOS) partitions in a filesystem.  
 
 
-{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$drivers/disk/disk.\+h$>$}\newline
 {\ttfamily \#include $<$filesystem/format/fat32.\+h$>$}\newline
 {\ttfamily \#include $<$filesystem/format/ext2.\+h$>$}\newline
@@ -19,6 +19,15 @@ struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1partition_1_1MasterBootReco
 \begin{DoxyCompactList}\small\item\em Stores information about the master boot record. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition}{Max\+OS\+::filesystem\+::partition\+::\+MSDOSPartition}}
 \begin{DoxyCompactList}\small\item\em Handles mounting of partitions documented in an MSDOS partition table. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{msdos_8h_ab1ba6e33a1f0304ba3ef76f48d44b6e7}\label{msdos_8h_ab1ba6e33a1f0304ba3ef76f48d44b6e7} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry}{Max\+OS\+::filesystem\+::partition\+::\+Partition\+Table\+Entry}} {\bfseries Max\+OS\+::filesystem\+::partition\+::partition\+\_\+table\+\_\+entry\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry}{Partition\+Table\+Entry} struct. \end{DoxyCompactList}\item 
+\Hypertarget{msdos_8h_ac818b8d6a6e48d402765748016bddb85}\label{msdos_8h_ac818b8d6a6e48d402765748016bddb85} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord}{Max\+OS\+::filesystem\+::partition\+::\+Master\+Boot\+Record}} {\bfseries Max\+OS\+::filesystem\+::partition\+::master\+\_\+boot\+\_\+record\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1filesystem_1_1partition_1_1MasterBootRecord}{Master\+Boot\+Record} struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
@@ -342,48 +351,6 @@ enum class \mbox{\hyperlink{msdos_8h_a2e4fb19c764ea277199e32724975df93}{Max\+OS\
 , {\bfseries XENIX\+\_\+\+BAD\+\_\+\+BLOCK}
  \}
 \begin{DoxyCompactList}\small\item\em Credit\+: \href{http://www.osdever.net/documents/pdf/partitiontypes.pdf}{\texttt{ http\+://www.\+osdever.\+net/documents/pdf/partitiontypes.\+pdf}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Functions}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{msdos_8h_afddaf05ee4263b59484844173c35294b}\label{msdos_8h_afddaf05ee4263b59484844173c35294b} 
-struct \mbox{\hyperlink{structMaxOS_1_1filesystem_1_1partition_1_1PartitionTableEntry}{Max\+OS\+::filesystem\+::partition\+::\+Partition\+Table\+Entry}} {\bfseries Max\+OS\+::filesystem\+::partition\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed))
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Variables}
-\begin{DoxyCompactItemize}
-\item 
-uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a473a1483ecee72b5fb823dd28190cef8}{bootable}}
-\begin{DoxyCompactList}\small\item\em Is this partition bootable? (0x80 = bootable, 0x00 = not bootable) \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a7b0643284eda403a636341c87b08e850}{start\+\_\+head}}
-\begin{DoxyCompactList}\small\item\em The starting head of the partition. \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a7194a9ec4359f80228f38427074b0e79}{start\+\_\+sector}}
-\begin{DoxyCompactList}\small\item\em The first sector of the partition. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{msdos_8h_a461c61c9b56efe9ccccb9ddcafc7039e}{start\+\_\+cylinder}}
-\begin{DoxyCompactList}\small\item\em The starting cylinder of the partition. \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a1d127017fb298b889f4ba24752d08b8e}{type}}
-\begin{DoxyCompactList}\small\item\em The partition type (see Partition\+Type enum) \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{msdos_8h_aa8928d79fa39385e4e726185713fc356}{end\+\_\+head}}
-\begin{DoxyCompactList}\small\item\em The last head of the partition. \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{msdos_8h_aed0439ad723570765c1e40b8efd1dd61}{end\+\_\+sector}}
-\begin{DoxyCompactList}\small\item\em The last sector of the partition. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{msdos_8h_a4673ec2e07d66b72d0744129d4e89b87}{end\+\_\+cylinder}}
-\begin{DoxyCompactList}\small\item\em The last cylinder of the partition. \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{msdos_8h_a48084b77fa49c552983824a90b0110e4}{start\+\_\+\+LBA}}
-\begin{DoxyCompactList}\small\item\em The starting LBA of the partition. \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{msdos_8h_aebb70c2aab3407a9f05334c47131a43b}{length}}
-\begin{DoxyCompactList}\small\item\em The length of the partition in sectors. \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{msdos_8h_a09835f758bb5328b55a01068bbc4c972}{bootloader}} \mbox{[}440\mbox{]}
-\begin{DoxyCompactList}\small\item\em The assembly bytes that make up the bootloader software. \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{msdos_8h_a2eda13dfaaf6d61d3bbad4f0dc86c845}{disk\+\_\+signature}}
-\begin{DoxyCompactList}\small\item\em Unique disk signature (optional) \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{msdos_8h_a69f7e996ff7ce0531e893a56c8515e6b}{unused}}
-\begin{DoxyCompactList}\small\item\em Reserved (usually zero) \end{DoxyCompactList}\item 
-Partition\+Table\+Entry \mbox{\hyperlink{msdos_8h_ae82a748207fb88709bb65e8a13096863}{primary\+\_\+partition}} \mbox{[}4\mbox{]}
-\begin{DoxyCompactList}\small\item\em The partition table entries. \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}{magic}}
-\begin{DoxyCompactList}\small\item\em The magic number that identifies this as a valid MBR (0x\+AA55) \end{DoxyCompactList}\item 
-\Hypertarget{msdos_8h_a88887f48bf23d5a530521fb8b8a66ecd}\label{msdos_8h_a88887f48bf23d5a530521fb8b8a66ecd} 
-class \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1partition_1_1MSDOSPartition}{Max\+OS\+::filesystem\+::partition\+::\+MSDOSPartition}} {\bfseries Max\+OS\+::filesystem\+::partition\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}
-\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -414,501 +381,284 @@ Credit\+: \href{http://www.osdever.net/documents/pdf/partitiontypes.pdf}{\texttt
 
 
 
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00026}{26}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00022}{22}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EMPTY,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x00}}
-\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT12,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x01}}
-\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ XENIX\_ROOT,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x02}}
-\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ XENIX\_USR,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x03}}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT16,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x04}}
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EXTENDED,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x05}}
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT16\_32MB,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x06}}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NTFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x07}}
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QNX\_QNY,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x08}}
-\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AIX\_DATA,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x09}}
-\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OS2\_BOOT\_MANAGER,\ \ \ \ \ \ \textcolor{comment}{//\ 0x0A}}
-\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT32,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0B}}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT32\_LBA,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0C}}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0D}}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT16\_LBA,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0E}}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EXTENDED\_LBA,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0F}}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OPUS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x10}}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT12\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x11}}
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ COMPAQ,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x12}}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_2,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x13}}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT16\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x14}}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_3,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x15}}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT16\_32MB\_HIDDEN,\ \ \ \ \ \textcolor{comment}{//\ 0x16}}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IFS\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x17}}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AST\_SMART\_SLEEP,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x18}}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_4,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x19}}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_5,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x1A}}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT32\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x1B}}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT32\_LBA\_HIDDEN,\ \ \ \ \ \ \textcolor{comment}{//\ 0x1C}}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_6,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x1D}}
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAT16\_LBA\_HIDDEN,\ \ \ \ \ \ \textcolor{comment}{//\ 0x1E}}
-\DoxyCodeLine{00058\ }
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_7,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x1F}}
-\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_8,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x20}}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_1,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x21}}
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_10,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x22}}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_2,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x23}}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NEC\_DOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x24}}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_11,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x25}}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_3,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x26}}
-\DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x27\ -\/\ 0x30:\ unassigned}}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_12,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x27}}
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_13,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x28}}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_14,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x29}}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_15,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2A}}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_16,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2B}}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_17,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2C}}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_18,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2D}}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_19,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2E}}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_20,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2F}}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_21,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x30}}
-\DoxyCodeLine{00079\ }
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_4,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x31}}
-\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x32}}
-\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_5,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x33}}
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_6,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x34}}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ JFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x35}}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_7,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x36}}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_22,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x37}}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ THEOS\_3\_2,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x38}}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PLAN9,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x39}}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ THEOS\_4\_4GB,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x3A}}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ THEOS\_4\_EXTENDED,\ \ \ \ \ \ \textcolor{comment}{//\ 0x3B}}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PARTITIONMAGIC\_RECOVERY,\ \textcolor{comment}{//\ 0x3C}}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HIDDEN\_NETWARE,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x3D}}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_23,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x3E}}
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_24,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x3F}}
-\DoxyCodeLine{00095\ }
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VENIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x40}}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_MINIX,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x41}}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_SWAP,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x42}}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_NATIVE,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x43}}
-\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GOBACK,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x44}}
-\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BOOT\_US,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x45}}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EUMEL\_ELAN\_46,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x46}}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EUMEL\_ELAN\_47,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x47}}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EUMEL\_ELAN\_48,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x48}}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_25,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x49}}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ADAOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4A}}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_26,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4B}}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OBERON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4C}}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QNX4,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4D}}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QNX4\_SECOND,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4E}}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QNX4\_THIRD,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4F}}
-\DoxyCodeLine{00112\ }
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ONTRACK\_DM,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x50}}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ONTRACK\_DM\_RW,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x51}}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CPM,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x52}}
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DISK\_MANAGER\_AUX3,\ \ \ \ \ \textcolor{comment}{//\ 0x53}}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DISK\_MANAGER\_DDO,\ \ \ \ \ \ \textcolor{comment}{//\ 0x54}}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EZ\_DRIVE,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x55}}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GOLDEN\_BOW,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x56}}
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRIVE\_PRO,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x57}}
-\DoxyCodeLine{00121\ }
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_27,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x58}}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_28,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x59}}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_29,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5A}}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_30,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5B}}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PRIAM\_EDISK,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5C}}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_31,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5D}}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_32,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5E}}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_33,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5F}}
-\DoxyCodeLine{00130\ }
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_34,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x60}}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPEEDSTOR,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x61}}
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_35,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x62}}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x63}}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PC\_ARMOUR,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x64}}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NOVELL\_NETWARE386,\ \ \ \ \ \textcolor{comment}{//\ 0x65}}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NOVELL\_SMS,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x66}}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NOVELL,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x67}}
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NOVELL\_OLD,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x68}}
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NOVELL\_NETWARE\_NSS,\ \ \ \ \textcolor{comment}{//\ 0x69}}
-\DoxyCodeLine{00141\ }
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_36,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6A}}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_37,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6B}}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_38,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6C}}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_39,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6D}}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_40,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6E}}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_41,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6F}}
-\DoxyCodeLine{00148\ }
-\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DISKSECURE,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x70}}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_8,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x71}}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_42,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x72}}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_9,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x73}}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SCRAMDISK,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x74}}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IBM\_PCIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x75}}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_10,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x76}}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ M2FS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x77}}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ XOSL\_FS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x78}}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_43,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x79}}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_44,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7A}}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_45,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7B}}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_46,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7C}}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_47,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7D}}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_48,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7E}}
-\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_49,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7F}}
-\DoxyCodeLine{00165\ }
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MINIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x80}}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MINIX2,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x81}}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_SWAP\_ALT,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x82}}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_EXT2,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x83}}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HIBERNATION,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x84}}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_EXTENDED,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x85}}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_RAID,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x86}}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NTFS\_VOLUME\_SET,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x87}}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_50,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x88}}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_51,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x89}}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_KERNEL,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8A}}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FAULT\_TOLERANT\_FAT32,\ \ \textcolor{comment}{//\ 0x8B}}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FT\_FAT32\_LBA,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8C}}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREEFDISK\_FAT12,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8D}}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_LVM,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8E}}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_52,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8F}}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREEFDISK\_FAT16,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x90}}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREEFDISK\_EXTENDED,\ \ \ \ \textcolor{comment}{//\ 0x91}}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREEFDISK\_FAT16\_LARGE,\ \textcolor{comment}{//\ 0x92}}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HIDDEN\_LINUX\_NATIVE,\ \ \ \textcolor{comment}{//\ 0x93}}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AMOEBA\_BAD\_BLOCK,\ \ \ \ \ \ \textcolor{comment}{//\ 0x94}}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MIT\_EXOPC,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x95}}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_53,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x96}}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREEFDISK\_FAT32,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x97}}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREEFDISK\_FAT32\_LBA,\ \ \ \textcolor{comment}{//\ 0x98}}
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DCE376,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x99}}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREEFDISK\_FAT16\_LBA,\ \ \ \textcolor{comment}{//\ 0x9A}}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FREEFDISK\_EXTENDED\_LBA,\textcolor{comment}{//\ 0x9B}}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ EMPTY,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x00}}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ FAT12,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x01}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ XENIX\_ROOT,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x02}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ XENIX\_USR,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x03}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ FAT16,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x04}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ EXTENDED,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x05}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ FAT16\_32MB,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x06}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ NTFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x07}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ QNX\_QNY,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x08}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ AIX\_DATA,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x09}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ OS2\_BOOT\_MANAGER,\ \ \ \ \ \ \textcolor{comment}{//\ 0x0A}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ FAT32,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0B}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ FAT32\_LBA,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0C}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ UNUSED\_1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0D}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ FAT16\_LBA,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0E}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ EXTENDED\_LBA,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x0F}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ OPUS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x10}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ FAT12\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x11}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ COMPAQ,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x12}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ UNUSED\_2,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x13}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ FAT16\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x14}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ UNUSED\_3,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x15}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ FAT16\_32MB\_HIDDEN,\ \ \ \ \ \textcolor{comment}{//\ 0x16}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ IFS\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x17}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ AST\_SMART\_SLEEP,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x18}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ UNUSED\_4,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x19}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ UNUSED\_5,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x1A}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ FAT32\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x1B}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ FAT32\_LBA\_HIDDEN,\ \ \ \ \ \ \textcolor{comment}{//\ 0x1C}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ UNUSED\_6,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x1D}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ FAT16\_LBA\_HIDDEN,\ \ \ \ \ \ \textcolor{comment}{//\ 0x1E}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ UNUSED\_7,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x1F}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ UNUSED\_8,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x20}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ RESERVED\_1,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x21}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ UNUSED\_10,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x22}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ RESERVED\_2,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x23}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ NEC\_DOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x24}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ UNUSED\_11,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x25}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ RESERVED\_3,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x26}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x27\ -\/\ 0x30:\ unassigned}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ UNUSED\_12,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x27}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ UNUSED\_13,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x28}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ UNUSED\_14,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x29}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ UNUSED\_15,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2A}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ UNUSED\_16,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2B}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ UNUSED\_17,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2C}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ UNUSED\_18,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2D}}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ UNUSED\_19,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2E}}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ UNUSED\_20,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x2F}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ UNUSED\_21,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x30}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ RESERVED\_4,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x31}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ NOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x32}}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ RESERVED\_5,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x33}}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ RESERVED\_6,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x34}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ JFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x35}}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ RESERVED\_7,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x36}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ UNUSED\_22,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x37}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ THEOS\_3\_2,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x38}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ PLAN9,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x39}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ THEOS\_4\_4GB,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x3A}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ THEOS\_4\_EXTENDED,\ \ \ \ \ \ \textcolor{comment}{//\ 0x3B}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ PARTITIONMAGIC\_RECOVERY,\ \textcolor{comment}{//\ 0x3C}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ HIDDEN\_NETWARE,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x3D}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ UNUSED\_23,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x3E}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ UNUSED\_24,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x3F}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ VENIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x40}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ LINUX\_MINIX,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x41}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ LINUX\_SWAP,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x42}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ LINUX\_NATIVE,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x43}}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ GOBACK,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x44}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ BOOT\_US,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x45}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ EUMEL\_ELAN\_46,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x46}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ EUMEL\_ELAN\_47,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x47}}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ EUMEL\_ELAN\_48,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x48}}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ UNUSED\_25,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x49}}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ ADAOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4A}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ UNUSED\_26,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4B}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ OBERON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4C}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ QNX4,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4D}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ QNX4\_SECOND,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4E}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ QNX4\_THIRD,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x4F}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ ONTRACK\_DM,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x50}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ ONTRACK\_DM\_RW,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x51}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ CPM,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x52}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ DISK\_MANAGER\_AUX3,\ \ \ \ \ \textcolor{comment}{//\ 0x53}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ DISK\_MANAGER\_DDO,\ \ \ \ \ \ \textcolor{comment}{//\ 0x54}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ EZ\_DRIVE,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x55}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ GOLDEN\_BOW,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x56}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ DRIVE\_PRO,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x57}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ UNUSED\_27,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x58}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ UNUSED\_28,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x59}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ UNUSED\_29,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5A}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ UNUSED\_30,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5B}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ PRIAM\_EDISK,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5C}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ UNUSED\_31,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5D}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ UNUSED\_32,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5E}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ UNUSED\_33,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x5F}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ UNUSED\_34,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x60}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ SPEEDSTOR,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x61}}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ UNUSED\_35,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x62}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ UNIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x63}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ PC\_ARMOUR,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x64}}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ NOVELL\_NETWARE386,\ \ \ \ \ \textcolor{comment}{//\ 0x65}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ NOVELL\_SMS,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x66}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ NOVELL,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x67}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ NOVELL\_OLD,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x68}}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ NOVELL\_NETWARE\_NSS,\ \ \ \ \textcolor{comment}{//\ 0x69}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ UNUSED\_36,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6A}}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ UNUSED\_37,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6B}}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ UNUSED\_38,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6C}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ UNUSED\_39,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6D}}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ UNUSED\_40,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6E}}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ UNUSED\_41,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x6F}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ DISKSECURE,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x70}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ RESERVED\_8,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x71}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ UNUSED\_42,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x72}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ RESERVED\_9,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x73}}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ SCRAMDISK,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x74}}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ IBM\_PCIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x75}}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ RESERVED\_10,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x76}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ M2FS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x77}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ XOSL\_FS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x78}}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ UNUSED\_43,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x79}}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ UNUSED\_44,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7A}}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ UNUSED\_45,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7B}}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ UNUSED\_46,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7C}}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ UNUSED\_47,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7D}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ UNUSED\_48,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7E}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ UNUSED\_49,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x7F}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ MINIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x80}}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ MINIX2,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x81}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ LINUX\_SWAP\_ALT,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x82}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ LINUX\_EXT2,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x83}}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ HIBERNATION,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x84}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ LINUX\_EXTENDED,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x85}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ LINUX\_RAID,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x86}}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ NTFS\_VOLUME\_SET,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x87}}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ UNUSED\_50,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x88}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ UNUSED\_51,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x89}}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ LINUX\_KERNEL,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8A}}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ FAULT\_TOLERANT\_FAT32,\ \ \textcolor{comment}{//\ 0x8B}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ FT\_FAT32\_LBA,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8C}}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ FREEFDISK\_FAT12,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8D}}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ LINUX\_LVM,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8E}}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ UNUSED\_52,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x8F}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ FREEFDISK\_FAT16,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x90}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ FREEFDISK\_EXTENDED,\ \ \ \ \textcolor{comment}{//\ 0x91}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ FREEFDISK\_FAT16\_LARGE,\ \textcolor{comment}{//\ 0x92}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ HIDDEN\_LINUX\_NATIVE,\ \ \ \textcolor{comment}{//\ 0x93}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ AMOEBA\_BAD\_BLOCK,\ \ \ \ \ \ \textcolor{comment}{//\ 0x94}}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ MIT\_EXOPC,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x95}}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ UNUSED\_53,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x96}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ FREEFDISK\_FAT32,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0x97}}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ FREEFDISK\_FAT32\_LBA,\ \ \ \textcolor{comment}{//\ 0x98}}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ DCE376,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x99}}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ FREEFDISK\_FAT16\_LBA,\ \ \ \textcolor{comment}{//\ 0x9A}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ FREEFDISK\_EXTENDED\_LBA,\textcolor{comment}{//\ 0x9B}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ UNUSED\_54,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x9C}}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ UNUSED\_55,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x9D}}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ UNUSED\_56,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x9E}}
 \DoxyCodeLine{00194\ }
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_54,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x9C}}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_55,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x9D}}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_56,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x9E}}
-\DoxyCodeLine{00198\ }
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BSD\_OS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x9F}}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LAPTOP\_HIBERNATION,\ \ \ \ \textcolor{comment}{//\ 0xA0}}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HP\_VOLUME\_EXPANSION,\ \ \ \textcolor{comment}{//\ 0xA1}}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_57,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA2}}
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_11,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA3}}
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_12,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA4}}
-\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BSD\_386,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA5}}
-\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OPENBSD,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA6}}
-\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NEXTSTEP,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA7}}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MAC\_OS\_X,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA8}}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NETBSD,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA9}}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OLIVETTI\_SERVICE,\ \ \ \ \ \ \textcolor{comment}{//\ 0xAA}}
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MAC\_OS\_X\_BOOT,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAB}}
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_58,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAC}}
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_59,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAD}}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SHAGOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAE}}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SHAGOS\_SWAP,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAF}}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BOOTSTAR,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB0}}
-\DoxyCodeLine{00217\ }
-\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_13,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB1}}
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_60,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB2}}
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_14,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB3}}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_15,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB4}}
-\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_61,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB5}}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_16,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB6}}
-\DoxyCodeLine{00224\ }
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BSDI\_BSD386\_FS,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB7}}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BSDI\_BSD386\_SWAP,\ \ \ \ \ \ \textcolor{comment}{//\ 0xB8}}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_62,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB9}}
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_63,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBA}}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BOOT\_WIZARD\_HIDDEN,\ \ \ \ \textcolor{comment}{//\ 0xBB}}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_64,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBC}}
-\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_65,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBD}}
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SOLARIS8\_BOOT,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBE}}
-\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_66,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBF}}
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CTOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC0}}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRDOS\_FAT12,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC1}}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_17,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC2}}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HIDDEN\_LINUX\_SWAP,\ \ \ \ \ \textcolor{comment}{//\ 0xC3}}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRDOS\_FAT16,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC4}}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRDOS\_EXTENDED,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC5}}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRDOS\_FAT16\_LARGE,\ \ \ \ \ \textcolor{comment}{//\ 0xC6}}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NTFS\_CORRUPT,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC7}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ BSD\_OS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0x9F}}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ LAPTOP\_HIBERNATION,\ \ \ \ \textcolor{comment}{//\ 0xA0}}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ HP\_VOLUME\_EXPANSION,\ \ \ \textcolor{comment}{//\ 0xA1}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ UNUSED\_57,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA2}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ RESERVED\_11,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA3}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ RESERVED\_12,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA4}}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ BSD\_386,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA5}}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ OPENBSD,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA6}}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ NEXTSTEP,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA7}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ MAC\_OS\_X,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA8}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ NETBSD,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xA9}}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ OLIVETTI\_SERVICE,\ \ \ \ \ \ \textcolor{comment}{//\ 0xAA}}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ MAC\_OS\_X\_BOOT,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAB}}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ UNUSED\_58,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAC}}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ UNUSED\_59,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAD}}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ SHAGOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAE}}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ SHAGOS\_SWAP,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xAF}}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ BOOTSTAR,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB0}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ RESERVED\_13,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB1}}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ UNUSED\_60,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB2}}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ RESERVED\_14,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB3}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ RESERVED\_15,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB4}}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ UNUSED\_61,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB5}}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ RESERVED\_16,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB6}}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ BSDI\_BSD386\_FS,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB7}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ BSDI\_BSD386\_SWAP,\ \ \ \ \ \ \textcolor{comment}{//\ 0xB8}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ UNUSED\_62,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xB9}}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ UNUSED\_63,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBA}}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ BOOT\_WIZARD\_HIDDEN,\ \ \ \ \textcolor{comment}{//\ 0xBB}}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ UNUSED\_64,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBC}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ UNUSED\_65,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBD}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ SOLARIS8\_BOOT,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBE}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ UNUSED\_66,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xBF}}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ CTOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC0}}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ DRDOS\_FAT12,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC1}}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ RESERVED\_17,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC2}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ HIDDEN\_LINUX\_SWAP,\ \ \ \ \ \textcolor{comment}{//\ 0xC3}}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ DRDOS\_FAT16,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC4}}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ DRDOS\_EXTENDED,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC5}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ DRDOS\_FAT16\_LARGE,\ \ \ \ \ \textcolor{comment}{//\ 0xC6}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ NTFS\_CORRUPT,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC7}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ UNUSED\_67,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC8}}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ UNUSED\_68,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC9}}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ UNUSED\_69,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCA}}
 \DoxyCodeLine{00242\ }
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_67,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC8}}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_68,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xC9}}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_69,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCA}}
-\DoxyCodeLine{00246\ }
-\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRDOS\_FAT32,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCB}}
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRDOS\_FAT32\_LBA,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCC}}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CTOS\_MEMDUMP,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCD}}
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DRDOS\_FAT16\_LBA,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCE}}
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_70,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCF}}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ REAL32\_SECURE\_BIG,\ \ \ \ \ \textcolor{comment}{//\ 0xD0}}
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OLD\_MULTIUSER\_DOS\_FAT12,\textcolor{comment}{//\ 0xD1}}
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_71,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD2}}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_72,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD3}}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OLD\_MULTIUSER\_DOS\_FAT16,\textcolor{comment}{//\ 0xD4}}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OLD\_MULTIUSER\_DOS\_EXTENDED,\textcolor{comment}{//\ 0xD5}}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ OLD\_MULTIUSER\_DOS\_FAT16\_LARGE,\textcolor{comment}{//\ 0xD6}}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_73,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD7}}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CPM86,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD8}}
-\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_74,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD9}}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NON\_FS\_DATA,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xDA}}
-\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DIGITAL\_RESEARCH\_CPM,\ \ \textcolor{comment}{//\ 0xDB}}
-\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_75,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xDC}}
-\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HIDDEN\_CTOS\_MEMDUMP,\ \ \ \textcolor{comment}{//\ 0xDD}}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DELL\_POWEREDGE,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xDE}}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DGUX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xDF}}
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ STM\_AVFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE0}}
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPEEDSTOR\_FAT\_EXTENDED,\textcolor{comment}{//\ 0xE1}}
-\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_76,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE2}}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPEEDSTOR\_RO,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE3}}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPEEDSTOR\_EXTENDED,\ \ \ \ \textcolor{comment}{//\ 0xE4}}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TANDY\_DOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE5}}
-\DoxyCodeLine{00274\ }
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_18,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE6}}
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_77,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE7}}
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_78,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE8}}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_79,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE9}}
-\DoxyCodeLine{00279\ }
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BEFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xEA}}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPRYTIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xEB}}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EFI\_PROTECTIVE,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xEE}}
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EFI\_SYSTEM,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xEF}}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_PA\_RISC,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF0}}
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPEEDSTOR\_2,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF1}}
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DOS\_3\_3\_SECONDARY,\ \ \ \ \ \textcolor{comment}{//\ 0xF2}}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_19,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF3}}
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SPEEDSTOR\_LARGE,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF4}}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PROLOGUE\_MULTI,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF5}}
-\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RESERVED\_20,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF6}}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_80,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF7}}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_81,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF8}}
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UNUSED\_82,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF9}}
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ BOCHS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFA}}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VMFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFB}}
-\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VMWARE\_SWAP,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFC}}
-\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ LINUX\_RAID\_AUTO,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFD}}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NT\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFE}}
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ XENIX\_BAD\_BLOCK\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFF}}
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ DRDOS\_FAT32,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCB}}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ DRDOS\_FAT32\_LBA,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCC}}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ CTOS\_MEMDUMP,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCD}}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ DRDOS\_FAT16\_LBA,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCE}}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ UNUSED\_70,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xCF}}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ REAL32\_SECURE\_BIG,\ \ \ \ \ \textcolor{comment}{//\ 0xD0}}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ OLD\_MULTIUSER\_DOS\_FAT12,\textcolor{comment}{//\ 0xD1}}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ UNUSED\_71,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD2}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ UNUSED\_72,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD3}}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ OLD\_MULTIUSER\_DOS\_FAT16,\textcolor{comment}{//\ 0xD4}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ OLD\_MULTIUSER\_DOS\_EXTENDED,\textcolor{comment}{//\ 0xD5}}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ OLD\_MULTIUSER\_DOS\_FAT16\_LARGE,\textcolor{comment}{//\ 0xD6}}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ UNUSED\_73,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD7}}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ CPM86,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD8}}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ UNUSED\_74,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xD9}}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ NON\_FS\_DATA,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xDA}}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ DIGITAL\_RESEARCH\_CPM,\ \ \textcolor{comment}{//\ 0xDB}}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ UNUSED\_75,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xDC}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ HIDDEN\_CTOS\_MEMDUMP,\ \ \ \textcolor{comment}{//\ 0xDD}}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ DELL\_POWEREDGE,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xDE}}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ DGUX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xDF}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ STM\_AVFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE0}}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ SPEEDSTOR\_FAT\_EXTENDED,\textcolor{comment}{//\ 0xE1}}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ UNUSED\_76,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE2}}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ SPEEDSTOR\_RO,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE3}}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ SPEEDSTOR\_EXTENDED,\ \ \ \ \textcolor{comment}{//\ 0xE4}}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ TANDY\_DOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE5}}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ RESERVED\_18,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE6}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ UNUSED\_77,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE7}}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ UNUSED\_78,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE8}}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ UNUSED\_79,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xE9}}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ BEFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xEA}}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ SPRYTIX,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xEB}}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ EFI\_PROTECTIVE,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xEE}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ EFI\_SYSTEM,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xEF}}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ LINUX\_PA\_RISC,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF0}}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ SPEEDSTOR\_2,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF1}}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ DOS\_3\_3\_SECONDARY,\ \ \ \ \ \textcolor{comment}{//\ 0xF2}}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ RESERVED\_19,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF3}}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ SPEEDSTOR\_LARGE,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF4}}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ PROLOGUE\_MULTI,\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF5}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ RESERVED\_20,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF6}}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ UNUSED\_80,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF7}}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ UNUSED\_81,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF8}}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ UNUSED\_82,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xF9}}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ BOCHS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFA}}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ VMFS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFB}}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ VMWARE\_SWAP,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFC}}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ LINUX\_RAID\_AUTO,\ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFD}}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ NT\_HIDDEN,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFE}}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ XENIX\_BAD\_BLOCK\ \ \ \ \ \ \ \ \textcolor{comment}{//\ 0xFF}}
+\DoxyCodeLine{00296\ \ \ \ \ \};}
 
 \end{DoxyCode}
-
-
-\doxysubsection{Variable Documentation}
-\Hypertarget{msdos_8h_a473a1483ecee72b5fb823dd28190cef8}\label{msdos_8h_a473a1483ecee72b5fb823dd28190cef8} 
-\index{msdos.h@{msdos.h}!bootable@{bootable}}
-\index{bootable@{bootable}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{bootable}{bootable}}
-{\footnotesize\ttfamily uint8\+\_\+t bootable}
-
-
-
-Is this partition bootable? (0x80 = bootable, 0x00 = not bootable) 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00001}{1}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a09835f758bb5328b55a01068bbc4c972}\label{msdos_8h_a09835f758bb5328b55a01068bbc4c972} 
-\index{msdos.h@{msdos.h}!bootloader@{bootloader}}
-\index{bootloader@{bootloader}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{bootloader}{bootloader}}
-{\footnotesize\ttfamily uint8\+\_\+t bootloader\mbox{[}440\mbox{]}}
-
-
-
-The assembly bytes that make up the bootloader software. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00001}{1}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a2eda13dfaaf6d61d3bbad4f0dc86c845}\label{msdos_8h_a2eda13dfaaf6d61d3bbad4f0dc86c845} 
-\index{msdos.h@{msdos.h}!disk\_signature@{disk\_signature}}
-\index{disk\_signature@{disk\_signature}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{disk\_signature}{disk\_signature}}
-{\footnotesize\ttfamily uint32\+\_\+t disk\+\_\+signature}
-
-
-
-Unique disk signature (optional) 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00002}{2}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a4673ec2e07d66b72d0744129d4e89b87}\label{msdos_8h_a4673ec2e07d66b72d0744129d4e89b87} 
-\index{msdos.h@{msdos.h}!end\_cylinder@{end\_cylinder}}
-\index{end\_cylinder@{end\_cylinder}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{end\_cylinder}{end\_cylinder}}
-{\footnotesize\ttfamily uint16\+\_\+t end\+\_\+cylinder}
-
-
-
-The last cylinder of the partition. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00011}{11}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_aa8928d79fa39385e4e726185713fc356}\label{msdos_8h_aa8928d79fa39385e4e726185713fc356} 
-\index{msdos.h@{msdos.h}!end\_head@{end\_head}}
-\index{end\_head@{end\_head}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{end\_head}{end\_head}}
-{\footnotesize\ttfamily uint8\+\_\+t end\+\_\+head}
-
-
-
-The last head of the partition. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00009}{9}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_aed0439ad723570765c1e40b8efd1dd61}\label{msdos_8h_aed0439ad723570765c1e40b8efd1dd61} 
-\index{msdos.h@{msdos.h}!end\_sector@{end\_sector}}
-\index{end\_sector@{end\_sector}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{end\_sector}{end\_sector}}
-{\footnotesize\ttfamily uint8\+\_\+t end\+\_\+sector}
-
-
-
-The last sector of the partition. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00010}{10}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_aebb70c2aab3407a9f05334c47131a43b}\label{msdos_8h_aebb70c2aab3407a9f05334c47131a43b} 
-\index{msdos.h@{msdos.h}!length@{length}}
-\index{length@{length}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{length}{length}}
-{\footnotesize\ttfamily uint32\+\_\+t length}
-
-
-
-The length of the partition in sectors. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00014}{14}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2}\label{msdos_8h_a8c61e64b8675498cee79c59d3f8131e2} 
-\index{msdos.h@{msdos.h}!magic@{magic}}
-\index{magic@{magic}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{magic}{magic}}
-{\footnotesize\ttfamily uint16\+\_\+t magic}
-
-
-
-The magic number that identifies this as a valid MBR (0x\+AA55) 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00007}{7}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{kernel_8cpp_source_l00071}{kernel\+\_\+main()}}, and \mbox{\hyperlink{multiboot_8cpp_source_l00024}{Max\+OS\+::system\+::\+Multiboot\+::\+Multiboot()}}.
-
-\Hypertarget{msdos_8h_ae82a748207fb88709bb65e8a13096863}\label{msdos_8h_ae82a748207fb88709bb65e8a13096863} 
-\index{msdos.h@{msdos.h}!primary\_partition@{primary\_partition}}
-\index{primary\_partition@{primary\_partition}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{primary\_partition}{primary\_partition}}
-{\footnotesize\ttfamily Partition\+Table\+Entry primary\+\_\+partition\mbox{[}4\mbox{]}}
-
-
-
-The partition table entries. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00005}{5}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a461c61c9b56efe9ccccb9ddcafc7039e}\label{msdos_8h_a461c61c9b56efe9ccccb9ddcafc7039e} 
-\index{msdos.h@{msdos.h}!start\_cylinder@{start\_cylinder}}
-\index{start\_cylinder@{start\_cylinder}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{start\_cylinder}{start\_cylinder}}
-{\footnotesize\ttfamily uint16\+\_\+t start\+\_\+cylinder}
-
-
-
-The starting cylinder of the partition. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00005}{5}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a7b0643284eda403a636341c87b08e850}\label{msdos_8h_a7b0643284eda403a636341c87b08e850} 
-\index{msdos.h@{msdos.h}!start\_head@{start\_head}}
-\index{start\_head@{start\_head}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{start\_head}{start\_head}}
-{\footnotesize\ttfamily uint8\+\_\+t start\+\_\+head}
-
-
-
-The starting head of the partition. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00003}{3}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a48084b77fa49c552983824a90b0110e4}\label{msdos_8h_a48084b77fa49c552983824a90b0110e4} 
-\index{msdos.h@{msdos.h}!start\_LBA@{start\_LBA}}
-\index{start\_LBA@{start\_LBA}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{start\_LBA}{start\_LBA}}
-{\footnotesize\ttfamily uint32\+\_\+t start\+\_\+\+LBA}
-
-
-
-The starting LBA of the partition. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00013}{13}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a7194a9ec4359f80228f38427074b0e79}\label{msdos_8h_a7194a9ec4359f80228f38427074b0e79} 
-\index{msdos.h@{msdos.h}!start\_sector@{start\_sector}}
-\index{start\_sector@{start\_sector}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{start\_sector}{start\_sector}}
-{\footnotesize\ttfamily uint8\+\_\+t start\+\_\+sector}
-
-
-
-The first sector of the partition. 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00004}{4}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a1d127017fb298b889f4ba24752d08b8e}\label{msdos_8h_a1d127017fb298b889f4ba24752d08b8e} 
-\index{msdos.h@{msdos.h}!type@{type}}
-\index{type@{type}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{type}{type}}
-{\footnotesize\ttfamily uint8\+\_\+t type}
-
-
-
-The partition type (see Partition\+Type enum) 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00007}{7}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-
-\Hypertarget{msdos_8h_a69f7e996ff7ce0531e893a56c8515e6b}\label{msdos_8h_a69f7e996ff7ce0531e893a56c8515e6b} 
-\index{msdos.h@{msdos.h}!unused@{unused}}
-\index{unused@{unused}!msdos.h@{msdos.h}}
-\doxysubsubsection{\texorpdfstring{unused}{unused}}
-{\footnotesize\ttfamily uint16\+\_\+t unused}
-
-
-
-Reserved (usually zero) 
-
-
-
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00003}{3}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
-

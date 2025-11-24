@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/virtual.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/memory/virtual.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -42,12 +42,19 @@
 .ti -1c
 .RI "typedef enum \fBMaxOS::memory::VirtualFlags\fP \fBMaxOS::memory::virtual_flags_t\fP"
 .br
+.RI "Alias for VirtualFlags enum\&. "
 .ti -1c
 .RI "typedef struct \fBMaxOS::memory::VirtualMemoryChunk\fP \fBMaxOS::memory::virtual_memory_chunk_t\fP"
 .br
+.RI "Alias for \fBVirtualMemoryChunk\fP struct\&. "
 .ti -1c
 .RI "typedef struct \fBMaxOS::memory::FreeChunk\fP \fBMaxOS::memory::free_chunk_t\fP"
 .br
+.RI "Alias for \fBFreeChunk\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::memory::VirtualMemoryRegion\fP \fBMaxOS::memory::virtual_memory_region_t\fP"
+.br
+.RI "Alias for \fBVirtualMemoryRegion\fP struct\&. "
 .in -1c
 .SS "Enumerations"
 
@@ -56,25 +63,6 @@
 .RI "enum \fBMaxOS::memory::VirtualFlags\fP { \fBMaxOS::memory::RESERVE\fP = (1 << 9), \fBMaxOS::memory::SHARED\fP = (1 << 10) }"
 .br
 .RI "Flags for chunks used in virtual memory allocation\&. "
-.in -1c
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "struct \fBMaxOS::memory::PageTableEntry\fP \fBMaxOS::memory::__attribute__\fP ((packed)) pte_t"
-.br
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "virtual_memory_chunk_t \fBchunks\fP [CHUNKS_PER_PAGE]"
-.br
-.RI "The metadata for the chunks in this region\&. "
-.ti -1c
-.RI "struct VirtualMemoryRegion * \fBnext\fP"
-.br
-.RI "Pointer to the next region in the list\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -95,12 +83,12 @@ Max Tyson
 
 .PP
 Definition in file \fBvirtual\&.h\fP\&.
-.SH "Enumeration Type Documentation"
+.SH "Typedef Documentation"
 .PP 
-.SS "enum \fBMaxOS::memory::VirtualFlags\fP"
+.SS "\fBMaxOS::memory::virtual_flags_t\fP"
 
 .PP
-Flags for chunks used in virtual memory allocation\&. 
+Alias for VirtualFlags enum\&. 
 .PP
 \fBSee also\fP
 .RS 4
@@ -113,6 +101,34 @@ PageFlags
 .RE
 .PP
 
+.SS "\fBMaxOS::memory::virtual_memory_chunk_t\fP"
+
+.PP
+Alias for VirtualMemoryChunk struct\&. 
+.PP
+\fBSee also\fP
+.RS 4
+VirtualFlags 
+.RE
+.PP
+
+.SS "\fBMaxOS::memory::virtual_memory_region_t\fP"
+
+.PP
+Alias for VirtualMemoryRegion struct\&. 
+.PP
+\fBNote\fP
+.RS 4
+This stores the metadata for the chunks, not the actual memory they represent\&. (ie chunks are not slices of this region) 
+.RE
+.PP
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBMaxOS::memory::VirtualFlags\fP"
+
+.PP
+Flags for chunks used in virtual memory allocation\&. 
 .PP
 \fBEnumerator\fP
 .in +1c
@@ -123,31 +139,16 @@ Reserve the memory but do not map any physical memory to it\&.
 \fB\fISHARED \fP\fP
 The memory is shared between multiple processes\&. 
 .PP
-Definition at line \fB28\fP of file \fBvirtual\&.h\fP\&..PP
+Definition at line \fB31\fP of file \fBvirtual\&.h\fP\&..PP
 .nf
-28                                   {
-29             RESERVE = (1 << 9),         
-30             SHARED = (1 << 10),         
-31 
-32         } virtual_flags_t;
+31                                   {
+32 
+33             RESERVE = (1 << 9),         
+34             SHARED = (1 << 10),         
+35 
+36         } virtual_flags_t;
 .fi
 
-.SH "Variable Documentation"
-.PP 
-.SS "virtual_memory_chunk_t chunks[CHUNKS_PER_PAGE]"
-
-.PP
-The metadata for the chunks in this region\&. 
-.PP
-Definition at line \fB0\fP of file \fBvirtual\&.h\fP\&.
-.SS "struct VirtualMemoryRegion* next"
-
-.PP
-Pointer to the next region in the list\&. 
-.PP
-Definition at line \fB1\fP of file \fBvirtual\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::common::BlockingLock::acquire()\fP, and \fBMaxOS::filesystem::format::Fat32Volume::allocate_cluster()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

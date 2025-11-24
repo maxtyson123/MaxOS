@@ -1,4 +1,4 @@
-.TH "MaxOS::gui::Window" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::gui::Window" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,7 +19,7 @@ Inherits \fBMaxOS::gui::CompositeWidget\fP\&.
 .br
 .RI "Construct a new \fBWindow\fP object at a specific position and size (relative to the screen) with a title\&. "
 .ti -1c
-.RI "\fBWindow\fP (\fBWidget\fP *\fBcontainedWidget\fP, \fBconst\fP \fBstring\fP &\fBtitle_text\fP)"
+.RI "\fBWindow\fP (\fBWidget\fP *\fBcontained_widget\fP, \fBconst\fP \fBstring\fP &\fBtitle_text\fP)"
 .br
 .RI "Construct a new \fBWindow\fP object that contains a specific widget with a title\&. The window sizes itself to fit the widget\&. "
 .ti -1c
@@ -47,15 +47,15 @@ Public Member Functions inherited from \fBMaxOS::gui::CompositeWidget\fP
 .br
 .RI "Draws a section of the widget and its m_children\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBon_mouse_enter_widget\fP (\fBuint32_t\fP \fBtoX\fP, \fBuint32_t\fP \fBtoY\fP) \fBoverride\fP"
+.RI "\fBvoid\fP \fBon_mouse_enter_widget\fP (\fBuint32_t\fP \fBto_x\fP, \fBuint32_t\fP \fBto_y\fP) \fBoverride\fP"
 .br
 .RI "Passes the event to the child that the mouse is over\&. (Event handling should be done by the derived class) "
 .ti -1c
-.RI "\fBvoid\fP \fBon_mouse_leave_widget\fP (\fBuint32_t\fP \fBfromX\fP, \fBuint32_t\fP \fBfromY\fP) \fBoverride\fP"
+.RI "\fBvoid\fP \fBon_mouse_leave_widget\fP (\fBuint32_t\fP \fBfrom_x\fP, \fBuint32_t\fP \fBfrom_y\fP) \fBoverride\fP"
 .br
 .RI "Passes the event to the child that the mouse is over\&. (Event handling should be done by the derived class) "
 .ti -1c
-.RI "\fBvoid\fP \fBon_mouse_move_widget\fP (\fBuint32_t\fP \fBfromX\fP, \fBuint32_t\fP \fBfromY\fP, \fBuint32_t\fP \fBtoX\fP, \fBuint32_t\fP \fBtoY\fP) \fBoverride\fP"
+.RI "\fBvoid\fP \fBon_mouse_move_widget\fP (\fBuint32_t\fP \fBfrom_x\fP, \fBuint32_t\fP \fBfrom_y\fP, \fBuint32_t\fP \fBto_x\fP, \fBuint32_t\fP \fBto_y\fP) \fBoverride\fP"
 .br
 .RI "Passes the event to the child that the mouse is over, also generates a leave/enter event for children\&. "
 .ti -1c
@@ -66,6 +66,10 @@ Public Member Functions inherited from \fBMaxOS::gui::CompositeWidget\fP
 
 Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 .in +1c
+.ti -1c
+.RI "\fBWidget\fP ()"
+.br
+.RI "Construct a new \fBWidget\fP object\&. "
 .ti -1c
 .RI "\fBWidget\fP (\fBint32_t\fP left, \fBint32_t\fP top, \fBuint32_t\fP width, \fBuint32_t\fP height)"
 .br
@@ -119,15 +123,15 @@ Public Member Functions inherited from \fBMaxOS::gui::Widget\fP
 Public Member Functions inherited from \fBMaxOS::drivers::peripherals::KeyboardEventHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBcommon::Event\fP< KeyboardEvents > * \fBon_event\fP (\fBcommon::Event\fP< KeyboardEvents > *) \fBoverride\fP"
+.RI "\fBcommon::Event\fP< \fBKeyboardEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBKeyboardEvents\fP > *) \fBoverride\fP"
 .br
 .RI "Handle the trigger of an event\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_down\fP (\fBKeyCode\fP, \fBKeyboardState\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_down\fP (\fBKeyCode\fP, \fBconst\fP \fBKeyboardState\fP &)"
 .br
 .RI "Handle the key down event\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_up\fP (\fBKeyCode\fP, \fBKeyboardState\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBon_key_up\fP (\fBKeyCode\fP, \fBconst\fP \fBKeyboardState\fP &)"
 .br
 .RI "Handle the key up event\&. "
 .in -1c
@@ -286,14 +290,14 @@ Definition at line \fB27\fP of file \fBwindow\&.cpp\fP\&..PP
 
 .PP
 References \fBadd_child()\fP, \fBarea_colour\fP, \fBMaxOS::gui::widgets::Text::background_colour\fP, \fBMaxOS::gui::widgets::Text::foreground_colour\fP, \fBframe_border_colour\fP, \fBframe_colour\fP, \fBframe_thickness\fP, \fBMaxOS::gui::Widget::m_min_height\fP, \fBMaxOS::gui::Widget::m_min_width\fP, and \fBtitle_bar_height\fP\&.
-.SS "Window::Window (\fBWidget\fP * containedWidget, \fBconst\fP \fBstring\fP & title_text)"
+.SS "Window::Window (\fBWidget\fP * contained_widget, \fBconst\fP \fBstring\fP & title_text)"
 
 .PP
 Construct a new \fBWindow\fP object that contains a specific widget with a title\&. The window sizes itself to fit the widget\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIcontainedWidget\fP The widget to contain within the window 
+\fIcontained_widget\fP The widget to contain within the window 
 .br
 \fItitle_text\fP The text to display in the title bar of the window 
 .RE
@@ -302,8 +306,8 @@ Construct a new \fBWindow\fP object that contains a specific widget with a title
 .PP
 Definition at line \fB63\fP of file \fBwindow\&.cpp\fP\&..PP
 .nf
-64 : CompositeWidget(0, 0, containedWidget\->position()\&.width + 2 * 5 + 2, containedWidget\->position()\&.height + 2 * 5 + 10 + 2),
-65   m_title(0, \-(10 + 5) + 2, containedWidget\->position()\&.width, 10 + 5 \- 3, title_text),
+64 : CompositeWidget(0, 0, contained_widget\->position()\&.width + 2 * 5 + 2, contained_widget\->position()\&.height + 2 * 5 + 10 + 2),
+65   m_title(0, \-(10 + 5) + 2, contained_widget\->position()\&.width, 10 + 5 \- 3, title_text),
 66   m_mover(this),
 67   m_resizer_top(this),
 68   m_resizer_bottom(this),
@@ -328,7 +332,7 @@ Definition at line \fB63\fP of file \fBwindow\&.cpp\fP\&..PP
 87 
 88     // Add the title to the window
 89     Window::add_child(&m_title);
-90     Window::add_child(containedWidget);
+90     Window::add_child(contained_widget);
 91 }
 .fi
 
@@ -350,23 +354,23 @@ Adds a child to the window\&.
 .PP
 Reimplemented from \fBMaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line \fB219\fP of file \fBwindow\&.cpp\fP\&..PP
+Definition at line \fB220\fP of file \fBwindow\&.cpp\fP\&..PP
 .nf
-219                                     {
-220 
-221     // If there is a child to add
-222     if (child != nullptr) {
-223 
-224         // Change the position of the child to be inside the window contents
-225         Rectangle<int32_t> childPosition = child\->position();
-226         child\->move(childPosition\&.left + frame_thickness + 1,
-227                     childPosition\&.top + frame_thickness + title_bar_height + 1);
-228 
-229     }
-230 
-231     // Add the child to the window
-232     CompositeWidget::add_child(child);
-233 }
+220                                     {
+221 
+222     // If there is a child to add
+223     if (child != nullptr) {
+224 
+225         // Change the position of the child to be inside the window contents
+226         Rectangle<int32_t> child_position = child\->position();
+227         child\->move(child_position\&.left + frame_thickness + 1,
+228                     child_position\&.top + frame_thickness + title_bar_height + 1);
+229 
+230     }
+231 
+232     // Add the child to the window
+233     CompositeWidget::add_child(child);
+234 }
 .fi
 
 .PP
@@ -389,68 +393,68 @@ Draws the window and its children\&.
 .PP
 Reimplemented from \fBMaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line \fB153\fP of file \fBwindow\&.cpp\fP\&..PP
+Definition at line \fB154\fP of file \fBwindow\&.cpp\fP\&..PP
 .nf
-153                                                                                 {
-154 
-155     // Get the positioning of the window
-156     Coordinates window_absolute_position = CompositeWidget::absolute_coordinates(Coordinates(0, 0));
-157     Rectangle<int32_t> windowPosition = this\->position();
-158     int32_t window_x = window_absolute_position\&.first;
-159     int32_t window_y = window_absolute_position\&.second;
-160 
-161     // Create an area for the window contents
-162     Rectangle<int32_t> window_contents_area(frame_thickness, frame_thickness + title_bar_height,
-163                                             windowPosition\&.width \- 2 * frame_thickness,
-164                                             windowPosition\&.height \- 2 * frame_thickness \- title_bar_height);
-165 
-166     // Draw the window contents if they are in the area to draw
-167     if (window_contents_area\&.intersects(area)) {
-168         Rectangle<int32_t> contents_drawable = window_contents_area\&.intersection(area);
-169         gc\->fill_rectangle(contents_drawable\&.left + window_x, contents_drawable\&.top + window_y,
-170                            contents_drawable\&.left + contents_drawable\&.width + window_x,
-171                            contents_drawable\&.top + contents_drawable\&.height + window_y, area_colour);
-172     }
-173 
-174     // Draw the frame if it is in the area to draw
-175     Rectangle<int32_t> window_frame_top_area(frame_thickness, 0, windowPosition\&.width \- 2 * frame_thickness,
-176                                              frame_thickness + title_bar_height);
-177     if (window_frame_top_area\&.intersects(area)) {
-178         Rectangle<int32_t> frame_drawable = window_frame_top_area\&.intersection(area);
-179         gc\->fill_rectangle(frame_drawable\&.left + window_x, frame_drawable\&.top + window_y,
-180                            frame_drawable\&.left + frame_drawable\&.width + window_x,
-181                            frame_drawable\&.top + frame_drawable\&.height + window_y, frame_colour);
-182     }
-183 
-184     // Draw the bottom of the window frame
-185     Rectangle<int32_t> window_frame_bottom_area(frame_thickness, windowPosition\&.height \- frame_thickness,
-186                                                 windowPosition\&.width \- 2 * frame_thickness, frame_thickness);
-187     if (window_frame_bottom_area\&.intersects(area)) {
-188         Rectangle<int32_t> bottom_drawable = window_frame_bottom_area\&.intersection(area);
-189         gc\->fill_rectangle(window_x + bottom_drawable\&.left, window_y + bottom_drawable\&.top,
-190                            window_x + bottom_drawable\&.left + bottom_drawable\&.width,
-191                            window_y + bottom_drawable\&.top + bottom_drawable\&.height, frame_colour);
-192     }
-193 
-194     // Draw the left of the window frame
-195     Rectangle<int32_t> window_frame_left_area(0, 0, frame_thickness, windowPosition\&.height);
-196     if (window_frame_left_area\&.intersects(area)) {
-197         Rectangle<int32_t> left_drawable = window_frame_left_area\&.intersection(area);
-198         gc\->fill_rectangle(window_x + left_drawable\&.left, window_y + left_drawable\&.top,
-199                            window_x + left_drawable\&.left + left_drawable\&.width,
-200                            window_y + left_drawable\&.top + left_drawable\&.height, frame_colour);
-201     }
-202 
-203     // Draw the right of the window frame
-204     Rectangle<int32_t> window_frame_right_area(windowPosition\&.width \- frame_thickness, 0, frame_thickness,
-205                                                windowPosition\&.height);
-206     if (window_frame_right_area\&.intersects(area)) {
-207         Rectangle<int32_t> right_drawable = window_frame_right_area\&.intersection(area);
-208         gc\->fill_rectangle(window_x + right_drawable\&.left, window_y + right_drawable\&.top,
-209                            window_x + right_drawable\&.left + right_drawable\&.width,
-210                            window_y + right_drawable\&.top + right_drawable\&.height, frame_colour);
-211     }
-212 }
+154                                                                                 {
+155 
+156     // Get the positioning of the window
+157     Coordinates window_absolute_position = CompositeWidget::absolute_coordinates(Coordinates(0, 0));
+158     Rectangle<int32_t> window_position = this\->position();
+159     int32_t window_x = window_absolute_position\&.first;
+160     int32_t window_y = window_absolute_position\&.second;
+161 
+162     // Create an area for the window contents
+163     Rectangle<int32_t> window_contents_area(frame_thickness, frame_thickness + title_bar_height,
+164                                             window_position\&.width \- 2 * frame_thickness,
+165                                             window_position\&.height \- 2 * frame_thickness \- title_bar_height);
+166 
+167     // Draw the window contents if they are in the area to draw
+168     if (window_contents_area\&.intersects(area)) {
+169         Rectangle<int32_t> contents_drawable = window_contents_area\&.intersection(area);
+170         gc\->fill_rectangle(contents_drawable\&.left + window_x, contents_drawable\&.top + window_y,
+171                            contents_drawable\&.left + contents_drawable\&.width + window_x,
+172                            contents_drawable\&.top + contents_drawable\&.height + window_y, area_colour);
+173     }
+174 
+175     // Draw the frame if it is in the area to draw
+176     Rectangle<int32_t> window_frame_top_area(frame_thickness, 0, window_position\&.width \- 2 * frame_thickness,
+177                                              frame_thickness + title_bar_height);
+178     if (window_frame_top_area\&.intersects(area)) {
+179         Rectangle<int32_t> frame_drawable = window_frame_top_area\&.intersection(area);
+180         gc\->fill_rectangle(frame_drawable\&.left + window_x, frame_drawable\&.top + window_y,
+181                            frame_drawable\&.left + frame_drawable\&.width + window_x,
+182                            frame_drawable\&.top + frame_drawable\&.height + window_y, frame_colour);
+183     }
+184 
+185     // Draw the bottom of the window frame
+186     Rectangle<int32_t> window_frame_bottom_area(frame_thickness, window_position\&.height \- frame_thickness,
+187                                                 window_position\&.width \- 2 * frame_thickness, frame_thickness);
+188     if (window_frame_bottom_area\&.intersects(area)) {
+189         Rectangle<int32_t> bottom_drawable = window_frame_bottom_area\&.intersection(area);
+190         gc\->fill_rectangle(window_x + bottom_drawable\&.left, window_y + bottom_drawable\&.top,
+191                            window_x + bottom_drawable\&.left + bottom_drawable\&.width,
+192                            window_y + bottom_drawable\&.top + bottom_drawable\&.height, frame_colour);
+193     }
+194 
+195     // Draw the left of the window frame
+196     Rectangle<int32_t> window_frame_left_area(0, 0, frame_thickness, window_position\&.height);
+197     if (window_frame_left_area\&.intersects(area)) {
+198         Rectangle<int32_t> left_drawable = window_frame_left_area\&.intersection(area);
+199         gc\->fill_rectangle(window_x + left_drawable\&.left, window_y + left_drawable\&.top,
+200                            window_x + left_drawable\&.left + left_drawable\&.width,
+201                            window_y + left_drawable\&.top + left_drawable\&.height, frame_colour);
+202     }
+203 
+204     // Draw the right of the window frame
+205     Rectangle<int32_t> window_frame_right_area(window_position\&.width \- frame_thickness, 0, frame_thickness,
+206                                                window_position\&.height);
+207     if (window_frame_right_area\&.intersects(area)) {
+208         Rectangle<int32_t> right_drawable = window_frame_right_area\&.intersection(area);
+209         gc\->fill_rectangle(window_x + right_drawable\&.left, window_y + right_drawable\&.top,
+210                            window_x + right_drawable\&.left + right_drawable\&.width,
+211                            window_y + right_drawable\&.top + right_drawable\&.height, frame_colour);
+212     }
+213 }
 .fi
 
 .PP
@@ -469,56 +473,61 @@ Handles the mouse button being pressed\&.
 \fIbutton\fP The button that is pressed\&. 
 .RE
 .PP
+\fBReturns\fP
+.RS 4
+The MouseEventHandler of the widget that will handle the event, nullptr otherwise\&. 
+.RE
+.PP
 
 .PP
 Reimplemented from \fBMaxOS::gui::CompositeWidget\fP\&.
 .PP
-Definition at line \fB102\fP of file \fBwindow\&.cpp\fP\&..PP
+Definition at line \fB103\fP of file \fBwindow\&.cpp\fP\&..PP
 .nf
-102                                                                                                      {
-103 
-104     // Pass the mouse event to the children
-105     drivers::peripherals::MouseEventHandler* child_result = CompositeWidget::on_mouse_button_pressed(mouse_x, mouse_y, button);
-106     Rectangle<int32_t> window_position = position();
-107 
-108     // Bring the window to the front
-109     bring_to_front();
-110 
-111     // Convert the mouse coordinates to an int32_t
-112     auto x = (int32_t) mouse_x;
-113     auto y = (int32_t) mouse_y;
-114 
-115     if (x <= frame_thickness) {
-116         if (y <= frame_thickness)
-117             return &m_resizer_top_left;
-118 
-119         else if (y < window_position\&.height \- frame_thickness)
-120             return &m_resizer_left;
-121 
-122         else
-123             return &m_resizer_bottom_left;
-124     } else if (x < window_position\&.width \- frame_thickness) {
-125         if (y <= frame_thickness)
-126             return &m_resizer_top;
-127 
-128         else if (y < frame_thickness + title_bar_height)
-129             return &m_mover;
-130 
-131         else if (y >= window_position\&.height \- frame_thickness)
-132             return &m_resizer_bottom;
-133     } else {
-134         if (y <= frame_thickness)
-135             return &m_resizer_top_right;
-136 
-137         else if (y < window_position\&.height \- frame_thickness)
-138             return &m_resizer_right;
-139 
-140         else
-141             return &m_resizer_bottom_right;
-142     }
-143 
-144     return child_result;
-145 }
+103                                                                                                      {
+104 
+105     // Pass the mouse event to the children
+106     drivers::peripherals::MouseEventHandler* child_result = CompositeWidget::on_mouse_button_pressed(mouse_x, mouse_y, button);
+107     Rectangle<int32_t> window_position = position();
+108 
+109     // Bring the window to the front
+110     bring_to_front();
+111 
+112     // Convert the mouse coordinates to an int32_t
+113     auto x = (int32_t) mouse_x;
+114     auto y = (int32_t) mouse_y;
+115 
+116     if (x <= frame_thickness) {
+117         if (y <= frame_thickness)
+118             return &m_resizer_top_left;
+119 
+120         else if (y < window_position\&.height \- frame_thickness)
+121             return &m_resizer_left;
+122 
+123         else
+124             return &m_resizer_bottom_left;
+125     } else if (x < window_position\&.width \- frame_thickness) {
+126         if (y <= frame_thickness)
+127             return &m_resizer_top;
+128 
+129         else if (y < frame_thickness + title_bar_height)
+130             return &m_mover;
+131 
+132         else if (y >= window_position\&.height \- frame_thickness)
+133             return &m_resizer_bottom;
+134     } else {
+135         if (y <= frame_thickness)
+136             return &m_resizer_top_right;
+137 
+138         else if (y < window_position\&.height \- frame_thickness)
+139             return &m_resizer_right;
+140 
+141         else
+142             return &m_resizer_bottom_right;
+143     }
+144 
+145     return child_result;
+146 }
 .fi
 
 .PP

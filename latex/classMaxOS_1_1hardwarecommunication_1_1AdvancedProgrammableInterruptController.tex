@@ -14,6 +14,8 @@ Handles both the Local APIC (boot core) and IO APIC.
 \item 
 \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_ab7fe24b8d23c2844131e98e52aced3df}{Advanced\+Programmable\+Interrupt\+Controller}} (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface}{Advanced\+Configuration\+And\+Power\+Interface}} \texorpdfstring{$\ast$}{*}acpi)
 \begin{DoxyCompactList}\small\item\em Construct a new Advanced Programmable Interrupt Controller object and initialises the Local APIC and IO APIC, disabling the legacy PIC. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_a59519c4631e9ce4dacfed1bcc276141c}{\texorpdfstring{$\sim$}{\string~}\+Advanced\+Programmable\+Interrupt\+Controller}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the Advanced Programmable Interrupt Controller object and frees the Local APIC and IO APIC. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{Local\+APIC}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_af632f7fe1f4a8d9716ec845628946eef}{local\+\_\+apic}} () const
 \begin{DoxyCompactList}\small\item\em Get the local apic. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{IOAPIC}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_a466e10dea95ada62df527bf033a33deb}{io\+\_\+apic}} () const
@@ -24,10 +26,10 @@ Handles both the Local APIC (boot core) and IO APIC.
 Handles both the Local APIC (boot core) and IO APIC. 
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000021}{Todo}}]Should either handle all Local APICs or none (only boot core right now, others accessed per core directly which is inconsistent) \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000024}{Todo}}]Should either handle all Local APICs or none (only boot core right now, others accessed per core directly which is inconsistent) \end{DoxyRefDesc}
 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00203}{203}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+Definition at line \mbox{\hyperlink{apic_8h_source_l00228}{228}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 
 
@@ -36,7 +38,7 @@ Definition at line \mbox{\hyperlink{apic_8h_source_l00203}{203}} of file \mbox{\
 \index{MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController@{MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController}!AdvancedProgrammableInterruptController@{AdvancedProgrammableInterruptController}}
 \index{AdvancedProgrammableInterruptController@{AdvancedProgrammableInterruptController}!MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController@{MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController}}
 \doxysubsubsection{\texorpdfstring{AdvancedProgrammableInterruptController()}{AdvancedProgrammableInterruptController()}}
-{\footnotesize\ttfamily Advanced\+Programmable\+Interrupt\+Controller\+::\+Advanced\+Programmable\+Interrupt\+Controller (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface}{Advanced\+Configuration\+And\+Power\+Interface}} \texorpdfstring{$\ast$}{*}}]{acpi }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily Advanced\+Programmable\+Interrupt\+Controller\+::\+Advanced\+Programmable\+Interrupt\+Controller (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface}{Advanced\+Configuration\+And\+Power\+Interface}} \texorpdfstring{$\ast$}{*}}]{acpi }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
 
 
@@ -49,37 +51,37 @@ Construct a new Advanced Programmable Interrupt Controller object and initialise
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00412}{412}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00415}{415}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00413\ :\ m\_pic\_master\_command\_port(0x20),}
-\DoxyCodeLine{00414\ \ \ m\_pic\_master\_data\_port(0x21),}
-\DoxyCodeLine{00415\ \ \ m\_pic\_slave\_command\_port(0xA0),}
-\DoxyCodeLine{00416\ \ \ m\_pic\_slave\_data\_port(0xA1)}
-\DoxyCodeLine{00417\ \{}
-\DoxyCodeLine{00418\ }
-\DoxyCodeLine{00419\ \ \ \ \ \textcolor{comment}{//\ Register\ this\ APIC}}
-\DoxyCodeLine{00420\ \ \ \ \ \mbox{\hyperlink{classLogger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ APIC\(\backslash\)n"{}};}
-\DoxyCodeLine{00421\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a3a44cbeaa1d7ed616942bb2ef08ec863}{InterruptManager::active\_interrupt\_manager}}()-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5373148b2ed1db2126a5ea6324553df3}{set\_apic}}(\textcolor{keyword}{this});}
-\DoxyCodeLine{00422\ }
-\DoxyCodeLine{00423\ \ \ \ \ \textcolor{comment}{//\ Init\ the\ Local\ APIC}}
-\DoxyCodeLine{00424\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Initialising\ Local\ APIC\(\backslash\)n"{}};}
-\DoxyCodeLine{00425\ \ \ \ \ m\_local\_apic\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{LocalAPIC}}();}
-\DoxyCodeLine{00426\ }
-\DoxyCodeLine{00427\ \ \ \ \ \textcolor{comment}{//\ Disable\ the\ legacy\ mode\ PIC}}
-\DoxyCodeLine{00428\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Disabling\ PIC\(\backslash\)n"{}};}
-\DoxyCodeLine{00429\ \ \ \ \ disable\_pic();}
-\DoxyCodeLine{00430\ }
-\DoxyCodeLine{00431\ \ \ \ \ \textcolor{comment}{//\ Init\ the\ IO\ APIC}}
-\DoxyCodeLine{00432\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Initialising\ IO\ APIC\(\backslash\)n"{}};}
-\DoxyCodeLine{00433\ \ \ \ \ m\_io\_apic\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{IOAPIC}}(acpi);}
-\DoxyCodeLine{00434\ \}}
+\DoxyCodeLine{00416\ :\ m\_pic\_master\_command\_port(0x20),}
+\DoxyCodeLine{00417\ \ \ m\_pic\_master\_data\_port(0x21),}
+\DoxyCodeLine{00418\ \ \ m\_pic\_slave\_command\_port(0xA0),}
+\DoxyCodeLine{00419\ \ \ m\_pic\_slave\_data\_port(0xA1)}
+\DoxyCodeLine{00420\ \{}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \ \ \ \ \textcolor{comment}{//\ Register\ this\ APIC}}
+\DoxyCodeLine{00423\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ APIC\(\backslash\)n"{}};}
+\DoxyCodeLine{00424\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a3a44cbeaa1d7ed616942bb2ef08ec863}{InterruptManager::active\_interrupt\_manager}}()-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a5373148b2ed1db2126a5ea6324553df3}{set\_apic}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ \textcolor{comment}{//\ Init\ the\ Local\ APIC}}
+\DoxyCodeLine{00427\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Initialising\ Local\ APIC\(\backslash\)n"{}};}
+\DoxyCodeLine{00428\ \ \ \ \ m\_local\_apic\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{LocalAPIC}}();}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \ \ \ \ \textcolor{comment}{//\ Disable\ the\ legacy\ mode\ PIC}}
+\DoxyCodeLine{00431\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Disabling\ PIC\(\backslash\)n"{}};}
+\DoxyCodeLine{00432\ \ \ \ \ disable\_pic();}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ \ \ \textcolor{comment}{//\ Init\ the\ IO\ APIC}}
+\DoxyCodeLine{00435\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Initialising\ IO\ APIC\(\backslash\)n"{}};}
+\DoxyCodeLine{00436\ \ \ \ \ m\_io\_apic\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC}{IOAPIC}}(acpi);}
+\DoxyCodeLine{00437\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{interrupts_8cpp_source_l00385}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::active\+\_\+interrupt\+\_\+manager()}}, \mbox{\hyperlink{logger_8cpp_source_l00178}{Logger\+::\+DEBUG()}}, \mbox{\hyperlink{logger_8cpp_source_l00167}{Logger\+::\+INFO()}}, and \mbox{\hyperlink{interrupts_8cpp_source_l00301}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::set\+\_\+apic()}}.
+References \mbox{\hyperlink{interrupts_8cpp_source_l00392}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::active\+\_\+interrupt\+\_\+manager()}}, \mbox{\hyperlink{logger_8cpp_source_l00193}{Max\+OS\+::\+Logger\+::\+DEBUG()}}, \mbox{\hyperlink{logger_8cpp_source_l00171}{Max\+OS\+::\+Logger\+::\+INFO()}}, and \mbox{\hyperlink{interrupts_8cpp_source_l00308}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::set\+\_\+apic()}}.
 
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_a59519c4631e9ce4dacfed1bcc276141c}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_a59519c4631e9ce4dacfed1bcc276141c} 
 \index{MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController@{MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController}!````~AdvancedProgrammableInterruptController@{\texorpdfstring{$\sim$}{\string~}AdvancedProgrammableInterruptController}}
@@ -89,16 +91,20 @@ References \mbox{\hyperlink{interrupts_8cpp_source_l00385}{Max\+OS\+::hardwareco
 
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00436}{436}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Destroy the Advanced Programmable Interrupt Controller object and frees the Local APIC and IO APIC. 
+
+
+
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00442}{442}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00437\ }
-\DoxyCodeLine{00438\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ memory}}
-\DoxyCodeLine{00439\ \ \ \ \ \textcolor{keyword}{delete}\ m\_local\_apic;}
-\DoxyCodeLine{00440\ \ \ \ \ \textcolor{keyword}{delete}\ m\_io\_apic;}
-\DoxyCodeLine{00441\ \}}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ memory}}
+\DoxyCodeLine{00445\ \ \ \ \ \textcolor{keyword}{delete}\ m\_local\_apic;}
+\DoxyCodeLine{00446\ \ \ \ \ \textcolor{keyword}{delete}\ m\_io\_apic;}
+\DoxyCodeLine{00447\ \}}
 
 \end{DoxyCode}
 
@@ -119,19 +125,19 @@ The io apic
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00484}{484}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00490}{490}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00485\ }
-\DoxyCodeLine{00486\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_io\_apic;}
-\DoxyCodeLine{00487\ \}}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00491\ }
+\DoxyCodeLine{00492\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_io\_apic;}
+\DoxyCodeLine{00493\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00524}{Max\+OS\+::system\+::\+CPU\+::find\+\_\+cores()}}.
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00527}{Max\+OS\+::system\+::\+CPU\+::find\+\_\+cores()}}.
 
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_af632f7fe1f4a8d9716ec845628946eef}\label{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_af632f7fe1f4a8d9716ec845628946eef} 
 \index{MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController@{MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController}!local\_apic@{local\_apic}}
@@ -148,19 +154,19 @@ The local apic
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00474}{474}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00480}{480}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00475\ }
-\DoxyCodeLine{00476\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_local\_apic;}
-\DoxyCodeLine{00477\ \}}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00481\ }
+\DoxyCodeLine{00482\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_local\_apic;}
+\DoxyCodeLine{00483\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{clock_8cpp_source_l00144}{Max\+OS\+::drivers\+::clock\+::\+Clock\+::calibrate()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00249}{Max\+OS\+::system\+::\+CPU\+::\+CPU()}}.
+Referenced by \mbox{\hyperlink{clock_8cpp_source_l00144}{Max\+OS\+::drivers\+::clock\+::\+Clock\+::calibrate()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00252}{Max\+OS\+::system\+::\+CPU\+::\+CPU()}}.
 
 
 

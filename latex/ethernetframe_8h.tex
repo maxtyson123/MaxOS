@@ -5,7 +5,7 @@
 Defines classes for handling Ethernet Frames and their payloads.  
 
 
-{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$common/map.\+h$>$}\newline
 {\ttfamily \#include $<$drivers/ethernet/ethernet.\+h$>$}\newline
 {\ttfamily \#include $<$memory/memorymanagement.\+h$>$}\newline
@@ -20,23 +20,15 @@ class \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFramePayloadHandler}{Max\+OS
 \begin{DoxyCompactList}\small\item\em Handles a specific type of Ethernet Frame payload. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classMaxOS_1_1net_1_1EthernetFrameHandler}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler}}
 \begin{DoxyCompactList}\small\item\em Handles incoming Ethernet Frames and routes them to the appropriate payload handlers. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Functions}
+\doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{arp_8h_a706e75e7063d1ccca9baadb0f52f98bd}\label{arp_8h_a706e75e7063d1ccca9baadb0f52f98bd} 
-struct \mbox{\hyperlink{structMaxOS_1_1net_1_1ARPMessage}{Max\+OS\+::net\+::\+ARPMessage}} {\bfseries Max\+OS\+::net\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed))
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Variables}
-\begin{DoxyCompactItemize}
-\item 
-uint64\+\_\+t \mbox{\hyperlink{ethernetframe_8h_ab7397a8498d13aec6dbc4fbf86cc051e}{destination\+MAC}}
-\begin{DoxyCompactList}\small\item\em The mac address of the target (Big Endian) \end{DoxyCompactList}\item 
-uint64\+\_\+t \mbox{\hyperlink{ethernetframe_8h_adfc6a7d732611f222f5ffb5bb2bde281}{source\+MAC}}
-\begin{DoxyCompactList}\small\item\em The mac address of the sender (Big Endian) \end{DoxyCompactList}\item 
-uint16\+\_\+t \mbox{\hyperlink{ethernetframe_8h_acb5cfd209ba75c853d03f701e7f91679}{type}}
-\begin{DoxyCompactList}\small\item\em The type (Big Endian) 0x0800 = IPv4, 0x0806 = ARP, 0x86\+DD = IPv6. \end{DoxyCompactList}\item 
-uint32\+\_\+t \mbox{\hyperlink{ethernetframe_8h_aa482bc33779a87f57ab8efc2c1680c48}{checksum}}
-\begin{DoxyCompactList}\small\item\em Checksum of the payload. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\Hypertarget{ethernetframe_8h_a16ae314e5405cda33113c11e6fde9f59}\label{ethernetframe_8h_a16ae314e5405cda33113c11e6fde9f59} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1net_1_1EthernetFrameHeader}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Header}} {\bfseries Max\+OS\+::net\+::ethernet\+\_\+frame\+\_\+header\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1net_1_1EthernetFrameHeader}{Ethernet\+Frame\+Header} struct. \end{DoxyCompactList}\item 
+\Hypertarget{ethernetframe_8h_a4b835e698a9eec1789e7b1574d9923ba}\label{ethernetframe_8h_a4b835e698a9eec1789e7b1574d9923ba} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1net_1_1EthernetFrameFooter}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Footer}} {\bfseries Max\+OS\+::net\+::ethernet\+\_\+frame\+\_\+footer\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1net_1_1EthernetFrameFooter}{Ethernet\+Frame\+Footer} struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -49,75 +41,8 @@ Defines classes for handling Ethernet Frames and their payloads.
 Max Tyson
 \end{DoxyAuthor}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000032}{Todo}}]Make big endian helper functions and clairty (ie be\+\_\+uint16\+\_\+t etc)z \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000034}{Todo}}]Make big endian helper functions and clairty (ie be\+\_\+uint16\+\_\+t etc)z \end{DoxyRefDesc}
 
 
 Definition in file \mbox{\hyperlink{ethernetframe_8h_source}{ethernetframe.\+h}}.
-
-
-
-\doxysubsection{Variable Documentation}
-\Hypertarget{ethernetframe_8h_aa482bc33779a87f57ab8efc2c1680c48}\label{ethernetframe_8h_aa482bc33779a87f57ab8efc2c1680c48} 
-\index{ethernetframe.h@{ethernetframe.h}!checksum@{checksum}}
-\index{checksum@{checksum}!ethernetframe.h@{ethernetframe.h}}
-\doxysubsubsection{\texorpdfstring{checksum}{checksum}}
-{\footnotesize\ttfamily uint32\+\_\+t checksum}
-
-
-
-Checksum of the payload. 
-
-
-
-Definition at line \mbox{\hyperlink{ethernetframe_8h_source_l00000}{0}} of file \mbox{\hyperlink{ethernetframe_8h_source}{ethernetframe.\+h}}.
-
-\Hypertarget{ethernetframe_8h_ab7397a8498d13aec6dbc4fbf86cc051e}\label{ethernetframe_8h_ab7397a8498d13aec6dbc4fbf86cc051e} 
-\index{ethernetframe.h@{ethernetframe.h}!destinationMAC@{destinationMAC}}
-\index{destinationMAC@{destinationMAC}!ethernetframe.h@{ethernetframe.h}}
-\doxysubsubsection{\texorpdfstring{destinationMAC}{destinationMAC}}
-{\footnotesize\ttfamily uint64\+\_\+t destination\+MAC}
-
-
-
-The mac address of the target (Big Endian) 
-
-
-
-Definition at line \mbox{\hyperlink{ethernetframe_8h_source_l00001}{1}} of file \mbox{\hyperlink{ethernetframe_8h_source}{ethernetframe.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{ethernetframe_8cpp_source_l00104}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Data\+Received()}}, and \mbox{\hyperlink{ethernetframe_8cpp_source_l00181}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}.
-
-\Hypertarget{ethernetframe_8h_adfc6a7d732611f222f5ffb5bb2bde281}\label{ethernetframe_8h_adfc6a7d732611f222f5ffb5bb2bde281} 
-\index{ethernetframe.h@{ethernetframe.h}!sourceMAC@{sourceMAC}}
-\index{sourceMAC@{sourceMAC}!ethernetframe.h@{ethernetframe.h}}
-\doxysubsubsection{\texorpdfstring{sourceMAC}{sourceMAC}}
-{\footnotesize\ttfamily uint64\+\_\+t source\+MAC}
-
-
-
-The mac address of the sender (Big Endian) 
-
-
-
-Definition at line \mbox{\hyperlink{ethernetframe_8h_source_l00002}{2}} of file \mbox{\hyperlink{ethernetframe_8h_source}{ethernetframe.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{ethernetframe_8cpp_source_l00104}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Data\+Received()}}, and \mbox{\hyperlink{ethernetframe_8cpp_source_l00181}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::send\+Ethernet\+Frame()}}.
-
-\Hypertarget{ethernetframe_8h_acb5cfd209ba75c853d03f701e7f91679}\label{ethernetframe_8h_acb5cfd209ba75c853d03f701e7f91679} 
-\index{ethernetframe.h@{ethernetframe.h}!type@{type}}
-\index{type@{type}!ethernetframe.h@{ethernetframe.h}}
-\doxysubsubsection{\texorpdfstring{type}{type}}
-{\footnotesize\ttfamily uint16\+\_\+t type}
-
-
-
-The type (Big Endian) 0x0800 = IPv4, 0x0806 = ARP, 0x86\+DD = IPv6. 
-
-
-
-Definition at line \mbox{\hyperlink{ethernetframe_8h_source_l00004}{4}} of file \mbox{\hyperlink{ethernetframe_8h_source}{ethernetframe.\+h}}.
 

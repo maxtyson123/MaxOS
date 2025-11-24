@@ -1,0 +1,1019 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/tests/common.cpp" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/src/tests/common.cpp \- Defines the tests for all common components of MaxOS\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tests/common\&.h>\fP
+.br
+\fC#include <common/buffer\&.h>\fP
+.br
+\fC#include <common/colour\&.h>\fP
+.br
+\fC#include <common/graphicsContext\&.h>\fP
+.br
+\fC#include <common/inputStream\&.h>\fP
+.br
+\fC#include <common/logger\&.h>\fP
+.br
+\fC#include <common/map\&.h>\fP
+.br
+\fC#include <common/outputStream\&.h>\fP
+.br
+\fC#include <common/rectangle\&.h>\fP
+.br
+\fC#include <common/string\&.h>\fP
+.br
+\fC#include <common/time\&.h>\fP
+.br
+\fC#include <common/vector\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBregister_buffer_tests\fP ()"
+.br
+.RI "Registers all buffer tests\&. "
+.ti -1c
+.RI "void \fBregister_colour_tests\fP ()"
+.br
+.RI "Registers all colour tests\&. "
+.ti -1c
+.RI "void \fBregister_map_tests\fP ()"
+.br
+.RI "Registers all map tests\&. "
+.ti -1c
+.RI "void \fBregister_rectangle_tests\fP ()"
+.br
+.RI "Registers all rectangle tests\&. "
+.ti -1c
+.RI "void \fBregister_string_tests\fP ()"
+.br
+.RI "Registers all string tests\&. "
+.ti -1c
+.RI "void \fBregister_time_tests\fP ()"
+.br
+.RI "Registers all time tests\&. "
+.ti -1c
+.RI "void \fBregister_vector_tests\fP ()"
+.br
+.RI "Registers all vector tests\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines the tests for all common components of MaxOS\&. 
+
+Implements the tests for all common components of MaxOS\&.
+.PP
+\fBDate\fP
+.RS 4
+23rd November 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBcommon\&.cpp\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void register_buffer_tests ()"
+
+.PP
+Registers all buffer tests\&. 
+.PP
+Definition at line \fB29\fP of file \fBcommon\&.cpp\fP\&..PP
+.nf
+29                              {
+30 
+31     MAXOS_CONDITIONAL_TEST(Buffer_Construct_Size, TestType::COMMON)
+32     {
+33         Buffer buf(10);
+34         return compare(buf\&.capacity(), 10);
+35     });
+36 
+37     MAXOS_CONDITIONAL_TEST(Buffer_Construct_FromSource, TestType::COMMON)
+38     {
+39         // Create from existing data
+40         uint8_t data[5] = { 1, 2, 3, 4, 5 };
+41         Buffer buf(data, 5);
+42 
+43         // Make sure data matches
+44         for(size_t i = 0; i < 5; i++)
+45             if(!compare(buf\&.read(0), data[i]))
+46                 return false;
+47 
+48         return true;
+49     });
+50 
+51     MAXOS_CONDITIONAL_TEST(Buffer_Clear, TestType::COMMON)
+52     {
+53         // Create buffer and fill with non\-zero data
+54         Buffer buf(5);
+55         buf\&.full(0xFF);
+56 
+57         // Ensure buffer is cleared to zeroes
+58         buf\&.clear();
+59         for(size_t i = 0; i < buf\&.capacity(); i++)
+60             if(!compare(buf\&.read(0), 0x00))
+61                 return false;
+62 
+63         return true;
+64     });
+65 
+66     MAXOS_CONDITIONAL_TEST(Buffer_Full, TestType::COMMON)
+67     {
+68         // Create buffer and fill with specific byte
+69         Buffer buf(5);
+70         buf\&.full(0xAA);
+71 
+72         // Ensure buffer is filled with the correct byte
+73         for(size_t i = 0; i < buf\&.capacity(); i++)
+74             if(!compare(buf\&.read(0), 0xAA))
+75                 return false;
+76 
+77         return true;
+78     });
+79 
+80     MAXOS_CONDITIONAL_TEST(Buffer_WriteRead_Offset, TestType::COMMON)
+81     {
+82         // Setup buffer with byes at specific offsets
+83         Buffer buf(3);
+84         buf\&.write(0x12);
+85         buf\&.write(1, 0x34);
+86 
+87         // Read back bytes and verify
+88         if(!compare(buf\&.read(0), 0x12)) return false;
+89         if(!compare(buf\&.read(1), 0x34)) return false;
+90         return true;
+91     });
+92 
+93     MAXOS_CONDITIONAL_TEST(Buffer_Resize, TestType::COMMON)
+94     {
+95         Buffer buf(5);
+96         buf\&.resize(10);
+97         return compare(buf\&.capacity(), 10);
+98     });
+99 
+100     MAXOS_CONDITIONAL_TEST(Buffer_CopyFromBuffer, TestType::COMMON)
+101     {
+102         // Create source and destination buffers with known data
+103         Buffer src(5);
+104         Buffer dst(5);
+105         src\&.full(0x55);
+106 
+107         // Ensure data is copied correctly
+108         dst\&.copy_from(&src);
+109         for(size_t i = 0; i < dst\&.capacity(); i++)
+110             if(!compare(dst\&.read(0), 0x55))
+111                 return false;
+112 
+113         return true;
+114     });
+115 
+116     MAXOS_CONDITIONAL_TEST(Buffer_CopyToBuffer, TestType::COMMON)
+117     {
+118         // Create source and destination buffers with known data
+119         Buffer src(5);
+120         Buffer dst(5);
+121         src\&.full(0x77);
+122 
+123         // Ensure data is copied correctly
+124         src\&.copy_to(&dst);
+125         for(size_t i = 0; i < dst\&.capacity(); i++)
+126             if(!compare(dst\&.read(0), 0x77))
+127                 return false;
+128 
+129         return true;
+130     });
+131 
+132     MAXOS_CONDITIONAL_TEST(Buffer_CopyFromRawPointer, TestType::COMMON)
+133     {
+134         // Create raw data and copy into buffer
+135         uint8_t data[3] = { 0x01, 0x02, 0x03 };
+136         Buffer buf(3);
+137         buf\&.copy_from(data, 3);
+138 
+139         // Ensure data is copied correctly
+140         return compare(buf\&.read(0), 0x01)
+141                && compare(buf\&.read(1), 0x02)
+142                && compare(buf\&.read(2), 0x03);
+143     });
+144 
+145     MAXOS_CONDITIONAL_TEST(Buffer_CopyToRawPointer, TestType::COMMON)
+146     {
+147         // Create buffer with known data
+148         Buffer buf(3);
+149         buf\&.full(0x99);
+150 
+151         // Copy data to raw pointer
+152         uint8_t out[3] = { 0 };
+153         buf\&.copy_to(out, 3);
+154 
+155         return compare(out[0], 0x99)
+156                && compare(out[1], 0x99)
+157                && compare(out[2], 0x99);
+158     });
+159 
+160     MAXOS_CONDITIONAL_TEST(Buffer_Offset_Update, TestType::COMMON)
+161     {
+162         // Create a buffer and fill with data that will move the offset
+163         Buffer buf(3, true);
+164         buf\&.write(0x10);
+165         buf\&.write(0x20);
+166 
+167         // Overwrite first byte and check offset moved correctly
+168         buf\&.set_offset(0);
+169         buf\&.write(0x30);
+170         return compare(buf\&.read(0), 0x30)
+171                && compare(buf\&.read(1), 0x20)
+172                && compare(buf\&.read(2), 0x00);
+173     });
+174 
+175     MAXOS_CONDITIONAL_TEST(Buffer_Offset_Disabled, TestType::COMMON)
+176     {
+177         // Create a buffer and fill with data that will move the offset
+178         Buffer buf(3, false);
+179         buf\&.write(0x11);
+180         buf\&.write(0x22);
+181 
+182         // Overwrite first byte and check offset did not move
+183         buf\&.set_offset(0);
+184         buf\&.write(0x33);
+185         return compare(buf\&.read(0), 0x33)
+186                && compare(buf\&.read(1), 0x22)
+187                && compare(buf\&.read(2), 0x00);
+188     });
+189 
+190     MAXOS_CONDITIONAL_TEST(Buffer_CopyPartial_FromBuffer, TestType::COMMON)
+191     {
+192         // Setup source and destination buffers
+193         Buffer src(5);
+194         Buffer dst(5);
+195         src\&.full(0x55);
+196 
+197         // Verify that only part of the buffer is copied
+198         dst\&.copy_from(&src, 3);
+199         return dst\&.read(0) == 0x55 && dst\&.read(1) == 0x55 && dst\&.read(2) == 0x55 && dst\&.read(3) == 0x00;
+200     });
+201 
+202     MAXOS_CONDITIONAL_TEST(Buffer_CopyPartial_ToBuffer, TestType::COMMON)
+203     {
+204         // Setup source and destination buffers
+205         Buffer src(5);
+206         Buffer dst(5);
+207         src\&.full(0x66);
+208 
+209         // Verify that only part of the buffer is copied
+210         src\&.copy_to(&dst, 3);
+211         return compare(dst\&.read(0), 0x66)
+212                && compare(dst\&.read(1), 0x66)
+213                && compare(dst\&.read(2), 0x66)
+214                && compare(dst\&.read(3), 0x00);
+215     });
+216 
+217     MAXOS_CONDITIONAL_TEST(Buffer_Full_Partial, TestType::COMMON)
+218     {
+219         Buffer buf(5);
+220         buf\&.full(0x99, 1, 3);
+221         return compare(buf\&.read(0), 0x00)
+222                && compare(buf\&.read(1), 0x99)
+223                && compare(buf\&.read(2), 0x99)
+224                && compare(buf\&.read(3), 0x99)
+225                && compare(buf\&.read(4), 0x00);
+226     });
+227 
+228     // TODO: Test bounds checking (some sorta exception handling)
+229 }
+.fi
+
+.PP
+References \fBMAXOS_CONDITIONAL_TEST\fP\&.
+.SS "void register_colour_tests ()"
+
+.PP
+Registers all colour tests\&. 
+.PP
+Definition at line \fB234\fP of file \fBcommon\&.cpp\fP\&..PP
+.nf
+234                              {
+235 
+236     MAXOS_CONDITIONAL_TEST(Colour_DefaultConstructor, TestType::COMMON)
+237     {
+238         Colour c;
+239         return compare(c\&.red, 0)
+240                && compare(c\&.green, 0)
+241                && compare(c\&.blue, 0)
+242                && compare(c\&.alpha, 0);
+243     });
+244 
+245     MAXOS_CONDITIONAL_TEST(Colour_RGBConstructor, TestType::COMMON)
+246     {
+247         Colour c(10, 20, 30);
+248         return compare(c\&.red, 10)
+249                && compare(c\&.green, 20)
+250                && compare(c\&.blue, 30)
+251                && compare(c\&.alpha, 0);
+252     });
+253 
+254     MAXOS_CONDITIONAL_TEST(Colour_RGBAConstructor, TestType::COMMON)
+255     {
+256         Colour c(10, 20, 30, 40);
+257         return compare(c\&.red, 10)
+258                && compare(c\&.green, 20)
+259                && compare(c\&.blue, 30)
+260                && compare(c\&.alpha, 40);
+261     });
+262 
+263     MAXOS_CONDITIONAL_TEST(Colour_ConsoleColourConstructor_Red, TestType::COMMON)
+264     {
+265         Colour c(ConsoleColour::Red);
+266         return compare(c\&.red, 255)
+267                && compare(c\&.green, 0)
+268                && compare(c\&.blue, 0);
+269     });
+270 
+271     MAXOS_CONDITIONAL_TEST(Colour_HexStringConstructor_Magenta, TestType::COMMON)
+272     {
+273         Colour c("FF00FF");
+274         return compare(c\&.red, 255)
+275                && compare(c\&.green, 0)
+276                && compare(c\&.blue, 255);
+277     });
+278 
+279     MAXOS_CONDITIONAL_TEST(Colour_ANSIStringConstructor_FGGreen, TestType::COMMON)
+280     {
+281         Colour c("\\033[0;32m");
+282         return compare(c\&.red, 0)
+283                && compare(c\&.green, 255)
+284                && compare(c\&.blue, 0);
+285     });
+286 
+287     MAXOS_CONDITIONAL_TEST(Colour_ToConsoleColour_Red, TestType::COMMON)
+288     {
+289         Colour c(255, 0, 0);
+290         return c\&.to_console_colour() == ConsoleColour::Red;
+291     });
+292 
+293     MAXOS_CONDITIONAL_TEST(Colour_ConsoleColourRoundTrip_Blue, TestType::COMMON)
+294     {
+295         Colour c(ConsoleColour::Blue);
+296         return c\&.to_console_colour() == ConsoleColour::Blue;
+297     });
+298 
+299     MAXOS_CONDITIONAL_TEST(Colour_AlphaPreservation, TestType::COMMON)
+300     {
+301         Colour c(10, 20, 30, 128);
+302         return compare(c\&.alpha, 128);
+303     });
+304 
+305 }
+.fi
+
+.PP
+References \fBMAXOS_CONDITIONAL_TEST\fP\&.
+.SS "void register_map_tests ()"
+
+.PP
+Registers all map tests\&. 
+.PP
+Definition at line \fB310\fP of file \fBcommon\&.cpp\fP\&..PP
+.nf
+310                           {
+311 
+312     MAXOS_CONDITIONAL_TEST(Map_EmptyOnConstruct, TestType::COMMON)
+313     {
+314         Map<int, int> m;
+315         return compare(m\&.empty(), true);
+316     });
+317 
+318     MAXOS_CONDITIONAL_TEST(Map_PushBack_SizeAndFind, TestType::COMMON)
+319     {
+320         // Create map and add an element
+321         Map<int, int> m;
+322         m\&.push_back(1, 100);
+323 
+324         // Verify size is correct
+325         if(!compare(m\&.size(), 1))
+326             return false;
+327 
+328         // Verify element can be found
+329         auto it = m\&.find(1);
+330         return it != m\&.end() && compare(it\->first, 1) && compare(it\->second, 100);
+331     });
+332 
+333     MAXOS_CONDITIONAL_TEST(Map_PushBack_PopBack, TestType::COMMON)
+334     {
+335         // Create map and add elements
+336         Map<int, int> m;
+337         m\&.push_back(1, 10);
+338         m\&.push_back(2, 20);
+339 
+340         // Verify size
+341         if(!compare(m\&.size(), 2))
+342             return false;
+343 
+344         // Confirm last element is correct
+345         Pair<int, int> last = m\&.pop_back();
+346         if(!compare(last\&.first, 2)) return false;
+347         if(!compare(last\&.second, 20)) return false;
+348 
+349         // Verify size after pop
+350         return compare(m\&.size(), 1);
+351     });
+352 
+353     MAXOS_CONDITIONAL_TEST(Map_PushFront_PopFront, TestType::COMMON)
+354     {
+355         // Create map and add elements
+356         Map<int, int> m;
+357         m\&.push_back(2, 20);
+358         m\&.push_front(1, 10);
+359 
+360         // Verify size
+361         if(!compare(m\&.size(), 2))
+362             return false;
+363 
+364         // Confirm first element is correct
+365         Pair<int, int> first = m\&.pop_front();
+366         if(!compare(first\&.first, 1)) return false;
+367         if(!compare(first\&.second, 10)) return false;
+368 
+369         // Verify size after pop
+370         return compare(m\&.size(), 1);
+371     });
+372 
+373     MAXOS_CONDITIONAL_TEST(Map_Insert_AddAndUpdate, TestType::COMMON)
+374     {
+375         // Create map and add an element
+376         Map<int, int> m;
+377         m\&.insert(1, 100);
+378 
+379         // Verify size after insert
+380         if(!compare(m\&.size(), 1))
+381             return false;
+382 
+383         // Update the existing element and verify size remains the same
+384         m\&.insert(1, 200);
+385         if(!compare(m\&.size(), 1)) return false;
+386 
+387         // Verify the value was updated
+388         auto it = m\&.find(1);
+389         if(it == m\&.end()) return false;
+390         return compare(it\->second, 200);
+391     });
+392 
+393     MAXOS_CONDITIONAL_TEST(Map_Erase_ByKey, TestType::COMMON)
+394     {
+395         // Create map and add elements
+396         Map<int, int> m;
+397         m\&.push_back(1, 10);
+398         m\&.push_back(2, 20);
+399 
+400         // Verify size before erase
+401         if(!compare(m\&.size(), 2)) return false;
+402 
+403         // Erase one element and verify size and contents
+404         m\&.erase(1);
+405         if(!compare(m\&.size(), 1)) return false;
+406         return (m\&.find(1) == m\&.end()) && (m\&.find(2) != m\&.end());
+407     });
+408 
+409     MAXOS_CONDITIONAL_TEST(Map_Erase_ByIterator, TestType::COMMON)
+410     {
+411         // Create map and add elements
+412         Map<int, int> m;
+413         m\&.push_back(1, 11);
+414         m\&.push_back(2, 22);
+415 
+416         // Verify size before erase
+417         if(!compare(m\&.size(), 2)) return false;
+418 
+419         // Erase one element
+420         auto it = m\&.find(1);
+421         if(it == m\&.end()) return false;
+422         m\&.erase(it);
+423 
+424         // Verify size and contents after erase
+425         if(!compare(m\&.size(), 1)) return false;
+426         return (m\&.find(1) == m\&.end()) && (m\&.find(2) != m\&.end());
+427     });
+428 
+429     MAXOS_CONDITIONAL_TEST(Map_Clear_Empties, TestType::COMMON)
+430     {
+431         // Create map and add elements
+432         Map<int, int> m;
+433         m\&.push_back(1, 1);
+434         m\&.push_back(2, 2);
+435 
+436         // Clear the map and verify it's empty
+437         m\&.clear();
+438         return compare(m\&.empty(), true) && compare(m\&.size(), 0);
+439     });
+440 
+441     MAXOS_CONDITIONAL_TEST(Map_ReserveAndIncreaseSize, TestType::COMMON)
+442     {
+443         // Create map and reserve space
+444         Map<int, int> m;
+445         m\&.reserve(16);
+446 
+447         // Verify size is still zero
+448         if(!compare(m\&.size(), 0)) return false;
+449 
+450         // Increase size and verify still zero //TODO: also verify capacity increased?
+451         m\&.increase_size();
+452         return compare(m\&.size(), 0);
+453     });
+454 }
+.fi
+
+.PP
+References \fBMAXOS_CONDITIONAL_TEST\fP\&.
+.SS "void register_rectangle_tests ()"
+
+.PP
+Registers all rectangle tests\&. 
+.PP
+Definition at line \fB459\fP of file \fBcommon\&.cpp\fP\&..PP
+.nf
+459                                 {
+460 
+461     MAXOS_CONDITIONAL_TEST(Rectangle_DefaultConstructor, TestType::COMMON)
+462     {
+463         Rectangle<int> r;
+464 
+465         if(!compare(r\&.left, 0)) return false;
+466         if(!compare(r\&.top, 0)) return false;
+467         if(!compare(r\&.width, 0)) return false;
+468         if(!compare(r\&.height, 0)) return false;
+469         return true;
+470     });
+471 
+472     MAXOS_CONDITIONAL_TEST(Rectangle_Construct_PositiveValues, TestType::COMMON)
+473     {
+474         Rectangle<int> r(1, 2, 3, 4);
+475 
+476         if(!compare(r\&.left, 1)) return false;
+477         if(!compare(r\&.top, 2)) return false;
+478         if(!compare(r\&.width, 3)) return false;
+479         if(!compare(r\&.height, 4)) return false;
+480         return true;
+481     });
+482 
+483     MAXOS_CONDITIONAL_TEST(Rectangle_Construct_NegativeSize_Normalises, TestType::COMMON)
+484     {
+485         Rectangle<int> r(\-2, \-3, \-4, \-5);
+486 
+487         if(!compare(r\&.left, \-6)) return false;
+488         if(!compare(r\&.top, \-8)) return false;
+489         if(!compare(r\&.width, 4)) return false;
+490         if(!compare(r\&.height, 5)) return false;
+491         return true;
+492     });
+493 
+494 
+495     MAXOS_CONDITIONAL_TEST(Rectangle_Intersects_Overlaps, TestType::COMMON)
+496     {
+497         Rectangle<int> a(0, 0, 10, 10);
+498         Rectangle<int> b(5, 5, 2, 2);
+499 
+500         return compare(a\&.intersects(b), true);
+501     });
+502 
+503     MAXOS_CONDITIONAL_TEST(Rectangle_Intersects_EdgeTouch_NoIntersect, TestType::COMMON)
+504     {
+505         Rectangle<int> a(0, 0, 10, 10);
+506         Rectangle<int> b(10, 10, 5, 5);
+507         Rectangle<int> c(11, 0, 2, 2);
+508 
+509         if(!compare(a\&.intersects(b), false)) return false;
+510         if(!compare(a\&.intersects(c), false)) return false;
+511         return true;
+512     });
+513 
+514     MAXOS_CONDITIONAL_TEST(Rectangle_Intersection_CorrectValues, TestType::COMMON)
+515     {
+516         Rectangle<int> a(0, 0, 10, 10);
+517         Rectangle<int> b(5, 5, 10, 10);
+518         Rectangle<int> inter = a\&.intersection(b);
+519 
+520         if(!compare(inter\&.left, 5)) return false;
+521         if(!compare(inter\&.top, 5)) return false;
+522         if(!compare(inter\&.width, 5)) return false;
+523         if(!compare(inter\&.height, 5)) return false;
+524         return true;
+525     });
+526 
+527     MAXOS_CONDITIONAL_TEST(Rectangle_Contains_Rectangle_Inside, TestType::COMMON)
+528     {
+529         Rectangle<int> outer(0, 0, 10, 10);
+530         Rectangle<int> inner(2, 2, 3, 3);
+531 
+532         return compare(outer\&.contains(inner), true);
+533     });
+534 
+535     MAXOS_CONDITIONAL_TEST(Rectangle_Contains_Rectangle_EdgeTouch_False, TestType::COMMON)
+536     {
+537         Rectangle<int> a(0, 0, 4, 4);
+538         Rectangle<int> b(4, 1, 2, 2);
+539         Rectangle<int> c(\-1, \-1, 1, 1);
+540 
+541         if(!compare(a\&.contains(b), false)) return false;
+542         if(!compare(a\&.contains(c), false)) return false;
+543         return true;
+544     });
+545 
+546     MAXOS_CONDITIONAL_TEST(Rectangle_Contains_Point, TestType::COMMON)
+547     {
+548         Rectangle<int> r(1, 1, 4, 4);
+549 
+550         if(!compare(r\&.contains(1, 1), true)) return false;
+551         if(!compare(r\&.contains(4, 1), false)) return false;
+552         if(!compare(r\&.contains(3, 3), true)) return false;
+553         if(!compare(r\&.contains(0, 0), false)) return false;
+554         return true;
+555     });
+556 
+557     MAXOS_CONDITIONAL_TEST(Rectangle_Subtract_NoIntersection_ReturnsOriginal, TestType::COMMON)
+558     {
+559         Rectangle<int> a(0, 0, 4, 4);
+560         Rectangle<int> b(5, 5, 2, 2);
+561 
+562         auto res = a\&.subtract(b);
+563         const Rectangle<int>& r = res[0];
+564 
+565         if(!compare((int)res\&.size(), 1)) return false;
+566         if(!compare(r\&.left, a\&.left)) return false;
+567         if(!compare(r\&.top, a\&.top)) return false;
+568         if(!compare(r\&.width, a\&.width)) return false;
+569         if(!compare(r\&.height, a\&.height)) return false;
+570         return true;
+571     });
+572 
+573     MAXOS_CONDITIONAL_TEST(Rectangle_Subtract_FullyCovered_EmptyResult, TestType::COMMON)
+574     {
+575         Rectangle<int> a(0, 0, 4, 4);
+576         Rectangle<int> b(0, 0, 4, 4);
+577 
+578         auto res = a\&.subtract(b);
+579         return compare((int)res\&.size(), 0);
+580     });
+581 
+582 }
+.fi
+
+.PP
+References \fBMAXOS_CONDITIONAL_TEST\fP\&.
+.SS "void register_string_tests ()"
+
+.PP
+Registers all string tests\&. 
+.PP
+Definition at line \fB587\fP of file \fBcommon\&.cpp\fP\&..PP
+.nf
+587                              {
+588 
+589 
+590     MAXOS_CONDITIONAL_TEST(String_DefaultConstructor, TestType::COMMON)
+591     {
+592         String s;
+593         return compare(s\&.length(), (size_t)0);
+594     });
+595 
+596     MAXOS_CONDITIONAL_TEST(String_CharConstructor, TestType::COMMON)
+597     {
+598         String s('A');
+599         return compare(s\&.length(), (size_t)1) && compare(s[0], 'A');
+600     });
+601 
+602     MAXOS_CONDITIONAL_TEST(String_CStringConstructor, TestType::COMMON)
+603     {
+604         String s("Hello");
+605         return compare(s\&.length(), (size_t)5) && compare(s, String("Hello"));
+606     });
+607 
+608     MAXOS_CONDITIONAL_TEST(String_CopyConstructor_Assignment, TestType::COMMON)
+609     {
+610         String a("CopyMe");
+611         String b(a);
+612         String c;
+613         c = a;
+614         return compare(b, a) && compare(c, a);
+615     });
+616 
+617     MAXOS_CONDITIONAL_TEST(String_Concat_Plus_PlusEquals, TestType::COMMON)
+618     {
+619         String a("Hello");
+620         String b("World");
+621 
+622         String combined = a + String(" ") + b;
+623         a += String(" ");
+624         a += b;
+625 
+626         return compare(combined, String("Hello World")) && compare(a, combined);
+627     });
+628 
+629     MAXOS_CONDITIONAL_TEST(String_Substring_StartsWith, TestType::COMMON)
+630     {
+631         String s("This is a test");
+632         String sub = s\&.substring(5, 2);
+633 
+634         return compare(sub, String("is")) && compare(s\&.starts_with(String("This")), true);
+635     });
+636 
+637     MAXOS_CONDITIONAL_TEST(String_Split_Simple, TestType::COMMON)
+638     {
+639         String s("one,two,three");
+640         auto parts = s\&.split(String(","));
+641 
+642         if(!compare((size_t)parts\&.size(), (size_t)3)) return false;
+643         if(!compare(parts[0], String("one"))) return false;
+644         if(!compare(parts[1], String("two"))) return false;
+645         return compare(parts[2], String("three"));
+646     });
+647 
+648     MAXOS_CONDITIONAL_TEST(String_Strip_Center, TestType::COMMON)
+649     {
+650         String s("   padded   ");
+651         String stripped = s\&.strip(' ');
+652         String centered = String("hi")\&.center(6, '\&.');
+653 
+654         if(!compare(stripped, String("   padded"))) return false;
+655         return compare(centered, String("\&.\&.hi\&.\&."));
+656     });
+657 
+658     MAXOS_CONDITIONAL_TEST(String_Formatted_Integer_Hex_String, TestType::COMMON)
+659     {
+660         String f = String::formatted("num:%d hex:%x str:%s", 42, (uint64_t)0x2A, (char*)"ok");
+661 
+662         return compare(f, String("num:42 hex:2A str:ok"));
+663     });
+664 
+665     MAXOS_CONDITIONAL_TEST(String_Length_AnsiHandling, TestType::COMMON)
+666     {
+667         String s = String("\\033[0;31m") + String("X") + String("\\033[0m") + String("Y");
+668 
+669 
+670         if(!compare(s\&.length(true), (size_t)8)) return false;
+671         return compare(s\&.length(false), (size_t)2);
+672     });
+673 
+674     MAXOS_CONDITIONAL_TEST(String_OperatorMultiply, TestType::COMMON)
+675     {
+676         String s("ab");
+677         String r = s * 3;
+678 
+679         return compare(r, String("ababab")) && compare(r\&.length(), (size_t)6);
+680     });
+681 
+682     MAXOS_CONDITIONAL_TEST(String_Comparisons_LexValue, TestType::COMMON)
+683     {
+684         String a("aaa");
+685         String b("bbb");
+686 
+687         if(!compare(a < b, true)) return false;
+688         if(!compare(b > a, true)) return false;
+689         if(!compare(a <= a, true)) return false;
+690         return compare(b >= a, true);
+691     });
+692 
+693     MAXOS_CONDITIONAL_TEST(String_StringBuilder_Append, TestType::COMMON)
+694     {
+695         StringBuilder sb;
+696         sb << "val:" << 123 << (uint64_t)0x10 << true;
+697         String out = sb\&.out;
+698 
+699         if(!compare(out\&.starts_with(String("val:")), true)) return false;
+700         if(!compare(out\&.length() > (size_t)5, true)) return false;
+701         return true;
+702     });
+703 
+704 }
+.fi
+
+.PP
+References \fBMAXOS_CONDITIONAL_TEST\fP\&.
+.SS "void register_time_tests ()"
+
+.PP
+Registers all time tests\&. 
+.PP
+Definition at line \fB709\fP of file \fBcommon\&.cpp\fP\&..PP
+.nf
+709                            {
+710 
+711 
+712     MAXOS_CONDITIONAL_TEST(Time_IsLeapYear_True, TestType::COMMON)
+713     {
+714         Time t { 2020, 2, 1, 0, 0, 0 };
+715         return compare(t\&.is_leap_year(), true);
+716     });
+717 
+718     MAXOS_CONDITIONAL_TEST(Time_IsLeapYear_False, TestType::COMMON)
+719     {
+720         Time t { 2019, 3, 1, 0, 0, 0 };
+721         return compare(t\&.is_leap_year(), false);
+722     });
+723 
+724     MAXOS_CONDITIONAL_TEST(Time_Epoch_1970_01_01, TestType::COMMON)
+725     {
+726         Time t { 1970, 1, 1, 0, 0, 0 };
+727         return compare(time_to_epoch(t), (uint64_t)0ULL);
+728     });
+729 
+730     MAXOS_CONDITIONAL_TEST(Time_Epoch_1970_01_02, TestType::COMMON)
+731     {
+732         Time t { 1970, 1, 2, 0, 0, 0 };
+733         return compare(time_to_epoch(t), (uint64_t)86400ULL);
+734     });
+735 
+736     MAXOS_CONDITIONAL_TEST(Time_Epoch_1971_01_01, TestType::COMMON)
+737     {
+738         Time t { 1971, 1, 1, 0, 0, 0 };
+739         return compare(time_to_epoch(t), (uint64_t)31536000ULL);
+740     });
+741 
+742     MAXOS_CONDITIONAL_TEST(Time_Epoch_1972_03_01_LeapYear, TestType::COMMON)
+743     {
+744         Time t { 1972, 3, 1, 0, 0, 0 };
+745         return compare(time_to_epoch(t), (uint64_t)68256000ULL);
+746     });
+747 
+748     MAXOS_CONDITIONAL_TEST(Time_MonthsArray_Bounds, TestType::COMMON)
+749     {
+750         return compare(string(Months[0]), string("January")) && compare(string(Months[11]), string("December"));
+751     });
+752 
+753 }
+.fi
+
+.PP
+References \fBMAXOS_CONDITIONAL_TEST\fP\&.
+.SS "void register_vector_tests ()"
+
+.PP
+Registers all vector tests\&. 
+.PP
+Definition at line \fB758\fP of file \fBcommon\&.cpp\fP\&..PP
+.nf
+758                              {
+759 
+760     MAXOS_CONDITIONAL_TEST(Vector_Default_Construct_Empty, TestType::COMMON)
+761     {
+762         Vector<int> v;
+763         return compare((int)v\&.size(), 0) && compare(v\&.empty(), true);
+764     });
+765 
+766 
+767     MAXOS_CONDITIONAL_TEST(Vector_Construct_Size_Fill, TestType::COMMON)
+768     {
+769         Vector<int> v(4, 7);
+770         return compare((size_t)v\&.size(), 4)
+771                && compare(v[0], 7)
+772                && compare(v[1], 7)
+773                && compare(v[2], 7)
+774                && compare(v[3], 7);
+775     });
+776 
+777     MAXOS_CONDITIONAL_TEST(Vector_PushBack_PopBack, TestType::COMMON)
+778     {
+779         Vector<int> v;
+780         v\&.push_back(1);
+781         v\&.push_back(2);
+782         v\&.push_back(3);
+783 
+784         if(!compare((size_t)v\&.size(), 3)) return false;
+785 
+786         int popped = v\&.pop_back();
+787         if(!compare(popped, 3)) return false;
+788         return compare((size_t)v\&.size(), 2);
+789     });
+790 
+791     MAXOS_CONDITIONAL_TEST(Vector_PushFront_PopFront, TestType::COMMON)
+792     {
+793         Vector<int> v;
+794         v\&.push_back(2);
+795         v\&.push_back(3);
+796         v\&.push_front(1);
+797 
+798         if(!compare((size_t)v\&.size(), 3)) return false;
+799         if(!compare(v[0], 1)) return false;
+800 
+801         int front = v\&.pop_front();
+802         if(!compare(front, 1)) return false;
+803         return compare((size_t)v\&.size(), 2);
+804     });
+805 
+806     MAXOS_CONDITIONAL_TEST(Vector_Reserve_IncreaseSize_Preserves, TestType::COMMON)
+807     {
+808         Vector<int> v;
+809         v\&.push_back(9);
+810         v\&.push_back(8);
+811         v\&.reserve(16);
+812 
+813         if(!compare((size_t)v\&.size(), 2)) return false;
+814         if(!compare(v[0], 9)) return false;
+815         if(!compare(v[1], 8)) return false;
+816 
+817         v\&.increase_size();
+818         return compare(v[0], 9);
+819     });
+820 
+821     MAXOS_CONDITIONAL_TEST(Vector_CopyConstructor_Independent, TestType::COMMON)
+822     {
+823         Vector<int> original;
+824         original\&.push_back(4);
+825         original\&.push_back(5);
+826         Vector<int> copy = original;
+827 
+828         original\&.pop_back();
+829         if(!compare((size_t)original\&.size(), 1)) return false;
+830         return compare((size_t)copy\&.size(), 2)
+831             && compare(copy[1], 5);
+832     });
+833 
+834 
+835     MAXOS_CONDITIONAL_TEST(Vector_MoveConstructor_Transfers, TestType::COMMON)
+836     {
+837         Vector<int> src;
+838         src\&.push_back(10);
+839         src\&.push_back(11);
+840         Vector<int> moved = static_cast<Vector<int>&&>(src);
+841 
+842         if(!compare((size_t)moved\&.size(), 2)) return false;
+843         return compare((size_t)src\&.size(), 0);
+844     });
+845 
+846     MAXOS_CONDITIONAL_TEST(Vector_Assignment_Copy_And_Move, TestType::COMMON)
+847     {
+848         Vector<int> a;
+849         a\&.push_back(1);
+850         a\&.push_back(2);
+851 
+852         Vector<int> b;
+853         b = a;
+854         if(!compare((size_t)b\&.size(), 2)) return false;
+855         if(!compare(b[1], 2)) return false;
+856 
+857         Vector<int> c;
+858         c = static_cast<Vector<int>&&>(b); // move assign
+859         if(!compare((size_t)c\&.size(), 2)) return false;
+860         return compare((size_t)b\&.size(), 0);
+861     });
+862 
+863     MAXOS_CONDITIONAL_TEST(Vector_Erase_ByValue_RemovesAll, TestType::COMMON)
+864     {
+865         Vector<int> v;
+866         v\&.push_back(3);
+867         v\&.push_back(4);
+868         v\&.push_back(3);
+869         v\&.push_back(5);
+870         v\&.erase(3);
+871 
+872         if(!compare((size_t)v\&.size(), 2)) return false;
+873         return compare(v[0], 4)
+874             && compare(v[1], 5);
+875     });
+876 
+877     MAXOS_CONDITIONAL_TEST(Vector_Erase_ByIterator_RemovesSingle, TestType::COMMON)
+878     {
+879         Vector<int> v;
+880         v\&.push_back(7);
+881         v\&.push_back(8);
+882         v\&.push_back(9);
+883         auto it = v\&.begin() + 1;
+884         v\&.erase(it);
+885 
+886         if(!compare((size_t)v\&.size(), 2)) return false;
+887         return compare(v[0], 7)
+888             && compare(v[1], 9);
+889     });
+890 
+891     MAXOS_CONDITIONAL_TEST(Vector_Find_Present_And_Absent, TestType::COMMON)
+892     {
+893         Vector<int> v;
+894         v\&.push_back(21);
+895         v\&.push_back(22);
+896         v\&.push_back(23);
+897 
+898         bool found22 = (v\&.find(22) != v\&.end());
+899         bool found99 = (v\&.find(99) != v\&.end());
+900 
+901         if(!compare(found22, true)) return false;
+902         return compare(found99, false);
+903     });
+904 }
+.fi
+
+.PP
+References \fBMAXOS_CONDITIONAL_TEST\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

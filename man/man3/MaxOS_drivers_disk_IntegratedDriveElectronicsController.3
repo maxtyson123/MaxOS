@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::disk::IntegratedDriveElectronicsController" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::disk::IntegratedDriveElectronicsController" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,7 +15,7 @@ Inherits \fBMaxOS::drivers::Driver\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBIntegratedDriveElectronicsController\fP (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP *device_descriptor)"
+.RI "\fBIntegratedDriveElectronicsController\fP (\fBhardwarecommunication::PCIDeviceDescriptor\fP *device_descriptor)"
 .br
 .RI "Construct a new Integrated Drive Electronics Controller object\&. "
 .ti -1c
@@ -41,7 +41,7 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
-.RI "deactivate the driver "
+.RI "Deactivate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBuint32_t\fP \fBreset\fP ()"
 .br
@@ -51,10 +51,10 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .PP 
 \fBDriver\fP for the IDE controller, handles the creation and management of the IDE devices\&. 
 .PP
-Definition at line \fB29\fP of file \fBide\&.h\fP\&.
+Definition at line \fB25\fP of file \fBide\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "IntegratedDriveElectronicsController::IntegratedDriveElectronicsController (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP * device_descriptor)"
+.SS "IntegratedDriveElectronicsController::IntegratedDriveElectronicsController (\fBhardwarecommunication::PCIDeviceDescriptor\fP * device_descriptor)\fC [explicit]\fP"
 
 .PP
 Construct a new Integrated Drive Electronics Controller object\&. 
@@ -123,13 +123,20 @@ References \fBMaxOS::filesystem::partition::MSDOSPartition::mount_partitions()\f
 .PP
 Get the device name\&. 
 .PP
+\fBReturns\fP
+.RS 4
+The device name 
+.RE
+.PP
+
+.PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB100\fP of file \fBide\&.cpp\fP\&..PP
+Definition at line \fB104\fP of file \fBide\&.cpp\fP\&..PP
 .nf
-100                                                          {
-101     return "PIIX4";
-102 }
+104                                                          {
+105     return "PIIX4";
+106 }
 .fi
 
 .SS "void IntegratedDriveElectronicsController::initialise ()\fC [final]\fP, \fC [virtual]\fP"
@@ -168,19 +175,26 @@ Definition at line \fB46\fP of file \fBide\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBLogger::DEBUG()\fP\&.
+References \fBMaxOS::Logger::DEBUG()\fP\&.
 .SS "\fBstring\fP IntegratedDriveElectronicsController::vendor_name ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Get the vendor name\&. 
 .PP
+\fBReturns\fP
+.RS 4
+The vendor name 
+.RE
+.PP
+
+.PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB93\fP of file \fBide\&.cpp\fP\&..PP
+Definition at line \fB95\fP of file \fBide\&.cpp\fP\&..PP
 .nf
-93                                                          {
-94     return "Intel";
-95 }
+95                                                          {
+96     return "Intel";
+97 }
 .fi
 
 

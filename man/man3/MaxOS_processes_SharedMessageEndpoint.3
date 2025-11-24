@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::SharedMessageEndpoint" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::SharedMessageEndpoint" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,15 +15,19 @@ Inherits \fBMaxOS::processes::Resource\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBSharedMessageEndpoint\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP \fBsize\fP, resource_type_t \fBtype\fP)"
+.RI "\fBSharedMessageEndpoint\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP size, \fBresource_type_t\fP \fBtype\fP)"
 .br
 .RI "Creates a new shared message endpoint\&. "
 .ti -1c
-.RI "\fBint\fP \fBread\fP (\fBvoid\fP *buffer, \fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.RI "\fB~SharedMessageEndpoint\fP () \fBfinal\fP"
+.br
+.RI "Destroys the shared message endpoint and frees all messages\&. "
+.ti -1c
+.RI "\fBint\fP \fBread\fP (\fBvoid\fP *buffer, \fBsize_t\fP size, \fBsize_t\fP flags) \fBfinal\fP"
 .br
 .RI "Reads the first message from the endpoint or will yield until a message has been written\&. "
 .ti -1c
-.RI "\fBint\fP \fBwrite\fP (\fBconst\fP \fBvoid\fP *buffer, \fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.RI "\fBint\fP \fBwrite\fP (\fBconst\fP \fBvoid\fP *buffer, \fBsize_t\fP size, \fBsize_t\fP flags) \fBfinal\fP"
 .br
 .RI "Handles writing to the message endpoint resource by writing the buffer as a message\&. "
 .in -1c
@@ -31,7 +35,7 @@ Inherits \fBMaxOS::processes::Resource\fP\&.
 Public Member Functions inherited from \fBMaxOS::processes::Resource\fP
 .in +1c
 .ti -1c
-.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t \fBflags\fP, resource_type_t \fBtype\fP)"
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBresource_type_t\fP \fBtype\fP)"
 .br
 .RI "Constructs a new \fBResource\fP object\&. "
 .ti -1c
@@ -39,15 +43,15 @@ Public Member Functions inherited from \fBMaxOS::processes::Resource\fP
 .br
 .RI "Gets the name of this resource\&. "
 .ti -1c
-.RI "resource_type_t \fBtype\fP ()"
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
 .br
 .RI "Gets the type of this resource\&. "
 .ti -1c
-.RI "virtual void \fBopen\fP (size_t \fBflags\fP)"
+.RI "virtual void \fBopen\fP (size_t flags)"
 .br
 .RI "Opens the resource\&. "
 .ti -1c
-.RI "virtual void \fBclose\fP (size_t \fBflags\fP)"
+.RI "virtual void \fBclose\fP (size_t flags)"
 .br
 .RI "Closes the resource\&. "
 .in -1c
@@ -58,7 +62,7 @@ A endpoint that allows processes to queue messages on\&.
 Definition at line \fB54\fP of file \fBipc\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "SharedMessageEndpoint::SharedMessageEndpoint (\fBconst\fP \fBstring\fP & name, \fBsize_t\fP size, resource_type_t type)"
+.SS "SharedMessageEndpoint::SharedMessageEndpoint (\fBconst\fP \fBstring\fP & name, \fBsize_t\fP size, \fBresource_type_t\fP type)"
 
 .PP
 Creates a new shared message endpoint\&. 
@@ -85,14 +89,16 @@ Definition at line \fB112\fP of file \fBipc\&.cpp\fP\&..PP
 .SS "SharedMessageEndpoint::~SharedMessageEndpoint ()\fC [final]\fP"
 
 .PP
-Definition at line \fB118\fP of file \fBipc\&.cpp\fP\&..PP
+Destroys the shared message endpoint and frees all messages\&. 
+.PP
+Definition at line \fB121\fP of file \fBipc\&.cpp\fP\&..PP
 .nf
-118                                               {
-119 
-120     // Free the messages
-121     for(auto& message : m_queue)
-122         delete message;
-123 }
+121                                               {
+122 
+123     // Free the messages
+124     for(auto& message : m_queue)
+125         delete message;
+126 }
 .fi
 
 .SH "Member Function Documentation"
@@ -120,25 +126,25 @@ The amount of bytes read
 .PP
 Reimplemented from \fBMaxOS::processes::Resource\fP\&.
 .PP
-Definition at line \fB133\fP of file \fBipc\&.cpp\fP\&..PP
+Definition at line \fB136\fP of file \fBipc\&.cpp\fP\&..PP
 .nf
-133                                                                        {
-134 
-135     // Wait for a message
-136     if(m_queue\&.empty())
-137         return \-1 * (int)resource_error_base_t::SHOULD_BLOCK;
-138 
-139     // Read the message into the buffer
-140     buffer_t* message = m_queue\&.pop_front();
-141     size_t readable = size > message\->capacity() ? message\->capacity() : size;
-142     memcpy(buffer, message \-> raw(), readable);
-143 
-144     return readable;
-145 }
+136                                                                        {
+137 
+138     // Wait for a message
+139     if(m_queue\&.empty())
+140         return \-1 * (int)resource_error_base_t::SHOULD_BLOCK;
+141 
+142     // Read the message into the buffer
+143     buffer_t* message = m_queue\&.pop_front();
+144     size_t readable = size > message\->capacity() ? message\->capacity() : size;
+145     memcpy(buffer, message \-> raw(), readable);
+146 
+147     return readable;
+148 }
 .fi
 
 .PP
-References \fBmemcpy()\fP, and \fBsize\fP\&.
+References \fBmemcpy()\fP\&.
 .SS "\fBint\fP SharedMessageEndpoint::write (\fBconst\fP \fBvoid\fP * buffer, \fBsize_t\fP size, \fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -162,24 +168,24 @@ The amount of bytes written
 .PP
 Reimplemented from \fBMaxOS::processes::Resource\fP\&.
 .PP
-Definition at line \fB155\fP of file \fBipc\&.cpp\fP\&..PP
+Definition at line \fB158\fP of file \fBipc\&.cpp\fP\&..PP
 .nf
-155                                                                               {
-156 
-157     m_message_lock\&.lock();
-158 
-159     // Create the message
-160     auto* new_message = new buffer_t(size);
-161     new_message\->copy_from(buffer, size);
-162     m_queue\&.push_back(new_message);
-163 
-164     m_message_lock\&.unlock();
-165     return size;
-166 }
+158                                                                               {
+159 
+160     m_message_lock\&.lock();
+161 
+162     // Create the message
+163     auto* new_message = new buffer_t(size);
+164     new_message\->copy_from(buffer, size);
+165     m_queue\&.push_back(new_message);
+166 
+167     m_message_lock\&.unlock();
+168     return size;
+169 }
 .fi
 
 .PP
-References \fBMaxOS::common::Spinlock::lock()\fP, \fBsize\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+References \fBMaxOS::common::Spinlock::lock()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 
 .SH "Author"
 .PP 

@@ -9,72 +9,72 @@
 \DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00012}00012\ \textcolor{keyword}{using\ namespace\ }MaxOS;}
 \DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00013}00013\ \textcolor{keyword}{using\ namespace\ }MaxOS::system;}
 \DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00014}00014\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00015}00015\ GlobalDescriptorTable::GlobalDescriptorTable()}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00016}00016\ \{}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00017}00017\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00018}00018\ \ \ \ \ \textcolor{comment}{//\ Null\ descriptor}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00019}00019\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[0]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00018}\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_af965f61a6b95b05608d27385fee17f4e}{00018}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_af965f61a6b95b05608d27385fee17f4e}{GlobalDescriptorTable::GlobalDescriptorTable}}()}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00019}00019\ \{}
 \DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00020}00020\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00021}00021\ \ \ \ \ \textcolor{comment}{//\ Kernel\ Code\ Segment\ descriptor}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00022}00022\ \ \ \ \ uint64\_t\ kernel\_cs\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00023}00023\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Write;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00024}00024\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Execute;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00025}00025\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::CodeOrDataSegment;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00026}00026\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Present;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00027}00027\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::LongMode;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00028}00028\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[1]\ =\ kernel\_cs;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00029}00029\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00030}00030\ \ \ \ \ \textcolor{comment}{//\ Kernel\ Data\ Segment\ descriptor}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00031}00031\ \ \ \ \ uint64\_t\ kernel\_ds\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00032}00032\ \ \ \ \ kernel\_ds\ |=\ (uint64\_t)\ DescriptorFlags::Write;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00033}00033\ \ \ \ \ kernel\_ds\ |=\ (uint64\_t)\ DescriptorFlags::CodeOrDataSegment;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00034}00034\ \ \ \ \ kernel\_ds\ |=\ (uint64\_t)\ DescriptorFlags::Present;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00035}00035\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[2]\ =\ kernel\_ds;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00036}00036\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00037}00037\ \ \ \ \ \textcolor{comment}{//\ User\ code\ segment\ descriptor\ (Change\ the\ privilege\ level\ to\ 3)}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00038}00038\ \ \ \ \ uint64\_t\ user\_cs\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00039}00039\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Write;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00040}00040\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Execute;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00041}00041\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::CodeOrDataSegment;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00042}00042\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Present;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00043}00043\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::LongMode;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00044}00044\ \ \ \ \ user\_cs\ |=\ (3ULL\ <<\ 45);}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00045}00045\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[3]\ =\ user\_cs;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00046}00046\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00047}00047\ \ \ \ \ \textcolor{comment}{//\ User\ data\ segment\ descriptor\ (Change\ the\ privilege\ level\ to\ 3)}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00048}00048\ \ \ \ \ uint64\_t\ user\_ds\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00049}00049\ \ \ \ \ user\_ds\ |=\ (uint64\_t)\ DescriptorFlags::Write;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00050}00050\ \ \ \ \ user\_ds\ |=\ (uint64\_t)\ DescriptorFlags::CodeOrDataSegment;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00051}00051\ \ \ \ \ user\_ds\ |=\ (uint64\_t)\ DescriptorFlags::Present;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00052}00052\ \ \ \ \ user\_ds\ |=\ (3ULL\ <<\ 45);}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00053}00053\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[4]\ =\ user\_ds;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00054}00054\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00055}00055\ \ \ \ \ \textcolor{comment}{//\ Reserve\ space\ for\ the\ TSS}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00056}00056\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[5]\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00057}00057\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[6]\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00058}00058\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00059}00059\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ GDT}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00060}00060\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a69a4066581f829e6e47d169879aa4749}{load}}();}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00021}00021\ \ \ \ \ \textcolor{comment}{//\ Null\ descriptor}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00022}00022\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[0]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00024}00024\ \ \ \ \ \textcolor{comment}{//\ Kernel\ Code\ Segment\ descriptor}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00025}00025\ \ \ \ \ uint64\_t\ kernel\_cs\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00026}00026\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Write;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00027}00027\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Execute;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00028}00028\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::CodeOrDataSegment;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00029}00029\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Present;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00030}00030\ \ \ \ \ kernel\_cs\ |=\ (uint64\_t)\ DescriptorFlags::LongMode;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00031}00031\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[1]\ =\ kernel\_cs;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00033}00033\ \ \ \ \ \textcolor{comment}{//\ Kernel\ Data\ Segment\ descriptor}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00034}00034\ \ \ \ \ uint64\_t\ kernel\_ds\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00035}00035\ \ \ \ \ kernel\_ds\ |=\ (uint64\_t)\ DescriptorFlags::Write;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00036}00036\ \ \ \ \ kernel\_ds\ |=\ (uint64\_t)\ DescriptorFlags::CodeOrDataSegment;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00037}00037\ \ \ \ \ kernel\_ds\ |=\ (uint64\_t)\ DescriptorFlags::Present;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00038}00038\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[2]\ =\ kernel\_ds;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00040}00040\ \ \ \ \ \textcolor{comment}{//\ User\ code\ segment\ descriptor\ (Change\ the\ privilege\ level\ to\ 3)}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00041}00041\ \ \ \ \ uint64\_t\ user\_cs\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00042}00042\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Write;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00043}00043\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Execute;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00044}00044\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::CodeOrDataSegment;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00045}00045\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::Present;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00046}00046\ \ \ \ \ user\_cs\ |=\ (uint64\_t)\ DescriptorFlags::LongMode;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00047}00047\ \ \ \ \ user\_cs\ |=\ (3ULL\ <<\ 45);}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00048}00048\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[3]\ =\ user\_cs;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00050}00050\ \ \ \ \ \textcolor{comment}{//\ User\ data\ segment\ descriptor\ (Change\ the\ privilege\ level\ to\ 3)}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00051}00051\ \ \ \ \ uint64\_t\ user\_ds\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00052}00052\ \ \ \ \ user\_ds\ |=\ (uint64\_t)\ DescriptorFlags::Write;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00053}00053\ \ \ \ \ user\_ds\ |=\ (uint64\_t)\ DescriptorFlags::CodeOrDataSegment;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00054}00054\ \ \ \ \ user\_ds\ |=\ (uint64\_t)\ DescriptorFlags::Present;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00055}00055\ \ \ \ \ user\_ds\ |=\ (3ULL\ <<\ 45);}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00056}00056\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[4]\ =\ user\_ds;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00058}00058\ \ \ \ \ \textcolor{comment}{//\ Reserve\ space\ for\ the\ TSS}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00059}00059\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[5]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00060}00060\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[6]\ =\ 0;}
 \DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00061}00061\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00062}00062\ \ \ \ \ \textcolor{comment}{//\ Reload\ the\ segment\ registers}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00063}00063\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%ds"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00064}00064\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%es"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00065}00065\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%fs"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00066}00066\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%gs"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00067}00067\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%ss"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00068}00068\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Reloaded\ segment\ registers\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00069}00069\ \}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00070}00070\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00074}\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a69a4066581f829e6e47d169879aa4749}{00074}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a69a4066581f829e6e47d169879aa4749}{GlobalDescriptorTable::load}}()\ \{}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00075}00075\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}\ =\ \{}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \ \ \ .size\ \ \ \ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}})\ -\/\ 1,}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00077}00077\ \ \ \ \ \ \ \ \ \ \ \ \ .address\ =\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}},}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00078}00078\ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00079}00079\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}lgdt\ \%0"{}}\ :\ :\ \textcolor{stringliteral}{"{}m"{}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}));}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00080}00080\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Loaded\ GDT\ of\ limit\ 0x"{}}\ <<\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}.size\ <<\ \textcolor{stringliteral}{"{}\ and\ address\ 0x"{}}\ <<\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}.address\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00081}00081\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00082}00082\ \}}
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00083}00083\ }
-\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00084}00084\ GlobalDescriptorTable::\string~GlobalDescriptorTable()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00062}00062\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ GDT}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00063}00063\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a69a4066581f829e6e47d169879aa4749}{load}}();}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00065}00065\ \ \ \ \ \textcolor{comment}{//\ Reload\ the\ segment\ registers}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00066}00066\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%ds"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00067}00067\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%es"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00068}00068\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%fs"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00069}00069\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%gs"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00070}00070\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}mov\ \%0,\ \%\%ss"{}}\ :\ :\ \textcolor{stringliteral}{"{}r"{}}(0x10));}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00071}00071\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Reloaded\ segment\ registers\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00072}00072\ \}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00077}\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a69a4066581f829e6e47d169879aa4749}{00077}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a69a4066581f829e6e47d169879aa4749}{GlobalDescriptorTable::load}}()\ \{}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00078}00078\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}\ =\ \{}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00079}00079\ \ \ \ \ \ \ \ \ \ \ \ \ .size\ \ \ \ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}})\ -\/\ 1,}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00080}00080\ \ \ \ \ \ \ \ \ \ \ \ \ .address\ =\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}},}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00081}00081\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00082}00082\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}lgdt\ \%0"{}}\ :\ :\ \textcolor{stringliteral}{"{}m"{}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}));}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00083}00083\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Loaded\ GDT\ of\ limit\ 0x"{}}\ <<\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}.size\ <<\ \textcolor{stringliteral}{"{}\ and\ address\ 0x"{}}\ <<\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}.address\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00085}00085\ \}}
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{gdt_8cpp_source_l00087}00087\ GlobalDescriptorTable::\string~GlobalDescriptorTable()\ =\ \textcolor{keywordflow}{default};}
 
 \end{DoxyCode}

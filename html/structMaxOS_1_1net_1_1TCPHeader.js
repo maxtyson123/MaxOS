@@ -1,14 +1,14 @@
 var structMaxOS_1_1net_1_1TCPHeader =
 [
-    [ "acknowledgementNumber", "structMaxOS_1_1net_1_1TCPHeader.html#a569d058374bd0ef41d18472fafca2e8b", null ],
+    [ "acknowledgement_number", "structMaxOS_1_1net_1_1TCPHeader.html#a139a5b210c4c75f52054b245072d2c13", null ],
     [ "checksum", "structMaxOS_1_1net_1_1TCPHeader.html#a70b90fc1d1ad31b08cfb554e17095ae2", null ],
-    [ "dstPort", "structMaxOS_1_1net_1_1TCPHeader.html#a4328eccee8e084d01b2eaf69bb7e227d", null ],
+    [ "dst_port", "structMaxOS_1_1net_1_1TCPHeader.html#a3c09b0fbee7bf6039005315a280ce739", null ],
     [ "flags", "structMaxOS_1_1net_1_1TCPHeader.html#a0ad1bf96dfae11247658e8ba9f195e19", null ],
-    [ "headerSize32", "structMaxOS_1_1net_1_1TCPHeader.html#ac516149329fd3167405f46b64ad43b7d", null ],
+    [ "header_size_32", "structMaxOS_1_1net_1_1TCPHeader.html#ac2b9f6c4783a52d7e7051a467d8f7324", null ],
     [ "options", "structMaxOS_1_1net_1_1TCPHeader.html#abe3ba69242235b109702a0d5d45cb0a5", null ],
     [ "reserved", "structMaxOS_1_1net_1_1TCPHeader.html#ad3ff77ed43b5689f0519b700f28cdc0b", null ],
-    [ "sequenceNumber", "structMaxOS_1_1net_1_1TCPHeader.html#a52d0029e972d414eccfdf494335410f6", null ],
-    [ "srcPort", "structMaxOS_1_1net_1_1TCPHeader.html#a8695146d8bccbc86fa2bb9dfe99d1de2", null ],
-    [ "urgentPtr", "structMaxOS_1_1net_1_1TCPHeader.html#a428006680ccce835d879e8bbb1c59641", null ],
-    [ "windowSize", "structMaxOS_1_1net_1_1TCPHeader.html#a945e830b8920dc70dfb4f433dbee3efd", null ]
+    [ "sequence_number", "structMaxOS_1_1net_1_1TCPHeader.html#a88edd3f887e84febe5e39f2ea60af313", null ],
+    [ "src_port", "structMaxOS_1_1net_1_1TCPHeader.html#ac65b3e1385022aba84653c4bf2fb5b11", null ],
+    [ "urgent_ptr", "structMaxOS_1_1net_1_1TCPHeader.html#a4aed929b776473189f06f1b1b018c4a9", null ],
+    [ "window_size", "structMaxOS_1_1net_1_1TCPHeader.html#ac4f77dc1a9328e5a7344dbf652e14452", null ]
 ];

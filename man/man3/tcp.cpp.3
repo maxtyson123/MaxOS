@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/net/tcp.cpp" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/net/tcp.cpp" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,11 +16,13 @@
 
 .in +1c
 .ti -1c
-.RI "\fBuint32_t\fP \fBbigEndian32\fP (\fBuint32_t\fP x)"
+.RI "\fBuint32_t\fP \fBbig_endian_32\fP (\fBuint32_t\fP x)"
 .br
+.RI "Convert a 32-bit integer to big-endian format\&. "
 .ti -1c
-.RI "\fBuint32_t\fP \fBbigEndian16\fP (\fBuint16_t\fP x)"
+.RI "\fBuint32_t\fP \fBbig_endian_16\fP (\fBuint16_t\fP x)"
 .br
+.RI "Convert a 16-bit integer to big-endian format\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -43,30 +45,62 @@ Max Tyson
 Definition in file \fBtcp\&.cpp\fP\&.
 .SH "Function Documentation"
 .PP 
-.SS "\fBuint32_t\fP bigEndian16 (\fBuint16_t\fP x)"
+.SS "\fBuint32_t\fP big_endian_16 (\fBuint16_t\fP x)"
 
 .PP
-Definition at line \fB154\fP of file \fBtcp\&.cpp\fP\&..PP
-.nf
-154                                  {
-155     return ((x & 0xFF00) >> 8)
-156            | ((x & 0x00FF) << 8);
-157 }
-.fi
-
-.SS "\fBuint32_t\fP bigEndian32 (\fBuint32_t\fP x)"
+Convert a 16-bit integer to big-endian format\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The 16-bit integer to convert 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The big-endian formatted integer 
+.RE
+.PP
 
 .PP
-Definition at line \fB147\fP of file \fBtcp\&.cpp\fP\&..PP
+Definition at line \fB187\fP of file \fBtcp\&.cpp\fP\&..PP
 .nf
-147                                  {
-148     return ((x & 0xFF000000) >> 24)
-149            | ((x & 0x00FF0000) >> 8)
-150            | ((x & 0x0000FF00) << 8)
-151            | ((x & 0x000000FF) << 24);
-152 }
+187                                    {
+188     return ((x & 0xFF00) >> 8)
+189            | ((x & 0x00FF) << 8);
+190 }
 .fi
 
+.PP
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
+.SS "\fBuint32_t\fP big_endian_32 (\fBuint32_t\fP x)"
+
+.PP
+Convert a 32-bit integer to big-endian format\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The 32-bit integer to convert 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The big-endian formatted integer 
+.RE
+.PP
+
+.PP
+Definition at line \fB174\fP of file \fBtcp\&.cpp\fP\&..PP
+.nf
+174                                    {
+175     return ((x & 0xFF000000) >> 24)
+176            | ((x & 0x00FF0000) >> 8)
+177            | ((x & 0x0000FF00) << 8)
+178            | ((x & 0x000000FF) << 24);
+179 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

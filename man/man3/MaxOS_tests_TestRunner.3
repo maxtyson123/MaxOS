@@ -1,0 +1,150 @@
+.TH "MaxOS::tests::TestRunner" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::tests::TestRunner \- A class to run all tests\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <test\&.h>\fP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBtest_kernel\fP ()"
+.br
+.RI "Setups the \fBTestRunner\fP and runs all kernel tests\&. "
+.ti -1c
+.RI "static void \fBrun_all_tests\fP ()"
+.br
+.RI "Runs all registered tests\&. "
+.ti -1c
+.RI "static void \fBrun_all_types\fP (\fBTestType\fP type)"
+.br
+.RI "Runs all tests of a specific type\&. "
+.ti -1c
+.RI "static void \fBadd_all_tests\fP ()"
+.br
+.RI "Adds all predefined tests to the test runner\&. "
+.ti -1c
+.RI "static void \fBadd_test\fP (\fBTest\fP *test)"
+.br
+.RI "Adds a test to the test runner\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A class to run all tests\&. 
+
+
+.PP
+\fBTodo\fP
+.RS 4
+Revisit when cbf 
+.RE
+.PP
+
+.PP
+Definition at line \fB133\fP of file \fBtest\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void TestRunner::add_all_tests ()\fC [static]\fP"
+
+.PP
+Adds all predefined tests to the test runner\&. 
+.PP
+Definition at line \fB145\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+145                                {
+146     register_tests_common();
+147 }
+.fi
+
+.PP
+Referenced by \fBtest_kernel()\fP\&.
+.SS "void TestRunner::add_test (\fBTest\fP * test)\fC [static]\fP"
+
+.PP
+Adds a test to the test runner\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItest\fP The test to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB138\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+138                                     {
+139     s_tests\&.push_back(test);
+140 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::tests::Test::Test()\fP\&.
+.SS "void TestRunner::run_all_tests ()\fC [static]\fP"
+
+.PP
+Runs all registered tests\&. 
+.PP
+Definition at line \fB116\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+116                                {
+117     Logger::TEST() << "Running all tests\&.\&.\&. (" << (int )s_tests\&.size() << " tests found)\\n";
+118     for (auto& test : s_tests)
+119         test\->run();
+120 }
+.fi
+
+.PP
+References \fBMaxOS::Logger::TEST()\fP\&.
+.PP
+Referenced by \fBtest_kernel()\fP\&.
+.SS "void TestRunner::run_all_types (\fBTestType\fP type)\fC [static]\fP"
+
+.PP
+Runs all tests of a specific type\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The type of tests to run 
+.RE
+.PP
+
+.PP
+Definition at line \fB127\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+127                                             {
+128     for (auto& test : s_tests)
+129         if (test\->type() == type)
+130             test\->run();
+131 }
+.fi
+
+.SS "void TestRunner::test_kernel ()\fC [static]\fP"
+
+.PP
+Setups the \fBTestRunner\fP and runs all kernel tests\&. 
+.PP
+Definition at line \fB152\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+152                              {
+153 
+154     // Add all tests
+155     s_tests = common::Vector<Test*>();
+156     add_all_tests();
+157 
+158     // Run all system tests
+159     run_all_tests();
+160 
+161 }
+.fi
+
+.PP
+References \fBadd_all_tests()\fP, and \fBrun_all_tests()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

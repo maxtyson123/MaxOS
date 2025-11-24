@@ -1,7 +1,7 @@
 var classMaxOS_1_1drivers_1_1console_1_1VESABootConsole =
 [
     [ "VESABootConsole", "classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#a9d8bebede82d741eb53e19b7cf2c31ec", null ],
-    [ "finish", "classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#a002ec47ccd9ddb93f441bc00142d21a8", null ],
+    [ "finish", "classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#a2b516337e26f881b192182ec32d17dca", null ],
     [ "get_background_color", "classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#affcd0b85ea69db9cdf8ec421db91eded", null ],
     [ "get_character", "classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#a3e0e10e20e08318165459407de5263bd", null ],
     [ "get_foreground_color", "classMaxOS_1_1drivers_1_1console_1_1VESABootConsole.html#a1f02119cc22547c43234ead605b65605", null ],

@@ -1,4 +1,4 @@
-.TH "MaxOS::common::Rectangle< Type >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::Rectangle< Type >" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -72,7 +72,7 @@ class MaxOS::common::Rectangle< Type >"Stores the left, top, width and height of
 .PP
 
 .PP
-Definition at line \fB24\fP of file \fBrectangle\&.h\fP\&.
+Definition at line \fB22\fP of file \fBrectangle\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::Rectangle\fP< \fBType\fP >::Rectangle (\fBType\fP left, \fBType\fP top, \fBType\fP width, \fBType\fP height)"
@@ -98,32 +98,29 @@ Creates a new rectangle, if width or height are negative, the left/top will be a
 .PP
 
 .PP
-Definition at line \fB58\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB56\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-59         : left(left),
-60           top(top),
-61           width(width),
-62           height(height)
-63         {
-64 
-65             // If the width is negative, move the left and make the width positive
-66             if(width < 0)
-67             {
-68                 left += width;
-69                 width *= \-1;
-70             }
-71 
-72             // If the m_height is negative, move the top and make the height positive
-73             if(height < 0)
-74             {
-75                 top += height;
-76                 height *= \-1;
-77             }
-78 
-79             // Set the values
-80             this\->left = left;
-81             this\->top = top;
-82         }
+57             : left(left),
+58             top(top),
+59             width(width),
+60             height(height) {
+61 
+62         // If the width is negative, move the left and make the width positive
+63         if(width < 0) {
+64             left += width;
+65             width *= \-1;
+66         }
+67 
+68         // If the m_height is negative, move the top and make the height positive
+69         if(height < 0) {
+70             top += height;
+71             height *= \-1;
+72         }
+73 
+74         // Set the values
+75         this\->left = left;
+76         this\->top = top;
+77     }
 .fi
 
 .PP
@@ -150,29 +147,29 @@ True if this rectangle contains the other rectangle, false otherwise
 .PP
 
 .PP
-Definition at line \fB196\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB192\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-196                                                                                        {
+192                                                                                     {
+193 
+194         // If the other rectangle is to the left of this rectangle
+195         if(other\&.left + other\&.width <= left)
+196             return false;
 197 
-198             // If the other rectangle is to the left of this rectangle
-199             if(other\&.left + other\&.width <= left)
-200                 return false;
+198         // If the other rectangle is to the right of this rectangle
+199         if(other\&.left >= left + width)
+200             return false;
 201 
-202             // If the other rectangle is to the right of this rectangle
-203             if(other\&.left >= left + width)
-204                 return false;
+202         // If the other rectangle is above this rectangle
+203         if(other\&.top + other\&.height <= top)
+204             return false;
 205 
-206             // If the other rectangle is above this rectangle
-207             if(other\&.top + other\&.height <= top)
-208                 return false;
+206         // If the other rectangle is below this rectangle
+207         if(other\&.top >= top + height)
+208             return false;
 209 
-210             // If the other rectangle is below this rectangle
-211             if(other\&.top >= top + height)
-212                 return false;
-213 
-214             // If none of the above conditions are true, then the rectangles intersect
-215             return true;
-216         }
+210         // If none of the above conditions are true, then the rectangles intersect
+211         return true;
+212     }
 .fi
 
 .PP
@@ -201,30 +198,30 @@ True if this rectangle contains the point, false otherwise
 .PP
 
 .PP
-Definition at line \fB227\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB223\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-227                                                                          {
+223                                                                       {
+224 
+225         // If the point is to the left of this rectangle
+226         if(x < left)
+227             return false;
 228 
-229            // If the point is to the left of this rectangle
-230             if(x < left)
-231                 return false;
+229         // If the point is to the right of this rectangle
+230         if(x >= left + width)
+231             return false;
 232 
-233             // If the point is to the right of this rectangle
-234             if(x >= left + width)
-235                 return false;
+233         // If the point is above this rectangle
+234         if(y < top)
+235             return false;
 236 
-237             // If the point is above this rectangle
-238             if(y < top)
-239                 return false;
+237         // If the point is below this rectangle
+238         if(y >= top + height)
+239             return false;
 240 
-241             // If the point is below this rectangle
-242             if(y >= top + height)
-243                 return false;
-244 
-245             // If none of the above conditions are true, then the point is inside the rectangle
-246             return true;
-247 
-248         }
+241         // If none of the above conditions are true, then the point is inside the rectangle
+242         return true;
+243 
+244     }
 .fi
 
 .PP
@@ -249,24 +246,26 @@ The intersection of the two rectangles
 .PP
 
 .PP
-Definition at line \fB121\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB116\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-121                                                                                                       {
-122             // If the rectangles don't intersect, return an empty rectangle
-123             if(!intersects(other))
-124                 return Rectangle<Type>();
-125 
-126             // Get the left and top of the intersection using the maximum of the two
-127             Type left = this \-> left > other\&.left ? this \-> left : other\&.left;
-128             Type top = this \-> top > other\&.top ? this \-> top : other\&.top;
-129 
-130             // Get the right and bottom of the intersection using the minimum of the two
-131             Type right = this \-> left + this \-> width < other\&.left + other\&.width ? this \-> left + this \-> width : other\&.left + other\&.width;
-132             Type bottom = this \-> top + this \-> height < other\&.top + other\&.height ? this \-> top + this \-> height : other\&.top + other\&.height;
-133 
-134             // Return the intersection
-135             return Rectangle<Type>(left, top, right \- left, bottom \- top);
-136         }
+116                                                                                                    {
+117         // If the rectangles don't intersect, return an empty rectangle
+118         if(!intersects(other))
+119             return Rectangle<Type>();
+120 
+121         // Get the left and top of the intersection using the maximum of the two
+122         Type i_left = this\->left > other\&.left ? this\->left : other\&.left;
+123         Type i_top = this\->top > other\&.top ? this\->top : other\&.top;
+124 
+125         // Get the right and bottom of the intersection using the minimum of the two
+126         Type right = this\->left + this\->width < other\&.left + other\&.width ? this\->left + this\->width : other\&.left +
+127                                                                                                       other\&.width;
+128         Type bottom = this\->top + this\->height < other\&.top + other\&.height ? this\->top + this\->height : other\&.top +
+129                                                                                                        other\&.height;
+130 
+131         // Return the intersection
+132         return Rectangle<Type>(i_left, i_top, right \- left, bottom \- top);
+133     }
 .fi
 
 .PP
@@ -293,28 +292,28 @@ True if the rectangles intersect, false otherwise
 .PP
 
 .PP
-Definition at line \fB93\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB88\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-93                                                                                          {
-94             // If the other rectangle is to the left of this rectangle
-95             if(other\&.left + other\&.width <= left)
-96                 return false;
-97 
-98             // If the other rectangle is to the right of this rectangle
-99             if(other\&.left >= left + width)
-100                 return false;
-101 
-102             // If the other rectangle is above this rectangle
-103             if(other\&.top + other\&.height <= top)
-104                 return false;
-105 
-106             // If the other rectangle is below this rectangle
-107             if(other\&.top >= top + height)
-108                 return false;
-109 
-110             // If none of the above conditions are true, then the rectangles intersect
-111             return true;
-112         }
+88                                                                                       {
+89         // If the other rectangle is to the left of this rectangle
+90         if(other\&.left + other\&.width <= left)
+91             return false;
+92 
+93         // If the other rectangle is to the right of this rectangle
+94         if(other\&.left >= left + width)
+95             return false;
+96 
+97         // If the other rectangle is above this rectangle
+98         if(other\&.top + other\&.height <= top)
+99             return false;
+100 
+101         // If the other rectangle is below this rectangle
+102         if(other\&.top >= top + height)
+103             return false;
+104 
+105         // If none of the above conditions are true, then the rectangles intersect
+106         return true;
+107     }
 .fi
 
 .PP
@@ -341,51 +340,50 @@ A vector of rectangles that represent the subtraction
 .PP
 
 .PP
-Definition at line \fB145\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB142\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-145                                                                                                            {
+142                                                                                                        {
+143 
+144         // Store the result rectangle
+145         Vector<Rectangle<Type>> result;
 146 
-147             // Store the result rectangle
-148             Vector<Rectangle<Type> > result;
-149 
-150             // Make sure the rectangles intersect
-151             if(!intersects(other))
-152             {
-153               result\&.push_back(*this);
-154                 return result;
-155             }
-156 
-157             // Get the minimum and maximum values for the width and height
-158             Type maxLeft = left > other\&.left ? left : other\&.left;
-159             Type minRight = (left + width < other\&.left + other\&.width ? left + width : other\&.left + other\&.width);
-160             Type minBottom = (top + height < other\&.top + other\&.height ? top+height : other\&.top + other\&.height);
-161 
-162             // Add the non\-intersecting rectangles to the result
-163 
-164             // Add non\-overlapping region above if current top is less than other top
-165             if (top < other\&.top)
-166               result\&.push_back(Rectangle<Type>(maxLeft, top, minRight \- maxLeft,
-167                                                other\&.top \- top));
-168 
-169             // Add non\-overlapping region to the left if current left is less than other left
-170             if (left < other\&.left)
-171               result\&.push_back(
-172                   Rectangle<Type>(left, top, other\&.left \- left, height));
-173 
-174             // Add non\-overlapping region to the right if current right is greater than other right
-175             if (left + width > other\&.left + other\&.width)
-176               result\&.push_back(Rectangle<Type>(
-177                   other\&.left + other\&.width, top,
-178                   (left + width) \- (other\&.left + other\&.width) + 1, height));
-179 
-180             // Add non\-overlapping region below if current bottom is greater than other bottom
-181             if (this\->top + this\->height > other\&.top + other\&.height)
-182               result\&.push_back(Rectangle<Type>(maxLeft, minBottom,
-183                                                minRight \- maxLeft,
-184                                                top + height \- minBottom + 1));
-185 
-186             return result;
-187         }
+147         // Make sure the rectangles intersect
+148         if(!intersects(other)) {
+149             result\&.push_back(*this);
+150             return result;
+151         }
+152 
+153         // Get the minimum and maximum values for the width and height
+154         Type max_left = left > other\&.left ? left : other\&.left;
+155         Type min_right = (left + width < other\&.left + other\&.width ? left + width : other\&.left + other\&.width);
+156         Type min_bottom = (top + height < other\&.top + other\&.height ? top + height : other\&.top + other\&.height);
+157 
+158         // Add the non\-intersecting rectangles to the result
+159 
+160         // Add non\-overlapping region above if current top is less than other top
+161         if(top < other\&.top)
+162             result\&.push_back(Rectangle<Type>(max_left, top, min_right \- max_left,
+163                                              other\&.top \- top));
+164 
+165         // Add non\-overlapping region to the left if current left is less than other left
+166         if(left < other\&.left)
+167             result\&.push_back(
+168                     Rectangle<Type>(left, top, other\&.left \- left, height));
+169 
+170         // Add non\-overlapping region to the right if current right is greater than other right
+171         if(left + width > other\&.left + other\&.width)
+172             result\&.push_back(Rectangle<Type>(
+173                     other\&.left + other\&.width, top,
+174                     (left + width) \- (other\&.left + other\&.width) + 1, height));
+175 
+176         // Add non\-overlapping region below if current bottom is greater than other bottom
+177         if(this\->top + this\->height > other\&.top + other\&.height)
+178             result\&.push_back(Rectangle<Type>(max_left, min_bottom,
+179                                              min_right \- max_left,
+180                                              top + height \- min_bottom + 1));
+181 
+182         return result;
+183     }
 .fi
 
 .PP
@@ -399,9 +397,9 @@ Referenced by \fBMaxOS::gui::CompositeWidget::draw()\fP, \fBMaxOS::gui::Desktop:
 .PP
 The height of the rectangle\&. 
 .PP
-Definition at line \fB29\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB27\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-29 { 0 };          
+27 { 0 };          
 .fi
 
 .PP
@@ -411,21 +409,21 @@ Referenced by \fBMaxOS::common::Rectangle< Type >::contains()\fP, \fBMaxOS::comm
 .PP
 The left coordinate of the rectangle\&. 
 .PP
-Definition at line \fB26\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB24\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-26 { 0 };            
+24 { 0 };            
 .fi
 
 .PP
-Referenced by \fBMaxOS::gui::Widget::absolute_coordinates()\fP, \fBMaxOS::gui::Window::add_child()\fP, \fBMaxOS::common::Rectangle< Type >::contains()\fP, \fBMaxOS::common::Rectangle< Type >::contains()\fP, \fBMaxOS::gui::widgets::Button::draw()\fP, \fBMaxOS::gui::widgets::InputBox::draw()\fP, \fBMaxOS::gui::widgets::Text::draw()\fP, \fBMaxOS::gui::CompositeWidget::draw()\fP, \fBMaxOS::gui::Desktop::draw_self()\fP, \fBMaxOS::gui::Window::draw_self()\fP, \fBMaxOS::gui::Font::draw_text()\fP, \fBMaxOS::common::Rectangle< Type >::intersection()\fP, \fBMaxOS::common::Rectangle< Type >::intersects()\fP, \fBMaxOS::gui::Widget::move()\fP, \fBMaxOS::gui::CompositeWidget::on_mouse_button_pressed()\fP, \fBMaxOS::gui::CompositeWidget::on_mouse_button_released()\fP, \fBMaxOS::gui::CompositeWidget::on_mouse_enter_widget()\fP, \fBMaxOS::gui::CompositeWidget::on_mouse_leave_widget()\fP, \fBMaxOS::common::Rectangle< Type >::Rectangle()\fP, and \fBMaxOS::common::Rectangle< Type >::subtract()\fP\&.
+Referenced by \fBMaxOS::gui::Widget::absolute_coordinates()\fP, \fBMaxOS::gui::Window::add_child()\fP, \fBMaxOS::common::Rectangle< Type >::contains()\fP, \fBMaxOS::common::Rectangle< Type >::contains()\fP, \fBMaxOS::gui::widgets::Button::draw()\fP, \fBMaxOS::gui::widgets::InputBox::draw()\fP, \fBMaxOS::gui::widgets::Text::draw()\fP, \fBMaxOS::gui::CompositeWidget::draw()\fP, \fBMaxOS::gui::Desktop::draw_self()\fP, \fBMaxOS::gui::Window::draw_self()\fP, \fBMaxOS::gui::Font::draw_text()\fP, \fBMaxOS::common::Rectangle< Type >::intersection()\fP, \fBMaxOS::common::Rectangle< Type >::intersects()\fP, \fBMaxOS::gui::Widget::move()\fP, \fBMaxOS::gui::CompositeWidget::on_mouse_button_pressed()\fP, \fBMaxOS::gui::CompositeWidget::on_mouse_button_released()\fP, \fBMaxOS::gui::CompositeWidget::on_mouse_enter_widget()\fP, \fBMaxOS::gui::CompositeWidget::on_mouse_leave_widget()\fP, \fBMaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >::on_mouse_move_event()\fP, \fBMaxOS::common::Rectangle< Type >::Rectangle()\fP, and \fBMaxOS::common::Rectangle< Type >::subtract()\fP\&.
 .SS "template<\fBclass\fP \fBType\fP > \fBType\fP \fBMaxOS::common::Rectangle\fP< \fBType\fP >::top { 0 }"
 
 .PP
 The top coordinate of the rectangle\&. 
 .PP
-Definition at line \fB27\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB25\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-27 { 0 };             
+25 { 0 };             
 .fi
 
 .PP
@@ -435,13 +433,13 @@ Referenced by \fBMaxOS::gui::Widget::absolute_coordinates()\fP, \fBMaxOS::gui::W
 .PP
 The width of the rectangle\&. 
 .PP
-Definition at line \fB28\fP of file \fBrectangle\&.h\fP\&..PP
+Definition at line \fB26\fP of file \fBrectangle\&.h\fP\&..PP
 .nf
-28 { 0 };           
+26 { 0 };           
 .fi
 
 .PP
-Referenced by \fBMaxOS::common::Rectangle< Type >::contains()\fP, \fBMaxOS::common::Rectangle< Type >::contains()\fP, \fBMaxOS::gui::Desktop::Desktop()\fP, \fBMaxOS::gui::widgets::Button::draw()\fP, \fBMaxOS::gui::widgets::InputBox::draw()\fP, \fBMaxOS::gui::widgets::Text::draw()\fP, \fBMaxOS::gui::Desktop::draw_self()\fP, \fBMaxOS::gui::Window::draw_self()\fP, \fBMaxOS::gui::Font::draw_text()\fP, \fBMaxOS::common::Rectangle< Type >::intersection()\fP, \fBMaxOS::common::Rectangle< Type >::intersects()\fP, \fBMaxOS::gui::Widget::invalidate()\fP, \fBMaxOS::gui::Window::on_mouse_button_pressed()\fP, \fBMaxOS::gui::Desktop::on_mouse_move_event()\fP, \fBMaxOS::drivers::console::VESABootConsole::print_logo()\fP, \fBMaxOS::common::Rectangle< Type >::Rectangle()\fP, \fBMaxOS::gui::Widget::resize()\fP, \fBMaxOS::drivers::console::VESABootConsole::scroll_up()\fP, \fBMaxOS::common::Rectangle< Type >::subtract()\fP, \fBMaxOS::drivers::console::VESABootConsole::update_progress_bar()\fP, and \fBMaxOS::drivers::console::VESABootConsole::width()\fP\&.
+Referenced by \fBMaxOS::common::Rectangle< Type >::contains()\fP, \fBMaxOS::common::Rectangle< Type >::contains()\fP, \fBMaxOS::gui::Desktop::Desktop()\fP, \fBMaxOS::gui::widgets::Button::draw()\fP, \fBMaxOS::gui::widgets::InputBox::draw()\fP, \fBMaxOS::gui::widgets::Text::draw()\fP, \fBMaxOS::gui::Desktop::draw_self()\fP, \fBMaxOS::gui::Window::draw_self()\fP, \fBMaxOS::gui::Font::draw_text()\fP, \fBMaxOS::common::Rectangle< Type >::intersection()\fP, \fBMaxOS::common::Rectangle< Type >::intersects()\fP, \fBMaxOS::gui::Widget::invalidate()\fP, \fBMaxOS::gui::Window::on_mouse_button_pressed()\fP, \fBMaxOS::gui::Desktop::on_mouse_move_event()\fP, \fBMaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >::on_mouse_move_event()\fP, \fBMaxOS::drivers::console::VESABootConsole::print_logo()\fP, \fBMaxOS::common::Rectangle< Type >::Rectangle()\fP, \fBMaxOS::gui::Widget::resize()\fP, \fBMaxOS::drivers::console::VESABootConsole::scroll_up()\fP, \fBMaxOS::common::Rectangle< Type >::subtract()\fP, \fBMaxOS::drivers::console::VESABootConsole::update_progress_bar()\fP, and \fBMaxOS::drivers::console::VESABootConsole::width()\fP\&.
 
 .SH "Author"
 .PP 

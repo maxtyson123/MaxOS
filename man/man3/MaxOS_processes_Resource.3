@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::Resource" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::Resource" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,7 +15,7 @@ Inherited by \fBMaxOS::filesystem::DirectoryResource\fP, \fBMaxOS::filesystem::F
 
 .in +1c
 .ti -1c
-.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t \fBflags\fP, resource_type_t \fBtype\fP)"
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBresource_type_t\fP \fBtype\fP)"
 .br
 .RI "Constructs a new \fBResource\fP object\&. "
 .ti -1c
@@ -23,25 +23,25 @@ Inherited by \fBMaxOS::filesystem::DirectoryResource\fP, \fBMaxOS::filesystem::F
 .br
 .RI "Gets the name of this resource\&. "
 .ti -1c
-.RI "resource_type_t \fBtype\fP ()"
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
 .br
 .RI "Gets the type of this resource\&. "
 .ti -1c
-.RI "virtual void \fBopen\fP (size_t \fBflags\fP)"
+.RI "virtual void \fBopen\fP (size_t flags)"
 .br
 .RI "Opens the resource\&. "
 .ti -1c
-.RI "virtual void \fBclose\fP (size_t \fBflags\fP)"
+.RI "virtual void \fBclose\fP (size_t flags)"
 .br
 .RI "Closes the resource\&. "
 .ti -1c
-.RI "virtual int \fBread\fP (void *buffer, size_t \fBsize\fP, size_t \fBflags\fP)"
+.RI "virtual int \fBread\fP (void *buffer, size_t size, size_t flags)"
 .br
-.RI "Read a certain amount of bytes from a resource\&. "
+.RI "read a certain amount of bytes from a resource "
 .ti -1c
-.RI "virtual int \fBwrite\fP (const void *buffer, size_t \fBsize\fP, size_t \fBflags\fP)"
+.RI "virtual int \fBwrite\fP (const void *buffer, size_t size, size_t flags)"
 .br
-.RI "Write a certain amount of bytes to a resource\&. "
+.RI "write a certain amount of bytes to a resource "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -50,7 +50,7 @@ Represents a generic resource that can be opened, closed, read from and written 
 Definition at line \fB29\fP of file \fBresource\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Resource::Resource (const \fBstring\fP & name, size_t flags, resource_type_t type)"
+.SS "Resource::Resource (const \fBstring\fP & name, size_t flags, \fBresource_type_t\fP type)"
 
 .PP
 Constructs a new \fBResource\fP object\&. 
@@ -145,7 +145,7 @@ Definition at line \fB35\fP of file \fBresource\&.cpp\fP\&..PP
 .SS "int Resource::read (void * buffer, size_t size, size_t flags)\fC [virtual]\fP"
 
 .PP
-Read a certain amount of bytes from a resource\&. 
+read a certain amount of bytes from a resource 
 .PP
 \fBParameters\fP
 .RS 4
@@ -172,7 +172,7 @@ Definition at line \fB57\fP of file \fBresource\&.cpp\fP\&..PP
 59 }
 .fi
 
-.SS "resource_type_t Resource::type ()"
+.SS "\fBresource_type_t\fP Resource::type ()"
 
 .PP
 Gets the type of this resource\&. 
@@ -197,7 +197,7 @@ Referenced by \fBMaxOS::processes::ResourceManager::close_resource()\fP\&.
 .SS "int Resource::write (const void * buffer, size_t size, size_t flags)\fC [virtual]\fP"
 
 .PP
-Write a certain amount of bytes to a resource\&. 
+write a certain amount of bytes to a resource 
 .PP
 \fBParameters\fP
 .RS 4

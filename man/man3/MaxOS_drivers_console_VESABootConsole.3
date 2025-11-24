@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::console::VESABootConsole" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::console::VESABootConsole" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,7 +27,7 @@ Inherits \fBMaxOS::drivers::Driver\fP, and \fBMaxOS::drivers::console::Console\f
 .br
 .RI "Gets the height of the console\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfinish\fP ()"
+.RI "\fBvoid\fP \fBfinish\fP () \fBconst\fP"
 .br
 .RI "Cleans up the boot console\&. "
 .ti -1c
@@ -65,11 +65,11 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
 .br
-.RI "activate the driver "
+.RI "Activate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
-.RI "deactivate the driver "
+.RI "Deactivate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
 .br
@@ -138,10 +138,10 @@ Public Member Functions inherited from \fBMaxOS::drivers::console::Console\fP
 .PP 
 \fBDriver\fP for the VESA \fBConsole\fP during boot, handles the printing of characters and strings to the screen using VESA protocol\&. 
 .PP
-Definition at line \fB33\fP of file \fBvesaboot\&.h\fP\&.
+Definition at line \fB30\fP of file \fBvesaboot\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "VESABootConsole::VESABootConsole (\fBcommon::GraphicsContext\fP * graphics_context)"
+.SS "VESABootConsole::VESABootConsole (\fBcommon::GraphicsContext\fP * graphics_context)\fC [explicit]\fP"
 
 .PP
 Constructs a new VESA Boot \fBConsole\fP object, initializing the console area for text output\&. 
@@ -155,40 +155,39 @@ Constructs a new VESA Boot \fBConsole\fP object, initializing the console area f
 .PP
 Definition at line \fB25\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-26 : m_font((uint8_t *)AMIGA_FONT)
-27 {
-28 
-29     // Set up
-30     Logger::INFO() << "Setting up VESA console\\n";
-31     s_graphics_context = graphics_context;
-32     m_video_memory_meta = (uint16_t *) MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
-33 
-34     // Prepare the console
-35     VESABootConsole::clear();
-36     print_logo();
-37     m_console_area = new ConsoleArea(this, 0, 0, width() / 2 \- 25, height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
-38     cout = new ConsoleStream(m_console_area);
-39 
-40     // Only log to the screen when debugging
-41     #ifdef TARGET_DEBUG
-42         Logger::active_logger()\->add_log_writer(cout);
-43         Logger::INFO() << "Console Stream set up \\n";
-44     #endif
-45 }
+26         : m_font((uint8_t*) AMIGA_FONT) {
+27 
+28     // Set up
+29     Logger::INFO() << "Setting up VESA console\\n";
+30     s_graphics_context = graphics_context;
+31     m_video_memory_meta = (uint16_t*) MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
+32 
+33     // Prepare the console
+34     VESABootConsole::clear();
+35     print_logo();
+36     m_console_area = new ConsoleArea(this, 0, 0, width() / 2 \- 25, height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+37     cout = new ConsoleStream(m_console_area);
+38 
+39     // Only log to the screen when debugging
+40 #ifndef NDEBUG
+41     Logger::active_logger()\->add_log_writer(cout);
+42     Logger::INFO() << "Console Stream set up \\n";
+43 #endif
+44 }
 .fi
 
 .PP
-References \fBLogger::active_logger()\fP, \fBMaxOS::drivers::console::Console::clear()\fP, \fBcout\fP, \fBheight()\fP, \fBLogger::INFO()\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBprint_logo()\fP, and \fBwidth()\fP\&.
+References \fBMaxOS::Logger::active_logger()\fP, \fBMaxOS::drivers::console::Console::clear()\fP, \fBcout\fP, \fBheight()\fP, \fBMaxOS::Logger::INFO()\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBprint_logo()\fP, and \fBwidth()\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBvoid\fP VESABootConsole::finish ()"
+.SS "\fBvoid\fP VESABootConsole::finish () const"
 
 .PP
 Cleans up the boot console\&. 
 .PP
 Definition at line \fB349\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-349                              {
+349                                    {
 350 
 351     // Done
 352     Logger::HEADER() << "MaxOS Kernel Successfully Booted\\n" << ANSI_COLOURS[ANSIColour::Reset];
@@ -198,7 +197,7 @@ Definition at line \fB349\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBLogger::active_logger()\fP, \fBMaxOS::common::ANSI_COLOURS\fP, \fBcout\fP, \fBLogger::HEADER()\fP, and \fBMaxOS::drivers::console::ConsoleStream::set_cursor()\fP\&.
+References \fBMaxOS::Logger::active_logger()\fP, \fBMaxOS::common::ANSI_COLOURS\fP, \fBcout\fP, \fBMaxOS::Logger::HEADER()\fP, and \fBMaxOS::drivers::console::ConsoleStream::set_cursor()\fP\&.
 .PP
 Referenced by \fBkernel_main()\fP\&.
 .SS "\fBConsoleColour\fP VESABootConsole::get_background_color (\fBuint16_t\fP x, \fBuint16_t\fP y)\fC [final]\fP, \fC [virtual]\fP"
@@ -222,23 +221,23 @@ The background color at the specified location or black if the coordinates are o
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line \fB230\fP of file \fBvesaboot\&.cpp\fP\&..PP
+Definition at line \fB229\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-230                                                                           {
-231 
-232     if(CPU::panic_lock\&.is_locked())
-233         return ConsoleColour::Red;
-234 
-235     // If the coordinates are out of bounds, return
-236     if (x >= width() || y >= height())
-237         return ConsoleColour::Black;
-238 
-239     // Calculate the offset
-240     int offset = (y * width() + x);
-241 
-242     // Return the background color at the offset, by masking the background color with the current background color (bits 12\-15)
-243     return (ConsoleColour) ((m_video_memory_meta[offset] & 0xF000) >> 12);
-244 }
+229                                                                           {
+230 
+231     if(CPU::panic_lock\&.is_locked())
+232         return ConsoleColour::Red;
+233 
+234     // If the coordinates are out of bounds, return
+235     if(x >= width() || y >= height())
+236         return ConsoleColour::Black;
+237 
+238     // Calculate the offset
+239     int offset = (y * width() + x);
+240 
+241     // Return the background color at the offset, by masking the background color with the current background color (bits 12\-15)
+242     return (ConsoleColour) ((m_video_memory_meta[offset] & 0xF000) >> 12);
+243 }
 .fi
 
 .PP
@@ -266,20 +265,20 @@ The character at the specified location or a space if the coordinates are out of
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line \fB187\fP of file \fBvesaboot\&.cpp\fP\&..PP
+Definition at line \fB186\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-187                                                           {
-188 
-189     // If the coordinates are out of bounds, return
-190     if (x >= width() || y >= height())
-191         return ' ';
-192 
-193     // Calculate the offset
-194     int offset = (y * width() + x);
-195 
-196     // Return the character at the offset, by masking the character with the current character (last 8 bits)
-197     return (char) (m_video_memory_meta[offset] & 0x00FF);
-198 }
+186                                                           {
+187 
+188     // If the coordinates are out of bounds, return
+189     if(x >= width() || y >= height())
+190         return ' ';
+191 
+192     // Calculate the offset
+193     int offset = (y * width() + x);
+194 
+195     // Return the character at the offset, by masking the character with the current character (last 8 bits)
+196     return (char) (m_video_memory_meta[offset] & 0x00FF);
+197 }
 .fi
 
 .PP
@@ -305,23 +304,23 @@ The foreground color at the specified location or white if the coordinates are o
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line \fB207\fP of file \fBvesaboot\&.cpp\fP\&..PP
+Definition at line \fB206\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-207                                                                           {
-208 
-209     if(CPU::panic_lock\&.is_locked())
-210         return ConsoleColour::White;
-211 
-212     // If the coordinates are out of bounds, return
-213     if (x >= width() || y >= height())
-214         return ConsoleColour::White;
-215 
-216     // Calculate the offset
-217     int offset = (y * width() + x);
-218 
-219     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8\-11)
-220     return (ConsoleColour) ((m_video_memory_meta[offset] & 0x0F00) >> 8);
-221 }
+206                                                                           {
+207 
+208     if(CPU::panic_lock\&.is_locked())
+209         return ConsoleColour::White;
+210 
+211     // If the coordinates are out of bounds, return
+212     if(x >= width() || y >= height())
+213         return ConsoleColour::White;
+214 
+215     // Calculate the offset
+216     int offset = (y * width() + x);
+217 
+218     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8\-11)
+219     return (ConsoleColour) ((m_video_memory_meta[offset] & 0x0F00) >> 8);
+220 }
 .fi
 
 .PP
@@ -342,11 +341,11 @@ The height of the console in characters
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line \fB63\fP of file \fBvesaboot\&.cpp\fP\&..PP
+Definition at line \fB62\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-63                                  {
-64     return s_graphics_context\->height() / FONT_HEIGHT;
-65 }
+62                                  {
+63     return s_graphics_context\->height() / FONT_HEIGHT;
+64 }
 .fi
 
 .PP
@@ -358,40 +357,47 @@ Referenced by \fBget_background_color()\fP, \fBget_character()\fP, \fBget_foregr
 .PP
 Prints the logo to the center of the screen\&. 
 .PP
-Definition at line \fB249\fP of file \fBvesaboot\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fIis_panic\fP Whether to print the kernel panic logo or the normal logo 
+.RE
+.PP
+
+.PP
+Definition at line \fB250\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-249                                               {
-250 
-251     // Load the logo
-252     const char *logo = is_panic ? header_data_kp : header_data;
-253 
-254     // Find the center of the screen
-255     uint32_t screen_width = s_graphics_context\->width();
-256     uint32_t screen_height = s_graphics_context\->height();
-257     uint32_t center_x = screen_width / 2;
-258     uint32_t center_y = screen_height / 2 \- 80;
-259 
-260     // Fill the screen with the logo colour
-261     auto col = Colour(is_panic ? ConsoleColour::Red : ConsoleColour::Black);
-262     memset(s_graphics_context\->framebuffer_address(), s_graphics_context\->colour_to_int(col), screen_width * screen_height * (s_graphics_context\->color_depth()/8));
-263 
-264     // Draw the logo
-265     for (uint32_t logoY = 0; logoY < LOGO_HEIGHT; ++logoY) {
-266         for (uint32_t logoX = 0; logoX < LOGO_WIDTH; ++logoX) {
-267 
-268             // Get the pixel from the logo
-269             uint8_t pixel[3] = {0};
-270             LOGO_HEADER_PIXEL(logo, pixel)
-271 
-272             // Draw the pixel
-273             s_graphics_context\->put_pixel(center_x \- LOGO_WIDTH / 2 + logoX,
-274                                           center_y \- LOGO_HEIGHT / 2 + logoY,
-275                                           common::Colour(pixel[0], pixel[1], pixel[2]));
-276         }
-277     }
-278 
-279     update_progress_bar(0);
-280 }
+250                                               {
+251 
+252     // Load the logo
+253     const char* logo = is_panic ? header_data_kp : header_data;
+254 
+255     // Find the center of the screen
+256     uint32_t screen_width = s_graphics_context\->width();
+257     uint32_t screen_height = s_graphics_context\->height();
+258     uint32_t center_x = screen_width / 2;
+259     uint32_t center_y = screen_height / 2 \- 80;
+260 
+261     // Fill the screen with the logo colour
+262     auto col = Colour(is_panic ? ConsoleColour::Red : ConsoleColour::Black);
+263     memset(s_graphics_context\->framebuffer_address(), s_graphics_context\->colour_to_int(col), screen_width * screen_height * (s_graphics_context\->color_depth() / 8));
+264 
+265     // Draw the logo
+266     for(uint32_t logo_y = 0; logo_y < LOGO_HEIGHT; ++logo_y) {
+267         for(uint32_t logo_x = 0; logo_x < LOGO_WIDTH; ++logo_x) {
+268 
+269             // Get the pixel from the logo
+270             uint8_t pixel[3] = { 0 };
+271             LOGO_HEADER_PIXEL(logo, pixel)
+272 
+273             // Draw the pixel
+274             s_graphics_context\->put_pixel(center_x \- LOGO_WIDTH / 2 + logo_x,
+275                                           center_y \- LOGO_HEIGHT / 2 + logo_y,
+276                                           common::Colour(pixel[0], pixel[1], pixel[2]));
+277         }
+278     }
+279 
+280     update_progress_bar(0);
+281 }
 .fi
 
 .PP
@@ -416,73 +422,73 @@ Places a character at the specified location\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line \fB74\fP of file \fBvesaboot\&.cpp\fP\&..PP
+Definition at line \fB73\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-74                                                                   {
-75 
-76     // Parse any ansi codes
-77     if (c == '\\033') {
-78 
-79         // Store the character
-80         ansi_code_length = 0;
-81         ansi_code[ansi_code_length++] = c;
-82 
-83         // Do not draw the escape character
-84         return;
-85     }
-86 
-87     if (ansi_code_length < 8) {
-88 
-89         // Add the character to the ANSI code
-90         ansi_code[ansi_code_length++] = c;
-91 
-92         // If the ANSI code is complete
-93         if (c == 'm') {
-94             ansi_code[ansi_code_length] = '\\0';
-95             ansi_code_length = \-1;
-96 
-97             if (strcmp("\\033[0m", ansi_code) != 0) {
-98                 m_foreground_color = ConsoleColour::Uninitialised;
-99                 m_background_color = ConsoleColour::Uninitialised;
-100                 return;
-101             }
-102 
-103             // Get the colour from the ANSI code
-104             const Colour colour(ansi_code);
-105 
-106             // Set the colour
-107             bool foreground = ansi_code[4] == '3';
-108             if (foreground)
-109                 m_foreground_color = colour\&.to_console_colour();
-110             else
-111                 m_background_color = colour\&.to_console_colour();
-112 
-113         }
-114 
-115         // Do not draw the escape character
-116         return;
-117     }
-118 
-119     // If the coordinates are out of bounds, return
-120     if (x >= width() || y >= height())
-121         return;
-122 
-123     // Calculate the offset
-124     int offset = (y * width() + x);
-125 
-126     // Set the character at the offset, by masking the character with the current character (last 8 bits)
-127     m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xFF00) | (uint16_t) c;
-128 
-129     // Convert the char into a string
-130     char s[] = " ";
-131     s[0] = c;
-132 
-133     Colour foreground = m_foreground_color == ConsoleColour::Uninitialised ? get_foreground_color(x, y) : Colour(m_foreground_color);
-134     Colour background = m_background_color == ConsoleColour::Uninitialised ? get_background_color(x, y) : Colour(m_background_color);
-135 
-136     // Use the m_font to draw the character
-137     m_font\&.draw_text(x * 8, y * FONT_HEIGHT, foreground, background, s_graphics_context, s);
-138 }
+73                                                                   {
+74 
+75     // Parse any ansi codes
+76     if(c == '\\033') {
+77 
+78         // Store the character
+79         ansi_code_length = 0;
+80         ansi_code[ansi_code_length++] = c;
+81 
+82         // Do not draw the escape character
+83         return;
+84     }
+85 
+86     if(ansi_code_length < 8) {
+87 
+88         // Add the character to the ANSI code
+89         ansi_code[ansi_code_length++] = c;
+90 
+91         // If the ANSI code is complete
+92         if(c == 'm') {
+93             ansi_code[ansi_code_length] = '\\0';
+94             ansi_code_length = \-1;
+95 
+96             if(strcmp("\\033[0m", ansi_code) != 0) {
+97                 m_foreground_color = ConsoleColour::Uninitialised;
+98                 m_background_color = ConsoleColour::Uninitialised;
+99                 return;
+100             }
+101 
+102             // Get the colour from the ANSI code
+103             const Colour colour(ansi_code);
+104 
+105             // Set the colour
+106             bool foreground = ansi_code[4] == '3';
+107             if(foreground)
+108                 m_foreground_color = colour\&.to_console_colour();
+109             else
+110                 m_background_color = colour\&.to_console_colour();
+111 
+112         }
+113 
+114         // Do not draw the escape character
+115         return;
+116     }
+117 
+118     // If the coordinates are out of bounds, return
+119     if(x >= width() || y >= height())
+120         return;
+121 
+122     // Calculate the offset
+123     int offset = (y * width() + x);
+124 
+125     // Set the character at the offset, by masking the character with the current character (last 8 bits)
+126     m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xFF00) | (uint16_t) c;
+127 
+128     // Convert the char into a string
+129     char s[] = " ";
+130     s[0] = c;
+131 
+132     Colour foreground = m_foreground_color == ConsoleColour::Uninitialised ? Colour(get_foreground_color(x, y)) : Colour(m_foreground_color);
+133     Colour background = m_background_color == ConsoleColour::Uninitialised ? Colour(get_background_color(x, y)) : Colour(m_background_color);
+134 
+135     // Use the m_font to draw the character
+136     m_font\&.draw_text(x * 8, y * FONT_HEIGHT, foreground, background, s_graphics_context, s);
+137 }
 .fi
 
 .PP
@@ -513,52 +519,51 @@ Scrolls the console up by 1 line\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line \fB294\fP of file \fBvesaboot\&.cpp\fP\&..PP
+Definition at line \fB295\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-297                                                                            {
-298 
+298                                                                            {
 299 
-300     // Get the framebuffer info
-301     auto *framebuffer_address = (uint8_t *) s_graphics_context\->framebuffer_address();
-302     uint64_t framebuffer_width = s_graphics_context\->width();
-303     uint64_t framebuffer_bpp = s_graphics_context\->color_depth(); // in bits per pixel
-304     uint64_t bytes_per_pixel = framebuffer_bpp / 8;
-305     uint64_t framebuffer_pitch = framebuffer_width * bytes_per_pixel;
-306 
-307     uint16_t line_height = FONT_HEIGHT;
-308 
-309     // Region conversions
-310     uint16_t region_pixel_y = top * line_height;
-311     uint16_t region_pixel_height = height * line_height;
-312     uint16_t region_pixel_left = left * FONT_WIDTH;
-313     uint16_t region_pixel_width = width * FONT_WIDTH;
-314     size_t row_bytes = region_pixel_width * bytes_per_pixel;
-315 
-316     // Decide the colour of the pixel
-317     ConsoleColour to_set_foreground = get_foreground_color(left, top + height \- 1);
-318     ConsoleColour to_set_background = get_background_color(left, top + height \- 1);
-319     Colour fill_colour = Colour(to_set_background);
-320     uint32_t fill_value = s_graphics_context\->colour_to_int(to_set_background);
+300 
+301     // Get the framebuffer info
+302     auto* framebuffer_address = (uint8_t*) s_graphics_context\->framebuffer_address();
+303     uint64_t framebuffer_width = s_graphics_context\->width();
+304     uint64_t framebuffer_bpp = s_graphics_context\->color_depth(); // in bits per pixel
+305     uint64_t bytes_per_pixel = framebuffer_bpp / 8;
+306     uint64_t framebuffer_pitch = framebuffer_width * bytes_per_pixel;
+307 
+308     uint16_t line_height = FONT_HEIGHT;
+309 
+310     // Region conversions
+311     uint16_t region_pixel_y = top * line_height;
+312     uint16_t region_pixel_height = height * line_height;
+313     uint16_t region_pixel_left = left * FONT_WIDTH;
+314     uint16_t region_pixel_width = width * FONT_WIDTH;
+315     size_t row_bytes = region_pixel_width * bytes_per_pixel;
+316 
+317     // Decide the colour of the pixel
+318     ConsoleColour to_set_foreground = get_foreground_color(left, top + height \- 1);
+319     ConsoleColour to_set_background = get_background_color(left, top + height \- 1);
+320     uint32_t fill_value = s_graphics_context\->colour_to_int(Colour(to_set_background));
 321 
 322     // Scroll the region upward by one text line
-323     for (uint16_t row = 0; row < region_pixel_height \- line_height; row++) {
-324         uint8_t *src  = framebuffer_address + (region_pixel_y + row + line_height) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
-325         uint8_t *dest = framebuffer_address + (region_pixel_y + row) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
+323     for(uint16_t row = 0; row < region_pixel_height \- line_height; row++) {
+324         uint8_t* src = framebuffer_address + (region_pixel_y + row + line_height) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
+325         uint8_t* dest = framebuffer_address + (region_pixel_y + row) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
 326         memmove(dest, src, row_bytes);
 327     }
 328 
 329     // Clear the last line of the region
 330     uint16_t clear_start_y = region_pixel_y + region_pixel_height \- line_height;
-331     for (uint16_t row = 0; row < line_height; row++) {
-332         auto row_add = (uint32_t *) (framebuffer_address + (clear_start_y + row) * framebuffer_pitch + region_pixel_left * 4);
-333         for (uint16_t col = 0; col < region_pixel_width; col++) {
+331     for(uint16_t row = 0; row < line_height; row++) {
+332         auto row_add = (uint32_t*) (framebuffer_address + (clear_start_y + row) * framebuffer_pitch + region_pixel_left * 4);
+333         for(uint16_t col = 0; col < region_pixel_width; col++) {
 334             row_add[col] = fill_value;
 335         }
 336     }
 337 
 338     //Update any per\-pixel colour metadata
 339     uint16_t text_row = top + height \- 1;
-340     for (uint16_t x = left; x < left + width; x++) {
+340     for(uint16_t x = left; x < left + width; x++) {
 341         set_foreground_color(x, text_row, to_set_foreground);
 342         set_background_color(x, text_row, to_set_background);
 343     }
@@ -585,20 +590,20 @@ Sets the background color at the specified location\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line \fB167\fP of file \fBvesaboot\&.cpp\fP\&..PP
+Definition at line \fB166\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-167                                                                                            {
-168 
-169     // If the coordinates are out of bounds, return
-170     if (x >= width() || y >= height())
-171         return;
-172 
-173     // Calculate the offset
-174     int offset = (y * width() + x);
-175 
-176     // Set the background color at the offset, by masking the background color with the current background color (bits 12\-15)
-177     m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0x0FFF) | ((uint16_t) background << 12);
-178 }
+166                                                                                            {
+167 
+168     // If the coordinates are out of bounds, return
+169     if(x >= width() || y >= height())
+170         return;
+171 
+172     // Calculate the offset
+173     int offset = (y * width() + x);
+174 
+175     // Set the background color at the offset, by masking the background color with the current background color (bits 12\-15)
+176     m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0x0FFF) | ((uint16_t) background << 12);
+177 }
 .fi
 
 .PP
@@ -623,20 +628,20 @@ Sets the foreground color at the specified location\&.
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line \fB147\fP of file \fBvesaboot\&.cpp\fP\&..PP
+Definition at line \fB146\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-147                                                                                            {
-148 
-149     // If the coordinates are out of bounds, return
-150     if (x >= width() || y >= height())
-151         return;
-152 
-153     // Calculate the offset
-154     int offset = (y * width() + x);
-155 
-156     // Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8\-11)
-157     m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xF0FF) | ((uint16_t) foreground << 8);
-158 }
+146                                                                                            {
+147 
+148     // If the coordinates are out of bounds, return
+149     if(x >= width() || y >= height())
+150         return;
+151 
+152     // Calculate the offset
+153     int offset = (y * width() + x);
+154 
+155     // Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8\-11)
+156     m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xF0FF) | ((uint16_t) foreground << 8);
+157 }
 .fi
 
 .PP
@@ -660,11 +665,11 @@ Definition at line \fB362\fP of file \fBvesaboot\&.cpp\fP\&..PP
 362                                                             {
 363 
 364     // Check bounds
-365     if (percentage > 100)
+365     if(percentage > 100)
 366         percentage = 100;
 367 
 368     // Must have a valid graphics context
-369     if (s_graphics_context == nullptr)
+369     if(s_graphics_context == nullptr)
 370         return;
 371 
 372     uint8_t progress_height = 15;
@@ -682,8 +687,8 @@ Definition at line \fB362\fP of file \fBvesaboot\&.cpp\fP\&..PP
 384     uint32_t end_y = LOGO_HEIGHT + progress_height + progress_spacing;
 385 
 386     // Draw the progress bar
-387     for (uint32_t progress_y = start_y; progress_y < end_y; ++progress_y) {
-388         for (uint32_t progress_x = start_x; progress_x < end_x; ++progress_x) {
+387     for(uint32_t progress_y = start_y; progress_y < end_y; ++progress_y) {
+388         for(uint32_t progress_x = start_x; progress_x < end_x; ++progress_x) {
 389 
 390             // Check if drawing border
 391             bool is_border = (progress_y == start_y) || (progress_y == end_y \- 1) ||
@@ -693,20 +698,21 @@ Definition at line \fB362\fP of file \fBvesaboot\&.cpp\fP\&..PP
 395             is_border = is_border && percentage == 0;
 396 
 397             // If it is not within the percentage, skip it
-398             if (progress_x > LOGO_WIDTH * percentage / 100 && !is_border)
-399                 continue;
-400 
-401             s_graphics_context\->put_pixel(right_x + progress_x, bottom_y + progress_y, Colour(0xFF, 0xFF, 0xFF));
-402 
-403         }
-404     }
-405 }
+398             uint32_t logo_progress_width = LOGO_WIDTH * percentage / 100;
+399             if(progress_x > logo_progress_width && !is_border)
+400                 continue;
+401 
+402             s_graphics_context\->put_pixel(right_x + progress_x, bottom_y + progress_y, Colour(0xFF, 0xFF, 0xFF));
+403 
+404         }
+405     }
+406 }
 .fi
 
 .PP
 References \fBMaxOS::common::Rectangle< Type >::height\fP, \fBLOGO_HEIGHT\fP, \fBLOGO_WIDTH\fP, and \fBMaxOS::common::Rectangle< Type >::width\fP\&.
 .PP
-Referenced by \fBprint_logo()\fP, and \fBLogger::set_log_level()\fP\&.
+Referenced by \fBprint_logo()\fP, and \fBMaxOS::Logger::set_log_level()\fP\&.
 .SS "\fBuint16_t\fP VESABootConsole::width ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -721,11 +727,11 @@ The width of the console in characters
 .PP
 Reimplemented from \fBMaxOS::drivers::console::Console\fP\&.
 .PP
-Definition at line \fB54\fP of file \fBvesaboot\&.cpp\fP\&..PP
+Definition at line \fB53\fP of file \fBvesaboot\&.cpp\fP\&..PP
 .nf
-54                                 {
-55     return s_graphics_context\->width() / FONT_WIDTH;       // 8 pixels per character
-56 }
+53                                 {
+54     return s_graphics_context\->width() / FONT_WIDTH;       // 8 pixels per character
+55 }
 .fi
 
 .PP
@@ -739,7 +745,7 @@ Referenced by \fBget_background_color()\fP, \fBget_character()\fP, \fBget_foregr
 .PP
 The boot console output stream\&. 
 .PP
-Definition at line \fB54\fP of file \fBvesaboot\&.h\fP\&.
+Definition at line \fB51\fP of file \fBvesaboot\&.h\fP\&.
 .PP
 Referenced by \fBfinish()\fP, and \fBVESABootConsole()\fP\&.
 

@@ -15,405 +15,402 @@
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00018}00018\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{interrupts_8h}{hardwarecommunication/interrupts.h}}>}}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00019}00019\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{port_8h}{hardwarecommunication/port.h}}>}}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00020}00020\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{apic_8h}{hardwarecommunication/apic.h}}>}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00021}00021\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00021}00021\ \textcolor{preprocessor}{\#include\ <cstdint>}}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00022}00022\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00023}00023\ \textcolor{keyword}{namespace\ }MaxOS\ \{}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00024}00024\ \ \ \ \ \textcolor{keyword}{namespace\ }drivers\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00024}00024\ \textcolor{keyword}{namespace\ }MaxOS::drivers::peripherals\ \{}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00025}00025\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00026}00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{namespace\ }peripherals\ \{}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00027}00027\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00028}00028\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ ScanCodeType\ :\ \textcolor{keywordtype}{int}\ \{}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ REGULAR,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EXTENDED,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EXTENDED\_BUFFER}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00033}00033\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00034}\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{00034}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}}\ :\ uint16\_t\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00030}\mbox{\hyperlink{keyboard_8h_a58fa1d0fe070a3f55e3ba46c44a7680e}{00030}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{keyboard_8h_a58fa1d0fe070a3f55e3ba46c44a7680e}{ScanCodeType}}\ :\ \textcolor{keywordtype}{int}\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ REGULAR,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00032}00032\ \ \ \ \ \ \ \ \ EXTENDED,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00033}00033\ \ \ \ \ \ \ \ \ EXTENDED\_BUFFER}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00034}00034\ \ \ \ \ \};}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00035}00035\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Alphabet}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00037}00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ A\ =\ \textcolor{charliteral}{'A'},\ a\ =\ \textcolor{charliteral}{'a'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ B\ =\ \textcolor{charliteral}{'B'},\ b\ =\ \textcolor{charliteral}{'b'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ C\ =\ \textcolor{charliteral}{'C'},\ c\ =\ \textcolor{charliteral}{'c'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ D\ =\ \textcolor{charliteral}{'D'},\ d\ =\ \textcolor{charliteral}{'d'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ E\ =\ \textcolor{charliteral}{'E'},\ e\ =\ \textcolor{charliteral}{'e'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ =\ \textcolor{charliteral}{'F'},\ f\ =\ \textcolor{charliteral}{'f'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ G\ =\ \textcolor{charliteral}{'G'},\ g\ =\ \textcolor{charliteral}{'g'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\ =\ \textcolor{charliteral}{'H'},\ h\ =\ \textcolor{charliteral}{'h'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ I\ =\ \textcolor{charliteral}{'I'},\ i\ =\ \textcolor{charliteral}{'i'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ J\ =\ \textcolor{charliteral}{'J'},\ j\ =\ \textcolor{charliteral}{'j'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ K\ =\ \textcolor{charliteral}{'K'},\ k\ =\ \textcolor{charliteral}{'k'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ L\ =\ \textcolor{charliteral}{'L'},\ l\ =\ \textcolor{charliteral}{'l'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ M\ =\ \textcolor{charliteral}{'M'},\ m\ =\ \textcolor{charliteral}{'m'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ N\ =\ \textcolor{charliteral}{'N'},\ n\ =\ \textcolor{charliteral}{'n'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ O\ =\ \textcolor{charliteral}{'O'},\ o\ =\ \textcolor{charliteral}{'o'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ P\ =\ \textcolor{charliteral}{'P'},\ p\ =\ \textcolor{charliteral}{'p'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Q\ =\ \textcolor{charliteral}{'Q'},\ q\ =\ \textcolor{charliteral}{'q'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ R\ =\ \textcolor{charliteral}{'R'},\ r\ =\ \textcolor{charliteral}{'r'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ S\ =\ \textcolor{charliteral}{'S'},\ s\ =\ \textcolor{charliteral}{'s'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ =\ \textcolor{charliteral}{'T'},\ t\ =\ \textcolor{charliteral}{'t'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ U\ =\ \textcolor{charliteral}{'U'},\ u\ =\ \textcolor{charliteral}{'u'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V\ =\ \textcolor{charliteral}{'V'},\ v\ =\ \textcolor{charliteral}{'v'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ W\ =\ \textcolor{charliteral}{'W'},\ w\ =\ \textcolor{charliteral}{'w'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ X\ =\ \textcolor{charliteral}{'X'},\ x\ =\ \textcolor{charliteral}{'x'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Y\ =\ \textcolor{charliteral}{'Y'},\ y\ =\ \textcolor{charliteral}{'y'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Z\ =\ \textcolor{charliteral}{'Z'},\ z\ =\ \textcolor{charliteral}{'z'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00063}00063\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Numbers}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa}{zero}}\ =\ \textcolor{charliteral}{'0'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ one\ =\ \textcolor{charliteral}{'1'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ two\ =\ \textcolor{charliteral}{'2'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ three\ =\ \textcolor{charliteral}{'3'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ four\ =\ \textcolor{charliteral}{'4'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ five\ =\ \textcolor{charliteral}{'5'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ six\ =\ \textcolor{charliteral}{'6'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ seven\ =\ \textcolor{charliteral}{'7'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eight\ =\ \textcolor{charliteral}{'8'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nine\ =\ \textcolor{charliteral}{'9'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00075}00075\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Symbols}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00077}00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ comma\ =\ \textcolor{charliteral}{','},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00078}00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fullStop\ =\ \textcolor{charliteral}{'.'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00079}00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ exclamationMark\ =\ \textcolor{charliteral}{'!'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00080}00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ questionMark\ =\ \textcolor{charliteral}{'?'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00081}00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ quotationMark\ =\ \textcolor{charliteral}{'\(\backslash\)"{}'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00082}00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ semicolon\ =\ \textcolor{charliteral}{';'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00083}00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ colon\ =\ \textcolor{charliteral}{':'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ apostrophe\ =\ \textcolor{charliteral}{'\(\backslash\)''},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00085}00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ slantedApostrophe\ =\ \textcolor{charliteral}{'`'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00086}00086\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Signs}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ powerSign\ =\ \textcolor{charliteral}{'\string^'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00089}00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dollarSign\ =\ \textcolor{charliteral}{'\$'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00090}00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ percentSign\ =\ \textcolor{charliteral}{'\%'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00091}00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ andSign\ =\ \textcolor{charliteral}{'\&'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00092}00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ atSign\ =\ \textcolor{charliteral}{'@'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00093}00093\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Special\ Characters}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00095}00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ underscore\ =\ \textcolor{charliteral}{'\_'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lineThing\ =\ \textcolor{charliteral}{'|'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hash\ =\ \textcolor{charliteral}{'\#'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00098}00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backslash\ =\ \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ forwardSlash\ =\ \textcolor{charliteral}{'/'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ squigglyLine\ =\ \textcolor{charliteral}{'\string~'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00101}00101\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Math\ Symbols}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ plus\ =\ \textcolor{charliteral}{'+'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ minus\ =\ \textcolor{charliteral}{'-\/'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ equals\ =\ \textcolor{charliteral}{'='},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ multiply\ =\ \textcolor{charliteral}{'*'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lessThan\ =\ \textcolor{charliteral}{'<'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ greaterThan\ =\ \textcolor{charliteral}{'>'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00109}00109\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Brackets}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openBracket\ =\ \textcolor{charliteral}{'('},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeBracket\ =\ \textcolor{charliteral}{')'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00113}00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openSquareBracket\ =\ \textcolor{charliteral}{'['},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeSquareBracket\ =\ \textcolor{charliteral}{']'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openCurlyBracket\ =\ \textcolor{charliteral}{'\{'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00116}00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeCurlyBracket\ =\ \textcolor{charliteral}{'\}'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00117}00117\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Writing}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00119}00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ space\ =\ \textcolor{charliteral}{'\ '},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00120}00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tab\ =\ \textcolor{charliteral}{'\(\backslash\)t'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00121}00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ enter\ =\ \textcolor{charliteral}{'\(\backslash\)n'},}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00122}00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backspace\ =\ \textcolor{charliteral}{'\(\backslash\)b'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00040}\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{00040}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}}\ :\ uint16\_t\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00042}00042\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Alphabet}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00043}00043\ \ \ \ \ \ \ \ \ A\ =\ \textcolor{charliteral}{'A'},\ a\ =\ \textcolor{charliteral}{'a'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ B\ =\ \textcolor{charliteral}{'B'},\ b\ =\ \textcolor{charliteral}{'b'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00045}00045\ \ \ \ \ \ \ \ \ C\ =\ \textcolor{charliteral}{'C'},\ c\ =\ \textcolor{charliteral}{'c'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00046}00046\ \ \ \ \ \ \ \ \ D\ =\ \textcolor{charliteral}{'D'},\ d\ =\ \textcolor{charliteral}{'d'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00047}00047\ \ \ \ \ \ \ \ \ E\ =\ \textcolor{charliteral}{'E'},\ e\ =\ \textcolor{charliteral}{'e'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00048}00048\ \ \ \ \ \ \ \ \ F\ =\ \textcolor{charliteral}{'F'},\ f\ =\ \textcolor{charliteral}{'f'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00049}00049\ \ \ \ \ \ \ \ \ G\ =\ \textcolor{charliteral}{'G'},\ g\ =\ \textcolor{charliteral}{'g'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00050}00050\ \ \ \ \ \ \ \ \ H\ =\ \textcolor{charliteral}{'H'},\ h\ =\ \textcolor{charliteral}{'h'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ I\ =\ \textcolor{charliteral}{'I'},\ i\ =\ \textcolor{charliteral}{'i'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00052}00052\ \ \ \ \ \ \ \ \ J\ =\ \textcolor{charliteral}{'J'},\ j\ =\ \textcolor{charliteral}{'j'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ K\ =\ \textcolor{charliteral}{'K'},\ k\ =\ \textcolor{charliteral}{'k'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00054}00054\ \ \ \ \ \ \ \ \ L\ =\ \textcolor{charliteral}{'L'},\ l\ =\ \textcolor{charliteral}{'l'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ M\ =\ \textcolor{charliteral}{'M'},\ m\ =\ \textcolor{charliteral}{'m'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ N\ =\ \textcolor{charliteral}{'N'},\ n\ =\ \textcolor{charliteral}{'n'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ O\ =\ \textcolor{charliteral}{'O'},\ o\ =\ \textcolor{charliteral}{'o'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ P\ =\ \textcolor{charliteral}{'P'},\ p\ =\ \textcolor{charliteral}{'p'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ Q\ =\ \textcolor{charliteral}{'Q'},\ q\ =\ \textcolor{charliteral}{'q'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ R\ =\ \textcolor{charliteral}{'R'},\ r\ =\ \textcolor{charliteral}{'r'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ S\ =\ \textcolor{charliteral}{'S'},\ s\ =\ \textcolor{charliteral}{'s'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ T\ =\ \textcolor{charliteral}{'T'},\ t\ =\ \textcolor{charliteral}{'t'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00063}00063\ \ \ \ \ \ \ \ \ U\ =\ \textcolor{charliteral}{'U'},\ u\ =\ \textcolor{charliteral}{'u'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ V\ =\ \textcolor{charliteral}{'V'},\ v\ =\ \textcolor{charliteral}{'v'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ W\ =\ \textcolor{charliteral}{'W'},\ w\ =\ \textcolor{charliteral}{'w'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00066}00066\ \ \ \ \ \ \ \ \ X\ =\ \textcolor{charliteral}{'X'},\ x\ =\ \textcolor{charliteral}{'x'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ Y\ =\ \textcolor{charliteral}{'Y'},\ y\ =\ \textcolor{charliteral}{'y'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ Z\ =\ \textcolor{charliteral}{'Z'},\ z\ =\ \textcolor{charliteral}{'z'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00070}00070\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Numbers}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00071}00071\ \ \ \ \ \ \ \ \ zero\ =\ \textcolor{charliteral}{'0'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00072}00072\ \ \ \ \ \ \ \ \ one\ =\ \textcolor{charliteral}{'1'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00073}00073\ \ \ \ \ \ \ \ \ two\ =\ \textcolor{charliteral}{'2'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00074}00074\ \ \ \ \ \ \ \ \ three\ =\ \textcolor{charliteral}{'3'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00075}00075\ \ \ \ \ \ \ \ \ four\ =\ \textcolor{charliteral}{'4'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00076}00076\ \ \ \ \ \ \ \ \ five\ =\ \textcolor{charliteral}{'5'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00077}00077\ \ \ \ \ \ \ \ \ six\ =\ \textcolor{charliteral}{'6'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00078}00078\ \ \ \ \ \ \ \ \ seven\ =\ \textcolor{charliteral}{'7'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00079}00079\ \ \ \ \ \ \ \ \ eight\ =\ \textcolor{charliteral}{'8'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00080}00080\ \ \ \ \ \ \ \ \ nine\ =\ \textcolor{charliteral}{'9'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00082}00082\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Symbols}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00083}00083\ \ \ \ \ \ \ \ \ comma\ =\ \textcolor{charliteral}{','},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00084}00084\ \ \ \ \ \ \ \ \ fullStop\ =\ \textcolor{charliteral}{'.'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00085}00085\ \ \ \ \ \ \ \ \ exclamationMark\ =\ \textcolor{charliteral}{'!'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00086}00086\ \ \ \ \ \ \ \ \ questionMark\ =\ \textcolor{charliteral}{'?'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00087}00087\ \ \ \ \ \ \ \ \ quotationMark\ =\ \textcolor{charliteral}{'\(\backslash\)"{}'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00088}00088\ \ \ \ \ \ \ \ \ semicolon\ =\ \textcolor{charliteral}{';'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00089}00089\ \ \ \ \ \ \ \ \ colon\ =\ \textcolor{charliteral}{':'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00090}00090\ \ \ \ \ \ \ \ \ apostrophe\ =\ \textcolor{charliteral}{'\(\backslash\)''},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00091}00091\ \ \ \ \ \ \ \ \ slantedApostrophe\ =\ \textcolor{charliteral}{'`'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00093}00093\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Signs}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00094}00094\ \ \ \ \ \ \ \ \ powerSign\ =\ \textcolor{charliteral}{'\string^'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00095}00095\ \ \ \ \ \ \ \ \ dollarSign\ =\ \textcolor{charliteral}{'\$'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00096}00096\ \ \ \ \ \ \ \ \ percentSign\ =\ \textcolor{charliteral}{'\%'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00097}00097\ \ \ \ \ \ \ \ \ andSign\ =\ \textcolor{charliteral}{'\&'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00098}00098\ \ \ \ \ \ \ \ \ atSign\ =\ \textcolor{charliteral}{'@'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00100}00100\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Special\ Characters}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00101}00101\ \ \ \ \ \ \ \ \ underscore\ =\ \textcolor{charliteral}{'\_'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00102}00102\ \ \ \ \ \ \ \ \ lineThing\ =\ \textcolor{charliteral}{'|'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ hash\ =\ \textcolor{charliteral}{'\#'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00104}00104\ \ \ \ \ \ \ \ \ backslash\ =\ \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00105}00105\ \ \ \ \ \ \ \ \ forwardSlash\ =\ \textcolor{charliteral}{'/'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00106}00106\ \ \ \ \ \ \ \ \ squigglyLine\ =\ \textcolor{charliteral}{'\string~'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00108}00108\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Math\ Symbols}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00109}00109\ \ \ \ \ \ \ \ \ plus\ =\ \textcolor{charliteral}{'+'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00110}00110\ \ \ \ \ \ \ \ \ minus\ =\ \textcolor{charliteral}{'-\/'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00111}00111\ \ \ \ \ \ \ \ \ equals\ =\ \textcolor{charliteral}{'='},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00112}00112\ \ \ \ \ \ \ \ \ multiply\ =\ \textcolor{charliteral}{'*'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00113}00113\ \ \ \ \ \ \ \ \ lessThan\ =\ \textcolor{charliteral}{'<'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00114}00114\ \ \ \ \ \ \ \ \ greaterThan\ =\ \textcolor{charliteral}{'>'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00116}00116\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Brackets}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00117}00117\ \ \ \ \ \ \ \ \ openBracket\ =\ \textcolor{charliteral}{'('},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00118}00118\ \ \ \ \ \ \ \ \ closeBracket\ =\ \textcolor{charliteral}{')'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00119}00119\ \ \ \ \ \ \ \ \ openSquareBracket\ =\ \textcolor{charliteral}{'['},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00120}00120\ \ \ \ \ \ \ \ \ closeSquareBracket\ =\ \textcolor{charliteral}{']'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00121}00121\ \ \ \ \ \ \ \ \ openCurlyBracket\ =\ \textcolor{charliteral}{'\{'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00122}00122\ \ \ \ \ \ \ \ \ closeCurlyBracket\ =\ \textcolor{charliteral}{'\}'},}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00123}00123\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00125}00125\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00126}00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Functions}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00127}00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}{f1}}\ =\ 1000,\ \ \ \ \ \ \textcolor{comment}{//force\ it\ to\ start\ at\ 1000\ so\ it\ doesn't\ conflict\ with\ ascii}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00128}00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f2,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00129}00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f3,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00130}00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f4,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00131}00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f5,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00132}00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f6,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00133}00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f7,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00134}00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f8,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00135}00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f9,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00136}00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f10,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00137}00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f11,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00138}00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f12,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00139}00139\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Top\ Row}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ escape,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printScreen,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ scrollLock,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pauseBreak,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00124}00124\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Writing}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00125}00125\ \ \ \ \ \ \ \ \ space\ =\ \textcolor{charliteral}{'\ '},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00126}00126\ \ \ \ \ \ \ \ \ tab\ =\ \textcolor{charliteral}{'\(\backslash\)t'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00127}00127\ \ \ \ \ \ \ \ \ enter\ =\ \textcolor{charliteral}{'\(\backslash\)n'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00128}00128\ \ \ \ \ \ \ \ \ backspace\ =\ \textcolor{charliteral}{'\(\backslash\)b'},}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00132}00132\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Functions}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00133}00133\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}{f1}}\ =\ 1000,\ \ \ \ \ \ \textcolor{comment}{//force\ it\ to\ start\ at\ 1000\ so\ it\ doesn't\ conflict\ with\ ascii}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00134}00134\ \ \ \ \ \ \ \ \ f2,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00135}00135\ \ \ \ \ \ \ \ \ f3,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00136}00136\ \ \ \ \ \ \ \ \ f4,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00137}00137\ \ \ \ \ \ \ \ \ f5,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00138}00138\ \ \ \ \ \ \ \ \ f6,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00139}00139\ \ \ \ \ \ \ \ \ f7,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00140}00140\ \ \ \ \ \ \ \ \ f8,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00141}00141\ \ \ \ \ \ \ \ \ f9,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00142}00142\ \ \ \ \ \ \ \ \ f10,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00143}00143\ \ \ \ \ \ \ \ \ f11,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00144}00144\ \ \ \ \ \ \ \ \ f12,}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00145}00145\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00146}00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Arrow\ s}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00147}00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ upArrow,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00148}00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ downArrow,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00149}00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftArrow,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00150}00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightArrow,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00146}00146\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Top\ Row}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00147}00147\ \ \ \ \ \ \ \ \ escape,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00148}00148\ \ \ \ \ \ \ \ \ printScreen,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00149}00149\ \ \ \ \ \ \ \ \ scrollLock,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00150}00150\ \ \ \ \ \ \ \ \ pauseBreak,}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00151}00151\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00152}00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Keys\ Above\ Arrows}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ insert,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00154}00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ home,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00155}00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageUp,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00156}00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ deleteKey,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ end,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageDown,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00159}00159\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Left\ Side}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ capsLock,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftShift,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftControl,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//weird\ ass\ Windows\ key\ or\ command\ on\ Mac}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00165}00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftAlt,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00166}00166\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Right\ Side}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00168}00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightAlt,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ functionKey,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightControl,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightShift,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00152}00152\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Arrow\ s}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00153}00153\ \ \ \ \ \ \ \ \ upArrow,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00154}00154\ \ \ \ \ \ \ \ \ downArrow,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00155}00155\ \ \ \ \ \ \ \ \ leftArrow,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00156}00156\ \ \ \ \ \ \ \ \ rightArrow,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00157}00157\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00158}00158\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Keys\ Above\ Arrows}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00159}00159\ \ \ \ \ \ \ \ \ insert,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00160}00160\ \ \ \ \ \ \ \ \ home,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00161}00161\ \ \ \ \ \ \ \ \ pageUp,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00162}00162\ \ \ \ \ \ \ \ \ deleteKey,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00163}00163\ \ \ \ \ \ \ \ \ end,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00164}00164\ \ \ \ \ \ \ \ \ pageDown,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00166}00166\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Left\ Side}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00167}00167\ \ \ \ \ \ \ \ \ capsLock,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00168}00168\ \ \ \ \ \ \ \ \ leftShift,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00169}00169\ \ \ \ \ \ \ \ \ leftControl,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00170}00170\ \ \ \ \ \ \ \ \ leftOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//weird\ ass\ Windows\ key\ or\ command\ on\ Mac}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00171}00171\ \ \ \ \ \ \ \ \ leftAlt,}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00172}00172\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00173}00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00174}00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadLock,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadForwardSlash,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMultiply,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMinus,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPlus,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00179}00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEnter,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00180}00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadZero,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadOne,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadTwo,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadThree,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00184}00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFour,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFive,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00186}00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSix,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00187}00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSeven,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEight,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadNine,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFullStop,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00191}00191\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad\ (Non\ Number\ Lock)}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadHome,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00194}00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPageDown,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPageUp,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEnd,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadInsert,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadUpArrow,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadDownArrow,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00200}00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadLeftArrow,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00201}00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadRightArrow,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00203}00203\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00210}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{00210}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \{}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00211}00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00212}00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00213}00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{\string~KeyboardState}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00214}00214\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00215}00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Left\ and\ Right}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00216}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a1aa311be52a604f66b09b72a24fdc259}{00216}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a1aa311be52a604f66b09b72a24fdc259}{left\_shift}}\ \ \ \ \ =\ \textcolor{keyword}{false};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00217}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_ae4cf19ca9d47cbb531bd79b801aa5779}{00217}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_ae4cf19ca9d47cbb531bd79b801aa5779}{right\_shift}}\ \ \ \ =\ \textcolor{keyword}{false};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00218}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a123776001c04064fcf16634a6823acb2}{00218}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a123776001c04064fcf16634a6823acb2}{left\_control}}\ \ \ =\ \textcolor{keyword}{false};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00219}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a80a72d0bf7e8e58714725e647daf7a91}{00219}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a80a72d0bf7e8e58714725e647daf7a91}{right\_control}}\ \ =\ \textcolor{keyword}{false};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00220}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_adb4eb1a26bae79a707ae642ee442301b}{00220}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_adb4eb1a26bae79a707ae642ee442301b}{left\_alt}}\ \ \ \ \ \ \ =\ \textcolor{keyword}{false};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00221}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_ad95debcc519a02f70bee1dc56954a198}{00221}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_ad95debcc519a02f70bee1dc56954a198}{right\_alt}}\ \ \ \ \ \ =\ \textcolor{keyword}{false};\ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00222}00222\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00223}00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Other\ Stuff}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00224}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_abf24f0324f16ffec09cb0398892ea03d}{00224}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_abf24f0324f16ffec09cb0398892ea03d}{caps\_lock}}\ \ \ \ \ \ \ \ \ \ =\ \textcolor{keyword}{false};\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00225}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a85d0597ebc3496da941adc73afe70430}{00225}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a85d0597ebc3496da941adc73afe70430}{number\_pad\_lock}}\ \ \ \ =\ \textcolor{keyword}{false};\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00226}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_aa95ad82cf1f0414a6d0479e0bd03a524}{00226}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_aa95ad82cf1f0414a6d0479e0bd03a524}{scroll\_lock}}\ \ \ \ \ \ \ \ =\ \textcolor{keyword}{false};\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00227}00227\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00173}00173\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Right\ Side}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00174}00174\ \ \ \ \ \ \ \ \ rightAlt,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00175}00175\ \ \ \ \ \ \ \ \ functionKey,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00176}00176\ \ \ \ \ \ \ \ \ rightControl,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00177}00177\ \ \ \ \ \ \ \ \ rightShift,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00179}00179\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00180}00180\ \ \ \ \ \ \ \ \ numberPadLock,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00181}00181\ \ \ \ \ \ \ \ \ numberPadForwardSlash,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00182}00182\ \ \ \ \ \ \ \ \ numberPadMultiply,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00183}00183\ \ \ \ \ \ \ \ \ numberPadMinus,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00184}00184\ \ \ \ \ \ \ \ \ numberPadPlus,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00185}00185\ \ \ \ \ \ \ \ \ numberPadEnter,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00186}00186\ \ \ \ \ \ \ \ \ numberPadZero,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00187}00187\ \ \ \ \ \ \ \ \ numberPadOne,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00188}00188\ \ \ \ \ \ \ \ \ numberPadTwo,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00189}00189\ \ \ \ \ \ \ \ \ numberPadThree,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00190}00190\ \ \ \ \ \ \ \ \ numberPadFour,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00191}00191\ \ \ \ \ \ \ \ \ numberPadFive,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00192}00192\ \ \ \ \ \ \ \ \ numberPadSix,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00193}00193\ \ \ \ \ \ \ \ \ numberPadSeven,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00194}00194\ \ \ \ \ \ \ \ \ numberPadEight,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00195}00195\ \ \ \ \ \ \ \ \ numberPadNine,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00196}00196\ \ \ \ \ \ \ \ \ numberPadFullStop,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00197}00197\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00198}00198\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad\ (Non\ Number\ Lock)}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00199}00199\ \ \ \ \ \ \ \ \ numberPadHome,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00200}00200\ \ \ \ \ \ \ \ \ numberPadPageDown,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00201}00201\ \ \ \ \ \ \ \ \ numberPadPageUp,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00202}00202\ \ \ \ \ \ \ \ \ numberPadEnd,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00203}00203\ \ \ \ \ \ \ \ \ numberPadInsert,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00204}00204\ \ \ \ \ \ \ \ \ numberPadUpArrow,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00205}00205\ \ \ \ \ \ \ \ \ numberPadDownArrow,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00206}00206\ \ \ \ \ \ \ \ \ numberPadLeftArrow,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00207}00207\ \ \ \ \ \ \ \ \ numberPadRightArrow,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00208}00208\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00216}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{00216}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00217}00217\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00218}00218\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00219}00219\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{\string~KeyboardState}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00220}00220\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00221}00221\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Left\ and\ Right}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00222}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a1aa311be52a604f66b09b72a24fdc259}{00222}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a1aa311be52a604f66b09b72a24fdc259}{left\_shift}}\ =\ \textcolor{keyword}{false};\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00223}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_ae4cf19ca9d47cbb531bd79b801aa5779}{00223}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_ae4cf19ca9d47cbb531bd79b801aa5779}{right\_shift}}\ =\ \textcolor{keyword}{false};\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00224}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a123776001c04064fcf16634a6823acb2}{00224}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a123776001c04064fcf16634a6823acb2}{left\_control}}\ =\ \textcolor{keyword}{false};\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00225}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a80a72d0bf7e8e58714725e647daf7a91}{00225}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a80a72d0bf7e8e58714725e647daf7a91}{right\_control}}\ =\ \textcolor{keyword}{false};\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00226}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_adb4eb1a26bae79a707ae642ee442301b}{00226}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_adb4eb1a26bae79a707ae642ee442301b}{left\_alt}}\ =\ \textcolor{keyword}{false};\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00227}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_ad95debcc519a02f70bee1dc56954a198}{00227}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_ad95debcc519a02f70bee1dc56954a198}{right\_alt}}\ =\ \textcolor{keyword}{false};\ \ \ \ }
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00228}00228\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00229}00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ KeyboardEvents\ \{}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00230}00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KEYDOWN,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00231}00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KEYUP}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00232}00232\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00233}00233\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00238}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent}{00238}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent}{KeyUpEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Event}{common::Event}}<KeyboardEvents>\ \{}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00239}00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00240}00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent}{KeyUpEvent}}(\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \&);}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00241}00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent}{\string~KeyUpEvent}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00242}00242\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00243}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent_a533ef353bda01ee02d1cfdb3e3a6abcc}{00243}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent_a533ef353bda01ee02d1cfdb3e3a6abcc}{key\_code}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00244}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent_a2c239507794f21428f8a95cb30f90b28}{00244}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent_a2c239507794f21428f8a95cb30f90b28}{keyboard\_state}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00245}00245\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00246}00246\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00251}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent}{00251}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent}{KeyDownEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Event}{common::Event}}<KeyboardEvents>\ \{}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent}{KeyDownEvent}}(\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \&);}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00254}00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent}{\string~KeyDownEvent}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00255}00255\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00256}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent_a560f5288329c6163d413224167bf18f1}{00256}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent_a560f5288329c6163d413224167bf18f1}{key\_code}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00257}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent_a920122b40beca5266575c7c22948a00f}{00257}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent_a920122b40beca5266575c7c22948a00f}{keyboard\_state}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00259}00259\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00264}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler}{00264}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler}{KeyboardEventHandler}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1EventHandler}{common::EventHandler}}<KeyboardEvents>\ \{}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00265}00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler}{KeyboardEventHandler}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler}{\string~KeyboardEventHandler}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00268}00268\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Event<KeyboardEvents>}}*\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler_a7d37c490aac7678eb8b836c96d59d928}{on\_event}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Event<KeyboardEvents>}}*)\ \textcolor{keyword}{override};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00270}00270\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00271}00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler_a77c8e7e0173fc39d738f37ccc03dcc1d}{on\_key\_down}}(\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}},\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}});}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00272}00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler_a38aca82b74f83101f4dbc5b2b0b8d714}{on\_key\_up}}(\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}},\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}});}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00273}00273\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00274}00274\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00279}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter}{00279}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter}{KeyboardInterpreter}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1InputStreamEventHandler}{common::InputStreamEventHandler}}<uint8\_t>,\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1EventManager}{common::EventManager}}<KeyboardEvents>\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00229}00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Other\ Stuff}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00230}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_abf24f0324f16ffec09cb0398892ea03d}{00230}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_abf24f0324f16ffec09cb0398892ea03d}{caps\_lock}}\ =\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00231}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a85d0597ebc3496da941adc73afe70430}{00231}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_a85d0597ebc3496da941adc73afe70430}{number\_pad\_lock}}\ =\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00232}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_aa95ad82cf1f0414a6d0479e0bd03a524}{00232}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState_aa95ad82cf1f0414a6d0479e0bd03a524}{scroll\_lock}}\ =\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00233}00233\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00239}\mbox{\hyperlink{keyboard_8h_add731b6c5a9b8a0f34a4d129d9767554}{00239}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{keyboard_8h_add731b6c5a9b8a0f34a4d129d9767554}{KeyboardEvents}}\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00240}00240\ \ \ \ \ \ \ \ \ KEYDOWN,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00241}00241\ \ \ \ \ \ \ \ \ KEYUP}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00242}00242\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00243}00243\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00248}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent}{00248}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent}{KeyUpEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Event}{common::Event}}<KeyboardEvents>\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00249}00249\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent}{KeyUpEvent}}(\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\&);}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent}{\string~KeyUpEvent}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00252}00252\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00253}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent_a533ef353bda01ee02d1cfdb3e3a6abcc}{00253}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent_a533ef353bda01ee02d1cfdb3e3a6abcc}{key\_code}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00254}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent_a2c239507794f21428f8a95cb30f90b28}{00254}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyUpEvent_a2c239507794f21428f8a95cb30f90b28}{keyboard\_state}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00255}00255\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00256}00256\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00261}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent}{00261}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent}{KeyDownEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Event}{common::Event}}<KeyboardEvents>\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00262}00262\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent}{KeyDownEvent}}(\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\&);}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent}{\string~KeyDownEvent}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00266}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent_a560f5288329c6163d413224167bf18f1}{00266}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent_a560f5288329c6163d413224167bf18f1}{key\_code}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00267}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent_a920122b40beca5266575c7c22948a00f}{00267}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyDownEvent_a920122b40beca5266575c7c22948a00f}{keyboard\_state}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00268}00268\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00269}00269\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00274}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler}{00274}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler}{KeyboardEventHandler}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1EventHandler}{common::EventHandler}}<KeyboardEvents>\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00275}00275\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler}{KeyboardEventHandler}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler}{\string~KeyboardEventHandler}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00278}00278\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00279}00279\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Event<KeyboardEvents>}}*\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler_a7d37c490aac7678eb8b836c96d59d928}{on\_event}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{common::Event<KeyboardEvents>}}*)\ \textcolor{keyword}{override};}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00280}00280\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00281}00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00282}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_af4af833968632fe7592396be94b580b5}{00282}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_af4af833968632fe7592396be94b580b5}{m\_keyboard\_state}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00283}00283\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00284}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a5161f6637241a53b7a744ca08f9ec037}{00284}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a5161f6637241a53b7a744ca08f9ec037}{m\_next\_is\_first\_extended\_code}}\ =\ \textcolor{keyword}{false};\ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00285}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a6f7982a73461fdf847e85e59a1fa3676}{00285}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a6f7982a73461fdf847e85e59a1fa3676}{m\_extended\_scan\_code\_bytes}}\ =\ 0;\ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00286}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_ac4fb1b84c9ce9f13fd33adbac5b9827e}{00286}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_ac4fb1b84c9ce9f13fd33adbac5b9827e}{m\_extended\_code\_buffer}}\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00287}00287\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00288}00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00289}00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter}{KeyboardInterpreter}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00290}00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter}{\string~KeyboardInterpreter}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00291}00291\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00292}00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a6cb39ba0fc1baa0ea00ace7122be750f}{on\_key\_read}}(\textcolor{keywordtype}{bool},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \&,\ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}});}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00281}00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler_a30cd7d3f127191f4cd5c32bfc2067537}{on\_key\_down}}(\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\&);}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00282}00282\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardEventHandler_a1ea8726fbbe20b77061fbc4d8329c0ae}{on\_key\_up}}(\mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\&);}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00283}00283\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00284}00284\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00289}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter}{00289}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter}{KeyboardInterpreter}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1InputStreamEventHandler}{common::InputStreamEventHandler}}<uint8\_t>,\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1EventManager}{common::EventManager}}<KeyboardEvents>\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00290}00290\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00291}00291\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00292}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_af4af833968632fe7592396be94b580b5}{00292}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_af4af833968632fe7592396be94b580b5}{m\_keyboard\_state}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00293}00293\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00295}00295\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00300}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US}{00300}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US}{KeyboardInterpreterEN\_US}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter}{KeyboardInterpreter}}\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00294}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a5161f6637241a53b7a744ca08f9ec037}{00294}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a5161f6637241a53b7a744ca08f9ec037}{m\_next\_is\_first\_extended\_code}}\ =\ \textcolor{keyword}{false};\ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00295}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a6f7982a73461fdf847e85e59a1fa3676}{00295}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a6f7982a73461fdf847e85e59a1fa3676}{m\_extended\_scan\_code\_bytes}}\ =\ 0;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00296}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_ac4fb1b84c9ce9f13fd33adbac5b9827e}{00296}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_ac4fb1b84c9ce9f13fd33adbac5b9827e}{m\_extended\_code\_buffer}}\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00297}00297\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00298}00298\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00299}00299\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a036aa57f7418c8d360dda574e16788f8}{KeyboardInterpreter}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00300}00300\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter}{\string~KeyboardInterpreter}}();}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00301}00301\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter_a6cb39ba0fc1baa0ea00ace7122be750f}{on\_key\_read}}(\textcolor{keywordtype}{bool},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState}{KeyboardState}}\&,\ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{KeyCode}});}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00303}00303\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00308}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US_a345f23d5e9acfe6791e344b9595bc12b}{00308}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US_a345f23d5e9acfe6791e344b9595bc12b}{KeyCodeEN\_US}}\ \{}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00309}00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ First\ Row}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00310}00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ escape\ =\ 0x01,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00311}00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}{f1}}\ =\ 0x3B,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00312}00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f2\ =\ 0x3C,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00313}00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f3\ =\ 0x3D,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00314}00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f4\ =\ 0x3E,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00315}00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f5\ =\ 0x3F,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00316}00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f6\ =\ 0x40,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00317}00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f7\ =\ 0x41,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00318}00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f8\ =\ 0x42,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00319}00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f9\ =\ 0x43,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00320}00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f10\ =\ 0x44,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00321}00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f11\ =\ 0x57,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00322}00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f12\ =\ 0x58,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00323}00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printScreen\ =\ 0x37,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00324}00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ scrollLock\ =\ 0x46,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00325}00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pauseBreak\ =\ 0x45,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00326}00326\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00327}00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Second\ Row}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00328}00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ squigglyLine\ =\ 0x29,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00329}00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ one\ =\ 0x02,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00330}00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ two\ =\ 0x03,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00331}00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ three\ =\ 0x04,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00332}00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ four\ =\ 0x05,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00333}00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ five\ =\ 0x06,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00334}00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ six\ =\ 0x07,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00335}00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ seven\ =\ 0x08,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00336}00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eight\ =\ 0x09,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00337}00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nine\ =\ 0x0A,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00338}00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa}{zero}}\ =\ 0x0B,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00339}00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ minus\ =\ 0x0C,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00340}00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ equals\ =\ 0x0D,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00341}00341\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backspace\ =\ 0x0E,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00342}00342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ insert\ =\ 0x52,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00343}00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ home\ =\ 0x47,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00344}00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageUp\ =\ 0x49,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00345}00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadLock\ =\ 0x45,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00346}00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadForwardSlash\ =\ 0x35,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00347}00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMultiply\ =\ 0x37,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00348}00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMinus\ =\ 0x4A,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00349}00349\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00350}00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Third\ Row}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00351}00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tab\ =\ 0x0F,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00352}00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Q\ =\ 0x10,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00353}00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ W\ =\ 0x11,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00354}00354\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ E\ =\ 0x12,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00355}00355\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ R\ =\ 0x13,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00356}00356\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ =\ 0x14,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00357}00357\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Y\ =\ 0x15,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00358}00358\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ U\ =\ 0x16,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00359}00359\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ I\ =\ 0x17,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00360}00360\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ O\ =\ 0x18,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00361}00361\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ P\ =\ 0x19,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00362}00362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openSquareBracket\ =\ 0x1A,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00363}00363\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeSquareBracket\ =\ 0x1B,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00364}00364\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backslash\ =\ 0x2B,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00365}00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ deleteKey\ =\ 0x53,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00366}00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ end\ =\ 0x4F,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00367}00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageDown\ =\ 0x51,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00368}00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSeven\ =\ 0x47,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00369}00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEight\ =\ 0x48,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00370}00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadNine\ =\ 0x49,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00371}00371\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPlus\ =\ 0x4E,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00372}00372\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00373}00373\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Fourth\ Row}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00374}00374\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ capsLock\ =\ 0x3A,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00375}00375\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ A\ =\ 0x1E,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00376}00376\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ S\ =\ 0x1F,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00377}00377\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ D\ =\ 0x20,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00378}00378\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ =\ 0x21,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00379}00379\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ G\ =\ 0x22,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00380}00380\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\ =\ 0x23,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00381}00381\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ J\ =\ 0x24,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00382}00382\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ K\ =\ 0x25,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00383}00383\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ L\ =\ 0x26,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00384}00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ semicolon\ =\ 0x27,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00385}00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ apostrophe\ =\ 0x28,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00386}00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ enter\ =\ 0x1C,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00387}00387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFour\ =\ 0x4B,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00388}00388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFive\ =\ 0x4C,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00389}00389\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSix\ =\ 0x4D,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00390}00390\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00391}00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Fifth\ Row}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00392}00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftShift\ =\ 0x2A,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00393}00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Z\ =\ 0x2C,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00394}00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ X\ =\ 0x2D,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00395}00395\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ C\ =\ 0x2E,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00396}00396\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V\ =\ 0x2F,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00397}00397\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ B\ =\ 0x30,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00398}00398\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ N\ =\ 0x31,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00399}00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ M\ =\ 0x32,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00400}00400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ comma\ =\ 0x33,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00401}00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fullStop\ =\ 0x34,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00402}00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ forwardSlash\ =\ 0x35,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00403}00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightShift\ =\ 0x36,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00404}00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ upArrow\ =\ 0x48,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00405}00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadOne\ =\ 0x4F,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00406}00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadTwo\ =\ 0x50,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00407}00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadThree\ =\ 0x51,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00408}00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEnter\ =\ 0x1C,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00409}00409\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00410}00410\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sixth\ Row}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00411}00411\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftControl\ =\ 0x1D,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00412}00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftOS\ =\ 0x5B,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00413}00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftAlt\ =\ 0x38,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00414}00414\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ space\ =\ 0x39,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00415}00415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightAlt\ =\ 0x38,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00416}00416\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ function\ =\ 0x5D,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00417}00417\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightControl\ =\ 0x1D,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00418}00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftArrow\ =\ 0x4B,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00419}00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ downArrow\ =\ 0x50,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00420}00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightArrow\ =\ 0x4D,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00421}00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadZero\ =\ 0x52,}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00422}00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFullStop\ =\ 0x53}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00424}00424\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00425}00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US}{KeyboardInterpreterEN\_US}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00426}00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US}{\string~KeyboardInterpreterEN\_US}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00427}00427\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00428}00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US_ab3d48ecc6a8ab983ee5efad922f688dd}{on\_stream\_read}}(uint8\_t\ scan\_code)\ \textcolor{keyword}{final};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00429}00429\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00430}00430\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00431}00431\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00436}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{00436}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{KeyboardDriver}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{hardwarecommunication::InterruptHandler}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver}{Driver}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1GenericInputStream}{common::GenericInputStream}}<uint8\_t>\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00304}00304\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00305}00305\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00310}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US}{00310}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US}{KeyboardInterpreterEN\_US}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreter}{KeyboardInterpreter}}\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00311}00311\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00312}00312\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00313}00313\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00318}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US_a345f23d5e9acfe6791e344b9595bc12b}{00318}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US_a345f23d5e9acfe6791e344b9595bc12b}{KeyCodeEN\_US}}\ \{}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00319}00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ First\ Row}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00320}00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ escape\ =\ 0x01,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00321}00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}{f1}}\ =\ 0x3B,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00322}00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f2\ =\ 0x3C,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00323}00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f3\ =\ 0x3D,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00324}00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f4\ =\ 0x3E,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00325}00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f5\ =\ 0x3F,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00326}00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f6\ =\ 0x40,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00327}00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f7\ =\ 0x41,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00328}00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f8\ =\ 0x42,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00329}00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f9\ =\ 0x43,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00330}00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f10\ =\ 0x44,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00331}00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f11\ =\ 0x57,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00332}00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f12\ =\ 0x58,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00333}00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printScreen\ =\ 0x37,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00334}00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ scrollLock\ =\ 0x46,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00335}00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pauseBreak\ =\ 0x45,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00336}00336\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00337}00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Second\ Row}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00338}00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ squigglyLine\ =\ 0x29,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00339}00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ one\ =\ 0x02,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00340}00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ two\ =\ 0x03,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00341}00341\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ three\ =\ 0x04,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00342}00342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ four\ =\ 0x05,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00343}00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ five\ =\ 0x06,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00344}00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ six\ =\ 0x07,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00345}00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ seven\ =\ 0x08,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00346}00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eight\ =\ 0x09,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00347}00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nine\ =\ 0x0A,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00348}00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ zero\ =\ 0x0B,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00349}00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ minus\ =\ 0x0C,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00350}00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ equals\ =\ 0x0D,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00351}00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backspace\ =\ 0x0E,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00352}00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ insert\ =\ 0x52,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00353}00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ home\ =\ 0x47,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00354}00354\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageUp\ =\ 0x49,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00355}00355\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadLock\ =\ 0x45,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00356}00356\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadForwardSlash\ =\ 0x35,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00357}00357\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMultiply\ =\ 0x37,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00358}00358\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMinus\ =\ 0x4A,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00359}00359\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00360}00360\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Third\ Row}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00361}00361\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tab\ =\ 0x0F,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00362}00362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Q\ =\ 0x10,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00363}00363\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ W\ =\ 0x11,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00364}00364\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ E\ =\ 0x12,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00365}00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ R\ =\ 0x13,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00366}00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ =\ 0x14,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00367}00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Y\ =\ 0x15,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00368}00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ U\ =\ 0x16,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00369}00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ I\ =\ 0x17,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00370}00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ O\ =\ 0x18,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00371}00371\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ P\ =\ 0x19,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00372}00372\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openSquareBracket\ =\ 0x1A,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00373}00373\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeSquareBracket\ =\ 0x1B,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00374}00374\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backslash\ =\ 0x2B,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00375}00375\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ deleteKey\ =\ 0x53,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00376}00376\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ end\ =\ 0x4F,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00377}00377\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageDown\ =\ 0x51,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00378}00378\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSeven\ =\ 0x47,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00379}00379\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEight\ =\ 0x48,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00380}00380\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadNine\ =\ 0x49,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00381}00381\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPlus\ =\ 0x4E,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00382}00382\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00383}00383\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Fourth\ Row}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00384}00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ capsLock\ =\ 0x3A,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00385}00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ A\ =\ 0x1E,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00386}00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ S\ =\ 0x1F,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00387}00387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ D\ =\ 0x20,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00388}00388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ =\ 0x21,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00389}00389\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ G\ =\ 0x22,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00390}00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\ =\ 0x23,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00391}00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ J\ =\ 0x24,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00392}00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ K\ =\ 0x25,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00393}00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ L\ =\ 0x26,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00394}00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ semicolon\ =\ 0x27,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00395}00395\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ apostrophe\ =\ 0x28,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00396}00396\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ enter\ =\ 0x1C,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00397}00397\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFour\ =\ 0x4B,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00398}00398\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFive\ =\ 0x4C,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00399}00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSix\ =\ 0x4D,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00400}00400\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00401}00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Fifth\ Row}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00402}00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftShift\ =\ 0x2A,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00403}00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Z\ =\ 0x2C,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00404}00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ X\ =\ 0x2D,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00405}00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ C\ =\ 0x2E,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00406}00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V\ =\ 0x2F,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00407}00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ B\ =\ 0x30,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00408}00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ N\ =\ 0x31,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00409}00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ M\ =\ 0x32,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00410}00410\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ comma\ =\ 0x33,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00411}00411\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fullStop\ =\ 0x34,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00412}00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ forwardSlash\ =\ 0x35,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00413}00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightShift\ =\ 0x36,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00414}00414\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ upArrow\ =\ 0x48,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00415}00415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadOne\ =\ 0x4F,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00416}00416\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadTwo\ =\ 0x50,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00417}00417\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadThree\ =\ 0x51,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00418}00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEnter\ =\ 0x1C,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00419}00419\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00420}00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sixth\ Row}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00421}00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftControl\ =\ 0x1D,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00422}00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftOS\ =\ 0x5B,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftAlt\ =\ 0x38,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00424}00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ space\ =\ 0x39,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00425}00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightAlt\ =\ 0x38,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00426}00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ function\ =\ 0x5D,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00427}00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightControl\ =\ 0x1D,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00428}00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftArrow\ =\ 0x4B,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00429}00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ downArrow\ =\ 0x50,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00430}00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightArrow\ =\ 0x4D,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00431}00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadZero\ =\ 0x52,}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00432}00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFullStop\ =\ 0x53}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00433}00433\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00434}00434\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00435}00435\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US_a07c730f3732867b856bbbb0f5b326f8d}{KeyboardInterpreterEN\_US}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00436}00436\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US}{\string~KeyboardInterpreterEN\_US}}();}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00437}00437\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00438}00438\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00439}00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_data\_port;}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00440}00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_command\_port;}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00438}00438\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US_ab3d48ecc6a8ab983ee5efad922f688dd}{on\_stream\_read}}(uint8\_t\ scan\_code)\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00439}00439\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00440}00440\ \ \ \ \ \};}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00441}00441\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00442}00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00443}00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{KeyboardDriver}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00444}00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{\string~KeyboardDriver}}();}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00445}00445\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00446}00446\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver_a2e23ac39d852e6ecce2954fcce778d0f}{handle\_interrupt}}()\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00446}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{00446}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{KeyboardDriver}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{hardwarecommunication::InterruptHandler}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1Driver}{Driver}},\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1GenericInputStream}{common::GenericInputStream}}<uint8\_t>\ \{}
 \DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00447}00447\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00448}00448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver_adc16d0857364171bbed8c68982c4114d}{activate}}()\ \textcolor{keyword}{final};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00449}00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver_adb008e33a50138c2f17fdab6f52d88fe}{device\_name}}()\ \textcolor{keyword}{final};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00450}00450\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00451}00451\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00452}00452\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00453}00453\ \}}
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00454}00454\ }
-\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00455}00455\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAX\_OS\_DRIVERS\_PERIPHERALS\_KEYBOARD\_H}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00448}00448\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00449}00449\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_data\_port;}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00450}00450\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Port8Bit}{hardwarecommunication::Port8Bit}}\ m\_command\_port;}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00451}00451\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00452}00452\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00453}00453\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver_ad1de2608dc143d1a14247a9e2bd6ae85}{KeyboardDriver}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00454}00454\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{\string~KeyboardDriver}}();}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00455}00455\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00456}00456\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver_a2e23ac39d852e6ecce2954fcce778d0f}{handle\_interrupt}}()\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00457}00457\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00458}00458\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver_adc16d0857364171bbed8c68982c4114d}{activate}}()\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00459}00459\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver_adb008e33a50138c2f17fdab6f52d88fe}{device\_name}}()\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00460}00460\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00461}00461\ \}}
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00462}00462\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00463}00463\ }
+\DoxyCodeLine{\Hypertarget{keyboard_8h_source_l00464}00464\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAX\_OS\_DRIVERS\_PERIPHERALS\_KEYBOARD\_H}}
 
 \end{DoxyCode}

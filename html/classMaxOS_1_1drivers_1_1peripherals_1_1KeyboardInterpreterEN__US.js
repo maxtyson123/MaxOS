@@ -105,5 +105,6 @@ var classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US =
       [ "numberPadZero", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a345f23d5e9acfe6791e344b9595bc12ba504697f0f167e467834d1ddc472beb41", null ],
       [ "numberPadFullStop", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a345f23d5e9acfe6791e344b9595bc12bad4bbe4f11d708b29f95a3801a000e8fc", null ]
     ] ],
+    [ "KeyboardInterpreterEN_US", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#a07c730f3732867b856bbbb0f5b326f8d", null ],
     [ "on_stream_read", "classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardInterpreterEN__US.html#ab3d48ecc6a8ab983ee5efad922f688dd", null ]
 ];

@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::Path" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::Path" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,7 +13,7 @@ MaxOS::filesystem::Path \- Handles file & directory paths\&.
 
 .in +1c
 .ti -1c
-.RI "\fBstatic\fP \fBbool\fP \fBvalid\fP (\fBstring\fP \fBpath\fP)"
+.RI "\fBstatic\fP \fBbool\fP \fBvalid\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
 .br
 .RI "Check if a path is valid\&. "
 .ti -1c
@@ -21,31 +21,31 @@ MaxOS::filesystem::Path \- Handles file & directory paths\&.
 .br
 .RI "Check if a path is a file\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBstring\fP \fBfile_name\fP (\fBstring\fP \fBpath\fP)"
+.RI "\fBstatic\fP \fBstring\fP \fBfile_name\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
 .br
 .RI "Get the file name component of a path if it exists or an empty string\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBstring\fP \fBfile_extension\fP (\fBstring\fP \fBpath\fP)"
+.RI "\fBstatic\fP \fBstring\fP \fBfile_extension\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
 .br
 .RI "Try to get the file extension from a path (assumes split by '\&.') "
 .ti -1c
-.RI "\fBstatic\fP \fBstring\fP \fBfile_path\fP (\fBstring\fP \fBpath\fP)"
+.RI "\fBstatic\fP \fBstring\fP \fBfile_path\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
 .br
 .RI "Finds the path to the directory the file is in\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBstring\fP \fBtop_directory\fP (\fBstring\fP \fBpath\fP)"
+.RI "\fBstatic\fP \fBstring\fP \fBtop_directory\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
 .br
 .RI "Get the top directory of a path\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBstring\fP \fBparent_directory\fP (\fBstring\fP \fBpath\fP)"
+.RI "\fBstatic\fP \fBstring\fP \fBparent_directory\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
 .br
 .RI "Get the parent directory of the path\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBstring\fP \fBabsolute_path\fP (\fBstring\fP \fBpath\fP)"
+.RI "\fBstatic\fP \fBstring\fP \fBabsolute_path\fP (\fBconst\fP \fBstring\fP &\fBpath\fP)"
 .br
 .RI "Calculates path with out any '\&.\&./' or '\&./'\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBstring\fP \fBjoin_path\fP (\fBstring\fP \fBbase\fP, \fBstring\fP \fBextended\fP)"
+.RI "\fBstatic\fP \fBstring\fP \fBjoin_path\fP (\fBconst\fP \fBstring\fP &base, \fBconst\fP \fBstring\fP &\fBextended\fP)"
 .br
 .RI "Joins two paths together\&. "
 .in -1c
@@ -53,10 +53,10 @@ MaxOS::filesystem::Path \- Handles file & directory paths\&.
 .PP 
 Handles file & directory paths\&. 
 .PP
-Definition at line \fB22\fP of file \fBpath\&.h\fP\&.
+Definition at line \fB21\fP of file \fBpath\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBstring\fP Path::absolute_path (\fBstring\fP path)\fC [static]\fP"
+.SS "\fBstring\fP Path::absolute_path (\fBconst\fP \fBstring\fP & path)\fC [static]\fP"
 
 .PP
 Calculates path with out any '\&.\&./' or '\&./'\&. 
@@ -75,7 +75,7 @@ The new path, direct from root
 .PP
 Definition at line \fB170\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-170                                       {
+170                                              {
 171 
 172     // Split the path into components
 173     auto components = path\&.split("/");
@@ -111,7 +111,7 @@ Definition at line \fB170\fP of file \fBpath\&.cpp\fP\&..PP
 References \fBabsolute_path()\fP, and \fBis_file()\fP\&.
 .PP
 Referenced by \fBabsolute_path()\fP, \fBMaxOS::filesystem::VFSResourceRegistry::create_resource()\fP, and \fBMaxOS::filesystem::VFSResourceRegistry::get_resource()\fP\&.
-.SS "\fBstring\fP Path::file_extension (\fBstring\fP path)\fC [static]\fP"
+.SS "\fBstring\fP Path::file_extension (\fBconst\fP \fBstring\fP & path)\fC [static]\fP"
 
 .PP
 Try to get the file extension from a path (assumes split by '\&.') 
@@ -130,11 +130,11 @@ The file extension or the original path if it does not exist
 .PP
 Definition at line \fB77\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-77                                        {
+77                                               {
 78 
 79     // Find the last \&.
 80     int last_dot = \-1;
-81     for (int i = 0; i < path\&.length(); i++)
+81     for (size_t i = 0; i < path\&.length(); i++)
 82         if (path[i] == '\&.')
 83             last_dot = i;
 84 
@@ -153,7 +153,7 @@ Definition at line \fB77\fP of file \fBpath\&.cpp\fP\&..PP
 References \fBfile_extension()\fP\&.
 .PP
 Referenced by \fBfile_extension()\fP, and \fBis_file()\fP\&.
-.SS "\fBstring\fP Path::file_name (\fBstring\fP path)\fC [static]\fP"
+.SS "\fBstring\fP Path::file_name (\fBconst\fP \fBstring\fP & path)\fC [static]\fP"
 
 .PP
 Get the file name component of a path if it exists or an empty string\&. 
@@ -172,11 +172,11 @@ The file name or the original path if it does not exist
 .PP
 Definition at line \fB54\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-54                                   {
+54                                          {
 55 
 56     // Find the last /
 57     int last_slash = \-1;
-58     for (int i = 0; i < path\&.length(); i++)
+58     for (size_t i = 0; i < path\&.length(); i++)
 59         if (path[i] == '/')
 60             last_slash = i;
 61 
@@ -194,7 +194,7 @@ Definition at line \fB54\fP of file \fBpath\&.cpp\fP\&..PP
 References \fBfile_name()\fP\&.
 .PP
 Referenced by \fBMaxOS::filesystem::VirtualFileSystem::create_directory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::create_file()\fP, \fBMaxOS::filesystem::VirtualFileSystem::delete_directory()\fP, \fBMaxOS::filesystem::VirtualFileSystem::delete_file()\fP, \fBMaxOS::filesystem::FileSystem::exists()\fP, \fBfile_name()\fP, \fBis_file()\fP, and \fBMaxOS::filesystem::VirtualFileSystem::open_file()\fP\&.
-.SS "\fBstring\fP Path::file_path (\fBstring\fP path)\fC [static]\fP"
+.SS "\fBstring\fP Path::file_path (\fBconst\fP \fBstring\fP & path)\fC [static]\fP"
 
 .PP
 Finds the path to the directory the file is in\&. 
@@ -213,11 +213,11 @@ The file path or the original path if it does not exist
 .PP
 Definition at line \fB101\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-101                                   {
+101                                          {
 102 
 103     // Try to find the last /
 104     int last_slash = \-1;
-105     for (int i = 0; i < path\&.length(); i++)
+105     for (size_t i = 0; i < path\&.length(); i++)
 106         if (path[i] == '/')
 107             last_slash = i;
 108 
@@ -265,7 +265,7 @@ Definition at line \fB42\fP of file \fBpath\&.cpp\fP\&..PP
 References \fBfile_extension()\fP, and \fBfile_name()\fP\&.
 .PP
 Referenced by \fBabsolute_path()\fP, \fBMaxOS::filesystem::VFSResourceRegistry::create_resource()\fP, and \fBMaxOS::filesystem::VFSResourceRegistry::get_resource()\fP\&.
-.SS "\fBstring\fP Path::join_path (\fBstring\fP base, \fBstring\fP extended)\fC [static]\fP"
+.SS "\fBstring\fP Path::join_path (\fBconst\fP \fBstring\fP & base, \fBconst\fP \fBstring\fP & extended)\fC [static]\fP"
 
 .PP
 Joins two paths together\&. 
@@ -286,7 +286,7 @@ The joint path
 .PP
 Definition at line \fB208\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-208                                                    {
+208                                                                  {
 209 
 210     // The new path is from root
 211     if(extended[0] == '/')
@@ -297,10 +297,8 @@ Definition at line \fB208\fP of file \fBpath\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBbase\fP\&.
-.PP
 Referenced by \fBMaxOS::filesystem::VFSResourceRegistry::create_resource()\fP, and \fBMaxOS::filesystem::VFSResourceRegistry::get_resource()\fP\&.
-.SS "\fBstring\fP Path::parent_directory (\fBstring\fP path)\fC [static]\fP"
+.SS "\fBstring\fP Path::parent_directory (\fBconst\fP \fBstring\fP & path)\fC [static]\fP"
 
 .PP
 Get the parent directory of the path\&. 
@@ -318,11 +316,11 @@ Get the parent directory of the path\&.
 .PP
 Definition at line \fB148\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-148                                          {
+148                                                 {
 149 
 150     // Find the last /
 151     int last_slash = \-1;
-152     for (int i = 0; i < path\&.length(); i++)
+152     for (size_t i = 0; i < path\&.length(); i++)
 153         if (path[i] == '/')
 154             last_slash = i;
 155 
@@ -337,7 +335,7 @@ Definition at line \fB148\fP of file \fBpath\&.cpp\fP\&..PP
 
 .PP
 Referenced by \fBMaxOS::filesystem::FileResource::write()\fP, and \fBMaxOS::filesystem::DirectoryResource::write()\fP\&.
-.SS "\fBstring\fP Path::top_directory (\fBstring\fP path)\fC [static]\fP"
+.SS "\fBstring\fP Path::top_directory (\fBconst\fP \fBstring\fP & path)\fC [static]\fP"
 
 .PP
 Get the top directory of a path\&. 
@@ -356,11 +354,11 @@ The top directory or the original path if it does not exist
 .PP
 Definition at line \fB125\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-125                                       {
+125                                              {
 126 
 127     // Find the first /
 128     int first_slash = \-1;
-129     for (int i = 0; i < path\&.length(); i++)
+129     for (size_t i = 0; i < path\&.length(); i++)
 130         if (path[i] == '/')
 131             first_slash = i;
 132 
@@ -378,7 +376,7 @@ Definition at line \fB125\fP of file \fBpath\&.cpp\fP\&..PP
 References \fBtop_directory()\fP\&.
 .PP
 Referenced by \fBMaxOS::filesystem::FileSystem::get_directory()\fP, and \fBtop_directory()\fP\&.
-.SS "\fBbool\fP Path::valid (\fBstring\fP path)\fC [static]\fP"
+.SS "\fBbool\fP Path::valid (\fBconst\fP \fBstring\fP & path)\fC [static]\fP"
 
 .PP
 Check if a path is valid\&. 
@@ -397,7 +395,7 @@ True if the path is valid, false otherwise
 .PP
 Definition at line \fB21\fP of file \fBpath\&.cpp\fP\&..PP
 .nf
-21                             {
+21                                    {
 22 
 23     // Must not be empty
 24     if (path\&.length() == 0)

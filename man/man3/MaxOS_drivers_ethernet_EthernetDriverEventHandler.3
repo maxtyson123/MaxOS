@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::ethernet::EthernetDriverEventHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::ethernet::EthernetDriverEventHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,19 +21,19 @@ Inherited by \fBMaxOS::net::EthernetFrameHandler\fP\&.
 .br
 .RI "__EVENT HANDLER___ "
 .ti -1c
-.RI "\fBvirtual\fP \fBcommon::Event\fP< \fBEthernetDriverEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBEthernetDriverEvents\fP > *\fBevent\fP) \fBoverride\fP"
+.RI "\fBcommon::Event\fP< \fBEthernetDriverEvents\fP > * \fBon_event\fP (\fBcommon::Event\fP< \fBEthernetDriverEvents\fP > *\fBevent\fP) \fBoverride\fP"
 .br
 .RI "Handle an event\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBBeforeSend\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBbefore_send\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size)"
 .br
 .RI "Handle before send event\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBDataSent\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvirtual\fP \fBvoid\fP \fBdata_sent\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size)"
 .br
 .RI "Handle data sent event\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBbool\fP \fBDataReceived\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvirtual\fP \fBbool\fP \fBdata_received\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size)"
 .br
 .RI "Handle data received event\&. "
 .in -1c
@@ -49,26 +49,42 @@ Public Member Functions inherited from \fBMaxOS::common::EventHandler< EthernetD
 .PP 
 Handles the events that are triggered by the Ethernet \fBDriver\fP\&. 
 .PP
-Definition at line \fB75\fP of file \fBethernet\&.h\fP\&.
+Definition at line \fB73\fP of file \fBethernet\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBvoid\fP EthernetDriverEventHandler::BeforeSend (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [virtual]\fP"
+.SS "\fBvoid\fP EthernetDriverEventHandler::before_send (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [virtual]\fP"
 
 .PP
 Handle before send event\&. 
 .PP
-Definition at line \fB33\fP of file \fBethernet\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to handle 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+
+.PP
+Definition at line \fB39\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-33                                                               {
-34 }
+39                                                                            {
+40 }
 .fi
 
 .PP
 Referenced by \fBon_event()\fP\&.
-.SS "\fBbool\fP EthernetDriverEventHandler::DataReceived (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [virtual]\fP"
+.SS "\fBbool\fP EthernetDriverEventHandler::data_received (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [virtual]\fP"
 
 .PP
 Handle data received event\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to handle 
+.br
+\fIsize\fP The size of the buffer 
+.RE
 .PP
 \fBReturns\fP
 .RS 4
@@ -79,29 +95,38 @@ True if the data should be sent back, false otherwise
 .PP
 Reimplemented in \fBMaxOS::net::EthernetFrameHandler\fP\&.
 .PP
-Definition at line \fB26\fP of file \fBethernet\&.cpp\fP\&..PP
+Definition at line \fB29\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-26                                                                 {
-27     return false;
-28 }
+29                                                                              {
+30     return false;
+31 }
 .fi
 
 .PP
 Referenced by \fBon_event()\fP\&.
-.SS "\fBvoid\fP EthernetDriverEventHandler::DataSent (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [virtual]\fP"
+.SS "\fBvoid\fP EthernetDriverEventHandler::data_sent (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [virtual]\fP"
 
 .PP
 Handle data sent event\&. 
 .PP
-Definition at line \fB39\fP of file \fBethernet\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to handle 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+
+.PP
+Definition at line \fB48\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-39                                                             {
-40 }
+48                                                                          {
+49 }
 .fi
 
 .PP
 Referenced by \fBon_event()\fP\&.
-.SS "\fBEvent\fP< \fBEthernetDriverEvents\fP > * EthernetDriverEventHandler::on_event (\fBcommon::Event\fP< \fBEthernetDriverEvents\fP > * event)\fC [override]\fP, \fC [virtual]\fP"
+.SS "\fBEvent\fP< \fBEthernetDriverEvents\fP > * EthernetDriverEventHandler::on_event (\fBcommon::Event\fP< \fBEthernetDriverEvents\fP > * event)\fC [override]\fP"
 
 .PP
 Handle an event\&. 
@@ -118,35 +143,35 @@ The handled event
 .PP
 
 .PP
-Definition at line \fB48\fP of file \fBethernet\&.cpp\fP\&..PP
+Definition at line \fB57\fP of file \fBethernet\&.cpp\fP\&..PP
 .nf
-48                                                                                                     {
-49 
-50     switch (event\->type) {
-51 
-52         case EthernetDriverEvents::BEFORE_SEND:
-53             BeforeSend(((BeforeSendEvent*) event)\->buffer, ((BeforeSendEvent*) event)\->size);
-54             break;
-55 
-56         case EthernetDriverEvents::DATA_SENT:
-57             DataSent(((DataSentEvent*) event)\->buffer, ((DataSentEvent*) event)\->size);
-58             break;
-59 
-60         case EthernetDriverEvents::DATA_RECEIVED:
-61             event\->return_value\&.boolValue = DataReceived(((DataReceivedEvent*) event)\->buffer,
-62                                                          ((DataReceivedEvent*) event)\->size);
+57                                                                                                     {
+58 
+59     switch (event\->type) {
+60 
+61         case EthernetDriverEvents::BEFORE_SEND:
+62             before_send(((BeforeSendEvent*) event)\->buffer, ((BeforeSendEvent*) event)\->size);
 63             break;
 64 
-65         default:
-66             break;
-67     }
+65         case EthernetDriverEvents::DATA_SENT:
+66             data_sent(((DataSentEvent*) event)\->buffer, ((DataSentEvent*) event)\->size);
+67             break;
 68 
-69     return event;
-70 }
+69         case EthernetDriverEvents::DATA_RECEIVED:
+70             event\->return_value\&.bool_value = data_received(((DataReceivedEvent*) event)\->buffer,
+71                                                            ((DataReceivedEvent*) event)\->size);
+72             break;
+73 
+74         default:
+75             break;
+76     }
+77 
+78     return event;
+79 }
 .fi
 
 .PP
-References \fBBeforeSend()\fP, \fBDataReceived()\fP, \fBDataSent()\fP, and \fBsize\fP\&.
+References \fBbefore_send()\fP, \fBdata_received()\fP, and \fBdata_sent()\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,0 +1,118 @@
+\doxysection{kasan.\+cpp}
+\hypertarget{kasan_8cpp_source}{}\label{kasan_8cpp_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/kasan.cpp@{/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/kasan.cpp}}
+\mbox{\hyperlink{kasan_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{kasan_8h}{runtime/kasan.h}}>}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logger_8h}{common/logger.h}}>}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00012}00012\ \textcolor{keyword}{using\ namespace\ }MaxOS;}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00013}00013\ \textcolor{keyword}{using\ namespace\ }MaxOS::runtime;}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00015}00015\ KASanHandler::KASanHandler()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00017}00017\ KASanHandler::\string~KASanHandler()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00027}\mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{00027}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keywordtype}{bool}\ write,\ uintptr\_t\ address,\ \textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{void}*\ rip)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00028}00028\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}KASAN\ ERROR:\ \%s\ of\ size\ \%zu\ at\ address\ 0x\%lx\ from\ RIP\ 0x\%p"{}},\ write\ ?\ \textcolor{stringliteral}{"{}WRITE"{}}\ :\ \textcolor{stringliteral}{"{}READ"{}},\ size,\ address,\ rip);}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00029}00029\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00034}\mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_acb851576cf57beb73ccf37e3b7432ef3}{00034}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_acb851576cf57beb73ccf37e3b7432ef3}{KASanHandler::initialize}}()\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00036}00036\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00044}\mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a5bfc92f363bfaa0e918b53f1f6298f6c}{00044}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a5bfc92f363bfaa0e918b53f1f6298f6c}{KASanHandler::poison\_stack}}(uintptr\_t\ address,\ \textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00046}00046\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00054}\mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a11c56a03d25c08f6e75878a838b4af53}{00054}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a11c56a03d25c08f6e75878a838b4af53}{KASanHandler::unpoison\_stack}}(uintptr\_t\ address,\ \textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00056}00056\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00063}\mbox{\hyperlink{kasan_8cpp_adf82451e6a6680c40300235f7fca955c}{00063}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_adf82451e6a6680c40300235f7fca955c}{\_\_asan\_load1\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00064}00064\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{false},\ address,\ 1,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00065}00065\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00072}\mbox{\hyperlink{kasan_8cpp_a724dc9d3569d753ddb0db3c29ba9fb0b}{00072}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a724dc9d3569d753ddb0db3c29ba9fb0b}{\_\_asan\_load2\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00073}00073\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{false},\ address,\ 2,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00074}00074\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00081}\mbox{\hyperlink{kasan_8cpp_a02085d543d7b6734e0c1c39c6430c9fd}{00081}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a02085d543d7b6734e0c1c39c6430c9fd}{\_\_asan\_load4\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00082}00082\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{false},\ address,\ 4,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00083}00083\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00090}\mbox{\hyperlink{kasan_8cpp_a8aef7c6b36d83e5b94e6e0aa79326685}{00090}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a8aef7c6b36d83e5b94e6e0aa79326685}{\_\_asan\_load8\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00091}00091\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{false},\ address,\ 8,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00092}00092\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00099}\mbox{\hyperlink{kasan_8cpp_a1bd6914109aed9d66537d6e825b22686}{00099}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a1bd6914109aed9d66537d6e825b22686}{\_\_asan\_load16\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00100}00100\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{false},\ address,\ 16,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00101}00101\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00109}\mbox{\hyperlink{kasan_8cpp_a774ac9a869c241498949c8b0311bc3dd}{00109}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a774ac9a869c241498949c8b0311bc3dd}{\_\_asan\_loadN\_noabort}}(uintptr\_t\ address,\ \textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00110}00110\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{false},\ address,\ size,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00111}00111\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00118}\mbox{\hyperlink{kasan_8cpp_af32fc81b83b574c518caf4da3654cb6f}{00118}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_af32fc81b83b574c518caf4da3654cb6f}{\_\_asan\_store1\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00119}00119\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{true},\ address,\ 1,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00120}00120\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00127}\mbox{\hyperlink{kasan_8cpp_acdb3e864c8afda3a2767e143558bc3e9}{00127}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_acdb3e864c8afda3a2767e143558bc3e9}{\_\_asan\_store2\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00128}00128\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{true},\ address,\ 2,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00129}00129\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00136}\mbox{\hyperlink{kasan_8cpp_a27867a953a84c03bf723cbfc4d902318}{00136}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a27867a953a84c03bf723cbfc4d902318}{\_\_asan\_store4\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00137}00137\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{true},\ address,\ 4,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00138}00138\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00145}\mbox{\hyperlink{kasan_8cpp_ad20674376a2a38454ba261a01fbd7720}{00145}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_ad20674376a2a38454ba261a01fbd7720}{\_\_asan\_store8\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00146}00146\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{true},\ address,\ 8,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00147}00147\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00148}00148\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00154}\mbox{\hyperlink{kasan_8cpp_ad77cc66d979da17fa4d9b3bb936a04a1}{00154}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_ad77cc66d979da17fa4d9b3bb936a04a1}{\_\_asan\_store16\_noabort}}(uintptr\_t\ address)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00155}00155\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{true},\ address,\ 16,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00156}00156\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00157}00157\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00164}\mbox{\hyperlink{kasan_8cpp_aaa2e3e105cad0f7b7ee7d41ac6448496}{00164}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_aaa2e3e105cad0f7b7ee7d41ac6448496}{\_\_asan\_storeN\_noabort}}(uintptr\_t\ address,\ \textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00165}00165\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1runtime_1_1KASanHandler_a1a90cea11d370a00c2117d5da3ecc0eb}{KASanHandler::handle}}(\textcolor{keyword}{false},\ address,\ size,\ \_\_builtin\_return\_address(0));}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00166}00166\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00167}00167\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00171}\mbox{\hyperlink{kasan_8cpp_a510ca7c78de9adf0a2ee7489367663d3}{00171}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a510ca7c78de9adf0a2ee7489367663d3}{\_\_asan\_handle\_no\_return}}()\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00172}00172\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}KASAN\ ERROR:\ Function\ marked\ 'noreturn'\ has\ returned"{}});}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00173}00173\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00174}00174\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00181}\mbox{\hyperlink{kasan_8cpp_aa6ca4a69dbcca8fa79b9170a4500f2bd}{00181}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_aa6ca4a69dbcca8fa79b9170a4500f2bd}{\_\_asan\_alloca\_poison}}(uintptr\_t\ address,\ \textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00182}00182\ \ \ \ \ \textcolor{comment}{//TODO:\ Implement\ stack\ poisoning}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00183}00183\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}KASAN\ ERROR:\ Stack\ poisoning\ not\ implemented\ for\ address\ 0x\%lx\ of\ size\ \%zu"{}},\ address,\ size);}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00184}00184\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00192}\mbox{\hyperlink{kasan_8cpp_a670410225b449f95df6c31590f71640d}{00192}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a670410225b449f95df6c31590f71640d}{\_\_asan\_alloca\_unpoison}}(\textcolor{keywordtype}{void}*\ stack\_top,\ \textcolor{keywordtype}{void}*\ stack\_bottom)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00193}00193\ \ \ \ \ \textcolor{comment}{//TODO:\ Implement\ stack\ unpoisoning}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00194}00194\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}KASAN\ ERROR:\ Stack\ unpoisoning\ not\ implemented\ for\ range\ 0x\%p\ -\/\ 0x\%p"{}},\ stack\_bottom,\ stack\_top);}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00195}00195\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00196}00196\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00203}\mbox{\hyperlink{kasan_8cpp_a58edda82d4ee2189ee672f2afcfc00e3}{00203}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a58edda82d4ee2189ee672f2afcfc00e3}{\_\_asan\_set\_shadow\_00}}(\textcolor{keywordtype}{void}*\ pointer,\ \textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00204}00204\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00205}00205\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ memory\ to\ mark\ it\ as\ unpoisoned}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00206}00206\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ size;\ ++i)}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00207}00207\ \ \ \ \ \ \ \ \ ((int8\_t*)pointer)[i]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00209}00209\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00210}00210\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00217}\mbox{\hyperlink{kasan_8cpp_a800547f04b10fd4d50ba22c4c655e99f}{00217}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a800547f04b10fd4d50ba22c4c655e99f}{\_\_asan\_set\_shadow\_f8}}(\textcolor{keywordtype}{void}\ *pointer,\ \textcolor{keywordtype}{size\_t}\ size)\{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00218}00218\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00219}00219\ \ \ \ \ \textcolor{comment}{//\ Fill\ the\ memory\ to\ mark\ it\ as\ poisoned}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00220}00220\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ size;\ ++i)}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00221}00221\ \ \ \ \ \ \ \ \ ((int8\_t*)pointer)[i]\ =\ 0xF8;}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00222}00222\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00223}00223\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00224}00224\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00230}\mbox{\hyperlink{kasan_8cpp_ad5e3840857ccfe9638c9b0307bf2a9da}{00230}}\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_ad5e3840857ccfe9638c9b0307bf2a9da}{\_\_asan\_before\_dynamic\_init}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}\ *module\_name)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00231}00231\ \ \ \ \ \textcolor{comment}{//\ Nothing\ to\ do}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00232}00232\ \}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00233}00233\ }
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00239}\mbox{\hyperlink{kasan_8cpp_a9964309d6bbaf626c6389d47f3eabafe}{00239}}\ \ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{kasan_8cpp_a9964309d6bbaf626c6389d47f3eabafe}{\_\_asan\_after\_dynamic\_init}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}\ *module\_name)\ \{}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00240}00240\ \ \ \ \ \textcolor{comment}{//\ Nothing\ to\ do}}
+\DoxyCodeLine{\Hypertarget{kasan_8cpp_source_l00241}00241\ \ \}}
+
+\end{DoxyCode}

@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::format::Fat32FileSystem" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::format::Fat32FileSystem" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -23,6 +23,10 @@ Inherits \fBMaxOS::filesystem::FileSystem\fP\&.
 Public Member Functions inherited from \fBMaxOS::filesystem::FileSystem\fP
 .in +1c
 .ti -1c
+.RI "\fBvirtual\fP \fB~FileSystem\fP ()"
+.br
+.RI "Destructor for \fBFileSystem\fP, frees the root directory (Which in turn frees all files and subdirectories) "
+.ti -1c
 .RI "\fBDirectory\fP * \fBroot_directory\fP ()"
 .br
 .RI "Get the directory at '/'\&. "
@@ -41,7 +45,7 @@ Public Member Functions inherited from \fBMaxOS::filesystem::FileSystem\fP
 Protected Attributes inherited from \fBMaxOS::filesystem::FileSystem\fP
 .in +1c
 .ti -1c
-.RI "\fBDirectory\fP * \fBm_root_directory\fP"
+.RI "\fBDirectory\fP * \fBm_root_directory\fP = nullptr"
 .br
 .RI "The fist directory in the file system (not be confused with the system root) "
 .in -1c
@@ -49,7 +53,7 @@ Protected Attributes inherited from \fBMaxOS::filesystem::FileSystem\fP
 .PP 
 Handles the FAT32 filesystem operations\&. 
 .PP
-Definition at line \fB266\fP of file \fBfat32\&.h\fP\&.
+Definition at line \fB286\fP of file \fBfat32\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Fat32FileSystem::Fat32FileSystem (\fBdrivers::disk::Disk\fP * disk, \fBuint32_t\fP partition_offset)"
@@ -66,16 +70,15 @@ Construct a new Fat32 \fBFile\fP System object\&.
 .PP
 
 .PP
-Definition at line \fB992\fP of file \fBfat32\&.cpp\fP\&..PP
+Definition at line \fB989\fP of file \fBfat32\&.cpp\fP\&..PP
 .nf
-993 : m_volume(disk, partition_offset)
-994 {
+990         : m_volume(disk, partition_offset) {
+991 
+992     // Create the root directory
+993     m_root_directory = new Fat32Directory(&m_volume, m_volume\&.bpb\&.root_cluster, "/");
+994     m_root_directory\->read_from_disk();
 995 
-996     // Create the root directory
-997     m_root_directory = new Fat32Directory(&m_volume, m_volume\&.bpb\&.root_cluster, "/");
-998     m_root_directory\->read_from_disk();
-999 
-1000 }
+996 }
 .fi
 
 .PP

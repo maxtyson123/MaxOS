@@ -15,277 +15,275 @@
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00018}00018\ \textcolor{keyword}{using\ namespace\ }MaxOS::drivers::console;}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00019}00019\ \textcolor{keyword}{using\ namespace\ }MaxOS::system;}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00020}00020\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00025}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9d8bebede82d741eb53e19b7cf2c31ec}{00025}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9d8bebede82d741eb53e19b7cf2c31ec}{VESABootConsole::VESABootConsole}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext}{GraphicsContext}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{graphics\_context}})}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00026}00026\ :\ m\_font((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ *)AMIGA\_FONT)}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00027}00027\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00028}00028\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00029}00029\ \ \ \ \ \textcolor{comment}{//\ Set\ up}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00030}00030\ \ \ \ \ \mbox{\hyperlink{classLogger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ VESA\ console\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00031}00031\ \ \ \ \ s\_graphics\_context\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{graphics\_context}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00032}00032\ \ \ \ \ m\_video\_memory\_meta\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ *)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a983c849ff604367f7c8a0e70172bb331}{MemoryManager::kmalloc}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}()\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}));}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00033}00033\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{comment}{//\ Prepare\ the\ console}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00035}00035\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a8b4ffaeabbea48e1f3aa1e535ee88ab8}{VESABootConsole::clear}}();}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00036}00036\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ac6633b03d30c0914c4a53262019ab6b0}{print\_logo}}();}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00037}00037\ \ \ \ \ m\_console\_area\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}}(\textcolor{keyword}{this},\ 0,\ 0,\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ /\ 2\ -\/\ 25,\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}(),\ ConsoleColour::DarkGrey,\ ConsoleColour::Black);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00038}00038\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad770dfdf401d706a7ac8049a09fcbb06}{cout}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}}(m\_console\_area);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00039}00039\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00040}00040\ \ \ \ \ \textcolor{comment}{//\ Only\ log\ to\ the\ screen\ when\ debugging}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00041}00041\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TARGET\_DEBUG}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a3f18073f008cf3a9a63a5894fa2cf9f7}{Logger::active\_logger}}()-\/>add\_log\_writer(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad770dfdf401d706a7ac8049a09fcbb06}{cout}});}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Console\ Stream\ set\ up\ \(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00044}00044\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00045}00045\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00046}00046\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00047}00047\ VESABootConsole::\string~VESABootConsole()\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00048}00048\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00054}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{00054}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{VESABootConsole::width}}()\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00055}00055\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}}()\ /\ \mbox{\hyperlink{font_8h_a9457ac603b35f6f70cc52a965751655d}{FONT\_WIDTH}};\ \ \ \ \ \ \ \textcolor{comment}{//\ 8\ pixels\ per\ character}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00056}00056\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00057}00057\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00063}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{00063}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{VESABootConsole::height}}()\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00064}00064\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}}()\ /\ \mbox{\hyperlink{font_8h_a74cedeb04ec5a57076d2a0ae41ead44d}{FONT\_HEIGHT}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00065}00065\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00066}00066\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00074}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4c3e7d6a676f0a7c67f3cd13c50a989e}{00074}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4c3e7d6a676f0a7c67f3cd13c50a989e}{VESABootConsole::put\_character}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y,\ \textcolor{keywordtype}{char}\ c)\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00075}00075\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00076}00076\ \ \ \ \ \textcolor{comment}{//\ Parse\ any\ ansi\ codes}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00077}00077\ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'\(\backslash\)033'})\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00078}00078\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00079}00079\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Store\ the\ character}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00080}00080\ \ \ \ \ \ \ \ \ ansi\_code\_length\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00081}00081\ \ \ \ \ \ \ \ \ ansi\_code[ansi\_code\_length++]\ =\ c;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00082}00082\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00083}00083\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ draw\ the\ escape\ character}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00084}00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00085}00085\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00086}00086\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00087}00087\ \ \ \ \ \textcolor{keywordflow}{if}\ (ansi\_code\_length\ <\ 8)\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00088}00088\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00089}00089\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ character\ to\ the\ ANSI\ code}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00090}00090\ \ \ \ \ \ \ \ \ ansi\_code[ansi\_code\_length++]\ =\ c;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00091}00091\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00092}00092\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ ANSI\ code\ is\ complete}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00093}00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'m'})\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ ansi\_code[ansi\_code\_length]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00095}00095\ \ \ \ \ \ \ \ \ \ \ \ \ ansi\_code\_length\ =\ -\/1;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00096}00096\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{string_8h_a82efc5a6f65207e2120b326554db0ee9}{strcmp}}(\textcolor{stringliteral}{"{}\(\backslash\)033[0m"{}},\ ansi\_code)\ !=\ 0)\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00098}00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_foreground\_color\ =\ ConsoleColour::Uninitialised;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_background\_color\ =\ ConsoleColour::Uninitialised;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00102}00102\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00103}00103\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ colour\ from\ the\ ANSI\ code}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}\ colour(ansi\_code);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00105}00105\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ colour}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}}\ =\ ansi\_code[4]\ ==\ \textcolor{charliteral}{'3'};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}})}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00109}00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_foreground\_color\ =\ colour.\mbox{\hyperlink{classMaxOS_1_1common_1_1Colour_a433579f913162aecf6a9524f2632cdb3}{to\_console\_colour}}();}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_background\_color\ =\ colour.\mbox{\hyperlink{classMaxOS_1_1common_1_1Colour_a433579f913162aecf6a9524f2632cdb3}{to\_console\_colour}}();}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00112}00112\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00113}00113\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00114}00114\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00115}00115\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ draw\ the\ escape\ character}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00116}00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00117}00117\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00118}00118\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00119}00119\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00120}00120\ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00121}00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00122}00122\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00123}00123\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00124}00124\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00125}00125\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00126}00126\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ character\ at\ the\ offset,\ by\ masking\ the\ character\ with\ the\ current\ character\ (last\ 8\ bits)}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00127}00127\ \ \ \ \ m\_video\_memory\_meta[offset]\ =\ (m\_video\_memory\_meta[offset]\ \&\ 0xFF00)\ |\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})\ c;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00128}00128\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00129}00129\ \ \ \ \ \textcolor{comment}{//\ Convert\ the\ char\ into\ a\ string}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00130}00130\ \ \ \ \ \textcolor{keywordtype}{char}\ s[]\ =\ \textcolor{stringliteral}{"{}\ "{}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00131}00131\ \ \ \ \ s[0]\ =\ c;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00132}00132\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00133}00133\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}}\ =\ m\_foreground\_color\ ==\ ConsoleColour::Uninitialised\ ?\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{get\_foreground\_color}}(x,\ y)\ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(m\_foreground\_color);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00134}00134\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}}\ =\ m\_background\_color\ ==\ ConsoleColour::Uninitialised\ ?\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{get\_background\_color}}(x,\ y)\ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(m\_background\_color);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00135}00135\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00136}00136\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ m\_font\ to\ draw\ the\ character}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00137}00137\ \ \ \ \ m\_font.\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_aa80fe1e9d019a378fdf59f901fc1d886}{draw\_text}}(x\ *\ 8,\ y\ *\ \mbox{\hyperlink{font_8h_a74cedeb04ec5a57076d2a0ae41ead44d}{FONT\_HEIGHT}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}},\ s\_graphics\_context,\ s);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00138}00138\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00139}00139\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00147}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a255705777700f4e758fc3d6519805fd0}{00147}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a255705777700f4e758fc3d6519805fd0}{VESABootConsole::set\_foreground\_color}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y,\ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}})\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00148}00148\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00149}00149\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00150}00150\ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00151}00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00152}00152\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00153}00153\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00154}00154\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00155}00155\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00156}00156\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ foreground\ color\ at\ the\ offset,\ by\ masking\ the\ foreground\ color\ with\ the\ current\ foreground\ color\ (bits\ 8-\/11)}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00157}00157\ \ \ \ \ m\_video\_memory\_meta[offset]\ =\ (m\_video\_memory\_meta[offset]\ \&\ 0xF0FF)\ |\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}}\ <<\ 8);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00158}00158\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00159}00159\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00167}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ab47423eb57c96c0b156b3cee109f566c}{00167}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ab47423eb57c96c0b156b3cee109f566c}{VESABootConsole::set\_background\_color}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y,\ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}})\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00168}00168\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00169}00169\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00170}00170\ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00171}00171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00172}00172\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00173}00173\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00174}00174\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00175}00175\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00176}00176\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ background\ color\ at\ the\ offset,\ by\ masking\ the\ background\ color\ with\ the\ current\ background\ color\ (bits\ 12-\/15)}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00177}00177\ \ \ \ \ m\_video\_memory\_meta[offset]\ =\ (m\_video\_memory\_meta[offset]\ \&\ 0x0FFF)\ |\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}}\ <<\ 12);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00178}00178\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00179}00179\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00187}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a3e0e10e20e08318165459407de5263bd}{00187}}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a3e0e10e20e08318165459407de5263bd}{VESABootConsole::get\_character}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y)\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00188}00188\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00189}00189\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00190}00190\ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00191}00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{charliteral}{'\ '};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00192}00192\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00193}00193\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00194}00194\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00195}00195\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00196}00196\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ character\ at\ the\ offset,\ by\ masking\ the\ character\ with\ the\ current\ character\ (last\ 8\ bits)}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00197}00197\ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{char})\ (m\_video\_memory\_meta[offset]\ \&\ 0x00FF);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00198}00198\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00199}00199\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00207}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{00207}}\ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{VESABootConsole::get\_foreground\_color}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y)\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00208}00208\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00209}00209\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_af7c9f38c5738cdaa2b57251577eea6d5}{CPU::panic\_lock}}.is\_locked())}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00210}00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ConsoleColour::White;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00211}00211\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00212}00212\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00213}00213\ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00214}00214\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ConsoleColour::White;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00215}00215\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00216}00216\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00217}00217\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00218}00218\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00219}00219\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ foreground\ color\ at\ the\ offset,\ by\ masking\ the\ foreground\ color\ with\ the\ current\ foreground\ color\ (bits\ 8-\/11)}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00220}00220\ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}})\ ((m\_video\_memory\_meta[offset]\ \&\ 0x0F00)\ >>\ 8);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00221}00221\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00222}00222\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00230}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{00230}}\ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{VESABootConsole::get\_background\_color}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y)\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00231}00231\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00232}00232\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_af7c9f38c5738cdaa2b57251577eea6d5}{CPU::panic\_lock}}.is\_locked())}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00233}00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ConsoleColour::Red;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00234}00234\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00235}00235\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00236}00236\ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00237}00237\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ConsoleColour::Black;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00238}00238\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00239}00239\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00240}00240\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00241}00241\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00242}00242\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ background\ color\ at\ the\ offset,\ by\ masking\ the\ background\ color\ with\ the\ current\ background\ color\ (bits\ 12-\/15)}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00243}00243\ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}})\ ((m\_video\_memory\_meta[offset]\ \&\ 0xF000)\ >>\ 12);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00244}00244\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00245}00245\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00249}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ac6633b03d30c0914c4a53262019ab6b0}{00249}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ac6633b03d30c0914c4a53262019ab6b0}{VESABootConsole::print\_logo}}(\textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_panic}})\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00250}00250\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00251}00251\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ logo}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00252}00252\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_panic}}\ ?\ header\_data\_kp\ :\ header\_data;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00253}00253\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00254}00254\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ center\ of\ the\ screen}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00255}00255\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_width}}\ =\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}}();}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00256}00256\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_height}}\ =\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}}();}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00257}00257\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{center\_x}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_width}}\ /\ 2;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00258}00258\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{center\_y}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_height}}\ /\ 2\ -\/\ 80;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00259}00259\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00260}00260\ \ \ \ \ \textcolor{comment}{//\ Fill\ the\ screen\ with\ the\ logo\ colour}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00261}00261\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_panic}}\ ?\ ConsoleColour::Red\ :\ ConsoleColour::Black);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00262}00262\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_af609697d85ef5a91e8be47ffa4c20f94}{memset}}(s\_graphics\_context-\/>framebuffer\_address(),\ s\_graphics\_context-\/>colour\_to\_int(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_width}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_height}}\ *\ (s\_graphics\_context-\/>color\_depth()/8));}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00263}00263\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00264}00264\ \ \ \ \ \textcolor{comment}{//\ Draw\ the\ logo}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00265}00265\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logoY}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logoY}}\ <\ \mbox{\hyperlink{logo_8h_adb5eaff88a6d4126a5974efd7e02d2c1}{LOGO\_HEIGHT}};\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logoY}})\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00266}00266\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logoX}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logoX}}\ <\ \mbox{\hyperlink{logo_8h_a60bff4f23af14a3037ecd2257c658ba5}{LOGO\_WIDTH}};\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logoX}})\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00267}00267\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ pixel\ from\ the\ logo}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}}[3]\ =\ \{0\};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logo_8h_a110a220384a7eb45fd382195d6081afb}{LOGO\_HEADER\_PIXEL}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}})}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00271}00271\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00272}00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Draw\ the\ pixel}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00273}00273\ \ \ \ \ \ \ \ \ \ \ \ \ s\_graphics\_context-\/>put\_pixel(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{center\_x}}\ -\/\ \mbox{\hyperlink{logo_8h_a60bff4f23af14a3037ecd2257c658ba5}{LOGO\_WIDTH}}\ /\ 2\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logoX}},}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00274}00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{center\_y}}\ -\/\ \mbox{\hyperlink{logo_8h_adb5eaff88a6d4126a5974efd7e02d2c1}{LOGO\_HEIGHT}}\ /\ 2\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logoY}},}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{common::Colour}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}}[0],\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}}[1],\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}}[2]));}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00276}00276\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00277}00277\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00278}00278\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00279}00279\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_adad7f5e1e178ad70708c772319050a6f}{update\_progress\_bar}}(0);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00280}00280\ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00281}00281\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00025}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9d8bebede82d741eb53e19b7cf2c31ec}{00025}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9d8bebede82d741eb53e19b7cf2c31ec}{VESABootConsole::VESABootConsole}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1GraphicsContext}{GraphicsContext}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{graphics\_context}})}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00026}00026\ \ \ \ \ \ \ \ \ :\ m\_font((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)\ AMIGA\_FONT)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00028}00028\ \ \ \ \ \textcolor{comment}{//\ Set\ up}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00029}00029\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ VESA\ console\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00030}00030\ \ \ \ \ s\_graphics\_context\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{graphics\_context}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00031}00031\ \ \ \ \ m\_video\_memory\_meta\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a983c849ff604367f7c8a0e70172bb331}{MemoryManager::kmalloc}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}()\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}));}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00033}00033\ \ \ \ \ \textcolor{comment}{//\ Prepare\ the\ console}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00034}00034\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a8b4ffaeabbea48e1f3aa1e535ee88ab8}{VESABootConsole::clear}}();}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00035}00035\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ac6633b03d30c0914c4a53262019ab6b0}{print\_logo}}();}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00036}00036\ \ \ \ \ m\_console\_area\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleArea}{ConsoleArea}}(\textcolor{keyword}{this},\ 0,\ 0,\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ /\ 2\ -\/\ 25,\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}(),\ ConsoleColour::DarkGrey,\ ConsoleColour::Black);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00037}00037\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad770dfdf401d706a7ac8049a09fcbb06}{cout}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream}{ConsoleStream}}(m\_console\_area);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00039}00039\ \ \ \ \ \textcolor{comment}{//\ Only\ log\ to\ the\ screen\ when\ debugging}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00040}00040\ \textcolor{preprocessor}{\#ifndef\ NDEBUG}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00041}00041\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a3f18073f008cf3a9a63a5894fa2cf9f7}{Logger::active\_logger}}()-\/>add\_log\_writer(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad770dfdf401d706a7ac8049a09fcbb06}{cout}});}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00042}00042\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Console\ Stream\ set\ up\ \(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00043}00043\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00044}00044\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00046}00046\ VESABootConsole::\string~VESABootConsole()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00053}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{00053}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{VESABootConsole::width}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00054}00054\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}}()\ /\ \mbox{\hyperlink{font_8h_a9457ac603b35f6f70cc52a965751655d}{FONT\_WIDTH}};\ \ \ \ \ \ \ \textcolor{comment}{//\ 8\ pixels\ per\ character}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00055}00055\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00062}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{00062}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{VESABootConsole::height}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00063}00063\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}}()\ /\ \mbox{\hyperlink{font_8h_a74cedeb04ec5a57076d2a0ae41ead44d}{FONT\_HEIGHT}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00064}00064\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00073}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4c3e7d6a676f0a7c67f3cd13c50a989e}{00073}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a4c3e7d6a676f0a7c67f3cd13c50a989e}{VESABootConsole::put\_character}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y,\ \textcolor{keywordtype}{char}\ c)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00075}00075\ \ \ \ \ \textcolor{comment}{//\ Parse\ any\ ansi\ codes}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00076}00076\ \ \ \ \ \textcolor{keywordflow}{if}(c\ ==\ \textcolor{charliteral}{'\(\backslash\)033'})\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00078}00078\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Store\ the\ character}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00079}00079\ \ \ \ \ \ \ \ \ ansi\_code\_length\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00080}00080\ \ \ \ \ \ \ \ \ ansi\_code[ansi\_code\_length++]\ =\ c;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00082}00082\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ draw\ the\ escape\ character}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00083}00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00084}00084\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00086}00086\ \ \ \ \ \textcolor{keywordflow}{if}(ansi\_code\_length\ <\ 8)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00088}00088\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ character\ to\ the\ ANSI\ code}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00089}00089\ \ \ \ \ \ \ \ \ ansi\_code[ansi\_code\_length++]\ =\ c;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00091}00091\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ ANSI\ code\ is\ complete}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00092}00092\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(c\ ==\ \textcolor{charliteral}{'m'})\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00093}00093\ \ \ \ \ \ \ \ \ \ \ \ \ ansi\_code[ansi\_code\_length]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ ansi\_code\_length\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{string_8h_a82efc5a6f65207e2120b326554db0ee9}{strcmp}}(\textcolor{stringliteral}{"{}\(\backslash\)033[0m"{}},\ ansi\_code)\ !=\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_foreground\_color\ =\ ConsoleColour::Uninitialised;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00098}00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_background\_color\ =\ ConsoleColour::Uninitialised;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00099}00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00100}00100\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ colour\ from\ the\ ANSI\ code}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00103}00103\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}\ colour(ansi\_code);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ colour}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}}\ =\ ansi\_code[4]\ ==\ \textcolor{charliteral}{'3'};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}})}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00108}00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_foreground\_color\ =\ colour.\mbox{\hyperlink{classMaxOS_1_1common_1_1Colour_a433579f913162aecf6a9524f2632cdb3}{to\_console\_colour}}();}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00109}00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_background\_color\ =\ colour.\mbox{\hyperlink{classMaxOS_1_1common_1_1Colour_a433579f913162aecf6a9524f2632cdb3}{to\_console\_colour}}();}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00112}00112\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00114}00114\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ draw\ the\ escape\ character}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00115}00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00116}00116\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00118}00118\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00119}00119\ \ \ \ \ \textcolor{keywordflow}{if}(x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00120}00120\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00122}00122\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00123}00123\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00125}00125\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ character\ at\ the\ offset,\ by\ masking\ the\ character\ with\ the\ current\ character\ (last\ 8\ bits)}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00126}00126\ \ \ \ \ m\_video\_memory\_meta[offset]\ =\ (m\_video\_memory\_meta[offset]\ \&\ 0xFF00)\ |\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})\ c;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00128}00128\ \ \ \ \ \textcolor{comment}{//\ Convert\ the\ char\ into\ a\ string}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00129}00129\ \ \ \ \ \textcolor{keywordtype}{char}\ s[]\ =\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00130}00130\ \ \ \ \ s[0]\ =\ c;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00132}00132\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}}\ =\ m\_foreground\_color\ ==\ ConsoleColour::Uninitialised\ ?\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{get\_foreground\_color}}(x,\ y))\ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(m\_foreground\_color);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00133}00133\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}}\ =\ m\_background\_color\ ==\ ConsoleColour::Uninitialised\ ?\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{get\_background\_color}}(x,\ y))\ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(m\_background\_color);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00135}00135\ \ \ \ \ \textcolor{comment}{//\ Use\ the\ m\_font\ to\ draw\ the\ character}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00136}00136\ \ \ \ \ m\_font.\mbox{\hyperlink{classMaxOS_1_1gui_1_1Font_aa80fe1e9d019a378fdf59f901fc1d886}{draw\_text}}(x\ *\ 8,\ y\ *\ \mbox{\hyperlink{font_8h_a74cedeb04ec5a57076d2a0ae41ead44d}{FONT\_HEIGHT}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}},\ s\_graphics\_context,\ s);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00137}00137\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00146}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a255705777700f4e758fc3d6519805fd0}{00146}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a255705777700f4e758fc3d6519805fd0}{VESABootConsole::set\_foreground\_color}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y,\ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}})\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00148}00148\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00149}00149\ \ \ \ \ \textcolor{keywordflow}{if}(x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00150}00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00152}00152\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00153}00153\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00155}00155\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ foreground\ color\ at\ the\ offset,\ by\ masking\ the\ foreground\ color\ with\ the\ current\ foreground\ color\ (bits\ 8-\/11)}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00156}00156\ \ \ \ \ m\_video\_memory\_meta[offset]\ =\ (m\_video\_memory\_meta[offset]\ \&\ 0xF0FF)\ |\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}}\ <<\ 8);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00157}00157\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00166}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ab47423eb57c96c0b156b3cee109f566c}{00166}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ab47423eb57c96c0b156b3cee109f566c}{VESABootConsole::set\_background\_color}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y,\ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}})\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00167}00167\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00168}00168\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00169}00169\ \ \ \ \ \textcolor{keywordflow}{if}(x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00170}00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00172}00172\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00173}00173\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00174}00174\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00175}00175\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ background\ color\ at\ the\ offset,\ by\ masking\ the\ background\ color\ with\ the\ current\ background\ color\ (bits\ 12-\/15)}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00176}00176\ \ \ \ \ m\_video\_memory\_meta[offset]\ =\ (m\_video\_memory\_meta[offset]\ \&\ 0x0FFF)\ |\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}})\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}}\ <<\ 12);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00177}00177\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00186}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a3e0e10e20e08318165459407de5263bd}{00186}}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a3e0e10e20e08318165459407de5263bd}{VESABootConsole::get\_character}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00188}00188\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00189}00189\ \ \ \ \ \textcolor{keywordflow}{if}(x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00190}00190\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{charliteral}{'\ '};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00192}00192\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00193}00193\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00194}00194\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00195}00195\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ character\ at\ the\ offset,\ by\ masking\ the\ character\ with\ the\ current\ character\ (last\ 8\ bits)}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00196}00196\ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{char})\ (m\_video\_memory\_meta[offset]\ \&\ 0x00FF);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00197}00197\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00198}00198\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00206}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{00206}}\ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{VESABootConsole::get\_foreground\_color}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00207}00207\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00208}00208\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_af7c9f38c5738cdaa2b57251577eea6d5}{CPU::panic\_lock}}.is\_locked())}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00209}00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ConsoleColour::White;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00210}00210\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00211}00211\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00212}00212\ \ \ \ \ \textcolor{keywordflow}{if}(x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00213}00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ConsoleColour::White;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00214}00214\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00215}00215\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00216}00216\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00217}00217\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00218}00218\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ foreground\ color\ at\ the\ offset,\ by\ masking\ the\ foreground\ color\ with\ the\ current\ foreground\ color\ (bits\ 8-\/11)}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00219}00219\ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}})\ ((m\_video\_memory\_meta[offset]\ \&\ 0x0F00)\ >>\ 8);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00220}00220\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00221}00221\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00229}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{00229}}\ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{VESABootConsole::get\_background\_color}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ y)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00231}00231\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_af7c9f38c5738cdaa2b57251577eea6d5}{CPU::panic\_lock}}.is\_locked())}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00232}00232\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ConsoleColour::Red;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00233}00233\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00234}00234\ \ \ \ \ \textcolor{comment}{//\ If\ the\ coordinates\ are\ out\ of\ bounds,\ return}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00235}00235\ \ \ \ \ \textcolor{keywordflow}{if}(x\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ ||\ y\ >=\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}())}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00236}00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ConsoleColour::Black;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00237}00237\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00238}00238\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00239}00239\ \ \ \ \ \textcolor{keywordtype}{int}\ offset\ =\ (y\ *\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}()\ +\ x);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00240}00240\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00241}00241\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ background\ color\ at\ the\ offset,\ by\ masking\ the\ background\ color\ with\ the\ current\ background\ color\ (bits\ 12-\/15)}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00242}00242\ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}})\ ((m\_video\_memory\_meta[offset]\ \&\ 0xF000)\ >>\ 12);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00243}00243\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00244}00244\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00250}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ac6633b03d30c0914c4a53262019ab6b0}{00250}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ac6633b03d30c0914c4a53262019ab6b0}{VESABootConsole::print\_logo}}(\textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_panic}})\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00251}00251\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00252}00252\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ logo}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00253}00253\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_panic}}\ ?\ header\_data\_kp\ :\ header\_data;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00254}00254\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00255}00255\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ center\ of\ the\ screen}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00256}00256\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_width}}\ =\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}}();}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00257}00257\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_height}}\ =\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_a02aa1de4cd8eef57646079bbedaf9c64}{height}}();}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00258}00258\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{center\_x}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_width}}\ /\ 2;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00259}00259\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{center\_y}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_height}}\ /\ 2\ -\/\ 80;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00260}00260\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00261}00261\ \ \ \ \ \textcolor{comment}{//\ Fill\ the\ screen\ with\ the\ logo\ colour}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00262}00262\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_panic}}\ ?\ ConsoleColour::Red\ :\ ConsoleColour::Black);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00263}00263\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_af609697d85ef5a91e8be47ffa4c20f94}{memset}}(s\_graphics\_context-\/>framebuffer\_address(),\ s\_graphics\_context-\/>colour\_to\_int(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_width}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{screen\_height}}\ *\ (s\_graphics\_context-\/>color\_depth()\ /\ 8));}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00264}00264\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00265}00265\ \ \ \ \ \textcolor{comment}{//\ Draw\ the\ logo}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00266}00266\ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_y}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_y}}\ <\ \mbox{\hyperlink{logo_8h_adb5eaff88a6d4126a5974efd7e02d2c1}{LOGO\_HEIGHT}};\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_y}})\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00267}00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_x}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_x}}\ <\ \mbox{\hyperlink{logo_8h_a60bff4f23af14a3037ecd2257c658ba5}{LOGO\_WIDTH}};\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_x}})\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00268}00268\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ pixel\ from\ the\ logo}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}}[3]\ =\ \{\ 0\ \};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00271}00271\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{logo_8h_a110a220384a7eb45fd382195d6081afb}{LOGO\_HEADER\_PIXEL}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}})}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00272}00272\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00273}00273\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Draw\ the\ pixel}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00274}00274\ \ \ \ \ \ \ \ \ \ \ \ \ s\_graphics\_context-\/>put\_pixel(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{center\_x}}\ -\/\ \mbox{\hyperlink{logo_8h_a60bff4f23af14a3037ecd2257c658ba5}{LOGO\_WIDTH}}\ /\ 2\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_x}},}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{center\_y}}\ -\/\ \mbox{\hyperlink{logo_8h_adb5eaff88a6d4126a5974efd7e02d2c1}{LOGO\_HEIGHT}}\ /\ 2\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_y}},}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{common::Colour}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}}[0],\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}}[1],\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pixel}}[2]));}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00277}00277\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00278}00278\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00280}00280\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_adad7f5e1e178ad70708c772319050a6f}{update\_progress\_bar}}(0);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00281}00281\ \}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00282}00282\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00294}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a346f74f12f8a66e7acaba902c7da50a6}{00294}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a3229266e76e289c6d610d3770312ab67}{VESABootConsole::scroll\_up}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ left,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ top,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ width,}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00295}00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ height,}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{common::ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}},}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{common::ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}},\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fill}})\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00298}00298\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00283}00283\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00295}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a346f74f12f8a66e7acaba902c7da50a6}{00295}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1Console_a3229266e76e289c6d610d3770312ab67}{VESABootConsole::scroll\_up}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ left,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ top,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ width,}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ height,}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{common::ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{foreground}},}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{common::ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{background}},\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fill}})\ \{}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00299}00299\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00300}00300\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ framebuffer\ info}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00301}00301\ \ \ \ \ \textcolor{keyword}{auto}\ *framebuffer\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ *)\ s\_graphics\_context-\/>framebuffer\_address();}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00302}00302\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ framebuffer\_width\ =\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}}();}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00303}00303\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ framebuffer\_bpp\ =\ s\_graphics\_context-\/>color\_depth();\ \textcolor{comment}{//\ in\ bits\ per\ pixel}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00304}00304\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}}\ =\ framebuffer\_bpp\ /\ 8;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00305}00305\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ framebuffer\_pitch\ =\ framebuffer\_width\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00306}00306\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00307}00307\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}}\ =\ \mbox{\hyperlink{font_8h_a74cedeb04ec5a57076d2a0ae41ead44d}{FONT\_HEIGHT}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00308}00308\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00309}00309\ \ \ \ \ \textcolor{comment}{//\ Region\ conversions}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00310}00310\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_y}}\ =\ top\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00311}00311\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_height}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00312}00312\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_left}}\ =\ left\ *\ \mbox{\hyperlink{font_8h_a9457ac603b35f6f70cc52a965751655d}{FONT\_WIDTH}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00313}00313\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_width}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}\ *\ \mbox{\hyperlink{font_8h_a9457ac603b35f6f70cc52a965751655d}{FONT\_WIDTH}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00314}00314\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row\_bytes}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_width}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00315}00315\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00316}00316\ \ \ \ \ \textcolor{comment}{//\ Decide\ the\ colour\ of\ the\ pixel}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00317}00317\ \ \ \ \ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_set\_foreground}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{get\_foreground\_color}}(left,\ top\ +\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}\ -\/\ 1);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00318}00318\ \ \ \ \ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_set\_background}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{get\_background\_color}}(left,\ top\ +\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}\ -\/\ 1);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00319}00319\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fill\_colour}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_set\_background}});}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00320}00320\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fill\_value}}\ =\ s\_graphics\_context-\/>colour\_to\_int(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_set\_background}});}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00300}00300\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00301}00301\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ framebuffer\ info}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00302}00302\ \ \ \ \ \textcolor{keyword}{auto}*\ framebuffer\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*)\ s\_graphics\_context-\/>framebuffer\_address();}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00303}00303\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ framebuffer\_width\ =\ s\_graphics\_context-\/>\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle_adcfd80cceb499bfb2b52a103c2b76950}{width}}();}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00304}00304\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ framebuffer\_bpp\ =\ s\_graphics\_context-\/>color\_depth();\ \textcolor{comment}{//\ in\ bits\ per\ pixel}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00305}00305\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}}\ =\ framebuffer\_bpp\ /\ 8;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00306}00306\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}}\ framebuffer\_pitch\ =\ framebuffer\_width\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00307}00307\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00308}00308\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}}\ =\ \mbox{\hyperlink{font_8h_a74cedeb04ec5a57076d2a0ae41ead44d}{FONT\_HEIGHT}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00309}00309\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00310}00310\ \ \ \ \ \textcolor{comment}{//\ Region\ conversions}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00311}00311\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_y}}\ =\ top\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00312}00312\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_height}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00313}00313\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_left}}\ =\ left\ *\ \mbox{\hyperlink{font_8h_a9457ac603b35f6f70cc52a965751655d}{FONT\_WIDTH}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00314}00314\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_width}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}}\ *\ \mbox{\hyperlink{font_8h_a9457ac603b35f6f70cc52a965751655d}{FONT\_WIDTH}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00315}00315\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row\_bytes}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_width}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00316}00316\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00317}00317\ \ \ \ \ \textcolor{comment}{//\ Decide\ the\ colour\ of\ the\ pixel}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00318}00318\ \ \ \ \ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_set\_foreground}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a1f02119cc22547c43234ead605b65605}{get\_foreground\_color}}(left,\ top\ +\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}\ -\/\ 1);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00319}00319\ \ \ \ \ \mbox{\hyperlink{colour_8h_a163092be7d061323a91e03e6e8965da9}{ConsoleColour}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_set\_background}}\ =\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_affcd0b85ea69db9cdf8ec421db91eded}{get\_background\_color}}(left,\ top\ +\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}\ -\/\ 1);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00320}00320\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fill\_value}}\ =\ s\_graphics\_context-\/>colour\_to\_int(\mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_set\_background}}));}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00321}00321\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00322}00322\ \ \ \ \ \textcolor{comment}{//\ Scroll\ the\ region\ upward\ by\ one\ text\ line}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00323}00323\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_height}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}++)\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00324}00324\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{src}}\ \ =\ framebuffer\_address\ +\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_y}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}})\ *\ framebuffer\_pitch\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_left}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00325}00325\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{dest}}\ =\ framebuffer\_address\ +\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_y}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}})\ *\ framebuffer\_pitch\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_left}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00323}00323\ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_height}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}++)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00324}00324\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{src}}\ =\ framebuffer\_address\ +\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_y}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}})\ *\ framebuffer\_pitch\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_left}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00325}00325\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{dest}}\ =\ framebuffer\_address\ +\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_y}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}})\ *\ framebuffer\_pitch\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_left}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bytes\_per\_pixel}};}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00326}00326\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a337c480eed50c49c1db8e51a1e0acf15}{memmove}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{dest}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{src}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row\_bytes}});}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00327}00327\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00328}00328\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00329}00329\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ last\ line\ of\ the\ region}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00330}00330\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{clear\_start\_y}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_y}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_height}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00331}00331\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}++)\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00332}00332\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row\_add}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ *)\ (framebuffer\_address\ +\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{clear\_start\_y}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}})\ *\ framebuffer\_pitch\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_left}}\ *\ 4);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00333}00333\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_width}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}++)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00331}00331\ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{line\_height}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}}++)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00332}00332\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row\_add}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}*)\ (framebuffer\_address\ +\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{clear\_start\_y}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row}})\ *\ framebuffer\_pitch\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_left}}\ *\ 4);}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00333}00333\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}\ =\ 0;\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{region\_pixel\_width}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}++)\ \{}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00334}00334\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{row\_add}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{col}}]\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{fill\_value}};}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00335}00335\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00336}00336\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00337}00337\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00338}00338\ \ \ \ \ \textcolor{comment}{//Update\ any\ per-\/pixel\ colour\ metadata}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00339}00339\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{text\_row}}\ =\ top\ +\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_af47951eeb0b4a077201dc8d3fb7c3fde}{height}}\ -\/\ 1;}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00340}00340\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x\ =\ left;\ x\ <\ left\ +\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}};\ x++)\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00340}00340\ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint16\_t}}\ x\ =\ left;\ x\ <\ left\ +\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a9c920422611baaf0351bf3e1971c290a}{width}};\ x++)\ \{}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00341}00341\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a255705777700f4e758fc3d6519805fd0}{set\_foreground\_color}}(x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{text\_row}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_set\_foreground}});}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00342}00342\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ab47423eb57c96c0b156b3cee109f566c}{set\_background\_color}}(x,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{text\_row}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{to\_set\_background}});}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00343}00343\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00344}00344\ \}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00345}00345\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00349}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a002ec47ccd9ddb93f441bc00142d21a8}{00349}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a002ec47ccd9ddb93f441bc00142d21a8}{VESABootConsole::finish}}()\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00349}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a2b516337e26f881b192182ec32d17dca}{00349}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_a2b516337e26f881b192182ec32d17dca}{VESABootConsole::finish}}()\textcolor{keyword}{\ const\ }\{}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00350}00350\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00351}00351\ \ \ \ \ \textcolor{comment}{//\ Done}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00352}00352\ \ \ \ \ \mbox{\hyperlink{classLogger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}MaxOS\ Kernel\ Successfully\ Booted\(\backslash\)n"{}}\ <<\ \mbox{\hyperlink{colour_8h_a3364e04f094e16c00bed0dafa17c4b1c}{ANSI\_COLOURS}}[ANSIColour::Reset];}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00352}00352\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}MaxOS\ Kernel\ Successfully\ Booted\(\backslash\)n"{}}\ <<\ \mbox{\hyperlink{colour_8h_a3364e04f094e16c00bed0dafa17c4b1c}{ANSI\_COLOURS}}[ANSIColour::Reset];}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00353}00353\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad770dfdf401d706a7ac8049a09fcbb06}{cout}}-\/>\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1ConsoleStream_af7a324b308df986e5f1232d8b9bfb63e}{set\_cursor}}(0,\ 0);}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00354}00354\ \ \ \ \ \mbox{\hyperlink{classLogger_a3f18073f008cf3a9a63a5894fa2cf9f7}{Logger::active\_logger}}()-\/>disable\_log\_writer(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad770dfdf401d706a7ac8049a09fcbb06}{cout}});}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00354}00354\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a3f18073f008cf3a9a63a5894fa2cf9f7}{Logger::active\_logger}}()-\/>disable\_log\_writer(\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_ad770dfdf401d706a7ac8049a09fcbb06}{cout}});}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00355}00355\ \}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00356}00356\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00362}\mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_adad7f5e1e178ad70708c772319050a6f}{00362}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole_adad7f5e1e178ad70708c772319050a6f}{VESABootConsole::update\_progress\_bar}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{percentage}})\ \{}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00363}00363\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00364}00364\ \ \ \ \ \textcolor{comment}{//\ Check\ bounds}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00365}00365\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{percentage}}\ >\ 100)}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00365}00365\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{percentage}}\ >\ 100)}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00366}00366\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{percentage}}\ =\ 100;}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00367}00367\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00368}00368\ \ \ \ \ \textcolor{comment}{//\ Must\ have\ a\ valid\ graphics\ context}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00369}00369\ \ \ \ \ \textcolor{keywordflow}{if}\ (s\_graphics\_context\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00369}00369\ \ \ \ \ \textcolor{keywordflow}{if}(s\_graphics\_context\ ==\ \textcolor{keyword}{nullptr})}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00370}00370\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00371}00371\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00372}00372\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_height}}\ =\ 15;}
@@ -303,8 +301,8 @@
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00384}00384\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{end\_y}}\ =\ \mbox{\hyperlink{logo_8h_adb5eaff88a6d4126a5974efd7e02d2c1}{LOGO\_HEIGHT}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_height}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_spacing}};}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00385}00385\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00386}00386\ \ \ \ \ \textcolor{comment}{//\ Draw\ the\ progress\ bar}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00387}00387\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start\_y}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{end\_y}};\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}})\ \{}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00388}00388\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start\_x}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{end\_x}};\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}})\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00387}00387\ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start\_y}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{end\_y}};\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}})\ \{}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00388}00388\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start\_x}};\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}}\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{end\_x}};\ ++\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}})\ \{}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00389}00389\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00390}00390\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ drawing\ border}}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00391}00391\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_border}}\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}}\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{start\_y}})\ ||\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}}\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{end\_y}}\ -\/\ 1)\ ||}
@@ -314,13 +312,14 @@
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00395}00395\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_border}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_border}}\ \&\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{percentage}}\ ==\ 0;}
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00396}00396\ }
 \DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00397}00397\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ it\ is\ not\ within\ the\ percentage,\ skip\ it}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00398}00398\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}}\ >\ \mbox{\hyperlink{logo_8h_a60bff4f23af14a3037ecd2257c658ba5}{LOGO\_WIDTH}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{percentage}}\ /\ 100\ \&\&\ !\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_border}})}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00399}00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00400}00400\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00401}00401\ \ \ \ \ \ \ \ \ \ \ \ \ s\_graphics\_context-\/>put\_pixel(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right\_x}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bottom\_y}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(0xFF,\ 0xFF,\ 0xFF));}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00402}00402\ }
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00403}00403\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00404}00404\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00405}00405\ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00398}00398\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_progress\_width}}\ =\ \mbox{\hyperlink{logo_8h_a60bff4f23af14a3037ecd2257c658ba5}{LOGO\_WIDTH}}\ *\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{percentage}}\ /\ 100;}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00399}00399\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}}\ >\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logo\_progress\_width}}\ \&\&\ !\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{is\_border}})}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00400}00400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00401}00401\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00402}00402\ \ \ \ \ \ \ \ \ \ \ \ \ s\_graphics\_context-\/>put\_pixel(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right\_x}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_x}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{bottom\_y}}\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{progress\_y}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Colour}{Colour}}(0xFF,\ 0xFF,\ 0xFF));}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00403}00403\ }
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00404}00404\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00405}00405\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vesaboot_8cpp_source_l00406}00406\ \}}
 
 \end{DoxyCode}

@@ -20,10 +20,10 @@ Handles mounting of partitions documented in an MSDOS partition table.
 Handles mounting of partitions documented in an MSDOS partition table. 
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000014}{Todo}}]Abstract some of this into a base class and use it for GPT and other partition tables \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000017}{Todo}}]Abstract some of this into a base class and use it for GPT and other partition tables \end{DoxyRefDesc}
 
 
-Definition at line \mbox{\hyperlink{msdos_8h_source_l00348}{348}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
+Definition at line \mbox{\hyperlink{msdos_8h_source_l00350}{350}} of file \mbox{\hyperlink{msdos_8h_source}{msdos.\+h}}.
 
 
 
@@ -58,7 +58,7 @@ Definition at line \mbox{\hyperlink{msdos_8cpp_source_l00023}{23}} of file \mbox
 \DoxyCodeLine{00029\ }
 \DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ magic\ number\ is\ correct}}
 \DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mbr}}.magic\ !=\ 0xAA55)\ \{}
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}Could\ not\ find\ valid\ MBR\ on\ disk\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ disk\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a4cc5871bd96523f5c50a2ac8ccbf44f3}{Logger::WARNING}}()\ <<\ \textcolor{stringliteral}{"{}Could\ not\ find\ valid\ MBR\ on\ disk\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ disk\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
 \DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
 \DoxyCodeLine{00034\ \ \ \ \ \}}
 \DoxyCodeLine{00035\ }
@@ -66,32 +66,32 @@ Definition at line \mbox{\hyperlink{msdos_8cpp_source_l00023}{23}} of file \mbox
 \DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem}{VirtualFileSystem}}\ *\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem_aeb7fce72e33423a13006d9097c725650}{VirtualFileSystem::current\_file\_system}}();}
 \DoxyCodeLine{00038\ }
 \DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ primary\ partitions}}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&entry:\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mbr}}.\mbox{\hyperlink{msdos_8h_ae82a748207fb88709bb65e8a13096863}{primary\_partition}})\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&entry:\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{mbr}}.primary\_partition)\ \{}
 \DoxyCodeLine{00041\ }
 \DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Empty\ entry}}
 \DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (entry.type\ ==\ 0)}
 \DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
 \DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Partition\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ entry.type\ <<\ \textcolor{stringliteral}{"{}\ at\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ entry.start\_LBA\ <<\ \textcolor{stringliteral}{"{}:\ "{}};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Partition\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ entry.type\ <<\ \textcolor{stringliteral}{"{}\ at\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ entry.start\_LBA\ <<\ \textcolor{stringliteral}{"{}:\ "{}};}
 \DoxyCodeLine{00047\ }
 \DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ a\ file\ system\ for\ the\ partition}}
 \DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ ((\mbox{\hyperlink{msdos_8h_a2e4fb19c764ea277199e32724975df93}{PartitionType}})\ entry.type)\ \{}
 \DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PartitionType::EMPTY:}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}Empty\ partition\(\backslash\)n"{}};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}Empty\ partition\(\backslash\)n"{}};}
 \DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
 \DoxyCodeLine{00053\ }
 \DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PartitionType::FAT32:}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}FAT32\ partition\(\backslash\)n"{}};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}FAT32\ partition\(\backslash\)n"{}};}
 \DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}}-\/>mount\_filesystem(\textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1Fat32FileSystem}{Fat32FileSystem}}(disk,\ entry.start\_LBA));}
 \DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
 \DoxyCodeLine{00058\ }
 \DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ PartitionType::LINUX\_EXT2:}
-\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}EXT2\ partition\(\backslash\)n"{}};}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}EXT2\ partition\(\backslash\)n"{}};}
 \DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}}-\/>mount\_filesystem(\textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem}{ext2::Ext2FileSystem}}(disk,\ entry.start\_LBA));}
 \DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
 \DoxyCodeLine{00063\ }
 \DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}Unknown\ or\ unimplemented\ partition\ type:\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ entry.type\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}Unknown\ or\ unimplemented\ partition\ type:\ 0x"{}}\ <<\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint64\_t}})\ entry.type\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
 \DoxyCodeLine{00066\ }
 \DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00068\ \ \ \ \ \}}
@@ -100,7 +100,7 @@ Definition at line \mbox{\hyperlink{msdos_8cpp_source_l00023}{23}} of file \mbox
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{vfs_8cpp_source_l00038}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::current\+\_\+file\+\_\+system()}}, \mbox{\hyperlink{logger_8cpp_source_l00178}{Logger\+::\+DEBUG()}}, \mbox{\hyperlink{logger_8cpp_source_l00145}{Logger\+::\+Out()}}, \mbox{\hyperlink{disk_8cpp_source_l00026}{Max\+OS\+::drivers\+::disk\+::\+Disk\+::read()}}, and \mbox{\hyperlink{logger_8cpp_source_l00190}{Logger\+::\+WARNING()}}.
+References \mbox{\hyperlink{vfs_8cpp_source_l00046}{Max\+OS\+::filesystem\+::\+Virtual\+File\+System\+::current\+\_\+file\+\_\+system()}}, \mbox{\hyperlink{logger_8cpp_source_l00193}{Max\+OS\+::\+Logger\+::\+DEBUG()}}, \mbox{\hyperlink{logger_8cpp_source_l00149}{Max\+OS\+::\+Logger\+::\+Out()}}, \mbox{\hyperlink{disk_8cpp_source_l00026}{Max\+OS\+::drivers\+::disk\+::\+Disk\+::read()}}, and \mbox{\hyperlink{logger_8cpp_source_l00205}{Max\+OS\+::\+Logger\+::\+WARNING()}}.
 
 
 

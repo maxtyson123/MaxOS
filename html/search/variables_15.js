@@ -1,9 +1,19 @@
 var searchData=
 [
-  ['wakeup_5ftime_0',['wakeup_time',['../classMaxOS_1_1processes_1_1Thread.html#a2cda049e10651cb61318f38cd88f22e2',1,'MaxOS::processes::Thread']]],
-  ['width_1',['width',['../classMaxOS_1_1common_1_1Rectangle.html#adcfd80cceb499bfb2b52a103c2b76950',1,'MaxOS::common::Rectangle::width'],['../structmultiboot__header__tag__framebuffer.html#a01f7fd9c4cbb8d58b155a50ff0e030d0',1,'multiboot_header_tag_framebuffer::width']]],
-  ['windowsize_2',['windowsize',['../structMaxOS_1_1net_1_1TCPHeader.html#a945e830b8920dc70dfb4f433dbee3efd',1,'MaxOS::net::TCPHeader::windowSize'],['../tcp_8h.html#a6b2a31b20954529dabfe0f32eda1cf11',1,'windowSize:&#160;tcp.h']]],
-  ['working_5fdirectory_3',['working_directory',['../classMaxOS_1_1processes_1_1Process.html#aa1858c7751bb2937a9ad96ae5a71b781',1,'MaxOS::processes::Process']]],
-  ['write_4',['write',['../structMaxOS_1_1memory_1_1PageTableEntry.html#a19a12178e0574e9a8c0f999766c2318f',1,'MaxOS::memory::PageTableEntry::write'],['../physical_8h.html#ab4d8d1259f524270d625ab8933700d27',1,'write:&#160;physical.h']]],
-  ['write_5fthrough_5',['write_through',['../structMaxOS_1_1memory_1_1PageTableEntry.html#a943f3d6c515cf5dd13deba2e981b6f53',1,'MaxOS::memory::PageTableEntry::write_through'],['../physical_8h.html#ad124499797a0c2567e0689e8586318af',1,'write_through:&#160;physical.h']]]
+  ['vbe_5fcontrol_5finfo_0',['vbe_control_info',['../structmultiboot__tag__vbe.html#a057304e943e881731680e06472c4bf1e',1,'multiboot_tag_vbe']]],
+  ['vbe_5finterface_5flen_1',['vbe_interface_len',['../structmultiboot__tag__vbe.html#a513fc2ea3224e91c0870165152d989e1',1,'multiboot_tag_vbe']]],
+  ['vbe_5finterface_5foff_2',['vbe_interface_off',['../structmultiboot__tag__vbe.html#a1370d764136d9cde9132c71ebf54bc3e',1,'multiboot_tag_vbe']]],
+  ['vbe_5finterface_5fseg_3',['vbe_interface_seg',['../structmultiboot__tag__vbe.html#a72d62afb2de739a3e651aac357069abe',1,'multiboot_tag_vbe']]],
+  ['vbe_5fmode_4',['vbe_mode',['../structmultiboot__tag__vbe.html#a3d8f77830f0e010b34939f4eeb24e64d',1,'multiboot_tag_vbe']]],
+  ['vbe_5fmode_5finfo_5',['vbe_mode_info',['../structmultiboot__tag__vbe.html#a386399d7efb3952f08693fb0f5242bd9',1,'multiboot_tag_vbe']]],
+  ['vector_6',['vector',['../structMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_1_1PACKED.html#ad67402830126535a36c51e76aa947d4a',1,'MaxOS::hardwarecommunication::RedirectionEntry::PACKED']]],
+  ['vendor_5fid_7',['vendor_id',['../classMaxOS_1_1hardwarecommunication_1_1PCIDeviceDescriptor.html#ae2799e7add772bfb96dbb39a33f13c2e',1,'MaxOS::hardwarecommunication::PCIDeviceDescriptor']]],
+  ['version_8',['version',['../structMaxOS_1_1processes_1_1ELFHeader64.html#a77d209bca543587a883e520b1eaa85b2',1,'MaxOS::processes::ELFHeader64::version'],['../structmultiboot__tag__apm.html#a9062cb77271b7ed69970ede5c90a50ad',1,'multiboot_tag_apm::version'],['../structMaxOS_1_1net_1_1IPV4Header.html#a333b82f1a2e716afd0038cc216870f88',1,'MaxOS::net::IPV4Header::version']]],
+  ['version_5f1_5finfo_9',['version_1_info',['../structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2.html#adb286c22caa9006ddc492ae72bcb9026',1,'MaxOS::hardwarecommunication::RSDPDescriptor2']]],
+  ['version_5fmajor_10',['version_major',['../structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1SuperBlock.html#a9e3aea5975ca0f0e5e2bd3c090c4ee3f',1,'MaxOS::filesystem::format::ext2::SuperBlock']]],
+  ['version_5fminor_11',['version_minor',['../structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1SuperBlock.html#a5b88d426ab836aa4dc576ca89fc7fc3a',1,'MaxOS::filesystem::format::ext2::SuperBlock']]],
+  ['virtual_5faddress_12',['virtual_address',['../structMaxOS_1_1processes_1_1ELFProgramHeader64.html#a68ca654dfe15d423e868f94cde021d3a',1,'MaxOS::processes::ELFProgramHeader64::virtual_address'],['../structMaxOS_1_1processes_1_1ELFSectionHeader64.html#a670b02b22fc9096862dac72ae7ddd447',1,'MaxOS::processes::ELFSectionHeader64::virtual_address']]],
+  ['volume_5fid_13',['volume_id',['../structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html#add8a248f396a1b896f439472ddb26eed',1,'MaxOS::filesystem::format::BiosParameterBlock32']]],
+  ['volume_5flabel_14',['volume_label',['../structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html#a4139be4b0ee3c9e25b431730de94a22a',1,'MaxOS::filesystem::format::BiosParameterBlock32']]],
+  ['volume_5fname_15',['volume_name',['../structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1SuperBlock.html#aa2da200720ae74b224ee5e9e861882ee',1,'MaxOS::filesystem::format::ext2::SuperBlock']]]
 ];

@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::InterruptHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::InterruptHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,7 +19,7 @@ Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\f
 .br
 .RI "Handles an interrupt\&. "
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
+.RI "\fBvirtual\fP \fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
 .in -1c
@@ -30,6 +30,10 @@ Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\f
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
 .RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "\fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
 .in -1c
 .SS "Protected Attributes"
 
@@ -43,10 +47,10 @@ Inherited by \fBMaxOS::drivers::clock::Clock\fP, \fBMaxOS::drivers::clock::PIT\f
 .PP 
 Handles a certain interrupt number\&. 
 .PP
-Definition at line \fB32\fP of file \fBinterrupts\&.h\fP\&.
+Definition at line \fB30\fP of file \fBinterrupts\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "InterruptHandler::InterruptHandler (\fBuint8_t\fP interrupt_number, \fBint64_t\fP redirect = \fC\-1\fP, \fBuint64_t\fP redirect_index = \fC0\fP)\fC [protected]\fP"
+.SS "InterruptHandler::InterruptHandler (\fBuint8_t\fP interrupt_number, \fBint64_t\fP redirect = \fC\-1\fP, \fBuint64_t\fP redirect_index = \fC0\fP)\fC [explicit]\fP, \fC [protected]\fP"
 
 .PP
 Creates a new interrupt handler and registers it with the interrupt manager\&. 
@@ -97,19 +101,23 @@ References \fBASSERT\fP, \fBm_interrupt_number\fP, \fBMaxOS::hardwarecommunicati
 .SS "InterruptHandler::~InterruptHandler ()\fC [protected]\fP"
 
 .PP
-Definition at line \fB53\fP of file \fBinterrupts\&.cpp\fP\&..PP
+Destroys the interrupt handler and unregisters it from the interrupt manager\&. 
+.PP
+Definition at line \fB55\fP of file \fBinterrupts\&.cpp\fP\&..PP
 .nf
-53                                     {
-54 
-55     // Get the interrupt manager
-56     InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
-57     if (interrupt_manager == nullptr) return;
-58 
-59     // Remove the handler
-60     interrupt_manager\->set_interrupt_handler(m_interrupt_number, nullptr);
-61 }
+55                                     {
+56 
+57     // Get the interrupt manager
+58     InterruptManager* interrupt_manager = InterruptManager::s_active_interrupt_manager;
+59     if (interrupt_manager == nullptr) return;
+60 
+61     // Remove the handler
+62     interrupt_manager\->set_interrupt_handler(m_interrupt_number, nullptr);
+63 }
 .fi
 
+.PP
+References \fBm_interrupt_number\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::s_active_interrupt_manager\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP InterruptHandler::handle_interrupt ()\fC [virtual]\fP"
@@ -119,16 +127,16 @@ Handles an interrupt\&.
 .PP
 Reimplemented in \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP, \fBMaxOS::drivers::ethernet::IntelI217\fP, and \fBMaxOS::drivers::peripherals::KeyboardDriver\fP\&.
 .PP
-Definition at line \fB66\fP of file \fBinterrupts\&.cpp\fP\&..PP
+Definition at line \fB68\fP of file \fBinterrupts\&.cpp\fP\&..PP
 .nf
-66                                         {
-67 
-68 }
+68                                         {
+69 
+70 }
 .fi
 
 .PP
 Referenced by \fBhandle_interrupt()\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\fP\&.
-.SS "system::cpu_status_t * InterruptHandler::handle_interrupt (system::cpu_status_t * status)\fC [virtual]\fP"
+.SS "\fBsystem::cpu_status_t\fP * InterruptHandler::handle_interrupt (\fBsystem::cpu_status_t\fP * status)\fC [virtual]\fP"
 
 .PP
 Handles an interrupt and returns the status\&. 
@@ -145,18 +153,18 @@ The status of the CPU
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::processes::GlobalScheduler\fP\&.
+Reimplemented in \fBMaxOS::system::SyscallManager\fP, and \fBMaxOS::processes::GlobalScheduler\fP\&.
 .PP
-Definition at line \fB76\fP of file \fBinterrupts\&.cpp\fP\&..PP
+Definition at line \fB78\fP of file \fBinterrupts\&.cpp\fP\&..PP
 .nf
-76                                                                                  {
-77 
-78     // For handlers that don't care about the status
-79     handle_interrupt();
-80 
-81     // Return the default status
-82     return status;
-83 }
+78                                                                                  {
+79 
+80     // For handlers that don't care about the status
+81     handle_interrupt();
+82 
+83     // Return the default status
+84     return status;
+85 }
 .fi
 
 .PP
@@ -168,9 +176,9 @@ References \fBhandle_interrupt()\fP\&.
 .PP
 The interrupt number this handler handles\&. 
 .PP
-Definition at line \fB34\fP of file \fBinterrupts\&.h\fP\&.
+Definition at line \fB32\fP of file \fBinterrupts\&.h\fP\&.
 .PP
-Referenced by \fBInterruptHandler()\fP\&.
+Referenced by \fBInterruptHandler()\fP, and \fB~InterruptHandler()\fP\&.
 
 .SH "Author"
 .PP 

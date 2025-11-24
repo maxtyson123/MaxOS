@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/cplusplus.cpp" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/cplusplus.cpp" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,26 +18,31 @@
 .ti -1c
 .RI "void \fB__cxa_pure_virtual\fP ()"
 .br
+.RI "Called when a virtual function is called on an object with no implementation\&. "
 .ti -1c
 .RI "void \fB__stack_chk_fail\fP (void)"
 .br
+.RI "Called when stack smashing is detectedf\&. "
 .ti -1c
 .RI "void \fBcall_constructors\fP ()"
 .br
-.RI "Calls the C++ static constructors\&. "
+.RI "Calls all global constructors\&. "
 .in -1c
 .SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "void * \fB__dso_handle\fP = nullptr"
+.RI "void * \fB__dso_handle\fP"
 .br
+.RI "Define static constructors (DSO = Dynamic Shared Object) "
 .ti -1c
 .RI "constructor \fBstart_ctors\fP"
 .br
+.RI "Pointer to the start of the constructors section\&. "
 .ti -1c
 .RI "constructor \fBend_ctors\fP"
 .br
+.RI "Pointer to the end of the constructors section\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -63,53 +68,73 @@ Definition in file \fBcplusplus\&.cpp\fP\&.
 .SS "void __cxa_pure_virtual ()"
 
 .PP
-Definition at line \fB19\fP of file \fBcplusplus\&.cpp\fP\&..PP
+Called when a virtual function is called on an object with no implementation\&. 
+.PP
+Definition at line \fB21\fP of file \fBcplusplus\&.cpp\fP\&..PP
 .nf
-19                                      {
-20     ASSERT(false, "Pure virtual function call failed");
-21 }
+21                                      {
+22     ASSERT(false, "Pure virtual function call failed");
+23 }
 .fi
 
+.PP
+References \fBASSERT\fP\&.
 .SS "void __stack_chk_fail (void)"
 
 .PP
-Definition at line \fB23\fP of file \fBcplusplus\&.cpp\fP\&..PP
+Called when stack smashing is detectedf\&. 
+.PP
+Definition at line \fB28\fP of file \fBcplusplus\&.cpp\fP\&..PP
 .nf
-24 {
-25     ASSERT(false, "Stack Smashed");
-26 }
+29 {
+30     ASSERT(false, "Stack Smashed");
+31 }
 .fi
 
+.PP
+References \fBMaxOS::runtime::__stack_chk_fail()\fP, and \fBASSERT\fP\&.
 .SS "void call_constructors ()"
 
 .PP
-Calls the C++ static constructors\&. 
+Calls all global constructors\&. Calls the C++ static constructors\&. 
 .PP
-Definition at line \fB29\fP of file \fBcplusplus\&.cpp\fP\&..PP
+Definition at line \fB39\fP of file \fBcplusplus\&.cpp\fP\&..PP
 .nf
-29                                     {
-30     // Loop through and initialise all the global constructors
-31     for (constructor* i = &start_ctors; i != &end_ctors; i++)
-32         (*i)();
-33 }
+39                                     {
+40     // Loop through and initialise all the global constructorsu
+41     for (constructor* i = &start_ctors; i != &end_ctors; i++)
+42         (*i)();
+43 }
 .fi
 
+.PP
+References \fBend_ctors\fP, and \fBstart_ctors\fP\&.
 .PP
 Referenced by \fBkernel_main()\fP\&.
 .SH "Variable Documentation"
 .PP 
-.SS "void* __dso_handle = nullptr"
+.SS "void* __dso_handle"
 
+.PP
+Define static constructors (DSO = Dynamic Shared Object) 
 .PP
 Definition at line \fB16\fP of file \fBcplusplus\&.cpp\fP\&.
 .SS "constructor end_ctors"
 
 .PP
-Definition at line \fB28\fP of file \fBcplusplus\&.cpp\fP\&.
+Pointer to the end of the constructors section\&. 
+.PP
+Definition at line \fB34\fP of file \fBcplusplus\&.cpp\fP\&.
+.PP
+Referenced by \fBcall_constructors()\fP\&.
 .SS "constructor start_ctors"
 
 .PP
-Definition at line \fB27\fP of file \fBcplusplus\&.cpp\fP\&.
+Pointer to the start of the constructors section\&. 
+.PP
+Definition at line \fB33\fP of file \fBcplusplus\&.cpp\fP\&.
+.PP
+Referenced by \fBcall_constructors()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

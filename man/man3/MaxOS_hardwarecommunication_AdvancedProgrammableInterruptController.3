@@ -1,4 +1,4 @@
-.TH "MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,6 +16,10 @@ MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController \- Handles
 .RI "\fBAdvancedProgrammableInterruptController\fP (\fBAdvancedConfigurationAndPowerInterface\fP *acpi)"
 .br
 .RI "Construct a new Advanced Programmable Interrupt Controller object and initialises the Local APIC and IO APIC, disabling the legacy PIC\&. "
+.ti -1c
+.RI "\fB~AdvancedProgrammableInterruptController\fP ()"
+.br
+.RI "Destroy the Advanced Programmable Interrupt Controller object and frees the Local APIC and IO APIC\&. "
 .ti -1c
 .RI "\fBLocalAPIC\fP * \fBlocal_apic\fP () const"
 .br
@@ -38,10 +42,10 @@ Should either handle all Local APICs or none (only boot core right now, others a
 .PP
 
 .PP
-Definition at line \fB203\fP of file \fBapic\&.h\fP\&.
+Definition at line \fB228\fP of file \fBapic\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController (\fBAdvancedConfigurationAndPowerInterface\fP * acpi)"
+.SS "AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController (\fBAdvancedConfigurationAndPowerInterface\fP * acpi)\fC [explicit]\fP"
 
 .PP
 Construct a new Advanced Programmable Interrupt Controller object and initialises the Local APIC and IO APIC, disabling the legacy PIC\&. 
@@ -53,45 +57,47 @@ Construct a new Advanced Programmable Interrupt Controller object and initialise
 .PP
 
 .PP
-Definition at line \fB412\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB415\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-413 : m_pic_master_command_port(0x20),
-414   m_pic_master_data_port(0x21),
-415   m_pic_slave_command_port(0xA0),
-416   m_pic_slave_data_port(0xA1)
-417 {
-418 
-419     // Register this APIC
-420     Logger::INFO() << "Setting up APIC\\n";
-421     InterruptManager::active_interrupt_manager()\->set_apic(this);
-422 
-423     // Init the Local APIC
-424     Logger::DEBUG() << "Initialising Local APIC\\n";
-425     m_local_apic = new LocalAPIC();
-426 
-427     // Disable the legacy mode PIC
-428     Logger::DEBUG() << "Disabling PIC\\n";
-429     disable_pic();
-430 
-431     // Init the IO APIC
-432     Logger::DEBUG() << "Initialising IO APIC\\n";
-433     m_io_apic = new IOAPIC(acpi);
-434 }
+416 : m_pic_master_command_port(0x20),
+417   m_pic_master_data_port(0x21),
+418   m_pic_slave_command_port(0xA0),
+419   m_pic_slave_data_port(0xA1)
+420 {
+421 
+422     // Register this APIC
+423     Logger::INFO() << "Setting up APIC\\n";
+424     InterruptManager::active_interrupt_manager()\->set_apic(this);
+425 
+426     // Init the Local APIC
+427     Logger::DEBUG() << "Initialising Local APIC\\n";
+428     m_local_apic = new LocalAPIC();
+429 
+430     // Disable the legacy mode PIC
+431     Logger::DEBUG() << "Disabling PIC\\n";
+432     disable_pic();
+433 
+434     // Init the IO APIC
+435     Logger::DEBUG() << "Initialising IO APIC\\n";
+436     m_io_apic = new IOAPIC(acpi);
+437 }
 .fi
 
 .PP
-References \fBMaxOS::hardwarecommunication::InterruptManager::active_interrupt_manager()\fP, \fBLogger::DEBUG()\fP, \fBLogger::INFO()\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::set_apic()\fP\&.
+References \fBMaxOS::hardwarecommunication::InterruptManager::active_interrupt_manager()\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBMaxOS::Logger::INFO()\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::set_apic()\fP\&.
 .SS "AdvancedProgrammableInterruptController::~AdvancedProgrammableInterruptController ()"
 
 .PP
-Definition at line \fB436\fP of file \fBapic\&.cpp\fP\&..PP
+Destroy the Advanced Programmable Interrupt Controller object and frees the Local APIC and IO APIC\&. 
+.PP
+Definition at line \fB442\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-436                                                                                   {
-437 
-438     // Free the memory
-439     delete m_local_apic;
-440     delete m_io_apic;
-441 }
+442                                                                                   {
+443 
+444     // Free the memory
+445     delete m_local_apic;
+446     delete m_io_apic;
+447 }
 .fi
 
 .SH "Member Function Documentation"
@@ -108,12 +114,12 @@ The io apic
 .PP
 
 .PP
-Definition at line \fB484\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB490\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-484                                                                {
-485 
-486     return m_io_apic;
-487 }
+490                                                                {
+491 
+492     return m_io_apic;
+493 }
 .fi
 
 .PP
@@ -130,12 +136,12 @@ The local apic
 .PP
 
 .PP
-Definition at line \fB474\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB480\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-474                                                                      {
-475 
-476     return m_local_apic;
-477 }
+480                                                                      {
+481 
+482     return m_local_apic;
+483 }
 .fi
 
 .PP

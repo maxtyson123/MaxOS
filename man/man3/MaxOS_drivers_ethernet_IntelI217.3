@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::ethernet::IntelI217" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::ethernet::IntelI217" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,9 +15,9 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriver\fP, and \fBMaxOS::hardwarec
 
 .in +1c
 .ti -1c
-.RI "\fBIntelI217\fP (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP *\fBdeviceDescriptor\fP)"
+.RI "\fBIntelI217\fP (\fBhardwarecommunication::PCIDeviceDescriptor\fP *\fBdevice_descriptor\fP)"
 .br
-.RI "__DRIVER___ "
+.RI "Constructs a new Intel I217 Ethernet driver\&. Gets the MAC address and clears the receive descriptor array\&. "
 .ti -1c
 .RI "\fBuint32_t\fP \fBreset\fP () \fBfinal\fP"
 .br
@@ -25,11 +25,11 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriver\fP, and \fBMaxOS::hardwarec
 .ti -1c
 .RI "\fBvoid\fP \fBactivate\fP () \fBfinal\fP"
 .br
-.RI "activate the driver "
+.RI "Activate the driver\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBdeactivate\fP () \fBfinal\fP"
 .br
-.RI "deactivate the driver "
+.RI "Deactivate the driver\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBhandle_interrupt\fP () \fBfinal\fP"
 .br
@@ -43,11 +43,11 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriver\fP, and \fBMaxOS::hardwarec
 .br
 .RI "Get the device name of the driver\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBDoSend\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP) \fBfinal\fP"
+.RI "\fBvoid\fP \fBdo_send\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size) \fBfinal\fP"
 .br
-.RI "(Device Side) Send the data "
+.RI "(Device Side) send the data "
 .ti -1c
-.RI "\fBuint64_t\fP \fBGetMediaAccessControlAddress\fP () \fBfinal\fP"
+.RI "\fBuint64_t\fP \fBget_media_access_control_address\fP () \fBfinal\fP"
 .br
 .RI "Get the MAC address\&. "
 .in -1c
@@ -55,9 +55,9 @@ Inherits \fBMaxOS::drivers::ethernet::EthernetDriver\fP, and \fBMaxOS::hardwarec
 Public Member Functions inherited from \fBMaxOS::drivers::ethernet::EthernetDriver\fP
 .in +1c
 .ti -1c
-.RI "\fBvoid\fP \fBSend\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBsend\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size)"
 .br
-.RI "Send data to the network via the driver backend\&. "
+.RI "send data to the network via the driver backend "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
@@ -73,11 +73,11 @@ Public Member Functions inherited from \fBMaxOS::common::EventManager< EthernetD
 .ti -1c
 .RI "\fBvoid\fP \fBconnect_event_handler\fP (\fBEventHandler\fP< EthernetDriverEvents > *\fBhandler\fP)"
 .br
-.RI "Connect an event handler to the event manager if it is not already connected\&. "
+.RI "connect an event handler to the event manager if it is not already connected "
 .ti -1c
 .RI "\fBvoid\fP \fBdisconnect_event_handler\fP (\fBEventHandler\fP< EthernetDriverEvents > *\fBhandler\fP)"
 .br
-.RI "Disconnect an event handler from the event manager if it is connected\&. "
+.RI "disconnect an event handler from the event manager if it is connected "
 .ti -1c
 .RI "\fBVector\fP< \fBEvent\fP< EthernetDriverEvents > * > \fBraise_event\fP (\fBEvent\fP< EthernetDriverEvents > *\fBevent\fP)"
 .br
@@ -87,7 +87,7 @@ Public Member Functions inherited from \fBMaxOS::common::EventManager< EthernetD
 Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
+.RI "\fBvirtual\fP \fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
 .in -1c
@@ -97,7 +97,7 @@ Public Member Functions inherited from \fBMaxOS::hardwarecommunication::Interrup
 Static Public Member Functions inherited from \fBMaxOS::drivers::ethernet::EthernetDriver\fP
 .in +1c
 .ti -1c
-.RI "\fBstatic\fP \fBMediaAccessControlAddress\fP \fBCreateMediaAccessControlAddress\fP (\fBuint8_t\fP \fBdigit1\fP, \fBuint8_t\fP \fBdigit2\fP, \fBuint8_t\fP \fBdigit3\fP, \fBuint8_t\fP \fBdigit4\fP, \fBuint8_t\fP \fBdigit5\fP, \fBuint8_t\fP \fBdigit6\fP)"
+.RI "\fBstatic\fP \fBMediaAccessControlAddress\fP \fBcreate_media_access_control_address\fP (\fBuint8_t\fP \fBdigit1\fP, \fBuint8_t\fP \fBdigit2\fP, \fBuint8_t\fP \fBdigit3\fP, \fBuint8_t\fP \fBdigit4\fP, \fBuint8_t\fP \fBdigit5\fP, \fBuint8_t\fP \fBdigit6\fP)"
 .br
 .RI "Create a Media Access Control Address\&. "
 .in -1c
@@ -105,13 +105,13 @@ Static Public Member Functions inherited from \fBMaxOS::drivers::ethernet::Ether
 Protected Member Functions inherited from \fBMaxOS::drivers::ethernet::EthernetDriver\fP
 .in +1c
 .ti -1c
-.RI "\fBvoid\fP \fBFireDataReceived\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBfire_data_received\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size)"
 .br
 .RI "Handle the recieved data\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBFireDataSent\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBfire_data_sent\fP (\fBuint8_t\fP *buffer, \fBuint32_t\fP size)"
 .br
-.RI "Send data\&. "
+.RI "send data "
 .in -1c
 
 Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
@@ -120,6 +120,10 @@ Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::Inter
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
 .RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "\fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::common::EventManager< EthernetDriverEvents >\fP
@@ -140,114 +144,119 @@ Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHa
 .PP 
 \fBDriver\fP for the Intel I217 Ethernet Controller\&. 
 .PP
-Definition at line \fB33\fP of file \fBintel_i217\&.h\fP\&.
+Definition at line \fB64\fP of file \fBintel_i217\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "IntelI217::IntelI217 (\fBhardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor\fP * deviceDescriptor)"
+.SS "IntelI217::IntelI217 (\fBhardwarecommunication::PCIDeviceDescriptor\fP * device_descriptor)\fC [explicit]\fP"
 
 .PP
-__DRIVER___ 
+Constructs a new Intel I217 Ethernet driver\&. Gets the MAC address and clears the receive descriptor array\&. 
 .PP
-Definition at line \fB35\fP of file \fBintel_i217\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fIdevice_descriptor\fP The PCI device descriptor for this device 
+.RE
+.PP
+
+.PP
+Definition at line \fB33\fP of file \fBintel_i217\&.cpp\fP\&..PP
 .nf
-36 : InterruptHandler(0x20 + deviceDescriptor\->interrupt)
-37 {
-38 
-39     //Set the registers
-40     controlRegister = 0x0000;
-41     statusRegister = 0x0008;
-42     epromRegister = 0x0014;
-43     controlExtRegister = 0x0018;
-44     interruptMaskRegister = 0x00D0;
-45 
-46     receiveControlRegister = 0x0100;
-47     receiveDescriptorLowRegister = 0x2800;
-48     receiveDescriptorHighRegister = 0x2804;
-49     receiveDescriptorLengthRegister = 0x2808;
-50     receiveDescriptorHeadRegister = 0x2810;
-51     receiveDescriptorTailRegister = 0x2818;
-52 
-53     sendControlRegister = 0x0400;
-54     sendDescriptorLowRegister = 0x3800;
-55     sendDescriptorHighRegister = 0x3804;
-56     sendDescriptorLengthRegister = 0x3808;
-57     sendDescriptorHeadRegister = 0x3810;
-58     sendDescriptorTailRegister = 0x3818;
-59 
-60     // Get BAR0 type, io_base address and MMIO base address
-61     bar_type = 1; // deviceDescriptor \-> has_memory_base ? 0 : 1;  @todo Fix memory mapping from PCI as it is unable to get MAC from memory
-62     portBase = deviceDescriptor \->port_base;
-63     //TODO: memBase = deviceDescriptor \-> memory_base;
+34         : InterruptHandler(0x20 + device_descriptor\->interrupt) {
+35 
+36     //Set the registers
+37     control_register = 0x0000;
+38     status_register = 0x0008;
+39     eprom_register = 0x0014;
+40     control_ext_register = 0x0018;
+41     interrupt_mask_register = 0x00D0;
+42 
+43     receive_control_register = 0x0100;
+44     receive_descriptor_low_register = 0x2800;
+45     receive_descriptor_high_register = 0x2804;
+46     receive_descriptor_length_register = 0x2808;
+47     receive_descriptor_head_register = 0x2810;
+48     receive_descriptor_tail_register = 0x2818;
+49 
+50     send_control_register = 0x0400;
+51     send_descriptor_low_register = 0x3800;
+52     send_descriptor_high_register = 0x3804;
+53     send_descriptor_length_register = 0x3808;
+54     send_descriptor_head_register = 0x3810;
+55     send_descriptor_tail_register = 0x3818;
+56 
+57     // Get BAR0 type, io_base address and MMIO base address
+58     bar_type = 1; // deviceDescriptor \-> has_memory_base ? 0 : 1;  @todo Fix memory mapping from PCI as it is unable to get MAC from memory
+59     port_base = device_descriptor\->port_base;
+60     //TODO: memBase = deviceDescriptor \-> memory_base;
+61 
+62     init_done = false;
+63     active = false;
 64 
-65     initDone = false;
-66     active = false;
+65     // Clear eprom
+66     eprom_present = detect_ee_prom();
 67 
-68     //Clear eprom
-69     epromPresent = false;
-70 
-71     //Detect eprom
-72     detectEEProm ();
-73 
-74     if (readMACAddress()){
-75         ownMAC = CreateMediaAccessControlAddress(macAddress[0], macAddress[1], macAddress[2], macAddress[3], macAddress[4], macAddress[5]);
+68 
+69     if (read_mac_address()) {
+70         own_mac = create_media_access_control_address(mac_address[0], mac_address[1], mac_address[2], mac_address[3],
+71                                                       mac_address[4], mac_address[5]);
+72 
+73     } else {
+74         ASSERT(false, "ERROR, INIT FAILED, MAC ADDRESS NOT FOUND");
+75     }
 76 
-77     }else{
-78         ASSERT(false, "ERROR, INIT FAILED, MAC ADDRESS NOT FOUND");
-79     }
+77     for (int i = 0; i < 0x80; i++)               //Loop through all the registers
+78         write(0x5200 + i * 4, 0);     //Clear the receive descriptor array
+79 
 80 
-81     for(int i = 0; i < 0x80; i++)               //Loop through all the registers
-82         Write(0x5200 + i*4, 0);     //Clear the receive descriptor array
-83 
-84 
-85 
-86 
-87 }
+81 
+82 
+83 }
 .fi
 
 .PP
-References \fBASSERT\fP, and \fBMaxOS::drivers::ethernet::EthernetDriver::CreateMediaAccessControlAddress()\fP\&.
+References \fBASSERT\fP, and \fBMaxOS::drivers::ethernet::EthernetDriver::create_media_access_control_address()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP IntelI217::activate ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-activate the driver 
+Activate the driver\&. 
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB293\fP of file \fBintel_i217\&.cpp\fP\&..PP
+Definition at line \fB298\fP of file \fBintel_i217\&.cpp\fP\&..PP
 .nf
-293                          {
-294 
-295 
-296     //Enable interrupts
-297     Write(interruptMaskRegister ,0x1F6DC);                     //Enable all interrupts
-298     Write(interruptMaskRegister ,0xff & ~4);                   //Enable all interrupts except link status change
-299     Read(0xc0);                                                     //Clear all interrupts
+298                          {
+299 
 300 
-301     //while (!initDone);                                           //Wait for the init to be done
-302 
-303     //Initialise the send and receive descriptors
-304     receiveInit();
-305     sendInit();
-306 
-307     active = true;                                               // Set active to true
-308 
-309 }
+301     //Enable interrupts
+302     write(interrupt_mask_register, 0x1F6DC);                     //Enable all interrupts
+303     write(interrupt_mask_register, 0xff & ~4);                   //Enable all interrupts except link status change
+304     read(0xc0);                                                     //Clear all interrupts
+305 
+306     //while (!initDone);                                           //Wait for the init to be done
+307 
+308     //Initialise the send and receive descriptors
+309     receive_init();
+310     send_init();
+311 
+312     active = true;                                               // Set active to true
+313 
+314 }
 .fi
 
 .SS "\fBvoid\fP IntelI217::deactivate ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-deactivate the driver 
+Deactivate the driver\&. 
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB387\fP of file \fBintel_i217\&.cpp\fP\&..PP
+Definition at line \fB391\fP of file \fBintel_i217\&.cpp\fP\&..PP
 .nf
-387                            {
-388     Driver::deactivate();
-389 }
+391                            {
+392     Driver::deactivate();
+393 }
 .fi
 
 .PP
@@ -266,51 +275,58 @@ The device name of the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB395\fP of file \fBintel_i217\&.cpp\fP\&..PP
+Definition at line \fB399\fP of file \fBintel_i217\&.cpp\fP\&..PP
 .nf
-395                               {
-396     return "E1000 (i217)";
-397 }
+399                               {
+400     return "E1000 (i217)";
+401 }
 .fi
 
-.SS "\fBvoid\fP IntelI217::DoSend (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBvoid\fP IntelI217::do_send (\fBuint8_t\fP * buffer, \fBuint32_t\fP size)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-(Device Side) Send the data 
+(Device Side) send the data 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to handle 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+
 .PP
 Reimplemented from \fBMaxOS::drivers::ethernet::EthernetDriver\fP\&.
 .PP
-Definition at line \fB352\fP of file \fBintel_i217\&.cpp\fP\&..PP
+Definition at line \fB356\fP of file \fBintel_i217\&.cpp\fP\&..PP
 .nf
-352                                                      {
-353 
-354     while(!active);
-355 
-356     //Put params into send buffer
-357     sendDsrctrs[currentSendBuffer] \-> bufferAddress = (uint64_t)buffer;
-358     sendDsrctrs[currentSendBuffer] \-> length = size;
+356                                                       {
+357 
+358     while (!active);
 359 
-360     //Set the commands
-361     sendDsrctrs[currentSendBuffer] \-> cmd = (1 << 0)    // End of Packet
-362                                           | (1 << 1)    // Insert FCS
-363                                           | (1 << 3)    // Report Status
-364                                           ;
-365 
-366     sendDsrctrs[currentSendBuffer] \-> status = 0;
-367 
-368     uint8_t old_cur = currentSendBuffer;                                    //Save the current send buffer
-369     currentSendBuffer = (currentSendBuffer + 1) % 8;                        //Increment the current send buffer
-370     Write(sendDescriptorTailRegister, currentSendBuffer);       //write the current send buffer to the tail register
+360     //Put params into send buffer
+361     send_dsrctrs[current_send_buffer]\->buffer_address = (uint64_t) buffer;
+362     send_dsrctrs[current_send_buffer]\->length = size;
+363 
+364     //Set the commands
+365     send_dsrctrs[current_send_buffer]\->cmd = (1 << 0)    // End of Packet
+366                                           | (1 << 1)    // Insert FCS
+367                                           | (1 << 3)    // Report Status
+368             ;
+369 
+370     send_dsrctrs[current_send_buffer]\->status = 0;
 371 
-372     //Wait for the packet to be sent
-373     while(!(sendDsrctrs[old_cur]\->status & 0xff));
-374 
-375 }
+372     uint8_t old_cur = current_send_buffer;                                    //Save the current send buffer
+373     current_send_buffer = (current_send_buffer + 1) % 8;                        //Increment the current send buffer
+374     write(send_descriptor_tail_register, current_send_buffer);       //write the current send buffer to the tail register
+375 
+376     //Wait for the packet to be sent
+377     while (!(send_dsrctrs[old_cur]\->status & 0xff));
+378 
+379 }
 .fi
 
-.PP
-References \fBlength\fP, and \fBsize\fP\&.
-.SS "\fBuint64_t\fP IntelI217::GetMediaAccessControlAddress ()\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBuint64_t\fP IntelI217::get_media_access_control_address ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Get the MAC address\&. 
@@ -324,13 +340,13 @@ the MAC address
 .PP
 Reimplemented from \fBMaxOS::drivers::ethernet::EthernetDriver\fP\&.
 .PP
-Definition at line \fB377\fP of file \fBintel_i217\&.cpp\fP\&..PP
+Definition at line \fB381\fP of file \fBintel_i217\&.cpp\fP\&..PP
 .nf
-377                                                  {
-378     while(ownMAC == 0);
-379     return ownMAC;
-380 
-381 }
+381                                                      {
+382     while (own_mac == 0);
+383     return own_mac;
+384 
+385 }
 .fi
 
 .SS "\fBvoid\fP IntelI217::handle_interrupt ()\fC [final]\fP, \fC [virtual]\fP"
@@ -340,21 +356,21 @@ Handles an interrupt\&.
 .PP
 Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .PP
-Definition at line \fB311\fP of file \fBintel_i217\&.cpp\fP\&..PP
+Definition at line \fB316\fP of file \fBintel_i217\&.cpp\fP\&..PP
 .nf
-311                                  {
-312 
-313     Write(interruptMaskRegister, 0x1);      //Clear the interrupt or it will hang
-314     uint32_t temp = Read(0xc0);                //read the interrupt status register
-315 
-316     // if(temp & 0x04)
-317     //   m_driver_message_stream\-> write("INTEL i217 START LINK");//initDone = true;
-318     //
-319     // if(temp & 0x10)
-320     //   m_driver_message_stream\-> write("INTEL i217 GOOD THRESHOLD");
-321 
-322     if(temp & 0x80) FetchDataReceived();
-323 }
+316                                  {
+317 
+318     write(interrupt_mask_register, 0x1);      //Clear the interrupt or it will hang
+319     uint32_t temp = read(0xc0);                //read the interrupt status register
+320 
+321     // if(temp & 0x04)
+322     //   m_driver_message_stream\-> write("INTEL i217 START LINK");//initDone = true;
+323     //
+324     // if(temp & 0x10)
+325     //   m_driver_message_stream\-> write("INTEL i217 GOOD THRESHOLD");
+326 
+327     if (temp & 0x80) fetch_data_received();
+328 }
 .fi
 
 .SS "\fBuint32_t\fP IntelI217::reset ()\fC [final]\fP, \fC [virtual]\fP"
@@ -371,11 +387,11 @@ How long in milliseconds it took to reset the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB383\fP of file \fBintel_i217\&.cpp\fP\&..PP
+Definition at line \fB387\fP of file \fBintel_i217\&.cpp\fP\&..PP
 .nf
-383                           {
-384     return Driver::reset();
-385 }
+387                           {
+388     return Driver::reset();
+389 }
 .fi
 
 .PP
@@ -394,11 +410,11 @@ The vendor name of the driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB391\fP of file \fBintel_i217\&.cpp\fP\&..PP
+Definition at line \fB395\fP of file \fBintel_i217\&.cpp\fP\&..PP
 .nf
-391                               {
-392     return "Intel";
-393 }
+395                               {
+396     return "Intel";
+397 }
 .fi
 
 

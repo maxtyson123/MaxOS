@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/net/udp.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/net/udp.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 \fC#include <common/eventHandler\&.h>\fP
 .br
@@ -44,8 +44,13 @@
 
 .in +1c
 .ti -1c
+.RI "typedef struct PACKED \fBMaxOS::net::UDPHeader\fP \fBMaxOS::net::udp_header_t\fP"
+.br
+.RI "Alias for \fBUDPHeader\fP struct\&. "
+.ti -1c
 .RI "typedef uint16_t \fBMaxOS::net::UserDatagramProtocolPort\fP"
 .br
+.RI "UDP port\&. "
 .in -1c
 .SS "Enumerations"
 
@@ -54,33 +59,6 @@
 .RI "enum class \fBMaxOS::net::UDPEvents\fP { \fBDATA_RECEIVED\fP }"
 .br
 .RI "The events that can be fired by the UDP protocol\&. "
-.in -1c
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "struct \fBMaxOS::net::ARPMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
-.br
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "uint16_t \fBsourcePort\fP"
-.br
-.RI "The port of the sender\&. "
-.ti -1c
-.RI "uint16_t \fBdestinationPort\fP"
-.br
-.RI "The port of the receiver\&. "
-.ti -1c
-.RI "uint16_t \fBlength\fP"
-.br
-.RI "The length of the UDP header and data\&. "
-.ti -1c
-.RI "uint16_t \fBchecksum\fP"
-.br
-.RI "The checksum of the header and data\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -106,7 +84,16 @@ Definition in file \fBudp\&.h\fP\&.
 .SS "typedef uint16_t \fBMaxOS::net::UserDatagramProtocolPort\fP"
 
 .PP
-Definition at line \fB46\fP of file \fBudp\&.h\fP\&.
+UDP port\&. 
+.PP
+\fBTodo\fP
+.RS 4
+: Make UDPPort class and do udp_port_t (or generic port that can be used for TCP and UDP) 
+.RE
+.PP
+
+.PP
+Definition at line \fB50\fP of file \fBudp\&.h\fP\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum class \fBMaxOS::net::UDPEvents\fP\fC [strong]\fP"
@@ -114,43 +101,13 @@ Definition at line \fB46\fP of file \fBudp\&.h\fP\&.
 .PP
 The events that can be fired by the UDP protocol\&. 
 .PP
-Definition at line \fB38\fP of file \fBudp\&.h\fP\&..PP
+Definition at line \fB41\fP of file \fBudp\&.h\fP\&..PP
 .nf
-38                              {
-39             DATA_RECEIVED,
-40         };
+41                          {
+42         DATA_RECEIVED,
+43     };
 .fi
 
-.SH "Variable Documentation"
-.PP 
-.SS "uint16_t checksum"
-
-.PP
-The checksum of the header and data\&. 
-.PP
-Definition at line \fB4\fP of file \fBudp\&.h\fP\&.
-.SS "uint16_t destinationPort"
-
-.PP
-The port of the receiver\&. 
-.PP
-Definition at line \fB2\fP of file \fBudp\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP\&.
-.SS "uint16_t length"
-
-.PP
-The length of the UDP header and data\&. 
-.PP
-Definition at line \fB3\fP of file \fBudp\&.h\fP\&.
-.SS "uint16_t sourcePort"
-
-.PP
-The port of the sender\&. 
-.PP
-Definition at line \fB1\fP of file \fBudp\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::UserDatagramProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

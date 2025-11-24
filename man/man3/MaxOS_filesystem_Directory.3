@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::Directory" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::Directory" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,9 +15,13 @@ Inherited by \fBMaxOS::filesystem::format::Fat32Directory\fP, and \fBMaxOS::file
 
 .in +1c
 .ti -1c
+.RI "\fBvirtual\fP \fB~Directory\fP ()"
+.br
+.RI "Destructor for \fBDirectory\fP, frees all files and subdirectories\&. "
+.ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBread_from_disk\fP ()"
 .br
-.RI "Read the directory from the disk\&. "
+.RI "read the directory from the disk "
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBFile\fP * > \fBfiles\fP ()"
 .br
@@ -95,27 +99,31 @@ Inherited by \fBMaxOS::filesystem::format::Fat32Directory\fP, and \fBMaxOS::file
 .PP 
 Handles a group of files (directory) 
 .PP
-Definition at line \fB60\fP of file \fBfilesystem\&.h\fP\&.
+Definition at line \fB57\fP of file \fBfilesystem\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Directory::~Directory ()\fC [virtual]\fP"
 
 .PP
-Definition at line \fB97\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Destructor for \fBDirectory\fP, frees all files and subdirectories\&. 
+.PP
+Definition at line \fB100\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-97                       {
-98 
-99     // Free the files
-100     for (auto &file: m_files)
-101         delete file;
-102 
-103     // Free the subdirectories
-104     for (auto &subdirectory: m_subdirectories)
-105         delete subdirectory;
-106 
-107 }
+100                       {
+101 
+102     // Free the files
+103     for (auto &file: m_files)
+104         delete file;
+105 
+106     // Free the subdirectories
+107     for (auto &subdirectory: m_subdirectories)
+108         delete subdirectory;
+109 
+110 }
 .fi
 
+.PP
+References \fBm_files\fP, and \fBm_subdirectories\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBFile\fP * Directory::create_file (\fBconst\fP \fBstring\fP & name)\fC [virtual]\fP"
@@ -137,11 +145,11 @@ A new file object or null if it could not be created
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
 .PP
-Definition at line \fB148\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB151\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-148                                                {
-149     return nullptr;
-150 }
+151                                                {
+152     return nullptr;
+153 }
 .fi
 
 .PP
@@ -165,11 +173,11 @@ The new directory object or null if it could not be created
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
 .PP
-Definition at line \fB194\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB197\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-194                                                             {
-195     return nullptr;
-196 }
+197                                                             {
+198     return nullptr;
+199 }
 .fi
 
 .PP
@@ -186,11 +194,11 @@ A list of all the files in the directory
 .PP
 
 .PP
-Definition at line \fB121\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB124\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-121                                      {
-122     return m_files;
-123 }
+124                                      {
+125     return m_files;
+126 }
 .fi
 
 .PP
@@ -207,11 +215,11 @@ The name of the directory
 .PP
 
 .PP
-Definition at line \fB211\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB214\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-211                        {
-212     return m_name;
-213 }
+214                        {
+215     return m_name;
+216 }
 .fi
 
 .PP
@@ -234,18 +242,18 @@ Open a file in the directory\&.
 .PP
 
 .PP
-Definition at line \fB131\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB134\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-131                                              {
-132 
-133     // Try to find the file
-134     for (auto &file: m_files)
-135         if (file\->name() == name)
-136             return file;
-137 
-138     // File not found
-139     return nullptr;
-140 }
+134                                              {
+135 
+136     // Try to find the file
+137     for (auto &file: m_files)
+138         if (file\->name() == name)
+139             return file;
+140 
+141     // File not found
+142     return nullptr;
+143 }
 .fi
 
 .PP
@@ -269,20 +277,20 @@ The directory object or null if it could not be opened
 .PP
 
 .PP
-Definition at line \fB175\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB178\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-175                                                           {
-176 
-177     // Try to find the directory
-178     for (auto &subdirectory: m_subdirectories)
-179         if (subdirectory\->name() == name) {
-180             subdirectory\->read_from_disk();
-181             return subdirectory;
-182         }
-183 
-184     // Directory not found
-185     return nullptr;
-186 }
+178                                                           {
+179 
+180     // Try to find the directory
+181     for (auto &subdirectory: m_subdirectories)
+182         if (subdirectory\->name() == name) {
+183             subdirectory\->read_from_disk();
+184             return subdirectory;
+185         }
+186 
+187     // Directory not found
+188     return nullptr;
+189 }
 .fi
 
 .PP
@@ -292,15 +300,15 @@ Referenced by \fBMaxOS::filesystem::FileSystem::get_directory()\fP\&.
 .SS "\fBvoid\fP Directory::read_from_disk ()\fC [virtual]\fP"
 
 .PP
-Read the directory from the disk\&. 
+read the directory from the disk 
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
 .PP
-Definition at line \fB112\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB115\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-112                                {
-113 
-114 }
+115                                {
+116 
+117 }
 .fi
 
 .PP
@@ -319,10 +327,10 @@ Delete a file in the directory\&.
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
 .PP
-Definition at line \fB157\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB160\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-157                                               {
-158 }
+160                                               {
+161 }
 .fi
 
 .PP
@@ -341,10 +349,10 @@ Try to remove a directory in the directory\&.
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP, and \fBMaxOS::filesystem::format::Fat32Directory\fP\&.
 .PP
-Definition at line \fB202\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB205\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-202                                                       {
-203 }
+205                                                       {
+206 }
 .fi
 
 .PP
@@ -365,13 +373,13 @@ Rename a file in the directory\&.
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP\&.
 .PP
-Definition at line \fB249\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB252\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-249                                                                           {
-250 
-251     ASSERT(false, "not implemented");
-252 
-253 }
+252                                                                           {
+253 
+254     ASSERT(false, "not implemented");
+255 
+256 }
 .fi
 
 .PP
@@ -390,13 +398,13 @@ Rename a file in the directory\&.
 .PP
 
 .PP
-Definition at line \fB237\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB240\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-237                                                               {
-238 
-239     rename_file(file\->name(), new_name);
-240 
-241 }
+240                                                               {
+241 
+242     rename_file(file\->name(), new_name);
+243 
+244 }
 .fi
 
 .PP
@@ -419,11 +427,11 @@ Rename a subdirectory in the directory\&.
 .PP
 Reimplemented in \fBMaxOS::filesystem::format::ext2::Ext2Directory\fP\&.
 .PP
-Definition at line \fB273\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB276\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-273                                                                                   {
-274     ASSERT(false, "not implemented");
-275 }
+276                                                                                   {
+277     ASSERT(false, "not implemented");
+278 }
 .fi
 
 .PP
@@ -442,13 +450,13 @@ Rename a subdirectory in the directory\&.
 .PP
 
 .PP
-Definition at line \fB261\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB264\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-261                                                                                 {
-262 
-263     rename_subdirectory(directory\->name(), new_name);
-264 
-265 }
+264                                                                                 {
+265 
+266     rename_subdirectory(directory\->name(), new_name);
+267 
+268 }
 .fi
 
 .PP
@@ -467,18 +475,18 @@ The size of the directory (sum of all the files in bytes)
 .PP
 
 .PP
-Definition at line \fB220\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB223\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-220                        {
-221 
-222     // Sum the size of all the files
-223     size_t size = 0;
-224     for (auto &file: m_files)
-225         size += file\->size();
-226 
-227     return size;
-228 
-229 }
+223                        {
+224 
+225     // Sum the size of all the files
+226     size_t size = 0;
+227     for (auto &file: m_files)
+228         size += file\->size();
+229 
+230     return size;
+231 
+232 }
 .fi
 
 .PP
@@ -497,11 +505,11 @@ The subdirectories in the directory
 .PP
 
 .PP
-Definition at line \fB165\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB168\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-165                                                    {
-166     return m_subdirectories;
-167 }
+168                                                    {
+169     return m_subdirectories;
+170 }
 .fi
 
 .PP
@@ -513,15 +521,15 @@ References \fBm_subdirectories\fP\&.
 .PP
 The files in this directory\&. 
 .PP
-Definition at line \fB63\fP of file \fBfilesystem\&.h\fP\&.
+Definition at line \fB59\fP of file \fBfilesystem\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_file()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_file()\fP, \fBfiles()\fP, \fBopen_file()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::remove_file()\fP, and \fBsize()\fP\&.
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_file()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_file()\fP, \fBfiles()\fP, \fBopen_file()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::remove_file()\fP, \fBsize()\fP, and \fB~Directory()\fP\&.
 .SS "\fBstring\fP MaxOS::filesystem::Directory::m_name\fC [protected]\fP"
 
 .PP
 The name of this directory\&. 
 .PP
-Definition at line \fB66\fP of file \fBfilesystem\&.h\fP\&.
+Definition at line \fB62\fP of file \fBfilesystem\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::Ext2Directory()\fP, \fBMaxOS::filesystem::format::Fat32Directory::Fat32Directory()\fP, and \fBname()\fP\&.
 .SS "\fBcommon::Vector\fP<\fBDirectory\fP*> MaxOS::filesystem::Directory::m_subdirectories\fC [protected]\fP"
@@ -529,9 +537,9 @@ Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::Ext2Directory()
 .PP
 The subdirectories in this directory\&. 
 .PP
-Definition at line \fB64\fP of file \fBfilesystem\&.h\fP\&.
+Definition at line \fB60\fP of file \fBfilesystem\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_subdirectory()\fP, \fBopen_subdirectory()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::remove_subdirectory()\fP, and \fBsubdirectories()\fP\&.
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBMaxOS::filesystem::format::Fat32Directory::create_subdirectory()\fP, \fBopen_subdirectory()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::read_from_disk()\fP, \fBMaxOS::filesystem::format::Fat32Directory::remove_subdirectory()\fP, \fBsubdirectories()\fP, and \fB~Directory()\fP\&.
 
 .SH "Author"
 .PP 

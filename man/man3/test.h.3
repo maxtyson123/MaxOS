@@ -1,0 +1,320 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/tests/test.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/include/tests/test.h \- Defines a basic test class for MaxOS\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <common/string\&.h>\fP
+.br
+\fC#include <common/logger\&.h>\fP
+.br
+\fC#include <common/macros\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBMaxOS::tests::Test\fP"
+.br
+.RI "A basic test class\&. "
+.ti -1c
+.RI "class \fBMaxOS::tests::ConditionalTest\fP"
+.br
+.RI "A test that only checks a condition to determine pass/fail\&. "
+.ti -1c
+.RI "class \fBMaxOS::tests::TestRunner\fP"
+.br
+.RI "A class to run all tests\&. "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBMAXOS_CONDITIONAL_TEST\fP(name,  type)       auto CONCATENATE(test_, __COUNTER__) = new ConditionalTest(#name, type, []()"
+.br
+.RI "Simplified macro to define a conditional test\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::tests::TestStatus\fP { \fBPASS\fP, \fBFAIL\fP, \fBSKIP\fP }"
+.br
+.RI "The possible outcomes of a test\&. "
+.ti -1c
+.RI "enum class \fBMaxOS::tests::TestType\fP { \fBCOMMON\fP, \fBDRIVER\fP, \fBFILESYSTEM\fP, \fBGUI\fP, \fBHARDWARE_COMMUNICATION\fP, \fBMEMORY\fP, \fBNETWORK\fP, \fBPROCESSES\fP, \fBRUNTIME\fP, \fBSYSTEM\fP, \fBMAX_TEST_TYPES\fP }"
+.br
+.RI "The different types of tests\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename T1 , typename T2 > bool \fBMaxOS::tests::compare\fP (T1 const &actual, T2 const &expected)"
+.br
+.RI "Compares two values and logs a warning if they are not equal\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr const char * \fBMaxOS::tests::TEST_TYPE_STRINGS\fP []"
+.br
+.RI "\fBString\fP representations of the TestType enum\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines a basic test class for MaxOS\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+23rd November 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBtest\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define MAXOS_CONDITIONAL_TEST(name, type)       auto CONCATENATE(test_, __COUNTER__) = new ConditionalTest(#name, type, []()"
+
+.PP
+Simplified macro to define a conditional test\&. 
+.PP
+Definition at line \fB17\fP of file \fBtest\&.h\fP\&..PP
+.nf
+19                      {
+20 
+25     enum class TestStatus {
+26         PASS,
+27         FAIL,
+28         SKIP
+29     };
+30 
+35     enum class TestType {
+36         COMMON,
+37         DRIVER,
+38         FILESYSTEM,
+39         GUI,
+40         HARDWARE_COMMUNICATION,
+41         MEMORY,
+42         NETWORK,
+43         PROCESSES,
+44         RUNTIME,
+45         SYSTEM,
+46         MAX_TEST_TYPES
+47     };
+48 
+50     constexpr const char* TEST_TYPE_STRINGS[] = {
+51         "COMMON",
+52         "DRIVER",
+53         "FILESYSTEM",
+54         "GUI",
+55         "HARDWARE_COMMUNICATION",
+56         "MEMORY",
+57         "NETWORK",
+58         "PROCESSES",
+59         "RUNTIME",
+60         "SYSTEM",
+61         "UNKNOWN"
+62     };
+63 
+68     class Test {
+69 
+70         private:
+71             string m_name;
+72             TestType m_type;
+73 
+74         public:
+75             Test(const string& name, TestType type);
+76             virtual ~Test();
+77 
+78             TestStatus run();
+79 
+85             virtual TestStatus execute() = 0;
+86 
+87             const string& name() const;
+88             TestType type() const;
+89     };
+90 
+100     template<typename T1, typename T2> bool compare(T1 const& actual, T2 const& expected) {
+101 
+102         // Direct comparison
+103         if (actual == expected)
+104             return true;
+105 
+106         // Report what failed
+107         Logger::WARNING() << "Test failed comparison: expected [" << expected << "], got [" << actual << "]\\n";
+108         return false;
+109     }
+110 
+115     class ConditionalTest : public Test {
+116         private:
+117             bool (*m_condition)();
+118 
+119         public:
+120             ConditionalTest(const string& name, TestType type, bool (*condition)());
+121             ~ConditionalTest() override;
+122 
+123             TestStatus execute() override;
+124     };
+125 
+132     class TestRunner {
+133 
+134         private:
+135             inline static common::Vector<Test*> s_tests = common::Vector<Test*>();
+136 
+137         public:
+138 
+139             static void test_kernel();
+140 
+141             static void run_all_tests();
+142             static void run_all_types(TestType type);
+143 
+144             static void add_all_tests();
+145             static void add_test(Test* test);
+146 
+147     };
+148 }
+149 
+150 #endif //MAXOS_TESTS_TEST_H
+.fi
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBMaxOS::tests::TestStatus\fP\fC [strong]\fP"
+
+.PP
+The possible outcomes of a test\&. 
+.PP
+Definition at line \fB26\fP of file \fBtest\&.h\fP\&..PP
+.nf
+26                           {
+27         PASS,
+28         FAIL,
+29         SKIP
+30     };
+.fi
+
+.SS "enum class \fBMaxOS::tests::TestType\fP\fC [strong]\fP"
+
+.PP
+The different types of tests\&. 
+.PP
+Definition at line \fB36\fP of file \fBtest\&.h\fP\&..PP
+.nf
+36                         {
+37         COMMON,
+38         DRIVER,
+39         FILESYSTEM,
+40         GUI,
+41         HARDWARE_COMMUNICATION,
+42         MEMORY,
+43         NETWORK,
+44         PROCESSES,
+45         RUNTIME,
+46         SYSTEM,
+47         MAX_TEST_TYPES
+48     };
+.fi
+
+.SH "Function Documentation"
+.PP 
+.SS "template<typename T1 , typename T2 > bool MaxOS::tests::compare (T1 const & actual, T2 const & expected)"
+
+.PP
+Compares two values and logs a warning if they are not equal\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIT1\fP The type of the actual value 
+.br
+\fIT2\fP The type of the expected value 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIactual\fP The actual value 
+.br
+\fIexpected\fP The expected value 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the values are equal, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB101\fP of file \fBtest\&.h\fP\&..PP
+.nf
+101                                                                                           {
+102 
+103         // Direct comparison
+104         if (actual == expected)
+105             return true;
+106 
+107         // Report what failed
+108         Logger::WARNING() << "Test failed comparison: expected [" << expected << "], got [" << actual << "]\\n";
+109         return false;
+110     }
+.fi
+
+.PP
+References \fBMaxOS::tests::compare()\fP, and \fBMaxOS::Logger::WARNING()\fP\&.
+.PP
+Referenced by \fBMaxOS::tests::compare()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "constexpr const char* MaxOS::tests::TEST_TYPE_STRINGS[]\fC [constexpr]\fP"
+\fBInitial value:\fP.PP
+.nf
+= {
+        "COMMON",
+        "DRIVER",
+        "FILESYSTEM",
+        "GUI",
+        "HARDWARE_COMMUNICATION",
+        "MEMORY",
+        "NETWORK",
+        "PROCESSES",
+        "RUNTIME",
+        "SYSTEM",
+        "UNKNOWN"
+    }
+.fi
+
+.PP
+String representations of the TestType enum\&. 
+.PP
+Definition at line \fB51\fP of file \fBtest\&.h\fP\&..PP
+.nf
+51                                                 {
+52         "COMMON",
+53         "DRIVER",
+54         "FILESYSTEM",
+55         "GUI",
+56         "HARDWARE_COMMUNICATION",
+57         "MEMORY",
+58         "NETWORK",
+59         "PROCESSES",
+60         "RUNTIME",
+61         "SYSTEM",
+62         "UNKNOWN"
+63     };
+.fi
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

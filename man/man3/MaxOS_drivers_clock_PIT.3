@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::clock::PIT" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::clock::PIT" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,13 +17,13 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .ti -1c
 .RI "\fBPIT\fP (\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP *apic)"
 .br
-.RI "Constructor for the \fBPIT\fP class\&. Registers a handler for interrupt 0x22 and initializes ports\&. "
+.RI "Constructor for the \fBPIT\fP class\&. Registers a handler for interrupt 0x22 and initialises ports\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
+.RI "\fBvirtual\fP \fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
 .in -1c
@@ -36,6 +36,10 @@ Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::Inter
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
 .RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "\fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
@@ -49,13 +53,13 @@ Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHa
 .PP 
 \fBDriver\fP for the Programmable Interval Timer\&. 
 .PP
-Definition at line \fB93\fP of file \fBclock\&.h\fP\&.
+Definition at line \fB95\fP of file \fBclock\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "PIT::PIT (\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP * apic)"
+.SS "PIT::PIT (\fBhardwarecommunication::AdvancedProgrammableInterruptController\fP * apic)\fC [explicit]\fP"
 
 .PP
-Constructor for the \fBPIT\fP class\&. Registers a handler for interrupt 0x22 and initializes ports\&. 
+Constructor for the \fBPIT\fP class\&. Registers a handler for interrupt 0x22 and initialises ports\&. 
 .PP
 \fBParameters\fP
 .RS 4

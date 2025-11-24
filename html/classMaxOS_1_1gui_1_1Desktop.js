@@ -7,8 +7,8 @@ var classMaxOS_1_1gui_1_1Desktop =
     [ "internal_invalidate", "classMaxOS_1_1gui_1_1Desktop.html#a2e12df4145d37cef1f77c45a0b025ba0", null ],
     [ "invalidate", "classMaxOS_1_1gui_1_1Desktop.html#a7fbb339ab8bbdb8612f72d1547e2bd77", null ],
     [ "invert_mouse_cursor", "classMaxOS_1_1gui_1_1Desktop.html#a9c8711df4cd42767f6d28740182f3b2c", null ],
-    [ "on_key_down", "classMaxOS_1_1gui_1_1Desktop.html#afdf09c58c2663d317961a4f027cfa3ea", null ],
-    [ "on_key_up", "classMaxOS_1_1gui_1_1Desktop.html#a0ef21909cc5084a72f7b8fd478b3b292", null ],
+    [ "on_key_down", "classMaxOS_1_1gui_1_1Desktop.html#a7b62b1e0c5cbf340f5eb10b7bde695b1", null ],
+    [ "on_key_up", "classMaxOS_1_1gui_1_1Desktop.html#a89bbe63b636012406adcc69c4b5d50e6", null ],
     [ "on_mouse_down_event", "classMaxOS_1_1gui_1_1Desktop.html#af8910ac3b5333e49d958adebfd15ab8c", null ],
     [ "on_mouse_move_event", "classMaxOS_1_1gui_1_1Desktop.html#a63585ad6d0bc21eaf0492995c9622bef", null ],
     [ "on_mouse_up_event", "classMaxOS_1_1gui_1_1Desktop.html#a374ab0a16647a3fbcd390d205e4c722c", null ],
@@ -19,6 +19,6 @@ var classMaxOS_1_1gui_1_1Desktop =
     [ "m_focussed_widget", "classMaxOS_1_1gui_1_1Desktop.html#adc296de0e382f8bc7f8e160ca19738dd", null ],
     [ "m_graphics_context", "classMaxOS_1_1gui_1_1Desktop.html#afea5b2944b2c9a3484c6c6e4f7ee823b", null ],
     [ "m_invalid_areas", "classMaxOS_1_1gui_1_1Desktop.html#afff532fb8b06a71f747417c9bcc298e9", null ],
-    [ "m_mouse_x", "classMaxOS_1_1gui_1_1Desktop.html#abc5c381f4c7f5d06ff4d75dffcd4c6fa", null ],
-    [ "m_mouse_y", "classMaxOS_1_1gui_1_1Desktop.html#a6db4632321b626d42c16b8f6762bca72", null ]
+    [ "m_mouse_x", "classMaxOS_1_1gui_1_1Desktop.html#ac91a7e78185cbaebb6f38067219c3b93", null ],
+    [ "m_mouse_y", "classMaxOS_1_1gui_1_1Desktop.html#aaa03a1cb91e7a968487ee9645402a37a", null ]
 ];

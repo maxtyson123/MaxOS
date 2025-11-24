@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::peripherals::KeyboardDriver" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::peripherals::KeyboardDriver" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,6 +14,10 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP, \fBMaxOS::drivers
 .SS "Public Member Functions"
 
 .in +1c
+.ti -1c
+.RI "\fBKeyboardDriver\fP ()"
+.br
+.RI "Construct a new Keyboard \fBDriver\fP object, registering it as an interrupt handler for interrupt 0x21\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBhandle_interrupt\fP () \fBfinal\fP"
 .br
@@ -31,7 +35,7 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP, \fBMaxOS::drivers
 Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
 .in +1c
 .ti -1c
-.RI "\fBvirtual\fP system::cpu_status_t * \fBhandle_interrupt\fP (system::cpu_status_t *status)"
+.RI "\fBvirtual\fP \fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status)"
 .br
 .RI "Handles an interrupt and returns the status\&. "
 .in -1c
@@ -41,7 +45,7 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
-.RI "deactivate the driver "
+.RI "Deactivate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
 .br
@@ -88,6 +92,10 @@ Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::Inter
 .RI "\fBInterruptHandler\fP (\fBuint8_t\fP interrupt_number, \fBint64_t\fP \fBredirect\fP=\-1, \fBuint64_t\fP \fBredirect_index\fP=0)"
 .br
 .RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "\fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
 .in -1c
 
 Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
@@ -109,21 +117,23 @@ Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< uint8_
 .PP 
 \fBDriver\fP for the Keyboard Controller, manages the events and the keyboard state\&. 
 .PP
-Definition at line \fB436\fP of file \fBkeyboard\&.h\fP\&.
+Definition at line \fB446\fP of file \fBkeyboard\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "KeyboardDriver::KeyboardDriver ()"
 
 .PP
-Definition at line \fB64\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Construct a new Keyboard \fBDriver\fP object, registering it as an interrupt handler for interrupt 0x21\&. 
+.PP
+Definition at line \fB67\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-65 : InterruptHandler(0x21, 0x1, 0x12),
-66   m_data_port(0x60),
-67   m_command_port(0x64)
-68 {
-69 
-70 
-71 }
+68 : InterruptHandler(0x21, 0x1, 0x12),
+69   m_data_port(0x60),
+70   m_command_port(0x64)
+71 {
+72 
+73 
+74 }
 .fi
 
 .SH "Member Function Documentation"
@@ -135,28 +145,28 @@ activate the keyboard driver
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB78\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB81\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-78                               {
-79 
-80     // Wait for user to stop pressing key (this is for the start\-up key e\&.g\&. hold 'F12' for boot menu or hold 'del' for bios )
-81     while (m_command_port\&.read() & 0x1)
-82         m_data_port\&.read();
-83 
-84     // Enable keyboard interrupts
-85     m_command_port\&.write(0xAE);
+81                               {
+82 
+83     // Wait for user to stop pressing key (this is for the start\-up key e\&.g\&. hold 'F12' for boot menu or hold 'del' for bios )
+84     while (m_command_port\&.read() & 0x1)
+85         m_data_port\&.read();
 86 
-87     // Get the current state of the keyboard
-88     m_command_port\&.write(0x20);
-89     uint8_t status = (m_data_port\&.read() | 1) & ~0x10;
-90 
-91     // Reset the keyboard
-92     m_command_port\&.write(0x60);
-93     m_data_port\&.write(status);
-94 
-95     // Activate the keyboard
-96     m_data_port\&.write(0xF4);
-97 }
+87     // Enable keyboard interrupts
+88     m_command_port\&.write(0xAE);
+89 
+90     // Get the current state of the keyboard
+91     m_command_port\&.write(0x20);
+92     uint8_t status = (m_data_port\&.read() | 1) & ~0x10;
+93 
+94     // Reset the keyboard
+95     m_command_port\&.write(0x60);
+96     m_data_port\&.write(status);
+97 
+98     // Activate the keyboard
+99     m_data_port\&.write(0xF4);
+100 }
 .fi
 
 .PP
@@ -175,11 +185,11 @@ The device name
 .PP
 Reimplemented from \fBMaxOS::drivers::Driver\fP\&.
 .PP
-Definition at line \fB114\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB117\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-114                                    {
-115     return "Keyboard";
-116 }
+117                                    {
+118     return "Keyboard";
+119 }
 .fi
 
 .SS "\fBvoid\fP KeyboardDriver::handle_interrupt ()\fC [final]\fP, \fC [virtual]\fP"
@@ -189,15 +199,15 @@ deactivate the keyboard driver
 .PP
 Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .PP
-Definition at line \fB102\fP of file \fBkeyboard\&.cpp\fP\&..PP
+Definition at line \fB105\fP of file \fBkeyboard\&.cpp\fP\&..PP
 .nf
-102                                       {
-103 
-104     // Pass the scan code to the m_handlers
-105     uint8_t key = m_data_port\&.read();
-106     for (auto &handler: m_input_stream_event_handlers)
-107         handler\->on_stream_read(key);
-108 }
+105                                       {
+106 
+107     // Pass the scan code to the m_handlers
+108     uint8_t key = m_data_port\&.read();
+109     for (auto &handler: m_input_stream_event_handlers)
+110         handler\->on_stream_read(key);
+111 }
 .fi
 
 .PP

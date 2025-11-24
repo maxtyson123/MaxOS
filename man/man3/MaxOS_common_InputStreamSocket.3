@@ -1,4 +1,4 @@
-.TH "MaxOS::common::InputStreamSocket< Type >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::InputStreamSocket< Type >" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -121,7 +121,7 @@ class MaxOS::common::InputStreamSocket< Type >"Passes read events on to the hand
 .PP
 
 .PP
-Definition at line \fB69\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB65\fP of file \fBinputStream\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamSocket\fP< \fBType\fP >::InputStreamSocket ()\fC [default]\fP"
@@ -135,7 +135,7 @@ Creates a new \fBInputStreamSocket\fP\&.
 .RE
 .PP
 
-.SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamSocket\fP< \fBType\fP >::InputStreamSocket (\fBInputStreamEventHandler\fP< \fBType\fP > * processor_handler)"
+.SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamSocket\fP< \fBType\fP >::InputStreamSocket (\fBInputStreamEventHandler\fP< \fBType\fP > * processor_handler)\fC [explicit]\fP"
 
 .PP
 Creates a new \fBInputStreamSocket\fP and connects it to the handler\&. 
@@ -152,12 +152,11 @@ Creates a new \fBInputStreamSocket\fP and connects it to the handler\&.
 .PP
 
 .PP
-Definition at line \fB264\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB255\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-265         : InputStreamProcessor<Type, Type>(processor_handler)
-266         {
-267 
-268         }
+256             : InputStreamProcessor<Type, Type>(processor_handler) {
+257 
+258     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::InputStreamSocket\fP< \fBType\fP >::~\fBInputStreamSocket\fP ()\fC [default]\fP"
@@ -192,17 +191,19 @@ Called when data is read from a stream\&. Passes the event on to the internetPro
 .PP
 Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
 .PP
-Definition at line \fB283\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB273\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-283                                                                                            {
-284 
-285             // Pass the read event on to the handlers
-286             for(auto& event_handler : this \-> m_input_stream_event_handlers)
-287               event_handler \-> on_stream_read(read_element);
-288 
-289         }
+273                                                                                        {
+274 
+275         // Pass the read event on to the handlers
+276         for(auto& event_handler : this\->m_input_stream_event_handlers)
+277             event_handler\->on_stream_read(read_element);
+278 
+279     }
 .fi
 
+.PP
+References \fBMaxOS::common::InputStreamEventHandler< Type >::on_stream_read()\fP\&.
 
 .SH "Author"
 .PP 

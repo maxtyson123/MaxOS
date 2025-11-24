@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::format::ext2::InodeHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::format::ext2::InodeHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,11 +19,11 @@ MaxOS::filesystem::format::ext2::InodeHandler \- Simplfies the management of an 
 .ti -1c
 .RI "\fBsize_t\fP \fBsize\fP () \fBconst\fP"
 .br
-.RI "Read the size upper and lower into a single size_t\&. "
+.RI "read the size upper and lower into a single size_t "
 .ti -1c
 .RI "\fBvoid\fP \fBset_size\fP (\fBsize_t\fP \fBsize\fP)"
 .br
-.RI "Store the size of the inode data\&. (does not write to disk) "
+.RI "store the size of the inode data\&. (does not write to disk) "
 .ti -1c
 .RI "\fBsize_t\fP \fBgrow\fP (\fBsize_t\fP \fBamount\fP, \fBbool\fP flush=\fBtrue\fP)"
 .br
@@ -45,7 +45,7 @@ MaxOS::filesystem::format::ext2::InodeHandler \- Simplfies the management of an 
 .br
 .RI "The index of the inode\&. "
 .ti -1c
-.RI "inode_t \fBinode\fP"
+.RI "\fBinode_t\fP \fBinode\fP"
 .br
 .RI "The inode metadata for this file/directory\&. "
 .ti -1c
@@ -57,7 +57,7 @@ MaxOS::filesystem::format::ext2::InodeHandler \- Simplfies the management of an 
 .PP 
 Simplfies the management of an inode & its blocks\&. 
 .PP
-Definition at line \fB358\fP of file \fBext2\&.h\fP\&.
+Definition at line \fB372\fP of file \fBext2\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "InodeHandler::InodeHandler (\fBExt2Volume\fP * volume, \fBuint32_t\fP inode_index)"
@@ -74,23 +74,22 @@ Construct a new \fBInode\fP Handler object\&. Reads the inode and caches the blo
 .PP
 
 .PP
-Definition at line \fB506\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB509\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-507 : m_volume(volume),
-508   inode_number(inode_index),
-509   inode(m_volume\->read_inode(inode_number))
-510 {
-511 
-512     // Read the block pointers
-513     for (uint32_t direct_pointer = 0; direct_pointer < 12; ++direct_pointer)
-514         if (inode\&.block_pointers[direct_pointer])
-515             block_cache\&.push_back(inode\&.block_pointers[direct_pointer]);
-516 
-517     buffer_t buffer(m_volume\->block_size);
-518     parse_indirect(1, inode\&.l1_indirect, &buffer);
-519     parse_indirect(2, inode\&.l2_indirect, &buffer);
-520     parse_indirect(3, inode\&.l3_indirect, &buffer);
-521 }
+510         : m_volume(volume),
+511         inode_number(inode_index),
+512         inode(m_volume\->read_inode(inode_number)) {
+513 
+514     // Read the block pointers
+515     for(uint32_t direct_pointer = 0; direct_pointer < 12; ++direct_pointer)
+516         if(inode\&.block_pointers[direct_pointer])
+517             block_cache\&.push_back(inode\&.block_pointers[direct_pointer]);
+518 
+519     buffer_t buffer(m_volume\->block_size);
+520     parse_indirect(1, inode\&.l1_indirect, &buffer);
+521     parse_indirect(2, inode\&.l2_indirect, &buffer);
+522     parse_indirect(3, inode\&.l3_indirect, &buffer);
+523 }
 .fi
 
 .PP
@@ -102,18 +101,18 @@ References \fBblock_cache\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::bl
 .PP
 Marks this inode's blocks as free and then the inode as free\&. 
 .PP
-Definition at line \fB703\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB705\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-703                         {
-704 
-705     m_volume\->ext2_lock\&.lock();
+705                         {
 706 
-707     // Free the inode
-708     m_volume\->free_blocks(block_cache);
-709     m_volume\->free_inode(inode_number);
-710 
-711     m_volume\->ext2_lock\&.unlock();
-712 }
+707     m_volume\->ext2_lock\&.lock();
+708 
+709     // Free the inode
+710     m_volume\->free_blocks(block_cache);
+711     m_volume\->free_inode(inode_number);
+712 
+713     m_volume\->ext2_lock\&.unlock();
+714 }
 .fi
 
 .PP
@@ -142,26 +141,26 @@ Should this return \fBsize()\fP instead?
 .PP
 
 .PP
-Definition at line \fB673\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB675\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-673                                                    {
-674 
-675     // Nothing to grow
-676     if (amount <= 0)
-677         return size();
-678 
-679     // Allocate new blocks
-680     auto blocks = m_volume\->allocate_blocks(m_volume\->bytes_to_blocks(amount));
-681     ASSERT(blocks[0] != 0, "Failed to allocate new blocks for file");
-682 
-683     // Save the changes
-684     store_blocks(blocks);
-685     set_size(size() + amount);
-686     if (flush)
-687         save();
-688 
-689     return size() + amount;
-690 }
+675                                                    {
+676 
+677     // Nothing to grow
+678     if(amount <= 0)
+679         return size();
+680 
+681     // Allocate new blocks
+682     auto blocks = m_volume\->allocate_blocks(m_volume\->bytes_to_blocks(amount));
+683     ASSERT(blocks[0] != 0, "Failed to allocate new blocks for file");
+684 
+685     // Save the changes
+686     store_blocks(blocks);
+687     set_size(size() + amount);
+688     if(flush)
+689         save();
+690 
+691     return size() + amount;
+692 }
 .fi
 
 .PP
@@ -173,12 +172,12 @@ Referenced by \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
 .PP
 Writes the inode meta data to disk\&. 
 .PP
-Definition at line \fB695\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB697\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-695                         {
-696 
-697     m_volume\->write_inode(inode_number, &inode);
-698 }
+697                         {
+698 
+699     m_volume\->write_inode(inode_number, &inode);
+700 }
 .fi
 
 .PP
@@ -188,7 +187,7 @@ Referenced by \fBgrow()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::wr
 .SS "\fBvoid\fP InodeHandler::set_size (\fBsize_t\fP size)"
 
 .PP
-Store the size of the inode data\&. (does not write to disk) 
+store the size of the inode data\&. (does not write to disk) 
 .PP
 \fBParameters\fP
 .RS 4
@@ -197,14 +196,14 @@ Store the size of the inode data\&. (does not write to disk)
 .PP
 
 .PP
-Definition at line \fB535\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB537\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-535                                        {
-536 
-537     inode\&.size_lower = (uint32_t) (size & 0xFFFFFFFFULL);
-538     inode\&.size_upper = (uint32_t) (size >> 32);
-539 
-540 }
+537                                        {
+538 
+539     inode\&.size_lower = (uint32_t) (size & 0xFFFFFFFFULL);
+540     inode\&.size_upper = (uint32_t) (size >> 32);
+541 
+542 }
 .fi
 
 .PP
@@ -214,7 +213,7 @@ Referenced by \fBgrow()\fP\&.
 .SS "\fBsize_t\fP InodeHandler::size () const"
 
 .PP
-Read the size upper and lower into a single size_t\&. 
+read the size upper and lower into a single size_t 
 .PP
 \fBReturns\fP
 .RS 4
@@ -223,11 +222,11 @@ The size of the inode data (not the inode itself)
 .PP
 
 .PP
-Definition at line \fB527\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB529\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-527                                 {
-528     return ((size_t) inode\&.size_upper << 32) | (size_t) inode\&.size_lower;
-529 }
+529                                 {
+530     return ((size_t) inode\&.size_upper << 32) | (size_t) inode\&.size_lower;
+531 }
 .fi
 
 .PP
@@ -241,15 +240,15 @@ Referenced by \fBMaxOS::filesystem::format::ext2::Ext2File::Ext2File()\fP, \fBgr
 .PP
 All the blocks used by this inode\&. 
 .PP
-Definition at line \fB373\fP of file \fBext2\&.h\fP\&.
+Definition at line \fB387\fP of file \fBext2\&.h\fP\&.
 .PP
 Referenced by \fBfree()\fP, \fBInodeHandler()\fP, \fBMaxOS::filesystem::format::ext2::Ext2File::read()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Directory::read_from_disk()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
-.SS "inode_t MaxOS::filesystem::format::ext2::InodeHandler::inode"
+.SS "\fBinode_t\fP MaxOS::filesystem::format::ext2::InodeHandler::inode"
 
 .PP
 The inode metadata for this file/directory\&. 
 .PP
-Definition at line \fB372\fP of file \fBext2\&.h\fP\&.
+Definition at line \fB386\fP of file \fBext2\&.h\fP\&.
 .PP
 Referenced by \fBInodeHandler()\fP, \fBsave()\fP, \fBset_size()\fP, \fBsize()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2File::write()\fP\&.
 .SS "uint32_t MaxOS::filesystem::format::ext2::InodeHandler::inode_number"
@@ -257,7 +256,7 @@ Referenced by \fBInodeHandler()\fP, \fBsave()\fP, \fBset_size()\fP, \fBsize()\fP
 .PP
 The index of the inode\&. 
 .PP
-Definition at line \fB371\fP of file \fBext2\&.h\fP\&.
+Definition at line \fB385\fP of file \fBext2\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::filesystem::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBfree()\fP, and \fBsave()\fP\&.
 

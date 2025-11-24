@@ -1,4 +1,4 @@
-.TH "MaxOS::memory::MemoryManager" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::memory::MemoryManager" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,7 +17,11 @@ MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.
 .br
 .RI "Construct a new Memory Manager object\&. Will switch the pml4 to use the calling process's page tables\&. "
 .ti -1c
-.RI "\fBvoid\fP * \fBhandle_malloc\fP (\fBsize_t\fP \fBsize\fP)"
+.RI "\fB~MemoryManager\fP ()"
+.br
+.RI "Destroy the Memory Manager object, frees the VMM if not the kernel memory manager\&. "
+.ti -1c
+.RI "\fBvoid\fP * \fBhandle_malloc\fP (\fBsize_t\fP size)"
 .br
 .RI "Allocates a block of memory\&. "
 .ti -1c
@@ -28,7 +32,7 @@ MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.
 .RI "\fBVirtualMemoryManager\fP * \fBvmm\fP ()"
 .br
 .ti -1c
-.RI "\fBint\fP \fBmemory_used\fP ()"
+.RI "\fBsize_t\fP \fBmemory_used\fP ()"
 .br
 .RI "Returns the amount of memory used\&. "
 .in -1c
@@ -36,7 +40,7 @@ MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.
 
 .in +1c
 .ti -1c
-.RI "\fBstatic\fP \fBvoid\fP * \fBmalloc\fP (\fBsize_t\fP \fBsize\fP)"
+.RI "\fBstatic\fP \fBvoid\fP * \fBmalloc\fP (\fBsize_t\fP size)"
 .br
 .RI "Allocates a block of memory in the current USERSPACE heap\&. "
 .ti -1c
@@ -44,7 +48,7 @@ MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.
 .br
 .RI "Frees a block of memory using the current memory manager\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBvoid\fP * \fBkmalloc\fP (\fBsize_t\fP \fBsize\fP)"
+.RI "\fBstatic\fP \fBvoid\fP * \fBkmalloc\fP (\fBsize_t\fP size)"
 .br
 .RI "Allocates a block of memory in the KERNEL space\&. "
 .ti -1c
@@ -52,7 +56,7 @@ MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.
 .br
 .RI "Frees a block of memory using the kernel memory manager\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBsize_t\fP \fBalign\fP (\fBsize_t\fP \fBsize\fP)"
+.RI "\fBstatic\fP \fBsize_t\fP \fBalign\fP (\fBsize_t\fP size)"
 .br
 .RI "Aligns the size to the chunk alignment\&. "
 .ti -1c
@@ -76,10 +80,10 @@ MaxOS::memory::MemoryManager \- Handles memory allocation and deallocation\&.
 .PP 
 Handles memory allocation and deallocation\&. 
 .PP
-Definition at line \fB41\fP of file \fBmemorymanagement\&.h\fP\&.
+Definition at line \fB40\fP of file \fBmemorymanagement\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "MemoryManager::MemoryManager (\fBVirtualMemoryManager\fP * vmm = \fC\fBnullptr\fP\fP)"
+.SS "MemoryManager::MemoryManager (\fBVirtualMemoryManager\fP * vmm = \fC\fBnullptr\fP\fP)\fC [explicit]\fP"
 
 .PP
 Construct a new Memory Manager object\&. Will switch the pml4 to use the calling process's page tables\&. 
@@ -93,29 +97,28 @@ Construct a new Memory Manager object\&. Will switch the pml4 to use the calling
 .PP
 Definition at line \fB22\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-23 : m_virtual_memory_manager(vmm)
-24 {
-25 
-26     // Create the VMM if not provided
-27     if (m_virtual_memory_manager == nullptr)
-28         m_virtual_memory_manager = new VirtualMemoryManager();
-29 
-30     // Enable the memory manager
-31     switch_active_memory_manager(this);
-32 
-33     // Setup the first chunk of memory
-34     this\->m_first_memory_chunk = (MemoryChunk*) m_virtual_memory_manager\->allocate(PAGE_SIZE + sizeof(MemoryChunk), 0);
-35     m_first_memory_chunk\->allocated = false;
-36     m_first_memory_chunk\->prev = nullptr;
-37     m_first_memory_chunk\->next = nullptr;
-38     m_first_memory_chunk\->size = PAGE_SIZE \- sizeof(MemoryChunk);
-39     m_last_memory_chunk = m_first_memory_chunk;
-40 
-41     // First memory manager is the kernel memory manager
-42     if (s_kernel_memory_manager == nullptr)
-43         s_kernel_memory_manager = this;
-44 
-45 }
+23 : m_virtual_memory_manager(vmm) {
+24 
+25     // Create the VMM if not provided
+26     if(m_virtual_memory_manager == nullptr)
+27         m_virtual_memory_manager = new VirtualMemoryManager();
+28 
+29     // Enable the memory manager
+30     switch_active_memory_manager(this);
+31 
+32     // Set up the first chunk of memory
+33     this\->m_first_memory_chunk = (MemoryChunk*) m_virtual_memory_manager\->allocate(PAGE_SIZE + sizeof(MemoryChunk), 0);
+34     m_first_memory_chunk\->allocated = false;
+35     m_first_memory_chunk\->prev = nullptr;
+36     m_first_memory_chunk\->next = nullptr;
+37     m_first_memory_chunk\->size = PAGE_SIZE \- sizeof(MemoryChunk);
+38     m_last_memory_chunk = m_first_memory_chunk;
+39 
+40     // First memory manager is the kernel memory manager
+41     if(s_kernel_memory_manager == nullptr)
+42         s_kernel_memory_manager = this;
+43 
+44 }
 .fi
 
 .PP
@@ -123,24 +126,28 @@ References \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memo
 .SS "MemoryManager::~MemoryManager ()"
 
 .PP
-Definition at line \fB47\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Destroy the Memory Manager object, frees the VMM if not the kernel memory manager\&. 
+.PP
+Definition at line \fB49\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-47                               {
-48 
-49     // Free the VMM (if this is not the kernel memory manager)
-50     if (m_virtual_memory_manager != nullptr && s_current_memory_manager != s_kernel_memory_manager)
-51         delete m_virtual_memory_manager;
-52 
-53     // Remove the kernel reference to this
-54     if (s_kernel_memory_manager == this)
-55         s_kernel_memory_manager = nullptr;
-56 
-57     // Remove the active reference to this
-58     if (s_current_memory_manager == this)
-59         s_current_memory_manager = nullptr;
-60 }
+49                               {
+50 
+51     // Free the VMM (if this is not the kernel memory manager)
+52     if(m_virtual_memory_manager != nullptr && s_current_memory_manager != s_kernel_memory_manager)
+53         delete m_virtual_memory_manager;
+54 
+55     // Remove the kernel reference to this
+56     if(s_kernel_memory_manager == this)
+57         s_kernel_memory_manager = nullptr;
+58 
+59     // Remove the active reference to this
+60     if(s_current_memory_manager == this)
+61         s_current_memory_manager = nullptr;
+62 }
 .fi
 
+.PP
+References \fBs_current_memory_manager\fP, and \fBs_kernel_memory_manager\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBsize_t\fP MemoryManager::align (\fBsize_t\fP size)\fC [static]\fP"
@@ -160,16 +167,16 @@ The aligned size
 .PP
 
 .PP
-Definition at line \fB286\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB288\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-286                                        {
-287 
-288     return (size / CHUNK_ALIGNMENT + 1) * CHUNK_ALIGNMENT;
-289 }
+288                                        {
+289 
+290     return (size / CHUNK_ALIGNMENT + 1) * CHUNK_ALIGNMENT;
+291 }
 .fi
 
 .PP
-References \fBMaxOS::memory::CHUNK_ALIGNMENT\fP, and \fBsize\fP\&.
+References \fBMaxOS::memory::CHUNK_ALIGNMENT\fP\&.
 .PP
 Referenced by \fBhandle_malloc()\fP\&.
 .SS "\fBvoid\fP MemoryManager::free (\fBvoid\fP * pointer)\fC [static]\fP"
@@ -184,16 +191,16 @@ Frees a block of memory using the current memory manager\&.
 .PP
 
 .PP
-Definition at line \fB156\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB158\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-156                                       {
-157 
-158     // Make sure there is a memory manager
-159     if (s_current_memory_manager == nullptr)
-160         return;
-161 
-162     s_current_memory_manager\->handle_free(pointer);
-163 }
+158                                       {
+159 
+160     // Make sure there is a memory manager
+161     if(s_current_memory_manager == nullptr)
+162         return;
+163 
+164     s_current_memory_manager\->handle_free(pointer);
+165 }
 .fi
 
 .PP
@@ -212,52 +219,52 @@ Frees a block of memory\&.
 .PP
 
 .PP
-Definition at line \fB184\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB186\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-184                                              {
-185 
-186     // Cant free unallocated memory
-187     if (pointer == nullptr)
-188         return;
-189 
-190     // Check bounds
-191     if ((uint64_t) pointer < (uint64_t) m_first_memory_chunk || (uint64_t) pointer > (uint64_t) m_last_memory_chunk)
-192         return;
-193 
-194     // Get the chunk information from the pointer
-195     auto* chunk = (MemoryChunk*) ((size_t) pointer \- sizeof(MemoryChunk));
-196     chunk\->allocated = false;
-197 
-198     // If there is a free chunk before this chunk then merge them
-199     if (chunk\->prev != nullptr && !chunk\->prev\->allocated) {
-200 
-201         // Grow the chunk behind this one so that it now contains the freed one
-202         chunk\->prev\->size += chunk\->size + sizeof(MemoryChunk);
-203         chunk\->prev\->next = chunk\->next;
-204 
-205         // The chunk in front of the freed one now needs to point to the merged chunk
-206         if (chunk\->next != nullptr)
-207             chunk\->next\->prev = chunk\->prev;
-208 
-209         // Freed chunk doesn't exist anymore so now working with the merged chunk
-210         chunk = chunk\->prev;
-211 
-212     }
+186                                              {
+187 
+188     // Cant free unallocated memory
+189     if(pointer == nullptr)
+190         return;
+191 
+192     // Check bounds
+193     if((uint64_t) pointer < (uint64_t) m_first_memory_chunk || (uint64_t) pointer > (uint64_t) m_last_memory_chunk)
+194         return;
+195 
+196     // Get the chunk information from the pointer
+197     auto* chunk = (MemoryChunk*) ((size_t) pointer \- sizeof(MemoryChunk));
+198     chunk\->allocated = false;
+199 
+200     // If there is a free chunk before this chunk then merge them
+201     if(chunk\->prev != nullptr && !chunk\->prev\->allocated) {
+202 
+203         // Grow the chunk behind this one so that it now contains the freed one
+204         chunk\->prev\->size += chunk\->size + sizeof(MemoryChunk);
+205         chunk\->prev\->next = chunk\->next;
+206 
+207         // The chunk in front of the freed one now needs to point to the merged chunk
+208         if(chunk\->next != nullptr)
+209             chunk\->next\->prev = chunk\->prev;
+210 
+211         // Freed chunk doesn't exist anymore so now working with the merged chunk
+212         chunk = chunk\->prev;
 213 
-214     // If there is a free chunk after this chunk then merge them
-215     if (chunk\->next != nullptr && !chunk\->next\->allocated) {
-216 
-217         // Grow this chunk so that it now contains the free chunk in front of the old (now freed) one
-218         chunk\->size += chunk\->next\->size + sizeof(MemoryChunk);
-219 
-220         // Now that this chunk contains the next one, it has to point to the one in front of what has just been merged
-221         // and that has to point to this
-222         chunk\->next = chunk\->next\->next;
-223         if (chunk\->next != nullptr)
-224             chunk\->next\->prev = chunk;
-225 
-226     }
-227 }
+214     }
+215 
+216     // If there is a free chunk after this chunk then merge them
+217     if(chunk\->next != nullptr && !chunk\->next\->allocated) {
+218 
+219         // Grow this chunk so that it now contains the free chunk in front of the old (now freed) one
+220         chunk\->size += chunk\->next\->size + sizeof(MemoryChunk);
+221 
+222         // Now that this chunk contains the next one, it has to point to the one in front of what has just been merged
+223         // and that has to point to this
+224         chunk\->next = chunk\->next\->next;
+225         if(chunk\->next != nullptr)
+226             chunk\->next\->prev = chunk;
+227 
+228     }
+229 }
 .fi
 
 .SS "\fBvoid\fP * MemoryManager::handle_malloc (\fBsize_t\fP size)"
@@ -277,64 +284,64 @@ A pointer to the block, or nullptr if no block is available
 .PP
 
 .PP
-Definition at line \fB98\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB100\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-98                                               {
-99 
-100     MemoryChunk* result = nullptr;
+100                                               {
 101 
-102     // Nothing to allocate
-103     if (size == 0)
-104         return nullptr;
-105 
-106     // Add room to store the chunk information
-107     size = align(size + sizeof(MemoryChunk));
-108 
-109     // Find the next free chunk that is big enough
-110     for (MemoryChunk* chunk = m_first_memory_chunk; chunk != nullptr && result == nullptr; chunk = chunk\->next) {
-111         if (chunk\->size > size && !chunk\->allocated)
-112             result = chunk;
-113     }
-114 
-115     // If there is no free chunk then make more room
-116     if (result == nullptr)
-117         result = expand_heap(size);
-118 
-119     // If there is not left over space to store extra chunks there is no need to split the chunk
-120     if (result\->size < size + sizeof(MemoryChunk) + 1) {
-121         result\->allocated = true;
-122         void* p = (void*) (((size_t) result) + sizeof(MemoryChunk));
-123         return p;
-124     }
-125 
-126     // Split the chunk into: what was requested + free overflow space for future allocates
-127     //  \- This prevents waste in the event that a big free chunk was found but the requested size would only use a portion of that
-128     auto* extra = (MemoryChunk*) ((size_t) result + sizeof(MemoryChunk) + size);
-129     extra\->allocated = false;
-130     extra\->size = result\->size \- size \- sizeof(MemoryChunk);
-131     extra\->prev = result;
-132 
-133     // Add to the linked list
-134     extra\->next = result\->next;
-135     if (extra\->next != nullptr)
-136         extra\->next\->prev = extra;
-137 
-138     // Requested chunk is now allocated exactly to the size requested and points to the free (split) block of memory that
-139     // it did not use
-140     result\->size = size;
-141     result\->allocated = true;
-142     result\->next = extra;
-143 
-144     // Update the last memory chunk if necessary
-145     if (result == m_last_memory_chunk)
-146         m_last_memory_chunk = extra;
-147 
-148     return (void*) (((size_t) result) + sizeof(MemoryChunk));
-149 }
+102     MemoryChunk* result = nullptr;
+103 
+104     // Nothing to allocate
+105     if(size == 0)
+106         return nullptr;
+107 
+108     // Add room to store the chunk information
+109     size = align(size + sizeof(MemoryChunk));
+110 
+111     // Find the next free chunk that is big enough
+112     for(MemoryChunk* chunk = m_first_memory_chunk; chunk != nullptr && result == nullptr; chunk = chunk\->next) {
+113         if(chunk\->size > size && !chunk\->allocated)
+114             result = chunk;
+115     }
+116 
+117     // If there is no free chunk then make more room
+118     if(result == nullptr)
+119         result = expand_heap(size);
+120 
+121     // If there is not left over space to store extra chunks there is no need to split the chunk
+122     if(result\->size < size + sizeof(MemoryChunk) + 1) {
+123         result\->allocated = true;
+124         void* p = (void*) (((size_t) result) + sizeof(MemoryChunk));
+125         return p;
+126     }
+127 
+128     // Split the chunk into: what was requested + free overflow space for future allocates
+129     //  \- This prevents waste in the event that a big free chunk was found but the requested size would only use a portion of that
+130     auto* extra = (MemoryChunk*) ((size_t) result + sizeof(MemoryChunk) + size);
+131     extra\->allocated = false;
+132     extra\->size = result\->size \- size \- sizeof(MemoryChunk);
+133     extra\->prev = result;
+134 
+135     // Add to the linked list
+136     extra\->next = result\->next;
+137     if(extra\->next != nullptr)
+138         extra\->next\->prev = extra;
+139 
+140     // Requested chunk is now allocated exactly to the size requested and points to the free (split) block of memory that
+141     // it did not use
+142     result\->size = size;
+143     result\->allocated = true;
+144     result\->next = extra;
+145 
+146     // Update the last memory chunk if necessary
+147     if(result == m_last_memory_chunk)
+148         m_last_memory_chunk = extra;
+149 
+150     return (void*) (((size_t) result) + sizeof(MemoryChunk));
+151 }
 .fi
 
 .PP
-References \fBalign()\fP, and \fBsize\fP\&.
+References \fBalign()\fP\&.
 .SS "\fBvoid\fP MemoryManager::kfree (\fBvoid\fP * pointer)\fC [static]\fP"
 
 .PP
@@ -347,22 +354,22 @@ Frees a block of memory using the kernel memory manager\&.
 .PP
 
 .PP
-Definition at line \fB170\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB172\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-170                                        {
-171 
-172     // Make sure there is a kernel memory manager
-173     if (s_kernel_memory_manager == nullptr)
-174         return;
-175 
-176     s_kernel_memory_manager\->handle_free(pointer);
-177 }
+172                                        {
+173 
+174     // Make sure there is a kernel memory manager
+175     if(s_kernel_memory_manager == nullptr)
+176         return;
+177 
+178     s_kernel_memory_manager\->handle_free(pointer);
+179 }
 .fi
 
 .PP
 References \fBs_kernel_memory_manager\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TCPSocket::Connected()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Disconnect()\fP, \fBMaxOS::net::TCPSocket::Disconnected()\fP, \fBMaxOS::net::TCPSocket::handleTransmissionControlProtocolPayload()\fP, \fBMaxOS::net::UDPSocket::handleUserDatagramProtocolPayload()\fP, \fBoperator delete()\fP, \fBoperator delete()\fP, \fBoperator delete[]()\fP, \fBoperator delete[]()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Referenced by \fBMaxOS::net::TCPSocket::connected()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::disconnect()\fP, \fBMaxOS::net::TCPSocket::disconnected()\fP, \fBMaxOS::net::TCPSocket::handle_transmission_control_protocol_payload()\fP, \fBMaxOS::net::UDPSocket::handle_user_datagram_protocol_payload()\fP, \fBoperator delete()\fP, \fBoperator delete()\fP, \fBoperator delete[]()\fP, \fBoperator delete[]()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::send()\fP, \fBMaxOS::net::EthernetFrameHandler::send_ethernet_frame()\fP, \fBMaxOS::net::InternetProtocolHandler::send_internet_protocol_packet()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
 .SS "\fBvoid\fP * MemoryManager::kmalloc (\fBsize_t\fP size)\fC [static]\fP"
 
 .PP
@@ -380,22 +387,22 @@ The pointer to the block, or nullptr if no block is available
 .PP
 
 .PP
-Definition at line \fB83\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB85\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-83                                         {
-84 
-85     // Make sure there is a kernel memory manager
-86     if (s_kernel_memory_manager == nullptr)
-87         return nullptr;
-88 
-89     return s_kernel_memory_manager\->handle_malloc(size);
-90 }
+85                                         {
+86 
+87     // Make sure there is a kernel memory manager
+88     if(s_kernel_memory_manager == nullptr)
+89         return nullptr;
+90 
+91     return s_kernel_memory_manager\->handle_malloc(size);
+92 }
 .fi
 
 .PP
-References \fBs_kernel_memory_manager\fP, and \fBsize\fP\&.
+References \fBs_kernel_memory_manager\fP\&.
 .PP
-Referenced by \fBMaxOS::drivers::ethernet::AMD_AM79C973::AMD_AM79C973()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::Connect()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Connect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::Listen()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Listen()\fP, \fBoperator new()\fP, \fBoperator new[]()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP, \fBMaxOS::net::InternetProtocolHandler::sendInternetProtocolPacket()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP, \fBMaxOS::processes::Thread::Thread()\fP, \fBMaxOS::drivers::console::VESABootConsole::VESABootConsole()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
+Referenced by \fBMaxOS::drivers::ethernet::AMD_AM79C973::AMD_AM79C973()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::connect()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::connect()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::listen()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::listen()\fP, \fBoperator new()\fP, \fBoperator new[]()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::send()\fP, \fBMaxOS::net::EthernetFrameHandler::send_ethernet_frame()\fP, \fBMaxOS::net::InternetProtocolHandler::send_internet_protocol_packet()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP, \fBMaxOS::processes::Thread::Thread()\fP, \fBMaxOS::drivers::console::VESABootConsole::VESABootConsole()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
 .SS "\fBvoid\fP * MemoryManager::malloc (\fBsize_t\fP size)\fC [static]\fP"
 
 .PP
@@ -413,23 +420,23 @@ a pointer to the block, 0 if no block is available or no memory manager is set
 .PP
 
 .PP
-Definition at line \fB68\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB70\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-68                                        {
-69 
-70     // Make sure there is somthing to do the allocation
-71     if (s_current_memory_manager == nullptr)
-72         return nullptr;
-73 
-74     return s_current_memory_manager\->handle_malloc(size);
-75 }
+70                                        {
+71 
+72     // Make sure there is somthing to do the allocation
+73     if(s_current_memory_manager == nullptr)
+74         return nullptr;
+75 
+76     return s_current_memory_manager\->handle_malloc(size);
+77 }
 .fi
 
 .PP
-References \fBs_current_memory_manager\fP, and \fBsize\fP\&.
+References \fBs_current_memory_manager\fP\&.
 .PP
 Referenced by \fBMaxOS::system::SyscallManager::syscall_allocate_memory()\fP, and \fBMaxOS::processes::Thread::Thread()\fP\&.
-.SS "\fBint\fP MemoryManager::memory_used ()"
+.SS "\fBsize_t\fP MemoryManager::memory_used ()"
 
 .PP
 Returns the amount of memory used\&. 
@@ -441,19 +448,19 @@ The amount of memory used
 .PP
 
 .PP
-Definition at line \fB268\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB270\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-268                                {
-269 
-270     int result = 0;
+270                                   {
 271 
-272     // Loop through all the chunks and add up the size of the allocated chunks
-273     for (MemoryChunk* chunk = m_first_memory_chunk; chunk != nullptr; chunk = chunk\->next)
-274         if (chunk\->allocated)
-275             result += chunk\->size;
-276 
-277     return result;
-278 }
+272     size_t result = 0;
+273 
+274     // Loop through all the chunks and add up the size of the allocated chunks
+275     for(MemoryChunk* chunk = m_first_memory_chunk; chunk != nullptr; chunk = chunk\->next)
+276         if(chunk\->allocated)
+277             result += chunk\->size;
+278 
+279     return result;
+280 }
 .fi
 
 .SS "\fBvoid\fP MemoryManager::switch_active_memory_manager (\fBMemoryManager\fP * manager)\fC [static]\fP"
@@ -468,20 +475,20 @@ Switches the active memory manager\&.
 .PP
 
 .PP
-Definition at line \fB297\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB299\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-297                                                                        {
-298 
-299     // Make sure there is a manager
-300     if (manager == nullptr)
-301         return;
-302 
-303     // Switch the address space
-304     asm volatile("mov %0, %%cr3"::"r"((uint64_t) manager\->m_virtual_memory_manager\->pml4_root_address_physical()) : "memory");
-305 
-306     // Set the active memory manager
-307     s_current_memory_manager = manager;
-308 }
+299                                                                        {
+300 
+301     // Make sure there is a manager
+302     if(manager == nullptr)
+303         return;
+304 
+305     // Switch the address space
+306     asm volatile("mov %0, %%cr3"::"r"((uint64_t) manager\->m_virtual_memory_manager\->pml4_root_address_physical()) : "memory");
+307 
+308     // Set the active memory manager
+309     s_current_memory_manager = manager;
+310 }
 .fi
 
 .PP
@@ -498,12 +505,12 @@ The active virtual memory manager
 .PP
 
 .PP
-Definition at line \fB315\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+Definition at line \fB317\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .nf
-315                                          {
-316 
-317     return m_virtual_memory_manager;
-318 }
+317                                          {
+318 
+319     return m_virtual_memory_manager;
+320 }
 .fi
 
 .SH "Member Data Documentation"
@@ -513,17 +520,17 @@ Definition at line \fB315\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
 .PP
 The memory manager for the current process\&. 
 .PP
-Definition at line \fB52\fP of file \fBmemorymanagement\&.h\fP\&.
+Definition at line \fB51\fP of file \fBmemorymanagement\&.h\fP\&.
 .PP
-Referenced by \fBfree()\fP, \fBmalloc()\fP, and \fBswitch_active_memory_manager()\fP\&.
+Referenced by \fBfree()\fP, \fBmalloc()\fP, \fBswitch_active_memory_manager()\fP, and \fB~MemoryManager()\fP\&.
 .SS "\fBMemoryManager\fP* MaxOS::memory::MemoryManager::s_kernel_memory_manager = nullptr\fC [inline]\fP, \fC [static]\fP"
 
 .PP
 The memory manager for any kernel processes and all kernel allocations\&. 
 .PP
-Definition at line \fB53\fP of file \fBmemorymanagement\&.h\fP\&.
+Definition at line \fB52\fP of file \fBmemorymanagement\&.h\fP\&.
 .PP
-Referenced by \fBkfree()\fP, \fBkmalloc()\fP, \fBMemoryManager()\fP, \fBMaxOS::processes::Process::Process()\fP, and \fBMaxOS::processes::Scheduler::Scheduler()\fP\&.
+Referenced by \fBkfree()\fP, \fBkmalloc()\fP, \fBMemoryManager()\fP, \fBMaxOS::processes::Process::Process()\fP, \fBMaxOS::processes::Scheduler::Scheduler()\fP, \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP, and \fB~MemoryManager()\fP\&.
 
 .SH "Author"
 .PP 

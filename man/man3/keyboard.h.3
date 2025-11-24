@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/peripherals/keyboard.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/peripherals/keyboard.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,7 +25,7 @@
 .br
 \fC#include <hardwarecommunication/apic\&.h>\fP
 .br
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 
 .SS "Classes"
@@ -64,14 +64,17 @@
 
 .in +1c
 .ti -1c
-.RI "enum class \fBScanCodeType\fP : int { \fBREGULAR\fP, \fBEXTENDED\fP, \fBEXTENDED_BUFFER\fP }"
+.RI "enum class \fBMaxOS::drivers::peripherals::ScanCodeType\fP : int { \fBREGULAR\fP, \fBEXTENDED\fP, \fBEXTENDED_BUFFER\fP }"
 .br
+.RI "The type of scan code being sent by the keyboard\&. "
 .ti -1c
 .RI "enum class \fBMaxOS::drivers::peripherals::KeyCode\fP : uint16_t { \fBA\fP = 'A', \fBa\fP = 'a', \fBB\fP = 'B', \fBb\fP = 'b', \fBC\fP = 'C', \fBc\fP = 'c', \fBD\fP = 'D', \fBd\fP = 'd', \fBE\fP = 'E', \fBe\fP = 'e', \fBF\fP = 'F', \fBf\fP = 'f', \fBG\fP = 'G', \fBg\fP = 'g', \fBH\fP = 'H', \fBh\fP = 'h', \fBI\fP = 'I', \fBi\fP = 'i', \fBJ\fP = 'J', \fBj\fP = 'j', \fBK\fP = 'K', \fBk\fP = 'k', \fBL\fP = 'L', \fBl\fP = 'l', \fBM\fP = 'M', \fBm\fP = 'm', \fBN\fP = 'N', \fBn\fP = 'n', \fBO\fP = 'O', \fBo\fP = 'o', \fBP\fP = 'P', \fBp\fP = 'p', \fBQ\fP = 'Q', \fBq\fP = 'q', \fBR\fP = 'R', \fBr\fP = 'r', \fBS\fP = 'S', \fBs\fP = 's', \fBT\fP = 'T', \fBt\fP = 't', \fBU\fP = 'U', \fBu\fP = 'u', \fBV\fP = 'V', \fBv\fP = 'v', \fBW\fP = 'W', \fBw\fP = 'w', \fBX\fP = 'X', \fBx\fP = 'x', \fBY\fP = 'Y', \fBy\fP = 'y', \fBZ\fP = 'Z', \fBz\fP = 'z', \fBzero\fP = '0', \fBone\fP = '1', \fBtwo\fP = '2', \fBthree\fP = '3', \fBfour\fP = '4', \fBfive\fP = '5', \fBsix\fP = '6', \fBseven\fP = '7', \fBeight\fP = '8', \fBnine\fP = '9', \fBcomma\fP = ',', \fBfullStop\fP = '\&.', \fBexclamationMark\fP = '!', \fBquestionMark\fP = '?', \fBquotationMark\fP = '\\"', \fBsemicolon\fP = ';', \fBcolon\fP = ':', \fBapostrophe\fP = '\\'', \fBslantedApostrophe\fP = '`', \fBpowerSign\fP = '^', \fBdollarSign\fP = '$', \fBpercentSign\fP = '', \fBandSign\fP = '&', \fBatSign\fP = '@', \fBunderscore\fP = '_', \fBlineThing\fP = '|', \fBhash\fP = '#', \fBbackslash\fP = '\\\\', \fBforwardSlash\fP = '/', \fBsquigglyLine\fP = '~', \fBplus\fP = '+', \fBminus\fP = '-', \fBequals\fP = '=', \fBmultiply\fP = '*', \fBlessThan\fP = '<', \fBgreaterThan\fP = '>', \fBopenBracket\fP = '(', \fBcloseBracket\fP = ')', \fBopenSquareBracket\fP = '[', \fBcloseSquareBracket\fP = ']', \fBopenCurlyBracket\fP = '{', \fBcloseCurlyBracket\fP = '}', \fBspace\fP = ' ', \fBtab\fP = '\\t', \fBenter\fP = '\\n', \fBbackspace\fP = '\\b', \fBf1\fP = 1000, \fBf2\fP, \fBf3\fP, \fBf4\fP, \fBf5\fP, \fBf6\fP, \fBf7\fP, \fBf8\fP, \fBf9\fP, \fBf10\fP, \fBf11\fP, \fBf12\fP, \fBescape\fP, \fBprintScreen\fP, \fBscrollLock\fP, \fBpauseBreak\fP, \fBupArrow\fP, \fBdownArrow\fP, \fBleftArrow\fP, \fBrightArrow\fP, \fBinsert\fP, \fBhome\fP, \fBpageUp\fP, \fBdeleteKey\fP, \fBend\fP, \fBpageDown\fP, \fBcapsLock\fP, \fBleftShift\fP, \fBleftControl\fP, \fBleftOS\fP, \fBleftAlt\fP, \fBrightAlt\fP, \fBfunctionKey\fP, \fBrightControl\fP, \fBrightShift\fP, \fBnumberPadLock\fP, \fBnumberPadForwardSlash\fP, \fBnumberPadMultiply\fP, \fBnumberPadMinus\fP, \fBnumberPadPlus\fP, \fBnumberPadEnter\fP, \fBnumberPadZero\fP, \fBnumberPadOne\fP, \fBnumberPadTwo\fP, \fBnumberPadThree\fP, \fBnumberPadFour\fP, \fBnumberPadFive\fP, \fBnumberPadSix\fP, \fBnumberPadSeven\fP, \fBnumberPadEight\fP, \fBnumberPadNine\fP, \fBnumberPadFullStop\fP, \fBnumberPadHome\fP, \fBnumberPadPageDown\fP, \fBnumberPadPageUp\fP, \fBnumberPadEnd\fP, \fBnumberPadInsert\fP, \fBnumberPadUpArrow\fP, \fBnumberPadDownArrow\fP, \fBnumberPadLeftArrow\fP, \fBnumberPadRightArrow\fP }"
 .br
+.RI "A mapping of key codes to their values\&. "
 .ti -1c
-.RI "enum \fBKeyboardEvents\fP { \fBKEYDOWN\fP, \fBKEYUP\fP }"
+.RI "enum class \fBMaxOS::drivers::peripherals::KeyboardEvents\fP { \fBKEYDOWN\fP, \fBKEYUP\fP }"
 .br
+.RI "The events that can be triggered by the Keyboard Driver\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -94,19 +97,23 @@ Max Tyson
 Definition in file \fBkeyboard\&.h\fP\&.
 .SH "Enumeration Type Documentation"
 .PP 
-.SS "enum MaxOS::drivers::peripherals::KeyboardEvents"
+.SS "enum class \fBMaxOS::drivers::peripherals::KeyboardEvents\fP\fC [strong]\fP"
 
 .PP
-Definition at line \fB229\fP of file \fBkeyboard\&.h\fP\&..PP
+The events that can be triggered by the Keyboard Driver\&. 
+.PP
+Definition at line \fB239\fP of file \fBkeyboard\&.h\fP\&..PP
 .nf
-229                                 {
-230                 KEYDOWN,
-231                 KEYUP
-232             };
+239                               {
+240         KEYDOWN,
+241         KEYUP
+242     };
 .fi
 
 .SS "enum class \fBMaxOS::drivers::peripherals::KeyCode\fP : uint16_t\fC [strong]\fP"
 
+.PP
+A mapping of key codes to their values\&. 
 .PP
 \fBEnumerator\fP
 .in +1c
@@ -114,188 +121,190 @@ Definition at line \fB229\fP of file \fBkeyboard\&.h\fP\&..PP
 \fB\fIf1 \fP\fP
 OTHER CODES THAT ARE NOT CHARACTERS ///\&. 
 .PP
-Definition at line \fB34\fP of file \fBkeyboard\&.h\fP\&..PP
+Definition at line \fB40\fP of file \fBkeyboard\&.h\fP\&..PP
 .nf
-34                                : uint16_t {
-35 
-36                 // Alphabet
-37                 A = 'A', a = 'a',
-38                 B = 'B', b = 'b',
-39                 C = 'C', c = 'c',
-40                 D = 'D', d = 'd',
-41                 E = 'E', e = 'e',
-42                 F = 'F', f = 'f',
-43                 G = 'G', g = 'g',
-44                 H = 'H', h = 'h',
-45                 I = 'I', i = 'i',
-46                 J = 'J', j = 'j',
-47                 K = 'K', k = 'k',
-48                 L = 'L', l = 'l',
-49                 M = 'M', m = 'm',
-50                 N = 'N', n = 'n',
-51                 O = 'O', o = 'o',
-52                 P = 'P', p = 'p',
-53                 Q = 'Q', q = 'q',
-54                 R = 'R', r = 'r',
-55                 S = 'S', s = 's',
-56                 T = 'T', t = 't',
-57                 U = 'U', u = 'u',
-58                 V = 'V', v = 'v',
-59                 W = 'W', w = 'w',
-60                 X = 'X', x = 'x',
-61                 Y = 'Y', y = 'y',
-62                 Z = 'Z', z = 'z',
-63 
-64                 // Numbers
-65                 zero = '0',
-66                 one = '1',
-67                 two = '2',
-68                 three = '3',
-69                 four = '4',
-70                 five = '5',
-71                 six = '6',
-72                 seven = '7',
-73                 eight = '8',
-74                 nine = '9',
-75 
-76                 // Symbols
-77                 comma = ',',
-78                 fullStop = '\&.',
-79                 exclamationMark = '!',
-80                 questionMark = '?',
-81                 quotationMark = '\\"',
-82                 semicolon = ';',
-83                 colon = ':',
-84                 apostrophe = '\\'',
-85                 slantedApostrophe = '`',
-86 
-87                 // Signs
-88                 powerSign = '^',
-89                 dollarSign = '$',
-90                 percentSign = '%',
-91                 andSign = '&',
-92                 atSign = '@',
-93 
-94                 // Special Characters
-95                 underscore = '_',
-96                 lineThing = '|',
-97                 hash = '#',
-98                 backslash = '\\\\',
-99                 forwardSlash = '/',
-100                 squigglyLine = '~',
-101 
-102                 // Math Symbols
-103                 plus = '+',
-104                 minus = '\-',
-105                 equals = '=',
-106                 multiply = '*',
-107                 lessThan = '<',
-108                 greaterThan = '>',
-109 
-110                 // Brackets
-111                 openBracket = '(',
-112                 closeBracket = ')',
-113                 openSquareBracket = '[',
-114                 closeSquareBracket = ']',
-115                 openCurlyBracket = '{',
-116                 closeCurlyBracket = '}',
-117 
-118                 // Writing
-119                 space = ' ',
-120                 tab = '\\t',
-121                 enter = '\\n',
-122                 backspace = '\\b',
+40                        : uint16_t {
+41 
+42         // Alphabet
+43         A = 'A', a = 'a',
+44         B = 'B', b = 'b',
+45         C = 'C', c = 'c',
+46         D = 'D', d = 'd',
+47         E = 'E', e = 'e',
+48         F = 'F', f = 'f',
+49         G = 'G', g = 'g',
+50         H = 'H', h = 'h',
+51         I = 'I', i = 'i',
+52         J = 'J', j = 'j',
+53         K = 'K', k = 'k',
+54         L = 'L', l = 'l',
+55         M = 'M', m = 'm',
+56         N = 'N', n = 'n',
+57         O = 'O', o = 'o',
+58         P = 'P', p = 'p',
+59         Q = 'Q', q = 'q',
+60         R = 'R', r = 'r',
+61         S = 'S', s = 's',
+62         T = 'T', t = 't',
+63         U = 'U', u = 'u',
+64         V = 'V', v = 'v',
+65         W = 'W', w = 'w',
+66         X = 'X', x = 'x',
+67         Y = 'Y', y = 'y',
+68         Z = 'Z', z = 'z',
+69 
+70         // Numbers
+71         zero = '0',
+72         one = '1',
+73         two = '2',
+74         three = '3',
+75         four = '4',
+76         five = '5',
+77         six = '6',
+78         seven = '7',
+79         eight = '8',
+80         nine = '9',
+81 
+82         // Symbols
+83         comma = ',',
+84         fullStop = '\&.',
+85         exclamationMark = '!',
+86         questionMark = '?',
+87         quotationMark = '\\"',
+88         semicolon = ';',
+89         colon = ':',
+90         apostrophe = '\\'',
+91         slantedApostrophe = '`',
+92 
+93         // Signs
+94         powerSign = '^',
+95         dollarSign = '$',
+96         percentSign = '%',
+97         andSign = '&',
+98         atSign = '@',
+99 
+100         // Special Characters
+101         underscore = '_',
+102         lineThing = '|',
+103         hash = '#',
+104         backslash = '\\\\',
+105         forwardSlash = '/',
+106         squigglyLine = '~',
+107 
+108         // Math Symbols
+109         plus = '+',
+110         minus = '\-',
+111         equals = '=',
+112         multiply = '*',
+113         lessThan = '<',
+114         greaterThan = '>',
+115 
+116         // Brackets
+117         openBracket = '(',
+118         closeBracket = ')',
+119         openSquareBracket = '[',
+120         closeSquareBracket = ']',
+121         openCurlyBracket = '{',
+122         closeCurlyBracket = '}',
 123 
-125 
-126                 // Functions
-127                 f1 = 1000,      //force it to start at 1000 so it doesn't conflict with ascii
-128                 f2,
-129                 f3,
-130                 f4,
-131                 f5,
-132                 f6,
-133                 f7,
-134                 f8,
-135                 f9,
-136                 f10,
-137                 f11,
-138                 f12,
-139 
-140                 // Top Row
-141                 escape,
-142                 printScreen,
-143                 scrollLock,
-144                 pauseBreak,
+124         // Writing
+125         space = ' ',
+126         tab = '\\t',
+127         enter = '\\n',
+128         backspace = '\\b',
+129 
+131 
+132         // Functions
+133         f1 = 1000,      //force it to start at 1000 so it doesn't conflict with ascii
+134         f2,
+135         f3,
+136         f4,
+137         f5,
+138         f6,
+139         f7,
+140         f8,
+141         f9,
+142         f10,
+143         f11,
+144         f12,
 145 
-146                 // Arrow s
-147                 upArrow,
-148                 downArrow,
-149                 leftArrow,
-150                 rightArrow,
+146         // Top Row
+147         escape,
+148         printScreen,
+149         scrollLock,
+150         pauseBreak,
 151 
-152                 // Keys Above Arrows
-153                 insert,
-154                 home,
-155                 pageUp,
-156                 deleteKey,
-157                 end,
-158                 pageDown,
-159 
-160                 // Left Side
-161                 capsLock,
-162                 leftShift,
-163                 leftControl,
-164                 leftOS,                 //weird ass Windows key or command on Mac
-165                 leftAlt,
-166 
-167                 // Right Side
-168                 rightAlt,
-169                 functionKey,
-170                 rightControl,
-171                 rightShift,
+152         // Arrow s
+153         upArrow,
+154         downArrow,
+155         leftArrow,
+156         rightArrow,
+157 
+158         // Keys Above Arrows
+159         insert,
+160         home,
+161         pageUp,
+162         deleteKey,
+163         end,
+164         pageDown,
+165 
+166         // Left Side
+167         capsLock,
+168         leftShift,
+169         leftControl,
+170         leftOS,                 //weird ass Windows key or command on Mac
+171         leftAlt,
 172 
-173                 // Number Pad
-174                 numberPadLock,
-175                 numberPadForwardSlash,
-176                 numberPadMultiply,
-177                 numberPadMinus,
-178                 numberPadPlus,
-179                 numberPadEnter,
-180                 numberPadZero,
-181                 numberPadOne,
-182                 numberPadTwo,
-183                 numberPadThree,
-184                 numberPadFour,
-185                 numberPadFive,
-186                 numberPadSix,
-187                 numberPadSeven,
-188                 numberPadEight,
-189                 numberPadNine,
-190                 numberPadFullStop,
-191 
-192                 // Number Pad (Non Number Lock)
-193                 numberPadHome,
-194                 numberPadPageDown,
-195                 numberPadPageUp,
-196                 numberPadEnd,
-197                 numberPadInsert,
-198                 numberPadUpArrow,
-199                 numberPadDownArrow,
-200                 numberPadLeftArrow,
-201                 numberPadRightArrow,
-202             };
+173         // Right Side
+174         rightAlt,
+175         functionKey,
+176         rightControl,
+177         rightShift,
+178 
+179         // Number Pad
+180         numberPadLock,
+181         numberPadForwardSlash,
+182         numberPadMultiply,
+183         numberPadMinus,
+184         numberPadPlus,
+185         numberPadEnter,
+186         numberPadZero,
+187         numberPadOne,
+188         numberPadTwo,
+189         numberPadThree,
+190         numberPadFour,
+191         numberPadFive,
+192         numberPadSix,
+193         numberPadSeven,
+194         numberPadEight,
+195         numberPadNine,
+196         numberPadFullStop,
+197 
+198         // Number Pad (Non Number Lock)
+199         numberPadHome,
+200         numberPadPageDown,
+201         numberPadPageUp,
+202         numberPadEnd,
+203         numberPadInsert,
+204         numberPadUpArrow,
+205         numberPadDownArrow,
+206         numberPadLeftArrow,
+207         numberPadRightArrow,
+208     };
 .fi
 
-.SS "enum class MaxOS::drivers::peripherals::ScanCodeType : int\fC [strong]\fP"
+.SS "enum class \fBMaxOS::drivers::peripherals::ScanCodeType\fP : int\fC [strong]\fP"
 
 .PP
-Definition at line \fB28\fP of file \fBkeyboard\&.h\fP\&..PP
+The type of scan code being sent by the keyboard\&. 
+.PP
+Definition at line \fB30\fP of file \fBkeyboard\&.h\fP\&..PP
 .nf
-28                                     : int {
-29                 REGULAR,
-30                 EXTENDED,
-31                 EXTENDED_BUFFER
-32             };
+30                             : int {
+31         REGULAR,
+32         EXTENDED,
+33         EXTENDED_BUFFER
+34     };
 .fi
 
 .SH "Author"

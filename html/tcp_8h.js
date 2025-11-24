@@ -8,6 +8,9 @@ var tcp_8h =
     [ "MaxOS::net::TCPPayloadHandler", "classMaxOS_1_1net_1_1TCPPayloadHandler.html", "classMaxOS_1_1net_1_1TCPPayloadHandler" ],
     [ "MaxOS::net::TCPSocket", "classMaxOS_1_1net_1_1TCPSocket.html", "classMaxOS_1_1net_1_1TCPSocket" ],
     [ "MaxOS::net::TransmissionControlProtocolHandler", "classMaxOS_1_1net_1_1TransmissionControlProtocolHandler.html", "classMaxOS_1_1net_1_1TransmissionControlProtocolHandler" ],
+    [ "tcp_header_t", "tcp_8h.html#ade01f39cc741b9a05603f75bbebdf93d", null ],
+    [ "tcp_pseudo_header_t", "tcp_8h.html#ac72a8e333ba07816fd07ba87cca7fa8c", null ],
+    [ "TransmissionControlProtocolPort", "tcp_8h.html#a8e668c17241c6c0ed8e9f6df338b2307", null ],
     [ "TCPFlag", "tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5", [
       [ "FIN", "tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5af408850c47cccdcedad816d79e100906", null ],
       [ "SYN", "tcp_8h.html#ab016e1ccae4de3d81a67e8eeef0ba1f5abab6eed0f7cd8bd721e728003b63b54d", null ],
@@ -36,20 +39,5 @@ var tcp_8h =
       [ "TIME_WAIT", "tcp_8h.html#aef1bb382dd5d6cdaecb7ffe20b234a44a29766b42abee01f792492da03e732083", null ],
       [ "CLOSE_WAIT", "tcp_8h.html#aef1bb382dd5d6cdaecb7ffe20b234a44a831862ab9b2e65d7f51841e0c739180f", null ],
       [ "LAST_ACK", "tcp_8h.html#aef1bb382dd5d6cdaecb7ffe20b234a44a9cbd9a647dc3edd29dd880e97c352032", null ]
-    ] ],
-    [ "acknowledgementNumber", "tcp_8h.html#ac41c406579d1214f4a1f0338bca28b6a", null ],
-    [ "checksum", "tcp_8h.html#a6796c847bbd16253ce2538754c250bd6", null ],
-    [ "dstIP", "tcp_8h.html#a2287eab8c0183320980c7a0addb74a5a", null ],
-    [ "dstPort", "tcp_8h.html#ac01766720e5781a418710ebf1ba5379e", null ],
-    [ "flags", "tcp_8h.html#aa2585d779da0ab21273a8d92de9a0ebe", null ],
-    [ "headerSize32", "tcp_8h.html#a3909a49a58301aec6d401cdd9ae76f5a", null ],
-    [ "options", "tcp_8h.html#a2ba60f781746d31baf29e8c5a35d07e7", null ],
-    [ "protocol", "tcp_8h.html#ab551400c74271f35d0c79f81d29cffbb", null ],
-    [ "reserved", "tcp_8h.html#acb7bc06bed6f6408d719334fc41698c7", null ],
-    [ "sequenceNumber", "tcp_8h.html#a2d38c5cab4c11a0212dbc06554a6e1e0", null ],
-    [ "srcIP", "tcp_8h.html#a2c21b87d7d19b79e094d74112253a776", null ],
-    [ "srcPort", "tcp_8h.html#a26ebbf4f65c3f6fd9959d9cecef5c9d8", null ],
-    [ "totalLength", "tcp_8h.html#a46d6b08cf598408355fa1fc5c1de902a", null ],
-    [ "urgentPtr", "tcp_8h.html#aca974d34b50135a7d9b524a8fc2f5d00", null ],
-    [ "windowSize", "tcp_8h.html#a6b2a31b20954529dabfe0f32eda1cf11", null ]
+    ] ]
 ];

@@ -1,11 +1,15 @@
 var cpu_8h =
 [
-    [ "MaxOS::system::__attribute__", "structMaxOS_1_1system_1_1____attribute____.html", "structMaxOS_1_1system_1_1____attribute____" ],
+    [ "MaxOS::system::CPUStatus", "structMaxOS_1_1system_1_1CPUStatus.html", "structMaxOS_1_1system_1_1CPUStatus" ],
     [ "MaxOS::system::TaskStateSegment", "structMaxOS_1_1system_1_1TaskStateSegment.html", "structMaxOS_1_1system_1_1TaskStateSegment" ],
     [ "MaxOS::system::StackFrame", "structMaxOS_1_1system_1_1StackFrame.html", "structMaxOS_1_1system_1_1StackFrame" ],
     [ "MaxOS::system::CoreBootInfo", "structMaxOS_1_1system_1_1CoreBootInfo.html", "structMaxOS_1_1system_1_1CoreBootInfo" ],
     [ "MaxOS::system::Core", "classMaxOS_1_1system_1_1Core.html", "classMaxOS_1_1system_1_1Core" ],
     [ "MaxOS::system::CPU", "classMaxOS_1_1system_1_1CPU.html", "classMaxOS_1_1system_1_1CPU" ],
+    [ "core_boot_info_t", "cpu_8h.html#a8cc53adee7d9f2ae345e54f11cb80371", null ],
+    [ "cpu_status_t", "cpu_8h.html#a605489186b2c614af947b15ae8a77418", null ],
+    [ "stack_frame_t", "cpu_8h.html#a87e3471d15e54393e3055d6162c73f50", null ],
+    [ "tss_t", "cpu_8h.html#adb56c35feb20bc6b4fc73b093a48a97c", null ],
     [ "CPU_FEATURE_ECX", "cpu_8h.html#a955509bd4aa295b6038a6812bf689200", [
       [ "SSE3", "cpu_8h.html#a955509bd4aa295b6038a6812bf689200ac6603310b6588e97789264110f6e9101", null ],
       [ "PCLMUL", "cpu_8h.html#a955509bd4aa295b6038a6812bf689200a6032723e90ef0acd47ce885772cb659b", null ],
@@ -71,29 +75,5 @@ var cpu_8h =
       [ "IA64", "cpu_8h.html#aabd92958148e45d498450aaf57c8d6aba4c2c294c51f3230d47a6bf0fb0cbe47a", null ],
       [ "PBE", "cpu_8h.html#aabd92958148e45d498450aaf57c8d6abaeff7c5571b267c9cf48a2c16d82e99f4", null ]
     ] ],
-    [ "__attribute__", "cpu_8h.html#a2d3ce0f98cbfe481d7597fef8f25a230", null ],
-    [ "activated", "cpu_8h.html#a73e9fa0c3543560192f38a8ab6a78c47", null ],
-    [ "BOOT_STACK_SIZE", "cpu_8h.html#a0cdb341b2d45114c2d033ec00bc3b356", null ],
-    [ "gdt_64_base", "cpu_8h.html#a3f6e3329ba03df2dd96fa12c454d0c32", null ],
-    [ "id", "cpu_8h.html#a1e6927fa1486224044e568f9c370519b", null ],
-    [ "io_bitmap_offset", "cpu_8h.html#ac0cd4cbf2cda7bf0599dc6441efc8b3c", null ],
-    [ "ist1", "cpu_8h.html#a715597b286f1f3911516ff33f7daed1d", null ],
-    [ "ist2", "cpu_8h.html#a0cad174ca03880e2ef66877fa7452908", null ],
-    [ "ist3", "cpu_8h.html#adfffc52e9460241dab25a95518f110f1", null ],
-    [ "ist4", "cpu_8h.html#aa9913c81119fe2e85184295729bb919f", null ],
-    [ "ist5", "cpu_8h.html#ad44d2330d19aca0011f83bd384e17ffb", null ],
-    [ "ist6", "cpu_8h.html#a50ceffaaa84b8c9e483ab22a3e446a25", null ],
-    [ "ist7", "cpu_8h.html#a92d8554e63dfe173bb1cdc79e6105b77", null ],
-    [ "next", "cpu_8h.html#adacd1bb3e91dd22eaae8f252d4135d4d", null ],
-    [ "p4_table", "cpu_8h.html#a9fc1d0f743f4314f0b9083fa0b755e07", null ],
-    [ "reserved0", "cpu_8h.html#aed93283265f941dc1d2bf8d634164493", null ],
-    [ "reserved1", "cpu_8h.html#a70e1f8ea009867b1bee1dcd6740874a1", null ],
-    [ "reserved2", "cpu_8h.html#a43927117f60a83134aaf449767b87b6c", null ],
-    [ "reserved3", "cpu_8h.html#aa0c86982c9eef8033adb225c9f4c0458", null ],
-    [ "reserved4", "cpu_8h.html#af9c80382144c72c09f80eb6458d5238e", null ],
-    [ "rip", "cpu_8h.html#ad37248eb45d2509df75a205d8412ac65", null ],
-    [ "rsp0", "cpu_8h.html#a72b38046f765f14ce3d8f74ead10766b", null ],
-    [ "rsp1", "cpu_8h.html#a01fe81e8371ef1ebbf418968c24938af", null ],
-    [ "rsp2", "cpu_8h.html#a15cb2c4ffbfbf962c70a94c7519ef51f", null ],
-    [ "stack", "cpu_8h.html#a1eed65db00a29bed626cd7e0a16cbd05", null ]
+    [ "BOOT_STACK_SIZE", "cpu_8h.html#a0cdb341b2d45114c2d033ec00bc3b356", null ]
 ];

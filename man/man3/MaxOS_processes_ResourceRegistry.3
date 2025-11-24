@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::ResourceRegistry< Type >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::ResourceRegistry< Type >" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,27 +15,31 @@ Inherits \fBMaxOS::processes::BaseResourceRegistry\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBResourceRegistry\fP (resource_type_t \fBtype\fP)"
+.RI "\fBResourceRegistry\fP (\fBresource_type_t\fP \fBtype\fP)"
 .br
 .RI "Constructor for \fBResourceRegistry\fP of a specific type\&. "
 .ti -1c
-.RI "\fBResource\fP * \fBcreate_resource\fP (const \fBstring\fP &\fBname\fP, size_t \fBflags\fP) override"
+.RI "\fBResource\fP * \fBcreate_resource\fP (const \fBstring\fP &name, size_t flags) override"
 .br
-.RI "Creates a resource of the specific type\&. "
+.RI "Create a new resource of the specific type\&. "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::processes::BaseResourceRegistry\fP
 .in +1c
 .ti -1c
-.RI "\fBBaseResourceRegistry\fP (resource_type_t \fBtype\fP)"
+.RI "\fBBaseResourceRegistry\fP (\fBresource_type_t\fP \fBtype\fP)"
 .br
 .RI "Constructs a new \fBBaseResourceRegistry\fP object and registers it globally\&. "
 .ti -1c
-.RI "resource_type_t \fBtype\fP ()"
+.RI "\fB~BaseResourceRegistry\fP ()"
+.br
+.RI "Destructor for \fBBaseResourceRegistry\fP, removes it from the global list\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
 .br
 .RI "Gets the type of resources this registry handles\&. "
 .ti -1c
-.RI "virtual \fBResource\fP * \fBget_resource\fP (const \fBstring\fP &\fBname\fP)"
+.RI "virtual \fBResource\fP * \fBget_resource\fP (const \fBstring\fP &name)"
 .br
 .RI "Gets a resource from the registry by name\&. "
 .ti -1c
@@ -43,7 +47,7 @@ Public Member Functions inherited from \fBMaxOS::processes::BaseResourceRegistry
 .br
 .RI "Registers a resource in the registry\&. "
 .ti -1c
-.RI "virtual void \fBclose_resource\fP (\fBResource\fP *resource, size_t \fBflags\fP)"
+.RI "virtual void \fBclose_resource\fP (\fBResource\fP *resource, size_t flags)"
 .br
 .RI "Close the resource provided, if it exists in this registry\&. "
 .in -1c
@@ -61,7 +65,7 @@ Protected Attributes inherited from \fBMaxOS::processes::BaseResourceRegistry\fP
 .br
 .RI "The map of resource names to how many processes are using them\&. "
 .ti -1c
-.RI "resource_type_t \fBm_type\fP"
+.RI "\fBresource_type_t\fP \fBm_type\fP"
 .br
 .RI "The resource type that this registry manages\&. "
 .in -1c
@@ -84,7 +88,7 @@ class MaxOS::processes::ResourceRegistry< Type >"A resource registry for a speci
 Definition at line \fB81\fP of file \fBresource\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<class Type > \fBMaxOS::processes::ResourceRegistry\fP< Type >::ResourceRegistry (resource_type_t type)\fC [explicit]\fP"
+.SS "template<class Type > \fBMaxOS::processes::ResourceRegistry\fP< Type >::ResourceRegistry (\fBresource_type_t\fP type)\fC [explicit]\fP"
 
 .PP
 Constructor for \fBResourceRegistry\fP of a specific type\&. 
@@ -101,9 +105,9 @@ Constructor for \fBResourceRegistry\fP of a specific type\&.
 .PP
 
 .PP
-Definition at line \fB108\fP of file \fBresource\&.h\fP\&..PP
+Definition at line \fB114\fP of file \fBresource\&.h\fP\&..PP
 .nf
-108 :BaseResourceRegistry(type) {}
+115             :BaseResourceRegistry(type) { }
 .fi
 
 .SH "Member Function Documentation"
@@ -111,28 +115,42 @@ Definition at line \fB108\fP of file \fBresource\&.h\fP\&..PP
 .SS "template<class Type > \fBResource\fP * \fBMaxOS::processes::ResourceRegistry\fP< Type >::create_resource (const \fBstring\fP & name, size_t flags)\fC [inline]\fP, \fC [override]\fP, \fC [virtual]\fP"
 
 .PP
-Creates a resource of the specific type\&. 
+Create a new resource of the specific type\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource 
+.br
+\fIflags\fP The flags to open the resource with 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The created resource, or nullptr on failure 
+.RE
+.PP
+
 .PP
 Reimplemented from \fBMaxOS::processes::BaseResourceRegistry\fP\&.
 .PP
-Definition at line \fB88\fP of file \fBresource\&.h\fP\&..PP
+Definition at line \fB94\fP of file \fBresource\&.h\fP\&..PP
 .nf
-88                                                                                      {
-89 
-90                     auto resource = new Type(name, flags, type());
-91 
-92                     // Creation failed
-93                     if (!register_resource(resource)) {
-94                         delete resource;
-95                         return nullptr;
-96                     }
+94                                                                                  {
+95 
+96                 auto resource = new Type(name, flags, type());
 97 
-98                     return resource;
-99                 }
+98                 // Creation failed
+99                 if(!register_resource(resource)) {
+100                     delete resource;
+101                     return nullptr;
+102                 }
+103 
+104                 return resource;
+105             }
 .fi
 
 .PP
-References \fBflags\fP, \fBname\fP, \fBMaxOS::processes::BaseResourceRegistry::register_resource()\fP, and \fBMaxOS::processes::BaseResourceRegistry::type()\fP\&.
+References \fBMaxOS::processes::BaseResourceRegistry::register_resource()\fP, and \fBMaxOS::processes::BaseResourceRegistry::type()\fP\&.
 
 .SH "Author"
 .PP 

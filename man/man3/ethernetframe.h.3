@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/net/ethernetframe.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/net/ethernetframe.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 \fC#include <common/map\&.h>\fP
 .br
@@ -36,32 +36,17 @@
 .br
 .RI "Handles incoming Ethernet Frames and routes them to the appropriate payload handlers\&. "
 .in -1c
-.SS "Functions"
+.SS "Typedefs"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::net::ARPMessage\fP \fBMaxOS::net::__attribute__\fP ((packed))"
+.RI "typedef struct PACKED \fBMaxOS::net::EthernetFrameHeader\fP \fBMaxOS::net::ethernet_frame_header_t\fP"
 .br
-.in -1c
-.SS "Variables"
-
-.in +1c
+.RI "Alias for \fBEthernetFrameHeader\fP struct\&. "
 .ti -1c
-.RI "uint64_t \fBdestinationMAC\fP"
+.RI "typedef struct PACKED \fBMaxOS::net::EthernetFrameFooter\fP \fBMaxOS::net::ethernet_frame_footer_t\fP"
 .br
-.RI "The mac address of the target (Big Endian) "
-.ti -1c
-.RI "uint64_t \fBsourceMAC\fP"
-.br
-.RI "The mac address of the sender (Big Endian) "
-.ti -1c
-.RI "uint16_t \fBtype\fP"
-.br
-.RI "The type (Big Endian) 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6\&. "
-.ti -1c
-.RI "uint32_t \fBchecksum\fP"
-.br
-.RI "Checksum of the payload\&. "
+.RI "Alias for \fBEthernetFrameFooter\fP struct\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -87,36 +72,6 @@ Make big endian helper functions and clairty (ie be_uint16_t etc)z
 
 .PP
 Definition in file \fBethernetframe\&.h\fP\&.
-.SH "Variable Documentation"
-.PP 
-.SS "uint32_t checksum"
-
-.PP
-Checksum of the payload\&. 
-.PP
-Definition at line \fB0\fP of file \fBethernetframe\&.h\fP\&.
-.SS "uint64_t destinationMAC"
-
-.PP
-The mac address of the target (Big Endian) 
-.PP
-Definition at line \fB1\fP of file \fBethernetframe\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::EthernetFrameHandler::DataReceived()\fP, and \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP\&.
-.SS "uint64_t sourceMAC"
-
-.PP
-The mac address of the sender (Big Endian) 
-.PP
-Definition at line \fB2\fP of file \fBethernetframe\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::net::EthernetFrameHandler::DataReceived()\fP, and \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP\&.
-.SS "uint16_t type"
-
-.PP
-The type (Big Endian) 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6\&. 
-.PP
-Definition at line \fB4\fP of file \fBethernetframe\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

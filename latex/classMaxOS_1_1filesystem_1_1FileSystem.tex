@@ -18,6 +18,8 @@ Inheritance diagram for Max\+OS\+::filesystem\+::File\+System\+:\begin{figure}[H
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual}} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a9e366f036e9d9cd884fa689963aacc49}{\texorpdfstring{$\sim$}{\string~}\+File\+System}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{classMaxOS_1_1filesystem_1_1FileSystem}{File\+System}, frees the root directory (Which in turn frees all files and subdirectories) \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_aebe195e2366601af7a1b8e7befd70496}{root\+\_\+directory}} ()
 \begin{DoxyCompactList}\small\item\em Get the directory at "{}/"{}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a07a1f84e7a64661d40046c42e1e89c25}{get\+\_\+directory}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{const}} \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}})
@@ -27,14 +29,14 @@ Inheritance diagram for Max\+OS\+::filesystem\+::File\+System\+:\begin{figure}[H
 \doxysubsubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\+\_\+root\+\_\+directory}}
+\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\+\_\+root\+\_\+directory}} = nullptr
 \begin{DoxyCompactList}\small\item\em The fist directory in the file system (not be confused with the system root) \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Handles the disk operations and file system information. 
 
-Definition at line \mbox{\hyperlink{filesystem_8h_source_l00100}{100}} of file \mbox{\hyperlink{filesystem_8h_source}{filesystem.\+h}}.
+Definition at line \mbox{\hyperlink{filesystem_8h_source_l00096}{96}} of file \mbox{\hyperlink{filesystem_8h_source}{filesystem.\+h}}.
 
 
 
@@ -47,18 +49,26 @@ Definition at line \mbox{\hyperlink{filesystem_8h_source_l00100}{100}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{filesystem_8cpp_source_l00279}{279}} of file \mbox{\hyperlink{filesystem_8cpp_source}{filesystem.\+cpp}}.
+Destructor for \doxylink{classMaxOS_1_1filesystem_1_1FileSystem}{File\+System}, frees the root directory (Which in turn frees all files and subdirectories) 
+
+
+
+Definition at line \mbox{\hyperlink{filesystem_8cpp_source_l00285}{285}} of file \mbox{\hyperlink{filesystem_8cpp_source}{filesystem.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00280\ }
-\DoxyCodeLine{00281\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ root\ directory}}
-\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keyword}{delete}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}};}
-\DoxyCodeLine{00283\ }
-\DoxyCodeLine{00284\ \};}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ root\ directory}}
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keyword}{delete}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}};}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \}}
 
 \end{DoxyCode}
+
+
+References \mbox{\hyperlink{filesystem_8h_source_l00098}{m\+\_\+root\+\_\+directory}}.
+
 
 
 \doxysubsection{Member Function Documentation}
@@ -82,29 +92,29 @@ True if the path exists, false otherwise
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{filesystem_8cpp_source_l00336}{336}} of file \mbox{\hyperlink{filesystem_8cpp_source}{filesystem.\+cpp}}.
+Definition at line \mbox{\hyperlink{filesystem_8cpp_source_l00342}{342}} of file \mbox{\hyperlink{filesystem_8cpp_source}{filesystem.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00337\ }
-\DoxyCodeLine{00338\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ directory\ at\ the\ path}}
-\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_ae94526e2ff54e8ae745d7fd83951beba}{Path::file\_path}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
-\DoxyCodeLine{00340\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a07a1f84e7a64661d40046c42e1e89c25}{get\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}});}
-\DoxyCodeLine{00341\ }
-\DoxyCodeLine{00342\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ directory\ exists}}
-\DoxyCodeLine{00343\ \ \ \ \ \textcolor{keywordflow}{if}\ (!directory)}
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00345\ }
-\DoxyCodeLine{00346\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ file\ exists}}
-\DoxyCodeLine{00347\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ file\_name\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a32927d3a40b23bfd0b4145be19f2b2fa}{Path::file\_name}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
-\DoxyCodeLine{00348\ \ \ \ \ \textcolor{keywordflow}{return}\ directory-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a2d9ebbe1f5b8ed550cd57f33b905a357}{open\_file}}(file\_name)\ !=\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00349\ \}}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ directory\ at\ the\ path}}
+\DoxyCodeLine{00345\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_aa56c59462ec0b3ceb3e970bfeb707abb}{Path::file\_path}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{00346\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a07a1f84e7a64661d40046c42e1e89c25}{get\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}});}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ directory\ exists}}
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{keywordflow}{if}\ (!directory)}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00351\ }
+\DoxyCodeLine{00352\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ file\ exists}}
+\DoxyCodeLine{00353\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ file\_name\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a7f1c80154d3410031719f340d8db44cd}{Path::file\_name}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}});}
+\DoxyCodeLine{00354\ \ \ \ \ \textcolor{keywordflow}{return}\ directory-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a2d9ebbe1f5b8ed550cd57f33b905a357}{open\_file}}(file\_name)\ !=\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00355\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{path_8cpp_source_l00054}{Max\+OS\+::filesystem\+::\+Path\+::file\+\_\+name()}}, \mbox{\hyperlink{path_8cpp_source_l00101}{Max\+OS\+::filesystem\+::\+Path\+::file\+\_\+path()}}, \mbox{\hyperlink{filesystem_8cpp_source_l00301}{get\+\_\+directory()}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00131}{Max\+OS\+::filesystem\+::\+Directory\+::open\+\_\+file()}}.
+References \mbox{\hyperlink{path_8cpp_source_l00054}{Max\+OS\+::filesystem\+::\+Path\+::file\+\_\+name()}}, \mbox{\hyperlink{path_8cpp_source_l00101}{Max\+OS\+::filesystem\+::\+Path\+::file\+\_\+path()}}, \mbox{\hyperlink{filesystem_8cpp_source_l00307}{get\+\_\+directory()}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00134}{Max\+OS\+::filesystem\+::\+Directory\+::open\+\_\+file()}}.
 
 \Hypertarget{classMaxOS_1_1filesystem_1_1FileSystem_a07a1f84e7a64661d40046c42e1e89c25}\label{classMaxOS_1_1filesystem_1_1FileSystem_a07a1f84e7a64661d40046c42e1e89c25} 
 \index{MaxOS::filesystem::FileSystem@{MaxOS::filesystem::FileSystem}!get\_directory@{get\_directory}}
@@ -126,47 +136,47 @@ The directory object or null if it could not be opened
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{filesystem_8cpp_source_l00301}{301}} of file \mbox{\hyperlink{filesystem_8cpp_source}{filesystem.\+cpp}}.
+Definition at line \mbox{\hyperlink{filesystem_8cpp_source_l00307}{307}} of file \mbox{\hyperlink{filesystem_8cpp_source}{filesystem.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00302\ }
-\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ path\ is\ the\ root}}
-\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}\ ==\ \textcolor{stringliteral}{"{}/"{}})}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_aebe195e2366601af7a1b8e7befd70496}{root\_directory}}();}
-\DoxyCodeLine{00306\ }
-\DoxyCodeLine{00307\ \ \ \ \ \textcolor{comment}{//\ Recursively\ open\ the\ directory}}
-\DoxyCodeLine{00308\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_aebe195e2366601af7a1b8e7befd70496}{root\_directory}}();}
-\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}};}
-\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}.length()\ >\ 0)\ \{}
-\DoxyCodeLine{00311\ }
-\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ name\ of\ the\ directory}}
-\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_a5e8fc3218495a8ae8b312c4ad2580a80}{Path::top\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}});}
-\DoxyCodeLine{00314\ }
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Open\ the\ directory}}
-\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}\ =\ directory-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a129180de7cb84fff6bc479fdc8ff715d}{open\_subdirectory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}});}
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}})}
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00319\ }
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ new\ directory}}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}};}
-\DoxyCodeLine{00322\ }
-\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ path\ to\ the\ next\ directory}}
-\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}.substring(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}}.length()\ +\ 1,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}.length()\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}}.length()\ -\/\ 1);}
-\DoxyCodeLine{00325\ \ \ \ \ \}}
-\DoxyCodeLine{00326\ }
-\DoxyCodeLine{00327\ \ \ \ \ \textcolor{keywordflow}{return}\ directory;}
-\DoxyCodeLine{00328\ \}}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ path\ is\ the\ root}}
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}}\ ==\ \textcolor{stringliteral}{"{}/"{}})}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_aebe195e2366601af7a1b8e7befd70496}{root\_directory}}();}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \ \ \ \ \textcolor{comment}{//\ Recursively\ open\ the\ directory}}
+\DoxyCodeLine{00314\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_aebe195e2366601af7a1b8e7befd70496}{root\_directory}}();}
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}};}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}.length()\ >\ 0)\ \{}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ name\ of\ the\ directory}}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}}\ =\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Path_aa265770be2535952a19871a4d8924218}{Path::top\_directory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}});}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Open\ the\ directory}}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}}\ =\ directory-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_a129180de7cb84fff6bc479fdc8ff715d}{open\_subdirectory}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}});}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}})}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ new\ directory}}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ directory\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{subdirectory}};}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ path\ to\ the\ next\ directory}}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}.substring(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}}.length()\ +\ 1,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_path}}.length()\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{directory\_name}}.length()\ -\/\ 1);}
+\DoxyCodeLine{00331\ \ \ \ \ \}}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \ \ \ \ \textcolor{keywordflow}{return}\ directory;}
+\DoxyCodeLine{00334\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{filesystem_8cpp_source_l00175}{Max\+OS\+::filesystem\+::\+Directory\+::open\+\_\+subdirectory()}}, \mbox{\hyperlink{filesystem_8cpp_source_l00291}{root\+\_\+directory()}}, and \mbox{\hyperlink{path_8cpp_source_l00125}{Max\+OS\+::filesystem\+::\+Path\+::top\+\_\+directory()}}.
+References \mbox{\hyperlink{filesystem_8cpp_source_l00178}{Max\+OS\+::filesystem\+::\+Directory\+::open\+\_\+subdirectory()}}, \mbox{\hyperlink{filesystem_8cpp_source_l00297}{root\+\_\+directory()}}, and \mbox{\hyperlink{path_8cpp_source_l00125}{Max\+OS\+::filesystem\+::\+Path\+::top\+\_\+directory()}}.
 
 
 
-Referenced by \mbox{\hyperlink{filesystem_8cpp_source_l00336}{exists()}}.
+Referenced by \mbox{\hyperlink{filesystem_8cpp_source_l00342}{exists()}}.
 
 \Hypertarget{classMaxOS_1_1filesystem_1_1FileSystem_aebe195e2366601af7a1b8e7befd70496}\label{classMaxOS_1_1filesystem_1_1FileSystem_aebe195e2366601af7a1b8e7befd70496} 
 \index{MaxOS::filesystem::FileSystem@{MaxOS::filesystem::FileSystem}!root\_directory@{root\_directory}}
@@ -183,22 +193,22 @@ The root directory of the filesystem
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{filesystem_8cpp_source_l00291}{291}} of file \mbox{\hyperlink{filesystem_8cpp_source}{filesystem.\+cpp}}.
+Definition at line \mbox{\hyperlink{filesystem_8cpp_source_l00297}{297}} of file \mbox{\hyperlink{filesystem_8cpp_source}{filesystem.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}};}
-\DoxyCodeLine{00293\ \}}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}};}
+\DoxyCodeLine{00299\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{filesystem_8h_source_l00103}{m\+\_\+root\+\_\+directory}}.
+References \mbox{\hyperlink{filesystem_8h_source_l00098}{m\+\_\+root\+\_\+directory}}.
 
 
 
-Referenced by \mbox{\hyperlink{filesystem_8cpp_source_l00301}{get\+\_\+directory()}}.
+Referenced by \mbox{\hyperlink{filesystem_8cpp_source_l00307}{get\+\_\+directory()}}.
 
 
 
@@ -207,7 +217,7 @@ Referenced by \mbox{\hyperlink{filesystem_8cpp_source_l00301}{get\+\_\+directory
 \index{MaxOS::filesystem::FileSystem@{MaxOS::filesystem::FileSystem}!m\_root\_directory@{m\_root\_directory}}
 \index{m\_root\_directory@{m\_root\_directory}!MaxOS::filesystem::FileSystem@{MaxOS::filesystem::FileSystem}}
 \doxysubsubsection{\texorpdfstring{m\_root\_directory}{m\_root\_directory}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}\texorpdfstring{$\ast$}{*} Max\+OS\+::filesystem\+::\+File\+System\+::m\+\_\+root\+\_\+directory\hspace{0.3cm}{\ttfamily [protected]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}}\texorpdfstring{$\ast$}{*} Max\+OS\+::filesystem\+::\+File\+System\+::m\+\_\+root\+\_\+directory = nullptr\hspace{0.3cm}{\ttfamily [protected]}}
 
 
 
@@ -215,11 +225,11 @@ The fist directory in the file system (not be confused with the system root)
 
 
 
-Definition at line \mbox{\hyperlink{filesystem_8h_source_l00103}{103}} of file \mbox{\hyperlink{filesystem_8h_source}{filesystem.\+h}}.
+Definition at line \mbox{\hyperlink{filesystem_8h_source_l00098}{98}} of file \mbox{\hyperlink{filesystem_8h_source}{filesystem.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{ext2_8cpp_source_l01166}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+System\+::\+Ext2\+File\+System()}}, \mbox{\hyperlink{fat32_8cpp_source_l00992}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+System\+::\+Fat32\+File\+System()}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00291}{root\+\_\+directory()}}.
+Referenced by \mbox{\hyperlink{ext2_8cpp_source_l01173}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+System\+::\+Ext2\+File\+System()}}, \mbox{\hyperlink{fat32_8cpp_source_l00989}{Max\+OS\+::filesystem\+::format\+::\+Fat32\+File\+System\+::\+Fat32\+File\+System()}}, \mbox{\hyperlink{filesystem_8cpp_source_l00297}{root\+\_\+directory()}}, \mbox{\hyperlink{ext2_8cpp_source_l01185}{Max\+OS\+::filesystem\+::format\+::ext2\+::\+Ext2\+File\+System\+::\texorpdfstring{$\sim$}{\string~}\+Ext2\+File\+System()}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00285}{\texorpdfstring{$\sim$}{\string~}\+File\+System()}}.
 
 
 

@@ -35,7 +35,7 @@ Repeated API that could be made a class that isn\textquotesingle{}t because lock
 \end{DoxySeeAlso}
 
 
-Definition at line \mbox{\hyperlink{spinlock_8h_source_l00051}{51}} of file \mbox{\hyperlink{spinlock_8h_source}{spinlock.\+h}}.
+Definition at line \mbox{\hyperlink{spinlock_8h_source_l00049}{49}} of file \mbox{\hyperlink{spinlock_8h_source}{spinlock.\+h}}.
 
 
 
@@ -51,7 +51,7 @@ Definition at line \mbox{\hyperlink{spinlock_8h_source_l00051}{51}} of file \mbo
 Acquire the spinlock, spin until the lock is available and sleeping the thread until marked as available. 
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000045}{Todo}}]Move the yielding logic into process/thread code so that it can be reused \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000051}{Todo}}]Move the yielding logic into process/thread code so that it can be reused \end{DoxyRefDesc}
 
 
 Definition at line \mbox{\hyperlink{spinlock_8cpp_source_l00101}{101}} of file \mbox{\hyperlink{spinlock_8cpp_source}{spinlock.\+cpp}}.
@@ -76,8 +76,8 @@ Definition at line \mbox{\hyperlink{spinlock_8cpp_source_l00101}{101}} of file \
 \DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{thread}}-\/>thread\_state\ ==\ ThreadState::WAITING)\{}
 \DoxyCodeLine{00117\ }
 \DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Yield\ to\ the\ next\ thread}}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu\_status\_t}}*\ \mbox{\hyperlink{virtual_8h_a20e8ff4d4c943d29eee7cfd80a5ff0f3}{next}}\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{GlobalScheduler::core\_scheduler}}()-\/>schedule\_next(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{thread}}-\/>execution\_state);}
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a7c29a6b9b5a90983e9ba7b7b66271a29}{InterruptManager::ForceInterruptReturn}}(\mbox{\hyperlink{virtual_8h_a20e8ff4d4c943d29eee7cfd80a5ff0f3}{next}});}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ next\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{GlobalScheduler::core\_scheduler}}()-\/>schedule\_next(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{thread}}-\/>execution\_state);}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a7c29a6b9b5a90983e9ba7b7b66271a29}{InterruptManager::ForceInterruptReturn}}(next);}
 \DoxyCodeLine{00121\ \ \ \ \ \}}
 \DoxyCodeLine{00122\ }
 \DoxyCodeLine{00123\ }
@@ -86,7 +86,7 @@ Definition at line \mbox{\hyperlink{spinlock_8cpp_source_l00101}{101}} of file \
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{spinlock_8h_source_l00042}{Max\+OS\+::common\+::\+BLOCKING\+\_\+\+FAST\+\_\+\+TRY\+\_\+\+LIMIT}}, \mbox{\hyperlink{scheduler_8cpp_source_l00346}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::core\+\_\+scheduler()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00313}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::current\+\_\+thread()}}, \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a7c29a6b9b5a90983e9ba7b7b66271a29}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Force\+Interrupt\+Return()}}, \mbox{\hyperlink{virtual_8h_source_l00001}{next}}, and \mbox{\hyperlink{vector_8h_source_l00333}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::push\+\_\+back()}}.
+References \mbox{\hyperlink{spinlock_8h_source_l00040}{Max\+OS\+::common\+::\+BLOCKING\+\_\+\+FAST\+\_\+\+TRY\+\_\+\+LIMIT}}, \mbox{\hyperlink{scheduler_8cpp_source_l00349}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::core\+\_\+scheduler()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00316}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::current\+\_\+thread()}}, \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_a7c29a6b9b5a90983e9ba7b7b66271a29}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::\+Force\+Interrupt\+Return()}}, and \mbox{\hyperlink{vector_8h_source_l00333}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::push\+\_\+back()}}.
 
 
 
@@ -172,7 +172,7 @@ Definition at line \mbox{\hyperlink{spinlock_8cpp_source_l00129}{129}} of file \
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{vector_8h_source_l00321}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::empty()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00323}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::get\+\_\+thread()}}, and \mbox{\hyperlink{vector_8h_source_l00388}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::pop\+\_\+front()}}.
+References \mbox{\hyperlink{vector_8h_source_l00321}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::empty()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00326}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::get\+\_\+thread()}}, and \mbox{\hyperlink{vector_8h_source_l00390}{Max\+OS\+::common\+::\+Vector$<$ Type $>$\+::pop\+\_\+front()}}.
 
 
 

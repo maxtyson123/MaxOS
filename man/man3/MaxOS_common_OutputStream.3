@@ -1,4 +1,4 @@
-.TH "MaxOS::common::OutputStream" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::OutputStream" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,16 +12,20 @@ MaxOS::common::OutputStream \- A stream that strings can be written to\&.
 .PP
 Inherits \fBMaxOS::common::GenericOutputStream< string >\fP\&.
 .PP
-Inherited by \fBLogger\fP, \fBMaxOS::drivers::SerialConsole\fP, and \fBMaxOS::drivers::console::ConsoleStream\fP\&.
+Inherited by \fBMaxOS::Logger\fP, \fBMaxOS::drivers::SerialConsole\fP, and \fBMaxOS::drivers::console::ConsoleStream\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
+.ti -1c
+.RI "\fBOutputStream\fP ()"
+.br
+.RI "Constructs an \fBOutputStream\fP object that uses strings as the underlying data type\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBline_feed\fP ()"
 .br
 .RI "Writes a newline to the output stream\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBcarriageReturn\fP ()"
+.RI "\fBvirtual\fP \fBvoid\fP \fBcarriage_return\fP ()"
 .br
 .RI "Writes a carriage return to the output stream\&. "
 .ti -1c
@@ -179,35 +183,37 @@ Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< Proces
 .PP 
 A stream that strings can be written to\&. 
 .PP
-Definition at line \fB45\fP of file \fBoutputStream\&.h\fP\&.
+Definition at line \fB43\fP of file \fBoutputStream\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "OutputStream::OutputStream ()"
 
 .PP
-Definition at line \fB14\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Constructs an \fBOutputStream\fP object that uses strings as the underlying data type\&. 
+.PP
+Definition at line \fB17\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-15 : GenericOutputStream<string>::GenericOutputStream()
-16 {
-17 
-18 }
+18 : GenericOutputStream<string>::GenericOutputStream()
+19 {
+20 
+21 }
 .fi
 
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBvoid\fP OutputStream::carriageReturn ()\fC [virtual]\fP"
+.SS "\fBvoid\fP OutputStream::carriage_return ()\fC [virtual]\fP"
 
 .PP
 Writes a carriage return to the output stream\&. 
 .PP
-Definition at line \fB34\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB37\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-34                                   {
-35 
-36     // write the text representation of a carriage return to the output stream\&.
-37     write_char('\\r');
+37                                    {
 38 
-39 }
+39     // write the text representation of a carriage return to the output stream\&.
+40     write_char('\\r');
+41 
+42 }
 .fi
 
 .PP
@@ -219,11 +225,11 @@ Referenced by \fBwrite()\fP\&.
 .PP
 Clears the output stream\&. 
 .PP
-Definition at line \fB44\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB47\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-44                          {
-45 
-46 }
+47                          {
+48 
+49 }
 .fi
 
 .SS "\fBvoid\fP OutputStream::line_feed ()\fC [virtual]\fP"
@@ -231,13 +237,13 @@ Definition at line \fB44\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .PP
 Writes a newline to the output stream\&. 
 .PP
-Definition at line \fB25\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB28\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-25                              {
-26 
-27     write_char('\\n');
-28 
-29 }
+28                              {
+29 
+30     write_char('\\n');
+31 
+32 }
 .fi
 
 .PP
@@ -261,13 +267,13 @@ The output stream\&.
 .PP
 
 .PP
-Definition at line \fB163\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB166\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-163                                                          {
-164 
-165     write_char(char_to_write);
-166     return *this;
-167 }
+166                                                          {
+167 
+168     write_char(char_to_write);
+169     return *this;
+170 }
 .fi
 
 .PP
@@ -289,17 +295,17 @@ The output stream\&.
 .PP
 
 .PP
-Definition at line \fB175\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB178\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-175                                                                   {
-176 
-177     write(string_to_write);
-178     return *this;
-179 }
+178                                                                   {
+179 
+180     write(string_to_write);
+181     return *this;
+182 }
 .fi
 
 .PP
-References \fBwrite\fP\&.
+References \fBwrite()\fP\&.
 .SS "\fBOutputStream\fP & OutputStream::operator<< (\fBint\fP int_to_write)"
 
 .PP
@@ -317,13 +323,13 @@ The output stream\&.
 .PP
 
 .PP
-Definition at line \fB127\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB130\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-127                                                        {
-128 
-129     write_int(int_to_write);
-130     return *this;
-131 }
+130                                                        {
+131 
+132     write_int(int_to_write);
+133     return *this;
+134 }
 .fi
 
 .PP
@@ -345,17 +351,17 @@ The output stream\&.
 .PP
 
 .PP
-Definition at line \fB151\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB154\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-151                                                              {
-152 
-153     write(string_to_write);
-154     return *this;
-155 }
+154                                                              {
+155 
+156     write(string_to_write);
+157     return *this;
+158 }
 .fi
 
 .PP
-References \fBwrite\fP\&.
+References \fBwrite()\fP\&.
 .SS "\fBOutputStream\fP & OutputStream::operator<< (\fBuint64_t\fP hex_to_write)"
 
 .PP
@@ -373,13 +379,13 @@ The output stream\&.
 .PP
 
 .PP
-Definition at line \fB139\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB142\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-139                                                             {
-140 
-141     write_hex(hex_to_write);
-142     return *this;
-143 }
+142                                                             {
+143 
+144     write_hex(hex_to_write);
+145     return *this;
+146 }
 .fi
 
 .PP
@@ -396,38 +402,38 @@ Writes a string to the output stream\&.
 .PP
 
 .PP
-Definition at line \fB63\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB66\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-63                                                     {
-64 
-65     int i = 0;
-66     while (string_to_write[i] != '\\0') {
+66                                                     {
 67 
-68         switch (string_to_write[i]) {
-69 
-70             case '\\n':
-71                 line_feed();
-72                 break;
-73 
-74             case '\\r':
-75                 carriageReturn();
-76                 break;
-77 
-78             case '\\0':
-79                 return;
+68     int i = 0;
+69     while (string_to_write[i] != '\\0') {
+70 
+71         switch (string_to_write[i]) {
+72 
+73             case '\\n':
+74                 line_feed();
+75                 break;
+76 
+77             case '\\r':
+78                 carriage_return();
+79                 break;
 80 
-81             default:
-82                 write_char(string_to_write[i]);
-83                 break;
-84 
-85         }
-86         i++;
-87     }
-88 }
+81             case '\\0':
+82                 return;
+83 
+84             default:
+85                 write_char(string_to_write[i]);
+86                 break;
+87 
+88         }
+89         i++;
+90     }
+91 }
 .fi
 
 .PP
-References \fBcarriageReturn()\fP, \fBline_feed()\fP, and \fBwrite_char()\fP\&.
+References \fBcarriage_return()\fP, \fBline_feed()\fP, and \fBwrite_char()\fP\&.
 .SS "\fBvoid\fP OutputStream::write (\fBstring\fP string_to_write)\fC [override]\fP"
 
 .PP
@@ -440,18 +446,18 @@ Writes a string to the output stream\&.
 .PP
 
 .PP
-Definition at line \fB53\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB56\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-53                                                {
-54 
-55     write(string_to_write\&.c_str());
-56 }
+56                                                {
+57 
+58     write(string_to_write\&.c_str());
+59 }
 .fi
 
 .PP
-References \fBwrite\fP\&.
+References \fBwrite()\fP\&.
 .PP
-Referenced by \fBMaxOS::net::InternetProtocolHandler::handleEthernetframePayload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handleInternetProtocolPayload()\fP, and \fBMaxOS::net::EthernetFrameHandler::sendEthernetFrame()\fP\&.
+Referenced by \fBMaxOS::net::EthernetFrameHandler::data_received()\fP, \fBMaxOS::net::InternetProtocolHandler::handle_ethernetframe_payload()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, \fBoperator<<()\fP, \fBoperator<<()\fP, \fBMaxOS::Logger::printf()\fP, \fBMaxOS::net::EthernetFrameHandler::send_ethernet_frame()\fP, \fBwrite()\fP, \fBMaxOS::drivers::console::ConsoleStream::write_char()\fP, \fBwrite_hex()\fP, and \fBwrite_int()\fP\&.
 .SS "\fBvoid\fP OutputStream::write_char (\fBchar\fP char_to_write)\fC [virtual]\fP"
 
 .PP
@@ -464,17 +470,17 @@ Writes a character to the output stream\&.
 .PP
 
 .PP
-Reimplemented in \fBLogger\fP, \fBMaxOS::drivers::SerialConsole\fP, and \fBMaxOS::drivers::console::ConsoleStream\fP\&.
+Reimplemented in \fBMaxOS::Logger\fP, \fBMaxOS::drivers::SerialConsole\fP, and \fBMaxOS::drivers::console::ConsoleStream\fP\&.
 .PP
-Definition at line \fB95\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB98\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-95                                   {
-96 
-97 }
+98                                   {
+99 
+100 }
 .fi
 
 .PP
-Referenced by \fBcarriageReturn()\fP, \fBline_feed()\fP, \fBoperator<<()\fP, \fBwrite()\fP, and \fBLogger::write_char()\fP\&.
+Referenced by \fBcarriage_return()\fP, \fBline_feed()\fP, \fBoperator<<()\fP, \fBwrite()\fP, and \fBMaxOS::Logger::write_char()\fP\&.
 .SS "\fBvoid\fP OutputStream::write_hex (\fBuint64_t\fP hex_to_write)\fC [virtual]\fP"
 
 .PP
@@ -487,19 +493,19 @@ Writes a hex to the output stream\&.
 .PP
 
 .PP
-Definition at line \fB115\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB118\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-115                                                   {
-116 
-117     write(htoa(hex_to_write));
-118 
-119 }
+118                                                   {
+119 
+120     write(htoa(hex_to_write));
+121 
+122 }
 .fi
 
 .PP
-References \fBhtoa()\fP, and \fBwrite\fP\&.
+References \fBhtoa()\fP, and \fBwrite()\fP\&.
 .PP
-Referenced by \fBMaxOS::net::EthernetFrameHandler::DataReceived()\fP, and \fBoperator<<()\fP\&.
+Referenced by \fBMaxOS::net::EthernetFrameHandler::data_received()\fP, and \fBoperator<<()\fP\&.
 .SS "\fBvoid\fP OutputStream::write_int (\fBint\fP int_to_write)\fC [virtual]\fP"
 
 .PP
@@ -512,17 +518,17 @@ Writes an integer to the output stream\&.
 .PP
 
 .PP
-Definition at line \fB104\fP of file \fBoutputStream\&.cpp\fP\&..PP
+Definition at line \fB107\fP of file \fBoutputStream\&.cpp\fP\&..PP
 .nf
-104                                              {
-105 
-106     write(itoa(10, int_to_write));
-107 
-108 }
+107                                              {
+108 
+109     write(itoa(10, int_to_write));
+110 
+111 }
 .fi
 
 .PP
-References \fBitoa()\fP, and \fBwrite\fP\&.
+References \fBitoa()\fP, and \fBwrite()\fP\&.
 .PP
 Referenced by \fBoperator<<()\fP\&.
 

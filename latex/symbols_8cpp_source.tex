@@ -5,41 +5,38 @@
 \DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00001}00001\ }
 \DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <common/symbols.h>}}
 \DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00010}00010\ }
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00011}00011\ \textcolor{keyword}{namespace\ }MaxOS\{}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00012}00012\ }
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00013}00013\ \ \ \ \ \textcolor{keyword}{namespace\ }common\{}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00014}00014\ }
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00024}\mbox{\hyperlink{symbols_8cpp_a4bfba91a61cfa3c1878b5c9861bbf05c}{00024}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{symbols_8cpp_a4bfba91a61cfa3c1878b5c9861bbf05c}{resolve\_symbol}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{cpu_8h_ad37248eb45d2509df75a205d8412ac65}{rip}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{link\_base}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{load\_base}})}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00025}00025\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00026}00026\ }
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00027}00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ No\ symbols}}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00028}00028\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{KERNEL\_SYMBOLS\_COUNT}}\ ==\ 0)}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00030}00030\ }
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Convert\ load\ to\ linked}}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ offset\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00033}00033\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{load\_base}}\ >=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{link\_base}})}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ offset\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{load\_base}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{link\_base}};}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00035}00035\ }
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ adjusted\ address}}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{adjusted\_address}}\ =\ \mbox{\hyperlink{cpu_8h_ad37248eb45d2509df75a205d8412ac65}{rip}};}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{cpu_8h_ad37248eb45d2509df75a205d8412ac65}{rip}}\ >=\ offset)}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{adjusted\_address}}\ =\ \mbox{\hyperlink{cpu_8h_ad37248eb45d2509df75a205d8412ac65}{rip}}\ -\/\ offset;}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00040}00040\ }
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Binary\ Search\ for\ symbol}}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ left\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{KERNEL\_SYMBOLS\_COUNT}};}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (left\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right}})\ \{}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{middle}}\ =\ (left\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right}})\ >>\ 1;}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_symbols}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{middle}}].address\ <=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{adjusted\_address}})}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ left\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{middle}}\ +\ 1;}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{middle}};}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00051}00051\ }
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ left\ ==\ 0\ ?\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}}\ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_symbols}}[left\ -\/\ 1].name;}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00053}00053\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00054}00054\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00055}00055\ \}}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00012}00012\ \textcolor{keyword}{namespace\ }MaxOS::common\ \{}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00023}\mbox{\hyperlink{symbols_8cpp_a4bfba91a61cfa3c1878b5c9861bbf05c}{00023}}\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{symbols_8cpp_a4bfba91a61cfa3c1878b5c9861bbf05c}{resolve\_symbol}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ rip,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{link\_base}},\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{load\_base}})\ \{}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00025}00025\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ No\ symbols}}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00026}00026\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{KERNEL\_SYMBOLS\_COUNT}}\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00027}00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00029}00029\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Convert\ load\ to\ linked}}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ offset\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00031}00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{load\_base}}\ >=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{link\_base}})}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ offset\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{load\_base}}\ -\/\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{link\_base}};}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00034}00034\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ adjusted\ address}}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00035}00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{adjusted\_address}}\ =\ rip;}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(rip\ >=\ offset)}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{adjusted\_address}}\ =\ rip\ -\/\ offset;}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Binary\ Search\ for\ symbol}}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ left\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00041}00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{KERNEL\_SYMBOLS\_COUNT}};}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(left\ <\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right}})\ \{}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{middle}}\ =\ (left\ +\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right}})\ >>\ 1;}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_symbols}}[\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{middle}}].address\ <=\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{adjusted\_address}})}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ left\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{middle}}\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{right}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{middle}};}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00050}00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ left\ ==\ 0\ ?\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{nullptr}}\ :\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_symbols}}[left\ -\/\ 1].name;}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00051}00051\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{symbols_8cpp_source_l00052}00052\ \}}
 
 \end{DoxyCode}

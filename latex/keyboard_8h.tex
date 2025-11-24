@@ -14,7 +14,7 @@ Defines a Keyboard and related classes for handling keyboard input.
 {\ttfamily \#include $<$hardwarecommunication/interrupts.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/port.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/apic.\+h$>$}\newline
-{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -35,11 +35,11 @@ class \mbox{\hyperlink{classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardDriver}{M
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum class {\bfseries Scan\+Code\+Type} \+: int \{ {\bfseries REGULAR}
+enum class \mbox{\hyperlink{keyboard_8h_a58fa1d0fe070a3f55e3ba46c44a7680e}{Max\+OS\+::drivers\+::peripherals\+::\+Scan\+Code\+Type}} \+: int \{ {\bfseries REGULAR}
 , {\bfseries EXTENDED}
 , {\bfseries EXTENDED\+\_\+\+BUFFER}
  \}
-\item 
+\begin{DoxyCompactList}\small\item\em The type of scan code being sent by the keyboard. \end{DoxyCompactList}\item 
 enum class \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{Max\+OS\+::drivers\+::peripherals\+::\+Key\+Code}} \+: uint16\+\_\+t \{ \newline
 {\bfseries A} = \textquotesingle{}A\textquotesingle{}
 , {\bfseries a} = \textquotesingle{}a\textquotesingle{}
@@ -240,11 +240,11 @@ enum class \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{Max\+
 , {\bfseries number\+Pad\+Left\+Arrow}
 , {\bfseries number\+Pad\+Right\+Arrow}
  \}
-\item 
-enum {\bfseries Keyboard\+Events} \{ {\bfseries KEYDOWN}
+\begin{DoxyCompactList}\small\item\em A mapping of key codes to their values. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{keyboard_8h_add731b6c5a9b8a0f34a4d129d9767554}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Events}} \{ {\bfseries KEYDOWN}
 , {\bfseries KEYUP}
  \}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The events that can be triggered by the Keyboard Driver. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -267,18 +267,22 @@ Definition in file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
 \index{keyboard.h@{keyboard.h}!KeyboardEvents@{KeyboardEvents}}
 \index{KeyboardEvents@{KeyboardEvents}!keyboard.h@{keyboard.h}}
 \doxysubsubsection{\texorpdfstring{KeyboardEvents}{KeyboardEvents}}
-{\footnotesize\ttfamily enum Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Events}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{keyboard_8h_add731b6c5a9b8a0f34a4d129d9767554}{Max\+OS\+::drivers\+::peripherals\+::\+Keyboard\+Events}}\hspace{0.3cm}{\ttfamily [strong]}}
 
 
 
-Definition at line \mbox{\hyperlink{keyboard_8h_source_l00229}{229}} of file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
+The events that can be triggered by the Keyboard Driver. 
+
+
+
+Definition at line \mbox{\hyperlink{keyboard_8h_source_l00239}{239}} of file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KEYDOWN,}
-\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KEYUP}
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ KEYDOWN,}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ KEYUP}
+\DoxyCodeLine{00242\ \ \ \ \ \};}
 
 \end{DoxyCode}
 \Hypertarget{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}\label{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc} 
@@ -286,6 +290,10 @@ Definition at line \mbox{\hyperlink{keyboard_8h_source_l00229}{229}} of file \mb
 \index{KeyCode@{KeyCode}!keyboard.h@{keyboard.h}}
 \doxysubsubsection{\texorpdfstring{KeyCode}{KeyCode}}
 {\footnotesize\ttfamily enum class \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebc}{Max\+OS\+::drivers\+::peripherals\+::\+Key\+Code}} \+: uint16\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+A mapping of key codes to their values. 
 
 \begin{DoxyEnumFields}{Enumerator}
 \raisebox{\heightof{T}}[0pt][0pt]{\index{f1@{f1}!keyboard.h@{keyboard.h}}\index{keyboard.h@{keyboard.h}!f1@{f1}}}\Hypertarget{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}\label{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645} 
@@ -295,196 +303,200 @@ f1&OTHER CODES THAT ARE NOT CHARACTERS ///. \\
 \end{DoxyEnumFields}
 
 
-Definition at line \mbox{\hyperlink{keyboard_8h_source_l00034}{34}} of file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
+Definition at line \mbox{\hyperlink{keyboard_8h_source_l00040}{40}} of file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ uint16\_t\ \{}
-\DoxyCodeLine{00035\ }
-\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Alphabet}}
-\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ A\ =\ \textcolor{charliteral}{'A'},\ a\ =\ \textcolor{charliteral}{'a'},}
-\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ B\ =\ \textcolor{charliteral}{'B'},\ b\ =\ \textcolor{charliteral}{'b'},}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ C\ =\ \textcolor{charliteral}{'C'},\ c\ =\ \textcolor{charliteral}{'c'},}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ D\ =\ \textcolor{charliteral}{'D'},\ d\ =\ \textcolor{charliteral}{'d'},}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ E\ =\ \textcolor{charliteral}{'E'},\ e\ =\ \textcolor{charliteral}{'e'},}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ F\ =\ \textcolor{charliteral}{'F'},\ f\ =\ \textcolor{charliteral}{'f'},}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ G\ =\ \textcolor{charliteral}{'G'},\ g\ =\ \textcolor{charliteral}{'g'},}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ H\ =\ \textcolor{charliteral}{'H'},\ h\ =\ \textcolor{charliteral}{'h'},}
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ I\ =\ \textcolor{charliteral}{'I'},\ i\ =\ \textcolor{charliteral}{'i'},}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ J\ =\ \textcolor{charliteral}{'J'},\ j\ =\ \textcolor{charliteral}{'j'},}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ K\ =\ \textcolor{charliteral}{'K'},\ k\ =\ \textcolor{charliteral}{'k'},}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ L\ =\ \textcolor{charliteral}{'L'},\ l\ =\ \textcolor{charliteral}{'l'},}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ M\ =\ \textcolor{charliteral}{'M'},\ m\ =\ \textcolor{charliteral}{'m'},}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ N\ =\ \textcolor{charliteral}{'N'},\ n\ =\ \textcolor{charliteral}{'n'},}
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ O\ =\ \textcolor{charliteral}{'O'},\ o\ =\ \textcolor{charliteral}{'o'},}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ P\ =\ \textcolor{charliteral}{'P'},\ p\ =\ \textcolor{charliteral}{'p'},}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Q\ =\ \textcolor{charliteral}{'Q'},\ q\ =\ \textcolor{charliteral}{'q'},}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ R\ =\ \textcolor{charliteral}{'R'},\ r\ =\ \textcolor{charliteral}{'r'},}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ S\ =\ \textcolor{charliteral}{'S'},\ s\ =\ \textcolor{charliteral}{'s'},}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ =\ \textcolor{charliteral}{'T'},\ t\ =\ \textcolor{charliteral}{'t'},}
-\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ U\ =\ \textcolor{charliteral}{'U'},\ u\ =\ \textcolor{charliteral}{'u'},}
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ V\ =\ \textcolor{charliteral}{'V'},\ v\ =\ \textcolor{charliteral}{'v'},}
-\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ W\ =\ \textcolor{charliteral}{'W'},\ w\ =\ \textcolor{charliteral}{'w'},}
-\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ X\ =\ \textcolor{charliteral}{'X'},\ x\ =\ \textcolor{charliteral}{'x'},}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Y\ =\ \textcolor{charliteral}{'Y'},\ y\ =\ \textcolor{charliteral}{'y'},}
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Z\ =\ \textcolor{charliteral}{'Z'},\ z\ =\ \textcolor{charliteral}{'z'},}
-\DoxyCodeLine{00063\ }
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Numbers}}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fat32_8h_a7412b93c6525c9c9e53677b29cc9f5aa}{zero}}\ =\ \textcolor{charliteral}{'0'},}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ one\ =\ \textcolor{charliteral}{'1'},}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ two\ =\ \textcolor{charliteral}{'2'},}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ three\ =\ \textcolor{charliteral}{'3'},}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ four\ =\ \textcolor{charliteral}{'4'},}
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ five\ =\ \textcolor{charliteral}{'5'},}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ six\ =\ \textcolor{charliteral}{'6'},}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ seven\ =\ \textcolor{charliteral}{'7'},}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eight\ =\ \textcolor{charliteral}{'8'},}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nine\ =\ \textcolor{charliteral}{'9'},}
-\DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Symbols}}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ comma\ =\ \textcolor{charliteral}{','},}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fullStop\ =\ \textcolor{charliteral}{'.'},}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ exclamationMark\ =\ \textcolor{charliteral}{'!'},}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ questionMark\ =\ \textcolor{charliteral}{'?'},}
-\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ quotationMark\ =\ \textcolor{charliteral}{'\(\backslash\)"{}'},}
-\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ semicolon\ =\ \textcolor{charliteral}{';'},}
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ colon\ =\ \textcolor{charliteral}{':'},}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ apostrophe\ =\ \textcolor{charliteral}{'\(\backslash\)''},}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ slantedApostrophe\ =\ \textcolor{charliteral}{'`'},}
-\DoxyCodeLine{00086\ }
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Signs}}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ powerSign\ =\ \textcolor{charliteral}{'\string^'},}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dollarSign\ =\ \textcolor{charliteral}{'\$'},}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ percentSign\ =\ \textcolor{charliteral}{'\%'},}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ andSign\ =\ \textcolor{charliteral}{'\&'},}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ atSign\ =\ \textcolor{charliteral}{'@'},}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Special\ Characters}}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ underscore\ =\ \textcolor{charliteral}{'\_'},}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lineThing\ =\ \textcolor{charliteral}{'|'},}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hash\ =\ \textcolor{charliteral}{'\#'},}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backslash\ =\ \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'},}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ forwardSlash\ =\ \textcolor{charliteral}{'/'},}
-\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ squigglyLine\ =\ \textcolor{charliteral}{'\string~'},}
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Math\ Symbols}}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ plus\ =\ \textcolor{charliteral}{'+'},}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ minus\ =\ \textcolor{charliteral}{'-\/'},}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ equals\ =\ \textcolor{charliteral}{'='},}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ multiply\ =\ \textcolor{charliteral}{'*'},}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lessThan\ =\ \textcolor{charliteral}{'<'},}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ greaterThan\ =\ \textcolor{charliteral}{'>'},}
-\DoxyCodeLine{00109\ }
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Brackets}}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openBracket\ =\ \textcolor{charliteral}{'('},}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeBracket\ =\ \textcolor{charliteral}{')'},}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openSquareBracket\ =\ \textcolor{charliteral}{'['},}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeSquareBracket\ =\ \textcolor{charliteral}{']'},}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ openCurlyBracket\ =\ \textcolor{charliteral}{'\{'},}
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ closeCurlyBracket\ =\ \textcolor{charliteral}{'\}'},}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Writing}}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ space\ =\ \textcolor{charliteral}{'\ '},}
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tab\ =\ \textcolor{charliteral}{'\(\backslash\)t'},}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ enter\ =\ \textcolor{charliteral}{'\(\backslash\)n'},}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ backspace\ =\ \textcolor{charliteral}{'\(\backslash\)b'},}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ uint16\_t\ \{}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Alphabet}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ A\ =\ \textcolor{charliteral}{'A'},\ a\ =\ \textcolor{charliteral}{'a'},}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ B\ =\ \textcolor{charliteral}{'B'},\ b\ =\ \textcolor{charliteral}{'b'},}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ C\ =\ \textcolor{charliteral}{'C'},\ c\ =\ \textcolor{charliteral}{'c'},}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ D\ =\ \textcolor{charliteral}{'D'},\ d\ =\ \textcolor{charliteral}{'d'},}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ E\ =\ \textcolor{charliteral}{'E'},\ e\ =\ \textcolor{charliteral}{'e'},}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ F\ =\ \textcolor{charliteral}{'F'},\ f\ =\ \textcolor{charliteral}{'f'},}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ G\ =\ \textcolor{charliteral}{'G'},\ g\ =\ \textcolor{charliteral}{'g'},}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ H\ =\ \textcolor{charliteral}{'H'},\ h\ =\ \textcolor{charliteral}{'h'},}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ I\ =\ \textcolor{charliteral}{'I'},\ i\ =\ \textcolor{charliteral}{'i'},}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ J\ =\ \textcolor{charliteral}{'J'},\ j\ =\ \textcolor{charliteral}{'j'},}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ K\ =\ \textcolor{charliteral}{'K'},\ k\ =\ \textcolor{charliteral}{'k'},}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ L\ =\ \textcolor{charliteral}{'L'},\ l\ =\ \textcolor{charliteral}{'l'},}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ M\ =\ \textcolor{charliteral}{'M'},\ m\ =\ \textcolor{charliteral}{'m'},}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ N\ =\ \textcolor{charliteral}{'N'},\ n\ =\ \textcolor{charliteral}{'n'},}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ O\ =\ \textcolor{charliteral}{'O'},\ o\ =\ \textcolor{charliteral}{'o'},}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ P\ =\ \textcolor{charliteral}{'P'},\ p\ =\ \textcolor{charliteral}{'p'},}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ Q\ =\ \textcolor{charliteral}{'Q'},\ q\ =\ \textcolor{charliteral}{'q'},}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ R\ =\ \textcolor{charliteral}{'R'},\ r\ =\ \textcolor{charliteral}{'r'},}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ S\ =\ \textcolor{charliteral}{'S'},\ s\ =\ \textcolor{charliteral}{'s'},}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ T\ =\ \textcolor{charliteral}{'T'},\ t\ =\ \textcolor{charliteral}{'t'},}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ U\ =\ \textcolor{charliteral}{'U'},\ u\ =\ \textcolor{charliteral}{'u'},}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ V\ =\ \textcolor{charliteral}{'V'},\ v\ =\ \textcolor{charliteral}{'v'},}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ W\ =\ \textcolor{charliteral}{'W'},\ w\ =\ \textcolor{charliteral}{'w'},}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ X\ =\ \textcolor{charliteral}{'X'},\ x\ =\ \textcolor{charliteral}{'x'},}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ Y\ =\ \textcolor{charliteral}{'Y'},\ y\ =\ \textcolor{charliteral}{'y'},}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ Z\ =\ \textcolor{charliteral}{'Z'},\ z\ =\ \textcolor{charliteral}{'z'},}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Numbers}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ zero\ =\ \textcolor{charliteral}{'0'},}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ one\ =\ \textcolor{charliteral}{'1'},}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ two\ =\ \textcolor{charliteral}{'2'},}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ three\ =\ \textcolor{charliteral}{'3'},}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ four\ =\ \textcolor{charliteral}{'4'},}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ five\ =\ \textcolor{charliteral}{'5'},}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ six\ =\ \textcolor{charliteral}{'6'},}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ seven\ =\ \textcolor{charliteral}{'7'},}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ eight\ =\ \textcolor{charliteral}{'8'},}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ nine\ =\ \textcolor{charliteral}{'9'},}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Symbols}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ comma\ =\ \textcolor{charliteral}{','},}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ fullStop\ =\ \textcolor{charliteral}{'.'},}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ exclamationMark\ =\ \textcolor{charliteral}{'!'},}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ questionMark\ =\ \textcolor{charliteral}{'?'},}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ quotationMark\ =\ \textcolor{charliteral}{'\(\backslash\)"{}'},}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ semicolon\ =\ \textcolor{charliteral}{';'},}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ colon\ =\ \textcolor{charliteral}{':'},}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ apostrophe\ =\ \textcolor{charliteral}{'\(\backslash\)''},}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ slantedApostrophe\ =\ \textcolor{charliteral}{'`'},}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Signs}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ powerSign\ =\ \textcolor{charliteral}{'\string^'},}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ dollarSign\ =\ \textcolor{charliteral}{'\$'},}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ percentSign\ =\ \textcolor{charliteral}{'\%'},}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ andSign\ =\ \textcolor{charliteral}{'\&'},}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ atSign\ =\ \textcolor{charliteral}{'@'},}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Special\ Characters}}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ underscore\ =\ \textcolor{charliteral}{'\_'},}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ lineThing\ =\ \textcolor{charliteral}{'|'},}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ hash\ =\ \textcolor{charliteral}{'\#'},}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ backslash\ =\ \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'},}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ forwardSlash\ =\ \textcolor{charliteral}{'/'},}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ squigglyLine\ =\ \textcolor{charliteral}{'\string~'},}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Math\ Symbols}}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ plus\ =\ \textcolor{charliteral}{'+'},}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ minus\ =\ \textcolor{charliteral}{'-\/'},}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ equals\ =\ \textcolor{charliteral}{'='},}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ multiply\ =\ \textcolor{charliteral}{'*'},}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ lessThan\ =\ \textcolor{charliteral}{'<'},}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ greaterThan\ =\ \textcolor{charliteral}{'>'},}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Brackets}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ openBracket\ =\ \textcolor{charliteral}{'('},}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ closeBracket\ =\ \textcolor{charliteral}{')'},}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ openSquareBracket\ =\ \textcolor{charliteral}{'['},}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ closeSquareBracket\ =\ \textcolor{charliteral}{']'},}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ openCurlyBracket\ =\ \textcolor{charliteral}{'\{'},}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ closeCurlyBracket\ =\ \textcolor{charliteral}{'\}'},}
 \DoxyCodeLine{00123\ }
-\DoxyCodeLine{00125\ }
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Functions}}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}{f1}}\ =\ 1000,\ \ \ \ \ \ \textcolor{comment}{//force\ it\ to\ start\ at\ 1000\ so\ it\ doesn't\ conflict\ with\ ascii}}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f2,}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f3,}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f4,}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f5,}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f6,}
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f7,}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f8,}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f9,}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f10,}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f11,}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f12,}
-\DoxyCodeLine{00139\ }
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Top\ Row}}
-\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ escape,}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printScreen,}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ scrollLock,}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pauseBreak,}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Writing}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ space\ =\ \textcolor{charliteral}{'\ '},}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ tab\ =\ \textcolor{charliteral}{'\(\backslash\)t'},}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ enter\ =\ \textcolor{charliteral}{'\(\backslash\)n'},}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ backspace\ =\ \textcolor{charliteral}{'\(\backslash\)b'},}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Functions}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{keyboard_8h_a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645}{f1}}\ =\ 1000,\ \ \ \ \ \ \textcolor{comment}{//force\ it\ to\ start\ at\ 1000\ so\ it\ doesn't\ conflict\ with\ ascii}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ f2,}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ f3,}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ f4,}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ f5,}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ f6,}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ f7,}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ f8,}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ f9,}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ f10,}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ f11,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ f12,}
 \DoxyCodeLine{00145\ }
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Arrow\ s}}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ upArrow,}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ downArrow,}
-\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftArrow,}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightArrow,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Top\ Row}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ escape,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ printScreen,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ scrollLock,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ pauseBreak,}
 \DoxyCodeLine{00151\ }
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Keys\ Above\ Arrows}}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ insert,}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ home,}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageUp,}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ deleteKey,}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ end,}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pageDown,}
-\DoxyCodeLine{00159\ }
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Left\ Side}}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ capsLock,}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftShift,}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftControl,}
-\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//weird\ ass\ Windows\ key\ or\ command\ on\ Mac}}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ leftAlt,}
-\DoxyCodeLine{00166\ }
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Right\ Side}}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightAlt,}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ functionKey,}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightControl,}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rightShift,}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Arrow\ s}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ upArrow,}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ downArrow,}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ leftArrow,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ rightArrow,}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Keys\ Above\ Arrows}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ insert,}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ home,}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ pageUp,}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ deleteKey,}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ end,}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ pageDown,}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Left\ Side}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ capsLock,}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ leftShift,}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ leftControl,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ leftOS,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//weird\ ass\ Windows\ key\ or\ command\ on\ Mac}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ leftAlt,}
 \DoxyCodeLine{00172\ }
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad}}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadLock,}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadForwardSlash,}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMultiply,}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadMinus,}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPlus,}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEnter,}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadZero,}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadOne,}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadTwo,}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadThree,}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFour,}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFive,}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSix,}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadSeven,}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEight,}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadNine,}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadFullStop,}
-\DoxyCodeLine{00191\ }
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad\ (Non\ Number\ Lock)}}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadHome,}
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPageDown,}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadPageUp,}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadEnd,}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadInsert,}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadUpArrow,}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadDownArrow,}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadLeftArrow,}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numberPadRightArrow,}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Right\ Side}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ rightAlt,}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ functionKey,}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ rightControl,}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ rightShift,}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ numberPadLock,}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ numberPadForwardSlash,}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ numberPadMultiply,}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ numberPadMinus,}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ numberPadPlus,}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ numberPadEnter,}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ numberPadZero,}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ numberPadOne,}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ numberPadTwo,}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ numberPadThree,}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ numberPadFour,}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ numberPadFive,}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ numberPadSix,}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ numberPadSeven,}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ numberPadEight,}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ numberPadNine,}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ numberPadFullStop,}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Number\ Pad\ (Non\ Number\ Lock)}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ numberPadHome,}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ numberPadPageDown,}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ numberPadPageUp,}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ numberPadEnd,}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ numberPadInsert,}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ numberPadUpArrow,}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ numberPadDownArrow,}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ numberPadLeftArrow,}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ numberPadRightArrow,}
+\DoxyCodeLine{00208\ \ \ \ \ \};}
 
 \end{DoxyCode}
 \Hypertarget{keyboard_8h_a58fa1d0fe070a3f55e3ba46c44a7680e}\label{keyboard_8h_a58fa1d0fe070a3f55e3ba46c44a7680e} 
 \index{keyboard.h@{keyboard.h}!ScanCodeType@{ScanCodeType}}
 \index{ScanCodeType@{ScanCodeType}!keyboard.h@{keyboard.h}}
 \doxysubsubsection{\texorpdfstring{ScanCodeType}{ScanCodeType}}
-{\footnotesize\ttfamily enum class Max\+OS\+::drivers\+::peripherals\+::\+Scan\+Code\+Type \+: int\hspace{0.3cm}{\ttfamily [strong]}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{keyboard_8h_a58fa1d0fe070a3f55e3ba46c44a7680e}{Max\+OS\+::drivers\+::peripherals\+::\+Scan\+Code\+Type}} \+: int\hspace{0.3cm}{\ttfamily [strong]}}
 
 
 
-Definition at line \mbox{\hyperlink{keyboard_8h_source_l00028}{28}} of file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
+The type of scan code being sent by the keyboard. 
+
+
+
+Definition at line \mbox{\hyperlink{keyboard_8h_source_l00030}{30}} of file \mbox{\hyperlink{keyboard_8h_source}{keyboard.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \textcolor{keywordtype}{int}\ \{}
-\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ REGULAR,}
-\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EXTENDED,}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EXTENDED\_BUFFER}
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ \textcolor{keywordtype}{int}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ REGULAR,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ EXTENDED,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ EXTENDED\_BUFFER}
+\DoxyCodeLine{00034\ \ \ \ \ \};}
 
 \end{DoxyCode}

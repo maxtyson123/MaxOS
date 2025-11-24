@@ -1,4 +1,4 @@
-.TH "MaxOS::net::IPV4PayloadHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::net::IPV4PayloadHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,15 +15,15 @@ Inherited by \fBMaxOS::net::InternetControlMessageProtocol\fP\fC [private]\fP, \
 
 .in +1c
 .ti -1c
-.RI "\fBIPV4PayloadHandler\fP (\fBInternetProtocolHandler\fP *\fBinternetProtocolHandler\fP, \fBuint8_t\fP \fBprotocol\fP)"
+.RI "\fBIPV4PayloadHandler\fP (\fBInternetProtocolHandler\fP *\fBinternet_protocol_handler\fP, \fBuint8_t\fP protocol)"
 .br
-.RI "\fBPayload Handler\fP/// "
+.RI "Construct a new IPV4 Payload Handler object and register it with the Internet Protocol Handler\&. "
 .ti -1c
-.RI "\fBvirtual\fP \fBbool\fP \fBhandleInternetProtocolPayload\fP (InternetProtocolAddress \fBsourceIP\fP, InternetProtocolAddress \fBdestinationIP\fP, \fBuint8_t\fP *\fBpayloadData\fP, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvirtual\fP \fBbool\fP \fBhandle_internet_protocol_payload\fP (\fBnet::InternetProtocolAddress\fP \fBsrc_ip_be\fP, \fBnet::InternetProtocolAddress\fP \fBdst_ip_be\fP, \fBuint8_t\fP *\fBinternetprotocol_payload\fP, \fBuint32_t\fP size)"
 .br
 .RI "Called when an IP packet is received\&. (Deafult, does nothing, overide for use) "
 .ti -1c
-.RI "\fBvoid\fP \fBSend\fP (InternetProtocolAddress \fBdestinationIP\fP, \fBuint8_t\fP *\fBpayloadData\fP, \fBuint32_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBsend\fP (\fBInternetProtocolAddress\fP destination_ip, \fBuint8_t\fP *\fBpayload_data\fP, \fBuint32_t\fP size)"
 .br
 .RI "Sends an IP packet\&. "
 .in -1c
@@ -31,11 +31,11 @@ Inherited by \fBMaxOS::net::InternetControlMessageProtocol\fP\fC [private]\fP, \
 
 .in +1c
 .ti -1c
-.RI "\fBInternetProtocolHandler\fP * \fBinternetProtocolHandler\fP"
+.RI "\fBInternetProtocolHandler\fP * \fBinternet_protocol_handler\fP"
 .br
 .RI "The Internet protocol handler this payload handler is connected to\&. "
 .ti -1c
-.RI "uint8_t \fBipProtocol\fP"
+.RI "uint8_t \fBip_protocol\fP"
 .br
 .RI "The IP protocol this handler handles\&. "
 .in -1c
@@ -50,44 +50,53 @@ Inherited by \fBMaxOS::net::InternetControlMessageProtocol\fP\fC [private]\fP, \
 .PP 
 Handles the payload of a specific IP protocol\&. 
 .PP
-Definition at line \fB62\fP of file \fBipv4\&.h\fP\&.
+Definition at line \fB66\fP of file \fBipv4\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "IPV4PayloadHandler::IPV4PayloadHandler (\fBInternetProtocolHandler\fP * internetProtocolHandler, \fBuint8_t\fP protocol)"
+.SS "IPV4PayloadHandler::IPV4PayloadHandler (\fBInternetProtocolHandler\fP * internet_protocol_handler, \fBuint8_t\fP protocol)"
 
 .PP
-\fBPayload Handler\fP/// 
+Construct a new IPV4 Payload Handler object and register it with the Internet Protocol Handler\&. 
 .PP
-Definition at line \fB54\fP of file \fBipv4\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fIinternet_protocol_handler\fP The Internet Protocol Handler to register with 
+.br
+\fIprotocol\fP The IP protocol to handle 
+.RE
+.PP
+
+.PP
+Definition at line \fB57\fP of file \fBipv4\&.cpp\fP\&..PP
 .nf
-54                                                                                                          {
-55 
-56     // Store vars
-57     this \-> internetProtocolHandler = internetProtocolHandler;
-58     this \-> ipProtocol = protocol;
-59 
-60     //Register handler
-61     internetProtocolHandler \->connectIPV4PayloadHandler(this);
+57                                                                                                            {
+58 
+59     // Store vars
+60     this\->internet_protocol_handler = internet_protocol_handler;
+61     this\->ip_protocol = protocol;
 62 
-63 }
+63     //Register handler
+64     internet_protocol_handler\->connect_ipv_4_payload_handler(this);
+65 
+66 }
 .fi
 
 .PP
-References \fBMaxOS::net::InternetProtocolHandler::connectIPV4PayloadHandler()\fP, \fBinternetProtocolHandler\fP, \fBipProtocol\fP, and \fBprotocol\fP\&.
+References \fBMaxOS::net::InternetProtocolHandler::connect_ipv_4_payload_handler()\fP, \fBinternet_protocol_handler\fP, and \fBip_protocol\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBbool\fP IPV4PayloadHandler::handleInternetProtocolPayload (net::InternetProtocolAddress srcIP_BE, net::InternetProtocolAddress dstIP_BE, \fBuint8_t\fP * internetprotocolPayload, \fBuint32_t\fP size)\fC [virtual]\fP"
+.SS "\fBbool\fP IPV4PayloadHandler::handle_internet_protocol_payload (\fBnet::InternetProtocolAddress\fP src_ip_be, \fBnet::InternetProtocolAddress\fP dst_ip_be, \fBuint8_t\fP * internetprotocol_payload, \fBuint32_t\fP size)\fC [virtual]\fP"
 
 .PP
 Called when an IP packet is received\&. (Deafult, does nothing, overide for use) 
 .PP
 \fBParameters\fP
 .RS 4
-\fIsrcIP_BE\fP The source IP address\&. 
+\fIsrc_ip_be\fP The source IP address\&. 
 .br
-\fIdstIP_BE\fP The destination IP address\&. 
+\fIdst_ip_be\fP The destination IP address\&. 
 .br
-\fIinternetprotocolPayload\fP The payload of the IP packet\&. 
+\fIinternetprotocol_payload\fP The payload of the IP packet\&. 
 .br
 \fIsize\fP The size of the IP packet\&. 
 .RE
@@ -99,70 +108,70 @@ True if the packet was handled, false otherwise\&.
 .PP
 
 .PP
-Reimplemented in \fBMaxOS::net::InternetControlMessageProtocol\fP, \fBMaxOS::net::TransmissionControlProtocolHandler\fP, and \fBMaxOS::net::UserDatagramProtocolHandler\fP\&.
+Reimplemented in \fBMaxOS::net::TransmissionControlProtocolHandler\fP, \fBMaxOS::net::UserDatagramProtocolHandler\fP, and \fBMaxOS::net::InternetControlMessageProtocol\fP\&.
 .PP
-Definition at line \fB76\fP of file \fBipv4\&.cpp\fP\&..PP
+Definition at line \fB79\fP of file \fBipv4\&.cpp\fP\&..PP
 .nf
-79                                                                                   {
-80     return false;
-81 }
+82                                                                          {
+83     return false;
+84 }
 .fi
 
-.SS "\fBvoid\fP IPV4PayloadHandler::Send (InternetProtocolAddress destinationIP, \fBuint8_t\fP * payloadData, \fBuint32_t\fP size)"
+.SS "\fBvoid\fP IPV4PayloadHandler::send (\fBInternetProtocolAddress\fP destination_ip, \fBuint8_t\fP * payload_data, \fBuint32_t\fP size)"
 
 .PP
 Sends an IP packet\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIdestinationIP\fP The destination IP address\&. 
+\fIdestination_ip\fP The destination IP address\&. 
 .br
-\fIpayloadData\fP The payload of the IP packet\&. 
+\fIpayload_data\fP The payload of the IP packet\&. 
 .br
 \fIsize\fP The size of the IP packet\&. 
 .RE
 .PP
 
 .PP
-Definition at line \fB90\fP of file \fBipv4\&.cpp\fP\&..PP
+Definition at line \fB93\fP of file \fBipv4\&.cpp\fP\&..PP
 .nf
-90                                                                                                         {
-91 
-92 
-93     //Pass to backend
-94     internetProtocolHandler \-> sendInternetProtocolPacket(destinationIP, ipProtocol, payloadData, size);
+93                                                                                                           {
+94 
 95 
-96 }
+96     //Pass to backend
+97     internet_protocol_handler\->send_internet_protocol_packet(destination_ip, ip_protocol, payload_data, size);
+98 
+99 }
 .fi
 
 .PP
-References \fBdestinationIP\fP, \fBinternetProtocolHandler\fP, \fBipProtocol\fP, and \fBsize\fP\&.
+References \fBinternet_protocol_handler\fP, \fBip_protocol\fP, and \fBMaxOS::net::InternetProtocolHandler::send_internet_protocol_packet()\fP\&.
 .PP
-Referenced by \fBMaxOS::net::InternetControlMessageProtocol::RequestEchoReply()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Send()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP\&.
+Referenced by \fBMaxOS::net::InternetControlMessageProtocol::request_echo_reply()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::send()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
 .SH "Friends And Related Symbol Documentation"
 .PP 
 .SS "friend class \fBInternetProtocolHandler\fP\fC [friend]\fP"
 
 .PP
-Definition at line \fB63\fP of file \fBipv4\&.h\fP\&.
+Definition at line \fB67\fP of file \fBipv4\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "\fBInternetProtocolHandler\fP* MaxOS::net::IPV4PayloadHandler::internetProtocolHandler\fC [protected]\fP"
+.SS "\fBInternetProtocolHandler\fP* MaxOS::net::IPV4PayloadHandler::internet_protocol_handler\fC [protected]\fP"
 
 .PP
 The Internet protocol handler this payload handler is connected to\&. 
 .PP
-Definition at line \fB66\fP of file \fBipv4\&.h\fP\&.
+Definition at line \fB70\fP of file \fBipv4\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::Connect()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Connect()\fP, \fBIPV4PayloadHandler()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::Listen()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::Listen()\fP, and \fBSend()\fP\&.
-.SS "uint8_t MaxOS::net::IPV4PayloadHandler::ipProtocol\fC [protected]\fP"
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::connect()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::connect()\fP, \fBIPV4PayloadHandler()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::listen()\fP, \fBMaxOS::net::UserDatagramProtocolHandler::listen()\fP, and \fBsend()\fP\&.
+.SS "uint8_t MaxOS::net::IPV4PayloadHandler::ip_protocol\fC [protected]\fP"
 
 .PP
 The IP protocol this handler handles\&. 
 .PP
-Definition at line \fB67\fP of file \fBipv4\&.h\fP\&.
+Definition at line \fB71\fP of file \fBipv4\&.h\fP\&.
 .PP
-Referenced by \fBIPV4PayloadHandler()\fP, and \fBSend()\fP\&.
+Referenced by \fBIPV4PayloadHandler()\fP, and \fBsend()\fP\&.
 
 .SH "Author"
 .PP 

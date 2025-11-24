@@ -1,0 +1,108 @@
+.TH "MaxOS::tests::ConditionalTest" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::tests::ConditionalTest \- A test that only checks a condition to determine pass/fail\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <test\&.h>\fP
+.PP
+Inherits \fBMaxOS::tests::Test\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBConditionalTest\fP (const \fBstring\fP &\fBname\fP, \fBTestType\fP \fBtype\fP, bool(*condition)())"
+.br
+.RI "Constructs a \fBConditionalTest\fP with a name, type, and condition function\&. "
+.ti -1c
+.RI "\fBTestStatus\fP \fBexecute\fP () override"
+.br
+.RI "Executes the conditional test based on the provided condition function\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::tests::Test\fP
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (const \fBstring\fP &\fBname\fP, \fBTestType\fP \fBtype\fP)"
+.br
+.RI "Constructs a \fBTest\fP with a name and type, and registers it with the \fBTestRunner\fP\&. "
+.ti -1c
+.RI "\fBTestStatus\fP \fBrun\fP ()"
+.br
+.RI "Runs the test and returns the result\&. "
+.ti -1c
+.RI "const \fBstring\fP & \fBname\fP () const"
+.br
+.RI "Gets the name of the test\&. "
+.ti -1c
+.RI "\fBTestType\fP \fBtype\fP () const"
+.br
+.RI "Gets the type of the test\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A test that only checks a condition to determine pass/fail\&. 
+.PP
+Definition at line \fB116\fP of file \fBtest\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ConditionalTest::ConditionalTest (const \fBstring\fP & name, \fBTestType\fP type, bool(*)() condition)"
+
+.PP
+Constructs a \fBConditionalTest\fP with a name, type, and condition function\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the test 
+.br
+\fItype\fP The type of the test 
+.br
+\fIcondition\fP The condition function to evaluate 
+.RE
+.PP
+
+.PP
+Definition at line \fB90\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+91 : Test(name, type),
+92   m_condition(condition)
+93 {
+94 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBTestStatus\fP ConditionalTest::execute ()\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Executes the conditional test based on the provided condition function\&. 
+.PP
+\fBReturns\fP
+.RS 4
+TestStatus The status of the test after execution 
+.RE
+.PP
+
+.PP
+Implements \fBMaxOS::tests::Test\fP\&.
+.PP
+Definition at line \fB101\fP of file \fBtest\&.cpp\fP\&..PP
+.nf
+101                                     {
+102 
+103     if (m_condition())
+104         return TestStatus::PASS;
+105     else
+106         return TestStatus::FAIL;
+107 
+108 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

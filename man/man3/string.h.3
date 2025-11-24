@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/string.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/common/string.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,7 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
 .br
 \fC#include <common/vector\&.h>\fP
 .br
@@ -42,17 +42,13 @@
 .br
 .RI "Gets the length of a string\&. "
 .ti -1c
-.RI "char * \fBitoa\fP (int \fBbase\fP, int64_t number)"
+.RI "char * \fBitoa\fP (int base, int64_t number)"
 .br
 .RI "Converts integer to string\&. "
 .ti -1c
 .RI "char * \fBhtoa\fP (uint64_t number)"
 .br
 .RI "Converts hex to string\&. "
-.ti -1c
-.RI "char * \fBftoa\fP (float number)"
-.br
-.RI "Converts a float to a string\&. "
 .ti -1c
 .RI "bool \fBstrcmp\fP (char const *str1, char const *str2)"
 .br
@@ -70,19 +66,19 @@
 .br
 .RI "Checks if one String is equal to another String (better use is of '==') "
 .ti -1c
-.RI "bool \fBstrncmp\fP (char const *str1, char const *str2, int \fBlength\fP)"
+.RI "bool \fBstrncmp\fP (char const *str1, char const *str2, int length)"
 .br
 .RI "Checks if one string pointer is equal to another string pointer up to a specified length (each must be >= this length) "
 .ti -1c
-.RI "bool \fBstrncmp\fP (char const *str1, \fBMaxOS::String\fP const &str2, int \fBlength\fP)"
+.RI "bool \fBstrncmp\fP (char const *str1, \fBMaxOS::String\fP const &str2, int length)"
 .br
 .RI "Checks if one string pointer is equal to another String up to a specified length (each must be >= this length) "
 .ti -1c
-.RI "bool \fBstrncmp\fP (\fBMaxOS::String\fP const &str1, char const *str2, int \fBlength\fP)"
+.RI "bool \fBstrncmp\fP (\fBMaxOS::String\fP const &str1, char const *str2, int length)"
 .br
 .RI "Checks if one String is equal to another string pointer up to a specified length (each must be >= this length) "
 .ti -1c
-.RI "bool \fBstrncmp\fP (\fBMaxOS::String\fP const &str1, \fBMaxOS::String\fP const &str2, int \fBlength\fP)"
+.RI "bool \fBstrncmp\fP (\fBMaxOS::String\fP const &str1, \fBMaxOS::String\fP const &str2, int length)"
 .br
 .RI "Checks if one String is equal to another String up to a specified length (each must be >= this length) "
 .in -1c
@@ -115,91 +111,6 @@ Max Tyson
 Definition in file \fBstring\&.h\fP\&.
 .SH "Function Documentation"
 .PP 
-.SS "char * ftoa (float number)"
-
-.PP
-Converts a float to a string\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fInumber\fP The number to convert 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The converted string 
-.RE
-.PP
-
-.PP
-Definition at line \fB773\fP of file \fBstring\&.cpp\fP\&..PP
-.nf
-773                          {
-774 
-775     static char buffer[50];
-776     char *ptr = buffer;
-777 
-778     // Handle negative numbers\&.
-779     if (number < 0) {
-780         *ptr++ = '\-';
-781         number = \-number;
-782     }
-783 
-784     // Separate integer and fractional parts\&.
-785     int64_t intPart = (int64_t) number;
-786     float fraction = number \- (float) intPart;
-787 
-788     // Convert integer part to string using itoa\&.
-789     char *intStr = itoa(10, intPart);
-790     while (*intStr) {
-791         *ptr++ = *intStr++;
-792     }
-793 
-794     // Add the decimal point\&.
-795     *ptr++ = '\&.';
-796 
-797     // Define the desired precision for the fractional part\&.
-798     const int precision = 6;
-799 
-800     // Multiply the fraction to shift the decimal digits into integer range\&.
-801     float fracValue = fraction;
-802     for (int i = 0; i < precision; i++) {
-803         fracValue *= 10\&.0f;
-804     }
-805 
-806     // Optionally, round the value\&.
-807     auto fracInt = (int64_t) (fracValue + 0\&.5f);
-808 
-809     // Convert the fractional part to string\&.
-810     char fracBuffer[50];
-811     char *fracStr = itoa(10, fracInt);
-812 
-813     // Ensure we have leading zeros if the fractional part doesn't produce enough digits\&.
-814     // Calculate length of the converted fractional string\&.
-815     int len = 0;
-816     for (char *p = fracStr; *p; p++) {
-817         len++;
-818     }
-819     for (int i = 0; i < precision \- len; i++) {
-820         *ptr++ = '0';
-821     }
-822 
-823     // Copy the fractional digits\&.
-824     while (*fracStr) {
-825         *ptr++ = *fracStr++;
-826     }
-827 
-828     // Null\-terminate the string\&.
-829     *ptr = '\\0';
-830 
-831     return buffer;
-832 }
-.fi
-
-.PP
-References \fBitoa()\fP\&.
-.PP
-Referenced by \fBMaxOS::String::String()\fP\&.
 .SS "char * htoa (uint64_t number)"
 
 .PP
@@ -217,23 +128,27 @@ The converted string
 .PP
 
 .PP
-Definition at line \fB751\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB738\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-751                             {
-752     // If there is no buffer use a default buffer
-753     static char buffer[50] = {0};
-754     int i = 49;
-755 
-756     if (number == 0) {
-757         buffer[i] = '0';
-758         return &buffer[i];
-759     }
-760 
-761     for (; number && i; \-\-i, number /= 16)
-762         buffer[i] = "0123456789ABCDEF"[number % 16];
-763 
-764     return &buffer[i + 1];
-765 }
+738                             {
+739     // If there is no buffer use a default buffer
+740     static char buffer[50] = { 0 };
+741     int i = 49;
+742 
+743     // Null terminate the string
+744     buffer[i] = '\\0';
+745     \-\-i;
+746 
+747     if (number == 0) {
+748         buffer[i] = '0';
+749         return &buffer[i];
+750     }
+751 
+752     for (; number && i; \-\-i, number /= 16)
+753         buffer[i] = "0123456789ABCDEF"[number % 16];
+754 
+755     return &buffer[i + 1];
+756 }
 .fi
 
 .PP
@@ -257,38 +172,40 @@ The converted string
 .PP
 
 .PP
-Definition at line \fB720\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB703\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-720                                      {
-721 
-722     // If there is no buffer use a default buffer
-723     static char buffer[50] = {0};
-724 
-725     int i = 49;
-726     bool isNegative = number < 0;
-727 
-728     if (number == 0) {
-729         buffer[i] = '0';
-730         return &buffer[i];
-731     }
-732 
-733 
-734     for (; number && i; \-\-i, number /= base)
-735         buffer[i] = "0123456789ABCDEF"[number % base];
-736 
-737     if (isNegative) {
-738         buffer[i] = '\-';
-739         return &buffer[i];
-740     }
-741 
-742     return &buffer[i + 1];
-743 }
+703                                      {
+704 
+705     // If there is no buffer use a default buffer
+706     static char buffer[50] = { 0 };
+707 
+708     int i = 49;
+709     bool is_negative = number < 0;
+710 
+711     // Null terminate the string
+712     buffer[i] = '\\0';
+713     \-\-i;
+714 
+715     if (number == 0) {
+716         buffer[i] = '0';
+717         return &buffer[i];
+718     }
+719 
+720 
+721     for (; number && i; \-\-i, number /= base)
+722         buffer[i] = "0123456789ABCDEF"[number % base];
+723 
+724     if (is_negative) {
+725         buffer[i] = '\-';
+726         return &buffer[i];
+727     }
+728 
+729     return &buffer[i + 1];
+730 }
 .fi
 
 .PP
-References \fBbase\fP\&.
-.PP
-Referenced by \fBftoa()\fP, \fBMaxOS::String::String()\fP, and \fBMaxOS::common::OutputStream::write_int()\fP\&.
+Referenced by \fBMaxOS::String::String()\fP, and \fBMaxOS::common::OutputStream::write_int()\fP\&.
 .SS "bool strcmp (char const * str1, char const * str2)"
 
 .PP
@@ -308,19 +225,19 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB841\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB765\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-841                                                 {
-842 
-843     // Check if the strings are equal
-844     for (int i = 0; str1[i] != '\\0' || str2[i] != '\\0'; i++)
-845         if (str1[i] != str2[i])
-846             return false;
-847 
-848     // The strings are equal
-849     return true;
-850 
-851 }
+765                                                 {
+766 
+767     // Check if the strings are equal
+768     for (int i = 0; str1[i] != '\\0' || str2[i] != '\\0'; i++)
+769         if (str1[i] != str2[i])
+770             return false;
+771 
+772     // The strings are equal
+773     return true;
+774 
+775 }
 .fi
 
 .PP
@@ -344,14 +261,14 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB860\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB784\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-860                                                   {
-861 
-862     // Use the other strcmp function
-863     return strcmp(str1, str2\&.c_str());
-864 
-865 }
+784                                                   {
+785 
+786     // Use the other strcmp function
+787     return strcmp(str1, str2\&.c_str());
+788 
+789 }
 .fi
 
 .PP
@@ -375,13 +292,13 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB874\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB798\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-874                                                   {
-875 
-876     // Use the other strcmp function
-877     return strcmp(str1\&.c_str(), str2);
-878 }
+798                                                   {
+799 
+800     // Use the other strcmp function
+801     return strcmp(str1\&.c_str(), str2);
+802 }
 .fi
 
 .PP
@@ -405,14 +322,14 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB887\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB811\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-887                                                     {
-888 
-889     // Use the other strcmp function
-890     return strcmp(str1\&.c_str(), str2\&.c_str());
-891 
-892 }
+811                                                     {
+812 
+813     // Use the other strcmp function
+814     return strcmp(str1\&.c_str(), str2\&.c_str());
+815 
+816 }
 .fi
 
 .PP
@@ -434,17 +351,17 @@ The length of the string
 .PP
 
 .PP
-Definition at line \fB706\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB689\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-706                             {
-707     int len = 0;
-708     for (; str[len] != '\\0'; len++);
-709     return len;
-710 }
+689                             {
+690     int len = 0;
+691     for (; str[len] != '\\0'; len++);
+692     return len;
+693 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::String::String()\fP, \fBMaxOS::String::String()\fP, and \fBMaxOS::String::String()\fP\&.
+Referenced by \fBMaxOS::String::String()\fP, and \fBMaxOS::String::String()\fP\&.
 .SS "bool strncmp (char const * str1, char const * str2, int length)"
 
 .PP
@@ -466,23 +383,21 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB902\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB826\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-902                                                              {
-903 
-904     // Check if the strings are equal
-905     for (int i = 0; i < length; i++)
-906         if (str1[i] != str2[i])
-907             return false;
-908 
-909     // Strings are equal
-910     return true;
-911 
-912 }
+826                                                              {
+827 
+828     // Check if the strings are equal
+829     for (int i = 0; i < length; i++)
+830         if (str1[i] != str2[i])
+831             return false;
+832 
+833     // Strings are equal
+834     return true;
+835 
+836 }
 .fi
 
-.PP
-References \fBlength\fP\&.
 .PP
 Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()\fP, \fBstrncmp()\fP, \fBstrncmp()\fP, and \fBstrncmp()\fP\&.
 .SS "bool strncmp (char const * str1, \fBString\fP const & str2, int length)"
@@ -506,18 +421,18 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB922\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB846\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-922                                                                {
-923 
-924     // Use the other strncmp function
-925     return strncmp(str1, str2\&.c_str(), length);
-926 
-927 }
+846                                                                {
+847 
+848     // Use the other strncmp function
+849     return strncmp(str1, str2\&.c_str(), length);
+850 
+851 }
 .fi
 
 .PP
-References \fBMaxOS::String::c_str()\fP, \fBlength\fP, and \fBstrncmp()\fP\&.
+References \fBMaxOS::String::c_str()\fP, and \fBstrncmp()\fP\&.
 .SS "bool strncmp (\fBString\fP const & str1, char const * str2, int length)"
 
 .PP
@@ -539,18 +454,18 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB937\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB861\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-937                                                                {
-938 
-939     // Use the other strncmp function
-940     return strncmp(str1\&.c_str(), str2, length);
-941 
-942 }
+861                                                                {
+862 
+863     // Use the other strncmp function
+864     return strncmp(str1\&.c_str(), str2, length);
+865 
+866 }
 .fi
 
 .PP
-References \fBMaxOS::String::c_str()\fP, \fBlength\fP, and \fBstrncmp()\fP\&.
+References \fBMaxOS::String::c_str()\fP, and \fBstrncmp()\fP\&.
 .SS "bool strncmp (\fBString\fP const & str1, \fBString\fP const & str2, int length)"
 
 .PP
@@ -572,17 +487,17 @@ True if the strings are equal, false otherwise
 .PP
 
 .PP
-Definition at line \fB952\fP of file \fBstring\&.cpp\fP\&..PP
+Definition at line \fB876\fP of file \fBstring\&.cpp\fP\&..PP
 .nf
-952                                                                  {
-953 
-954     // Use the other strncmp function
-955     return strncmp(str1\&.c_str(), str2\&.c_str(), length);
-956 }
+876                                                                  {
+877 
+878     // Use the other strncmp function
+879     return strncmp(str1\&.c_str(), str2\&.c_str(), length);
+880 }
 .fi
 
 .PP
-References \fBMaxOS::String::c_str()\fP, \fBlength\fP, and \fBstrncmp()\fP\&.
+References \fBMaxOS::String::c_str()\fP, and \fBstrncmp()\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "constexpr int MaxOS::MAX_STRING_SMALL_STORAGE = 0x99\fC [constexpr]\fP"

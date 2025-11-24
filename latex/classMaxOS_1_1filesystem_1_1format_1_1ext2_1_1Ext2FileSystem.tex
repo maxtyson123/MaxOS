@@ -19,10 +19,14 @@ Inheritance diagram for Max\+OS\+::filesystem\+::format\+::ext2\+::Ext2\+File\+S
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem_a7aa6b4ababe8102ac0a2efdd0329b98f}{Ext2\+File\+System}} (\mbox{\hyperlink{classMaxOS_1_1drivers_1_1disk_1_1Disk}{drivers\+::disk\+::\+Disk}} \texorpdfstring{$\ast$}{*}disk, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\+\_\+t}} partition\+\_\+offset)
-\begin{DoxyCompactList}\small\item\em Construct a new Ext2 \doxylink{classMaxOS_1_1filesystem_1_1File}{File} System object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Construct a new Ext2 \doxylink{classMaxOS_1_1filesystem_1_1File}{File} System object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem_ae4aa96bf15141b89f8107bebdd3ba93f}{\texorpdfstring{$\sim$}{\string~}\+Ext2\+File\+System}} () \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{final}}
+\begin{DoxyCompactList}\small\item\em Destroy the Ext2 \doxylink{classMaxOS_1_1filesystem_1_1File}{File} System object and free the root directory. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{Max\+OS\+::filesystem\+::\+File\+System}}}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual}} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a9e366f036e9d9cd884fa689963aacc49}{\texorpdfstring{$\sim$}{\string~}\+File\+System}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{classMaxOS_1_1filesystem_1_1FileSystem}{File\+System}, frees the root directory (Which in turn frees all files and subdirectories) \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_aebe195e2366601af7a1b8e7befd70496}{root\+\_\+directory}} ()
 \begin{DoxyCompactList}\small\item\em Get the directory at "{}/"{}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a07a1f84e7a64661d40046c42e1e89c25}{get\+\_\+directory}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{const}} \mbox{\hyperlink{string_8h_a4a6e5834af96b66d8015f5a24c09e1b3}{string}} \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{path}})
@@ -33,14 +37,14 @@ Inheritance diagram for Max\+OS\+::filesystem\+::format\+::ext2\+::Ext2\+File\+S
 \doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem}{Max\+OS\+::filesystem\+::\+File\+System}}}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\+\_\+root\+\_\+directory}}
+\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory}{Directory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\+\_\+root\+\_\+directory}} = nullptr
 \begin{DoxyCompactList}\small\item\em The fist directory in the file system (not be confused with the system root) \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Handles the ext2 filesystem operations. 
 
-Definition at line \mbox{\hyperlink{ext2_8h_source_l00442}{442}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
+Definition at line \mbox{\hyperlink{ext2_8h_source_l00456}{456}} of file \mbox{\hyperlink{ext2_8h_source}{ext2.\+h}}.
 
 
 
@@ -64,22 +68,22 @@ Construct a new Ext2 \doxylink{classMaxOS_1_1filesystem_1_1File}{File} System ob
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01166}{1166}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
+Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01173}{1173}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{01167\ \ \ \ \ \ \ \ \ :\ m\_volume(disk,\ partition\_offset)\ \{}
-\DoxyCodeLine{01168\ }
-\DoxyCodeLine{01169\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ root\ directory}}
-\DoxyCodeLine{01170\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory}{Ext2Directory}}(\&m\_volume,\ 2,\ \textcolor{stringliteral}{"{}/"{}});}
-\DoxyCodeLine{01171\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ab847d2dfa3f68210d2579d77adc2a1a2}{read\_from\_disk}}();}
-\DoxyCodeLine{01172\ }
-\DoxyCodeLine{01173\ \}}
+\DoxyCodeLine{01174\ \ \ \ \ \ \ \ \ :\ m\_volume(disk,\ partition\_offset)\ \{}
+\DoxyCodeLine{01175\ }
+\DoxyCodeLine{01176\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ root\ directory}}
+\DoxyCodeLine{01177\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2Directory}{Ext2Directory}}(\&m\_volume,\ 2,\ \textcolor{stringliteral}{"{}/"{}});}
+\DoxyCodeLine{01178\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}}-\/>\mbox{\hyperlink{classMaxOS_1_1filesystem_1_1Directory_ab847d2dfa3f68210d2579d77adc2a1a2}{read\_from\_disk}}();}
+\DoxyCodeLine{01179\ }
+\DoxyCodeLine{01180\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{filesystem_8h_source_l00103}{Max\+OS\+::filesystem\+::\+File\+System\+::m\+\_\+root\+\_\+directory}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00112}{Max\+OS\+::filesystem\+::\+Directory\+::read\+\_\+from\+\_\+disk()}}.
+References \mbox{\hyperlink{filesystem_8h_source_l00098}{Max\+OS\+::filesystem\+::\+File\+System\+::m\+\_\+root\+\_\+directory}}, and \mbox{\hyperlink{filesystem_8cpp_source_l00115}{Max\+OS\+::filesystem\+::\+Directory\+::read\+\_\+from\+\_\+disk()}}.
 
 \Hypertarget{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem_ae4aa96bf15141b89f8107bebdd3ba93f}\label{classMaxOS_1_1filesystem_1_1format_1_1ext2_1_1Ext2FileSystem_ae4aa96bf15141b89f8107bebdd3ba93f} 
 \index{MaxOS::filesystem::format::ext2::Ext2FileSystem@{MaxOS::filesystem::format::ext2::Ext2FileSystem}!````~Ext2FileSystem@{\texorpdfstring{$\sim$}{\string~}Ext2FileSystem}}
@@ -89,15 +93,23 @@ References \mbox{\hyperlink{filesystem_8h_source_l00103}{Max\+OS\+::filesystem\+
 
 
 
-Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01175}{1175}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
+Destroy the Ext2 \doxylink{classMaxOS_1_1filesystem_1_1File}{File} System object and free the root directory. 
+
+
+
+Definition at line \mbox{\hyperlink{ext2_8cpp_source_l01185}{1185}} of file \mbox{\hyperlink{ext2_8cpp_source}{ext2.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{01175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{01176\ \ \ \ \ \textcolor{keyword}{delete}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}};}
-\DoxyCodeLine{01177\ \}}
+\DoxyCodeLine{01185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01186\ \ \ \ \ \textcolor{keyword}{delete}\ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1FileSystem_a7356a90ff2324a5236d2c130db8b328e}{m\_root\_directory}};}
+\DoxyCodeLine{01187\ \}}
 
 \end{DoxyCode}
+
+
+References \mbox{\hyperlink{filesystem_8h_source_l00098}{Max\+OS\+::filesystem\+::\+File\+System\+::m\+\_\+root\+\_\+directory}}.
+
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

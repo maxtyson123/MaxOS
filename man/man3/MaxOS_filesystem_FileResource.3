@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::FileResource" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::FileResource" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,23 +15,23 @@ Inherits \fBMaxOS::processes::Resource\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBFileResource\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP \fBflags\fP, processes::resource_type_t \fBtype\fP)"
+.RI "\fBFileResource\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP flags, \fBprocesses::resource_type_t\fP \fBtype\fP)"
 .br
 .RI "Construct a new \fBFile\fP Resource object\&. "
 .ti -1c
-.RI "\fBint\fP \fBread\fP (\fBvoid\fP *buffer, \fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.RI "\fBint\fP \fBread\fP (\fBvoid\fP *buffer, \fBsize_t\fP size, \fBsize_t\fP flags) \fBfinal\fP"
 .br
-.RI "Read from a file resource\&. "
+.RI "read from a file resource "
 .ti -1c
-.RI "\fBint\fP \fBwrite\fP (\fBconst\fP \fBvoid\fP *buffer, \fBsize_t\fP \fBsize\fP, \fBsize_t\fP \fBflags\fP) \fBfinal\fP"
+.RI "\fBint\fP \fBwrite\fP (\fBconst\fP \fBvoid\fP *buffer, \fBsize_t\fP size, \fBsize_t\fP flags) \fBfinal\fP"
 .br
-.RI "Write to a file resource\&. "
+.RI "write to a file resource "
 .in -1c
 
 Public Member Functions inherited from \fBMaxOS::processes::Resource\fP
 .in +1c
 .ti -1c
-.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t \fBflags\fP, resource_type_t \fBtype\fP)"
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBresource_type_t\fP \fBtype\fP)"
 .br
 .RI "Constructs a new \fBResource\fP object\&. "
 .ti -1c
@@ -39,15 +39,15 @@ Public Member Functions inherited from \fBMaxOS::processes::Resource\fP
 .br
 .RI "Gets the name of this resource\&. "
 .ti -1c
-.RI "resource_type_t \fBtype\fP ()"
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
 .br
 .RI "Gets the type of this resource\&. "
 .ti -1c
-.RI "virtual void \fBopen\fP (size_t \fBflags\fP)"
+.RI "virtual void \fBopen\fP (size_t flags)"
 .br
 .RI "Opens the resource\&. "
 .ti -1c
-.RI "virtual void \fBclose\fP (size_t \fBflags\fP)"
+.RI "virtual void \fBclose\fP (size_t flags)"
 .br
 .RI "Closes the resource\&. "
 .in -1c
@@ -82,7 +82,7 @@ Should this free the memory of the file when the resource is done??
 Definition at line \fB32\fP of file \fBvfsresource\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "FileResource::FileResource (\fBconst\fP \fBstring\fP & name, \fBsize_t\fP flags, processes::resource_type_t type)"
+.SS "FileResource::FileResource (\fBconst\fP \fBstring\fP & name, \fBsize_t\fP flags, \fBprocesses::resource_type_t\fP type)"
 
 .PP
 Construct a new \fBFile\fP Resource object\&. 
@@ -112,7 +112,7 @@ Definition at line \fB24\fP of file \fBvfsresource\&.cpp\fP\&..PP
 .SS "\fBint\fP FileResource::read (\fBvoid\fP * buffer, \fBsize_t\fP size, \fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Read from a file resource\&. 
+read from a file resource 
 .PP
 \fBParameters\fP
 .RS 4
@@ -167,11 +167,11 @@ Definition at line \fB41\fP of file \fBvfsresource\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBfile\fP, \fBflags\fP, \fBMaxOS::filesystem::File::position()\fP, \fBMaxOS::filesystem::File::read()\fP, \fBMaxOS::filesystem::File::size()\fP, and \fBsize\fP\&.
+References \fBfile\fP, \fBMaxOS::filesystem::File::position()\fP, \fBMaxOS::filesystem::File::read()\fP, and \fBMaxOS::filesystem::File::size()\fP\&.
 .SS "\fBint\fP FileResource::write (\fBconst\fP \fBvoid\fP * buffer, \fBsize_t\fP size, \fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Write to a file resource\&. 
+write to a file resource 
 .PP
 \fBParameters\fP
 .RS 4
@@ -242,7 +242,7 @@ Definition at line \fB80\fP of file \fBvfsresource\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBfile\fP, \fBflags\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, \fBMaxOS::processes::Resource::name()\fP, \fBMaxOS::filesystem::Path::parent_directory()\fP, \fBMaxOS::filesystem::File::seek()\fP, \fBsize\fP, and \fBMaxOS::filesystem::File::write()\fP\&.
+References \fBfile\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, \fBMaxOS::processes::Resource::name()\fP, \fBMaxOS::filesystem::Path::parent_directory()\fP, \fBMaxOS::filesystem::File::seek()\fP, and \fBMaxOS::filesystem::File::write()\fP\&.
 .SH "Member Data Documentation"
 .PP 
 .SS "\fBFile\fP* MaxOS::filesystem::FileResource::file"

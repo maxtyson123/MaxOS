@@ -1,0 +1,134 @@
+.TH "MaxOS::runtime::KASanHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::runtime::KASanHandler \- Handles kernel address sanitizer runtime errors\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <kasan\&.h>\fP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBhandle\fP (bool write, uintptr_t address, size_t size, void *rip)"
+.br
+.RI "Handles a KASan error by panicking and printing the details\&. "
+.ti -1c
+.RI "static void \fBinitialize\fP ()"
+.br
+.RI "Initializes the KASan handler by setting up the shadow memory\&. "
+.ti -1c
+.RI "static void \fBpoison_stack\fP (uintptr_t address, size_t size)"
+.br
+.RI "Marks a region of stack memory as poisoned (inaccessible) "
+.ti -1c
+.RI "static void \fBunpoison_stack\fP (uintptr_t address, size_t size)"
+.br
+.RI "Marks a region of stack memory as unpoisoned (accessible) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles kernel address sanitizer runtime errors\&. 
+
+
+.PP
+\fBTodo\fP
+.RS 4
+finish when cbf 
+.RE
+.PP
+
+.PP
+Definition at line \fB23\fP of file \fBkasan\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void KASanHandler::handle (bool write, uintptr_t address, size_t size, void * rip)\fC [static]\fP"
+
+.PP
+Handles a KASan error by panicking and printing the details\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwrite\fP Whether the access was a write (true) or read (false) 
+.br
+\fIaddress\fP The address that was accessed 
+.br
+\fIsize\fP The size of the access in bytes 
+.br
+\fIrip\fP The instruction pointer where the access occurred 
+.RE
+.PP
+
+.PP
+Definition at line \fB27\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+27                                                                                {
+28     ASSERT(false, "KASAN ERROR: %s of size %zu at address 0x%lx from RIP 0x%p", write ? "WRITE" : "READ", size, address, rip);
+29 }
+.fi
+
+.PP
+References \fBASSERT\fP\&.
+.PP
+Referenced by \fB__asan_load16_noabort()\fP, \fB__asan_load1_noabort()\fP, \fB__asan_load2_noabort()\fP, \fB__asan_load4_noabort()\fP, \fB__asan_load8_noabort()\fP, \fB__asan_loadN_noabort()\fP, \fB__asan_store16_noabort()\fP, \fB__asan_store1_noabort()\fP, \fB__asan_store2_noabort()\fP, \fB__asan_store4_noabort()\fP, \fB__asan_store8_noabort()\fP, and \fB__asan_storeN_noabort()\fP\&.
+.SS "void KASanHandler::initialize ()\fC [static]\fP"
+
+.PP
+Initializes the KASan handler by setting up the shadow memory\&. 
+.PP
+Definition at line \fB34\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+34                               {
+35 
+36 }
+.fi
+
+.SS "void KASanHandler::poison_stack (uintptr_t address, size_t size)\fC [static]\fP"
+
+.PP
+Marks a region of stack memory as poisoned (inaccessible) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The starting address of the region 
+.br
+\fIsize\fP The size of the region in bytes 
+.RE
+.PP
+
+.PP
+Definition at line \fB44\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+44                                                               {
+45 
+46 }
+.fi
+
+.SS "void KASanHandler::unpoison_stack (uintptr_t address, size_t size)\fC [static]\fP"
+
+.PP
+Marks a region of stack memory as unpoisoned (accessible) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The starting address of the region 
+.br
+\fIsize\fP The size of the region in bytes 
+.RE
+.PP
+
+.PP
+Definition at line \fB54\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+54                                                                 {
+55 
+56 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

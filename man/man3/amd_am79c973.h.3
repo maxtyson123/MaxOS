@@ -1,4 +1,4 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/ethernet/amd_am79c973.h" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/drivers/ethernet/amd_am79c973.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,7 +7,9 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stdint\&.h>\fP
+\fC#include <cstdint>\fP
+.br
+\fC#include <common/macros\&.h>\fP
 .br
 \fC#include <drivers/ethernet/ethernet\&.h>\fP
 .br
@@ -22,56 +24,29 @@
 
 .in +1c
 .ti -1c
+.RI "struct \fBMaxOS::drivers::ethernet::InitializationBlock\fP"
+.br
+.RI "The initialization block for the AMD AM79C973 Ethernet Controller\&. "
+.ti -1c
+.RI "struct \fBMaxOS::drivers::ethernet::BufferDescriptor\fP"
+.br
+.RI "Defines the layout of a buffer descriptor for the AMD AM79C973 Ethernet Controller\&. "
+.ti -1c
 .RI "class \fBMaxOS::drivers::ethernet::AMD_AM79C973\fP"
 .br
 .RI "\fBDriver\fP for the AMD AM79C973 Ethernet Controller\&. "
 .in -1c
-.SS "Variables"
+.SS "Typedefs"
 
 .in +1c
 .ti -1c
-.RI "uint16_t \fBmode\fP"
+.RI "typedef struct PACKED \fBMaxOS::drivers::ethernet::InitializationBlock\fP \fBMaxOS::drivers::ethernet::initialisation_block_t\fP"
 .br
+.RI "Alias for \fBInitializationBlock\fP struct\&. "
 .ti -1c
-.RI "unsigned \fBreserved1\fP"
+.RI "typedef struct PACKED \fBMaxOS::drivers::ethernet::BufferDescriptor\fP \fBMaxOS::drivers::ethernet::buffer_descriptor_t\fP"
 .br
-.ti -1c
-.RI "unsigned \fBnumSendBuffers\fP"
-.br
-.ti -1c
-.RI "unsigned \fBreserved2\fP"
-.br
-.ti -1c
-.RI "unsigned \fBnumRecvBuffers\fP"
-.br
-.ti -1c
-.RI "uint64_t \fBphysicalAddress\fP"
-.br
-.ti -1c
-.RI "uint16_t \fBreserved3\fP"
-.br
-.ti -1c
-.RI "uint64_t \fBlogicalAddress\fP"
-.br
-.ti -1c
-.RI "uint32_t \fBrecvBufferDescrAddress\fP"
-.br
-.ti -1c
-.RI "uint32_t \fBsendBufferDescrAddress\fP"
-.br
-.ti -1c
-.RI "uint64_t \fBaddress\fP"
-.br
-.ti -1c
-.RI "uint32_t \fBflags\fP"
-.br
-.RI "Flags indicating the status of the core (bit 0 = core enabled, bit 1 = can be enabled) "
-.ti -1c
-.RI "uint32_t \fBflags2\fP"
-.br
-.ti -1c
-.RI "uint32_t \fBavail\fP"
-.br
+.RI "Alias for \fBBufferDescriptor\fP struct\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -92,68 +67,6 @@ Max Tyson
 
 .PP
 Definition in file \fBamd_am79c973\&.h\fP\&.
-.SH "Variable Documentation"
-.PP 
-.SS "uint64_t address"
-
-.PP
-Definition at line \fB1\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "uint32_t avail"
-
-.PP
-Definition at line \fB4\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "uint16_t flags"
-
-.PP
-Flags indicating the status of the core (bit 0 = core enabled, bit 1 = can be enabled) Flags describing the polarity and trigger mode of the interrupt source (see MADT override flags) 
-.PP
-Definition at line \fB2\fP of file \fBamd_am79c973\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::PhysicalMemoryManager::change_page_flags()\fP, \fBMaxOS::processes::BaseResourceRegistry::close_resource()\fP, \fBMaxOS::processes::ResourceManager::close_resource()\fP, \fBMaxOS::processes::ResourceRegistry< Type >::create_resource()\fP, \fBMaxOS::memory::PhysicalMemoryManager::identity_map()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map_area()\fP, \fBMaxOS::processes::ResourceManager::open_resource()\fP, \fBMaxOS::filesystem::FileResource::read()\fP, \fBMaxOS::filesystem::DirectoryResource::read()\fP, \fBMaxOS::net::TransmissionControlProtocolHandler::sendTransmissionControlProtocolPacket()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_close()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_create()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_open()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_read()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_write()\fP, \fBMaxOS::processes::ELF64::to_vmm_flags()\fP, \fBMaxOS::filesystem::FileResource::write()\fP, and \fBMaxOS::filesystem::DirectoryResource::write()\fP\&.
-.SS "uint32_t flags2"
-
-.PP
-Definition at line \fB3\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "uint64_t logicalAddress"
-
-.PP
-Definition at line \fB8\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "uint16_t mode"
-
-.PP
-Definition at line \fB1\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "unsigned numRecvBuffers"
-
-.PP
-Definition at line \fB5\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "unsigned numSendBuffers"
-
-.PP
-Definition at line \fB3\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "uint64_t physicalAddress"
-
-.PP
-Definition at line \fB6\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "uint32_t recvBufferDescrAddress"
-
-.PP
-Definition at line \fB9\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "unsigned reserved1"
-
-.PP
-Definition at line \fB2\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "unsigned reserved2"
-
-.PP
-Definition at line \fB4\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "uint16_t reserved3"
-
-.PP
-Definition at line \fB7\fP of file \fBamd_am79c973\&.h\fP\&.
-.SS "uint32_t sendBufferDescrAddress"
-
-.PP
-Definition at line \fB10\fP of file \fBamd_am79c973\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

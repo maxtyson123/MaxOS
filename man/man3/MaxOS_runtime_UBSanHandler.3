@@ -1,4 +1,4 @@
-.TH "MaxOS::runtime::UBSanHandler" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::runtime::UBSanHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,7 +29,7 @@ MaxOS::runtime::UBSanHandler \- Handles undefined behaviour sanitizer runtime er
 .PP 
 Handles undefined behaviour sanitizer runtime errors\&. 
 .PP
-Definition at line \fB134\fP of file \fBubsan\&.h\fP\&.
+Definition at line \fB184\fP of file \fBubsan\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "void UBSanHandler::handle (\fBsource_location_t\fP location, const char * msg)\fC [static]\fP"
@@ -58,7 +58,7 @@ Definition at line \fB25\fP of file \fBubsan\&.cpp\fP\&..PP
 .PP
 References \fBASSERT\fP, \fBMaxOS::runtime::SourceLocation::column\fP, \fBMaxOS::runtime::SourceLocation::file\fP, and \fBMaxOS::runtime::SourceLocation::line\fP\&.
 .PP
-Referenced by \fBprint_type_mismatch()\fP, and \fBprint_type_mismatch_v1()\fP\&.
+Referenced by \fB__ubsan_handle_add_overflow()\fP, \fB__ubsan_handle_builtin_unreachable()\fP, \fB__ubsan_handle_divrem_overflow()\fP, \fB__ubsan_handle_load_invalid_value()\fP, \fB__ubsan_handle_missing_return()\fP, \fB__ubsan_handle_mul_overflow()\fP, \fB__ubsan_handle_negate_overflow()\fP, \fB__ubsan_handle_out_of_bounds()\fP, \fB__ubsan_handle_pointer_overflow()\fP, \fB__ubsan_handle_shift_out_of_bounds()\fP, \fB__ubsan_handle_sub_overflow()\fP, \fB__ubsan_handle_vla_bound_not_positive()\fP, \fBprint_type_mismatch()\fP, and \fBprint_type_mismatch_v1()\fP\&.
 .SS "void UBSanHandler::print_type_mismatch (\fBtype_mismatch_info_t\fP * info, uintptr_t ptr)\fC [static]\fP"
 
 .PP
@@ -90,7 +90,9 @@ Definition at line \fB37\fP of file \fBubsan\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::runtime::TypeMismatchInfo::alignment\fP, \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfo::location\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfo::type\fP, \fBMaxOS::runtime::TypeMismatchInfo::type_check_kind\fP, and \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP\&.
+References \fBMaxOS::runtime::TypeMismatchInfo::alignment\fP, \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfo::location\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfo::type\fP, \fBMaxOS::runtime::TypeMismatchInfo::type_check_kind\fP, \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP, and \fBubsan_aligned\fP\&.
+.PP
+Referenced by \fB__ubsan_handle_type_mismatch()\fP\&.
 .SS "void UBSanHandler::print_type_mismatch_v1 (\fBtype_mismatch_info_v1_t\fP * info, uintptr_t ptr)\fC [static]\fP"
 
 .PP
@@ -122,7 +124,9 @@ Definition at line \fB56\fP of file \fBubsan\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::location\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::log_alignment\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type_check_kind\fP, and \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP\&.
+References \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::location\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::log_alignment\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type_check_kind\fP, \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP, and \fBubsan_aligned\fP\&.
+.PP
+Referenced by \fB__ubsan_handle_type_mismatch_v1()\fP\&.
 
 .SH "Author"
 .PP 

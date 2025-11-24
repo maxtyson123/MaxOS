@@ -5,8 +5,9 @@
 Defines a Physical\+Memory\+Manager class for managing physical memory allocation and deallocation of pages.  
 
 
-{\ttfamily \#include $<$stdint.\+h$>$}\newline
-{\ttfamily \#include $<$stddef.\+h$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$cstddef$>$}\newline
+{\ttfamily \#include $<$common/macros.\+h$>$}\newline
 {\ttfamily \#include $<$system/multiboot.\+h$>$}\newline
 {\ttfamily \#include $<$common/spinlock.\+h$>$}\newline
 \doxysubsubsection*{Classes}
@@ -22,27 +23,32 @@ class \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{Max\+OS\+:
 \begin{DoxyCompactItemize}
 \item 
 \#define \mbox{\hyperlink{physical_8h_a9a863ef3a659fd011f2a7ee0bf553338}{ENTRIES\+\_\+\+TO\+\_\+\+ADDRESS}}(pml4,  pdpr,  pd,  pt)~((pml4 $<$$<$ 39) \texorpdfstring{$\vert$}{|} (pdpr $<$$<$ 30) \texorpdfstring{$\vert$}{|} (pd $<$$<$ 21) \texorpdfstring{$\vert$}{|}  (pt $<$$<$ 12))
-\item 
+\begin{DoxyCompactList}\small\item\em Convert page map level indices to a virtual address. \end{DoxyCompactList}\item 
 \#define \mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR,  LEVEL)~(((uint64\+\_\+t)ADDR \& ((uint64\+\_\+t)0x1ff $<$$<$ (12 + LEVEL \texorpdfstring{$\ast$}{*} 9))) $>$$>$ (12 + LEVEL \texorpdfstring{$\ast$}{*} 9))
-\item 
-\#define \mbox{\hyperlink{physical_8h_a21b56ad4b688267e89e208897cfdad31}{PML4\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~PMLX\+\_\+\+GET\+\_\+\+INDEX(ADDR, 3)
-\item 
-\#define \mbox{\hyperlink{physical_8h_a363318d5bd935b341ef29aa93046f5de}{PML3\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~PMLX\+\_\+\+GET\+\_\+\+INDEX(ADDR, 2)
-\item 
-\#define \mbox{\hyperlink{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}{PML2\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~PMLX\+\_\+\+GET\+\_\+\+INDEX(ADDR, 1)
-\item 
-\#define \mbox{\hyperlink{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}{PML1\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~PMLX\+\_\+\+GET\+\_\+\+INDEX(ADDR, 0)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get the index for a given page map level from a virtual address. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{physical_8h_a21b56ad4b688267e89e208897cfdad31}{PML4\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 3)
+\begin{DoxyCompactList}\small\item\em Get the PML4 index from a virtual address. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{physical_8h_a363318d5bd935b341ef29aa93046f5de}{PML3\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 2)
+\begin{DoxyCompactList}\small\item\em Get the PDPT index from a virtual address. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}{PML2\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 1)
+\begin{DoxyCompactList}\small\item\em Get the PDP index from a virtual address. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}{PML1\+\_\+\+GET\+\_\+\+INDEX}}(ADDR)~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 0)
+\begin{DoxyCompactList}\small\item\em Get the PT index from a virtual address. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
 typedef void \mbox{\hyperlink{physical_8h_a1a4a2cf740017bbb681bbe110a18fdcb}{Max\+OS\+::memory\+::virtual\+\_\+address\+\_\+t}}
-\item 
+\begin{DoxyCompactList}\small\item\em A type representing a virtual address (used for readability) \end{DoxyCompactList}\item 
 typedef void \mbox{\hyperlink{physical_8h_a86d1744b2aea4590cf02ef32ff8acc63}{Max\+OS\+::memory\+::physical\+\_\+address\+\_\+t}}
-\item 
-\Hypertarget{physical_8h_afff8f9259424b04221cedf42a6a6be65}\label{physical_8h_afff8f9259424b04221cedf42a6a6be65} 
-typedef enum \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eb}{Max\+OS\+::memory\+::\+Page\+Flags}} {\bfseries Max\+OS\+::memory\+::page\+\_\+flags\+\_\+t}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em A type representing a physical address (used for readability) \end{DoxyCompactList}\item 
+typedef enum \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eb}{Max\+OS\+::memory\+::\+Page\+Flags}} \mbox{\hyperlink{physical_8h_aa3df811efd0bcc8e3652661e1ee92c60}{Max\+OS\+::memory\+::page\+\_\+flags\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Alias for Page\+Flags enum. \end{DoxyCompactList}\item 
+\Hypertarget{physical_8h_a26eb45eda7112c12fd03390b701f071d}\label{physical_8h_a26eb45eda7112c12fd03390b701f071d} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1memory_1_1PageTableEntry}{Max\+OS\+::memory\+::\+Page\+Table\+Entry}} {\bfseries Max\+OS\+::memory\+::pte\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1memory_1_1PageTableEntry}{Page\+Table\+Entry} struct. \end{DoxyCompactList}\item 
+\Hypertarget{physical_8h_a133db1d1edfcaf62f3b8c3d241fcc371}\label{physical_8h_a133db1d1edfcaf62f3b8c3d241fcc371} 
+typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1memory_1_1PageMapLevel}{Max\+OS\+::memory\+::\+Page\+Map\+Level}} {\bfseries Max\+OS\+::memory\+::pml\+\_\+t}
+\begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1memory_1_1PageMapLevel}{Page\+Map\+Level} struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
@@ -62,39 +68,9 @@ enum \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eb}{Max\+OS\+::
 , \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84ebad32e5b4f2655fe653eb0f620de087fd5}{Max\+OS\+::memory\+::\+NO\+\_\+\+EXECUTE}} = (1ULL \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 63)
  \}
 \begin{DoxyCompactList}\small\item\em Flags for page table entries. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Functions}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{physical_8h_a10570b98e38bc593fa1163b00a058ca2}\label{physical_8h_a10570b98e38bc593fa1163b00a058ca2} 
-struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1PageTableEntry}{Max\+OS\+::memory\+::\+Page\+Table\+Entry}} {\bfseries Max\+OS\+::memory\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+} ((packed)) pte\+\_\+t
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-bool \mbox{\hyperlink{physical_8h_aa84cc4dc60e16481b79b15b815aaea31}{present}}
-\begin{DoxyCompactList}\small\item\em \texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+PRESENT \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{physical_8h_ab4d8d1259f524270d625ab8933700d27}{write}}
-\begin{DoxyCompactList}\small\item\em \texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+WRITE \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{physical_8h_a8d0d274d7162274a04afd0cb39eaccfd}{user}}
-\begin{DoxyCompactList}\small\item\em \texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+USER \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{physical_8h_ad124499797a0c2567e0689e8586318af}{write\+\_\+through}}
-\begin{DoxyCompactList}\small\item\em \texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+WRITE\+\_\+\+THROUGH \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{physical_8h_a7164e1adb9f37fa12d63bc66788850bf}{cache\+\_\+disabled}}
-\begin{DoxyCompactList}\small\item\em \texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+CACHE\+\_\+\+DISABLED \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{physical_8h_a242ede6c60cc0c65c71f38011ae1fa83}{accessed}}
-\begin{DoxyCompactList}\small\item\em \texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+ACCESSED \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{physical_8h_ad25edacba00e4d0666a9959053b7cc10}{dirty}}
-\begin{DoxyCompactList}\small\item\em \texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+DIRTY \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{physical_8h_ae929bd0aeee67959abac551b220720e4}{huge\+\_\+page}}
-\begin{DoxyCompactList}\small\item\em \texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+HUGE\+\_\+\+PAGE \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{physical_8h_a86004534684821212245555e66ec1d09}{global}}
-\begin{DoxyCompactList}\small\item\em \texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+GLOBAL \end{DoxyCompactList}\item 
-uint8\+\_\+t \mbox{\hyperlink{physical_8h_ad5a95884eb3a555f48a10bb338c65480}{available}}
-\begin{DoxyCompactList}\small\item\em Extra metadata bytes available for OS use. \end{DoxyCompactList}\item 
-uint64\+\_\+t \mbox{\hyperlink{physical_8h_a069784144afa0b45c14ce1788adb541a}{physical\+\_\+address}}
-\begin{DoxyCompactList}\small\item\em The address the page represents in memory. \end{DoxyCompactList}\item 
-pte\+\_\+t \mbox{\hyperlink{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}{entries}} \mbox{[}512\mbox{]}
-\begin{DoxyCompactList}\small\item\em The entries in this page map level. If it is a PT then these are page table entries, otherwise they are pointers to the next level. Indexed by the relevant bits in the virtual address. \end{DoxyCompactList}\item 
 constexpr uint64\+\_\+t \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{Max\+OS\+::memory\+::\+PAGE\+\_\+\+SIZE}} = 0x1000
 \begin{DoxyCompactList}\small\item\em The size of a page (4KB) \end{DoxyCompactList}\item 
 constexpr uint8\+\_\+t \mbox{\hyperlink{physical_8h_aade198fd5ec1031a23cd63fc2709f00c}{Max\+OS\+::memory\+::\+ROW\+\_\+\+BITS}} = 64
@@ -105,13 +81,10 @@ constexpr uint64\+\_\+t \mbox{\hyperlink{physical_8h_a5fe6a67466d94891bb90880d8b
 \begin{DoxyCompactList}\small\item\em Where higher half memory starts. \end{DoxyCompactList}\item 
 constexpr uint64\+\_\+t \mbox{\hyperlink{physical_8h_a47c394121636925d369cc1f13548b552}{Max\+OS\+::memory\+::\+HIGHER\+\_\+\+HALF\+\_\+\+MEM\+\_\+\+RESERVED}} = 0x280000000
 \begin{DoxyCompactList}\small\item\em Reserved higher half memory for kernel use (10GB) \end{DoxyCompactList}\item 
-constexpr uint64\+\_\+t \mbox{\hyperlink{physical_8h_a113a5e21291a156b8855b4d7eee1cc96}{Max\+OS\+::memory\+::\+HIGHER\+\_\+\+HALF\+\_\+\+OFFSET}} = \mbox{\hyperlink{physical_8h_a5fe6a67466d94891bb90880d8b8416a2}{HIGHER\+\_\+\+HALF\+\_\+\+MEM\+\_\+\+OFFSET}} + \mbox{\hyperlink{physical_8h_a47c394121636925d369cc1f13548b552}{HIGHER\+\_\+\+HALF\+\_\+\+MEM\+\_\+\+RESERVED}}
+constexpr uint64\+\_\+t \mbox{\hyperlink{physical_8h_a113a5e21291a156b8855b4d7eee1cc96}{Max\+OS\+::memory\+::\+HIGHER\+\_\+\+HALF\+\_\+\+OFFSET}}
 \begin{DoxyCompactList}\small\item\em Where higher half memory usable space starts. \end{DoxyCompactList}\item 
-constexpr uint64\+\_\+t \mbox{\hyperlink{physical_8h_a209a1e2709f9aac5d70eb43e198608d5}{Max\+OS\+::memory\+::\+HIGHER\+\_\+\+HALF\+\_\+\+DIRECT\+\_\+\+MAP}} = \mbox{\hyperlink{physical_8h_a113a5e21291a156b8855b4d7eee1cc96}{HIGHER\+\_\+\+HALF\+\_\+\+OFFSET}} + \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\+\_\+\+SIZE}}
-\begin{DoxyCompactList}\small\item\em Where the map of physical memory to higher half starts. \end{DoxyCompactList}\item 
-\Hypertarget{physical_8h_a1336b627521dd3a8924945fa01a30a49}\label{physical_8h_a1336b627521dd3a8924945fa01a30a49} 
-class \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager}} {\bfseries Max\+OS\+::memory\+::\+\_\+\+\_\+attribute\+\_\+\+\_\+}
-\end{DoxyCompactItemize}
+constexpr uint64\+\_\+t \mbox{\hyperlink{physical_8h_a209a1e2709f9aac5d70eb43e198608d5}{Max\+OS\+::memory\+::\+HIGHER\+\_\+\+HALF\+\_\+\+DIRECT\+\_\+\+MAP}}
+\begin{DoxyCompactList}\small\item\em Where the map of physical memory to higher half starts. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -138,47 +111,67 @@ Definition in file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00022}{22}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Convert page map level indices to a virtual address. 
+
+
+
+Definition at line \mbox{\hyperlink{physical_8h_source_l00019}{19}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 \Hypertarget{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd}\label{physical_8h_a39f52e0488e29313ac48c0a06c9f8cbd} 
 \index{physical.h@{physical.h}!PML1\_GET\_INDEX@{PML1\_GET\_INDEX}}
 \index{PML1\_GET\_INDEX@{PML1\_GET\_INDEX}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{PML1\_GET\_INDEX}{PML1\_GET\_INDEX}}
-{\footnotesize\ttfamily \#define PML1\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~PMLX\+\_\+\+GET\+\_\+\+INDEX(ADDR, 0)}
+{\footnotesize\ttfamily \#define PML1\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 0)}
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00028}{28}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Get the PT index from a virtual address. 
+
+
+
+Definition at line \mbox{\hyperlink{physical_8h_source_l00025}{25}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 \Hypertarget{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312}\label{physical_8h_aeccd6d6989169ce4bea31a8aebc3c312} 
 \index{physical.h@{physical.h}!PML2\_GET\_INDEX@{PML2\_GET\_INDEX}}
 \index{PML2\_GET\_INDEX@{PML2\_GET\_INDEX}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{PML2\_GET\_INDEX}{PML2\_GET\_INDEX}}
-{\footnotesize\ttfamily \#define PML2\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~PMLX\+\_\+\+GET\+\_\+\+INDEX(ADDR, 1)}
+{\footnotesize\ttfamily \#define PML2\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 1)}
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00027}{27}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Get the PDP index from a virtual address. 
+
+
+
+Definition at line \mbox{\hyperlink{physical_8h_source_l00024}{24}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 \Hypertarget{physical_8h_a363318d5bd935b341ef29aa93046f5de}\label{physical_8h_a363318d5bd935b341ef29aa93046f5de} 
 \index{physical.h@{physical.h}!PML3\_GET\_INDEX@{PML3\_GET\_INDEX}}
 \index{PML3\_GET\_INDEX@{PML3\_GET\_INDEX}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{PML3\_GET\_INDEX}{PML3\_GET\_INDEX}}
-{\footnotesize\ttfamily \#define PML3\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~PMLX\+\_\+\+GET\+\_\+\+INDEX(ADDR, 2)}
+{\footnotesize\ttfamily \#define PML3\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 2)}
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00026}{26}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Get the PDPT index from a virtual address. 
+
+
+
+Definition at line \mbox{\hyperlink{physical_8h_source_l00023}{23}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 \Hypertarget{physical_8h_a21b56ad4b688267e89e208897cfdad31}\label{physical_8h_a21b56ad4b688267e89e208897cfdad31} 
 \index{physical.h@{physical.h}!PML4\_GET\_INDEX@{PML4\_GET\_INDEX}}
 \index{PML4\_GET\_INDEX@{PML4\_GET\_INDEX}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{PML4\_GET\_INDEX}{PML4\_GET\_INDEX}}
-{\footnotesize\ttfamily \#define PML4\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~PMLX\+\_\+\+GET\+\_\+\+INDEX(ADDR, 3)}
+{\footnotesize\ttfamily \#define PML4\+\_\+\+GET\+\_\+\+INDEX(\begin{DoxyParamCaption}\item[{}]{ADDR }\end{DoxyParamCaption})~\mbox{\hyperlink{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}{PMLX\+\_\+\+GET\+\_\+\+INDEX}}(ADDR, 3)}
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00025}{25}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Get the PML4 index from a virtual address. 
+
+
+
+Definition at line \mbox{\hyperlink{physical_8h_source_l00022}{22}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 \Hypertarget{physical_8h_a0de5225931b391ee0a69cfd4aae482c0}\label{physical_8h_a0de5225931b391ee0a69cfd4aae482c0} 
 \index{physical.h@{physical.h}!PMLX\_GET\_INDEX@{PMLX\_GET\_INDEX}}
@@ -188,30 +181,54 @@ Definition at line \mbox{\hyperlink{physical_8h_source_l00025}{25}} of file \mbo
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00023}{23}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Get the index for a given page map level from a virtual address. 
+
+
+
+Definition at line \mbox{\hyperlink{physical_8h_source_l00020}{20}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
 \doxysubsection{Typedef Documentation}
+\Hypertarget{physical_8h_aa3df811efd0bcc8e3652661e1ee92c60}\label{physical_8h_aa3df811efd0bcc8e3652661e1ee92c60} 
+\index{physical.h@{physical.h}!page\_flags\_t@{page\_flags\_t}}
+\index{page\_flags\_t@{page\_flags\_t}!physical.h@{physical.h}}
+\doxysubsubsection{\texorpdfstring{page\_flags\_t}{page\_flags\_t}}
+{\footnotesize\ttfamily \mbox{\hyperlink{physical_8h_aa3df811efd0bcc8e3652661e1ee92c60}{Max\+OS\+::memory\+::page\+\_\+flags\+\_\+t}}}
+
+
+
+Alias for Page\+Flags enum. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000031}{Todo}}]\+: fix. this is stupid\+: Leave as enum not enum class for bitwise operations \end{DoxyRefDesc}
 \Hypertarget{physical_8h_a86d1744b2aea4590cf02ef32ff8acc63}\label{physical_8h_a86d1744b2aea4590cf02ef32ff8acc63} 
 \index{physical.h@{physical.h}!physical\_address\_t@{physical\_address\_t}}
 \index{physical\_address\_t@{physical\_address\_t}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{physical\_address\_t}{physical\_address\_t}}
-{\footnotesize\ttfamily typedef void \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Max\+OS\+::memory\+::physical\+\_\+address\+\_\+t}}}
+{\footnotesize\ttfamily typedef void \mbox{\hyperlink{physical_8h_a86d1744b2aea4590cf02ef32ff8acc63}{Max\+OS\+::memory\+::physical\+\_\+address\+\_\+t}}}
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00032}{32}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+A type representing a physical address (used for readability) 
+
+
+
+Definition at line \mbox{\hyperlink{physical_8h_source_l00030}{30}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 \Hypertarget{physical_8h_a1a4a2cf740017bbb681bbe110a18fdcb}\label{physical_8h_a1a4a2cf740017bbb681bbe110a18fdcb} 
 \index{physical.h@{physical.h}!virtual\_address\_t@{virtual\_address\_t}}
 \index{virtual\_address\_t@{virtual\_address\_t}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{virtual\_address\_t}{virtual\_address\_t}}
-{\footnotesize\ttfamily typedef void \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{Max\+OS\+::memory\+::virtual\+\_\+address\+\_\+t}}}
+{\footnotesize\ttfamily typedef void \mbox{\hyperlink{physical_8h_a1a4a2cf740017bbb681bbe110a18fdcb}{Max\+OS\+::memory\+::virtual\+\_\+address\+\_\+t}}}
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00031}{31}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+A type representing a virtual address (used for readability) 
+
+
+
+Definition at line \mbox{\hyperlink{physical_8h_source_l00029}{29}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
@@ -226,8 +243,6 @@ Definition at line \mbox{\hyperlink{physical_8h_source_l00031}{31}} of file \mbo
 
 Flags for page table entries. 
 
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000029}{Todo}}]\+: fix. this is stupid. Leave as enum not enum class for bitwise operations \end{DoxyRefDesc}
 \begin{DoxyEnumFields}{Enumerator}
 \raisebox{\heightof{T}}[0pt][0pt]{\index{NONE@{NONE}!physical.h@{physical.h}}\index{physical.h@{physical.h}!NONE@{NONE}}}\Hypertarget{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b}\label{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b} 
 NONE&No flags. \\
@@ -246,7 +261,7 @@ USER&This page is accessible from user mode. \\
 \hline
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{WRITE\_THROUGH@{WRITE\_THROUGH}!physical.h@{physical.h}}\index{physical.h@{physical.h}!WRITE\_THROUGH@{WRITE\_THROUGH}}}\Hypertarget{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba098956b3ae6507f7e6b9d1e3956ba8e3}\label{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba098956b3ae6507f7e6b9d1e3956ba8e3} 
-WRITE\+\_\+\+THROUGH&Write through caching is enabled. \\
+WRITE\+\_\+\+THROUGH&write through caching is enabled \\
 \hline
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{CACHE\_DISABLED@{CACHE\_DISABLED}!physical.h@{physical.h}}\index{physical.h@{physical.h}!CACHE\_DISABLED@{CACHE\_DISABLED}}}\Hypertarget{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2}\label{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2} 
@@ -276,133 +291,51 @@ NO\+\_\+\+EXECUTE&Dont let the CPU execute code on this page. \\
 \end{DoxyEnumFields}
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00040}{40}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00041}{41}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b}{NONE}}\ \ \ \ \ \ \ \ \ \ \ \ =\ 0,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ \ \ \ \ \ \ \ \ =\ (1\ <<\ 0),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ WRITE\ \ \ \ \ \ \ \ \ \ \ =\ (1\ <<\ 1),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba6c21f04b9fd8f97d73dbcedbd6380a22}{USER}}\ \ \ \ \ \ \ \ \ \ \ \ =\ (1\ <<\ 2),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ WRITE\_THROUGH\ \ \ =\ (1\ <<\ 3),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2}{CACHE\_DISABLED}}\ \ =\ (1\ <<\ 4),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ ACCESSED\ \ \ \ \ \ \ \ =\ (1\ <<\ 5),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba4f6db44a6458f735868d173d7cbdac05}{DIRTY}}\ \ \ \ \ \ \ \ \ \ \ =\ (1\ <<\ 6),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ HUGE\_PAGE\ \ \ \ \ \ \ =\ (1\ <<\ 7),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c}{GLOBAL}}\ \ \ \ \ \ \ \ \ \ =\ (1\ <<\ 8),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ NO\_EXECUTE\ \ \ \ \ \ =\ (1ULL\ <<\ 63)\ \ \ \ \ \ }
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \}\ page\_flags\_t;}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84ebaa2ede79c23f16bdfedb9353a7eb1a98b}{NONE}}\ =\ 0,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba045db4a831b7d96a7ecff4007e6a9048}{PRESENT}}\ =\ (1\ <<\ 0),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ WRITE\ =\ (1\ <<\ 1),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba6c21f04b9fd8f97d73dbcedbd6380a22}{USER}}\ =\ (1\ <<\ 2),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ WRITE\_THROUGH\ =\ (1\ <<\ 3),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba964d0ce7dc41e32c8a9f6004b9823bc2}{CACHE\_DISABLED}}\ =\ (1\ <<\ 4),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ ACCESSED\ =\ (1\ <<\ 5),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba4f6db44a6458f735868d173d7cbdac05}{DIRTY}}\ =\ (1\ <<\ 6),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ HUGE\_PAGE\ =\ (1\ <<\ 7),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c}{GLOBAL}}\ =\ (1\ <<\ 8),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ NO\_EXECUTE\ =\ (1ULL\ <<\ 63)\ \ \ \ \ \ }
+\DoxyCodeLine{00053\ \ \ \ \ \}\ \mbox{\hyperlink{physical_8h_aa3df811efd0bcc8e3652661e1ee92c60}{page\_flags\_t}};}
 
 \end{DoxyCode}
 
 
 \doxysubsection{Variable Documentation}
-\Hypertarget{physical_8h_a242ede6c60cc0c65c71f38011ae1fa83}\label{physical_8h_a242ede6c60cc0c65c71f38011ae1fa83} 
-\index{physical.h@{physical.h}!accessed@{accessed}}
-\index{accessed@{accessed}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{accessed}{accessed}}
-{\footnotesize\ttfamily bool accessed}
-
-
-
-\texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+ACCESSED 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00005}{5}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
-
-\Hypertarget{physical_8h_ad5a95884eb3a555f48a10bb338c65480}\label{physical_8h_ad5a95884eb3a555f48a10bb338c65480} 
-\index{physical.h@{physical.h}!available@{available}}
-\index{available@{available}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{available}{available}}
-{\footnotesize\ttfamily uint8\+\_\+t available}
-
-
-
-Extra metadata bytes available for OS use. 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00009}{9}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
-
-\Hypertarget{physical_8h_a7164e1adb9f37fa12d63bc66788850bf}\label{physical_8h_a7164e1adb9f37fa12d63bc66788850bf} 
-\index{physical.h@{physical.h}!cache\_disabled@{cache\_disabled}}
-\index{cache\_disabled@{cache\_disabled}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{cache\_disabled}{cache\_disabled}}
-{\footnotesize\ttfamily bool cache\+\_\+disabled}
-
-
-
-\texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+CACHE\+\_\+\+DISABLED 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00004}{4}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
-
-\Hypertarget{physical_8h_ad25edacba00e4d0666a9959053b7cc10}\label{physical_8h_ad25edacba00e4d0666a9959053b7cc10} 
-\index{physical.h@{physical.h}!dirty@{dirty}}
-\index{dirty@{dirty}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{dirty}{dirty}}
-{\footnotesize\ttfamily bool dirty}
-
-
-
-\texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+DIRTY 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00006}{6}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
-
-\Hypertarget{physical_8h_a571f2ec04bb9a58c7be02c94a37de231}\label{physical_8h_a571f2ec04bb9a58c7be02c94a37de231} 
-\index{physical.h@{physical.h}!entries@{entries}}
-\index{entries@{entries}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{entries}{entries}}
-{\footnotesize\ttfamily pte\+\_\+t entries\mbox{[}512\mbox{]}}
-
-
-
-The entries in this page map level. If it is a PT then these are page table entries, otherwise they are pointers to the next level. Indexed by the relevant bits in the virtual address. 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00000}{0}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00160}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}.
-
-\Hypertarget{physical_8h_a86004534684821212245555e66ec1d09}\label{physical_8h_a86004534684821212245555e66ec1d09} 
-\index{physical.h@{physical.h}!global@{global}}
-\index{global@{global}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{global}{global}}
-{\footnotesize\ttfamily bool global}
-
-
-
-\texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+GLOBAL 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00008}{8}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
-
 \Hypertarget{physical_8h_a209a1e2709f9aac5d70eb43e198608d5}\label{physical_8h_a209a1e2709f9aac5d70eb43e198608d5} 
 \index{physical.h@{physical.h}!HIGHER\_HALF\_DIRECT\_MAP@{HIGHER\_HALF\_DIRECT\_MAP}}
 \index{HIGHER\_HALF\_DIRECT\_MAP@{HIGHER\_HALF\_DIRECT\_MAP}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{HIGHER\_HALF\_DIRECT\_MAP}{HIGHER\_HALF\_DIRECT\_MAP}}
-{\footnotesize\ttfamily constexpr uint64\+\_\+t Max\+OS\+::memory\+::\+HIGHER\+\_\+\+HALF\+\_\+\+DIRECT\+\_\+\+MAP = HIGHER\+\_\+\+HALF\+\_\+\+OFFSET + PAGE\+\_\+\+SIZE\hspace{0.3cm}{\ttfamily [constexpr]}}
+{\footnotesize\ttfamily constexpr uint64\+\_\+t Max\+OS\+::memory\+::\+HIGHER\+\_\+\+HALF\+\_\+\+DIRECT\+\_\+\+MAP\hspace{0.3cm}{\ttfamily [constexpr]}}
 
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \mbox{\hyperlink{physical_8h_a113a5e21291a156b8855b4d7eee1cc96}{HIGHER\_HALF\_OFFSET}}\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\_SIZE}}}
+
+\end{DoxyCode}
 
 
 Where the map of physical memory to higher half starts. 
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00088}{88}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00099}{99}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{physical_8cpp_source_l00923}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::from\+\_\+dm\+\_\+region()}}, \mbox{\hyperlink{physical_8cpp_source_l00031}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager()}}, and \mbox{\hyperlink{physical_8cpp_source_l00908}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+dm\+\_\+region()}}.
+Referenced by \mbox{\hyperlink{physical_8cpp_source_l00945}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::from\+\_\+dm\+\_\+region()}}, \mbox{\hyperlink{physical_8cpp_source_l00031}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager()}}, \mbox{\hyperlink{physical_8cpp_source_l00930}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+dm\+\_\+region()}}, and \mbox{\hyperlink{virtual_8cpp_source_l00022}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager()}}.
 
 \Hypertarget{physical_8h_a4c282ffdf004848e8641e1b63f6a339e}\label{physical_8h_a4c282ffdf004848e8641e1b63f6a339e} 
 \index{physical.h@{physical.h}!HIGHER\_HALF\_KERNEL\_OFFSET@{HIGHER\_HALF\_KERNEL\_OFFSET}}
@@ -416,11 +349,11 @@ Where the kernel is mapped in higher half memory.
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00084}{84}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00094}{94}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{multiboot_8cpp_source_l00182}{Max\+OS\+::system\+::\+Multiboot\+::start\+\_\+tag()}}, \mbox{\hyperlink{physical_8cpp_source_l00861}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+higher\+\_\+region()}}, and \mbox{\hyperlink{physical_8cpp_source_l00877}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+lower\+\_\+region()}}.
+Referenced by \mbox{\hyperlink{multiboot_8cpp_source_l00182}{Max\+OS\+::system\+::\+Multiboot\+::start\+\_\+tag()}}, \mbox{\hyperlink{physical_8cpp_source_l00883}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+higher\+\_\+region()}}, and \mbox{\hyperlink{physical_8cpp_source_l00899}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+lower\+\_\+region()}}.
 
 \Hypertarget{physical_8h_a5fe6a67466d94891bb90880d8b8416a2}\label{physical_8h_a5fe6a67466d94891bb90880d8b8416a2} 
 \index{physical.h@{physical.h}!HIGHER\_HALF\_MEM\_OFFSET@{HIGHER\_HALF\_MEM\_OFFSET}}
@@ -434,11 +367,11 @@ Where higher half memory starts.
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00085}{85}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00095}{95}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{physical_8cpp_source_l00893}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+io\+\_\+region()}}.
+Referenced by \mbox{\hyperlink{physical_8cpp_source_l00915}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+io\+\_\+region()}}.
 
 \Hypertarget{physical_8h_a47c394121636925d369cc1f13548b552}\label{physical_8h_a47c394121636925d369cc1f13548b552} 
 \index{physical.h@{physical.h}!HIGHER\_HALF\_MEM\_RESERVED@{HIGHER\_HALF\_MEM\_RESERVED}}
@@ -452,39 +385,31 @@ Reserved higher half memory for kernel use (10GB)
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00086}{86}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00096}{96}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 \Hypertarget{physical_8h_a113a5e21291a156b8855b4d7eee1cc96}\label{physical_8h_a113a5e21291a156b8855b4d7eee1cc96} 
 \index{physical.h@{physical.h}!HIGHER\_HALF\_OFFSET@{HIGHER\_HALF\_OFFSET}}
 \index{HIGHER\_HALF\_OFFSET@{HIGHER\_HALF\_OFFSET}!physical.h@{physical.h}}
 \doxysubsubsection{\texorpdfstring{HIGHER\_HALF\_OFFSET}{HIGHER\_HALF\_OFFSET}}
-{\footnotesize\ttfamily constexpr uint64\+\_\+t Max\+OS\+::memory\+::\+HIGHER\+\_\+\+HALF\+\_\+\+OFFSET = HIGHER\+\_\+\+HALF\+\_\+\+MEM\+\_\+\+OFFSET + HIGHER\+\_\+\+HALF\+\_\+\+MEM\+\_\+\+RESERVED\hspace{0.3cm}{\ttfamily [constexpr]}}
+{\footnotesize\ttfamily constexpr uint64\+\_\+t Max\+OS\+::memory\+::\+HIGHER\+\_\+\+HALF\+\_\+\+OFFSET\hspace{0.3cm}{\ttfamily [constexpr]}}
 
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \mbox{\hyperlink{physical_8h_a5fe6a67466d94891bb90880d8b8416a2}{HIGHER\_HALF\_MEM\_OFFSET}}\ +}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{physical_8h_a47c394121636925d369cc1f13548b552}{HIGHER\_HALF\_MEM\_RESERVED}}}
+
+\end{DoxyCode}
 
 
 Where higher half memory usable space starts. 
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00087}{87}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00097}{97}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{physical_8cpp_source_l00908}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+dm\+\_\+region()}}.
-
-\Hypertarget{physical_8h_ae929bd0aeee67959abac551b220720e4}\label{physical_8h_ae929bd0aeee67959abac551b220720e4} 
-\index{physical.h@{physical.h}!huge\_page@{huge\_page}}
-\index{huge\_page@{huge\_page}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{huge\_page}{huge\_page}}
-{\footnotesize\ttfamily bool huge\+\_\+page}
-
-
-
-\texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+HUGE\+\_\+\+PAGE 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00007}{7}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Referenced by \mbox{\hyperlink{physical_8cpp_source_l00930}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+dm\+\_\+region()}}.
 
 \Hypertarget{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}\label{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed} 
 \index{physical.h@{physical.h}!PAGE\_SIZE@{PAGE\_SIZE}}
@@ -498,43 +423,11 @@ The size of a page (4KB)
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00081}{81}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00091}{91}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{physical_8cpp_source_l00748}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+direct\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{physical_8cpp_source_l00154}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{virtual_8cpp_source_l00129}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate()}}, \mbox{\hyperlink{physical_8cpp_source_l00262}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00187}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+frame()}}, \mbox{\hyperlink{physical_8cpp_source_l00177}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::check\+\_\+aligned()}}, \mbox{\hyperlink{physical_8cpp_source_l00331}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00243}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+frame()}}, \mbox{\hyperlink{virtual_8cpp_source_l00451}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+physical\+\_\+into\+\_\+address\+\_\+space()}}, \mbox{\hyperlink{physical_8cpp_source_l00555}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00539}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00737}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::memory\+\_\+used()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00022}{Max\+OS\+::memory\+::\+Memory\+Manager\+::\+Memory\+Manager()}}, \mbox{\hyperlink{physical_8cpp_source_l00031}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager()}}, \mbox{\hyperlink{physical_8cpp_source_l00758}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}, \mbox{\hyperlink{physical_8cpp_source_l00770}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}, \mbox{\hyperlink{physical_8cpp_source_l00088}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve\+\_\+kernel\+\_\+regions()}}, \mbox{\hyperlink{physical_8cpp_source_l00143}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::size\+\_\+to\+\_\+frames()}}, and \mbox{\hyperlink{physical_8cpp_source_l00613}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::unmap\+\_\+area()}}.
-
-\Hypertarget{physical_8h_a069784144afa0b45c14ce1788adb541a}\label{physical_8h_a069784144afa0b45c14ce1788adb541a} 
-\index{physical.h@{physical.h}!physical\_address@{physical\_address}}
-\index{physical\_address@{physical\_address}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{physical\_address}{physical\_address}}
-{\footnotesize\ttfamily uint64\+\_\+t physical\+\_\+address}
-
-
-
-The address the page represents in memory. 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00010}{10}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{acpi_8cpp_source_l00022}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::\+Advanced\+Configuration\+And\+Power\+Interface()}}, \mbox{\hyperlink{physical_8cpp_source_l00568}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::identity\+\_\+map()}}, \mbox{\hyperlink{physical_8cpp_source_l00849}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::is\+\_\+mapped()}}, \mbox{\hyperlink{virtual_8cpp_source_l00451}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+physical\+\_\+into\+\_\+address\+\_\+space()}}, \mbox{\hyperlink{virtual_8cpp_source_l00433}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+shared\+\_\+memory()}}, \mbox{\hyperlink{physical_8cpp_source_l00483}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map()}}, \mbox{\hyperlink{physical_8cpp_source_l00498}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map()}}, \mbox{\hyperlink{physical_8cpp_source_l00031}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager()}}, \mbox{\hyperlink{physical_8cpp_source_l00908}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+dm\+\_\+region()}}, \mbox{\hyperlink{physical_8cpp_source_l00861}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+higher\+\_\+region()}}, \mbox{\hyperlink{physical_8cpp_source_l00893}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+io\+\_\+region()}}, and \mbox{\hyperlink{vesa_8cpp_source_l00024}{Max\+OS\+::drivers\+::video\+::\+Video\+Electronics\+Standards\+Association\+::\+Video\+Electronics\+Standards\+Association()}}.
-
-\Hypertarget{physical_8h_aa84cc4dc60e16481b79b15b815aaea31}\label{physical_8h_aa84cc4dc60e16481b79b15b815aaea31} 
-\index{physical.h@{physical.h}!present@{present}}
-\index{present@{present}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{present}{present}}
-{\footnotesize\ttfamily bool present}
-
-
-
-\texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+PRESENT 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00000}{0}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Referenced by \mbox{\hyperlink{physical_8cpp_source_l00767}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+direct\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{physical_8cpp_source_l00167}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::align\+\_\+to\+\_\+page()}}, \mbox{\hyperlink{virtual_8cpp_source_l00133}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate()}}, \mbox{\hyperlink{physical_8cpp_source_l00275}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00200}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+frame()}}, \mbox{\hyperlink{physical_8cpp_source_l00190}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::check\+\_\+aligned()}}, \mbox{\hyperlink{physical_8cpp_source_l00344}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00256}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+frame()}}, \mbox{\hyperlink{virtual_8cpp_source_l00455}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::load\+\_\+physical\+\_\+into\+\_\+address\+\_\+space()}}, \mbox{\hyperlink{physical_8cpp_source_l00568}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00552}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00756}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::memory\+\_\+used()}}, \mbox{\hyperlink{memorymanagement_8cpp_source_l00022}{Max\+OS\+::memory\+::\+Memory\+Manager\+::\+Memory\+Manager()}}, \mbox{\hyperlink{physical_8cpp_source_l00031}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager()}}, \mbox{\hyperlink{physical_8cpp_source_l00777}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}, \mbox{\hyperlink{physical_8cpp_source_l00789}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}, \mbox{\hyperlink{physical_8cpp_source_l00096}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve\+\_\+kernel\+\_\+regions()}}, \mbox{\hyperlink{physical_8cpp_source_l00156}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::size\+\_\+to\+\_\+frames()}}, \mbox{\hyperlink{physical_8cpp_source_l00627}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::unmap\+\_\+area()}}, \mbox{\hyperlink{virtual_8cpp_source_l00022}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager()}}, and \mbox{\hyperlink{virtual_8cpp_source_l00081}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::\texorpdfstring{$\sim$}{\string~}\+Virtual\+Memory\+Manager()}}.
 
 \Hypertarget{physical_8h_aade198fd5ec1031a23cd63fc2709f00c}\label{physical_8h_aade198fd5ec1031a23cd63fc2709f00c} 
 \index{physical.h@{physical.h}!ROW\_BITS@{ROW\_BITS}}
@@ -548,55 +441,9 @@ The number of bits in the bitmap row.
 
 
 
-Definition at line \mbox{\hyperlink{physical_8h_source_l00082}{82}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Definition at line \mbox{\hyperlink{physical_8h_source_l00092}{92}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{physical_8cpp_source_l00262}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00187}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+frame()}}, \mbox{\hyperlink{physical_8cpp_source_l00331}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00243}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+frame()}}, \mbox{\hyperlink{physical_8cpp_source_l00031}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager()}}, and \mbox{\hyperlink{physical_8cpp_source_l00770}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}.
-
-\Hypertarget{physical_8h_a8d0d274d7162274a04afd0cb39eaccfd}\label{physical_8h_a8d0d274d7162274a04afd0cb39eaccfd} 
-\index{physical.h@{physical.h}!user@{user}}
-\index{user@{user}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{user}{user}}
-{\footnotesize\ttfamily bool user}
-
-
-
-\texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+USER 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00002}{2}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
-
-\Hypertarget{physical_8h_ab4d8d1259f524270d625ab8933700d27}\label{physical_8h_ab4d8d1259f524270d625ab8933700d27} 
-\index{physical.h@{physical.h}!write@{write}}
-\index{write@{write}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{write}{write}}
-{\footnotesize\ttfamily bool write}
-
-
-
-\texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+WRITE 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00001}{1}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
-
-
-
-Referenced by \mbox{\hyperlink{ethernetframe_8cpp_source_l00104}{Max\+OS\+::net\+::\+Ethernet\+Frame\+Handler\+::\+Data\+Received()}}, \mbox{\hyperlink{icmp_8cpp_source_l00043}{Max\+OS\+::net\+::\+Internet\+Control\+Message\+Protocol\+::handle\+Internet\+Protocol\+Payload()}}, \mbox{\hyperlink{outputStream_8h_source_l00093}{Max\+OS\+::common\+::\+Generic\+Output\+Stream$<$ Type $>$\+::on\+\_\+stream\+\_\+read()}}, \mbox{\hyperlink{outputStream_8cpp_source_l00175}{Max\+OS\+::common\+::\+Output\+Stream\+::operator$<$$<$()}}, \mbox{\hyperlink{outputStream_8cpp_source_l00151}{Max\+OS\+::common\+::\+Output\+Stream\+::operator$<$$<$()}}, \mbox{\hyperlink{logger_8cpp_source_l00223}{Logger\+::printf()}}, \mbox{\hyperlink{icmp_8cpp_source_l00084}{Max\+OS\+::net\+::\+Internet\+Control\+Message\+Protocol\+::\+Request\+Echo\+Reply()}}, \mbox{\hyperlink{apic_8cpp_source_l00117}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::send\+\_\+eoi()}}, \mbox{\hyperlink{apic_8cpp_source_l00128}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::send\+\_\+init()}}, \mbox{\hyperlink{apic_8cpp_source_l00167}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::send\+\_\+startup()}}, \mbox{\hyperlink{outputStream_8cpp_source_l00053}{Max\+OS\+::common\+::\+Output\+Stream\+::write()}}, \mbox{\hyperlink{disk_8cpp_source_l00050}{Max\+OS\+::drivers\+::disk\+::\+Disk\+::write()}}, \mbox{\hyperlink{console_8cpp_source_l00440}{Max\+OS\+::drivers\+::console\+::\+Console\+Stream\+::write\+\_\+char()}}, \mbox{\hyperlink{outputStream_8cpp_source_l00115}{Max\+OS\+::common\+::\+Output\+Stream\+::write\+\_\+hex()}}, and \mbox{\hyperlink{outputStream_8cpp_source_l00104}{Max\+OS\+::common\+::\+Output\+Stream\+::write\+\_\+int()}}.
-
-\Hypertarget{physical_8h_ad124499797a0c2567e0689e8586318af}\label{physical_8h_ad124499797a0c2567e0689e8586318af} 
-\index{physical.h@{physical.h}!write\_through@{write\_through}}
-\index{write\_through@{write\_through}!physical.h@{physical.h}}
-\doxysubsubsection{\texorpdfstring{write\_through}{write\_through}}
-{\footnotesize\ttfamily bool write\+\_\+through}
-
-
-
-\texorpdfstring{$\ast$}{*}copydoc Page\+Flags\+::\+WRITE\+\_\+\+THROUGH 
-
-
-
-Definition at line \mbox{\hyperlink{physical_8h_source_l00003}{3}} of file \mbox{\hyperlink{physical_8h_source}{physical.\+h}}.
+Referenced by \mbox{\hyperlink{physical_8cpp_source_l00275}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00200}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::allocate\+\_\+frame()}}, \mbox{\hyperlink{physical_8cpp_source_l00344}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+area()}}, \mbox{\hyperlink{physical_8cpp_source_l00256}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::free\+\_\+frame()}}, \mbox{\hyperlink{physical_8cpp_source_l00031}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::\+Physical\+Memory\+Manager()}}, and \mbox{\hyperlink{physical_8cpp_source_l00789}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::reserve()}}.
 

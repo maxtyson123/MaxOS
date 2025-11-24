@@ -1,4 +1,4 @@
-.TH "MaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,7 +17,6 @@ Inherits \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 .ti -1c
 .RI "\fBWidgetMoverResizer\fP (\fBWidget\fP *widget)"
 .br
-.RI "________________________________Tempaltes________________________________/// "
 .ti -1c
 .RI "void \fBon_mouse_move_event\fP (int8_t x, int8_t y) override"
 .br
@@ -68,13 +67,11 @@ class MaxOS::gui::WidgetMoverResizer< Left, Top, Width, Height >"A template clas
 .PP
 
 .PP
-Definition at line \fB126\fP of file \fBwidget\&.h\fP\&.
+Definition at line \fB127\fP of file \fBwidget\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<int Left, int Top, int Width, int Height> \fBMaxOS::gui::WidgetMoverResizer\fP< Left, Top, Width, Height >::WidgetMoverResizer (\fBWidget\fP * target)"
-
-.PP
-________________________________Tempaltes________________________________/// \fBWidgetMoverResizer\fP is a template class that allows you to move and resize a widget
+\fBWidgetMoverResizer\fP is a template class that allows you to move and resize a widget
 .PP
 \fBTemplate Parameters\fP
 .RS 4
@@ -94,12 +91,11 @@ ________________________________Tempaltes________________________________/// \fB
 .PP
 
 .PP
-Definition at line \fB163\fP of file \fBwidget\&.h\fP\&..PP
+Definition at line \fB161\fP of file \fBwidget\&.h\fP\&..PP
 .nf
-164                 : drivers::peripherals::MouseEventHandler()
-165         {
-166             this \->targetedWidget = target;
-167         }
+162                 : drivers::peripherals::MouseEventHandler() {
+163             this\->targeted_widget = target;
+164         }
 .fi
 
 .SH "Member Function Documentation"
@@ -118,26 +114,26 @@ OnMouseMoved is called when the mouse is moved\&. Resizes and moves the widget w
 .PP
 Reimplemented from \fBMaxOS::drivers::peripherals::MouseEventHandler\fP\&.
 .PP
-Definition at line \fB177\fP of file \fBwidget\&.h\fP\&..PP
+Definition at line \fB174\fP of file \fBwidget\&.h\fP\&..PP
 .nf
-178         {
-179 
-180             Widget* targ = this\->targetedWidget;
-181 
-182             // If there is actually a size of the widget to change
-183             if(Left != 0 || Top != 0)
-184                 // Move the widget to the left or right, and up or down
-185                 targ \-> move(targ \->m_position\&.left + Left * x, targ \->m_position\&.top + Top * y);
-186 
-187             // If there is actually a size of the widget to change
-188             if(Width != 0 || Height != 0)
-189                 // Resize the widget to the left or right, and up or down
-190                 targ \-> resize( targ \->m_position\&.width + Width*x, targ \->m_position\&.height + Height*y);
-191         }
+174                                                                                                                                                     {
+175 
+176             Widget* targ = this\->targeted_widget;
+177 
+178             // If there is actually a size of the widget to change
+179             if(Left != 0 || Top != 0)
+180                 // Move the widget to the left or right, and up or down
+181                 targ\->move(targ\->m_position\&.left + Left * x, targ\->m_position\&.top + Top * y);
+182 
+183             // If there is actually a size of the widget to change
+184             if(Width != 0 || Height != 0)
+185                 // Resize the widget to the left or right, and up or down
+186                 targ\->resize(targ\->m_position\&.width + Width * x, targ\->m_position\&.height + Height * y);
+187         }
 .fi
 
 .PP
-References \fBMaxOS::common::Rectangle< Type >::height\fP, \fBMaxOS::gui::Widget::m_position\fP, and \fBMaxOS::common::Rectangle< Type >::top\fP\&.
+References \fBMaxOS::common::Rectangle< Type >::height\fP, \fBMaxOS::common::Rectangle< Type >::left\fP, \fBMaxOS::gui::Widget::m_position\fP, \fBMaxOS::gui::Widget::move()\fP, \fBMaxOS::gui::Widget::resize()\fP, \fBMaxOS::common::Rectangle< Type >::top\fP, and \fBMaxOS::common::Rectangle< Type >::width\fP\&.
 
 .SH "Author"
 .PP 

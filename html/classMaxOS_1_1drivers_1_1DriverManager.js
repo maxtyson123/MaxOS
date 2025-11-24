@@ -1,5 +1,7 @@
 var classMaxOS_1_1drivers_1_1DriverManager =
 [
+    [ "DriverManager", "classMaxOS_1_1drivers_1_1DriverManager.html#a09c4511f7797d49195ffc64d26157a77", null ],
+    [ "~DriverManager", "classMaxOS_1_1drivers_1_1DriverManager.html#ae4dec72dfff075ed524e25e4baaf0385", null ],
     [ "activate_drivers", "classMaxOS_1_1drivers_1_1DriverManager.html#a2041307a431a4009ed86c15e3640b64e", null ],
     [ "add_driver", "classMaxOS_1_1drivers_1_1DriverManager.html#a198666c85006f43a9c1369efc97ef2df", null ],
     [ "add_driver_selector", "classMaxOS_1_1drivers_1_1DriverManager.html#a84849e119fe45ede2fce5b9c94cc5094", null ],

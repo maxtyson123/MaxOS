@@ -3,6 +3,7 @@ var clock_8h =
     [ "MaxOS::drivers::clock::PITCommand", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand.html", "structMaxOS_1_1drivers_1_1clock_1_1PITCommand" ],
     [ "MaxOS::drivers::clock::PIT", "classMaxOS_1_1drivers_1_1clock_1_1PIT.html", "classMaxOS_1_1drivers_1_1clock_1_1PIT" ],
     [ "MaxOS::drivers::clock::Clock", "classMaxOS_1_1drivers_1_1clock_1_1Clock.html", "classMaxOS_1_1drivers_1_1clock_1_1Clock" ],
+    [ "pit_command_t", "clock_8h.html#aae05a963b516d75531106e7ac70d7b44", null ],
     [ "AccessMode", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844", [
       [ "LATCH_COUNT", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844aa814f51f34d95e93c6d83be90275efb7", null ],
       [ "LOW_BYTE", "clock_8h.html#aec467a8b28cb0b1b17948364e6710844a9d6b9d6fa63a6900ea19237646019473", null ],

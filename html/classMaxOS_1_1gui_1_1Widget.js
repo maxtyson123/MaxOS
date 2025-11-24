@@ -1,5 +1,6 @@
 var classMaxOS_1_1gui_1_1Widget =
 [
+    [ "Widget", "classMaxOS_1_1gui_1_1Widget.html#ab0f05949f1fa8ca233137fc4119c7401", null ],
     [ "Widget", "classMaxOS_1_1gui_1_1Widget.html#a0a618860844ba536a30d30a2617a529b", null ],
     [ "absolute_coordinates", "classMaxOS_1_1gui_1_1Widget.html#ac136baa8c136bac3721492dfd19fd7ed", null ],
     [ "add_child", "classMaxOS_1_1gui_1_1Widget.html#ac71cba5f4df6fabed084b488a978877e", null ],
@@ -15,9 +16,9 @@ var classMaxOS_1_1gui_1_1Widget =
     [ "on_focus_lost", "classMaxOS_1_1gui_1_1Widget.html#a20bf87d6af80c410d7eada34a20d4819", null ],
     [ "on_mouse_button_pressed", "classMaxOS_1_1gui_1_1Widget.html#aa87dbf95bdccba3e30a44d6475af2660", null ],
     [ "on_mouse_button_released", "classMaxOS_1_1gui_1_1Widget.html#ab3ae6887e0ab9a683c0fabd21e3c7865", null ],
-    [ "on_mouse_enter_widget", "classMaxOS_1_1gui_1_1Widget.html#a61b7c5d7cea82b3dc71796724b28e8b1", null ],
-    [ "on_mouse_leave_widget", "classMaxOS_1_1gui_1_1Widget.html#a99c2219f175ce8ad5149bcc44f69ebdf", null ],
-    [ "on_mouse_move_widget", "classMaxOS_1_1gui_1_1Widget.html#ade7ce7222bc6c4cbc8a8301383ea2a20", null ],
+    [ "on_mouse_enter_widget", "classMaxOS_1_1gui_1_1Widget.html#a82bce3c016b3af68c2aef22faf505ef3", null ],
+    [ "on_mouse_leave_widget", "classMaxOS_1_1gui_1_1Widget.html#a3166b52ad3b2332133957e41b5d9fbc1", null ],
+    [ "on_mouse_move_widget", "classMaxOS_1_1gui_1_1Widget.html#a8957b9669e110ff6268e709fd28563ae", null ],
     [ "position", "classMaxOS_1_1gui_1_1Widget.html#a7ca01364da49cccb4b22327d049c96bc", null ],
     [ "resize", "classMaxOS_1_1gui_1_1Widget.html#a81cf691e5d7015855a9647de15bc709c", null ],
     [ "set_focus", "classMaxOS_1_1gui_1_1Widget.html#aceee9eec5dea49b9aad29de3380b2a1b", null ],

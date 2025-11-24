@@ -2,47 +2,50 @@
 \hypertarget{gdt_8h_source}{}\label{gdt_8h_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/system/gdt.h}}
 \mbox{\hyperlink{gdt_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00001}\mbox{\hyperlink{gdt_8h_ab6b52376c1b9d81e6ea6f95a1225f832}{00001}}\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00001}00001\ }
 \DoxyCodeLine{\Hypertarget{gdt_8h_source_l00009}00009\ \textcolor{preprocessor}{\#ifndef\ MAX\_OS\_SYSTEM\_GDT\_H}}
 \DoxyCodeLine{\Hypertarget{gdt_8h_source_l00010}00010\ \textcolor{preprocessor}{\#define\ MAX\_OS\_SYSTEM\_GDT\_H}}
 \DoxyCodeLine{\Hypertarget{gdt_8h_source_l00011}00011\ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <system/multiboot.h>}}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00014}00014\ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00015}00015\ \textcolor{keyword}{namespace\ }MaxOS\ \{}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00016}00016\ \ \ \ \ \textcolor{keyword}{namespace\ }system\ \{}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <common/macros.h>}}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <system/multiboot.h>}}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00017}00017\ \textcolor{keyword}{namespace\ }MaxOS::system\ \{}
 \DoxyCodeLine{\Hypertarget{gdt_8h_source_l00018}00018\ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00023}\mbox{\hyperlink{gdt_8h_a9939ce6f20f93eab7ad3ae6ee5d164c0}{00023}}\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{gdt_8h_a9939ce6f20f93eab7ad3ae6ee5d164c0}{DescriptorFlags}}\ :\ uint64\_t\ \{}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00024}00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ Write\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 41),}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00025}00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ Execute\ \ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 43),}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00026}00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ CodeOrDataSegment\ \ \ =\ (1ULL\ <<\ 44),}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00027}00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ GrowDown\ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 45),}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00028}00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ ConformFromLower\ \ \ \ =\ (1ULL\ <<\ 46),}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ Present\ \ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 47),}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ LongMode\ \ \ \ \ \ \ \ \ \ \ \ =\ (1ULL\ <<\ 53),}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00024}\mbox{\hyperlink{gdt_8h_a9939ce6f20f93eab7ad3ae6ee5d164c0}{00024}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{gdt_8h_a9939ce6f20f93eab7ad3ae6ee5d164c0}{DescriptorFlags}}\ :\ uint64\_t\ \{}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00025}00025\ \ \ \ \ \ \ \ \ Write\ =\ (1ULL\ <<\ 41),}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00026}00026\ \ \ \ \ \ \ \ \ Execute\ =\ (1ULL\ <<\ 43),}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00027}00027\ \ \ \ \ \ \ \ \ CodeOrDataSegment\ =\ (1ULL\ <<\ 44),}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00028}00028\ \ \ \ \ \ \ \ \ GrowDown\ =\ (1ULL\ <<\ 45),}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ ConformFromLower\ =\ (1ULL\ <<\ 46),}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ Present\ =\ (1ULL\ <<\ 47),}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ LongMode\ =\ (1ULL\ <<\ 53),}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00032}00032\ \ \ \ \ \};}
 \DoxyCodeLine{\Hypertarget{gdt_8h_source_l00033}00033\ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00038}\mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister}{00038}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister}{GDTRegister}}\ \{}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00039}\mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister_a9b3997c207851168d964e6067c13dd55}{00039}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister_a9b3997c207851168d964e6067c13dd55}{size}};\ \ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00040}\mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister_a2f7694833e3316d80542b25095f44730}{00040}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister_a2f7694833e3316d80542b25095f44730}{address}};\ \ \ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00041}00041\ \ \ \ \ \ \ \ \ \}\ \mbox{\hyperlink{structMaxOS_1_1system_1_1____attribute____}{\_\_attribute\_\_}}((packed))\ gdtr\_t;}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00042}00042\ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00047}\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{00047}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}\ \{}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00042}\mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister}{00042}}\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }PACKED\ \mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister}{GDTRegister}}\ \{}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00044}\mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister_a9b3997c207851168d964e6067c13dd55}{00044}}\ \ \ \ \ \ \ \ \ uint16\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister_a9b3997c207851168d964e6067c13dd55}{size}};\ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00045}\mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister_a2f7694833e3316d80542b25095f44730}{00045}}\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structMaxOS_1_1system_1_1GDTRegister_a2f7694833e3316d80542b25095f44730}{address}};\ \ \ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00047}\mbox{\hyperlink{gdt_8h_a922074ad0af798ffe772bf545d8d8553}{00047}}\ \ \ \ \ \}\ gdtr\_t;}
 \DoxyCodeLine{\Hypertarget{gdt_8h_source_l00048}00048\ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}();}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{\string~GlobalDescriptorTable}}();}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00052}00052\ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00053}\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{00053}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[7];\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00053}\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{00053}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}\ \{}
 \DoxyCodeLine{\Hypertarget{gdt_8h_source_l00054}00054\ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00055}\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{00055}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gdtr\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}\ =\ \{\};\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a69a4066581f829e6e47d169879aa4749}{load}}();}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00058}00058\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00059}00059\ \}}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_af965f61a6b95b05608d27385fee17f4e}{GlobalDescriptorTable}}();}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{\string~GlobalDescriptorTable}}();}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00059}\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{00059}}\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a9bdb65faac2492d14a9a981d24848aed}{table}}[7];\ \ \ \ }
 \DoxyCodeLine{\Hypertarget{gdt_8h_source_l00060}00060\ }
-\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00061}00061\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAX\_OS\_SYSTEM\_GDT\_H}}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00061}\mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{00061}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gdt_8h_a922074ad0af798ffe772bf545d8d8553}{gdtr\_t}}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a86d433c249e84554b491fa0c69c71089}{gdtr}}\ =\ \{\ \};\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable_a69a4066581f829e6e47d169879aa4749}{load}}();}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00063}00063\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00064}00064\ \}}
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{gdt_8h_source_l00067}00067\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAX\_OS\_SYSTEM\_GDT\_H}}
 
 \end{DoxyCode}

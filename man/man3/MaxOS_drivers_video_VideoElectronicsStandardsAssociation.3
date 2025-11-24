@@ -1,4 +1,4 @@
-.TH "MaxOS::drivers::video::VideoElectronicsStandardsAssociation" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::drivers::video::VideoElectronicsStandardsAssociation" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,7 +35,7 @@ Inherits \fBMaxOS::drivers::video::VideoDriver\fP\&.
 Public Member Functions inherited from \fBMaxOS::drivers::video::VideoDriver\fP
 .in +1c
 .ti -1c
-.RI "\fBbool\fP \fBset_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolorDepth\fP)"
+.RI "\fBbool\fP \fBset_mode\fP (\fBuint32_t\fP \fBwidth\fP, \fBuint32_t\fP \fBheight\fP, \fBuint32_t\fP \fBcolor_depth\fP)"
 .br
 .RI "Set the mode of the video driver\&. "
 .in -1c
@@ -45,11 +45,11 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBactivate\fP ()"
 .br
-.RI "activate the driver "
+.RI "Activate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBdeactivate\fP ()"
 .br
-.RI "deactivate the driver "
+.RI "Deactivate the driver\&. "
 .ti -1c
 .RI "\fBvirtual\fP \fBvoid\fP \fBinitialise\fP ()"
 .br
@@ -62,6 +62,10 @@ Public Member Functions inherited from \fBMaxOS::drivers::Driver\fP
 
 Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 .in +1c
+.ti -1c
+.RI "\fBGraphicsContext\fP ()"
+.br
+.RI "Constructs a \fBGraphicsContext\fP object and initializes the color palette\&. "
 .ti -1c
 .RI "\fBuint32_t\fP \fBcolour_to_int\fP (\fBconst\fP \fBColour\fP &)"
 .br
@@ -87,59 +91,59 @@ Public Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 .br
 .RI "Gets the address of the context's framebuffer to draw on\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBput_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBput_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Renders a pixel to the screen (automatically converts the colour to an integer) "
 .ti -1c
-.RI "\fBvoid\fP \fBputPixel\fP (\fBint32_t\fP x, \fBint32_t\fP y, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBput_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y, \fBuint32_t\fP colour)"
 .br
 .RI "Renders a pixel to the screen (automatically converts the colour to an integer), will not render the pixel if it is outside the screen\&. "
 .ti -1c
-.RI "\fBColour\fP \fBget_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.RI "\fBColour\fP \fBget_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
 .br
 .RI "Gets the colour of a pixel, or returns black if the pixel is outside the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBinvert_pixel\fP (\fBint32_t\fP x, \fBint32_t\fP y)"
+.RI "\fBvoid\fP \fBinvert_pixel\fP (\fBuint32_t\fP x, \fBuint32_t\fP y)"
 .br
 .RI "Inverts a pixel\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_line\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBdraw_line\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a line on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdrawLine\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBdraw_line\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a line on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a rectangle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBdraw_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a rectangle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a rectangle on the screen, filled with a colour\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBx1\fP, \fBint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBfill_rectangle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBx1\fP, \fBuint32_t\fP \fBy1\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a rectangle on the screen, filled with a colour\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a circle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdraw_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBdraw_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a circle on the screen\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfill_circle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
+.RI "\fBvoid\fP \fBfill_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBconst\fP \fBColour\fP &colour)"
 .br
 .RI "Draws a circle on the screen, filled with a colour\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBfillCircle\fP (\fBint32_t\fP \fBx0\fP, \fBint32_t\fP \fBy0\fP, \fBint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
+.RI "\fBvoid\fP \fBfill_circle\fP (\fBuint32_t\fP \fBx0\fP, \fBuint32_t\fP \fBy0\fP, \fBuint32_t\fP \fBradius\fP, \fBuint32_t\fP colour)"
 .br
 .RI "Draws a circle on the screen, filled with a colour\&. "
 .in -1c
@@ -185,15 +189,15 @@ Protected Member Functions inherited from \fBMaxOS::common::GraphicsContext\fP
 Protected Attributes inherited from \fBMaxOS::common::GraphicsContext\fP
 .in +1c
 .ti -1c
-.RI "\fBbool\fP \fBmirror_y_axis\fP { \fBfalse\fP }"
+.RI "\fBbool\fP \fBmirror_y_axis\fP"
 .br
 .RI "Should the y axis be mirrored (0,0 is top left if false, bottom left if true) "
 .ti -1c
-.RI "\fBint32_t\fP \fBm_width\fP { 0 }"
+.RI "\fBuint32_t\fP \fBm_width\fP { 0 }"
 .br
 .RI "The width of the screen in pixels\&. "
 .ti -1c
-.RI "\fBint32_t\fP \fBm_height\fP { 0 }"
+.RI "\fBuint32_t\fP \fBm_height\fP { 0 }"
 .br
 .RI "The height of the screen in pixels\&. "
 .ti -1c
@@ -213,10 +217,10 @@ Protected Attributes inherited from \fBMaxOS::common::GraphicsContext\fP
 .PP 
 \fBDriver\fP for the VESA video controller, handles the rendering of pixels to the screen using VESA\&. 
 .PP
-Definition at line \fB30\fP of file \fBvesa\&.h\fP\&.
+Definition at line \fB26\fP of file \fBvesa\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation (\fBmultiboot_tag_framebuffer\fP * framebuffer_info)"
+.SS "VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation (\fBmultiboot_tag_framebuffer\fP * framebuffer_info)\fC [explicit]\fP"
 
 .PP
 Constructs a new VESA driver object\&. Maps the framebuffer into the higher half\&. 
@@ -259,7 +263,7 @@ Definition at line \fB24\fP of file \fBvesa\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBmultiboot_tag_framebuffer::common\fP, \fBLogger::DEBUG()\fP, \fBLogger::INFO()\fP, \fBMaxOS::common::GraphicsContext::m_framebuffer_address\fP, \fBphysical_address\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::drivers::video::VideoDriver::set_mode()\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, and \fBMaxOS::memory::WRITE\fP\&.
+References \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBMaxOS::Logger::INFO()\fP, \fBMaxOS::common::GraphicsContext::m_framebuffer_address\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::drivers::video::VideoDriver::set_mode()\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, and \fBMaxOS::memory::WRITE\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBstring\fP VideoElectronicsStandardsAssociation::device_name ()\fC [final]\fP, \fC [virtual]\fP"

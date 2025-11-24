@@ -1,13 +1,15 @@
 var searchData=
 [
-  ['clock_0',['Clock',['../classMaxOS_1_1drivers_1_1clock_1_1Clock.html',1,'MaxOS::drivers::clock']]],
-  ['colour_1',['Colour',['../classMaxOS_1_1common_1_1Colour.html',1,'MaxOS::common']]],
-  ['compositewidget_2',['CompositeWidget',['../classMaxOS_1_1gui_1_1CompositeWidget.html',1,'MaxOS::gui']]],
-  ['connectedevent_3',['ConnectedEvent',['../classMaxOS_1_1net_1_1ConnectedEvent.html',1,'MaxOS::net']]],
-  ['console_4',['Console',['../classMaxOS_1_1drivers_1_1console_1_1Console.html',1,'MaxOS::drivers::console']]],
-  ['consolearea_5',['ConsoleArea',['../classMaxOS_1_1drivers_1_1console_1_1ConsoleArea.html',1,'MaxOS::drivers::console']]],
-  ['consolestream_6',['ConsoleStream',['../classMaxOS_1_1drivers_1_1console_1_1ConsoleStream.html',1,'MaxOS::drivers::console']]],
-  ['core_7',['Core',['../classMaxOS_1_1system_1_1Core.html',1,'MaxOS::system']]],
-  ['corebootinfo_8',['CoreBootInfo',['../structMaxOS_1_1system_1_1CoreBootInfo.html',1,'MaxOS::system']]],
-  ['cpu_9',['CPU',['../classMaxOS_1_1system_1_1CPU.html',1,'MaxOS::system']]]
+  ['datareceivedevent_0',['datareceivedevent',['../classMaxOS_1_1drivers_1_1ethernet_1_1DataReceivedEvent.html',1,'MaxOS::drivers::ethernet::DataReceivedEvent'],['../classMaxOS_1_1net_1_1DataReceivedEvent.html',1,'MaxOS::net::DataReceivedEvent']]],
+  ['datasentevent_1',['DataSentEvent',['../classMaxOS_1_1drivers_1_1ethernet_1_1DataSentEvent.html',1,'MaxOS::drivers::ethernet']]],
+  ['desktop_2',['Desktop',['../classMaxOS_1_1gui_1_1Desktop.html',1,'MaxOS::gui']]],
+  ['directory_3',['Directory',['../classMaxOS_1_1filesystem_1_1Directory.html',1,'MaxOS::filesystem']]],
+  ['directoryentry_4',['directoryentry',['../structMaxOS_1_1filesystem_1_1format_1_1DirectoryEntry.html',1,'MaxOS::filesystem::format::DirectoryEntry'],['../structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1DirectoryEntry.html',1,'MaxOS::filesystem::format::ext2::DirectoryEntry']]],
+  ['directoryresource_5',['DirectoryResource',['../classMaxOS_1_1filesystem_1_1DirectoryResource.html',1,'MaxOS::filesystem']]],
+  ['disconnectedevent_6',['DisconnectedEvent',['../classMaxOS_1_1net_1_1DisconnectedEvent.html',1,'MaxOS::net']]],
+  ['disk_7',['Disk',['../classMaxOS_1_1drivers_1_1disk_1_1Disk.html',1,'MaxOS::drivers::disk']]],
+  ['driver_8',['Driver',['../classMaxOS_1_1drivers_1_1Driver.html',1,'MaxOS::drivers']]],
+  ['drivermanager_9',['DriverManager',['../classMaxOS_1_1drivers_1_1DriverManager.html',1,'MaxOS::drivers']]],
+  ['driverselector_10',['DriverSelector',['../classMaxOS_1_1drivers_1_1DriverSelector.html',1,'MaxOS::drivers']]],
+  ['driverselectoreventhandler_11',['DriverSelectorEventHandler',['../classMaxOS_1_1drivers_1_1DriverSelectorEventHandler.html',1,'MaxOS::drivers']]]
 ];

@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::format::ext2::Ext2Directory" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::format::ext2::Ext2Directory" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,13 +15,13 @@ Inherits \fBMaxOS::filesystem::Directory\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBExt2Directory\fP (\fBExt2Volume\fP *\fBvolume\fP, \fBuint32_t\fP \fBinode\fP, \fBconst\fP \fBstring\fP &\fBname\fP)"
+.RI "\fBExt2Directory\fP (\fBExt2Volume\fP *\fBvolume\fP, \fBuint32_t\fP inode, \fBconst\fP \fBstring\fP &\fBname\fP)"
 .br
 .RI "Construct a new Ext2 \fBDirectory\fP object\&. "
 .ti -1c
 .RI "\fBvoid\fP \fBread_from_disk\fP () \fBfinal\fP"
 .br
-.RI "Read the directory from the inode on the disk\&. "
+.RI "read the directory from the inode on the disk "
 .ti -1c
 .RI "\fBFile\fP * \fBcreate_file\fP (\fBconst\fP \fBstring\fP &\fBname\fP) \fBfinal\fP"
 .br
@@ -50,6 +50,10 @@ Inherits \fBMaxOS::filesystem::Directory\fP\&.
 
 Public Member Functions inherited from \fBMaxOS::filesystem::Directory\fP
 .in +1c
+.ti -1c
+.RI "\fBvirtual\fP \fB~Directory\fP ()"
+.br
+.RI "Destructor for \fBDirectory\fP, frees all files and subdirectories\&. "
 .ti -1c
 .RI "\fBcommon::Vector\fP< \fBFile\fP * > \fBfiles\fP ()"
 .br
@@ -105,7 +109,7 @@ Protected Attributes inherited from \fBMaxOS::filesystem::Directory\fP
 .PP 
 Handles the directory operations on the ext2 filesystem\&. 
 .PP
-Definition at line \fB406\fP of file \fBext2\&.h\fP\&.
+Definition at line \fB420\fP of file \fBext2\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Ext2Directory::Ext2Directory (\fBExt2Volume\fP * volume, \fBuint32_t\fP inode, \fBconst\fP \fBstring\fP & name)"
@@ -124,11 +128,10 @@ Construct a new Ext2 \fBDirectory\fP object\&.
 .PP
 
 .PP
-Definition at line \fB853\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB854\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-854 : m_volume(volume),
-855   m_inode(m_volume, inode)
-856 {
+855         : m_volume(volume),
+856         m_inode(m_volume, inode) {
 857     m_name = name;
 858 }
 .fi
@@ -156,24 +159,24 @@ The new file object or null if it could not be created
 .PP
 Reimplemented from \fBMaxOS::filesystem::Directory\fP\&.
 .PP
-Definition at line \fB1083\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB1090\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1083                                                    {
-1084 
-1085     // Check if the file already exists
-1086     for (auto &file: m_files)
-1087         if (file\->name() == name)
-1088             return nullptr;
-1089 
-1090     // Create the file
-1091     auto file = new Ext2File(m_volume, create_entry(name, 0, false)\&.inode, name);
-1092     m_files\&.push_back(file);
-1093     return file;
-1094 }
+1090                                                    {
+1091 
+1092     // Check if the file already exists
+1093     for(auto& file : m_files)
+1094         if(file\->name() == name)
+1095             return nullptr;
+1096 
+1097     // Create the file
+1098     auto file = new Ext2File(m_volume, create_entry(name, 0, false)\&.inode, name);
+1099     m_files\&.push_back(file);
+1100     return file;
+1101 }
 .fi
 
 .PP
-References \fBinode\fP, \fBMaxOS::filesystem::Directory::m_files\fP, and \fBMaxOS::filesystem::Directory::name()\fP\&.
+References \fBMaxOS::filesystem::Directory::m_files\fP, and \fBMaxOS::filesystem::Directory::name()\fP\&.
 .SS "\fBDirectory\fP * Ext2Directory::create_subdirectory (\fBconst\fP \fBstring\fP & name)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -193,33 +196,33 @@ The new directory object or null if it could not be created
 .PP
 Reimplemented from \fBMaxOS::filesystem::Directory\fP\&.
 .PP
-Definition at line \fB1121\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB1128\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1121                                                                 {
-1122 
-1123     // Check if the directory already exists
-1124     for (auto &subdirectory: m_subdirectories)
-1125         if (subdirectory\->name() == name)
-1126             return nullptr;
-1127 
-1128     // Store the directory
-1129     auto directory = new Ext2Directory(m_volume, create_entry(name, 0, true)\&.inode, name);
-1130     m_subdirectories\&.push_back(directory);
-1131 
-1132     // Create self & parent references
-1133     directory\->create_entry("\&.", directory\->m_inode\&.inode_number, true);
-1134     directory\->create_entry("\&.\&.", m_inode\&.inode_number, true);
-1135 
-1136     return directory;
-1137 }
+1128                                                                 {
+1129 
+1130     // Check if the directory already exists
+1131     for(auto& subdirectory : m_subdirectories)
+1132         if(subdirectory\->name() == name)
+1133             return nullptr;
+1134 
+1135     // Store the directory
+1136     auto directory = new Ext2Directory(m_volume, create_entry(name, 0, true)\&.inode, name);
+1137     m_subdirectories\&.push_back(directory);
+1138 
+1139     // Create self & parent references
+1140     directory\->create_entry("\&.", directory\->m_inode\&.inode_number, true);
+1141     directory\->create_entry("\&.\&.", m_inode\&.inode_number, true);
+1142 
+1143     return directory;
+1144 }
 .fi
 
 .PP
-References \fBinode\fP, \fBMaxOS::filesystem::format::ext2::InodeHandler::inode_number\fP, \fBMaxOS::filesystem::Directory::m_subdirectories\fP, and \fBMaxOS::filesystem::Directory::name()\fP\&.
+References \fBMaxOS::filesystem::format::ext2::InodeHandler::inode_number\fP, \fBMaxOS::filesystem::Directory::m_subdirectories\fP, and \fBMaxOS::filesystem::Directory::name()\fP\&.
 .SS "\fBvoid\fP Ext2Directory::read_from_disk ()\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
-Read the directory from the inode on the disk\&. 
+read the directory from the inode on the disk 
 .PP
 Reimplemented from \fBMaxOS::filesystem::Directory\fP\&.
 .PP
@@ -232,34 +235,33 @@ Definition at line \fB959\fP of file \fBext2\&.cpp\fP\&..PP
 963     m_entry_names\&.clear();
 964 
 965     // Clear the old files & Directories
-966     for (auto &file: m_files)
+966     for(auto& file : m_files)
 967         delete file;
 968     m_files\&.clear();
 969 
-970     for (auto &directory: m_subdirectories)
+970     for(auto& directory : m_subdirectories)
 971         delete directory;
 972     m_subdirectories\&.clear();
 973 
 974     // Read the direct blocks (cant use for( : ))
 975     buffer_t buffer(m_volume\->block_size);
-976     for (int i = 0; i < m_inode\&.block_cache\&.size(); ++i) {
-977         uint32_t block_pointer = m_inode\&.block_cache[i];
-978 
-979         // Invalid block
-980         if (block_pointer == 0)
-981             break;
-982 
-983         // Parse the block
-984         m_volume\->read_block(block_pointer, &buffer);
-985         parse_block(&buffer);
-986     }
-987 
-988     m_volume\->ext2_lock\&.unlock();
-989 }
+976     for(unsigned int block_pointer : m_inode\&.block_cache) {
+977 
+978         // Invalid block
+979         if(block_pointer == 0)
+980             break;
+981 
+982         // Parse the block
+983         m_volume\->read_block(block_pointer, &buffer);
+984         parse_block(&buffer);
+985     }
+986 
+987     m_volume\->ext2_lock\&.unlock();
+988 }
 .fi
 
 .PP
-References \fBMaxOS::filesystem::format::ext2::InodeHandler::block_cache\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::block_size\fP, \fBMaxOS::common::Vector< Type >::clear()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::ext2_lock\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::filesystem::Directory::m_files\fP, \fBMaxOS::filesystem::Directory::m_subdirectories\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_block()\fP, \fBMaxOS::common::Vector< Type >::size()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+References \fBMaxOS::filesystem::format::ext2::InodeHandler::block_cache\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::block_size\fP, \fBMaxOS::common::Vector< Type >::clear()\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::ext2_lock\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::filesystem::Directory::m_files\fP, \fBMaxOS::filesystem::Directory::m_subdirectories\fP, \fBMaxOS::filesystem::format::ext2::Ext2Volume::read_block()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .SS "\fBvoid\fP Ext2Directory::remove_file (\fBconst\fP \fBstring\fP & name)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
@@ -274,11 +276,11 @@ Delete a file from this directory\&.
 .PP
 Reimplemented from \fBMaxOS::filesystem::Directory\fP\&.
 .PP
-Definition at line \fB1101\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB1108\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1101                                                   {
-1102     remove_entry(name, false);
-1103 }
+1108                                                   {
+1109     remove_entry(name, false);
+1110 }
 .fi
 
 .PP
@@ -297,11 +299,11 @@ Remove a directory entry from the directory\&.
 .PP
 Reimplemented from \fBMaxOS::filesystem::Directory\fP\&.
 .PP
-Definition at line \fB1144\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB1151\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1144                                                           {
-1145     remove_entry(name, true);
-1146 }
+1151                                                           {
+1152     remove_entry(name, true);
+1153 }
 .fi
 
 .PP
@@ -322,11 +324,11 @@ Renames the file from the old name to the new name if it exists\&.
 .PP
 Reimplemented from \fBMaxOS::filesystem::Directory\fP\&.
 .PP
-Definition at line \fB1111\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB1118\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1111                                                                               {
-1112     rename_entry(old_name, new_name, false);
-1113 }
+1118                                                                               {
+1119     rename_entry(old_name, new_name, false);
+1120 }
 .fi
 
 .SS "\fBvoid\fP Ext2Directory::rename_subdirectory (\fBconst\fP \fBstring\fP & old_name, \fBconst\fP \fBstring\fP & new_name)\fC [final]\fP, \fC [virtual]\fP"
@@ -345,11 +347,11 @@ Renames the directory from the old name to the new name if it exists\&.
 .PP
 Reimplemented from \fBMaxOS::filesystem::Directory\fP\&.
 .PP
-Definition at line \fB1154\fP of file \fBext2\&.cpp\fP\&..PP
+Definition at line \fB1161\fP of file \fBext2\&.cpp\fP\&..PP
 .nf
-1154                                                                                       {
-1155     rename_entry(old_name, new_name, true);
-1156 }
+1161                                                                                       {
+1162     rename_entry(old_name, new_name, true);
+1163 }
 .fi
 
 

@@ -14,14 +14,14 @@
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00017}00017\ }
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00024}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_abf6c2a336a89df03f41c695f1a757969}{00024}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_abf6c2a336a89df03f41c695f1a757969}{GlobalScheduler::GlobalScheduler}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}}\&\ multiboot)}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00025}00025\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{InterruptHandler}}(0x20),}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00026}00026\ \ \ m\_shared\_memory\_registry(resource\_type\_t::SHARED\_MEMORY),}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00027}00027\ \ \ m\_shared\_messages\_registry(resource\_type\_t::MESSAGE\_ENDPOINT),}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00026}00026\ \ \ m\_shared\_memory\_registry(\mbox{\hyperlink{resource_8h_a9ac9ad12caad00b9d7eb53504318c263}{resource\_type\_t}}::SHARED\_MEMORY),}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00027}00027\ \ \ m\_shared\_messages\_registry(\mbox{\hyperlink{resource_8h_a9ac9ad12caad00b9d7eb53504318c263}{resource\_type\_t}}::MESSAGE\_ENDPOINT),}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00028}00028\ \ \ m\_next\_pid(-\/1),}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00029}00029\ \ \ m\_next\_tid(-\/1)}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00030}00030\ \{}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00031}00031\ }
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00032}00032\ \ \ \ \ \textcolor{comment}{//\ Set\ up\ the\ global\ scheduler}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00033}00033\ \ \ \ \ \mbox{\hyperlink{classLogger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ global\ Scheduler\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00033}00033\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ global\ Scheduler\(\backslash\)n"{}};}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00034}00034\ \ \ \ \ s\_instance\ =\ \textcolor{keyword}{this};}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00035}00035\ }
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00036}00036\ \ \ \ \ \textcolor{comment}{//\ Set\ up\ the\ per\ core\ scheduler}}
@@ -39,7 +39,7 @@
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00053}00053\ \}}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00054}00054\ }
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00055}00055\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00062}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a26277c64caeab8b00a68de942dfd2fa7}{00062}}\ system::cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{GlobalScheduler::handle\_interrupt}}(system::cpu\_status\_t*\ status)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00062}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a26277c64caeab8b00a68de942dfd2fa7}{00062}}\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{system::cpu\_status\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_abd792bc53ec7dd1b70c8386853cc3c33}{GlobalScheduler::handle\_interrupt}}(\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{system::cpu\_status\_t}}*\ status)\ \{}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00063}00063\ }
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00064}00064\ \ \ \ \ \textcolor{comment}{//\ Scheduler\ not\ active}}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00065}00065\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance\ ||\ !s\_instance-\/>m\_active)}
@@ -50,471 +50,470 @@
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00070}00070\ \ \ \ \ \textcolor{keywordflow}{return}\ s;}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00071}00071\ \}}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00072}00072\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00078}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a3d2377ff36a2a416b949ac6774475398}{00078}}\ system::cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a3d2377ff36a2a416b949ac6774475398}{GlobalScheduler::yield}}(cpu\_status\_t*\ current)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00079}00079\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{current\_thread}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}}\ =\ *current;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00080}00080\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4e3cb6c6cc95d62dc6149c0ec934c723}{yield}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00081}00081\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00079}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a3d2377ff36a2a416b949ac6774475398}{00079}}\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{system::cpu\_status\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a3d2377ff36a2a416b949ac6774475398}{GlobalScheduler::yield}}(\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ current)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00080}00080\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{current\_thread}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}}\ =\ *current;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00081}00081\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4e3cb6c6cc95d62dc6149c0ec934c723}{yield}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00082}00082\ \}}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00083}00083\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00084}00084\ GlobalScheduler::\string~GlobalScheduler()\{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00085}00085\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00086}00086\ \ \ \ \ \textcolor{comment}{//\ No\ longer\ the\ global\ instance}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00087}00087\ \ \ \ \ s\_instance\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00087}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a817a0407139e437686c29ee3367cab09}{00087}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a817a0407139e437686c29ee3367cab09}{GlobalScheduler::\string~GlobalScheduler}}()\{}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00088}00088\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00089}00089\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ per\ core\ scheduler}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00090}00090\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}::cores)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00091}00091\ \ \ \ \ \ \ \ \ delete\ core-\/>scheduler;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00092}00092\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00093}00093\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00094}00094\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00098}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac257db7eb13dd4daca113e43a4623900}{00098}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac257db7eb13dd4daca113e43a4623900}{GlobalScheduler::activate}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00099}00099\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00100}00100\ \ \ \ \ s\_instance\ -\/>\ m\_active\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00101}00101\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}})}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00102}00102\ \ \ \ \ \ \ \ \ core-\/>scheduler-\/>activate();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00103}00103\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00104}00104\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00105}00105\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00109}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac32ed71ca0571c1cf2125b3360549757}{00109}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac32ed71ca0571c1cf2125b3360549757}{GlobalScheduler::deactivate}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00110}00110\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00111}00111\ \ \ \ \ s\_instance\ -\/>\ m\_active\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00112}00112\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}})}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00113}00113\ \ \ \ \ \ \ \ \ core-\/>scheduler-\/>deactivate();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00114}00114\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00115}00115\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00116}00116\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00123}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad5da3a5d5310edcb9afae94db4852794}{00123}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad5da3a5d5310edcb9afae94db4852794}{GlobalScheduler::balance}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00124}00124\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00125}00125\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00089}00089\ \ \ \ \ \textcolor{comment}{//\ No\ longer\ the\ global\ instance}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00090}00090\ \ \ \ \ s\_instance\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00092}00092\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ per\ core\ scheduler}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00093}00093\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}})}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00094}00094\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ core-\/>scheduler;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00096}00096\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00101}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac257db7eb13dd4daca113e43a4623900}{00101}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac257db7eb13dd4daca113e43a4623900}{GlobalScheduler::activate}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00103}00103\ \ \ \ \ s\_instance\ -\/>\ m\_active\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00104}00104\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}})}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00105}00105\ \ \ \ \ \ \ \ \ core-\/>scheduler-\/>activate();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00107}00107\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00112}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac32ed71ca0571c1cf2125b3360549757}{00112}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac32ed71ca0571c1cf2125b3360549757}{GlobalScheduler::deactivate}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00114}00114\ \ \ \ \ s\_instance\ -\/>\ m\_active\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00115}00115\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}})}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00116}00116\ \ \ \ \ \ \ \ \ core-\/>scheduler-\/>deactivate();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00118}00118\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00126}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad5da3a5d5310edcb9afae94db4852794}{00126}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad5da3a5d5310edcb9afae94db4852794}{GlobalScheduler::balance}}()\ \{}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00127}00127\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00135}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ae22220b83f109ca31a40e99a8758db15}{00135}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ae22220b83f109ca31a40e99a8758db15}{GlobalScheduler::load\_multiboot\_elfs}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}}*\ multiboot)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00136}00136\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00137}00137\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*\ tag\ =\ multiboot-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a30987e6538d9e0aa663a7d5663cb452b}{start\_tag}}();\ tag-\/>type\ !=\ MULTIBOOT\_TAG\_TYPE\_END;\ tag\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*)\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot\_uint8\_t}}*)\ tag\ +\ ((tag-\/>size\ +\ 7)\ \&\ \string~7)))\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00138}00138\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00139}00139\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tag\ is\ not\ an\ ELF}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00140}00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tag-\/>type\ !=\ MULTIBOOT\_TAG\_TYPE\_MODULE)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00142}00142\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Try\ to\ create\ the\ elf\ from\ the\ module}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ \textcolor{keyword}{module}\ =\ (struct\ multiboot\_tag\_module*)\ tag;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ELF64}{ELF64}}\ elf((uintptr\_t)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a061e07bff657447294f4005f550d87ac}{PhysicalMemoryManager::to\_dm\_region}}(module-\/>mod\_start));}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00146}00146\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!elf.\mbox{\hyperlink{classMaxOS_1_1processes_1_1ELF64_af016428ffefa07a491eec7ade744c871}{is\_valid}}())}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00148}00148\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00149}00149\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Creating\ process\ from\ multiboot\ module\ for\ "{}}\ <<\ \textcolor{keyword}{module}-\/>cmdline\ <<\ "{}\ (at\ 0x"{}\ <<\ (uint64\_t)\ module-\/>mod\_start\ <<\ "{})\(\backslash\)n"{};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00150}00150\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00151}00151\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ an\ array\ of\ args\ for\ the\ process}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00152}00152\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}*\ args[1]\ =\ \{\textcolor{keyword}{module}-\/>cmdline\};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00128}00128\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00138}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ae22220b83f109ca31a40e99a8758db15}{00138}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ae22220b83f109ca31a40e99a8758db15}{GlobalScheduler::load\_multiboot\_elfs}}(\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}}*\ multiboot)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00140}00140\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*\ tag\ =\ multiboot-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot_a30987e6538d9e0aa663a7d5663cb452b}{start\_tag}}();\ tag-\/>type\ !=\ MULTIBOOT\_TAG\_TYPE\_END;\ tag\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structmultiboot__tag}{multiboot\_tag}}*)\ ((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot\_uint8\_t}}*)\ tag\ +\ ((tag-\/>size\ +\ 7)\ \&\ \string~7)))\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00142}00142\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tag\ is\ not\ an\ ELF}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tag-\/>type\ !=\ MULTIBOOT\_TAG\_TYPE\_MODULE)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00145}00145\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00146}00146\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Try\ to\ create\ the\ elf\ from\ the\ module}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ \textcolor{keyword}{module}\ =\ (struct\ multiboot\_tag\_module*)\ tag;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00148}00148\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1ELF64}{ELF64}}\ elf((uintptr\_t)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a061e07bff657447294f4005f550d87ac}{PhysicalMemoryManager::to\_dm\_region}}(module-\/>mod\_start));}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00149}00149\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!elf.\mbox{\hyperlink{classMaxOS_1_1processes_1_1ELF64_af016428ffefa07a491eec7ade744c871}{is\_valid}}())}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00150}00150\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00152}00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Creating\ process\ from\ multiboot\ module\ for\ "{}}\ <<\ \textcolor{keyword}{module}-\/>cmdline\ <<\ "{}\ (at\ 0x"{}\ <<\ (uint64\_t)\ module-\/>mod\_start\ <<\ "{})\(\backslash\)n"{};}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00153}00153\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00154}00154\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ the\ process}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00155}00155\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ process\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(module-\/>cmdline,\ args,\ 1,\ \&elf);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00156}00156\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a92932d6664340c61e8174c93168d7932}{GlobalScheduler::system\_scheduler}}()\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_adb0782a16515ac2e9268fccce8cd2112}{add\_process}}(process);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00157}00157\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00158}00158\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}ELF\ loaded\ to\ pid\ "{}}\ <<\ process-\/>pid()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00159}00159\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00160}00160\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00161}00161\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00165}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a4f462a1b05f9bf785a903bd0f3e495a0}{00165}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a4f462a1b05f9bf785a903bd0f3e495a0}{GlobalScheduler::print\_running\_header}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00166}00166\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00167}00167\ \ \ \ \ \textcolor{comment}{//\ No\ threads\ or\ processes\ to\ get}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00168}00168\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance\ ||\ !s\_instance-\/>m\_active)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00169}00169\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00170}00170\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00171}00171\ \ \ \ \ \textcolor{keyword}{auto}\ process\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{current\_process}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00172}00172\ \ \ \ \ \textcolor{keyword}{auto}\ thread\ \ \ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{current\_thread}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00154}00154\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ an\ array\ of\ args\ for\ the\ process}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00155}00155\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}*\ args[1]\ =\ \{\textcolor{keyword}{module}-\/>cmdline\};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00157}00157\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ the\ process}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00158}00158\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ process\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(module-\/>cmdline,\ args,\ 1,\ \&elf);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00159}00159\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a92932d6664340c61e8174c93168d7932}{GlobalScheduler::system\_scheduler}}()\ -\/>\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_adb0782a16515ac2e9268fccce8cd2112}{add\_process}}(process);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00161}00161\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}ELF\ loaded\ to\ pid\ "{}}\ <<\ process-\/>pid()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00162}00162\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00163}00163\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00168}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a4f462a1b05f9bf785a903bd0f3e495a0}{00168}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a4f462a1b05f9bf785a903bd0f3e495a0}{GlobalScheduler::print\_running\_header}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00169}00169\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00170}00170\ \ \ \ \ \textcolor{comment}{//\ No\ threads\ or\ processes\ to\ get}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00171}00171\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance\ ||\ !s\_instance-\/>m\_active)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00172}00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00173}00173\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00174}00174\ \ \ \ \ \mbox{\hyperlink{classLogger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}("{}}\ <<\ process-\/>name\ <<\ \textcolor{stringliteral}{"{}:t"{}}\ <<\ thread-\/>tid\ \ <<\ \textcolor{stringliteral}{"{}c"{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{CPU::executing\_core}}()-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8}{id}}\ <<\ \textcolor{stringliteral}{"{})\ "{}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00175}00175\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00174}00174\ \ \ \ \ \textcolor{keyword}{auto}\ process\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{current\_process}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00175}00175\ \ \ \ \ \textcolor{keyword}{auto}\ thread\ \ \ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{current\_thread}}();}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00176}00176\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00183}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_adb0782a16515ac2e9268fccce8cd2112}{00183}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_adb0782a16515ac2e9268fccce8cd2112}{GlobalScheduler::add\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00184}00184\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00185}00185\ \ \ \ \ \textcolor{comment}{//\ No\ cores?}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00186}00186\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}.empty())}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00187}00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00188}00188\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00189}00189\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ core\ with\ the\ least\ processes}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00190}00190\ \ \ \ \ uint64\_t\ core\_id\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00191}00191\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}*\ scheduler\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core\_id]-\/>scheduler;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00192}00192\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}})\{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00193}00193\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}\ =\ core-\/>scheduler;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00194}00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}{process\_amount}}()\ <\ scheduler-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}{process\_amount}}())\{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ core\_id\ =\ core-\/>id;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ scheduler\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00197}00197\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00198}00198\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00199}00199\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00200}00200\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ pid}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00201}00201\ \ \ \ \ \textcolor{keyword}{auto}\ pid\ =\ scheduler-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{add\_process}}(process);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00202}00202\ \ \ \ \ m\_core\_pids.\mbox{\hyperlink{classMaxOS_1_1common_1_1Map_a81607647ee83176c5cf53462f99583e0}{insert}}(pid,core\_id);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00203}00203\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00204}00204\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Adding\ process\ "{}}\ <<\ pid\ <<\ \textcolor{stringliteral}{"{}:\ "{}}\ <<\ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}\ <<\ \textcolor{stringliteral}{"{}\ to\ core\ "{}}\ <<\ core\_id\ <<\textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00205}00205\ \ \ \ \ \textcolor{keywordflow}{return}\ pid;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00206}00206\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00207}00207\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00214}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_add8dade082c0f3357c94f1abb79be249}{00214}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_add8dade082c0f3357c94f1abb79be249}{GlobalScheduler::add\_thread}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ thread)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00215}00215\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00216}00216\ \ \ \ \ \textcolor{comment}{//\ No\ cores?}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00217}00217\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}.empty())}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00218}00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00219}00219\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00220}00220\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ core\ with\ the\ least\ threads}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00221}00221\ \ \ \ \ uint64\_t\ core\_id\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00222}00222\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}*\ scheduler\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core\_id]-\/>scheduler;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00223}00223\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}})\{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00224}00224\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}\ =\ core-\/>scheduler;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00225}00225\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}{thread\_amount}}()\ <\ scheduler-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}{thread\_amount}}())\{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00226}00226\ \ \ \ \ \ \ \ \ \ \ \ \ core\_id\ =\ core-\/>id;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00227}00227\ \ \ \ \ \ \ \ \ \ \ \ \ scheduler\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00228}00228\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00229}00229\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00230}00230\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00231}00231\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ tid}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00232}00232\ \ \ \ \ \textcolor{keyword}{auto}\ tid\ =\ scheduler-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{add\_thread}}(thread);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00233}00233\ \ \ \ \ m\_core\_tids.\mbox{\hyperlink{classMaxOS_1_1common_1_1Map_a81607647ee83176c5cf53462f99583e0}{insert}}(tid,core\_id);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00234}00234\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00235}00235\ \ \ \ \ \mbox{\hyperlink{classLogger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Adding\ thread\ "{}}\ <<\ tid\ <<\ \textcolor{stringliteral}{"{}\ to\ core\ "{}}\ <<\ core\_id\ <<\textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00236}00236\ \ \ \ \ \textcolor{keywordflow}{return}\ tid;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00237}00237\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00238}00238\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00245}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a21b5962ea20b3ef69978bdd60320e098}{00245}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a21b5962ea20b3ef69978bdd60320e098}{GlobalScheduler::remove\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00246}00246\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00247}00247\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ core\ running\ the\ process}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00248}00248\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00249}00249\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00250}00250\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00251}00251\ \ \ \ \ \textcolor{keyword}{auto}\ core\ =\ s\_instance\ -\/>\ m\_core\_pids[process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}()];}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00252}00252\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core]-\/>scheduler-\/>remove\_process(process);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00253}00253\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00254}00254\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00261}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_af8f0feccb59c37c41b25e32e6f3cac4a}{00261}}\ system::cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_af8f0feccb59c37c41b25e32e6f3cac4a}{GlobalScheduler::force\_remove\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00262}00262\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00263}00263\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ core\ running\ the\ process}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00264}00264\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00265}00265\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00266}00266\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00267}00267\ \ \ \ \ \textcolor{keyword}{auto}\ core\ =\ s\_instance\ -\/>\ m\_core\_pids[process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}()];}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00268}00268\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core]-\/>scheduler-\/>force\_remove\_process(process);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00177}00177\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a2240fadc00ba8731c0117c019d800644}{Logger::Out}}()\ <<\ \textcolor{stringliteral}{"{}("{}}\ <<\ process-\/>name\ <<\ \textcolor{stringliteral}{"{}:t"{}}\ <<\ thread-\/>tid\ \ <<\ \textcolor{stringliteral}{"{}c"{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{CPU::executing\_core}}()-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_a9ec1cb7099f0a687903e05b7f50c25f8}{id}}\ <<\ \textcolor{stringliteral}{"{})\ "{}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00178}00178\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00179}00179\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00186}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_adb0782a16515ac2e9268fccce8cd2112}{00186}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_adb0782a16515ac2e9268fccce8cd2112}{GlobalScheduler::add\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00188}00188\ \ \ \ \ \textcolor{comment}{//\ No\ cores?}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00189}00189\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}.empty())}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00190}00190\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00192}00192\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ core\ with\ the\ least\ processes}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00193}00193\ \ \ \ \ uint64\_t\ core\_id\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00194}00194\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}*\ scheduler\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core\_id]-\/>scheduler;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00195}00195\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}})\{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00196}00196\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}\ =\ core-\/>scheduler;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00197}00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}{process\_amount}}()\ <\ scheduler-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}{process\_amount}}())\{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ core\_id\ =\ core-\/>id;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ scheduler\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00200}00200\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00201}00201\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00202}00202\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00203}00203\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ pid}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00204}00204\ \ \ \ \ \textcolor{keyword}{auto}\ pid\ =\ scheduler-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{add\_process}}(process);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00205}00205\ \ \ \ \ m\_core\_pids.\mbox{\hyperlink{classMaxOS_1_1common_1_1Map_a81607647ee83176c5cf53462f99583e0}{insert}}(pid,core\_id);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00207}00207\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Adding\ process\ "{}}\ <<\ pid\ <<\ \textcolor{stringliteral}{"{}:\ "{}}\ <<\ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a56404d627bd310d8de08fba3d8d2792f}{name}}\ <<\ \textcolor{stringliteral}{"{}\ to\ core\ "{}}\ <<\ core\_id\ <<\textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00208}00208\ \ \ \ \ \textcolor{keywordflow}{return}\ pid;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00209}00209\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00210}00210\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00217}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_add8dade082c0f3357c94f1abb79be249}{00217}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_add8dade082c0f3357c94f1abb79be249}{GlobalScheduler::add\_thread}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ thread)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00218}00218\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00219}00219\ \ \ \ \ \textcolor{comment}{//\ No\ cores?}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00220}00220\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}.empty())}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00221}00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00222}00222\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00223}00223\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ core\ with\ the\ least\ threads}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00224}00224\ \ \ \ \ uint64\_t\ core\_id\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00225}00225\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}*\ scheduler\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core\_id]-\/>scheduler;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00226}00226\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ core\ :\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}})\{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00227}00227\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}\ =\ core-\/>scheduler;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00228}00228\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}{thread\_amount}}()\ <\ scheduler-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}{thread\_amount}}())\{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00229}00229\ \ \ \ \ \ \ \ \ \ \ \ \ core\_id\ =\ core-\/>id;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00230}00230\ \ \ \ \ \ \ \ \ \ \ \ \ scheduler\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00231}00231\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00232}00232\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00233}00233\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00234}00234\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ tid}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00235}00235\ \ \ \ \ \textcolor{keyword}{auto}\ tid\ =\ scheduler-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{add\_thread}}(thread);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00236}00236\ \ \ \ \ m\_core\_tids.\mbox{\hyperlink{classMaxOS_1_1common_1_1Map_a81607647ee83176c5cf53462f99583e0}{insert}}(tid,core\_id);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00237}00237\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00238}00238\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Adding\ thread\ "{}}\ <<\ tid\ <<\ \textcolor{stringliteral}{"{}\ to\ core\ "{}}\ <<\ core\_id\ <<\textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00239}00239\ \ \ \ \ \textcolor{keywordflow}{return}\ tid;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00240}00240\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00241}00241\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00248}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a21b5962ea20b3ef69978bdd60320e098}{00248}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a21b5962ea20b3ef69978bdd60320e098}{GlobalScheduler::remove\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00249}00249\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00250}00250\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ core\ running\ the\ process}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00251}00251\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00252}00252\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00253}00253\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00254}00254\ \ \ \ \ \textcolor{keyword}{auto}\ core\ =\ s\_instance\ -\/>\ m\_core\_pids[process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}()];}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00255}00255\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core]-\/>scheduler-\/>remove\_process(process);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00256}00256\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00257}00257\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00264}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_af8f0feccb59c37c41b25e32e6f3cac4a}{00264}}\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{system::cpu\_status\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_af8f0feccb59c37c41b25e32e6f3cac4a}{GlobalScheduler::force\_remove\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00266}00266\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ core\ running\ the\ process}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00267}00267\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00268}00268\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00269}00269\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00270}00270\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00271}00271\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00277}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{00277}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00278}00278\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance\ ||\ !s\_instance\ -\/>m\_active)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00279}00279\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00280}00280\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00281}00281\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00282}00282\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00270}00270\ \ \ \ \ \textcolor{keyword}{auto}\ core\ =\ s\_instance\ -\/>\ m\_core\_pids[process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}()];}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00271}00271\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core]-\/>scheduler-\/>force\_remove\_process(process);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00272}00272\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00273}00273\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00280}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{00280}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00281}00281\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance\ ||\ !s\_instance\ -\/>m\_active)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00282}00282\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00283}00283\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00290}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a199f03c298a8f58e743db34830327a58}{00290}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a199f03c298a8f58e743db34830327a58}{GlobalScheduler::get\_process}}(uint64\_t\ pid)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00291}00291\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00292}00292\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ core\ running\ the\ pid}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00293}00293\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00294}00294\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00295}00295\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00296}00296\ \ \ \ \ \textcolor{keyword}{auto}\ core\ =\ s\_instance\ -\/>\ m\_core\_pids[pid];}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00297}00297\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core]-\/>scheduler-\/>get\_process(pid);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00298}00298\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00299}00299\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00304}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a06e979b83c4cd3db3eed8b333188d037}{00304}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a06e979b83c4cd3db3eed8b333188d037}{GlobalScheduler::next\_pid}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00305}00305\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_instance\ -\/>\ m\_next\_pid++;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00306}00306\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00307}00307\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00313}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{00313}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{GlobalScheduler::current\_thread}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00314}00314\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00315}00315\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00316}00316\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00323}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ab3891508a6e69d835b30c5ee81ba8fb0}{00323}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ab3891508a6e69d835b30c5ee81ba8fb0}{GlobalScheduler::get\_thread}}(uint64\_t\ tid)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00324}00324\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00325}00325\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ core\ running\ the\ tid}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00326}00326\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00327}00327\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00328}00328\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00329}00329\ \ \ \ \ \textcolor{keyword}{auto}\ core\ =\ s\_instance\ -\/>\ m\_core\_tids[tid];}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00330}00330\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core]-\/>scheduler-\/>get\_thread(tid);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00331}00331\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00332}00332\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00337}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a6197a324f9a16fdf1b3990df4eb7ddd3}{00337}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a6197a324f9a16fdf1b3990df4eb7ddd3}{GlobalScheduler::next\_tid}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00338}00338\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_instance-\/>m\_next\_tid++;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00339}00339\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00340}00340\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00346}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{00346}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{GlobalScheduler::core\_scheduler}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00347}00347\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{CPU::executing\_core}}()-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ab5f2cccadb50ecefe94cbb95eebea371}{scheduler}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00348}00348\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00349}00349\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00355}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac97d198ab1a455b25baa53693f8b0af9}{00355}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac97d198ab1a455b25baa53693f8b0af9}{GlobalScheduler::is\_active}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00356}00356\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_instance-\/>m\_active;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00357}00357\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00358}00358\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00362}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3b61aac11466cd45ae42ab8c2b0013f6}{00362}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3b61aac11466cd45ae42ab8c2b0013f6}{Scheduler::Scheduler}}()}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00363}00363\ :\ m\_next\_thread\_index(0),}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00364}00364\ \ \ m\_active(false),}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00365}00365\ \ \ m\_ticks(0)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00366}00366\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00367}00367\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00368}00368\ \ \ \ \ \textcolor{comment}{//\ Create\ this\ idle\ process}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00369}00369\ \ \ \ \ \textcolor{keyword}{auto}*\ idle\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(\textcolor{stringliteral}{"{}Idle"{}},\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr},\ 0,\ \textcolor{keyword}{true});}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00370}00370\ \ \ \ \ idle-\/>memory\_manager\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{MemoryManager::s\_kernel\_memory\_manager}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00371}00371\ \ \ \ \ idle-\/>set\_pid(0);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00372}00372\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{add\_process}}(idle);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00373}00373\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00374}00374\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00375}00375\ Scheduler::\string~Scheduler()\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00376}00376\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00284}00284\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00285}00285\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00286}00286\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00293}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a199f03c298a8f58e743db34830327a58}{00293}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a199f03c298a8f58e743db34830327a58}{GlobalScheduler::get\_process}}(uint64\_t\ pid)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00294}00294\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00295}00295\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ core\ running\ the\ pid}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00296}00296\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00297}00297\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00298}00298\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00299}00299\ \ \ \ \ \textcolor{keyword}{auto}\ core\ =\ s\_instance\ -\/>\ m\_core\_pids[pid];}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00300}00300\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core]-\/>scheduler-\/>get\_process(pid);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00301}00301\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00302}00302\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00307}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a06e979b83c4cd3db3eed8b333188d037}{00307}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a06e979b83c4cd3db3eed8b333188d037}{GlobalScheduler::next\_pid}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00308}00308\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_instance\ -\/>\ m\_next\_pid++;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00309}00309\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00310}00310\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00316}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{00316}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{GlobalScheduler::current\_thread}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00317}00317\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{core\_scheduler}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00318}00318\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00319}00319\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00326}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ab3891508a6e69d835b30c5ee81ba8fb0}{00326}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ab3891508a6e69d835b30c5ee81ba8fb0}{GlobalScheduler::get\_thread}}(uint64\_t\ tid)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00327}00327\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00328}00328\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ core\ running\ the\ tid}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00329}00329\ \ \ \ \ \textcolor{keywordflow}{if}(!s\_instance)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00330}00330\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00331}00331\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00332}00332\ \ \ \ \ \textcolor{keyword}{auto}\ core\ =\ s\_instance\ -\/>\ m\_core\_tids[tid];}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00333}00333\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_acbed3e383ef08559099051d9c7e9d57b}{CPU::cores}}[core]-\/>scheduler-\/>get\_thread(tid);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00334}00334\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00335}00335\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00340}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a6197a324f9a16fdf1b3990df4eb7ddd3}{00340}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a6197a324f9a16fdf1b3990df4eb7ddd3}{GlobalScheduler::next\_tid}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00341}00341\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_instance-\/>m\_next\_tid++;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00342}00342\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00343}00343\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00349}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{00349}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler}{Scheduler}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a0eb017023c57324c9f92bce011aaf3c9}{GlobalScheduler::core\_scheduler}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00350}00350\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{CPU::executing\_core}}()-\/>\mbox{\hyperlink{classMaxOS_1_1system_1_1Core_ab5f2cccadb50ecefe94cbb95eebea371}{scheduler}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00351}00351\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00352}00352\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00358}\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac97d198ab1a455b25baa53693f8b0af9}{00358}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac97d198ab1a455b25baa53693f8b0af9}{GlobalScheduler::is\_active}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00359}00359\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_instance-\/>m\_active;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00360}00360\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00361}00361\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00365}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3b61aac11466cd45ae42ab8c2b0013f6}{00365}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3b61aac11466cd45ae42ab8c2b0013f6}{Scheduler::Scheduler}}()}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00366}00366\ :\ m\_next\_thread\_index(0),}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00367}00367\ \ \ m\_active(false),}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00368}00368\ \ \ m\_ticks(0)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00369}00369\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00370}00370\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00371}00371\ \ \ \ \ \textcolor{comment}{//\ Create\ this\ idle\ process}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00372}00372\ \ \ \ \ \textcolor{keyword}{auto}*\ idle\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}(\textcolor{stringliteral}{"{}Idle"{}},\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr},\ 0,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00373}00373\ \ \ \ \ idle-\/>memory\_manager\ =\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_a80d8e713d6ad371a4b564a5202542d48}{MemoryManager::s\_kernel\_memory\_manager}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00374}00374\ \ \ \ \ idle-\/>set\_pid(0);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00375}00375\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{add\_process}}(idle);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00376}00376\ \}}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00377}00377\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00384}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c82e3f0b71fd6e7d570594ea7be397}{00384}}\ cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c82e3f0b71fd6e7d570594ea7be397}{Scheduler::schedule}}(cpu\_status\_t*\ cpu\_state)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00385}00385\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00386}00386\ \ \ \ \ \textcolor{comment}{//\ Scheduler\ cant\ schedule\ anything}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00387}00387\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_threads.empty()\ ||\ !m\_active)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00388}00388\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cpu\_state;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00389}00389\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00390}00390\ \ \ \ \ \textcolor{comment}{//\ Thread\ that\ we\ are\ dealing\ with}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00391}00391\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_next\_thread\_index];}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00378}00378\ Scheduler::\string~Scheduler()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00379}00379\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00380}00380\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00387}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c82e3f0b71fd6e7d570594ea7be397}{00387}}\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c82e3f0b71fd6e7d570594ea7be397}{Scheduler::schedule}}(\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ cpu\_state)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00388}00388\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00389}00389\ \ \ \ \ \textcolor{comment}{//\ Scheduler\ cant\ schedule\ anything}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00390}00390\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_threads.empty()\ ||\ !m\_active)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00391}00391\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cpu\_state;}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00392}00392\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00393}00393\ \ \ \ \ \textcolor{comment}{//\ Ticked}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00394}00394\ \ \ \ \ m\_ticks++;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00395}00395\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_adac2079967569c8686ab0d05631065bc}{ticks}}++;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00396}00396\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00397}00397\ \ \ \ \ \textcolor{comment}{//\ Thread\ hasn't\ used\ its\ time\ slot\ yet}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00398}00398\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_adac2079967569c8686ab0d05631065bc}{ticks}}\ \%\ \mbox{\hyperlink{scheduler_8h_a16e9836793c1567dfa036940aef3db6d}{TICKS\_PER\_EVENT}})}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00399}00399\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cpu\_state;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00400}00400\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00401}00401\ \ \ \ \ \textcolor{comment}{//\ Schedule\ the\ next\ thread}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00402}00402\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(cpu\_state);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00403}00403\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00404}00404\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00413}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{00413}}\ cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{Scheduler::schedule\_next}}(cpu\_status\_t*\ cpu\_state)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00414}00414\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00415}00415\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ current\ state}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00416}00416\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_next\_thread\_index];}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00417}00417\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ owner\_process\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00418}00418\ \ \ \ \ \textcolor{keyword}{auto}\ old\_tid\ =\ m\_next\_thread\_index;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00419}00419\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00420}00420\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ executing\ thread\ state}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00421}00421\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}}\ =\ *cpu\_state;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00422}00422\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a21abe4a5d20033649696849094c415d0}{save\_sse\_state}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00423}00423\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ ==\ ThreadState::RUNNING)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00424}00424\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ ThreadState::READY;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00425}00425\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00426}00426\ \ \ \ \ \textcolor{comment}{//\ Find\ a\ free\ thread\ to\ run}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00427}00427\ \ \ \ \ \textcolor{keywordflow}{while}\ ((++m\_next\_thread\_index)\ !=\ old\_tid)\{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00428}00428\ \ \ \ \ \ \ \ \ m\_next\_thread\_index\ \%=\ m\_threads.size();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00429}00429\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00430}00430\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ current\ thread}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00431}00431\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_next\_thread\_index];}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00432}00432\ \ \ \ \ \ \ \ \ owner\_process\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00433}00433\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00434}00434\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ state\ changes}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00435}00435\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}})\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00393}00393\ \ \ \ \ \textcolor{comment}{//\ Thread\ that\ we\ are\ dealing\ with}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00394}00394\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_next\_thread\_index];}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00395}00395\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00396}00396\ \ \ \ \ \textcolor{comment}{//\ Ticked}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00397}00397\ \ \ \ \ m\_ticks++;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00398}00398\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_adac2079967569c8686ab0d05631065bc}{ticks}}++;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00399}00399\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00400}00400\ \ \ \ \ \textcolor{comment}{//\ Thread\ hasn't\ used\ its\ time\ slot\ yet}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00401}00401\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_adac2079967569c8686ab0d05631065bc}{ticks}}\ \%\ \mbox{\hyperlink{scheduler_8h_a16e9836793c1567dfa036940aef3db6d}{TICKS\_PER\_EVENT}})}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00402}00402\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cpu\_state;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00403}00403\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00404}00404\ \ \ \ \ \textcolor{comment}{//\ Schedule\ the\ next\ thread}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00405}00405\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(cpu\_state);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00406}00406\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00407}00407\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00416}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{00416}}\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{Scheduler::schedule\_next}}(\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ cpu\_state)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00417}00417\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00418}00418\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ current\ state}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00419}00419\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_next\_thread\_index];}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00420}00420\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ owner\_process\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00421}00421\ \ \ \ \ \textcolor{keyword}{auto}\ old\_tid\ =\ m\_next\_thread\_index;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00422}00422\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00423}00423\ \ \ \ \ \textcolor{comment}{//\ Save\ the\ executing\ thread\ state}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00424}00424\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}}\ =\ *cpu\_state;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00425}00425\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a21abe4a5d20033649696849094c415d0}{save\_sse\_state}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00426}00426\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ ==\ ThreadState::RUNNING)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00427}00427\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ ThreadState::READY;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00428}00428\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00429}00429\ \ \ \ \ \textcolor{comment}{//\ Find\ a\ free\ thread\ to\ run}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00430}00430\ \ \ \ \ \textcolor{keywordflow}{while}\ ((++m\_next\_thread\_index)\ !=\ old\_tid)\{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00431}00431\ \ \ \ \ \ \ \ \ m\_next\_thread\_index\ \%=\ m\_threads.size();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00432}00432\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00433}00433\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ current\ thread}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00434}00434\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}\ =\ m\_threads[m\_next\_thread\_index];}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00435}00435\ \ \ \ \ \ \ \ \ owner\_process\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}();}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00436}00436\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00437}00437\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ThreadState::SLEEPING:}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00438}00438\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00439}00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ wake-\/up\ time\ hasn't\ occurred\ yet,\ run\ the\ next\ thread}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00440}00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a2cda049e10651cb61318f38cd88f22e2}{wakeup\_time}}\ >\ \mbox{\hyperlink{scheduler_8h_a16e9836793c1567dfa036940aef3db6d}{TICKS\_PER\_EVENT}})\{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00441}00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a2cda049e10651cb61318f38cd88f22e2}{wakeup\_time}}\ -\/=\ \mbox{\hyperlink{scheduler_8h_a16e9836793c1567dfa036940aef3db6d}{TICKS\_PER\_EVENT}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00442}00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00443}00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00444}00444\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00445}00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00446}00446\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00447}00447\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ThreadState::STOPPED:}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00448}00448\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00449}00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ process\ that\ has\ the\ thread\ and\ remove\ it}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00450}00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}())\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00451}00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (thread\ ==\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}})\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00452}00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\_thread}}(thread-\/>tid);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00453}00453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00454}00454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00455}00455\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00456}00456\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00457}00457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ thread}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00458}00458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_threads.erase(m\_threads.begin()\ +\ m\_next\_thread\_index);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00459}00459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}().empty())}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00460}00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a00c2995b3a91021eb4f278a591ff994f}{remove\_process}}(owner\_process);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00461}00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00462}00462\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00463}00463\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ThreadState::WAITING:}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00437}00437\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ state\ changes}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00438}00438\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}})\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00439}00439\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00440}00440\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ThreadState::SLEEPING:}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00441}00441\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00442}00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ wake-\/up\ time\ hasn't\ occurred\ yet,\ run\ the\ next\ thread}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00443}00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a2cda049e10651cb61318f38cd88f22e2}{wakeup\_time}}\ >\ \mbox{\hyperlink{scheduler_8h_a16e9836793c1567dfa036940aef3db6d}{TICKS\_PER\_EVENT}})\{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00444}00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a2cda049e10651cb61318f38cd88f22e2}{wakeup\_time}}\ -\/=\ \mbox{\hyperlink{scheduler_8h_a16e9836793c1567dfa036940aef3db6d}{TICKS\_PER\_EVENT}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00445}00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00446}00446\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00447}00447\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00448}00448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00449}00449\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00450}00450\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ThreadState::STOPPED:}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00451}00451\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00452}00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ process\ that\ has\ the\ thread\ and\ remove\ it}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00453}00453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}())\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00454}00454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (thread\ ==\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}})\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00455}00455\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\_thread}}(thread-\/>tid);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00456}00456\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00457}00457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00458}00458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00459}00459\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00460}00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ thread}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00461}00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_threads.erase(m\_threads.begin()\ +\ m\_next\_thread\_index);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00462}00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(owner\_process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}().empty())}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00463}00463\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a00c2995b3a91021eb4f278a591ff994f}{remove\_process}}(owner\_process);}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00464}00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00465}00465\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00466}00466\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00467}00467\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00468}00468\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00469}00469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00470}00470\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00471}00471\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00472}00472\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ thread's\ state}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00473}00473\ \ \ \ \ \textcolor{keywordflow}{return}\ load\_process(owner\_process,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}});}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00474}00474\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00475}00475\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00483}00483\ cpu\_status\_t*\ Scheduler::load\_process(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ thread)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00484}00484\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00485}00485\ \ \ \ \ \textcolor{comment}{//\ Prepare\ the\ next\ thread\ to\ run}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00486}00486\ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ ThreadState::RUNNING;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00487}00487\ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_acd31b38f01bba4e58e8426f5f0be25f7}{restore\_sse\_state}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00488}00488\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00489}00489\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ thread's\ memory\ manager\ and\ task\ state}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00490}00490\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ae584e29e4d2925e3e30be409af2dc2e5}{MemoryManager::switch\_active\_memory\_manager}}(process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{memory\_manager}});}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00491}00491\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{CPU::executing\_core}}()\ -\/>\ tss.rsp0\ =\ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a9baa5fdcd84593974738c3f62f050283}{tss\_pointer}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00492}00492\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00493}00493\ \ \ \ \ \textcolor{keywordflow}{return}\ \&thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00494}00494\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00466}00466\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ThreadState::WAITING:}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00467}00467\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00468}00468\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00469}00469\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00470}00470\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00471}00471\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00472}00472\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00473}00473\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00474}00474\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00475}00475\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ thread's\ state}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00476}00476\ \ \ \ \ \textcolor{keywordflow}{return}\ load\_process(owner\_process,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}});}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00477}00477\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00478}00478\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00486}00486\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ Scheduler::load\_process(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ thread)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00487}00487\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00488}00488\ \ \ \ \ \textcolor{comment}{//\ Prepare\ the\ next\ thread\ to\ run}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00489}00489\ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ ThreadState::RUNNING;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00490}00490\ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_acd31b38f01bba4e58e8426f5f0be25f7}{restore\_sse\_state}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00491}00491\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00492}00492\ \ \ \ \ \textcolor{comment}{//\ Load\ the\ thread's\ memory\ manager\ and\ task\ state}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00493}00493\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager_ae584e29e4d2925e3e30be409af2dc2e5}{MemoryManager::switch\_active\_memory\_manager}}(process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{memory\_manager}});}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00494}00494\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{CPU::executing\_core}}()\ -\/>\ tss.rsp0\ =\ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a9baa5fdcd84593974738c3f62f050283}{tss\_pointer}}();}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00495}00495\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00502}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{00502}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{Scheduler::add\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00503}00503\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00504}00504\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ process\ ID}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00505}00505\ \ \ \ \ \textcolor{keyword}{auto}\ pid\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a06e979b83c4cd3db3eed8b333188d037}{GlobalScheduler::next\_pid}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00506}00506\ \ \ \ \ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_ad8173b9cedf33f4f14536985edc5a509}{set\_pid}}(pid);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00507}00507\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00508}00508\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ process\ to\ the\ list}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00509}00509\ \ \ \ \ m\_processes.push\_back(process);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00496}00496\ \ \ \ \ \textcolor{keywordflow}{return}\ \&thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00497}00497\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00498}00498\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00505}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{00505}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a57f5f5eecb3fbbc693b6462c880129b0}{Scheduler::add\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00506}00506\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00507}00507\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ process\ ID}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00508}00508\ \ \ \ \ \textcolor{keyword}{auto}\ pid\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a06e979b83c4cd3db3eed8b333188d037}{GlobalScheduler::next\_pid}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00509}00509\ \ \ \ \ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_ad8173b9cedf33f4f14536985edc5a509}{set\_pid}}(pid);}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00510}00510\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00511}00511\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ threads\ to\ the\ list}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00512}00512\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ thread\ :\ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}())}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00513}00513\ \ \ \ \ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}}\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{add\_thread}}(thread);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00514}00514\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00515}00515\ \ \ \ \ \textcolor{keywordflow}{return}\ pid;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00516}00516\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00511}00511\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ process\ to\ the\ list}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00512}00512\ \ \ \ \ m\_processes.push\_back(process);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00513}00513\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00514}00514\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ threads\ to\ the\ list}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00515}00515\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ thread\ :\ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}())}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00516}00516\ \ \ \ \ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}}\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{add\_thread}}(thread);}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00517}00517\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00524}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{00524}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{Scheduler::add\_thread}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ thread)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00525}00525\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00526}00526\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ thread\ ID}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00527}00527\ \ \ \ \ \textcolor{keyword}{auto}\ tid\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a6197a324f9a16fdf1b3990df4eb7ddd3}{GlobalScheduler::next\_tid}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00528}00528\ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}}\ =\ tid;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00529}00529\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00530}00530\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ thread\ to\ the\ list}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00531}00531\ \ \ \ \ m\_threads.push\_back(thread);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00518}00518\ \ \ \ \ \textcolor{keywordflow}{return}\ pid;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00519}00519\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00520}00520\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00527}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{00527}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a85c088e0e4d5e5d6fb646c842127c36c}{Scheduler::add\_thread}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ thread)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00528}00528\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00529}00529\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ thread\ ID}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00530}00530\ \ \ \ \ \textcolor{keyword}{auto}\ tid\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_a6197a324f9a16fdf1b3990df4eb7ddd3}{GlobalScheduler::next\_tid}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00531}00531\ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}}\ =\ tid;}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00532}00532\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00533}00533\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ thread\ ID}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00534}00534\ \ \ \ \ \textcolor{keywordflow}{return}\ tid;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00535}00535\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00536}00536\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00542}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a349f28166719d94bd978439f24cd2448}{00542}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a349f28166719d94bd978439f24cd2448}{Scheduler::ticks}}()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00543}00543\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00544}00544\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_ticks;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00545}00545\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00533}00533\ \ \ \ \ \textcolor{comment}{//\ Add\ the\ thread\ to\ the\ list}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00534}00534\ \ \ \ \ m\_threads.push\_back(thread);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00535}00535\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00536}00536\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ thread\ ID}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00537}00537\ \ \ \ \ \textcolor{keywordflow}{return}\ tid;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00538}00538\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00539}00539\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00545}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a349f28166719d94bd978439f24cd2448}{00545}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a349f28166719d94bd978439f24cd2448}{Scheduler::ticks}}()\textcolor{keyword}{\ const\ }\{}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00546}00546\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00550}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4e3cb6c6cc95d62dc6149c0ec934c723}{00550}}\ cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4e3cb6c6cc95d62dc6149c0ec934c723}{Scheduler::yield}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00551}00551\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00552}00552\ \ \ \ \ \textcolor{comment}{//\ If\ this\ is\ the\ only\ thread,\ can't\ yield}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00553}00553\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_threads.size()\ <=\ 1)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00554}00554\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00555}00555\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00556}00556\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ current\ thread\ to\ waiting\ if\ running}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00557}00557\ \ \ \ \ \textcolor{keyword}{auto}\ thread\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00558}00558\ \ \ \ \ \textcolor{keywordflow}{if}\ (thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ ==\ ThreadState::RUNNING)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00559}00559\ \ \ \ \ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ ThreadState::READY;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00547}00547\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_ticks;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00548}00548\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00549}00549\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00555}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4e3cb6c6cc95d62dc6149c0ec934c723}{00555}}\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4e3cb6c6cc95d62dc6149c0ec934c723}{Scheduler::yield}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00556}00556\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00557}00557\ \ \ \ \ \textcolor{comment}{//\ If\ this\ is\ the\ only\ thread,\ can't\ yield}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00558}00558\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_threads.size()\ <=\ 1)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00559}00559\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}};}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00560}00560\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00561}00561\ \ \ \ \ \textcolor{comment}{//\ Schedule\ the\ next\ thread}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00562}00562\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(\&thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}});}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00563}00563\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00564}00564\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00568}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ad7bd11e0611b0cad2fc18e3499d82dec}{00568}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ad7bd11e0611b0cad2fc18e3499d82dec}{Scheduler::activate}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00561}00561\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ current\ thread\ to\ waiting\ if\ running}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00562}00562\ \ \ \ \ \textcolor{keyword}{auto}\ thread\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00563}00563\ \ \ \ \ \textcolor{keywordflow}{if}\ (thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ ==\ ThreadState::RUNNING)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00564}00564\ \ \ \ \ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ ThreadState::READY;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00565}00565\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00566}00566\ \ \ \ \ \textcolor{comment}{//\ Schedule\ the\ next\ thread}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00567}00567\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(\&thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a920e84f873b5ad33355fbde1fb2d8047}{execution\_state}});}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00568}00568\ \}}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00569}00569\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00570}00570\ \ \ \ \ m\_active\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00571}00571\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00572}00572\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00579}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a00c2995b3a91021eb4f278a591ff994f}{00579}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a00c2995b3a91021eb4f278a591ff994f}{Scheduler::remove\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00580}00580\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00581}00581\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ process\ has\ no\ threads}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00582}00582\ \ \ \ \ \textcolor{keywordflow}{if}\ (!process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}().empty())\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00583}00583\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00584}00584\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ threads\ to\ stopped\ or\ remove\ them\ if\ forced}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00585}00585\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}())}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00586}00586\ \ \ \ \ \ \ \ \ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ ThreadState::STOPPED;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00587}00587\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00588}00588\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Need\ to\ wait\ until\ the\ threads\ are\ stopped\ before\ removing\ the\ process\ (this\ will\ be\ called\ again\ when\ all\ threads\ are\ stopped)}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00589}00589\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00590}00590\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00591}00591\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00573}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ad7bd11e0611b0cad2fc18e3499d82dec}{00573}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ad7bd11e0611b0cad2fc18e3499d82dec}{Scheduler::activate}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00574}00574\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00575}00575\ \ \ \ \ m\_active\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00576}00576\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00577}00577\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00584}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a00c2995b3a91021eb4f278a591ff994f}{00584}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a00c2995b3a91021eb4f278a591ff994f}{Scheduler::remove\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00585}00585\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00586}00586\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ process\ has\ no\ threads}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00587}00587\ \ \ \ \ \textcolor{keywordflow}{if}\ (!process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}().empty())\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00588}00588\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00589}00589\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ threads\ to\ stopped\ or\ remove\ them\ if\ forced}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00590}00590\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}())}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00591}00591\ \ \ \ \ \ \ \ \ \ \ \ \ thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a07fecafeda2dc5867ef07db926de4617}{thread\_state}}\ =\ ThreadState::STOPPED;}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00592}00592\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00593}00593\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ process}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00594}00594\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint32\_t\ i\ =\ 0;\ i\ <\ m\_processes.size();\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00595}00595\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_processes[i]\ ==\ process)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00596}00596\ \ \ \ \ \ \ \ \ \ \ \ \ m\_processes.erase(m\_processes.begin()\ +\ i);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00593}00593\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Need\ to\ wait\ until\ the\ threads\ are\ stopped\ before\ removing\ the\ process\ (this\ will\ be\ called\ again\ when\ all\ threads\ are\ stopped)}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00594}00594\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00595}00595\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00596}00596\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00597}00597\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00598}00598\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ process\ mem}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00599}00599\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ process;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00600}00600\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00601}00601\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00602}00602\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00603}00603\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00604}00604\ \ \ \ \ \textcolor{comment}{//\ Process\ not\ found}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00605}00605\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00606}00606\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00607}00607\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00614}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a501213a82c4fa7c7aa8bc6ff39377c0f}{00614}}\ cpu\_status\_t*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a501213a82c4fa7c7aa8bc6ff39377c0f}{Scheduler::force\_remove\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00615}00615\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00616}00616\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ process,\ fail}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00617}00617\ \ \ \ \ \textcolor{keywordflow}{if}\ (!process)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00618}00618\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00619}00619\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00620}00620\ \ \ \ \ \textcolor{comment}{//\ Remove\ all\ the\ threads}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00621}00621\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}())\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00622}00622\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00623}00623\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ thread\ from\ the\ scheduler}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00624}00624\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ m\_threads.find(thread)\ -\/\ m\_threads.begin();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00625}00625\ \ \ \ \ \ \ \ \ m\_threads.erase(m\_threads.begin()\ +\ index);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00626}00626\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00627}00627\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ thread}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00628}00628\ \ \ \ \ \ \ \ \ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\_thread}}(thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}});}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00629}00629\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00630}00630\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00598}00598\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ process}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00599}00599\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint32\_t\ i\ =\ 0;\ i\ <\ m\_processes.size();\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00600}00600\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_processes[i]\ ==\ process)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00601}00601\ \ \ \ \ \ \ \ \ \ \ \ \ m\_processes.erase(m\_processes.begin()\ +\ i);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00602}00602\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00603}00603\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ process\ mem}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00604}00604\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ process;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00605}00605\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00606}00606\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00607}00607\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00608}00608\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00609}00609\ \ \ \ \ \textcolor{comment}{//\ Process\ not\ found}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00610}00610\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00611}00611\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00612}00612\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00619}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a501213a82c4fa7c7aa8bc6ff39377c0f}{00619}}\ \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{cpu\_status\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a501213a82c4fa7c7aa8bc6ff39377c0f}{Scheduler::force\_remove\_process}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ process)\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00620}00620\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00621}00621\ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ no\ process,\ fail}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00622}00622\ \ \ \ \ \textcolor{keywordflow}{if}\ (!process)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00623}00623\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00624}00624\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00625}00625\ \ \ \ \ \textcolor{comment}{//\ Remove\ all\ the\ threads}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00626}00626\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a8595e1ab73f585be41005a6bbd88eb2f}{threads}}())\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00627}00627\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00628}00628\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ thread\ from\ the\ scheduler}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00629}00629\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ index\ =\ m\_threads.find(thread)\ -\/\ m\_threads.begin();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00630}00630\ \ \ \ \ \ \ \ \ m\_threads.erase(m\_threads.begin()\ +\ index);}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00631}00631\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00632}00632\ \ \ \ \ \textcolor{comment}{//\ Process\ will\ be\ dead\ now\ so\ run\ the\ next\ process\ (don't\ care\ about\ the\ execution\ state\ being\ outdated\ as\ it\ is\ being}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00633}00633\ \ \ \ \ \textcolor{comment}{//\ removed\ regardless)}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00634}00634\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(\&\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>execution\_state);}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00635}00635\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00632}00632\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Delete\ the\ thread}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00633}00633\ \ \ \ \ \ \ \ \ process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af57385b2fab714504b20e95ceb0a8bbd}{remove\_thread}}(thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}});}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00634}00634\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00635}00635\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00636}00636\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00642}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{00642}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{Scheduler::current\_process}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00643}00643\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00644}00644\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00645}00645\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00646}00646\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ process\ that\ has\ the\ thread\ being\ executed}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00647}00647\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ process:\ m\_processes)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00648}00648\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}()\ ==\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a130e3726d7c4912ab2fdf6bf587f757f}{parent\_pid}})\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00649}00649\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}\ =\ process;}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00650}00650\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00651}00651\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00652}00652\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00653}00653\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00654}00654\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00655}00655\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00662}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a51b58af8b283f0f98131dd2d6ce51540}{00662}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a51b58af8b283f0f98131dd2d6ce51540}{Scheduler::get\_process}}(uint64\_t\ pid)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00663}00663\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00664}00664\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ process}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00665}00665\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ process:\ m\_processes)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00666}00666\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}()\ ==\ pid)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00667}00667\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ process;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00637}00637\ \ \ \ \ \textcolor{comment}{//\ Process\ will\ be\ dead\ now\ so\ run\ the\ next\ process\ (don't\ care\ about\ the\ execution\ state\ being\ outdated\ as\ it\ is\ being}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00638}00638\ \ \ \ \ \textcolor{comment}{//\ removed\ regardless)}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00639}00639\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af0094b696d420844c5475311e556dd70}{schedule\_next}}(\&\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>execution\_state);}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00640}00640\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00641}00641\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00647}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{00647}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{Scheduler::current\_process}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00648}00648\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00649}00649\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00650}00650\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00651}00651\ \ \ \ \ \textcolor{comment}{//\ Find\ the\ process\ that\ has\ the\ thread\ being\ executed}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00652}00652\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ process:\ m\_processes)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00653}00653\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}()\ ==\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{current\_thread}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a130e3726d7c4912ab2fdf6bf587f757f}{parent\_pid}})\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00654}00654\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}}\ =\ process;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00655}00655\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00656}00656\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00657}00657\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00658}00658\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ae6984a0be65698916c382ed9abd9fc79}{current\_process}};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00659}00659\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00660}00660\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00667}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a51b58af8b283f0f98131dd2d6ce51540}{00667}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Process}{Process}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a51b58af8b283f0f98131dd2d6ce51540}{Scheduler::get\_process}}(uint64\_t\ pid)\ \{}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00668}00668\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00669}00669\ \ \ \ \ \textcolor{comment}{//\ Not\ found}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00670}00670\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00671}00671\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00672}00672\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00677}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}{00677}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}{Scheduler::process\_amount}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00678}00678\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_processes.size();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00679}00679\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00680}00680\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00686}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{00686}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{Scheduler::current\_thread}}()\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00687}00687\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00688}00688\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_threads[m\_next\_thread\_index];}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00689}00689\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00690}00690\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00695}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}{00695}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}{Scheduler::thread\_amount}}()\{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00696}00696\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_threads.size();}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00697}00697\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00698}00698\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00702}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af4792bed046b34d0010412e336ec2970}{00702}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af4792bed046b34d0010412e336ec2970}{Scheduler::deactivate}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00669}00669\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ process}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00670}00670\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ process:\ m\_processes)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00671}00671\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (process-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}()\ ==\ pid)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00672}00672\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ process;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00673}00673\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00674}00674\ \ \ \ \ \textcolor{comment}{//\ Not\ found}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00675}00675\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00676}00676\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00677}00677\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00682}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}{00682}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_ab16bfaa6ff6992298aa292a22ebe8397}{Scheduler::process\_amount}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00683}00683\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_processes.size();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00684}00684\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00685}00685\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00691}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{00691}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a4b29a981d21849fa08d64a51a5111932}{Scheduler::current\_thread}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00692}00692\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00693}00693\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_threads[m\_next\_thread\_index];}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00694}00694\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00695}00695\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00700}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}{00700}}\ uint64\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a3ce2093679daf9acde62bbabc020728e}{Scheduler::thread\_amount}}()\{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00701}00701\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_threads.size();}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00702}00702\ \}}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00703}00703\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00704}00704\ \ \ \ \ m\_active\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00705}00705\ \}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00706}00706\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00713}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a73cf68e70de225ce465f249989766468}{00713}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a73cf68e70de225ce465f249989766468}{Scheduler::get\_thread}}(uint64\_t\ tid)\ \{}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00714}00714\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00715}00715\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ thread}}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00716}00716\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ m\_threads)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00717}00717\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}}\ ==\ tid)}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00718}00718\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ thread;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00707}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af4792bed046b34d0010412e336ec2970}{00707}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_af4792bed046b34d0010412e336ec2970}{Scheduler::deactivate}}()\ \{}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00708}00708\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00709}00709\ \ \ \ \ m\_active\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00710}00710\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00711}00711\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00718}\mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a73cf68e70de225ce465f249989766468}{00718}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread}{Thread}}*\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Scheduler_a73cf68e70de225ce465f249989766468}{Scheduler::get\_thread}}(uint64\_t\ tid)\ \{}
 \DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00719}00719\ }
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00720}00720\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00721}00721\ \}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00720}00720\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ find\ the\ thread}}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00721}00721\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ thread:\ m\_threads)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00722}00722\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (thread-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a29d70fe3b961ad7389f00976bc5f7e0b}{tid}}\ ==\ tid)}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00723}00723\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ thread;}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00724}00724\ }
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00725}00725\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{scheduler_8cpp_source_l00726}00726\ \}}
 
 \end{DoxyCode}

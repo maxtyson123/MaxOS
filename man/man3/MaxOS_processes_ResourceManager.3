@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::ResourceManager" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::ResourceManager" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,15 +13,19 @@ MaxOS::processes::ResourceManager \- Manages the open resources for a process\&.
 
 .in +1c
 .ti -1c
+.RI "\fB~ResourceManager\fP ()"
+.br
+.RI "Destructor for \fBResourceManager\fP, closes all open resources\&. "
+.ti -1c
 .RI "\fBcommon::Map\fP< uint64_t, \fBResource\fP * > \fBresources\fP ()"
 .br
 .RI "Get the resources currently open\&. "
 .ti -1c
-.RI "uint64_t \fBopen_resource\fP (resource_type_t \fBtype\fP, const \fBstring\fP &\fBname\fP, size_t \fBflags\fP)"
+.RI "uint64_t \fBopen_resource\fP (\fBresource_type_t\fP type, const \fBstring\fP &name, size_t flags)"
 .br
 .RI "Registers a resource with the resource manager and then opens it\&. "
 .ti -1c
-.RI "void \fBclose_resource\fP (uint64_t handle, size_t \fBflags\fP)"
+.RI "void \fBclose_resource\fP (uint64_t handle, size_t flags)"
 .br
 .RI "Un registers the resource and then closes it\&. "
 .ti -1c
@@ -29,7 +33,7 @@ MaxOS::processes::ResourceManager \- Manages the open resources for a process\&.
 .br
 .RI "Gets a resource based on the handle id\&. "
 .ti -1c
-.RI "\fBResource\fP * \fBget_resource\fP (const \fBstring\fP &\fBname\fP)"
+.RI "\fBResource\fP * \fBget_resource\fP (const \fBstring\fP &name)"
 .br
 .RI "Finds a resource by name\&. "
 .in -1c
@@ -37,28 +41,32 @@ MaxOS::processes::ResourceManager \- Manages the open resources for a process\&.
 .PP 
 Manages the open resources for a process\&. 
 .PP
-Definition at line \fB134\fP of file \fBresource\&.h\fP\&.
+Definition at line \fB141\fP of file \fBresource\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "ResourceManager::~ResourceManager ()"
 
 .PP
-Definition at line \fB249\fP of file \fBresource\&.cpp\fP\&..PP
+Destructor for \fBResourceManager\fP, closes all open resources\&. 
+.PP
+Definition at line \fB261\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-249                                  {
-250 
-251     // Collect all resources (as closing will break iteration)
-252     common::Vector<uint64_t> handles;
-253     for (const auto& kv : m_resources)
-254         handles\&.push_back(kv\&.first);
-255 
-256     // Close the resources
-257     for (auto h : handles)
-258         close_resource(h, 0);
-259 
-260 };
+261                                  {
+262 
+263     // Collect all resources (as closing will break iteration)
+264     common::Vector<uint64_t> handles;
+265     for (const auto& kv : m_resources)
+266         handles\&.push_back(kv\&.first);
+267 
+268     // Close the resources
+269     for (auto h : handles)
+270         close_resource(h, 0);
+271 
+272 }
 .fi
 
+.PP
+References \fBclose_resource()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "void ResourceManager::close_resource (uint64_t handle, size_t flags)"
@@ -75,27 +83,27 @@ Un registers the resource and then closes it\&.
 .PP
 
 .PP
-Definition at line \fB301\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB313\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-301                                                                   {
-302 
-303     auto it = m_resources\&.find(handle);
-304     if(it == m_resources\&.end())
-305         return;
-306 
-307     // Remove it
-308     Resource* resource = it\->second;
-309     m_resources\&.erase(handle);
-310 
-311     // Close it
-312     GlobalResourceRegistry::get_registry(resource\->type()) \-> close_resource(resource, flags);
-313 }
+313                                                                   {
+314 
+315     auto it = m_resources\&.find(handle);
+316     if(it == m_resources\&.end())
+317         return;
+318 
+319     // Remove it
+320     Resource* resource = it\->second;
+321     m_resources\&.erase(handle);
+322 
+323     // Close it
+324     GlobalResourceRegistry::get_registry(resource\->type()) \-> close_resource(resource, flags);
+325 }
 .fi
 
 .PP
-References \fBclose_resource()\fP, \fBflags\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, and \fBMaxOS::processes::Resource::type()\fP\&.
+References \fBclose_resource()\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, and \fBMaxOS::processes::Resource::type()\fP\&.
 .PP
-Referenced by \fBclose_resource()\fP\&.
+Referenced by \fBclose_resource()\fP, and \fB~ResourceManager()\fP\&.
 .SS "\fBResource\fP * ResourceManager::get_resource (const \fBstring\fP & name)"
 
 .PP
@@ -113,20 +121,18 @@ The resource or nullptr if not found
 .PP
 
 .PP
-Definition at line \fB335\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB347\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-335                                                           {
-336 
-337     for(const auto& resource : m_resources)
-338         if(resource\&.second\->name() == name)
-339             return resource\&.second;
-340 
-341     return nullptr;
-342 }
+347                                                           {
+348 
+349     for(const auto& resource : m_resources)
+350         if(resource\&.second\->name() == name)
+351             return resource\&.second;
+352 
+353     return nullptr;
+354 }
 .fi
 
-.PP
-References \fBname\fP\&.
 .SS "\fBResource\fP * ResourceManager::get_resource (uint64_t handle)"
 
 .PP
@@ -144,20 +150,20 @@ The resource or nullptr if not found
 .PP
 
 .PP
-Definition at line \fB321\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB333\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-321                                                        {
-322 
-323     if(m_resources\&.find(handle) == m_resources\&.end())
-324         return nullptr;
-325 
-326     return m_resources[handle];
-327 }
+333                                                        {
+334 
+335     if(m_resources\&.find(handle) == m_resources\&.end())
+336         return nullptr;
+337 
+338     return m_resources[handle];
+339 }
 .fi
 
 .PP
 Referenced by \fBopen_resource()\fP\&.
-.SS "uint64_t ResourceManager::open_resource (resource_type_t type, const \fBstring\fP & name, size_t flags)"
+.SS "uint64_t ResourceManager::open_resource (\fBresource_type_t\fP type, const \fBstring\fP & name, size_t flags)"
 
 .PP
 Registers a resource with the resource manager and then opens it\&. 
@@ -178,26 +184,26 @@ The handle id of the resource or 0 if failed
 .PP
 
 .PP
-Definition at line \fB280\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB292\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-280                                                                                               {
-281 
-282     // Get the resource
-283     auto resource = GlobalResourceRegistry::get_registry(type) \-> get_resource(name);
-284     if(!resource)
-285         return 0;
-286 
-287     // Store it
-288     m_resources\&.insert(m_next_handle, resource);
-289 
-290     // Open it
-291     resource\->open(flags);
-292     return m_next_handle++;
-293 }
+292                                                                                               {
+293 
+294     // Get the resource
+295     auto resource = GlobalResourceRegistry::get_registry(type) \-> get_resource(name);
+296     if(!resource)
+297         return 0;
+298 
+299     // Store it
+300     m_resources\&.insert(m_next_handle, resource);
+301 
+302     // Open it
+303     resource\->open(flags);
+304     return m_next_handle++;
+305 }
 .fi
 
 .PP
-References \fBflags\fP, \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, \fBget_resource()\fP, \fBname\fP, and \fBtype\fP\&.
+References \fBMaxOS::processes::GlobalResourceRegistry::get_registry()\fP, and \fBget_resource()\fP\&.
 .SS "\fBcommon::Map\fP< uint64_t, \fBResource\fP * > ResourceManager::resources ()"
 
 .PP
@@ -210,12 +216,12 @@ The resources
 .PP
 
 .PP
-Definition at line \fB267\fP of file \fBresource\&.cpp\fP\&..PP
+Definition at line \fB279\fP of file \fBresource\&.cpp\fP\&..PP
 .nf
-267                                                           {
-268 
-269     return m_resources;
-270 }
+279                                                           {
+280 
+281     return m_resources;
+282 }
 .fi
 
 

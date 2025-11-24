@@ -1,4 +1,4 @@
-.TH "MaxOS::common::GenericInputStream< Type >" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::GenericInputStream< Type >" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -59,7 +59,7 @@ class MaxOS::common::GenericInputStream< Type >"Manages the connection of a stre
 .PP
 
 .PP
-Definition at line \fB108\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB102\fP of file \fBinputStream\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::GenericInputStream\fP< \fBType\fP >::GenericInputStream ()\fC [default]\fP"
@@ -73,7 +73,7 @@ Creates a new \fBGenericInputStream\fP\&.
 .RE
 .PP
 
-.SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::GenericInputStream\fP< \fBType\fP >::GenericInputStream (\fBInputStreamEventHandler\fP< \fBType\fP > * input_stream_event_handler)"
+.SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::GenericInputStream\fP< \fBType\fP >::GenericInputStream (\fBInputStreamEventHandler\fP< \fBType\fP > * input_stream_event_handler)\fC [explicit]\fP"
 
 .PP
 Creates a new \fBGenericInputStream\fP and connects it to the handler\&. 
@@ -90,13 +90,13 @@ Creates a new \fBGenericInputStream\fP and connects it to the handler\&.
 .PP
 
 .PP
-Definition at line \fB387\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB376\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-387                                                                                                                                    {
-388 
-389             // Connect the handler
-390             connect_input_stream_event_handler(input_stream_event_handler);
-391         }
+376                                                                                                                                {
+377 
+378         // Connect the handler
+379         connect_input_stream_event_handler(input_stream_event_handler);
+380     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBMaxOS::common::GenericInputStream\fP< \fBType\fP >::~\fBGenericInputStream\fP ()"
@@ -111,14 +111,14 @@ Destroys the \fBGenericInputStream\fP and disconnects all handlers\&.
 .PP
 
 .PP
-Definition at line \fB398\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB387\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-398                                                                            {
-399 
-400             // Disconnect all handlers
-401             while (!m_input_stream_event_handlers\&.empty())
-402               disconnect_input_stream_event_handler(*(m_input_stream_event_handlers\&.begin()));
-403         }
+387                                                                        {
+388 
+389         // Disconnect all handlers
+390         while(!m_input_stream_event_handlers\&.empty())
+391             disconnect_input_stream_event_handler(*(m_input_stream_event_handlers\&.begin()));
+392     }
 .fi
 
 .SH "Member Function Documentation"
@@ -140,18 +140,18 @@ Adds a inputStreamEventHandler to the list of internetProtocolHandlers\&.
 .PP
 
 .PP
-Definition at line \fB410\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB399\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-410                                                                                                                                                         {
-411 
-412             // Don't add the handler if it is already connected
-413             if(m_input_stream_event_handlers\&.find(input_stream_event_handler) != m_input_stream_event_handlers\&.end())
-414                 return;
-415 
-416             // Add the handler
-417             m_input_stream_event_handlers\&.push_back(input_stream_event_handler);
-418 
-419         }
+399                                                                                                                                                     {
+400 
+401         // Don't add the handler if it is already connected
+402         if(m_input_stream_event_handlers\&.find(input_stream_event_handler) != m_input_stream_event_handlers\&.end())
+403             return;
+404 
+405         // Add the handler
+406         m_input_stream_event_handlers\&.push_back(input_stream_event_handler);
+407 
+408     }
 .fi
 
 .SS "template<\fBclass\fP \fBType\fP > \fBvoid\fP \fBMaxOS::common::GenericInputStream\fP< \fBType\fP >::disconnect_input_stream_event_handler (\fBInputStreamEventHandler\fP< \fBType\fP > * input_stream_event_handler)"
@@ -171,21 +171,21 @@ Removes a handler from the list of handlers\&.
 .PP
 
 .PP
-Definition at line \fB427\fP of file \fBinputStream\&.h\fP\&..PP
+Definition at line \fB416\fP of file \fBinputStream\&.h\fP\&..PP
 .nf
-427                                                                                                                                                            {
-428 
-429             // Don't remove the handler if it is not connected
-430             if(m_input_stream_event_handlers\&.find(input_stream_event_handler) == m_input_stream_event_handlers\&.end())
-431                 return;
-432 
-433             // Remove the handler
-434             m_input_stream_event_handlers\&.erase(input_stream_event_handler);
-435 
-436             // Fire the end of stream event
-437             input_stream_event_handler\->on_end_of_stream(this);
-438 
-439         }
+416                                                                                                                                                        {
+417 
+418         // Don't remove the handler if it is not connected
+419         if(m_input_stream_event_handlers\&.find(input_stream_event_handler) == m_input_stream_event_handlers\&.end())
+420             return;
+421 
+422         // Remove the handler
+423         m_input_stream_event_handlers\&.erase(input_stream_event_handler);
+424 
+425         // Fire the end of stream event
+426         input_stream_event_handler\->on_end_of_stream(this);
+427 
+428     }
 .fi
 
 .PP
@@ -197,7 +197,7 @@ References \fBMaxOS::common::InputStreamEventHandler< Type >::on_end_of_stream()
 .PP
 List of streams being observed by this handler\&. 
 .PP
-Definition at line \fB111\fP of file \fBinputStream\&.h\fP\&.
+Definition at line \fB105\fP of file \fBinputStream\&.h\fP\&.
 
 .SH "Author"
 .PP 

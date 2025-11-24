@@ -1,12 +1,12 @@
 var structMaxOS_1_1net_1_1ARPMessage =
 [
     [ "command", "structMaxOS_1_1net_1_1ARPMessage.html#aba3fc19694ab7c5e5cf4c5e891889eb9", null ],
-    [ "dstIP", "structMaxOS_1_1net_1_1ARPMessage.html#aeba67c0e57bce43fdd6a125c95eebcb9", null ],
-    [ "dstMAC", "structMaxOS_1_1net_1_1ARPMessage.html#abdad0755c2db2b3700a20d8a3bf0db54", null ],
-    [ "hardwareAddressSize", "structMaxOS_1_1net_1_1ARPMessage.html#a0855c36113b369db73e56765a69885f4", null ],
-    [ "hardwareType", "structMaxOS_1_1net_1_1ARPMessage.html#a10234a96b8c4cfac10a96e2a95b76102", null ],
+    [ "dst_ip", "structMaxOS_1_1net_1_1ARPMessage.html#aacec74fb278b59f54d160653e3db3752", null ],
+    [ "dst_mac", "structMaxOS_1_1net_1_1ARPMessage.html#af4b7b74d97e3b26c4ca3a89f6c410ffc", null ],
+    [ "hardware_address_size", "structMaxOS_1_1net_1_1ARPMessage.html#ac1fdf6e2ffd6e326cc93c16389451802", null ],
+    [ "hardware_type", "structMaxOS_1_1net_1_1ARPMessage.html#a0e6d113339b7534f341f5a9600daaca0", null ],
     [ "protocol", "structMaxOS_1_1net_1_1ARPMessage.html#a748f8730648038b4b1fb0e502fee34e6", null ],
-    [ "protocolAddressSize", "structMaxOS_1_1net_1_1ARPMessage.html#a975ad79bd46709fbc0488b2f6bdef7f6", null ],
-    [ "srcIP", "structMaxOS_1_1net_1_1ARPMessage.html#af17f9e2518394831d6f4ff8edb1ceab1", null ],
-    [ "srcMAC", "structMaxOS_1_1net_1_1ARPMessage.html#ad20713f7b60be76c8bcc387e9fe9a09a", null ]
+    [ "protocol_address_size", "structMaxOS_1_1net_1_1ARPMessage.html#a96789983003b6eb642bda4df430988f1", null ],
+    [ "src_ip", "structMaxOS_1_1net_1_1ARPMessage.html#aebedb637d4b630ca937400a338434a66", null ],
+    [ "src_mac", "structMaxOS_1_1net_1_1ARPMessage.html#a1de65bf9ebb4927dba3bc0f05a2105f5", null ]
 ];

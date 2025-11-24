@@ -1,0 +1,524 @@
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/kasan.cpp" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/runner/work/MaxOS/MaxOS/kernel/src/runtime/kasan.cpp \- Implementation of the Kernel Address Sanitizer (KASan) handler\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <runtime/kasan\&.h>\fP
+.br
+\fC#include <common/logger\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fB__asan_load1_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory load access violation of 1 byte is detected\&. "
+.ti -1c
+.RI "void \fB__asan_load2_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory load access violation of 2 bytes is detected\&. "
+.ti -1c
+.RI "void \fB__asan_load4_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory load access violation of 4 bytes is detected\&. "
+.ti -1c
+.RI "void \fB__asan_load8_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory load access violation of 8 bytes is detected\&. "
+.ti -1c
+.RI "void \fB__asan_load16_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory load access violation of 16 bytes is detected\&. "
+.ti -1c
+.RI "void \fB__asan_loadN_noabort\fP (uintptr_t address, size_t size)"
+.br
+.RI "Triggered when a memory load access violation of arbitrary size is detected\&. "
+.ti -1c
+.RI "void \fB__asan_store1_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory store access violation of 1 byte is detected\&. "
+.ti -1c
+.RI "void \fB__asan_store2_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory store access violation of 2 bytes is detected\&. "
+.ti -1c
+.RI "void \fB__asan_store4_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory store access violation of 4 bytes is detected\&. "
+.ti -1c
+.RI "void \fB__asan_store8_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory store access violation of 8 bytes is detected\&. "
+.ti -1c
+.RI "void \fB__asan_store16_noabort\fP (uintptr_t address)"
+.br
+.RI "Triggered when a memory store access violation of 16 bytes is detected\&. "
+.ti -1c
+.RI "void \fB__asan_storeN_noabort\fP (uintptr_t address, size_t size)"
+.br
+.RI "Triggered when a memory store access violation of arbitrary size is detected\&. "
+.ti -1c
+.RI "void \fB__asan_handle_no_return\fP ()"
+.br
+.RI "Triggered when a function that is expected to not return does return\&. "
+.ti -1c
+.RI "void \fB__asan_alloca_poison\fP (uintptr_t address, size_t size)"
+.br
+.RI "Poisons a region of stack memory allocated with alloca\&. "
+.ti -1c
+.RI "void \fB__asan_alloca_unpoison\fP (void *stack_top, void *stack_bottom)"
+.br
+.RI "Unpoisons a region of stack memory allocated with alloca\&. "
+.ti -1c
+.RI "void \fB__asan_set_shadow_00\fP (void *pointer, size_t size)"
+.br
+.RI "Unpoisons a region of memory, marking it as accessible\&. "
+.ti -1c
+.RI "void \fB__asan_set_shadow_f8\fP (void *pointer, size_t size)"
+.br
+.RI "Poisons a region of memory, marking it as inaccessible\&. "
+.ti -1c
+.RI "void \fB__asan_before_dynamic_init\fP (const void *module_name)"
+.br
+.RI "Called before dynamic initialization of a module\&. "
+.ti -1c
+.RI "void \fB__asan_after_dynamic_init\fP (const void *module_name)"
+.br
+.RI "Called after dynamic initialization of a module\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Implementation of the Kernel Address Sanitizer (KASan) handler\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+22nd November 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBkasan\&.cpp\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void __asan_after_dynamic_init (const void * module_name)"
+
+.PP
+Called after dynamic initialization of a module\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImodule_name\fP The name of the module that was initialized 
+.RE
+.PP
+
+.PP
+Definition at line \fB239\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+239                                                                     {
+240     // Nothing to do
+241  }
+.fi
+
+.SS "void __asan_alloca_poison (uintptr_t address, size_t size)"
+
+.PP
+Poisons a region of stack memory allocated with alloca\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The starting address of the allocated memory 
+.br
+\fIsize\fP The size of the allocated memory in bytes 
+.RE
+.PP
+
+.PP
+Definition at line \fB181\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+181                                                                      {
+182     //TODO: Implement stack poisoning
+183     ASSERT(false, "KASAN ERROR: Stack poisoning not implemented for address 0x%lx of size %zu", address, size);
+184 }
+.fi
+
+.PP
+References \fBASSERT\fP\&.
+.SS "void __asan_alloca_unpoison (void * stack_top, void * stack_bottom)"
+
+.PP
+Unpoisons a region of stack memory allocated with alloca\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstack_top\fP The top address of the allocated memory 
+.br
+\fIstack_bottom\fP The bottom address of the allocated memory 
+.RE
+.PP
+
+.PP
+Definition at line \fB192\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+192                                                                             {
+193     //TODO: Implement stack unpoisoning
+194     ASSERT(false, "KASAN ERROR: Stack unpoisoning not implemented for range 0x%p \- 0x%p", stack_bottom, stack_top);
+195 }
+.fi
+
+.PP
+References \fBASSERT\fP\&.
+.SS "void __asan_before_dynamic_init (const void * module_name)"
+
+.PP
+Called before dynamic initialization of a module\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImodule_name\fP The name of the module being initialized 
+.RE
+.PP
+
+.PP
+Definition at line \fB230\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+230                                                                     {
+231     // Nothing to do
+232 }
+.fi
+
+.SS "void __asan_handle_no_return ()"
+
+.PP
+Triggered when a function that is expected to not return does return\&. 
+.PP
+Definition at line \fB171\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+171                                           {
+172     ASSERT(false, "KASAN ERROR: Function marked 'noreturn' has returned");
+173 }
+.fi
+
+.PP
+References \fBASSERT\fP\&.
+.SS "void __asan_load16_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory load access violation of 16 bytes is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB99\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+99                                                          {
+100     KASanHandler::handle(false, address, 16, __builtin_return_address(0));
+101 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_load1_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory load access violation of 1 byte is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB63\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+63                                                         {
+64     KASanHandler::handle(false, address, 1, __builtin_return_address(0));
+65 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_load2_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory load access violation of 2 bytes is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB72\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+72                                                         {
+73     KASanHandler::handle(false, address, 2, __builtin_return_address(0));
+74 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_load4_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory load access violation of 4 bytes is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB81\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+81                                                         {
+82     KASanHandler::handle(false, address, 4, __builtin_return_address(0));
+83 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_load8_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory load access violation of 8 bytes is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB90\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+90                                                         {
+91     KASanHandler::handle(false, address, 8, __builtin_return_address(0));
+92 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_loadN_noabort (uintptr_t address, size_t size)"
+
+.PP
+Triggered when a memory load access violation of arbitrary size is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.br
+\fIsize\fP The size of the access in bytes 
+.RE
+.PP
+
+.PP
+Definition at line \fB109\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+109                                                                      {
+110     KASanHandler::handle(false, address, size, __builtin_return_address(0));
+111 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_set_shadow_00 (void * pointer, size_t size)"
+
+.PP
+Unpoisons a region of memory, marking it as accessible\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP The starting address of the memory 
+.br
+\fIsize\fP The size of the memory region in bytes 
+.RE
+.PP
+
+.PP
+Definition at line \fB203\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+203                                                                  {
+204 
+205     // Clear the memory to mark it as unpoisoned
+206     for(int i = 0; i < size; ++i)
+207         ((int8_t*)pointer)[i] = 0;
+208 
+209 }
+.fi
+
+.SS "void __asan_set_shadow_f8 (void * pointer, size_t size)"
+
+.PP
+Poisons a region of memory, marking it as inaccessible\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP The starting address of the memory 
+.br
+\fIsize\fP The size of the memory region in bytes 
+.RE
+.PP
+
+.PP
+Definition at line \fB217\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+217                                                                 {
+218 
+219     // Fill the memory to mark it as poisoned
+220     for(int i = 0; i < size; ++i)
+221         ((int8_t*)pointer)[i] = 0xF8;
+222 
+223 }
+.fi
+
+.SS "void __asan_store16_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory store access violation of 16 bytes is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB154\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+154                                                           {
+155     KASanHandler::handle(true, address, 16, __builtin_return_address(0));
+156 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_store1_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory store access violation of 1 byte is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB118\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+118                                                          {
+119     KASanHandler::handle(true, address, 1, __builtin_return_address(0));
+120 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_store2_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory store access violation of 2 bytes is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB127\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+127                                                          {
+128     KASanHandler::handle(true, address, 2, __builtin_return_address(0));
+129 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_store4_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory store access violation of 4 bytes is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB136\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+136                                                          {
+137     KASanHandler::handle(true, address, 4, __builtin_return_address(0));
+138 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_store8_noabort (uintptr_t address)"
+
+.PP
+Triggered when a memory store access violation of 8 bytes is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.RE
+.PP
+
+.PP
+Definition at line \fB145\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+145                                                          {
+146     KASanHandler::handle(true, address, 8, __builtin_return_address(0));
+147 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SS "void __asan_storeN_noabort (uintptr_t address, size_t size)"
+
+.PP
+Triggered when a memory store access violation of arbitrary size is detected\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address that was accessed 
+.br
+\fIsize\fP The size of the access in bytes 
+.RE
+.PP
+
+.PP
+Definition at line \fB164\fP of file \fBkasan\&.cpp\fP\&..PP
+.nf
+164                                                                       {
+165     KASanHandler::handle(false, address, size, __builtin_return_address(0));
+166 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::KASanHandler::handle()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

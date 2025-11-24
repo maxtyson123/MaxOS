@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::Thread" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::Thread" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -53,11 +53,11 @@ MaxOS::processes::Thread \- The execution context of a sub-process thread\&.
 .br
 .RI "The parent process ID\&. "
 .ti -1c
-.RI "system::cpu_status_t \fBexecution_state\fP"
+.RI "\fBsystem::cpu_status_t\fP \fBexecution_state\fP"
 .br
 .RI "The CPU state of the thread\&. "
 .ti -1c
-.RI "thread_state_t \fBthread_state\fP"
+.RI "\fBthread_state_t\fP \fBthread_state\fP"
 .br
 .RI "The current state of the thread\&. "
 .ti -1c
@@ -73,7 +73,7 @@ MaxOS::processes::Thread \- The execution context of a sub-process thread\&.
 .PP 
 The execution context of a sub-process thread\&. 
 .PP
-Definition at line \fB47\fP of file \fBprocess\&.h\fP\&.
+Definition at line \fB49\fP of file \fBprocess\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Thread::Thread (\fBvoid\fP(*)(\fBvoid\fP *) _entry_point, \fBvoid\fP * args, \fBint\fP arg_amount, \fBProcess\fP * parent)"
@@ -81,57 +81,70 @@ Definition at line \fB47\fP of file \fBprocess\&.h\fP\&.
 .PP
 Constructor for the \fBThread\fP class\&. 
 .PP
-Definition at line \fB21\fP of file \fBprocess\&.cpp\fP\&..PP
+\fBParameters\fP
+.RS 4
+\fI_entry_point\fP The address of the function to start executing 
+.br
+\fIargs\fP The arguments to pass to the function 
+.br
+\fIarg_amount\fP The number of arguments 
+.br
+\fIparent\fP The proccess that owns this thread (started it) 
+.RE
+.PP
+
+.PP
+Definition at line \fB26\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-21                                                                                         {
-22 
-23     // Basic setup
-24     thread_state = ThreadState::NEW;
-25     wakeup_time = 0;
-26     ticks = 0;
+26                                                                                         {
 27 
-28     // Create the stack
-29     m_stack_pointer = (uintptr_t) MemoryManager::malloc(STACK_SIZE);
-30 
-31     // Create the TSS stack
-32     if (parent\->is_kernel) {
-33 
-34         // Use the kernel stack
-35         m_tss_stack_pointer = CPU::executing_core() \-> tss\&.rsp0;
-36 
-37     } else {
-38         m_tss_stack_pointer = (uintptr_t) MemoryManager::kmalloc(STACK_SIZE) + STACK_SIZE;
-39     }
-40 
-41     // Mak sure there is a stack
-42     ASSERT(m_stack_pointer != 0 && m_tss_stack_pointer != 0, "Failed to allocate stack for thread");
-43 
-44     // Set up the execution state
-45     execution_state = {};
-46     execution_state\&.rip = (uint64_t) _entry_point;
-47     execution_state\&.ss = parent\->is_kernel ? 0x10 : 0x23;
-48     execution_state\&.cs = parent\->is_kernel ? 0x8 : 0x1B;
-49     execution_state\&.rflags = 0x202;
-50     execution_state\&.interrupt_number = 0;
-51     execution_state\&.error_code = 0;
-52     execution_state\&.rsp = m_stack_pointer;
-53     execution_state\&.rbp = 0;
-54 
-55     // Copy the args into userspace
-56     uint64_t argc = arg_amount;
-57     void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
-58     memcpy(argv, args, arg_amount * sizeof(void*));
+28     // Basic setup
+29     thread_state = ThreadState::NEW;
+30     wakeup_time = 0;
+31     ticks = 0;
+32 
+33     // Create the stack
+34     m_stack_pointer = (uintptr_t) MemoryManager::malloc(STACK_SIZE);
+35 
+36     // Create the TSS stack
+37     if (parent\->is_kernel) {
+38 
+39         // Use the kernel stack
+40         m_tss_stack_pointer = CPU::executing_core() \-> tss\&.rsp0;
+41 
+42     } else {
+43         m_tss_stack_pointer = (uintptr_t) MemoryManager::kmalloc(STACK_SIZE) + STACK_SIZE;
+44     }
+45 
+46     // Mak sure there is a stack
+47     ASSERT(m_stack_pointer != 0 && m_tss_stack_pointer != 0, "Failed to allocate stack for thread");
+48 
+49     // Set up the execution state
+50     execution_state = {};
+51     execution_state\&.rip = (uint64_t) _entry_point;
+52     execution_state\&.ss = parent\->is_kernel ? 0x10 : 0x23;
+53     execution_state\&.cs = parent\->is_kernel ? 0x8 : 0x1B;
+54     execution_state\&.rflags = 0x202;
+55     execution_state\&.interrupt_number = 0;
+56     execution_state\&.error_code = 0;
+57     execution_state\&.rsp = m_stack_pointer;
+58     execution_state\&.rbp = 0;
 59 
-60     execution_state\&.rdi = argc;
-61     execution_state\&.rsi = (uint64_t) argv;
-62     //execution_state\->rdx = (uint64_t)env_args;
-63 
-64     parent_pid = parent\->pid();
-65 }
+60     // Copy the args into userspace
+61     uint64_t argc = arg_amount;
+62     void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
+63     memcpy(argv, args, arg_amount * sizeof(void*));
+64 
+65     execution_state\&.rdi = argc;
+66     execution_state\&.rsi = (uint64_t) argv;
+67     //execution_state\->rdx = (uint64_t)env_args;
+68 
+69     parent_pid = parent\->pid();
+70 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBMaxOS::system::CPU::executing_core()\fP, \fBexecution_state\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBMaxOS::memory::MemoryManager::malloc()\fP, \fBmemcpy()\fP, \fBparent_pid\fP, \fBthread_state\fP, \fBticks\fP, and \fBwakeup_time\fP\&.
+References \fBASSERT\fP, \fBMaxOS::system::CPU::executing_core()\fP, \fBexecution_state\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBMaxOS::memory::MemoryManager::malloc()\fP, \fBmemcpy()\fP, \fBparent_pid\fP, \fBMaxOS::processes::STACK_SIZE\fP, \fBthread_state\fP, \fBticks\fP, and \fBwakeup_time\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBvoid\fP Thread::restore_sse_state ()"
@@ -139,17 +152,17 @@ References \fBASSERT\fP, \fBMaxOS::system::CPU::executing_core()\fP, \fBexecutio
 .PP
 Restores the SSE, x87 FPU, and MMX states from the thread to memory\&. 
 .PP
-Definition at line \fB100\fP of file \fBprocess\&.cpp\fP\&..PP
+Definition at line \fB105\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-100                                {
-101 
-102     // Ensure the state saving is enabled
-103     if (!CPU::executing_core()\->xsave_enabled)
-104         return;
-105 
-106     // Restore the state
-107     asm volatile("fxrstor %0" : : "m" (m_sse_save_region));
-108 }
+105                                {
+106 
+107     // Ensure the state saving is enabled
+108     if (!CPU::executing_core()\->xsave_enabled)
+109         return;
+110 
+111     // Restore the state
+112     asm volatile("fxrstor %0" : : "m" (m_sse_save_region));
+113 }
 .fi
 
 .PP
@@ -159,64 +172,64 @@ References \fBMaxOS::system::CPU::executing_core()\fP\&.
 .PP
 Saves the CPU state into the thread's execution_state structure\&. 
 .PP
-Definition at line \fB113\fP of file \fBprocess\&.cpp\fP\&..PP
+Definition at line \fB118\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-113                             {
-114     asm volatile(
-115             // Store return address before stack is modified
-116             "movq (%%rsp), %%rax\\n"
-117 
-118             // Store RDI before stack is modified
-119             "pushq %%rdi\\n"
-120             "movq %0, %%rdi\\n"
-121 
-122             // Store general purpose
-123             "movq %%r15, 0x00(%%rdi)\\n"
-124             "movq %%r14, 0x08(%%rdi)\\n"
-125             "movq %%r13, 0x10(%%rdi)\\n"
-126             "movq %%r12, 0x18(%%rdi)\\n"
-127             "movq %%r11, 0x20(%%rdi)\\n"
-128             "movq %%r10, 0x28(%%rdi)\\n"
-129             "movq %%r9,  0x30(%%rdi)\\n"
-130             "movq %%r8,  0x38(%%rdi)\\n"
-131             "movq %%rdi, 0x40(%%rdi)\\n"
-132             "movq %%rsi, 0x48(%%rdi)\\n"
-133             "movq %%rbp, 0x50(%%rdi)\\n"
-134             "movq %%rdx, 0x58(%%rdi)\\n"
-135             "movq %%rcx, 0x60(%%rdi)\\n"
-136             "movq %%rbx, 0x68(%%rdi)\\n"
-137             "movq %%rax, 0x70(%%rdi)\\n"
-138 
-139             // Reserved
-140             "movq $0,    0x78(%%rdi)\\n"
-141             "movq $0,    0x80(%%rdi)\\n"
-142 
-143             // RIP from earlier
-144             "movq %%rax, 0x88(%%rdi)\\n"
-145 
-146             // Get cs
-147             "xorq %%rax, %%rax\\n"
-148             "movw %%cs, %%ax\\n"
-149             "movq %%rax, 0x90(%%rdi)\\n"
+118                             {
+119     asm volatile(
+120             // Store return address before stack is modified
+121             "movq (%%rsp), %%rax\\n"
+122 
+123             // Store RDI before stack is modified
+124             "pushq %%rdi\\n"
+125             "movq %0, %%rdi\\n"
+126 
+127             // Store general purpose
+128             "movq %%r15, 0x00(%%rdi)\\n"
+129             "movq %%r14, 0x08(%%rdi)\\n"
+130             "movq %%r13, 0x10(%%rdi)\\n"
+131             "movq %%r12, 0x18(%%rdi)\\n"
+132             "movq %%r11, 0x20(%%rdi)\\n"
+133             "movq %%r10, 0x28(%%rdi)\\n"
+134             "movq %%r9,  0x30(%%rdi)\\n"
+135             "movq %%r8,  0x38(%%rdi)\\n"
+136             "movq %%rdi, 0x40(%%rdi)\\n"
+137             "movq %%rsi, 0x48(%%rdi)\\n"
+138             "movq %%rbp, 0x50(%%rdi)\\n"
+139             "movq %%rdx, 0x58(%%rdi)\\n"
+140             "movq %%rcx, 0x60(%%rdi)\\n"
+141             "movq %%rbx, 0x68(%%rdi)\\n"
+142             "movq %%rax, 0x70(%%rdi)\\n"
+143 
+144             // Reserved
+145             "movq $0,    0x78(%%rdi)\\n"
+146             "movq $0,    0x80(%%rdi)\\n"
+147 
+148             // RIP from earlier
+149             "movq %%rax, 0x88(%%rdi)\\n"
 150 
-151             // Store flags
-152             "pushfq\\n"
-153             "popq %%rax\\n"
-154             "movq %%rax, 0x98(%%rdi)\\n"
+151             // Get cs
+152             "xorq %%rax, %%rax\\n"
+153             "movw %%cs, %%ax\\n"
+154             "movq %%rax, 0x90(%%rdi)\\n"
 155 
-156             // Get RSP and SS
-157             "movq %%rsp, 0xA0(%%rdi)\\n"
-158             "xorq %%rax, %%rax\\n"
-159             "movw %%ss, %%ax\\n"
-160             "movq %%rax, 0xA8(%%rdi)\\n"
-161 
-162             // Restore RDI
-163             "popq %%rdi\\n"
-164             :
-165             : "r" (&execution_state)
-166             : "rax", "cc", "memory"
-167             );
-168 }
+156             // Store flags
+157             "pushfq\\n"
+158             "popq %%rax\\n"
+159             "movq %%rax, 0x98(%%rdi)\\n"
+160 
+161             // Get RSP and SS
+162             "movq %%rsp, 0xA0(%%rdi)\\n"
+163             "xorq %%rax, %%rax\\n"
+164             "movw %%ss, %%ax\\n"
+165             "movq %%rax, 0xA8(%%rdi)\\n"
+166 
+167             // Restore RDI
+168             "popq %%rdi\\n"
+169             :
+170             : "r" (&execution_state)
+171             : "rax", "cc", "memory"
+172             );
+173 }
 .fi
 
 .PP
@@ -226,17 +239,17 @@ References \fBexecution_state\fP\&.
 .PP
 Saves the SSE, x87 FPU, and MMX states from memory to the thread\&. 
 .PP
-Definition at line \fB87\fP of file \fBprocess\&.cpp\fP\&..PP
+Definition at line \fB92\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-87                             {
-88 
-89     // Ensure the state saving is enabled
-90     if (!CPU::executing_core()\->xsave_enabled)
-91         return;
-92 
-93     // Save the state
-94     asm volatile("fxsave %0" : "=m" (m_sse_save_region));
-95 }
+92                             {
+93 
+94     // Ensure the state saving is enabled
+95     if (!CPU::executing_core()\->xsave_enabled)
+96         return;
+97 
+98     // Save the state
+99     asm volatile("fxsave %0" : "=m" (m_sse_save_region));
+100 }
 .fi
 
 .PP
@@ -255,14 +268,14 @@ Sleeps the thread for a certain amount of time\&.
 .PP
 
 .PP
-Definition at line \fB77\fP of file \fBprocess\&.cpp\fP\&..PP
+Definition at line \fB82\fP of file \fBprocess\&.cpp\fP\&..PP
 .nf
-77                                       {
-78 
-79     // Update the state
-80     thread_state = ThreadState::SLEEPING;
-81     wakeup_time  = milliseconds;
-82 }
+82                                       {
+83 
+84     // Update the state
+85     thread_state = ThreadState::SLEEPING;
+86     wakeup_time  = milliseconds;
+87 }
 .fi
 
 .PP
@@ -272,15 +285,22 @@ References \fBthread_state\fP, and \fBwakeup_time\fP\&.
 .PP
 Gets the stack pointer to use for the TSS when switching to this thread\&. 
 .PP
-Definition at line \fB71\fP of file \fBprocess\&.h\fP\&.
+\fBReturns\fP
+.RS 4
+tss 
+.RE
+.PP
+
+.PP
+Definition at line \fB73\fP of file \fBprocess\&.h\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "system::cpu_status_t MaxOS::processes::Thread::execution_state"
+.SS "\fBsystem::cpu_status_t\fP MaxOS::processes::Thread::execution_state"
 
 .PP
 The CPU state of the thread\&. 
 .PP
-Definition at line \fB65\fP of file \fBprocess\&.h\fP\&.
+Definition at line \fB67\fP of file \fBprocess\&.h\fP\&.
 .PP
 Referenced by \fBsave_cpu_state()\fP, \fBMaxOS::processes::Scheduler::schedule_next()\fP, \fBThread()\fP, \fBMaxOS::processes::Scheduler::yield()\fP, and \fBMaxOS::processes::GlobalScheduler::yield()\fP\&.
 .SS "uint64_t MaxOS::processes::Thread::parent_pid"
@@ -288,15 +308,15 @@ Referenced by \fBsave_cpu_state()\fP, \fBMaxOS::processes::Scheduler::schedule_n
 .PP
 The parent process ID\&. 
 .PP
-Definition at line \fB63\fP of file \fBprocess\&.h\fP\&.
+Definition at line \fB65\fP of file \fBprocess\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::Scheduler::current_process()\fP, and \fBThread()\fP\&.
-.SS "thread_state_t MaxOS::processes::Thread::thread_state"
+.SS "\fBthread_state_t\fP MaxOS::processes::Thread::thread_state"
 
 .PP
 The current state of the thread\&. 
 .PP
-Definition at line \fB66\fP of file \fBprocess\&.h\fP\&.
+Definition at line \fB68\fP of file \fBprocess\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::Scheduler::remove_process()\fP, \fBMaxOS::processes::Scheduler::schedule_next()\fP, \fBsleep()\fP, \fBThread()\fP, and \fBMaxOS::processes::Scheduler::yield()\fP\&.
 .SS "size_t MaxOS::processes::Thread::ticks"
@@ -304,7 +324,7 @@ Referenced by \fBMaxOS::processes::Scheduler::remove_process()\fP, \fBMaxOS::pro
 .PP
 The number of ticks the thread has run for\&. 
 .PP
-Definition at line \fB68\fP of file \fBprocess\&.h\fP\&.
+Definition at line \fB70\fP of file \fBprocess\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::Scheduler::schedule()\fP, and \fBThread()\fP\&.
 .SS "uint64_t MaxOS::processes::Thread::tid"
@@ -312,7 +332,7 @@ Referenced by \fBMaxOS::processes::Scheduler::schedule()\fP, and \fBThread()\fP\
 .PP
 The thread ID\&. 
 .PP
-Definition at line \fB62\fP of file \fBprocess\&.h\fP\&.
+Definition at line \fB64\fP of file \fBprocess\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::Scheduler::add_process()\fP, \fBMaxOS::processes::Scheduler::add_thread()\fP, \fBMaxOS::processes::Scheduler::force_remove_process()\fP, and \fBMaxOS::processes::Scheduler::get_thread()\fP\&.
 .SS "size_t MaxOS::processes::Thread::wakeup_time"
@@ -320,7 +340,7 @@ Referenced by \fBMaxOS::processes::Scheduler::add_process()\fP, \fBMaxOS::proces
 .PP
 The time at which the thread should wake up (if sleeping) 
 .PP
-Definition at line \fB69\fP of file \fBprocess\&.h\fP\&.
+Definition at line \fB71\fP of file \fBprocess\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::Scheduler::schedule_next()\fP, \fBsleep()\fP, and \fBThread()\fP\&.
 

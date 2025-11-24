@@ -1,4 +1,4 @@
-.TH "MaxOS::filesystem::FileSystem" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::filesystem::FileSystem" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,6 +14,10 @@ Inherited by \fBMaxOS::filesystem::format::Fat32FileSystem\fP, and \fBMaxOS::fil
 .SS "Public Member Functions"
 
 .in +1c
+.ti -1c
+.RI "\fBvirtual\fP \fB~FileSystem\fP ()"
+.br
+.RI "Destructor for \fBFileSystem\fP, frees the root directory (Which in turn frees all files and subdirectories) "
 .ti -1c
 .RI "\fBDirectory\fP * \fBroot_directory\fP ()"
 .br
@@ -31,7 +35,7 @@ Inherited by \fBMaxOS::filesystem::format::Fat32FileSystem\fP, and \fBMaxOS::fil
 
 .in +1c
 .ti -1c
-.RI "\fBDirectory\fP * \fBm_root_directory\fP"
+.RI "\fBDirectory\fP * \fBm_root_directory\fP = nullptr"
 .br
 .RI "The fist directory in the file system (not be confused with the system root) "
 .in -1c
@@ -39,22 +43,26 @@ Inherited by \fBMaxOS::filesystem::format::Fat32FileSystem\fP, and \fBMaxOS::fil
 .PP 
 Handles the disk operations and file system information\&. 
 .PP
-Definition at line \fB100\fP of file \fBfilesystem\&.h\fP\&.
+Definition at line \fB96\fP of file \fBfilesystem\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "FileSystem::~FileSystem ()\fC [virtual]\fP"
 
 .PP
-Definition at line \fB279\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Destructor for \fBFileSystem\fP, frees the root directory (Which in turn frees all files and subdirectories) 
+.PP
+Definition at line \fB285\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-279                         {
-280 
-281     // Free the root directory
-282     delete m_root_directory;
-283 
-284 };
+285                         {
+286 
+287     // Free the root directory
+288     delete m_root_directory;
+289 
+290 }
 .fi
 
+.PP
+References \fBm_root_directory\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBbool\fP FileSystem::exists (\fBconst\fP \fBstring\fP & path)"
@@ -74,22 +82,22 @@ True if the path exists, false otherwise
 .PP
 
 .PP
-Definition at line \fB336\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB342\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-336                                           {
-337 
-338     // Get the directory at the path
-339     string directory_path = Path::file_path(path);
-340     Directory* directory = get_directory(directory_path);
-341 
-342     // Check if the directory exists
-343     if (!directory)
-344         return false;
-345 
-346     // Check if the file exists
-347     const string file_name = Path::file_name(path);
-348     return directory\->open_file(file_name) != nullptr;
-349 }
+342                                           {
+343 
+344     // Get the directory at the path
+345     string directory_path = Path::file_path(path);
+346     Directory* directory = get_directory(directory_path);
+347 
+348     // Check if the directory exists
+349     if (!directory)
+350         return false;
+351 
+352     // Check if the file exists
+353     const string file_name = Path::file_name(path);
+354     return directory\->open_file(file_name) != nullptr;
+355 }
 .fi
 
 .PP
@@ -111,36 +119,36 @@ The directory object or null if it could not be opened
 .PP
 
 .PP
-Definition at line \fB301\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB307\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-301                                                        {
-302 
-303     // Check if the path is the root
-304     if (path == "/")
-305         return root_directory();
-306 
-307     // Recursively open the directory
-308     Directory* directory = root_directory();
-309     string directory_path = path;
-310     while (directory_path\&.length() > 0) {
-311 
-312         // Get the name of the directory
-313         string directory_name = Path::top_directory(directory_path);
-314 
-315         // Open the directory
-316         Directory* subdirectory = directory\->open_subdirectory(directory_name);
-317         if (!subdirectory)
-318             return nullptr;
-319 
-320         // Set the new directory
-321         directory = subdirectory;
-322 
-323         // Get the path to the next directory
-324         directory_path = directory_path\&.substring(directory_name\&.length() + 1, directory_path\&.length() \- directory_name\&.length() \- 1);
-325     }
-326 
-327     return directory;
-328 }
+307                                                        {
+308 
+309     // Check if the path is the root
+310     if (path == "/")
+311         return root_directory();
+312 
+313     // Recursively open the directory
+314     Directory* directory = root_directory();
+315     string directory_path = path;
+316     while (directory_path\&.length() > 0) {
+317 
+318         // Get the name of the directory
+319         string directory_name = Path::top_directory(directory_path);
+320 
+321         // Open the directory
+322         Directory* subdirectory = directory\->open_subdirectory(directory_name);
+323         if (!subdirectory)
+324             return nullptr;
+325 
+326         // Set the new directory
+327         directory = subdirectory;
+328 
+329         // Get the path to the next directory
+330         directory_path = directory_path\&.substring(directory_name\&.length() + 1, directory_path\&.length() \- directory_name\&.length() \- 1);
+331     }
+332 
+333     return directory;
+334 }
 .fi
 
 .PP
@@ -159,11 +167,11 @@ The root directory of the filesystem
 .PP
 
 .PP
-Definition at line \fB291\fP of file \fBfilesystem\&.cpp\fP\&..PP
+Definition at line \fB297\fP of file \fBfilesystem\&.cpp\fP\&..PP
 .nf
-291                                       {
-292     return m_root_directory;
-293 }
+297                                       {
+298     return m_root_directory;
+299 }
 .fi
 
 .PP
@@ -172,14 +180,14 @@ References \fBm_root_directory\fP\&.
 Referenced by \fBget_directory()\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "\fBDirectory\fP* MaxOS::filesystem::FileSystem::m_root_directory\fC [protected]\fP"
+.SS "\fBDirectory\fP* MaxOS::filesystem::FileSystem::m_root_directory = nullptr\fC [protected]\fP"
 
 .PP
 The fist directory in the file system (not be confused with the system root) 
 .PP
-Definition at line \fB103\fP of file \fBfilesystem\&.h\fP\&.
+Definition at line \fB98\fP of file \fBfilesystem\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::filesystem::format::ext2::Ext2FileSystem::Ext2FileSystem()\fP, \fBMaxOS::filesystem::format::Fat32FileSystem::Fat32FileSystem()\fP, and \fBroot_directory()\fP\&.
+Referenced by \fBMaxOS::filesystem::format::ext2::Ext2FileSystem::Ext2FileSystem()\fP, \fBMaxOS::filesystem::format::Fat32FileSystem::Fat32FileSystem()\fP, \fBroot_directory()\fP, \fBMaxOS::filesystem::format::ext2::Ext2FileSystem::~Ext2FileSystem()\fP, and \fB~FileSystem()\fP\&.
 
 .SH "Author"
 .PP 

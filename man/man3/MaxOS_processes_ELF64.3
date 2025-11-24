@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::ELF64" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::ELF64" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -45,7 +45,7 @@ MaxOS::processes::ELF64 \- Handles the loading and parsing of 64-bit ELF files\&
 
 .in +1c
 .ti -1c
-.RI "static uint64_t \fBto_vmm_flags\fP (uint32_t \fBtype\fP)"
+.RI "static uint64_t \fBto_vmm_flags\fP (uint32_t type)"
 .br
 .RI "Converts elf flags to vmm flags\&. "
 .in -1c
@@ -53,10 +53,10 @@ MaxOS::processes::ELF64 \- Handles the loading and parsing of 64-bit ELF files\&
 .PP 
 Handles the loading and parsing of 64-bit ELF files\&. 
 .PP
-Definition at line \fB202\fP of file \fBelf\&.h\fP\&.
+Definition at line \fB217\fP of file \fBelf\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "ELF64::ELF64 (uintptr_t elf_header_address)"
+.SS "ELF64::ELF64 (uintptr_t elf_header_address)\fC [explicit]\fP"
 
 .PP
 Constructor for the \fBELF64\fP class\&. 
@@ -172,6 +172,11 @@ Referenced by \fBget_program_header()\fP, \fBget_section_header()\fP, and \fBis_
 .PP
 Checks if the elf file is valid for MaxOS runtime\&. 
 .PP
+\fBReturns\fP
+.RS 4
+True if the elf file is valid, false otherwise
+.RE
+.PP
 \fBTodo\fP
 .RS 4
 Add support for maxOS ABI 
@@ -179,47 +184,47 @@ Add support for maxOS ABI
 .PP
 
 .PP
-Definition at line \fB98\fP of file \fBelf\&.cpp\fP\&..PP
+Definition at line \fB100\fP of file \fBelf\&.cpp\fP\&..PP
 .nf
-98                            {
-99 
-100     // Validate the magic number
-101     for (size_t i = 0; i < 4; i++)
-102         if (header()\->identification[i] != ELF_MAGIC[i])
-103             return false;
-104 
-105     // Check if the elf is 64 bit
-106     if (header()\->identification[(int) ELFIdentification::Class] != (int) ELFClass::Bits64)
-107         return false;
-108 
-109     // Check if the elf is little endian
-110     if (header()\->identification[(int) ELFIdentification::Data] != (int) ELFData::LittleEndian)
-111         return false;
-112 
-113     // Check if the elf is version 1
-114     if (header()\->identification[(int) ELFIdentification::Version] != (int) ELFVersion::Current)
-115         return false;
-116 
-117     // Check if the elf is for the MaxOS platform
-118     //  if(header() \-> identification[OSABI] != MaxOSABI)
-119     //      return false;
-120 
-121     // Check if the elf is executable
-122     if (header()\->type != (int) ELFType::Executable)
-123         return false;
-124 
-125     // Check if the elf is for the x86_64 platform
-126     if (header()\->machine != (int) ELFMachine::x86_64)
-127         return false;
-128 
-129     // LGTM
-130     return true;
-131 
-132 }
+100                            {
+101 
+102     // Validate the magic number
+103     for (size_t i = 0; i < 4; i++)
+104         if (header()\->identification[i] != ELF_MAGIC[i])
+105             return false;
+106 
+107     // Check if the elf is 64 bit
+108     if (header()\->identification[(int) ELFIdentification::Class] != (int) ELFClass::Bits64)
+109         return false;
+110 
+111     // Check if the elf is little endian
+112     if (header()\->identification[(int) ELFIdentification::Data] != (int) ELFData::LittleEndian)
+113         return false;
+114 
+115     // Check if the elf is version 1
+116     if (header()\->identification[(int) ELFIdentification::Version] != (int) ELFVersion::Current)
+117         return false;
+118 
+119     // Check if the elf is for the MaxOS platform
+120     //  if(header() \-> identification[OSABI] != MaxOSABI)
+121     //      return false;
+122 
+123     // Check if the elf is executable
+124     if (header()\->type != (int) ELFType::Executable)
+125         return false;
+126 
+127     // Check if the elf is for the x86_64 platform
+128     if (header()\->machine != (int) ELFMachine::x86_64)
+129         return false;
+130 
+131     // LGTM
+132     return true;
+133 
+134 }
 .fi
 
 .PP
-References \fBMaxOS::processes::ELF_MAGIC\fP, \fBheader()\fP, and \fBtype\fP\&.
+References \fBMaxOS::processes::ELF_MAGIC\fP, and \fBheader()\fP\&.
 .PP
 Referenced by \fBload()\fP, and \fBMaxOS::processes::GlobalScheduler::load_multiboot_elfs()\fP\&.
 .SS "void ELF64::load ()"
@@ -265,32 +270,32 @@ The vmm flags
 .PP
 
 .PP
-Definition at line \fB171\fP of file \fBelf\&.cpp\fP\&..PP
+Definition at line \fB173\fP of file \fBelf\&.cpp\fP\&..PP
 .nf
-171                                           {
-172 
-173     // Conversion
-174     // ELF   |   VMM
-175     // 0x0   |   Executable
-176     // 0x1   |   Write
-177     // 0x2   |   Read
-178 
-179     uint64_t flags = PRESENT | USER | NO_EXECUTE;
+173                                           {
+174 
+175     // Conversion
+176     // ELF   |   VMM
+177     // 0x0   |   Executable
+178     // 0x1   |   Write
+179     // 0x2   |   Read
 180 
-181     // Enable write
-182     if (type & ELFWrite)
-183         flags |= WRITE;
-184 
-185     // Disable no execute
-186     if (type & ELFExecute)
-187         flags &= ~NO_EXECUTE;
-188 
-189     return flags;
-190 }
+181     uint64_t flags = PRESENT | USER | NO_EXECUTE;
+182 
+183     // Enable write
+184     if (type & ELFWrite)
+185         flags |= WRITE;
+186 
+187     // Disable no execute
+188     if (type & ELFExecute)
+189         flags &= ~NO_EXECUTE;
+190 
+191     return flags;
+192 }
 .fi
 
 .PP
-References \fBflags\fP, \fBMaxOS::memory::NO_EXECUTE\fP, \fBMaxOS::memory::PRESENT\fP, \fBtype\fP, \fBMaxOS::memory::USER\fP, and \fBMaxOS::memory::WRITE\fP\&.
+References \fBMaxOS::memory::NO_EXECUTE\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::memory::USER\fP, and \fBMaxOS::memory::WRITE\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,4 +1,4 @@
-.TH "MaxOS::common::Buffer" 3 "Version 0.1" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::common::Buffer" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,11 +13,11 @@ MaxOS::common::Buffer \- Wrapper class for a region of bytes in memor in an atte
 
 .in +1c
 .ti -1c
-.RI "\fBBuffer\fP (\fBsize_t\fP \fBsize\fP, \fBbool\fP \fBupdate_offset\fP=\fBtrue\fP)"
+.RI "\fBBuffer\fP (\fBsize_t\fP size, \fBbool\fP \fBupdate_offset\fP=\fBtrue\fP)"
 .br
 .RI "Creates a buffer of the specified size\&. "
 .ti -1c
-.RI "\fBBuffer\fP (\fBvoid\fP *\fBsource\fP, \fBsize_t\fP \fBsize\fP, \fBbool\fP \fBupdate_offset\fP=\fBtrue\fP)"
+.RI "\fBBuffer\fP (\fBvoid\fP *source, \fBsize_t\fP size, \fBbool\fP \fBupdate_offset\fP=\fBtrue\fP)"
 .br
 .RI "Creates a buffer pointing to a source\&. "
 .ti -1c
@@ -45,7 +45,7 @@ MaxOS::common::Buffer \- Wrapper class for a region of bytes in memor in an atte
 .br
 .RI "The max bytes the buffer can currently store\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBresize\fP (\fBsize_t\fP \fBsize\fP)"
+.RI "\fBvoid\fP \fBresize\fP (\fBsize_t\fP size)"
 .br
 .RI "Grow the buffer to fit a new size\&. "
 .ti -1c
@@ -69,23 +69,23 @@ MaxOS::common::Buffer \- Wrapper class for a region of bytes in memor in an atte
 .br
 .RI "Copies all the bytes from another buffer into this buffer\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP)"
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer, \fBsize_t\fP length)"
 .br
 .RI "Copies a range of bytes from another buffer into this buffer\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset)"
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer, \fBsize_t\fP length, \fBsize_t\fP offset)"
 .br
 .RI "Copies a range of bytes from another buffer into this buffer at a specified offset\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset, \fBsize_t\fP \fBoffset_other\fP)"
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBBuffer\fP *buffer, \fBsize_t\fP length, \fBsize_t\fP offset, \fBsize_t\fP \fBoffset_other\fP)"
 .br
 .RI "Copies a range of bytes from another buffer into this buffer at a specified offset for both\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBvoid\fP *\fBsource\fP, \fBsize_t\fP \fBlength\fP)"
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBvoid\fP *source, \fBsize_t\fP length)"
 .br
 .RI "Copies a range of bytes from a source into this buffer\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBvoid\fP *\fBsource\fP, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset)"
+.RI "\fBvoid\fP \fBcopy_from\fP (\fBconst\fP \fBvoid\fP *source, \fBsize_t\fP length, \fBsize_t\fP offset)"
 .br
 .RI "Copies a range of bytes from a source into this buffer at a specified offset\&. "
 .ti -1c
@@ -93,23 +93,23 @@ MaxOS::common::Buffer \- Wrapper class for a region of bytes in memor in an atte
 .br
 .RI "Copies all the bytes from this buffer into another buffer\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP)"
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer, \fBsize_t\fP length)"
 .br
 .RI "Writes a range of bytes from this buffer into another buffer\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset)"
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer, \fBsize_t\fP length, \fBsize_t\fP offset)"
 .br
 .RI "Copies a range of bytes from this buffer into another buffer at a specified offset\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset, \fBsize_t\fP \fBoffset_other\fP)"
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBBuffer\fP *buffer, \fBsize_t\fP length, \fBsize_t\fP offset, \fBsize_t\fP \fBoffset_other\fP)"
 .br
 .RI "Copies a range of bytes from this buffer into another at an offset for each\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_to\fP (\fBvoid\fP *\fBdestination\fP, \fBsize_t\fP \fBlength\fP)"
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBvoid\fP *destination, \fBsize_t\fP length)"
 .br
 .RI "Copies a range of bytes from this buffer into a source\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBcopy_to\fP (\fBvoid\fP *\fBdestination\fP, \fBsize_t\fP \fBlength\fP, \fBsize_t\fP offset)"
+.RI "\fBvoid\fP \fBcopy_to\fP (\fBvoid\fP *destination, \fBsize_t\fP length, \fBsize_t\fP offset)"
 .br
 .RI "Copies a range of bytes from this buffer at an offset into a source\&. "
 .in -1c
@@ -125,10 +125,10 @@ MaxOS::common::Buffer \- Wrapper class for a region of bytes in memor in an atte
 .PP 
 Wrapper class for a region of bytes in memor in an attempt to add some memory safety\&. Automatically allocates the size specified and frees it once done, adds boundary to I/O\&. 
 .PP
-Definition at line \fB26\fP of file \fBbuffer\&.h\fP\&.
+Definition at line \fB25\fP of file \fBbuffer\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Buffer::Buffer (\fBsize_t\fP size, \fBbool\fP update_offset = \fC\fBtrue\fP\fP)"
+.SS "Buffer::Buffer (\fBsize_t\fP size, \fBbool\fP update_offset = \fC\fBtrue\fP\fP)\fC [explicit]\fP"
 
 .PP
 Creates a buffer of the specified size\&. 
@@ -153,8 +153,6 @@ Definition at line \fB20\fP of file \fBbuffer\&.cpp\fP\&..PP
 27 }
 .fi
 
-.PP
-References \fBsize\fP\&.
 .SS "Buffer::Buffer (\fBvoid\fP * source, \fBsize_t\fP size, \fBbool\fP update_offset = \fC\fBtrue\fP\fP)"
 
 .PP
@@ -182,8 +180,6 @@ Definition at line \fB36\fP of file \fBbuffer\&.cpp\fP\&..PP
 43 }
 .fi
 
-.PP
-References \fBsize\fP, and \fBsource\fP\&.
 .SS "Buffer::~Buffer ()"
 
 .PP
@@ -216,15 +212,15 @@ The length of the buffer storage array
 .PP
 
 .PP
-Definition at line \fB92\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB95\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-92                               {
-93     return m_capacity;
-94 }
+95                               {
+96     return m_capacity;
+97 }
 .fi
 
 .PP
-Referenced by \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBfull()\fP, \fBread()\fP, and \fBwrite()\fP\&.
+Referenced by \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBcopy_to()\fP, \fBread()\fP, \fBwrite()\fP, and \fBMaxOS::drivers::disk::Disk::write()\fP\&.
 .SS "\fBvoid\fP Buffer::clear ()"
 
 .PP
@@ -255,15 +251,15 @@ Copies all the bytes from another buffer into this buffer\&.
 .PP
 
 .PP
-Definition at line \fB189\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB195\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-189                                            {
-190 
-191     // Copy the buffer
-192     ASSERT(buffer\->capacity() <= capacity(), "Copy exceeds buffer capacity");
-193     copy_from(buffer\->raw(), buffer\->capacity());
-194 
-195 }
+195                                            {
+196 
+197     // Copy the buffer
+198     ASSERT(buffer\->capacity() <= capacity(), "Copy exceeds buffer capacity");
+199     copy_from(buffer\->raw(), buffer\->capacity());
+200 
+201 }
 .fi
 
 .PP
@@ -284,19 +280,19 @@ Copies a range of bytes from another buffer into this buffer\&.
 .PP
 
 .PP
-Definition at line \fB203\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB209\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-203                                                           {
-204 
-205     // Copy the buffer
-206     ASSERT(length <= buffer\->capacity(), "Copy exceeds external buffer capacity");
-207     copy_from(buffer\->raw(), length);
-208 
-209 }
+209                                                           {
+210 
+211     // Copy the buffer
+212     ASSERT(length <= buffer\->capacity(), "Copy exceeds external buffer capacity");
+213     copy_from(buffer\->raw(), length);
+214 
+215 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, \fBlength\fP, and \fBraw()\fP\&.
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, and \fBraw()\fP\&.
 .SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBBuffer\fP * buffer, \fBsize_t\fP length, \fBsize_t\fP offset)"
 
 .PP
@@ -313,19 +309,19 @@ Copies a range of bytes from another buffer into this buffer at a specified offs
 .PP
 
 .PP
-Definition at line \fB217\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB223\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-217                                                                          {
-218 
-219     // Copy the buffer
-220     ASSERT(length <= buffer\->capacity(), "Copy exceeds external buffer capacity");
-221     copy_from(buffer\->raw(), length, offset);
-222 
-223 }
+223                                                                          {
+224 
+225     // Copy the buffer
+226     ASSERT(length <= buffer\->capacity(), "Copy exceeds external buffer capacity");
+227     copy_from(buffer\->raw(), length, offset);
+228 
+229 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, \fBlength\fP, and \fBraw()\fP\&.
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, and \fBraw()\fP\&.
 .SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBBuffer\fP * buffer, \fBsize_t\fP length, \fBsize_t\fP offset, \fBsize_t\fP offset_other)"
 
 .PP
@@ -344,19 +340,19 @@ Copies a range of bytes from another buffer into this buffer at a specified offs
 .PP
 
 .PP
-Definition at line \fB233\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB239\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-233                                                                                               {
-234 
-235     // Copy the buffer
-236     ASSERT(length + offset_other <= buffer\->capacity(), "Copy exceeds external buffer capacity");
-237     copy_from(buffer\->raw() + offset_other, length, offset);
-238 
-239 }
+239                                                                                               {
+240 
+241     // Copy the buffer
+242     ASSERT(length + offset_other <= buffer\->capacity(), "Copy exceeds external buffer capacity");
+243     copy_from(buffer\->raw() + offset_other, length, offset);
+244 
+245 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, \fBlength\fP, and \fBraw()\fP\&.
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_from()\fP, and \fBraw()\fP\&.
 .SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBvoid\fP * source, \fBsize_t\fP length)"
 
 .PP
@@ -371,19 +367,19 @@ Copies a range of bytes from a source into this buffer\&.
 .PP
 
 .PP
-Definition at line \fB247\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB253\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-247                                                         {
-248 
-249     // Copy the bytes
-250     ASSERT(length + m_offset <= m_capacity, "Copy exceeds buffer capacity");
-251     memcpy(m_bytes + m_offset, source, length);
-252     set_offset(m_offset + length);
-253 }
+253                                                         {
+254 
+255     // Copy the bytes
+256     ASSERT(length + m_offset <= m_capacity, "Copy exceeds buffer capacity");
+257     memcpy(m_bytes + m_offset, source, length);
+258     set_offset(m_offset + length);
+259 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBlength\fP, \fBmemcpy()\fP, \fBset_offset()\fP, and \fBsource\fP\&.
+References \fBASSERT\fP, \fBmemcpy()\fP, and \fBset_offset()\fP\&.
 .SS "\fBvoid\fP Buffer::copy_from (\fBconst\fP \fBvoid\fP * source, \fBsize_t\fP length, \fBsize_t\fP offset)"
 
 .PP
@@ -400,20 +396,20 @@ Copies a range of bytes from a source into this buffer at a specified offset\&.
 .PP
 
 .PP
-Definition at line \fB262\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB268\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-262                                                                        {
-263 
-264     // Copy the bytes
-265     ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
-266     memcpy(m_bytes + offset + m_offset, source, length);
-267     set_offset(m_offset + length);
-268 
-269 }
+268                                                                        {
+269 
+270     // Copy the bytes
+271     ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
+272     memcpy(m_bytes + offset + m_offset, source, length);
+273     set_offset(m_offset + length);
+274 
+275 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBlength\fP, \fBmemcpy()\fP, \fBset_offset()\fP, and \fBsource\fP\&.
+References \fBASSERT\fP, \fBmemcpy()\fP, and \fBset_offset()\fP\&.
 .SS "\fBvoid\fP Buffer::copy_to (\fBBuffer\fP * buffer)"
 
 .PP
@@ -426,15 +422,15 @@ Copies all the bytes from this buffer into another buffer\&.
 .PP
 
 .PP
-Definition at line \fB276\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB282\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-276                                    {
-277 
-278     // Copy the buffer
-279     ASSERT(capacity() <= buffer\->capacity(), "Copy exceeds external buffer capacity");
-280     copy_to(buffer\->raw(), capacity());
-281 
-282 }
+282                                    {
+283 
+284     // Copy the buffer
+285     ASSERT(capacity() <= buffer\->capacity(), "Copy exceeds external buffer capacity");
+286     copy_to(buffer\->raw(), capacity());
+287 
+288 }
 .fi
 
 .PP
@@ -455,19 +451,19 @@ Writes a range of bytes from this buffer into another buffer\&.
 .PP
 
 .PP
-Definition at line \fB290\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB296\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-290                                                   {
-291 
-292     // Copy the buffer
-293     ASSERT(length <= buffer\->capacity(), "Copy exceeds external buffer capacity");
-294     copy_to(buffer\->raw(), length);
-295 
-296 }
+296                                                   {
+297 
+298     // Copy the buffer
+299     ASSERT(length <= buffer\->capacity(), "Copy exceeds external buffer capacity");
+300     copy_to(buffer\->raw(), length);
+301 
+302 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, \fBlength\fP, and \fBraw()\fP\&.
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, and \fBraw()\fP\&.
 .SS "\fBvoid\fP Buffer::copy_to (\fBBuffer\fP * buffer, \fBsize_t\fP length, \fBsize_t\fP offset)"
 
 .PP
@@ -484,19 +480,19 @@ Copies a range of bytes from this buffer into another buffer at a specified offs
 .PP
 
 .PP
-Definition at line \fB305\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB311\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-305                                                                  {
-306 
-307     // Copy the bytes
-308     ASSERT((length + offset) <= buffer\->capacity(), "Copy exceeds external buffer capacity");
-309     copy_to(buffer\->raw(), length, offset);
-310 
-311 }
+311                                                                  {
+312 
+313     // Copy the bytes
+314     ASSERT((length + offset) <= buffer\->capacity(), "Copy exceeds external buffer capacity");
+315     copy_to(buffer\->raw(), length, offset);
+316 
+317 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, \fBlength\fP, and \fBraw()\fP\&.
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, and \fBraw()\fP\&.
 .SS "\fBvoid\fP Buffer::copy_to (\fBBuffer\fP * buffer, \fBsize_t\fP length, \fBsize_t\fP offset, \fBsize_t\fP offset_other)"
 
 .PP
@@ -515,19 +511,19 @@ Copies a range of bytes from this buffer into another at an offset for each\&.
 .PP
 
 .PP
-Definition at line \fB321\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB327\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-321                                                                                       {
-322 
-323     // Copy the bytes
-324     ASSERT((length + offset) <= buffer\->capacity(), "Copy exceeds external buffer capacity");
-325     copy_to(buffer\->raw() + offset_other, length, offset);
-326 
-327 }
+327                                                                                       {
+328 
+329     // Copy the bytes
+330     ASSERT((length + offset) <= buffer\->capacity(), "Copy exceeds external buffer capacity");
+331     copy_to(buffer\->raw() + offset_other, length, offset);
+332 
+333 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, \fBlength\fP, and \fBraw()\fP\&.
+References \fBASSERT\fP, \fBcapacity()\fP, \fBcopy_to()\fP, and \fBraw()\fP\&.
 .SS "\fBvoid\fP Buffer::copy_to (\fBvoid\fP * destination, \fBsize_t\fP length)"
 
 .PP
@@ -542,20 +538,20 @@ Copies a range of bytes from this buffer into a source\&.
 .PP
 
 .PP
-Definition at line \fB336\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB342\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-336                                                      {
-337 
-338     // Copy the bytes
-339     ASSERT(length + m_offset <= (m_capacity), "Copy exceeds buffer capacity");
-340     memcpy(destination, m_bytes + m_offset, length);
-341     set_offset(m_offset + length);
-342 
-343 }
+342                                                      {
+343 
+344     // Copy the bytes
+345     ASSERT(length + m_offset <= (m_capacity), "Copy exceeds buffer capacity");
+346     memcpy(destination, m_bytes + m_offset, length);
+347     set_offset(m_offset + length);
+348 
+349 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBdestination\fP, \fBlength\fP, \fBmemcpy()\fP, and \fBset_offset()\fP\&.
+References \fBASSERT\fP, \fBmemcpy()\fP, and \fBset_offset()\fP\&.
 .SS "\fBvoid\fP Buffer::copy_to (\fBvoid\fP * destination, \fBsize_t\fP length, \fBsize_t\fP offset)"
 
 .PP
@@ -572,20 +568,20 @@ Copies a range of bytes from this buffer at an offset into a source\&.
 .PP
 
 .PP
-Definition at line \fB352\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB358\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-352                                                                     {
-353 
-354     // Copy the bytes
-355     ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
-356     memcpy(destination, m_bytes + offset + m_offset, length);
-357     set_offset(m_offset + length);
-358 
-359 }
+358                                                                     {
+359 
+360     // Copy the bytes
+361     ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
+362     memcpy(destination, m_bytes + offset + m_offset, length);
+363     set_offset(m_offset + length);
+364 
+365 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBdestination\fP, \fBlength\fP, \fBmemcpy()\fP, and \fBset_offset()\fP\&.
+References \fBASSERT\fP, \fBmemcpy()\fP, and \fBset_offset()\fP\&.
 .SS "\fBvoid\fP Buffer::full (\fBuint8_t\fP byte, \fBsize_t\fP offset = \fC0\fP, \fBsize_t\fP amount = \fC0\fP)"
 
 .PP
@@ -607,16 +603,19 @@ Definition at line \fB78\fP of file \fBbuffer\&.cpp\fP\&..PP
 78                                                             {
 79 
 80     // Prevent writing past the buffer bounds
-81     if (amount == 0) amount = m_capacity \- m_offset \- offset;
-82     ASSERT(m_offset + offset + amount <= capacity(), "Buffer overflow");
+81     size_t start = m_offset + offset;
+82     ASSERT(start <= m_capacity, "Offset past buffer end");
 83 
-84     memset(m_bytes + m_offset + offset, byte, amount);
-85 
-86 }
+84     if (amount == 0) amount = m_capacity \- start;
+85     ASSERT(start + amount <= m_capacity, "Buffer overflow");
+86 
+87     memset(m_bytes + start, byte, amount);
+88 
+89 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBcapacity()\fP, and \fBmemset()\fP\&.
+References \fBASSERT\fP, and \fBmemset()\fP\&.
 .SS "\fBuint8_t\fP * Buffer::raw () const"
 
 .PP
@@ -644,16 +643,25 @@ Referenced by \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_from()\fP, \fBcopy_f
 .PP
 Safely reads a byte from the buffer at the current offset\&. 
 .PP
-Definition at line \fB164\fP of file \fBbuffer\&.cpp\fP\&..PP
+\fBReturns\fP
+.RS 4
+The read byte 
+.RE
+.PP
+
+.PP
+Definition at line \fB168\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-164                      {
-165     set_offset(m_offset + 1);
-166     return m_bytes[m_offset \- 1];
-167 }
+168                      {
+169     set_offset(m_offset + 1);
+170     return m_bytes[m_offset \- 1];
+171 }
 .fi
 
 .PP
 References \fBset_offset()\fP\&.
+.PP
+Referenced by \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment::write()\fP\&.
 .SS "\fBuint8_t\fP Buffer::read (\fBsize_t\fP offset)"
 
 .PP
@@ -661,22 +669,27 @@ Safely reads a byte from the buffer at the specified offset\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIoffset\fP The offset into the buffer storage array 
+\fIoffset\fP The offset into the buffer storage array
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The read byte 
 .RE
 .PP
 
 .PP
-Definition at line \fB174\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB180\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-174                                   {
-175 
-176     // Prevent writing past the buffer bounds
-177     ASSERT(m_offset + offset < capacity() && offset >= 0, "Buffer overflow");
-178 
-179     // Set the byte
-180     set_offset(m_offset + 1);
-181     return m_bytes[(m_offset \- 1) + offset];
-182 }
+180                                   {
+181 
+182     // Prevent writing past the buffer bounds
+183     ASSERT(m_offset + offset < capacity(), "Buffer overflow");
+184 
+185     // Set the byte
+186     set_offset(m_offset + 1);
+187     return m_bytes[(m_offset \- 1) + offset];
+188 }
 .fi
 
 .PP
@@ -693,30 +706,30 @@ Grow the buffer to fit a new size\&.
 .PP
 
 .PP
-Definition at line \fB101\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB104\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-101                                {
-102 
-103     // Create the new buffer
-104     auto* new_buffer = new uint8_t[size];
+104                                {
 105 
-106     // Copy the old buffer
-107     if (m_bytes)
-108         memcpy(new_buffer, m_bytes, m_capacity);
-109 
-110     // Store the new buffer
-111     if (!m_dont_delete && m_bytes)
-112         delete[] m_bytes;
-113 
-114     m_bytes = new_buffer;
-115     m_capacity = size;
-116     m_dont_delete = true;
-117 
-118 }
+106     // Create the new buffer
+107     auto* new_buffer = new uint8_t[size];
+108 
+109     // Copy the old buffer
+110     if (m_bytes)
+111         memcpy(new_buffer, m_bytes, m_capacity);
+112 
+113     // Store the new buffer
+114     if (!m_dont_delete && m_bytes)
+115         delete[] m_bytes;
+116 
+117     m_bytes = new_buffer;
+118     m_capacity = size;
+119     m_dont_delete = true;
+120 
+121 }
 .fi
 
 .PP
-References \fBmemcpy()\fP, and \fBsize\fP\&.
+References \fBmemcpy()\fP\&.
 .SS "\fBvoid\fP Buffer::set_offset (\fBsize_t\fP offset)"
 
 .PP
@@ -729,14 +742,14 @@ Set the offset for where operations should begin from\&.
 .PP
 
 .PP
-Definition at line \fB125\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB128\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-125                                      {
-126 
-127     if (update_offset)
-128         m_offset = offset;
+128                                      {
 129 
-130 }
+130     if (update_offset)
+131         m_offset = offset;
+132 
+133 }
 .fi
 
 .PP
@@ -757,18 +770,18 @@ Safely writes a byte to the buffer at the specified offset\&.
 .PP
 
 .PP
-Definition at line \fB149\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB152\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-149                                               {
-150 
-151     // Prevent writing past the buffer bounds
-152     ASSERT(m_offset + offset < capacity() && offset >= 0, "Buffer overflow");
+152                                               {
 153 
-154     // Set the byte
-155     m_bytes[m_offset + offset] = byte;
-156     set_offset(m_offset + 1);
-157 
-158 }
+154     // Prevent writing past the buffer bounds
+155     ASSERT(m_offset + offset < capacity(), "Buffer overflow");
+156 
+157     // Set the byte
+158     m_bytes[m_offset + offset] = byte;
+159     set_offset(m_offset + 1);
+160 
+161 }
 .fi
 
 .PP
@@ -785,12 +798,12 @@ Safely writes a byte to the buffer at the current offset\&.
 .PP
 
 .PP
-Definition at line \fB137\fP of file \fBbuffer\&.cpp\fP\&..PP
+Definition at line \fB140\fP of file \fBbuffer\&.cpp\fP\&..PP
 .nf
-137                                {
-138     m_bytes[m_offset] = byte;
-139     set_offset(m_offset + 1);
-140 }
+140                                {
+141     m_bytes[m_offset] = byte;
+142     set_offset(m_offset + 1);
+143 }
 .fi
 
 .PP
@@ -802,7 +815,7 @@ References \fBset_offset()\fP\&.
 .PP
 Should operations write/read/copy update the offset in the buffer? 
 .PP
-Definition at line \fB45\fP of file \fBbuffer\&.h\fP\&.
+Definition at line \fB44\fP of file \fBbuffer\&.h\fP\&.
 .PP
 Referenced by \fBset_offset()\fP, and \fBMaxOS::filesystem::format::ext2::Ext2Volume::write_block()\fP\&.
 
