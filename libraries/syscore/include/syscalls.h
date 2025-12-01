@@ -25,7 +25,7 @@ namespace syscore{
 
 	enum class SyscallType{
 		CLOSE_PROCESS,
-		KLOG,	// TODO: Turn into open proc
+		KLOG,	// TODO: Turn into open proc OR move all into resources
 		ALLOCATE_MEMORY,
 		FREE_MEMORY,
 		RESOURCE_CREATE,

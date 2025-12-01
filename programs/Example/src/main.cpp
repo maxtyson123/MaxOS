@@ -3,7 +3,7 @@
 //
 #include <cstdint>
 #include <cstddef>
-#include <ipc/messages.h>
+#include <ipc/rpc.h>
 #include <filesystem/file.h>
 
 using namespace syscore;
@@ -31,18 +31,37 @@ void close()
 			);
 }
 
+int64_t say_hi_internal(const char* name)
+{
+
+	write("Hello, ");
+	write(name);
+	write("!\n");
+
+	return 69;
+}
+
+void say_hi_wrapper(ArgList* args, ArgList* return_values){
+
+	// Get args
+	const char* name = args->get_string(0);
+
+	// Call the internal function
+	int64_t response = say_hi_internal(name);
+
+	// Send response
+	return_values->push_int64(response);
+
+
+}
+
 extern "C" void _start(void) {
 
 	// Write to the console
-	write("MaxOS Test Program v3\n");
+	write("MaxOS Test Program v3 - 1\n");
 
-	// Lock
+	register_function("say_hi", say_hi_wrapper);
+	rpc_server_loop("greeting_server");
 
-	// Wait 2 seconds
-
-	// Unlock
-
-	// Die
 	close();
-
 }

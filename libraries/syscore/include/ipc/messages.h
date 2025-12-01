@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <syscalls.h>
 
+//TODO: Flags such that RPC using enpoint is restricted to two processes
 
 namespace syscore::ipc {
 
@@ -17,7 +18,8 @@ namespace syscore::ipc {
 	void close_endpoint(uint64_t endpoint);
 
 	void send_message(uint64_t endpoint, void* buffer, size_t size);
-	void read_message(uint64_t endpoint, void* buffer, size_t size);
+
+	size_t read_message(uint64_t endpoint, void* buffer, size_t size);
 }
 
 

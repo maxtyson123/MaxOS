@@ -64,9 +64,11 @@ namespace syscore::ipc {
 	 * @param endpoint The endpoint handle
 	 * @param buffer Where to read the message into
 	 * @param size How much of the message to read
+	 *
+	 * @return The number of bytes read
 	 */
-	void read_message(uint64_t endpoint, void* buffer, size_t size) {
+	size_t read_message(uint64_t endpoint, void* buffer, size_t size) {
 		if(endpoint)
-			resource_read(endpoint, buffer, size, 0);
+			return resource_read(endpoint, buffer, size, 0);
 	}
 }

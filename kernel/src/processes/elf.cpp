@@ -156,7 +156,7 @@ void ELF64::load_program_headers() const {
 
 		// Zero the rest of the memory if needed
 		size_t zero_size = program_header->memory_size - program_header->file_size;
-		memset((void*) ((uintptr_t) address + program_header->file_size), 0, zero_size);
+//		memset((void*) ((uintptr_t) address + program_header->file_size), 0, zero_size);
 
 		// Once the memory has been copied can now mark the pages as read only etc
 		uint64_t flags = to_vmm_flags(program_header->flags);
