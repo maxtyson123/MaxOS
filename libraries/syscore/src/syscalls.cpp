@@ -50,16 +50,6 @@ namespace syscore{
 	}
 
 	/**
-	 * @brief Close a process
-	 *
-	 * @param pid The process ID (0 for current process)
-	 * @param status The exit status
-	 */
-	void close_process(uint64_t pid, int status){
-		make_syscall(SyscallType::CLOSE_PROCESS, pid, (uint64_t)status, 0, 0, 0, 0);
-	}
-
-	/**
 	 * @brief Log a message to the kernel log
 	 *
 	 * @param message The message to log
@@ -136,7 +126,7 @@ namespace syscore{
 		while (true){
 			response = (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_WRITE, handle, (uint64_t)buffer, size, flags, 0, 0);
 			if(response == as_error(ResourceErrorBase::SHOULD_BLOCK))
-				thread_yield();
+				yeild();
 			else
 				break;
 		}
@@ -157,7 +147,7 @@ namespace syscore{
 		while (true){
 			response = (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_READ, handle, (uint64_t)buffer, size, flags, 0, 0);
 			if(response == as_error(ResourceErrorBase::SHOULD_BLOCK))
-				thread_yield();
+				yeild();
 			else
 				break;
 		}
@@ -168,24 +158,7 @@ namespace syscore{
 	 * @brief Yield the current thread's execution
 	 *
 	 */
-	void thread_yield(){
-		make_syscall(SyscallType::THREAD_YIELD, 0, 0, 0, 0, 0, 0);
-	}
-
-	/**
-	 * @brief Sleep the current thread for a certain amount of time
-	 *
-	 * @param time The time to sleep in milliseconds
-	 */
-	void thread_sleep(uint64_t time){
-		make_syscall(SyscallType::THREAD_SLEEP, time, 0, 0, 0, 0, 0);
-	}
-
-	/**
-	 * @brief Exit the current thread
-	 *
-	 */
-	void thread_exit(){
-		make_syscall(SyscallType::THREAD_CLOSE, 0, 0, 0, 0, 0, 0);
+	void yield(){
+		make_syscall(SyscallType::YEILD, 0, 0, 0, 0, 0, 0);
 	}
 }

@@ -71,18 +71,18 @@ namespace MaxOS::system {
 			void set_syscall_handler(::syscore::SyscallType syscall, syscall_func_t handler);
 			void remove_syscall_handler(::syscore::SyscallType syscall);
 
-			static syscall_args_t* syscall_close_process(syscall_args_t* args);
 			static syscall_args_t* syscall_klog(syscall_args_t* args);
+
 			static syscall_args_t* syscall_allocate_memory(syscall_args_t* args);
 			static syscall_args_t* syscall_free_memory(syscall_args_t* args);
+
 			static syscall_args_t* syscall_resource_create(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_open(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_close(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_write(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_read(syscall_args_t* args);
-			static syscall_args_t* syscall_thread_yield(syscall_args_t* args);
-			static syscall_args_t* syscall_thread_sleep(syscall_args_t* args);
-			static syscall_args_t* syscall_thread_close(syscall_args_t* args);
+
+			static syscall_args_t* syscall_yield(syscall_args_t* args);
 	};
 }
 

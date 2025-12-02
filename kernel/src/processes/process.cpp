@@ -23,7 +23,8 @@ using namespace MaxOS::common;
  * @param arg_amount The number of arguments
  * @param parent The proccess that owns this thread (started it)
  */
-Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process* parent) {
+Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process* parent)
+{
 
 	// Basic setup
 	thread_state = ThreadState::NEW;

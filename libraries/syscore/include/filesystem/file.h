@@ -2,6 +2,7 @@
 // Created by 98max on 9/1/2025.
 //
 
+
 #ifndef SYSCORE_FILESYSTEM_FILE_H
 #define SYSCORE_FILESYSTEM_FILE_H
 

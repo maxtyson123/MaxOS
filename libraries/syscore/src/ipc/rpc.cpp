@@ -274,18 +274,6 @@ size_t ArgList::payload_size() const {
 	return m_payload_size;
 }
 
-void write_hex(uint64_t value) {
-
-	const char* hex_chars = "0123456789ABCDEF";
-	char buffer[17];
-	for (int i = 0; i < 16; ++i) {
-		buffer[15 - i] = hex_chars[value & 0xF];
-		value >>= 4;
-	}
-	buffer[16] = '\0';
-	klog(buffer);
-}
-
 /**
  * @brief Appends arguments from another ArgList to this one
  *
@@ -476,7 +464,7 @@ bool syscore::ipc::rpc_call(const char* server, const char* function, ArgList* a
 		message.deserialise(buffer, size);
 
 		// Load the message header
-		auto header = (rpc_header_t*)message.get_blob(0, sizeof(rpc_header_t));
+		auto header = (rpc_header_t*)message.get_blob(0);
 
 		// Get the function and response endpoint
 		function_entry_t function_entry = find_function(message.get_string(1));

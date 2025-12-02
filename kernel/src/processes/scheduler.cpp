@@ -25,6 +25,8 @@ GlobalScheduler::GlobalScheduler(Multiboot& multiboot)
 : InterruptHandler(0x20),
   m_shared_memory_registry(resource_type_t::SHARED_MEMORY),
   m_shared_messages_registry(resource_type_t::MESSAGE_ENDPOINT),
+  m_thread_resource_registry(),
+  m_process_resource_registry(),
   m_next_pid(-1),
   m_next_tid(-1)
 {

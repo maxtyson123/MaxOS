@@ -236,16 +236,15 @@ No user usage so far (userland will be added in the future)
 - [x] VFS
 - [x] Loading ELF
 - [x] Multiple Cores Support (SMP & Scheduler)
-- [ ] Move VFS & drivers to userspace
+- [x] Move VFS & drivers to userspace
 - [ ] Porting & Dynamically Linking Libc
 - [ ] Move networking to userspace (& rewrite, fix)
 - [ ] Clean up ALL Todos
 
 #### Userland
-
+- [ ] connect to Clion with SMB for files and GDB for debugging in userspace
 - [ ] GUI
 - [ ] Terminal
-- [ ] connect to Clion with SMB for files and GDB for debugging in userspace
 - [ ] DOOM Port
 - [ ] Self-hosted os
 - [ ] GUI Framework

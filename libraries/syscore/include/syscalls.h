@@ -14,6 +14,8 @@ namespace syscore{
 		MESSAGE_ENDPOINT,
 		SHARED_MEMORY,
 		FILESYSTEM,
+		PROCESS,
+		THREAD,
 	};
 
 	enum class ResourceErrorBase{
@@ -24,24 +26,21 @@ namespace syscore{
 	int as_error(ResourceErrorBase code);
 
 	enum class SyscallType{
-		CLOSE_PROCESS,
-		KLOG,	// TODO: Turn into open proc OR move all into resources
+		KLOG,
+
 		ALLOCATE_MEMORY,
 		FREE_MEMORY,
+
 		RESOURCE_CREATE,
 		RESOURCE_OPEN,
 		RESOURCE_CLOSE,
 		RESOURCE_WRITE,
 		RESOURCE_READ,
-		THREAD_YIELD,
-		THREAD_SLEEP,
-		THREAD_CLOSE,
+
+		YEILD,
 	};
 
 	void* make_syscall(SyscallType type, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
-
-	void close_process(uint64_t pid, int status);
-	void klog(const char* message);
 
 	void* allocate_memory(size_t size);
 	void free_memory(void* address);
@@ -52,9 +51,7 @@ namespace syscore{
 	size_t resource_write(uint64_t handle, const void* buffer, size_t size, size_t flags);
 	size_t resource_read(uint64_t handle, void* buffer, size_t size, size_t flags);
 
-	void thread_yield();
-	void thread_sleep(uint64_t time);
-	void thread_exit();
+	void yeild();
 }
 
 #endif //SYSCORE_SYSCALLS_H

@@ -123,6 +123,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 /**
- * @todo Thread storage (when clib)
+ * @todo Thread storage (when clib) & threads can use RPC
  * @todo Once kernel done, turn into mono repo and separate components
  */

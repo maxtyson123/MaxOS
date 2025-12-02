@@ -31,7 +31,7 @@ FileResource::FileResource(string const& name, size_t flags, processes::resource
 FileResource::~FileResource() = default;
 
 /**
- * @brief read from a file resource
+ * @brief Read from a file resource
  *
  * @param buffer The buffer to read into
  * @param size The number of bytes to read
