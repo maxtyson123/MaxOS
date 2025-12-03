@@ -25,6 +25,18 @@ IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 ENDIF()
 
+# Generate RPC stubs when first setup
+SET(RPC_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/rpc.sh")
+EXECUTE_PROCESS(COMMAND ${RPC_SCRIPT} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+# For manual RPC gen when changing IDL files
+ADD_CUSTOM_TARGET(rpc
+    COMMENT "Generating RPC stubs"
+    COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${RPC_SCRIPT}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    USES_TERMINAL
+)
+
 # Function to make a library easier
 function(MAKE_LIBRARY LIBNAME)
 

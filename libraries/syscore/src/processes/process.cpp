@@ -34,16 +34,16 @@ uint64_t syscore::processes::exec_file(const char* path, const char** args, size
 
 	// Create the resource
 	uint64_t result = resource_create(ResourceType::PROCESS, (const char*)full_args, arg_amount + 1);
-	delete[] full_args;
+//	delete[] full_args;
 
 	// Wait for completion if requested
 	if (wait_for_completion && result > 0){
 
 		process_stats_t stats = get_process_stats_handle(result);
 
-		// Proces won't have a pid if it is not running
+		// If the process is killed it wont have a PID
 		if(stats.pid != 0)
-			thread_yield();
+			yeild();
 
 		close_process_handle(result);
 		return stats.exit_code;
@@ -58,7 +58,7 @@ uint64_t syscore::processes::exec_file(const char* path, const char** args, size
  * @param pid The PID of the process
  * @return A handle to the process
  */
-uint64_t get_process(uint64_t pid) {
+uint64_t syscore::processes::get_process(uint64_t pid) {
 
 	char pid_str[21];
 	//int to str

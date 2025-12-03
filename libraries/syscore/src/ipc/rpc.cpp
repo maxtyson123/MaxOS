@@ -407,6 +407,9 @@ bool syscore::ipc::rpc_call(const char* server, const char* function, ArgList* a
 
 	// Open the server
 	uint64_t endpoint = open_endpoint(server);
+	while (endpoint == 0 && flags & (size_t)RPCMEssageFlags::WAIT_FOR_SERVER)
+		endpoint = open_endpoint(server);
+
 	if (endpoint == 0)
 		return false;
 

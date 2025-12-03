@@ -681,6 +681,57 @@ String String::formatted(char const* format, va_list parameters) {
 }
 
 /**
+ * @brief Converts the string to an integer
+ *
+ * @return The integer value of the string or 0 if not a valid integer
+ */
+int String::to_int() const {
+
+	int result = 0;
+	bool is_negative = false;
+
+	for (size_t i = 0; i < m_length; i++) {
+		char c = m_string[i];
+
+		// Check for negative sign
+		if (i == 0 && c == '-') {
+			is_negative = true;
+			continue;
+		}
+
+		// Check if the character is a digit
+		if (c < '0' || c > '9')
+			return 0;
+
+		result = result * 10 + (c - '0');
+	}
+
+}
+
+/**
+ * @brief Converts the string to an unsigned 64 bit integer
+ *
+ * @return The uint or 0 if not a valid uint
+ */
+uint64_t String::to_uint64() const {
+
+	uint64_t result = 0;
+
+	for (size_t i = 0; i < m_length; i++) {
+		char c = m_string[i];
+
+		// Check if the character is a digit
+		if (c < '0' || c > '9')
+			return 0;
+
+		result = result * 10 + (c - '0');
+	}
+
+	return result;
+
+}
+
+/**
  * @brief Gets the length of a string
  *
  * @param str The string to get the length of

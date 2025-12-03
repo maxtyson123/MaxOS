@@ -156,9 +156,8 @@ namespace syscore{
 
 	/**
 	 * @brief Yield the current thread's execution
-	 *
 	 */
-	void yield(){
+	void yeild(){
 		make_syscall(SyscallType::YEILD, 0, 0, 0, 0, 0, 0);
 	}
 }

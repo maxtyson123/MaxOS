@@ -6,6 +6,10 @@ msg () {
   printf "\e[36m[INFO] $1 \e[39m\n"
 }
 
+rpcgen () {
+  printf "\e[36m[RPCGEN] $1 \e[39m\n"
+}
+
 warn () {
   printf "\e[33m[WARN] $1 \e[39m\n"
 }

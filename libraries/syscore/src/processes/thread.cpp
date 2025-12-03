@@ -32,7 +32,7 @@ uint64_t syscore::processes::spawn_thread(uint64_t process_handle, void (* entry
  * @param tid The thread ID of the thread to retrieve
  * @return The handle of the thread
  */
-uint64_t get_thread(uint64_t tid) {
+uint64_t syscore::processes::get_thread(uint64_t tid) {
 
 	char tid_str[21];
 	//int to str

@@ -39,6 +39,7 @@ namespace syscore::ipc {
 		ONE_WAY 			= (1 << 0),
 		URGENT  			= (1 << 1),
 		DESCRIPTOR_AS_DATA	= (1 << 2),
+		WAIT_FOR_SERVER		= (1 << 2),
 	};
 
 	/**
@@ -163,7 +164,7 @@ namespace syscore::ipc {
 	void register_function(const char* name, rpc_function_t function);
 	function_entry_t find_function(const char* name);
 
-	bool rpc_call(const char* server, const char* function, ArgList* args, ArgList* return_values, size_t flags);
+	bool rpc_call(const char* server, const char* function, ArgList* args, ArgList* return_values, size_t flags = 0);
 	[[noreturn]] void rpc_server_loop(const char* server);
 
 

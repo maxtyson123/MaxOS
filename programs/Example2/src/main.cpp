@@ -3,34 +3,13 @@
 //
 #include <cstdint>
 #include <cstddef>
-#include <ipc/rpc.h>
-#include <filesystem/directory.h>
+#include <greeting/greeter_client.h>
+#include <processes/process.h>
 #include <syscalls.h>
 
 using namespace syscore;
 using namespace syscore::ipc;
-using namespace syscore::filesystem;
-
-// Write using a syscall (int 0x80 with syscall 0x01 for write)
-void write(const char* data)
-{
-  // don't care abt length for now
-  asm volatile("int $0x80" : : "a" (0x01), "b" (data));
-}
-
-void close()
-{
-  // syscall 0, arg0 = pid (0 for current process), arg1 = exit code
-  asm volatile(
-      "mov $0, %%rdi\n\t"
-      "mov $0, %%rsi\n\t"
-      "mov $0x00, %%rax\n\t"
-      "int $0x80\n\t"
-      :
-      :
-      : "rax", "rdi", "rsi"
-        );
-}
+using namespace syscore::processes;
 
 
 void write_hexa(uint64_t value) {
@@ -45,39 +24,27 @@ void write_hexa(uint64_t value) {
 	klog(buffer);
 }
 
-void say_hi(const char* name)
-{
-
-	// Build RPC call
-	ArgList args;
-	args.push_string(name);
-
-	// Make the call
-	ArgList return_values;
-	if(rpc_call("greeting_server", "say_hi", &args, &return_values))
-	{
-		write_hexa(return_values.arg_count());
-		write_hexa(return_values.get_int64(0));
-		write("RPC call suc!\n");
-	} else{
-		write("RPC call failed!\n");
-	}
-}
-
 extern "C" void _start(void)
 {
 	// Write to the console
-	write("MaxOS Test Program v3 - 2\n");
+	klog("MaxOS Test Program v3 - 2\n");
 
-	thread_sleep(200);
 	say_hi("MaxOS User");
 
-	// Wait 0.5 seconds
+	compute_answer_result_t answer = compute_answer(42, 100);
+	klog("The answer is: ");
+	write_hexa(answer.v0);
+	klog("%h\n");
+	klog("With message: ");
+	klog(answer.v1);
+	klog("%h\n");
+	while (true){ asm("nop"); }
 
-	// Get lock
+	notify("This is a notification from the greeter client.");
 
-	// Write
 
-	close();
+	exit(0);
+
+	//TODO: exit() broken, notfiy broken, RPC call ret not wokring
 
 }

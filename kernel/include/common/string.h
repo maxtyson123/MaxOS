@@ -67,6 +67,13 @@ namespace MaxOS {
 			// Operator functions
 			[[nodiscard]] bool equals(String const& other) const;
 
+			// Number conversion
+			[[nodiscard]] int to_int() const;
+			[[nodiscard]] uint64_t to_uint64() const;
+
+			// Hex conversion
+//			[[nodiscard]] uint64_t hex_to_uint64() const; TODO
+
 			// Operators
 			String& operator =(String const& other);
 			String operator +(String const& other) const;
