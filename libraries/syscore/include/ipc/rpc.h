@@ -15,25 +15,9 @@
 #include <cstddef>
 #include <common.h>
 #include <ipc/messages.h>
+#include <processes/process.h>
 
 namespace syscore::ipc {
-
-	/**
-	 * @struct RPCHeader
-	 * @brief An IPC message header for RPC communication metadata
-	 *
-	 * @typedef rpc_message_t
-	 * @brief Alias for RPCHeader struct
-	 *
-	 * @todo Maybe use this, would then require a buffer allocated which means slower
-	 */
-	typedef struct RPCHeader {
-
-		size_t source_pid;
-		uint64_t flags;
-		uint64_t type;
-
-	} rpc_header_t;
 
 	/**
 	 * @enum RPCMessageType
@@ -51,10 +35,26 @@ namespace syscore::ipc {
 	 * @brief Flags for RPC messages
 	 */
 	enum class RPCMEssageFlags {
-		ONE_WAY,
-		URGENT,
-		DESCRIPTOR_AS_DATA
+		NONE 				= 0,
+		ONE_WAY 			= (1 << 0),
+		URGENT  			= (1 << 1),
+		DESCRIPTOR_AS_DATA	= (1 << 2),
 	};
+
+	/**
+	 * @struct RPCHeader
+	 * @brief An IPC message header for RPC communication metadata
+	 *
+	 * @typedef rpc_message_t
+	 * @brief Alias for RPCHeader struct
+	 */
+	typedef struct RPCHeader {
+
+		size_t source_pid;
+		size_t flags;
+		RPCMessageType type;
+
+	} rpc_header_t;
 
 	/**
 	 * @enum ArgType
@@ -163,7 +163,7 @@ namespace syscore::ipc {
 	void register_function(const char* name, rpc_function_t function);
 	function_entry_t find_function(const char* name);
 
-	bool rpc_call(const char* server, const char* function, ArgList* args, ArgList* return_values);
+	bool rpc_call(const char* server, const char* function, ArgList* args, ArgList* return_values, size_t flags);
 	[[noreturn]] void rpc_server_loop(const char* server);
 
 

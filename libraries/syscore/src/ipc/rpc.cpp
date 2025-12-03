@@ -12,6 +12,7 @@
 
 using namespace syscore;
 using namespace syscore::ipc;
+using namespace syscore::processes;
 
 ArgList::ArgList() = default;
 ArgList::~ArgList() = default;
@@ -395,13 +396,14 @@ function_entry_t syscore::ipc::find_function(const char* name) {
  * @param function The name of the function to call
  * @param args The arguments to pass to the function
  * @param return_values The return values from the function
+ * @param flags Optional flags to pass, see RPCMessageFlags
  * @return True if the call was successful, false otherwise
  *
  * @todo: not multi-thread safe for m_response_endpoint
  * @todo: unique endpoint name
  * @todo: header
  */
-bool syscore::ipc::rpc_call(const char* server, const char* function, ArgList* args, ArgList* return_values) {
+bool syscore::ipc::rpc_call(const char* server, const char* function, ArgList* args, ArgList* return_values, size_t flags) {
 
 	// Open the server
 	uint64_t endpoint = open_endpoint(server);
@@ -417,9 +419,9 @@ bool syscore::ipc::rpc_call(const char* server, const char* function, ArgList* a
 
 	// Add the header to the message
 	rpc_header_t header;
-	header.source_pid = 0;
-	header.flags = 0;
-	header.type = 0;
+	header.source_pid = pid();
+	header.flags = flags;
+	header.type = RPCMessageType::CALL;
 
 	// Create a message: name, response endpoint, args
 	ArgList message;
@@ -434,8 +436,10 @@ bool syscore::ipc::rpc_call(const char* server, const char* function, ArgList* a
 	send_message(endpoint, (void*)buffer, size);
 
 	// Read the response
-	size = read_message(m_response_endpoint, buffer, sizeof(buffer));
-	return_values -> deserialise(buffer, size);
+	if(!(flags & (size_t)RPCMEssageFlags::ONE_WAY)){
+		size = read_message(m_response_endpoint, buffer, sizeof(buffer));
+		return_values -> deserialise(buffer, size);
+	}
 
 	return true;
 }
@@ -446,6 +450,7 @@ bool syscore::ipc::rpc_call(const char* server, const char* function, ArgList* a
  * @param server The name of the server
  *
  * @note Will yield the thread when no messages are available.
+ * @todo Implement loading from shared mem
  */
 [[noreturn]] void syscore::ipc::rpc_server_loop(const char* server) {
 
@@ -481,7 +486,11 @@ bool syscore::ipc::rpc_call(const char* server, const char* function, ArgList* a
 		// Delegate to the function
 		ArgList return_values;
 		function_entry.function(&args, &return_values);
-		size = return_values.serialise(buffer, sizeof(buffer));
-		send_message(response_endpoint, (void*)buffer, size);
+
+		// Send the response
+		if(!(header->flags & (size_t)RPCMEssageFlags::ONE_WAY)){
+			size = return_values.serialise(buffer, sizeof(buffer));
+			send_message(response_endpoint, (void*)buffer, size);
+		}
 	}
 }

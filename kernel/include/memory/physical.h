@@ -39,17 +39,17 @@ namespace MaxOS::memory {
 	 * @todo: fix. this is stupid: Leave as enum not enum class for bitwise operations
 	 */
 	typedef enum PageFlags {
-		NONE = 0,                ///< No flags
-		PRESENT = (1 << 0),         ///< The page is present in memory
-		WRITE = (1 << 1),         ///< Memory in this page is writable
-		USER = (1 << 2),         ///< This page is accessible from user mode
-		WRITE_THROUGH = (1 << 3),         ///< write through caching is enabled
-		CACHE_DISABLED = (1 << 4),         ///< Dont let the CPU cache this page
-		ACCESSED = (1 << 5),         ///< This page has been read from or written to
-		DIRTY = (1 << 6),         ///< This page has been written to
-		HUGE_PAGE = (1 << 7),         ///< This page is not 4Kib (2MB or 1GB)
-		GLOBAL = (1 << 8),         ///< The page can be shared  between processes
-		NO_EXECUTE = (1ULL << 63)      ///< Dont let the CPU execute code on this page
+		NONE = 0,               	///< No flags
+		PRESENT = (1 << 0),        	///< The page is present in memory
+		WRITE = (1 << 1),         	///< Memory in this page is writable
+		USER = (1 << 2),         	///< This page is accessible from user mode
+		WRITE_THROUGH = (1 << 3),   ///< write through caching is enabled
+		CACHE_DISABLED = (1 << 4),  ///< Dont let the CPU cache this page
+		ACCESSED = (1 << 5),        ///< This page has been read from or written to
+		DIRTY = (1 << 6),         	///< This page has been written to
+		HUGE_PAGE = (1 << 7),       ///< This page is not 4Kib (2MB or 1GB)
+		GLOBAL = (1 << 8),         	///< The page can be shared  between processes
+		NO_EXECUTE = (1ULL << 63)   ///< Dont let the CPU execute code on this page
 	} page_flags_t;
 
 	/**
@@ -61,17 +61,17 @@ namespace MaxOS::memory {
 	 */
 	typedef struct PACKED PageTableEntry {
 
-		bool present : 1;                    ///< *copydoc PageFlags::PRESENT
-		bool write : 1;                      ///< *copydoc PageFlags::WRITE
-		bool user : 1;                       ///< *copydoc PageFlags::USER
-		bool write_through : 1;              ///< *copydoc PageFlags::WRITE_THROUGH
-		bool cache_disabled : 1;             ///< *copydoc PageFlags::CACHE_DISABLED
-		bool accessed : 1;                   ///< *copydoc PageFlags::ACCESSED
-		bool dirty : 1;                      ///< *copydoc PageFlags::DIRTY
-		bool huge_page : 1;                  ///< *copydoc PageFlags::HUGE_PAGE
-		bool global : 1;                     ///< *copydoc PageFlags::GLOBAL
-		uint8_t available : 3;               ///< Extra metadata bytes available for OS use
-		uint64_t physical_address : 52;      ///< The address the page represents in memory
+		bool present: 1;                    ///< *copydoc PageFlags::PRESENT
+		bool write: 1;                      ///< *copydoc PageFlags::WRITE
+		bool user: 1;                       ///< *copydoc PageFlags::USER
+		bool write_through: 1;              ///< *copydoc PageFlags::WRITE_THROUGH
+		bool cache_disabled: 1;             ///< *copydoc PageFlags::CACHE_DISABLED
+		bool accessed: 1;                   ///< *copydoc PageFlags::ACCESSED
+		bool dirty: 1;                      ///< *copydoc PageFlags::DIRTY
+		bool huge_page: 1;                  ///< *copydoc PageFlags::HUGE_PAGE
+		bool global: 1;                     ///< *copydoc PageFlags::GLOBAL
+		uint8_t available: 3;               ///< Extra metadata bytes available for OS use
+		uint64_t physical_address: 52;      ///< The address the page represents in memory
 
 	} pte_t;
 
@@ -95,9 +95,9 @@ namespace MaxOS::memory {
 	constexpr uint64_t HIGHER_HALF_MEM_OFFSET = 0xFFFF800000000000;                                     ///< Where higher half memory starts
 	constexpr uint64_t HIGHER_HALF_MEM_RESERVED = 0x280000000;                                          ///< Reserved higher half memory for kernel use (10GB)
 	constexpr uint64_t HIGHER_HALF_OFFSET = HIGHER_HALF_MEM_OFFSET +
-	                                        HIGHER_HALF_MEM_RESERVED;          ///< Where higher half memory usable space starts
+											HIGHER_HALF_MEM_RESERVED;          ///< Where higher half memory usable space starts
 	constexpr uint64_t HIGHER_HALF_DIRECT_MAP = HIGHER_HALF_OFFSET +
-	                                            PAGE_SIZE;                         ///< Where the map of physical memory to higher half starts
+												PAGE_SIZE;                         ///< Where the map of physical memory to higher half starts
 
 	/**
 	 * @class PhysicalMemoryManager
@@ -107,100 +107,100 @@ namespace MaxOS::memory {
 	 */
 	class PhysicalMemoryManager {
 
-		private:
+	private:
 
-			uint64_t* m_bit_map = nullptr;
-			uint32_t m_total_entries;
-			uint32_t m_bitmap_size;
-			uint32_t m_used_frames = 0;
-			uint32_t m_setup_frames = 0;
-			uint64_t m_memory_size;
+		uint64_t* m_bit_map = nullptr;
+		uint32_t m_total_entries;
+		uint32_t m_bitmap_size;
+		uint32_t m_used_frames = 0;
+		uint32_t m_setup_frames = 0;
+		uint64_t m_memory_size;
 
-			uint64_t m_kernel_start_page;
-			uint64_t m_kernel_end;
+		uint64_t m_kernel_start_page;
+		uint64_t m_kernel_end;
 
-			system::Multiboot* m_multiboot;
-			multiboot_mmap_entry* m_mmap;
-			multiboot_tag_mmap* m_mmap_tag;
+		system::Multiboot* m_multiboot;
+		multiboot_mmap_entry* m_mmap;
+		multiboot_tag_mmap* m_mmap_tag;
 
-			uint64_t* m_pml4_root_address;
-			pte_t* m_pml4_root;
+		uint64_t* m_pml4_root_address;
+		pte_t* m_pml4_root;
 
-			bool m_initialised;
-			bool m_nx_allowed;
+		bool m_initialised;
+		bool m_nx_allowed;
 
-			common::Spinlock m_lock;
+		common::Spinlock m_lock;
 
-			// Table Management
-			pml_t* get_or_create_table(pml_t* table, size_t index, size_t flags);
-			pml_t* get_and_create_table(pml_t* parent_table, uint64_t table_index, pml_t* table);
-			[[nodiscard]] pte_t create_page_table_entry(uintptr_t address, size_t flags) const;
+		// Table Management
+		pml_t* get_or_create_table(pml_t* table, size_t index, size_t flags);
+		pml_t* get_and_create_table(pml_t* parent_table, uint64_t table_index, pml_t* table);
+		[[nodiscard]] pte_t create_page_table_entry(uintptr_t address, size_t flags) const;
 
-			static uint64_t physical_address_of_entry(pte_t* entry);
-			pte_t* get_entry(virtual_address_t* virtual_address, pml_t* pml4_root);
-			static pml_t* get_higher_half_table(uint64_t index, uint64_t index2 = 510, uint64_t index3 = 510);
+		static uint64_t physical_address_of_entry(pte_t* entry);
+		pte_t* get_entry(virtual_address_t* virtual_address, pml_t* pml4_root);
+		static pml_t* get_higher_half_table(uint64_t index, uint64_t index2 = 510, uint64_t index3 = 510);
 
-			void initialise_bit_map();
+		void initialise_bit_map();
 
-		public:
+	public:
 
-			explicit PhysicalMemoryManager(system::Multiboot* multiboot);
-			~PhysicalMemoryManager();
+		explicit PhysicalMemoryManager(system::Multiboot* multiboot);
+		~PhysicalMemoryManager();
 
-			// Vars
-			[[nodiscard]] uint64_t memory_size() const;
-			[[nodiscard]] uint64_t memory_used() const;
+		// Vars
+		[[nodiscard]] uint64_t memory_size() const;
+		[[nodiscard]] uint64_t memory_used() const;
 
-			// Pml4
-			uint64_t* pml4_root_address();
-			static void unmap_lower_kernel();
+		// Pml4
+		uint64_t* pml4_root_address();
+		static void unmap_lower_kernel();
 
-			// Frame Management
-			void* allocate_frame();
-			void free_frame(void* address);
+		// Frame Management
+		void* allocate_frame();
+		void free_frame(void* address);
 
-			void* allocate_area(uint64_t start_address, size_t size);
-			void free_area(uint64_t start_address, size_t size);
+		void* allocate_area(uint64_t start_address, size_t size);
+		void free_area(uint64_t start_address, size_t size);
 
-			// Map
-			virtual_address_t* map(virtual_address_t* virtual_address, size_t flags);
-			virtual_address_t* map(physical_address_t* physical, virtual_address_t* virtual_address, size_t flags);
-			virtual_address_t* map(physical_address_t* physical, virtual_address_t* virtual_address, size_t flags, uint64_t* pml4_root);
-			void map_area(virtual_address_t* virtual_address_start, size_t length, size_t flags);
-			void map_area(physical_address_t* physical_address_start, virtual_address_t* virtual_address_start, size_t length, size_t flags);
-			void identity_map(physical_address_t* physical_address, size_t flags);
+		// Map
+		virtual_address_t* map(virtual_address_t* virtual_address, size_t flags);
+		virtual_address_t* map(physical_address_t* physical, virtual_address_t* virtual_address, size_t flags);
+		virtual_address_t* map(physical_address_t* physical, virtual_address_t* virtual_address, size_t flags, uint64_t* pml4_root);
+		void map_area(virtual_address_t* virtual_address_start, size_t length, size_t flags);
+		void map_area(physical_address_t* physical_address_start, virtual_address_t* virtual_address_start, size_t length, size_t flags);
+		void identity_map(physical_address_t* physical_address, size_t flags);
 
-			void unmap(virtual_address_t* virtual_address);
-			void unmap(virtual_address_t* virtual_address, uint64_t* pml4_root);
-			void unmap_area(virtual_address_t* virtual_address_start, size_t length);
+		void unmap(virtual_address_t* virtual_address);
+		void unmap(virtual_address_t* virtual_address, uint64_t* pml4_root);
+		void unmap_area(virtual_address_t* virtual_address_start, size_t length);
 
-			// Tools
-			static size_t size_to_frames(size_t size);
-			static size_t align_to_page(size_t size);
-			static size_t align_direct_to_page(size_t size);
-			static size_t align_up_to_page(size_t size, size_t s_page_size);
-			static bool check_aligned(size_t size);
+		// Tools
+		static size_t size_to_frames(size_t size);
+		static size_t align_to_page(size_t size);
+		static size_t align_direct_to_page(size_t size);
+		static size_t align_up_to_page(size_t size, size_t s_page_size);
+		static bool check_aligned(size_t size);
 
-			///@todo Make private with getter, maybe make mapping static?
-			inline static PhysicalMemoryManager* s_current_manager = nullptr;   ///< The current physical memory manager in use
-			static void clean_page_table(uint64_t* table);
+		///@todo Make private with getter, maybe make mapping static?
+		inline static PhysicalMemoryManager* s_current_manager = nullptr;   ///< The current physical memory manager in use
+		static void clean_page_table(uint64_t* table);
 
-			void reserve(uint64_t address);
-			void reserve(uint64_t address, size_t size, const char* = "Unknown");
-			void reserve_kernel_regions(system::Multiboot* multiboot);
+		void reserve(uint64_t address);
+		void reserve(uint64_t address, size_t size, const char* = "Unknown");
+		void reserve_kernel_regions(system::Multiboot* multiboot);
 
-			physical_address_t* get_physical_address(virtual_address_t* virtual_address, uint64_t* pml4_root);
-			bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address, uint64_t* pml4_root);
+		physical_address_t* get_physical_address(virtual_address_t* virtual_address, uint64_t* pml4_root);
+		bool is_mapped(uintptr_t physical_address, uintptr_t virtual_address, uint64_t* pml4_root);
 
-			void change_page_flags(virtual_address_t* virtual_address, size_t flags, uint64_t* pml4_root);
+		void change_page_flags(virtual_address_t* virtual_address, size_t flags, uint64_t* pml4_root);
 
-			// Higher Half Memory Management
-			static void* to_higher_region(uintptr_t physical_address);
-			static void* to_lower_region(uintptr_t virtual_address);
-			static void* to_io_region(uintptr_t physical_address);
-			static void* to_dm_region(uintptr_t physical_address);
-			static void* from_dm_region(uintptr_t physical_address);
-			static bool in_higher_region(uintptr_t virtual_address);
+		// Higher Half Memory Management
+		static void* to_higher_region(uintptr_t physical_address);
+		static void* to_lower_region(uintptr_t virtual_address);
+		static void* to_io_region(uintptr_t physical_address);
+		static void* to_dm_region(uintptr_t physical_address);
+		static void* from_dm_region(uintptr_t physical_address);
+		static bool in_higher_region(uintptr_t virtual_address);
 	};
 }
 
