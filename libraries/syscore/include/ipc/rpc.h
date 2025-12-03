@@ -166,6 +166,7 @@ namespace syscore::ipc {
 
 	bool rpc_call(const char* server, const char* function, ArgList* args, ArgList* return_values, size_t flags = 0);
 	[[noreturn]] void rpc_server_loop(const char* server);
+	void rpc_wait_for_server(const char* server);
 
 
 }

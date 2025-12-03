@@ -15,9 +15,8 @@ using namespace syscore::filesystem;
 int64_t say_hi(const char* name)
 {
 
-	klog("Hello, ");
-	klog(name);
-	klog("!\n");
+	klog("Hello, %s! Welcome to MaxOS.\n", name);
+	return 0;
 }
 
 compute_answer_result_t compute_answer(uint32_t a, uint32_t b)
@@ -30,9 +29,7 @@ compute_answer_result_t compute_answer(uint32_t a, uint32_t b)
 
 void notify(const char* message)
 {
-	klog("Notification received: ");
-	klog(message);
-	klog("\n");
+	klog("Notification received: %s\n", message);
 }
 
 extern "C" void _start(void) {

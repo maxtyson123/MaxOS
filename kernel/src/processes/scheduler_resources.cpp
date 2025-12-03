@@ -62,7 +62,7 @@ int ProcessResource::read(void* buffer, size_t size, size_t flags) {
 				stats.parent_pid = 0; //TODO: store parent pid
 				stats.thread_count = process->threads().size();
 				stats.total_ticks = process->total_ticks();
-				stats.memory_usage = process->memory_manager->memory_used();
+				stats.memory_usage = 0; //process->memory_manager->memory_used(); TODO: boken?
 				stats.handle_count = process->resource_manager.resources().size();
 			}
 			stats.exit_code = exit_code;
@@ -310,8 +310,8 @@ Resource* ThreadResourceRegistry::get_resource(string const& name) {
 	auto thread = new ThreadResource(name, 0, resource_type_t::PROCESS);
 	thread->thread = name == "this" ? GlobalScheduler::current_thread() : GlobalScheduler::get_thread(tid);
 
-	register_resource(resource);
-	return resource;
+	register_resource(thread);
+	return thread;
 }
 
 ThreadResourceRegistry::~ThreadResourceRegistry() = default;
@@ -355,8 +355,8 @@ Resource* ProcessResourceRegistry::get_resource(string const& name) {
 	auto process = new ProcessResource(name, 0, resource_type_t::PROCESS);
 	process->process = name == "this" ? GlobalScheduler::current_process() : GlobalScheduler::get_process(pid);
 
-	register_resource(resource);
-	return resource;
+	register_resource(process);
+	return process;
 }
 
 ProcessResourceRegistry::~ProcessResourceRegistry() = default;

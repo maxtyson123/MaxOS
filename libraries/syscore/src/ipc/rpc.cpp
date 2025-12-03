@@ -497,3 +497,21 @@ bool syscore::ipc::rpc_call(const char* server, const char* function, ArgList* a
 		}
 	}
 }
+
+/**
+ * @brief Waits for an RPC server to become available
+ *
+ * @param server The name of the server
+ */
+void syscore::ipc::rpc_wait_for_server(const char* server) {
+
+	// Try to open the greeter server endpoint until it is available
+	uint64_t endpoint = open_endpoint(server);
+	while (endpoint == 0){
+		yeild();
+		endpoint = open_endpoint(server);
+	}
+
+	close_endpoint(endpoint);
+
+}

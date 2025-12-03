@@ -25,7 +25,7 @@ UBSanHandler::~UBSanHandler() = default;
 void UBSanHandler::handle(source_location_t location, const char* msg) {
 
 	// Print the location
-	ASSERT(false, "UBSAN ERROR AT %s:%d:%d - %s", location.file, location.line, location.column, msg);
+	ASSERT(false, "UBSAN ERROR AT %s:%d:%d - %s \n", location.file, location.line, location.column, msg);
 }
 
 /**

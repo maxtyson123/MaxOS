@@ -42,7 +42,7 @@ namespace syscore{
 
 	void* make_syscall(SyscallType type, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
 
-	void klog(const char* message);
+	void klog(const char* format, ...);
 
 	void* allocate_memory(size_t size);
 	void free_memory(void* address);

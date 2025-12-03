@@ -225,6 +225,8 @@ EOF
 
 using namespace syscore::ipc;
 
+void wait_for_${service}_server();
+
 EOF
 
     # Forward declare the functions for the server, generate definitions for the client
@@ -405,6 +407,10 @@ EOF
 #include <${inc_include_prefix}${service}_client.h>
 
 using namespace syscore::ipc;
+
+void wait_for_${service}_server() {
+    rpc_wait_for_server("${service}");
+}
 
 EOF
 

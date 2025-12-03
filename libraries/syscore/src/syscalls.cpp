@@ -3,6 +3,8 @@
 //
 
 #include <syscalls.h>
+#include <stdarg.h>
+#include <common.h>
 
 namespace syscore{
 
@@ -54,7 +56,63 @@ namespace syscore{
 	 *
 	 * @param message The message to log
 	 */
-	void klog(const char* message){
+	void klog(char const *format, ...){
+
+		// Create a message buffer so that not having a syscall for each character
+		char message[1024];
+		va_list parameters;
+		va_start(parameters, format);
+
+		// Format the string
+		size_t index = 0;
+		for (; *format != '\0' && index < sizeof(message) - 1; format++) {
+
+			// If it is not a %, copy the character
+			if (*format != '%') {
+				message[index++] = *format;
+				continue;
+			}
+
+			// Move to the next character
+			format++;
+			switch (*format) {
+				case 'd': {
+					// Print a decimal
+					int number = va_arg (parameters, int);
+					char* num_str = itoa(10, number);
+
+					// Append the number string
+					for (size_t i = 0; num_str[i] != '\0' && index < sizeof(message) - 1; i++)
+						message[index++] = num_str[i];
+					break;
+				}
+				case 'x': {
+					// Print a hex
+					uint64_t number = va_arg (parameters, uint64_t);
+					char* num_str = htoa(number);
+
+					// Append the number string
+					for (size_t i = 0; num_str[i] != '\0' && index < sizeof(message) - 1; i++)
+						message[index++] = num_str[i];
+					break;
+				}
+				case 's': {
+					// Print a string
+					char* str = va_arg (parameters, char*);
+
+					for (size_t i = 0; str[i] != '\0' && index < sizeof(message) - 1; i++)
+						message[index++] = str[i];
+					break;
+				}
+			}
+
+		}
+
+		// Close
+		message[index] = '\0';
+		va_end(parameters);
+
+		// Print the formatted string
 		make_syscall(SyscallType::KLOG, (uint64_t)message, 0, 0, 0, 0, 0);
 	}
 
