@@ -9,8 +9,8 @@
 #include <system/syscalls.h>
 #include <common/logger.h>
 
-using namespace syscore;
 using namespace MaxOS;
+using namespace MaxOS::KPI;
 using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
@@ -178,7 +178,7 @@ syscall_args_t* SyscallManager::syscall_free_memory(syscall_args_t* args) {
 syscall_args_t* SyscallManager::syscall_resource_create(syscall_args_t* args) {
 
 	// Parse params
-	auto type 	= (ResourceType)args->arg0;
+	auto type 	= (resource_type_t)args->arg0;
 	auto name 	= (char*)args->arg1;
 	auto flags 	= (size_t)args->arg2;
 
@@ -199,7 +199,7 @@ syscall_args_t* SyscallManager::syscall_resource_create(syscall_args_t* args) {
 syscall_args_t* SyscallManager::syscall_resource_open(syscall_args_t* args) {
 
 	// Parse params
-	auto type 	= (ResourceType)args->arg0;
+	auto type 	= (resource_type_t)args->arg0;
 	auto name 	= (char*)args->arg1;
 	auto flags 	= (size_t)args->arg2;
 

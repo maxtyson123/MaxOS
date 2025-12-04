@@ -246,7 +246,7 @@ Process::~Process() {
 		delete memory_manager;
 
 	// Log the cleanup
-	Logger::DEBUG() << "Process " << name.c_str() << " cleaned up, memory before: " << pages << " bytes, after cleanup: " << PhysicalMemoryManager::s_current_manager->memory_used() << " bytes\n";
+	Logger::DEBUG() << "Process " << name.c_str() << " cleaned up, memory before: " << (int)pages << " bytes, after cleanup: " << (int)PhysicalMemoryManager::s_current_manager->memory_used() << " bytes\n";
 }
 
 /**

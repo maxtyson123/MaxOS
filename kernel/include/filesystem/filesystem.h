@@ -15,14 +15,14 @@
 #include <common/vector.h>
 #include <common/buffer.h>
 #include <filesystem/path.h>
-#include <syscore/include/filesystem/file.h>
+#include <libkpi/include/filesystem/file.h>
 
 
 namespace MaxOS::filesystem {
 
 
 	typedef uint32_t lba_t;                             ///< Logical Block Addressing type
-	typedef syscore::filesystem::SeekType SeekType;     ///< Seek type for file operations
+	typedef MaxOS::KPI::filesystem::SeekType SeekType;     ///< Seek type for file operations
 
 	/**
 	 * @class File

@@ -19,8 +19,8 @@
 
 namespace MaxOS::processes {
 
-	typedef ::syscore::ResourceType resource_type_t;                    ///< Alias to make the libsyscore ResourceType accessible here
-	typedef ::syscore::ResourceErrorBase resource_error_base_t;         ///< Alias to make the libsyscore ResourceErrorBase accessible here
+	typedef ::MaxOS::KPI::ResourceType resource_type_t;                    ///< Alias to make the libsyscore ResourceType accessible here
+	typedef ::MaxOS::KPI::ResourceErrorBase resource_error_base_t;         ///< Alias to make the libsyscore ResourceErrorBase accessible here
 
 	/**
 	 * @class Resource

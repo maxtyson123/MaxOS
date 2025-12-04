@@ -4,8 +4,7 @@
 
 #include <ipc/messages.h>
 
-
-namespace syscore::ipc {
+namespace MaxOS::KPI::ipc {
 
 	/**
 	 * @brief Create a new endpoint for sending and receiving messages

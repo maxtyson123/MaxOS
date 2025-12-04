@@ -13,8 +13,8 @@
 #include <processes/resource.h>
 #include <processes/process.h>
 #include <memory/memorymanagement.h>
-#include <syscore/include/processes/process.h>
-#include <syscore/include/processes/thread.h>
+#include <libkpi/include/processes/process.h>
+#include <libkpi/include/processes/thread.h>
 
 namespace MaxOS::processes {
 

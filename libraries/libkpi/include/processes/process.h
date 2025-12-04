@@ -7,8 +7,8 @@
  * @date 2nd December 2025
  * @author Max Tyson
  */
-#ifndef SYSCORE_PROCESSES_PROCESS_H
-#define SYSCORE_PROCESSES_PROCESS_H
+#ifndef MAXOS_KPI_PROCESSES_PROCESS_H
+#define MAXOS_KPI_PROCESSES_PROCESS_H
 
 #include <cstdint>
 #include <cstddef>
@@ -16,7 +16,7 @@
 #include <syscalls.h>
 #include <common.h>
 
-namespace syscore::processes {
+namespace MaxOS::KPI::processes {
 
 	/**
 	 * @struct ProcessStats
@@ -105,4 +105,4 @@ namespace syscore::processes {
 
 }
 
-#endif //SYSCORE_PROCESSES_PROCESS_H
+#endif //MAXOS_KPI_PROCESSES_PROCESS_H

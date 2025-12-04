@@ -1,11 +1,17 @@
-//
-// Created by 98max on 9/1/2025.
-//
+/**
+ * @file common.h
+ * @brief Common utility functions for syscore library
+ *
+ * @date 1st September 2025
+ * @author Max Tyson
+ *
+ * @todo Move common functions from kernel here
+ */
 
-#ifndef SYSCORE_COMMON_H
-#define SYSCORE_COMMON_H
+#ifndef MAXOS_KPI_COMMON_H
+#define MAXOS_KPI_COMMON_H
 
-namespace syscore{
+namespace MaxOS::KPI{
 
 	/**
 	* @brief Gets the length of a string
@@ -121,4 +127,4 @@ namespace syscore{
 
 }
 
-#endif //SYSCORE_COMMON_H
+#endif //MAXOS_KPI_COMMON_H

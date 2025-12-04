@@ -2,15 +2,15 @@
 // Created by 98max on 8/31/2025.
 //
 
-#ifndef SYSCORE_IPC_SHAREDMEMORY_H
-#define SYSCORE_IPC_SHAREDMEMORY_H
+#ifndef MAXOS_KPI_IPC_SHAREDMEMORY_H
+#define MAXOS_KPI_IPC_SHAREDMEMORY_H
 
 #include <cstdint>
 #include <cstddef>
 #include <syscalls.h>
 
 
-namespace syscore::ipc {
+namespace MaxOS::KPI::ipc {
 
 	void* create_shared_memory(const char* name, size_t size);
 
@@ -18,4 +18,4 @@ namespace syscore::ipc {
 }
 
 
-#endif //SYSCORE_IPC_SHAREDMEMORY_H
+#endif //MAXOS_KPI_IPC_SHAREDMEMORY_H

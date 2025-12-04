@@ -5,7 +5,7 @@
 #include <filesystem/file.h>
 
 
-namespace syscore::filesystem {
+namespace MaxOS::KPI::filesystem {
 
 	uint64_t open_file(const char* path) {
 		return resource_open(ResourceType::FILESYSTEM, path, 0);

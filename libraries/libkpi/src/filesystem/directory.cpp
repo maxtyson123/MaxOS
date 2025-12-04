@@ -5,7 +5,7 @@
 #include <filesystem/directory.h>
 
 
-namespace syscore::filesystem {
+namespace MaxOS::KPI::filesystem {
 
 
 	/**

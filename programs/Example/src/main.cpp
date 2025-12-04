@@ -7,9 +7,9 @@
 #include <greeting/greeter_server.h>
 #include <filesystem/file.h>
 
-using namespace syscore;
-using namespace syscore::ipc;
-using namespace syscore::filesystem;
+using namespace MaxOS::KPI;
+using namespace MaxOS::KPI::ipc;
+using namespace MaxOS::KPI::filesystem;
 
 
 int64_t say_hi(const char* name)

@@ -7,9 +7,9 @@
 #include <processes/process.h>
 #include <syscalls.h>
 
-using namespace syscore;
-using namespace syscore::ipc;
-using namespace syscore::processes;
+using namespace MaxOS::KPI;
+using namespace MaxOS::KPI::ipc;
+using namespace MaxOS::KPI::processes;
 
 extern "C" void _start(void)
 {

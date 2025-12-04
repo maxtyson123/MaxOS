@@ -8,8 +8,8 @@
 
 #include <processes/thread.h>
 
-using namespace syscore;
-using namespace syscore::processes;
+using namespace MaxOS::KPI;
+using namespace MaxOS::KPI::processes;
 
 /**
  * @brief Spawns a new thread in the specified process
@@ -22,7 +22,7 @@ using namespace syscore::processes;
  *
  * @todo Implement
  */
-uint64_t syscore::processes::spawn_thread(uint64_t process_handle, void (* entry_point)(void*), void* args, size_t arg_amount) {
+uint64_t MaxOS::KPI::processes::spawn_thread(uint64_t process_handle, void (* entry_point)(void*), void* args, size_t arg_amount) {
 
 }
 
@@ -32,7 +32,7 @@ uint64_t syscore::processes::spawn_thread(uint64_t process_handle, void (* entry
  * @param tid The thread ID of the thread to retrieve
  * @return The handle of the thread
  */
-uint64_t syscore::processes::get_thread(uint64_t tid) {
+uint64_t MaxOS::KPI::processes::get_thread(uint64_t tid) {
 
 	char tid_str[21];
 	//int to str
@@ -45,7 +45,7 @@ uint64_t syscore::processes::get_thread(uint64_t tid) {
  *
  * @param handle The handle to close
  */
-void syscore::processes::close_thread_handle(uint64_t handle) {
+void MaxOS::KPI::processes::close_thread_handle(uint64_t handle) {
 
 	resource_close(handle, 0);
 
@@ -58,7 +58,7 @@ void syscore::processes::close_thread_handle(uint64_t handle) {
  * @param exit_code The exit code to return to the owning process
  * @param close_handle True to close the handle after killing the thread (default: true)
  */
-void syscore::processes::kill_thread_handle(uint64_t handle, uint64_t exit, bool close_handle) {
+void MaxOS::KPI::processes::kill_thread_handle(uint64_t handle, uint64_t exit, bool close_handle) {
 
 	resource_write(handle, &exit, sizeof(exit), (size_t)ThreadFlags::WRITE_KILL);
 
@@ -73,7 +73,7 @@ void syscore::processes::kill_thread_handle(uint64_t handle, uint64_t exit, bool
  * @param tid The thread ID of the thread to kill
  * @param exit_code The exit code to return to the owning process
  */
-void syscore::processes::kill_thread(uint64_t tid, uint64_t exit_code) {
+void MaxOS::KPI::processes::kill_thread(uint64_t tid, uint64_t exit_code) {
 	kill_thread_handle(get_thread(tid), exit_code);
 }
 
@@ -83,7 +83,7 @@ void syscore::processes::kill_thread(uint64_t tid, uint64_t exit_code) {
  * @param thread_handle The handle of the thread
  * @return The statistics of the thread
  */
-thread_stats_t syscore::processes::get_thread_stats_handle(uint64_t thread_handle) {
+thread_stats_t MaxOS::KPI::processes::get_thread_stats_handle(uint64_t thread_handle) {
 
 	thread_stats_t stats;
 	resource_read(thread_handle, &stats, sizeof(thread_stats_t), (size_t)ThreadFlags::READ_STATS);
@@ -97,7 +97,7 @@ thread_stats_t syscore::processes::get_thread_stats_handle(uint64_t thread_handl
  * @param tid The thread ID of the thread
  * @return The statistics of the thread
  */
-thread_stats_t syscore::processes::get_thread_stats(uint64_t tid) {
+thread_stats_t MaxOS::KPI::processes::get_thread_stats(uint64_t tid) {
 
 	uint64_t handle = get_thread(tid);
 	thread_stats_t stats = get_thread_stats_handle(handle);
@@ -112,7 +112,7 @@ thread_stats_t syscore::processes::get_thread_stats(uint64_t tid) {
  * @param thread_handle The handle of the thread
  * @param sleep_time_ms The amount of time to sleep in milliseconds
  */
-void syscore::processes::thread_sleep_handle(uint64_t thread_handle, uint64_t sleep_time_ms) {
+void MaxOS::KPI::processes::thread_sleep_handle(uint64_t thread_handle, uint64_t sleep_time_ms) {
 
 	resource_write(thread_handle, &sleep_time_ms, sizeof(sleep_time_ms), (size_t)ThreadFlags::WRITE_SLEEP_TIME);
 
@@ -124,7 +124,7 @@ void syscore::processes::thread_sleep_handle(uint64_t thread_handle, uint64_t sl
  * @param tid The thread ID of the thread
  * @param sleep_time_ms The amount of time to sleep in milliseconds
  */
-void syscore::processes::thread_sleep(uint64_t tid, uint64_t sleep_time_ms) {
+void MaxOS::KPI::processes::thread_sleep(uint64_t tid, uint64_t sleep_time_ms) {
 
 	uint64_t handle = get_thread(tid);
 	thread_sleep_handle(handle, sleep_time_ms);
@@ -137,7 +137,7 @@ void syscore::processes::thread_sleep(uint64_t tid, uint64_t sleep_time_ms) {
  *
  * @return A handle to the current thread
  */
-uint64_t syscore::processes::get_current_thread() {
+uint64_t MaxOS::KPI::processes::get_current_thread() {
 
 	if (m_current_thread_handle == 0)
 		m_current_thread_handle = resource_open(ResourceType::THREAD, "this", 0);
@@ -151,7 +151,7 @@ uint64_t syscore::processes::get_current_thread() {
  *
  * @return The statistics of the current thread
  */
-thread_stats_t syscore::processes::get_current_thread_stats() {
+thread_stats_t MaxOS::KPI::processes::get_current_thread_stats() {
 
 	if (m_current_thread_stats.tid == 0)
 		m_current_thread_stats = get_thread_stats_handle(get_current_thread());
@@ -164,7 +164,7 @@ thread_stats_t syscore::processes::get_current_thread_stats() {
  *
  * @return The thread ID of the current thread
  */
-uint64_t syscore::processes::tid() {
+uint64_t MaxOS::KPI::processes::tid() {
 
 	// Ensure current thread stats are loaded
 	if (m_current_thread_stats.tid == 0)
@@ -179,7 +179,7 @@ uint64_t syscore::processes::tid() {
  *
  * @param exit_code The exit code to return to the owning process
  */
-void syscore::processes::thread_exit(uint64_t exit_code) {
+void MaxOS::KPI::processes::thread_exit(uint64_t exit_code) {
 
 	resource_write(get_current_thread(), &exit_code, sizeof(exit_code), (size_t)ThreadFlags::WRITE_KILL);
 	yeild();
@@ -191,7 +191,7 @@ void syscore::processes::thread_exit(uint64_t exit_code) {
  *
  * @param sleep_time_ms The amount of time to sleep in milliseconds
  */
-void syscore::processes::sleep(uint64_t sleep_time_ms) {
+void MaxOS::KPI::processes::sleep(uint64_t sleep_time_ms) {
 
 	resource_write(get_current_thread(), &sleep_time_ms, sizeof(sleep_time_ms), (size_t)ThreadFlags::WRITE_SLEEP_TIME);
 

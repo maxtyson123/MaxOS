@@ -19,6 +19,7 @@
 #include <memory/memorymanagement.h>
 #include <processes/scheduler.h>
 #include <system/syscalls.h>
+#include <libkpi/include/syscalls.h>
 
 
 namespace MaxOS::system {
@@ -68,8 +69,8 @@ namespace MaxOS::system {
 
 			cpu_status_t* handle_interrupt(cpu_status_t* esp) final;
 
-			void set_syscall_handler(::syscore::SyscallType syscall, syscall_func_t handler);
-			void remove_syscall_handler(::syscore::SyscallType syscall);
+			void set_syscall_handler(::MaxOS::KPI::SyscallType syscall, syscall_func_t handler);
+			void remove_syscall_handler(::MaxOS::KPI::SyscallType syscall);
 
 			static syscall_args_t* syscall_klog(syscall_args_t* args);
 

@@ -2,8 +2,8 @@
 // Created by 98max on 8/31/2025.
 //
 
-#ifndef SYSCORE_IPC_MESSAGES_H
-#define SYSCORE_IPC_MESSAGES_H
+#ifndef MAXOS_KPI_IPC_MESSAGES_H
+#define MAXOS_KPI_IPC_MESSAGES_H
 
 #include <cstdint>
 #include <cstddef>
@@ -11,7 +11,7 @@
 
 //TODO: Flags such that RPC using enpoint is restricted to two processes
 
-namespace syscore::ipc {
+namespace MaxOS::KPI::ipc {
 
 	uint64_t create_endpoint(const char* name);
 	uint64_t open_endpoint(const char* name);
@@ -23,4 +23,4 @@ namespace syscore::ipc {
 }
 
 
-#endif //SYSCORE_IPC_MESSAGES_H
+#endif //MAXOS_KPI_IPC_MESSAGES_H

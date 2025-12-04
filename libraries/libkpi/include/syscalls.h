@@ -1,14 +1,18 @@
-//
-// Created by 98max on 8/31/2025.
-//
+/**
+ * @file syscalls.h
+ * @brief Defines the syscalls that can be made to the kernel from user space
+ *
+ * @date 31st August 2025
+ * @author Max Tyson
+ */
 
-#ifndef SYSCORE_SYSCALLS_H
-#define SYSCORE_SYSCALLS_H
+#ifndef MAXOS_KPI_SYSCALLS_H
+#define MAXOS_KPI_SYSCALLS_H
 
 #include <cstdint>
 #include <cstddef>
 
-namespace syscore{
+namespace MaxOS::KPI{
 
 	enum class ResourceType{
 		MESSAGE_ENDPOINT,
@@ -56,4 +60,4 @@ namespace syscore{
 	void yeild();
 }
 
-#endif //SYSCORE_SYSCALLS_H
+#endif //MAXOS_KPI_SYSCALLS_H

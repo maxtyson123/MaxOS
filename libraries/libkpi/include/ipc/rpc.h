@@ -8,8 +8,8 @@
  * @todo: C api
  */
 
-#ifndef SYSCORE_IPC_RPC_H
-#define SYSCORE_IPC_RPC_H
+#ifndef MAXOS_KPI_IPC_RPC_H
+#define MAXOS_KPI_IPC_RPC_H
 
 #include <cstdint>
 #include <cstddef>
@@ -17,7 +17,7 @@
 #include <ipc/messages.h>
 #include <processes/process.h>
 
-namespace syscore::ipc {
+namespace MaxOS::KPI::ipc {
 
 	/**
 	 * @enum RPCMessageType
@@ -171,4 +171,4 @@ namespace syscore::ipc {
 
 }
 
-#endif //SYSCORE_IPC_RPC_H
+#endif //MAXOS_KPI_IPC_RPC_H

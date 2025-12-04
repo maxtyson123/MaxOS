@@ -4,6 +4,8 @@
  *
  * @date 15th October 2022
  * @author Max Tyson
+ *
+ * @todo Move to drivers/video?
  */
 
 #ifndef MaxOS_COMMON_GRAPHICSCONTEX_H

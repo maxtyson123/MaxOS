@@ -27,7 +27,7 @@ using namespace MaxOS::memory;
  * @param type The type of resource
  */
 SharedMemory::SharedMemory(const string& name, size_t size, resource_type_t type)
-: Resource(name, size, syscore::ResourceType::SHARED_MEMORY),
+: Resource(name, size, MaxOS::KPI::ResourceType::SHARED_MEMORY),
   m_size(size)
 {
 

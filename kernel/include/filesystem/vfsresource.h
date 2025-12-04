@@ -14,8 +14,8 @@
 #include <filesystem/vfs.h>
 #include <common/buffer.h>
 #include <processes/scheduler.h>
-#include <syscore/include/filesystem/file.h>
-#include <syscore/include/filesystem/directory.h>
+#include <libkpi/include/filesystem/file.h>
+#include <libkpi/include/filesystem/directory.h>
 
 namespace MaxOS {
 

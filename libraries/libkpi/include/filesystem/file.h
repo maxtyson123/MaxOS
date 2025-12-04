@@ -3,8 +3,8 @@
 //
 
 
-#ifndef SYSCORE_FILESYSTEM_FILE_H
-#define SYSCORE_FILESYSTEM_FILE_H
+#ifndef MAXOS_KPI_FILESYSTEM_FILE_H
+#define MAXOS_KPI_FILESYSTEM_FILE_H
 
 #include <cstdint>
 #include <cstddef>
@@ -12,7 +12,7 @@
 #include <syscalls.h>
 
 
-namespace syscore::filesystem {
+namespace MaxOS::KPI::filesystem {
 
 	enum class FileFlags {
 		DEFAULT,
@@ -44,4 +44,4 @@ namespace syscore::filesystem {
 }
 
 
-#endif //SYSCORE_FILESYSTEM_FILE_H
+#endif //MAXOS_KPI_FILESYSTEM_FILE_H

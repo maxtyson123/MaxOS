@@ -223,7 +223,7 @@ EOF
 #include <ipc/rpc.h>
 #include <${inc_include_prefix}${service}_types.h>
 
-using namespace syscore::ipc;
+using namespace MaxOS::KPI::ipc;
 
 void wait_for_${service}_server();
 
@@ -275,7 +275,7 @@ EOF
     cat > "$srv_cpp" <<EOF
 #include <${inc_include_prefix}${service}_server.h>
 
-using namespace syscore::ipc;
+using namespace MaxOS::KPI::ipc;
 
 EOF
 
@@ -406,7 +406,7 @@ EOF
     cat > "$cli_cpp" <<EOF
 #include <${inc_include_prefix}${service}_client.h>
 
-using namespace syscore::ipc;
+using namespace MaxOS::KPI::ipc;
 
 void wait_for_${service}_server() {
     rpc_wait_for_server("${service}");

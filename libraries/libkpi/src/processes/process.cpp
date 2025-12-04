@@ -8,8 +8,8 @@
 
 #include <processes/process.h>
 
-using namespace syscore;
-using namespace syscore::processes;
+using namespace MaxOS::KPI;
+using namespace MaxOS::KPI::processes;
 
 
 /**
@@ -24,7 +24,7 @@ using namespace syscore::processes;
  * @todo Implement mem allocation for full_args
  * @todo What if someone exec_file but not_wait and then never close the handle, will resource leak - should auto close when process ends?
  */
-uint64_t syscore::processes::exec_file(const char* path, const char** args, size_t arg_amount, bool wait_for_completion) {
+uint64_t MaxOS::KPI::processes::exec_file(const char* path, const char** args, size_t arg_amount, bool wait_for_completion) {
 
 	// Add the path as the first argument
 	const char** full_args = args; // new const char*[arg_amount + 1];
@@ -58,7 +58,7 @@ uint64_t syscore::processes::exec_file(const char* path, const char** args, size
  * @param pid The PID of the process
  * @return A handle to the process
  */
-uint64_t syscore::processes::get_process(uint64_t pid) {
+uint64_t MaxOS::KPI::processes::get_process(uint64_t pid) {
 
 	char pid_str[21];
 	//int to str
@@ -70,7 +70,7 @@ uint64_t syscore::processes::get_process(uint64_t pid) {
  *
  * @param handle The handle to close
  */
-void syscore::processes::close_process_handle(uint64_t handle) {
+void MaxOS::KPI::processes::close_process_handle(uint64_t handle) {
 	resource_close(handle, 0);
 }
 
@@ -81,7 +81,7 @@ void syscore::processes::close_process_handle(uint64_t handle) {
  * @param exit_code The exit code to return to the parent process
  * @param close_handle True to close the handle after killing the process (default: true)
  */
-void syscore::processes::kill_process_handle(uint64_t handle, uint64_t exit_code, bool close_handle) {
+void MaxOS::KPI::processes::kill_process_handle(uint64_t handle, uint64_t exit_code, bool close_handle) {
 
 	resource_write(handle, &exit_code, sizeof(exit_code), (size_t)ProcessFlags::WRITE_KILL);
 
@@ -96,7 +96,7 @@ void syscore::processes::kill_process_handle(uint64_t handle, uint64_t exit_code
  * @param exit_code The exit code to return to the parent process
  * @param close_handle True to close the handle after killing the process (default: true)
  */
-void syscore::processes::kill_process(uint64_t pid, uint64_t exit_code) {
+void MaxOS::KPI::processes::kill_process(uint64_t pid, uint64_t exit_code) {
 
 	kill_process_handle(get_process(pid), exit_code);
 
@@ -108,7 +108,7 @@ void syscore::processes::kill_process(uint64_t pid, uint64_t exit_code) {
  * @param handle The handle of the process
  * @return The statistics of the process
  */
-process_stats_t syscore::processes::get_process_stats_handle(uint64_t handle) {
+process_stats_t MaxOS::KPI::processes::get_process_stats_handle(uint64_t handle) {
 
 	process_stats_t stats;
 	resource_read(handle, &stats, sizeof(process_stats_t), (size_t)ProcessFlags::READ_STATS);
@@ -121,7 +121,7 @@ process_stats_t syscore::processes::get_process_stats_handle(uint64_t handle) {
  * @param pid The PID of the process
  * @return The statistics of the process
  */
-process_stats_t syscore::processes::get_process_stats(uint64_t pid) {
+process_stats_t MaxOS::KPI::processes::get_process_stats(uint64_t pid) {
 
 	uint64_t handle = get_process(pid);
 	process_stats_t stats = get_process_stats_handle(handle);
@@ -136,7 +136,7 @@ process_stats_t syscore::processes::get_process_stats(uint64_t pid) {
  * @param handle The handle of the process
  * @return The environment of the process
  */
-process_environment_t syscore::processes::get_process_environment_handle(uint64_t handle) {
+process_environment_t MaxOS::KPI::processes::get_process_environment_handle(uint64_t handle) {
 
 	process_environment_t env;
 	resource_read(handle, &env, sizeof(process_environment_t), (size_t)ProcessFlags::READ_ENVIRONMENT);
@@ -150,7 +150,7 @@ process_environment_t syscore::processes::get_process_environment_handle(uint64_
  * @param pid The PID of the process
  * @return The environment of the process
  */
-process_environment_t syscore::processes::get_process_environment(uint64_t pid) {
+process_environment_t MaxOS::KPI::processes::get_process_environment(uint64_t pid) {
 
 	uint64_t handle = get_process(pid);
 	process_environment_t env = get_process_environment_handle(handle);
@@ -165,7 +165,7 @@ process_environment_t syscore::processes::get_process_environment(uint64_t pid) 
  * @param pid The PID of the process
  * @param path The new working directory path
  */
-void syscore::processes::change_working_directory_handle(uint64_t handle, const char* path) {
+void MaxOS::KPI::processes::change_working_directory_handle(uint64_t handle, const char* path) {
 
 	resource_write(handle, path, strlen(path) + 1, (size_t)ProcessFlags::WRITE_CHANGE_DIRECTORY);
 
@@ -177,7 +177,7 @@ void syscore::processes::change_working_directory_handle(uint64_t handle, const 
  * @param pid The PID of the process
  * @param path The new working directory path
  */
-void syscore::processes::change_working_directory_pid(uint64_t pid, const char* path) {
+void MaxOS::KPI::processes::change_working_directory_pid(uint64_t pid, const char* path) {
 
 	uint64_t handle = get_process(pid);
 	change_working_directory_handle(handle, path);
@@ -190,7 +190,7 @@ void syscore::processes::change_working_directory_pid(uint64_t pid, const char* 
  *
  * @return A handle to the current process
  */
-uint64_t syscore::processes::get_current_process() {
+uint64_t MaxOS::KPI::processes::get_current_process() {
 
 	if (m_current_process_handle == 0)
 		m_current_process_handle = resource_open(ResourceType::PROCESS, "this", 0);
@@ -203,7 +203,7 @@ uint64_t syscore::processes::get_current_process() {
  *
  * @return The statistics of the current process
  */
-process_stats_t syscore::processes::get_current_process_stats() {
+process_stats_t MaxOS::KPI::processes::get_current_process_stats() {
 
 	m_current_process_stats = get_process_stats_handle(get_current_process());
 	return m_current_process_stats;
@@ -214,7 +214,7 @@ process_stats_t syscore::processes::get_current_process_stats() {
  *
  * @return The environment of the current process
  */
-process_environment_t syscore::processes::get_current_process_environment() {
+process_environment_t MaxOS::KPI::processes::get_current_process_environment() {
 
 	m_current_process_environment = get_process_environment_handle(get_current_process());
 	return m_current_process_environment;
@@ -225,7 +225,7 @@ process_environment_t syscore::processes::get_current_process_environment() {
  *
  * @return The PID of the current process
  */
-uint64_t syscore::processes::pid() {
+uint64_t MaxOS::KPI::processes::pid() {
 
 	// Haven't got current process stats yet, get them
 	if (m_current_process_stats.pid == 0)
@@ -239,7 +239,7 @@ uint64_t syscore::processes::pid() {
  *
  * @param exit_code The exit code to return to the parent process
  */
-void syscore::processes::exit(uint64_t exit_code) {
+void MaxOS::KPI::processes::exit(uint64_t exit_code) {
 
 	kill_process_handle(get_current_process(), exit_code);
 	yeild();
@@ -250,7 +250,7 @@ void syscore::processes::exit(uint64_t exit_code) {
  *
  * @param path The new working directory path
  */
-void syscore::processes::change_working_directory(const char* path) {
+void MaxOS::KPI::processes::change_working_directory(const char* path) {
 
 	change_working_directory_handle(get_current_process(), path);
 }

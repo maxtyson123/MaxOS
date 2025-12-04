@@ -6,14 +6,14 @@
  * @author Max Tyson
  */
 
-#ifndef SYSCORE_PROCESSES_THREAD_H
-#define SYSCORE_PROCESSES_THREAD_H
+#ifndef MAXOS_KPI_PROCESSES_THREAD_H
+#define MAXOS_KPI_PROCESSES_THREAD_H
 
 #include <cstdint>
 #include <cstddef>
 #include <syscalls.h>
 
-namespace syscore::processes {
+namespace MaxOS::KPI::processes {
 
 	typedef struct ThreadStats {
 
@@ -62,6 +62,6 @@ namespace syscore::processes {
 	void thread_exit(uint64_t exit_code);
 	void sleep(uint64_t sleep_time_ms);
 
-} // syscore::processes
+} // MaxOS::KPI::processes
 
-#endif //SYSCORE_PROCESSES_THREAD_H
+#endif //MAXOS_KPI_PROCESSES_THREAD_H

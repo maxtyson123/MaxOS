@@ -12,7 +12,7 @@ using namespace MaxOS;
 using namespace MaxOS::filesystem;
 using namespace MaxOS::processes;
 using namespace MaxOS::common;
-using namespace syscore::filesystem;
+using namespace MaxOS::KPI::filesystem;
 
 /**
  * @brief Construct a new File Resource object

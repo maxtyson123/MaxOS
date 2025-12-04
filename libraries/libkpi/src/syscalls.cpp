@@ -6,7 +6,7 @@
 #include <stdarg.h>
 #include <common.h>
 
-namespace syscore{
+namespace MaxOS::KPI{
 
 	int as_error(ResourceErrorBase code){
 		return -1 * (int)code;
@@ -18,7 +18,7 @@ namespace syscore{
 	 * @param type The type of syscall
 	 * @param arg0 The first argument
 	 * @param arg1 The second argument
-	 * @param arg2 The third argument
+	 * @param arg2 The third argumentmain
 	 * @param arg3 The fourth argument
 	 * @param arg4 The fifth argument
 	 * @param arg5 The sixth argument
