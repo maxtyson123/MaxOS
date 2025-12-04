@@ -11,7 +11,7 @@
 
 #include <net/ipv4.h>
 #include <cstdint>
-#include <common/outputStream.h>
+#include <outputStream.h>
 
 
 namespace MaxOS::net {

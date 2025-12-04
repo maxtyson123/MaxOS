@@ -10,8 +10,8 @@
 #define MAXOS_FILESYSTEM_EXT2_H
 
 #include <cstdint>
-#include <common/spinlock.h>
-#include <common/macros.h>
+#include <spinlock.h>
+#include <macros.h>
 #include <drivers/disk/disk.h>
 #include <drivers/clock/clock.h>
 #include <filesystem/filesystem.h>

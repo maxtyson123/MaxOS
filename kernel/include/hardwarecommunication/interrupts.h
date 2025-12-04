@@ -12,9 +12,9 @@
 #include <cstdint>
 #include <hardwarecommunication/port.h>
 #include <system/gdt.h>
-#include <common/inputStream.h>
-#include <common/outputStream.h>
-#include <common/map.h>
+#include <inputStream.h>
+#include <outputStream.h>
+#include <map.h>
 #include <system/cpu.h>
 #include <hardwarecommunication/apic.h>
 

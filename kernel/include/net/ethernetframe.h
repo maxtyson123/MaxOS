@@ -12,7 +12,7 @@
 #define MAXOS_NET_ETHERNETFRAME_H
 
 #include <cstdint>
-#include <common/map.h>
+#include <map.h>
 #include <drivers/ethernet/ethernet.h>
 #include <memory/memorymanagement.h>
 

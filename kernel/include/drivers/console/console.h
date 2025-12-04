@@ -10,8 +10,8 @@
 #define MAXOS_DRIVERS_CONSOLE_H
 
 #include <cstdint>
-#include <common/outputStream.h>
-#include <common/colour.h>
+#include <outputStream.h>
+#include <colour.h>
 
 
 namespace MaxOS::drivers::console {

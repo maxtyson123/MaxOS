@@ -10,7 +10,7 @@
 #define MAXOS_VIDEO_VESA_H
 
 #include <cstdint>
-#include <common/string.h>
+#include <string.h>
 #include <drivers/video/video.h>
 #include <memory/memorymanagement.h>
 #include <system/multiboot.h>

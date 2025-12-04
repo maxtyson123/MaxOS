@@ -11,10 +11,10 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <common/vector.h>
-#include <common/string.h>
-#include <common/buffer.h>
-#include <common/spinlock.h>
+#include <vector.h>
+#include <string.h>
+#include <buffer.h>
+#include <spinlock.h>
 #include <memory/physical.h>
 #include <memory/memoryIO.h>
 #include <processes/resource.h>

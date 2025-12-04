@@ -9,7 +9,7 @@
 #ifndef MAXOS_HARDWARECOMMUNICATION_APIC_H
 #define MAXOS_HARDWARECOMMUNICATION_APIC_H
 
-#include <common/macros.h>
+#include <macros.h>
 #include <hardwarecommunication/port.h>
 #include <hardwarecommunication/acpi.h>
 #include <memory/physical.h>

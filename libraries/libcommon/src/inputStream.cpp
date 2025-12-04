@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <common/inputStream.h>
+#include <inputStream.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;

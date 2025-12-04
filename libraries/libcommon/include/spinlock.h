@@ -9,7 +9,7 @@
 #ifndef MAXOS_COMMON_SPINLOCK_H
 #define MAXOS_COMMON_SPINLOCK_H
 
-#include <common/vector.h>
+#include <vector.h>
 
 
 namespace MaxOS::common {

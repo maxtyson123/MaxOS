@@ -14,7 +14,7 @@
 #define MAXOS_FILESYSTEM_FAT32_H
 
 #include <cstdint>
-#include <common/macros.h>
+#include <macros.h>
 #include <drivers/disk/disk.h>
 #include <filesystem/filesystem.h>
 

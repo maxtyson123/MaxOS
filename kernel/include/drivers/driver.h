@@ -10,9 +10,9 @@
 #define MAX_OS_DRIVERS_DRIVER_H
 
 #include <cstdint>
-#include <common/outputStream.h>
-#include <common/eventHandler.h>
-#include <common/string.h>
+#include <outputStream.h>
+#include <eventHandler.h>
+#include <string.h>
 #include <common/logger.h>
 #include <memory/memorymanagement.h>
 

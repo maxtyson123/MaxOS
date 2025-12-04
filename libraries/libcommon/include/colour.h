@@ -9,7 +9,7 @@
 #ifndef MAXOS_COMMON_COLOUR_H
 #define MAXOS_COMMON_COLOUR_H
 
-#include <common/string.h>
+#include <string.h>
 #include <cstdint>
 
 

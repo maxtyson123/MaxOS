@@ -11,9 +11,10 @@
 
 
 #include <cstdint>
-#include <common/eventHandler.h>
+#include <eventHandler.h>
 #include <net/ipv4.h>
 #include <memory/memorymanagement.h>
+#include <mem.h>
 
 
 namespace MaxOS::net {

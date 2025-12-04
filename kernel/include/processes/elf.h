@@ -13,8 +13,7 @@
 #include <cstddef>
 
 #include <memory/memorymanagement.h>
-#include <memory/memoryIO.h>
-
+#include <mem.h>
 
 namespace MaxOS::processes {
 

@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <memory/physical.h>
-#include <common/string.h>
+#include <string.h>
 
 
 namespace MaxOS {

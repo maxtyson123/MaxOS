@@ -5,7 +5,6 @@ IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fstack-protector-all -g") # Debug -fsanitize=kernel-address
 ENDIF()
 
-
 # Enable assembly
 SET(CMAKE_ASM_FLAGS "-f elf64")
 SET(CMAKE_ASM_COMPILE_OBJECT "nasm <FLAGS> -o <OBJECT> <SOURCE>")
@@ -49,7 +48,7 @@ FUNCTION(BUILD_KERNEL target_name)
     SET_TARGET_PROPERTIES(${target_name} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 
     # Set the include directories
-    TARGET_LINK_LIBRARIES(${target_name} PRIVATE gcc libkpi_static)
+    TARGET_LINK_LIBRARIES(${target_name} PRIVATE gcc libkpi_static libcommon_kernel)
     target_link_options(${target_name} PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
     TARGET_INCLUDE_DIRECTORIES(${target_name} PRIVATE include)
 endfunction()

@@ -10,8 +10,8 @@
 #define MAXOS_COMMON_OUTPUTSTREAM_H
 
 #include <cstdint>
-#include <common/inputStream.h>
-#include <common/string.h>
+#include <inputStream.h>
+#include <string.h>
 
 
 namespace MaxOS::common {

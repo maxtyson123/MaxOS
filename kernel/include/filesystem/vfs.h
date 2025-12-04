@@ -10,8 +10,8 @@
 #ifndef MAXOS_FILESYSTEM_VFS_H
 #define MAXOS_FILESYSTEM_VFS_H
 
-#include <common/map.h>
-#include <common/pair.h>
+#include <map.h>
+#include <pair.h>
 #include <filesystem/filesystem.h>
 
 

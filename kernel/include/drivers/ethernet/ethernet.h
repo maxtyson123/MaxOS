@@ -11,8 +11,8 @@
 
 #include <cstdint>
 #include <drivers/driver.h>
-#include <common/vector.h>
-#include <common/eventHandler.h>
+#include <vector.h>
+#include <eventHandler.h>
 
 
 namespace MaxOS::drivers::ethernet {

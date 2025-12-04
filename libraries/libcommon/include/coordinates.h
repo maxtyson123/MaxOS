@@ -10,7 +10,7 @@
 #define MAXOS_COMMON_COORDINATES_H
 
 #include <cstdint>
-#include <common/pair.h>
+#include <pair.h>
 
 
 namespace MaxOS::common {

@@ -10,12 +10,12 @@
 #define MAXOS_DRIVERS_CLOCK_CLOCK_H
 
 #include <cstdint>
-#include <common/time.h>
+#include <time.h>
 #include <drivers/driver.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/apic.h>
-#include <common/vector.h>
-#include <common/eventHandler.h>
+#include <vector.h>
+#include <eventHandler.h>
 
 
 namespace MaxOS::drivers::clock {

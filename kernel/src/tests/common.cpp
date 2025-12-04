@@ -7,17 +7,17 @@
 */
 
 #include <tests/common.h>
-#include <common/buffer.h>
-#include <common/colour.h>
+#include <buffer.h>
+#include <colour.h>
 #include <common/graphicsContext.h>
-#include <common/inputStream.h>
+#include <inputStream.h>
 #include <common/logger.h>
-#include <common/map.h>
-#include <common/outputStream.h>
-#include <common/rectangle.h>
-#include <common/string.h>
-#include <common/time.h>
-#include <common/vector.h>
+#include <map.h>
+#include <outputStream.h>
+#include <rectangle.h>
+#include <string.h>
+#include <time.h>
+#include <vector.h>
 
 using namespace ::MaxOS;
 using namespace ::MaxOS::tests;

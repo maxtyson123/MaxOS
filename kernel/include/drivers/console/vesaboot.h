@@ -15,9 +15,9 @@
 #include <drivers/console/console.h>
 #include <common/logo.h>
 #include <common/logo_kp.h>
-#include <common/colour.h>
+#include <colour.h>
 #include <system/cpu.h>
-#include <memory/memoryIO.h>
+#include <mem.h>
 #include <memory/memorymanagement.h>
 
 

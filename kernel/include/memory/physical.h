@@ -11,10 +11,9 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <common/macros.h>
+#include <macros.h>
 #include <system/multiboot.h>
-
-#include <common/spinlock.h>
+#include <spinlock.h>
 
 #define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))                  ///< Convert page map level indices to a virtual address
 #define PMLX_GET_INDEX(ADDR, LEVEL) (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))      ///< Get the index for a given page map level from a virtual address

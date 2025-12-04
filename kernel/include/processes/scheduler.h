@@ -9,7 +9,7 @@
 #ifndef MAXOS_PROCESSES_SCHEDULER_H
 #define MAXOS_PROCESSES_SCHEDULER_H
 
-#include <common/vector.h>
+#include <vector.h>
 #include <system/cpu.h>
 #include <hardwarecommunication/interrupts.h>
 #include <processes/process.h>

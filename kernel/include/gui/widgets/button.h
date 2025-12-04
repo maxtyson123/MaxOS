@@ -10,7 +10,7 @@
 #define MAXOS_GUI_WIDGETS_BUTTON_H
 
 #include <cstdint>
-#include <common/eventHandler.h>
+#include <eventHandler.h>
 #include <gui/widget.h>
 #include <gui/font.h>
 

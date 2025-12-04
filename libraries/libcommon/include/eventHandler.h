@@ -13,7 +13,7 @@
 #define MAXOS_COMMON_EVENTHANDLER_H
 
 #include <cstdint>
-#include <common/vector.h>
+#include <vector.h>
 
 
 namespace MaxOS::common {

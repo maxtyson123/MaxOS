@@ -11,7 +11,7 @@
 
 #include <cstdint>
 
-#include <common/vector.h>
+#include <vector.h>
 #include <stdarg.h>
 
 namespace MaxOS {

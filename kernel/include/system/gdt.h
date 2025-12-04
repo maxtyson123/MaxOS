@@ -10,7 +10,7 @@
 #define MAX_OS_SYSTEM_GDT_H
 
 #include <cstdint>
-#include <common/macros.h>
+#include <macros.h>
 #include <system/multiboot.h>
 
 

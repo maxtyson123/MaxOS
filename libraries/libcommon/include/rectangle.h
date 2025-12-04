@@ -9,7 +9,7 @@
 #ifndef MAXOS_COMMON_RECTANGLE_H
 #define MAXOS_COMMON_RECTANGLE_H
 
-#include <common/vector.h>
+#include <vector.h>
 
 namespace MaxOS::common {
 

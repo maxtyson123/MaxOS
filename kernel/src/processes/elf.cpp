@@ -12,6 +12,7 @@
 using namespace MaxOS;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
+using namespace MaxOS::common;
 
 
 

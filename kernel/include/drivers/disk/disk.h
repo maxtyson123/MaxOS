@@ -9,8 +9,8 @@
 #ifndef MAXOS_DRIVERS_DISK_H
 #define MAXOS_DRIVERS_DISK_H
 
-#include <common/outputStream.h>
-#include <common/buffer.h>
+#include <outputStream.h>
+#include <buffer.h>
 #include <drivers/driver.h>
 #include <cstdint>
 

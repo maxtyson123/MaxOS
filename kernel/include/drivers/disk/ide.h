@@ -11,7 +11,7 @@
 
 #include <drivers/disk/ata.h>
 #include <cstdint>
-#include <common/map.h>
+#include <map.h>
 #include <hardwarecommunication/pci.h>
 #include <filesystem/partition/msdos.h>
 

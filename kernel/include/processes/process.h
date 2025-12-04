@@ -10,9 +10,9 @@
 #define MAXOS_PROCESSES_PROCESS_H
 
 #include <system/cpu.h>
-#include <common/vector.h>
-#include <common/map.h>
-#include <common/string.h>
+#include <vector.h>
+#include <map.h>
+#include <string.h>
 #include <cstdint>
 #include <memory/virtual.h>
 #include <memory/memorymanagement.h>

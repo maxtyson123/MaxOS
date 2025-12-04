@@ -9,11 +9,11 @@
 #ifndef MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H
 #define MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H
 
-#include <common/map.h>
-#include <common/eventHandler.h>
-#include <common/inputStream.h>
-#include <common/string.h>
-#include <common/vector.h>
+#include <map.h>
+#include <eventHandler.h>
+#include <inputStream.h>
+#include <string.h>
+#include <vector.h>
 #include <drivers/driver.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>

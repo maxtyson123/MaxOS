@@ -12,7 +12,7 @@
 
 #include <processes/resource.h>
 #include <filesystem/vfs.h>
-#include <common/buffer.h>
+#include <buffer.h>
 #include <processes/scheduler.h>
 #include <libkpi/include/filesystem/file.h>
 #include <libkpi/include/filesystem/directory.h>

@@ -10,8 +10,9 @@
 #define MAXOS_DRIVERS_ETHERNET_INTEL_I127_H
 
 #include <cstddef>
-#include <common/outputStream.h>
-#include <common/macros.h>
+#include <outputStream.h>
+#include <macros.h>
+#include <assert.h>
 #include <drivers/driver.h>
 #include <hardwarecommunication/pci.h>
 #include <hardwarecommunication/interrupts.h>

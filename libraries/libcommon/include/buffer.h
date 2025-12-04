@@ -11,9 +11,8 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <memory/memoryIO.h>
-#include <common/logger.h>
-
+#include <mem.h>
+#include <assert.h>
 
 namespace MaxOS::common {
 

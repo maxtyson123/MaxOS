@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <system/multiboot.h>
 #include <memory/virtual.h>
-
+#include <assert.h>
 
 namespace MaxOS::memory {
 
@@ -73,19 +73,5 @@ namespace MaxOS::memory {
 			static void switch_active_memory_manager(MemoryManager* manager);
 	};
 }
-
-
-void* operator new(size_t size) throw();
-void* operator new[](size_t size) throw();
-
-//Placement New
-void* operator new(size_t size, void* pointer);
-void* operator new[](size_t size, void* pointer);
-
-void operator delete(void* pointer);
-void operator delete[](void* pointer);
-
-void operator delete(void* pointer, size_t size);
-void operator delete[](void* pointer, size_t size);
 
 #endif //MAXOS_SYSTEM_MEMORYMANAGEMENT_H

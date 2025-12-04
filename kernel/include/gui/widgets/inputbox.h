@@ -12,7 +12,7 @@
 #include <cstdint>
 #include <gui/widget.h>
 #include <gui/font.h>
-#include <common/string.h>
+#include <string.h>
 
 namespace MaxOS::gui::widgets {
 

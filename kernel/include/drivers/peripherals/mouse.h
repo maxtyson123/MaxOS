@@ -11,9 +11,9 @@
 
 
 #include <cstdint>
-#include <common/vector.h>
-#include <common/string.h>
-#include <common/eventHandler.h>
+#include <vector.h>
+#include <string.h>
+#include <eventHandler.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/driver.h>

@@ -9,9 +9,8 @@
 #ifndef MAXOS_COMMON_MAP_H
 #define MAXOS_COMMON_MAP_H
 
-#include <common/vector.h>
-#include <common/pair.h>
-
+#include <vector.h>
+#include <pair.h>
 
 namespace MaxOS::common {
 

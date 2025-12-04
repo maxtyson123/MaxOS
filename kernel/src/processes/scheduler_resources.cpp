@@ -13,6 +13,7 @@
 using namespace MaxOS;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
+using namespace MaxOS::common;
 using namespace MaxOS::KPI::processes;
 
 ProcessResource::ProcessResource(string const& name, size_t flags, resource_type_t type)

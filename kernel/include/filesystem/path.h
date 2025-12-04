@@ -9,7 +9,7 @@
 #ifndef MAXOS_FILESYSTEM_PATH_H
 #define MAXOS_FILESYSTEM_PATH_H
 
-#include <common/string.h>
+#include <string.h>
 
 
 namespace MaxOS::filesystem {

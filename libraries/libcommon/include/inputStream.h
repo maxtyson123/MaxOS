@@ -12,8 +12,8 @@
 #define MAXOS_COMMON_INPUTSTREAM_H
 
 #include <cstdint>
-#include <common/vector.h>
-#include <common/string.h>
+#include <vector.h>
+#include <string.h>
 
 namespace MaxOS::common {
 

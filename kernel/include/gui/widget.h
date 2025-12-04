@@ -10,10 +10,10 @@
 #define MaxOS_GUI_WIDGET_H
 
 #include <stdint.h>
-#include <common/rectangle.h>
-#include <common/vector.h>
+#include <rectangle.h>
+#include <vector.h>
 #include <common/graphicsContext.h>
-#include <common/coordinates.h>
+#include <coordinates.h>
 #include <drivers/peripherals/keyboard.h>
 #include <drivers/peripherals/mouse.h>
 

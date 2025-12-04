@@ -10,7 +10,7 @@
 #define MAXOS_DRIVERS_ETHERNET_AMD_AM79C973_H
 
 #include <cstdint>
-#include <common/macros.h>
+#include <macros.h>
 #include <drivers/ethernet/ethernet.h>
 #include <hardwarecommunication/pci.h>
 #include <hardwarecommunication/interrupts.h>

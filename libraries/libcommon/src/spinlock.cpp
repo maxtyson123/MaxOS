@@ -6,14 +6,11 @@
  * @author Max Tyson
  */
 
-#include <common/spinlock.h>
-#include <processes/scheduler.h>
+#include <spinlock.h>
+//#include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
-using namespace MaxOS::processes;
-using namespace MaxOS::system;
-using namespace MaxOS::hardwarecommunication;
 
 Spinlock::Spinlock() = default;
 Spinlock::~Spinlock() = default;
@@ -64,7 +61,7 @@ BlockingLock::BlockingLock() = default;
 BlockingLock::~BlockingLock() = default;
 
 bool BlockingLock::must_spin() {
-	return GlobalScheduler::is_active();
+//	return GlobalScheduler::is_active();
 }
 
 /**
@@ -104,21 +101,21 @@ void BlockingLock::acquire() {
 	for (int i = 0; (i < BLOCKING_FAST_TRY_LIMIT || must_spin()); ++i)
 		if(!__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE))
 			return;
-
-	// Add to the queue
-	auto thread = GlobalScheduler::current_thread();
-	thread->thread_state = ThreadState::WAITING;
-	m_queue.push_back(thread->tid);
-
-	thread->save_cpu_state();
-
-	// Guard against being resumed here
-	if(thread->thread_state == ThreadState::WAITING){
-
-		// Yield to the next thread
-		cpu_status_t* next = GlobalScheduler::core_scheduler()->schedule_next(&thread->execution_state);
-		InterruptManager::ForceInterruptReturn(next);
-	}
+//
+//	// Add to the queue
+//	auto thread = GlobalScheduler::current_thread();
+//	thread->thread_state = ThreadState::WAITING;
+//	m_queue.push_back(thread->tid);
+//
+//	thread->save_cpu_state();
+//
+//	// Guard against being resumed here
+//	if(thread->thread_state == ThreadState::WAITING){
+//
+//		// Yield to the next thread
+//		cpu_status_t* next = GlobalScheduler::core_scheduler()->schedule_next(&thread->execution_state);
+//		InterruptManager::ForceInterruptReturn(next);
+//	}
 
 
 }
@@ -128,11 +125,11 @@ void BlockingLock::acquire() {
  */
 void BlockingLock::release() {
 
-	// Next thread can be run
-	if(!m_queue.empty()){
-		auto tid = m_queue.pop_front();
-		GlobalScheduler::get_thread(tid)->thread_state = ThreadState::READY;
-	}
+//	// Next thread can be run
+//	if(!m_queue.empty()){
+//		auto tid = m_queue.pop_front();
+//		GlobalScheduler::get_thread(tid)->thread_state = ThreadState::READY;
+//	}
 
 	__atomic_clear(&m_locked, __ATOMIC_RELEASE);
 }

@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <net/ipv4.h>
 #include <memory/memorymanagement.h>
+#include <mem.h>
 
 
 namespace MaxOS::net {

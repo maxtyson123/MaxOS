@@ -10,7 +10,7 @@
 #define MAX_OS_HARDWARECOMMUNICATION_PCI_H
 
 #include <cstdint>
-#include <common/string.h>
+#include <string.h>
 #include <drivers/driver.h>
 #include <memory/memorymanagement.h>
 #include <hardwarecommunication/port.h>

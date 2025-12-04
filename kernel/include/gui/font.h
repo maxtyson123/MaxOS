@@ -10,9 +10,9 @@
 #define MAXOS_COMMON_FONT_H
 
 #include <cstdint>
-#include<common/graphicsContext.h>
-#include<common/rectangle.h>
-#include <common/string.h>
+#include <common/graphicsContext.h>
+#include <rectangle.h>
+#include <string.h>
 
 namespace MaxOS::gui {
 

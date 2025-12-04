@@ -9,8 +9,8 @@
 #ifndef MAXOS_DRIVERS_DISK_ATA_H
 #define MAXOS_DRIVERS_DISK_ATA_H
 
-#include <common/buffer.h>
-#include <common/outputStream.h>
+#include <buffer.h>
+#include <outputStream.h>
 #include <hardwarecommunication/port.h>
 #include <drivers/disk/disk.h>
 #include <cstdint>

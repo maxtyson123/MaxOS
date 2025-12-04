@@ -14,8 +14,8 @@
 #include <cstdint>
 #include <cstddef>
 #include <hardwarecommunication/interrupts.h>
-#include <common/vector.h>
-#include <common/colour.h>
+#include <vector.h>
+#include <colour.h>
 #include <memory/memorymanagement.h>
 #include <processes/scheduler.h>
 #include <system/syscalls.h>

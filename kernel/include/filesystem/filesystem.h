@@ -11,9 +11,9 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <common/string.h>
-#include <common/vector.h>
-#include <common/buffer.h>
+#include <string.h>
+#include <vector.h>
+#include <buffer.h>
 #include <filesystem/path.h>
 #include <libkpi/include/filesystem/file.h>
 

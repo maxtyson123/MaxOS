@@ -10,11 +10,12 @@
 #define MAXOS_PROCESSES_RESOURCE_H
 
 #include <cstddef>
-#include <common/map.h>
-#include <common/vector.h>
-#include <common/string.h>
+#include <map.h>
+#include <vector.h>
+#include <string.h>
 #include <common/logger.h>
 #include <syscalls.h>
+#include <mem.h>
 
 
 namespace MaxOS::processes {

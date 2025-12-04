@@ -9,9 +9,9 @@
 #ifndef MAXOS_TESTS_TEST_H
 #define MAXOS_TESTS_TEST_H
 
-#include <common/string.h>
+#include <string.h>
 #include <common/logger.h>
-#include <common/macros.h>
+#include <macros.h>
 
 /// Simplified macro to define a conditional test
 #define MAXOS_CONDITIONAL_TEST(name, type) \
