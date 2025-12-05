@@ -31,8 +31,8 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	wakeup_time = 0;
 	ticks = 0;
 
-	// Create the stack
-	m_stack_pointer = (uintptr_t) MemoryManager::malloc(STACK_SIZE);
+	// Create the stack (cant usee global MemoryManager::malloc() as process hasn't been registered with the seduler yet)
+	m_stack_pointer = (uintptr_t) parent->memory_manager->handle_malloc(STACK_SIZE);
 
 	// Create the TSS stack
 	if (parent->is_kernel) {
@@ -41,7 +41,7 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 		m_tss_stack_pointer = CPU::executing_core() -> tss.rsp0;
 
 	} else {
-		m_tss_stack_pointer = (uintptr_t) MemoryManager::kmalloc(STACK_SIZE) + STACK_SIZE;
+		m_tss_stack_pointer = (uintptr_t) parent->memory_manager->handle_malloc(STACK_SIZE) + STACK_SIZE;
 	}
 
 	// Mak sure there is a stack
@@ -60,7 +60,7 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 
 	// Copy the args into userspace
 	uint64_t argc = arg_amount;
-	void* argv = MemoryManager::malloc(arg_amount * sizeof(void*));
+	void* argv = parent->memory_manager->handle_malloc(arg_amount * sizeof(void*));
 	memcpy(argv, args, arg_amount * sizeof(void*));
 
 	execution_state.rdi = argc;
@@ -221,7 +221,7 @@ Process::Process(const string& p_name, void* args, int arg_amount, ELF64* elf, b
 {
 
 	// Get the entry point
-	elf->load();
+	elf->load_into_memory(memory_manager->vmm());
 	auto* entry_point = (void (*)(void*)) elf->header()->entry;
 
 	// Create the main thread

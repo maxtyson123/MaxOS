@@ -31,6 +31,18 @@ while [ "$#" -gt "0" ]; do
   esac
 done
 
+# Is slower
+GET_QEMU_CRASH_REASON=0
+if [ "$GET_QEMU_CRASH_REASON" -ne 0 ]; then
+    GET_QEMU_CRASH_RESON=1
+    DEBUG_LOGS="-d guest_errors"
+#    DEBUG_LOGS="$DEBUG_LOGS,int"
+    DEBUG_LOGS="$DEBUG_LOGS,cpu_reset"
+    DEBUG_LOGS="$DEBUG_LOGS,unimp"
+else
+    DEBUG_LOGS=""
+fi
+
 # Check if KVM is supported
 USE_KVM=0
 if [ -r /dev/kvm ]; then
@@ -68,7 +80,7 @@ fi
 ACCELERATOR=""
 if [ "$IN_WSL" -ne "0" ]; then
   msg "Using windows accelerator."
-#  ACCELERATOR="-accel whpx,kernel-irqchip=off -accel tcg"
+  ACCELERATOR="-accel whpx,kernel-irqchip=off -accel tcg"
 else
 
   # Check if KVM is supported
@@ -76,7 +88,10 @@ else
     msg "Using KVM accelerator."
     ACCELERATOR="-enable-kvm"
   fi
-
+fi
+if [ "$GET_QEMU_CRASH_REASON" -ne 0 ]; then
+    msg "Disabling accelerator for better crash logs."
+    ACCELERATOR=""
 fi
 
 # Find the qemu executable
@@ -121,7 +136,7 @@ fi
 
 # Check if we are debugging
 DEBUG=""
-if [  "$USE_DEBUG" -ne "0" ]; then
+if [  "$USE_DEBUG" -ne 0 ]; then
     DEBUG="-s -S"
 
     # WSL  needs to be disabled
@@ -150,7 +165,7 @@ QEMU_ARGS="$QEMU_ARGS -m 4G"                                            # 4 GB R
 QEMU_ARGS="$QEMU_ARGS -smp cores=4"                                     # 4 cores
 QEMU_ARGS="$QEMU_ARGS -serial stdio"                                    # Use stdio for serial
 #QEMU_ARGS="$QEMU_ARGS -monitor telnet::45454,server,nowait"             # Use telnet for monitor
-QEMU_ARGS="$QEMU_ARGS -d guest_errors"                        # Debug interrupts
+QEMU_ARGS="$QEMU_ARGS $DEBUG_LOGS"                        # Debug interrupts
 QEMU_ARGS="$QEMU_ARGS $DEBUG"                                           # Enable debugging
 QEMU_ARGS="$QEMU_ARGS $ACCELERATOR"                                     # Enable acceleration
 QEMU_ARGS="$QEMU_ARGS $DISPLAY_TYPE"                                    # Enable display

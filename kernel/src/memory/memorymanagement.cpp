@@ -8,10 +8,12 @@
 
 #include <memory/memorymanagement.h>
 #include <common/logger.h>
+#include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
+using namespace MaxOS::processes;
 using namespace MaxOS::system;
 
 /**
@@ -49,16 +51,12 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 MemoryManager::~MemoryManager() {
 
 	// Free the VMM (if this is not the kernel memory manager)
-	if(m_virtual_memory_manager != nullptr && s_current_memory_manager != s_kernel_memory_manager)
+	if(m_virtual_memory_manager != nullptr)
 		delete m_virtual_memory_manager;
 
 	// Remove the kernel reference to this
 	if(s_kernel_memory_manager == this)
 		s_kernel_memory_manager = nullptr;
-
-	// Remove the active reference to this
-	if(s_current_memory_manager == this)
-		s_current_memory_manager = nullptr;
 }
 
 /**
@@ -69,11 +67,7 @@ MemoryManager::~MemoryManager() {
  */
 void* MemoryManager::malloc(size_t size) {
 
-	// Make sure there is somthing to do the allocation
-	if(s_current_memory_manager == nullptr)
-		return nullptr;
-
-	return s_current_memory_manager->handle_malloc(size);
+	return GlobalScheduler::current_process()->memory_manager->handle_malloc(size);
 }
 
 /**
@@ -157,11 +151,7 @@ void* MemoryManager::handle_malloc(size_t size) {
  */
 void MemoryManager::free(void* pointer) {
 
-	// Make sure there is a memory manager
-	if(s_current_memory_manager == nullptr)
-		return;
-
-	s_current_memory_manager->handle_free(pointer);
+	return  GlobalScheduler::current_process()->memory_manager->handle_free(pointer);
 }
 
 /**
@@ -257,7 +247,7 @@ MemoryChunk* MemoryManager::expand_heap(size_t size) {
 	// If it is possible to merge the new chunk with the previous chunk then do so (note: this happens if the
 	// previous chunk is free but cant contain the size required)
 	if(!chunk->prev->allocated)
-		free((void*) ((size_t) chunk + sizeof(MemoryChunk)));
+		handle_free((void*) ((size_t) chunk + sizeof(MemoryChunk)));
 
 	return chunk;
 }
@@ -305,8 +295,6 @@ void MemoryManager::switch_active_memory_manager(MemoryManager* manager) {
 	// Switch the address space
 	asm volatile("mov %0, %%cr3"::"r"((uint64_t) manager->m_virtual_memory_manager->pml4_root_address_physical()) : "memory");
 
-	// Set the active memory manager
-	s_current_memory_manager = manager;
 }
 
 /**

@@ -217,13 +217,13 @@ namespace MaxOS::processes {
 		private:
 			uintptr_t m_elf_header_address;
 
-			void load_program_headers() const;
+			void load_program_headers(memory::VirtualMemoryManager* vmm) const;
 
 		public:
 			explicit ELF64(uintptr_t elf_header_address);
 			~ELF64();
 
-			void load();
+			void load_into_memory(memory::VirtualMemoryManager* vmm) const;
 			[[nodiscard]] bool is_valid() const;
 
 			[[nodiscard]] elf_64_header_t* header() const;

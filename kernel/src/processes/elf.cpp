@@ -34,14 +34,15 @@ ELF64::~ELF64() = default;
 /**
  * @brief Loads the elf program into memory if a valid elf file
  *
+ * @param vmm Which address space to load the elf into
  * @todo Error handling
  */
-void ELF64::load() {
+void ELF64::load_into_memory(VirtualMemoryManager* vmm) const {
 
 	if (!is_valid())
 		return;
 
-	load_program_headers();
+	load_program_headers(vmm);
 
 }
 
@@ -137,7 +138,7 @@ bool ELF64::is_valid() const {
 /**
  * @brief Loop through the program headers and load the program into memory at the give address with the given size
  */
-void ELF64::load_program_headers() const {
+void ELF64::load_program_headers(VirtualMemoryManager* vmm) const {
 
 	for (size_t i = 0; i < header()->program_header_count; i++) {
 
@@ -149,19 +150,19 @@ void ELF64::load_program_headers() const {
 			continue;
 
 		// Allocate space at the requested address
-		void* address = MemoryManager::s_current_memory_manager->vmm()->allocate(program_header->virtual_address, program_header->memory_size, PRESENT | WRITE);
+		void* address = vmm->allocate(program_header->virtual_address, program_header->memory_size, PRESENT | WRITE);
 		ASSERT(address != nullptr, "Failed to allocate memory for program header\n");
 
 		// Copy the program into memory at that address
 		memcpy(address, (void*) (m_elf_header_address + program_header->offset), program_header->file_size);
 
-		// Zero the rest of the memory if needed
+		// Zero the rest of the memory if needed TODO: breaks
 		size_t zero_size = program_header->memory_size - program_header->file_size;
 //		memset((void*) ((uintptr_t) address + program_header->file_size), 0, zero_size);
 
 		// Once the memory has been copied can now mark the pages as read only etc
 		uint64_t flags = to_vmm_flags(program_header->flags);
-		PhysicalMemoryManager::s_current_manager->change_page_flags(address, flags, MemoryManager::s_current_memory_manager->vmm()->pml4_root_address());
+		PhysicalMemoryManager::s_current_manager->change_page_flags(address, flags, vmm->pml4_root_address());
 	}
 }
 

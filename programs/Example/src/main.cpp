@@ -6,10 +6,15 @@
 #include <ipc/rpc.h>
 #include <greeting/greeter_server.h>
 #include <filesystem/file.h>
+#include <mem.h>
 
+
+using namespace MaxOS::common;
 using namespace MaxOS::KPI;
 using namespace MaxOS::KPI::ipc;
 using namespace MaxOS::KPI::filesystem;
+
+#include <string.h>
 
 
 int64_t say_hi(const char* name)
@@ -36,6 +41,14 @@ extern "C" void _start(void) {
 
 	// Write to the console
 	klog("MaxOS Test Program v3 - 1\n");
+
+	// Simple buffer malloc test
+	void* buffer = new uint8_t[256];
+	klog("Allocated buffer at address: 0x%x\n", buffer);
+	memset(buffer, 0xAB, 256);
+	delete[] buffer;
+
+
 
 	run_greeter();
 }

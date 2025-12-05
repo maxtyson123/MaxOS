@@ -48,7 +48,6 @@ namespace MaxOS::memory {
 			MemoryChunk* expand_heap(size_t size);
 
 		public:
-			inline static MemoryManager* s_current_memory_manager = nullptr;            ///< The memory manager for the current process
 			inline static MemoryManager* s_kernel_memory_manager = nullptr;             ///< The memory manager for any kernel processes and all kernel allocations
 
 			explicit MemoryManager(VirtualMemoryManager* virtual_memory_manager = nullptr);
