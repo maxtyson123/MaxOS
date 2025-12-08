@@ -9,10 +9,9 @@
 #include <cstdint>
 #include <common/logger.h>
 #include <hardwarecommunication/interrupts.h>
+#include <hardwarecommunication/clock.h>
 #include <drivers/console/serial.h>
 #include <drivers/console/vesaboot.h>
-#include <drivers/driver.h>
-#include <drivers/video/vesa.h>
 #include <gui/desktop.h>
 #include <processes/scheduler.h>
 #include <system/cpu.h>
@@ -27,9 +26,6 @@
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::drivers;
-using namespace MaxOS::drivers::peripherals;
-using namespace MaxOS::drivers::video;
-using namespace MaxOS::drivers::clock;
 using namespace MaxOS::drivers::console;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::gui;
@@ -93,28 +89,21 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	VESABootConsole console(&vesa);
 
 	Logger::HEADER() << "Stage {2}: Hardware Initialisation\n";
-	VirtualFileSystem vfs;
 	CPU cpu(&gdt, &multiboot);
 	Clock kernel_clock(&cpu.apic, 1);
-	DriverManager driver_manager;
-	driver_manager.add_driver(&kernel_clock);
-	driver_manager.find_drivers();
-	uint32_t reset_wait_time = driver_manager.reset_devices();
-
-	Logger::HEADER() << "Stage {3}: Device Finalisation\n";
 	interrupts.activate();
 	kernel_clock.calibrate();
-	kernel_clock.delay(reset_wait_time);
-	driver_manager.initialise_drivers();
-	driver_manager.activate_drivers();
 	cpu.init_cores();
 
-	Logger::HEADER() << "Stage {4}: System Finalisation\n";
-	GlobalScheduler scheduler(multiboot);
-	VFSResourceRegistry vfs_registry(&vfs);
+	Logger::HEADER() << "Stage {3}: Userspace Initialisation\n";
 	SyscallManager syscalls;
+	GlobalScheduler scheduler(multiboot);
 	console.finish();
 	GlobalScheduler::activate();
+
+	//TO MOVE:
+	//	VirtualFileSystem vfs;
+	//	VFSResourceRegistry vfs_registry(&vfs);
 
 	// Idle loop  (read Idle.md)
 	while(true)
@@ -125,4 +114,5 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 /**
  * @todo Thread storage (when clib) & threads can use RPC
  * @todo Once kernel done, turn into mono repo and separate components
+ * @todo Doxy for progs & libs
  */

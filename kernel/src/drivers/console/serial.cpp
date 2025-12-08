@@ -6,10 +6,10 @@
  * @author Max Tyson
  */
 
-#include <drivers/console/serial.h>
+#include <console/serial.h>
 
 using namespace MaxOS;
-using namespace MaxOS::drivers;
+using namespace MaxOS::console;
 
 /**
  * @brief Constructs a new Serial Console object and initialises the serial port

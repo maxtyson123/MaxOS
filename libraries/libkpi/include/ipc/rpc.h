@@ -13,7 +13,7 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <common.h>
+#include <string.h>
 #include <ipc/messages.h>
 #include <processes/process.h>
 
@@ -112,14 +112,14 @@ namespace MaxOS::KPI::ipc {
 			void push_uint64(uint64_t value);
 			void push_int32(int32_t value);
 			void push_int64(int64_t value);
-			void push_string(const char* value);
+			void push_string(const string& value);
 			void push_blob(const void* data, size_t length);
 
 			uint32_t get_uint32(size_t index) const;
 			uint64_t get_uint64(size_t index) const;
 			int32_t  get_int32(size_t index) const;
 			int64_t  get_int64(size_t index) const;
-			const char* get_string(size_t index) const;
+			string get_string(size_t index) const;
 			const void* get_blob(size_t index) const;
 
 			const uint8_t* payload() const;

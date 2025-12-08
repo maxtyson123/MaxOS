@@ -1,0 +1,97 @@
+/**
+ * @file disk.cpp
+ * @brief Implementation of a Disk driver base class
+ *
+ * @date 18th April 2025
+ * @author Max Tyson
+ */
+
+#include <generic/disk.h>
+
+using namespace LibDriver::generic;
+
+Disk::Disk() = default;
+
+Disk::~Disk() = default;
+
+/**
+ * @brief read data from the disk into a buffer (max capacity 512 bytes)
+ *
+ * @param sector The sector to read from
+ * @param data_buffer The buffer to read the data into
+ */
+void Disk::read(uint32_t sector, void* data_buffer) {
+
+//	size_t amount = (data_buffer->capacity() > 512) ? 512 : data_buffer->capacity();
+	size_t amount = 512;
+	read(sector, data_buffer, amount);
+
+}
+
+/**
+ * @brief read data from the disk
+ *
+ * @param sector The sector to read from
+ * @param data_buffer The buffer to read the data into
+ * @param amount The amount of data to read
+ */
+void Disk::read(uint32_t sector, void* data_buffer, size_t amount) {
+
+}
+
+/**
+ * @brief write data to the disk from a buffer (max capacity 512 bytes)
+ *
+ * @param sector The sector to write to
+ * @param data The buffer to write the data from
+ */
+void Disk::write(uint32_t sector, void* data) {
+
+//	size_t amount = (data->capacity() > 512) ? 512 : data->capacity();
+	size_t amount = 512;
+	write(sector, data, amount);
+
+}
+
+/**
+ * @brief write data to the disk
+ *
+ * @param sector The sector to write to
+ * @param data The buffer to write the data into
+ * @param count The amount of data to write
+ */
+void Disk::write(uint32_t sector, void* data, size_t count) {
+}
+
+/**
+ * @brief Flush the disk cache
+ *
+ * This function is used to flush the disk cache to ensure that all data is written to the disk.
+ */
+void Disk::flush() {
+}
+
+/**
+ * @brief Activate the disk driver
+ */
+void Disk::activate() {
+	Driver::activate();
+}
+
+/**
+ * @brief Get the device name
+ *
+ * @return The name of the device
+ */
+string Disk::device_name() {
+	return "Disk";
+}
+
+/**
+ * @brief Get the vendor name
+ *
+ * @return The name of the vendor
+ */
+string Disk::vendor_name() {
+	return "Generic";
+}

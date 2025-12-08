@@ -6,12 +6,11 @@
  * @author Max Tyson
  */
 
-#include <drivers/console/console.h>
+#include <console/console.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
-using namespace MaxOS::drivers;
-using namespace MaxOS::drivers::console;
+using namespace MaxOS::console;
 
 Console::Console() = default;
 

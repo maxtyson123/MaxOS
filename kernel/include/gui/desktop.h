@@ -11,9 +11,7 @@
 
 #include <cstdint>
 #include <common/graphicsContext.h>
-#include <drivers/peripherals/mouse.h>
 #include <gui/widget.h>
-#include <drivers/clock/clock.h>
 
 
 namespace MaxOS::gui {

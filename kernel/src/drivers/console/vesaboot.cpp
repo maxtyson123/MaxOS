@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <drivers/console/vesaboot.h>
+#include <console/vesaboot.h>
 #include <gui/font/amiga_font.h>
 #include <common/logger.h>
 
@@ -14,8 +14,7 @@ using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::gui;
 using namespace MaxOS::memory;
-using namespace MaxOS::drivers;
-using namespace MaxOS::drivers::console;
+using namespace MaxOS::console;
 using namespace MaxOS::system;
 
 /**

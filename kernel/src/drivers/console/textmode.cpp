@@ -6,12 +6,11 @@
  * @author Max Tyson
  */
 
-#include <drivers/console/textmode.h>
+#include <console/textmode.h>
 
 using namespace MaxOS;
+using namespace MaxOS::console;
 using namespace MaxOS::common;
-using namespace MaxOS::drivers;
-using namespace MaxOS::drivers::console;
 
 TextModeConsole::TextModeConsole() = default;
 

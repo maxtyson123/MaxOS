@@ -26,19 +26,19 @@ IF(NOT CMAKE_BUILD_TYPE)
 ENDIF()
 
 # Generate RPC stubs when first setup
-SET(RPC_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/rpc.sh")
+SET(RPC_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/rpc.py")
 EXECUTE_PROCESS(COMMAND ${RPC_SCRIPT} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # For manual RPC gen when changing IDL files
 ADD_CUSTOM_TARGET(rpc
     COMMENT "Generating RPC stubs"
-    COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${RPC_SCRIPT}
+    COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" python3 ${RPC_SCRIPT}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     USES_TERMINAL
 )
 
 # Function to make a library easier
-function(MAKE_LIBRARY LIBNAME)
+FUNCTION(MAKE_LIBRARY LIBNAME)
 
     # TODO: ADD_DEPENDENCIES(${LIBNAME} libc) (& for static)
 
@@ -54,7 +54,67 @@ function(MAKE_LIBRARY LIBNAME)
 
     # TODO: Install headers onto fs
 
-endfunction()
+ENDFUNCTION()
+
+FUNCTION(MAKE_LIBRARY_NOSTD LIBNAME LIBRARY_SRCS)
+
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -mno-red-zone -mno-80387 -mno-mmx -fno-use-cxa-atexit")
+
+    # Disable noisy warnings
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-pointer-arith -Wno-address-of-packed-member -Wno-trigraphs -Wno-unused-variable -Wno-unused-function")
+
+    # Find all .cpp and .s files recursively in the given source directory
+    FILE(GLOB_RECURSE PROJ_SRCS ${LIBRARY_SRCS}/*.cpp ${LIBRARY_SRCS}/*.s)
+
+    # Build as a static library
+    ADD_LIBRARY(${LIBNAME}_static STATIC ${PROJ_SRCS})
+    TARGET_INCLUDE_DIRECTORIES(${LIBNAME}_static PUBLIC ${CMAKE_SOURCE_DIR}/${LIBRARY_SRCS}/include)
+    INSTALL(TARGETS ${LIBNAME}_static DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
+ENDFUNCTION()
+
+# Function to make a program easier
+FUNCTION(MAKE_PROG_NOSTD TARGET_NAME SRC_DIR)
+
+    # Set compiler flags freestanding no stdlib
+    SET(CMAKE_CXX_FLAGS "-ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g -fno-use-cxa-atexit" CACHE STRING "" FORCE)
+
+    # Find all .cpp and .s files recursively in the given source directory
+    FILE(GLOB_RECURSE PROJ_SRCS ${SRC_DIR}/*.cpp ${SRC_DIR}/*.s)
+
+    # Create the executable
+    ADD_EXECUTABLE(${TARGET_NAME}.elf ${PROJ_SRCS})
+
+    # Set the linker script path
+    SET(LINKER_SCRIPT ${SRC_DIR}/linker.ld)
+
+    # Ensure the target rebuilds if the linker script changes
+    SET_TARGET_PROPERTIES(${TARGET_NAME}.elf PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
+
+    # Link libraries and pass linker options
+    TARGET_LINK_LIBRARIES(${TARGET_NAME}.elf gcc libkpi_static)
+    TARGET_COMPILE_OPTIONS(${TARGET_NAME}.elf PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
+    TARGET_INCLUDE_DIRECTORIES(${TARGET_NAME}.elf PRIVATE include)
+
+    # Install the executable to the boot filesystem
+    INSTALL(TARGETS ${TARGET_NAME}.elf DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/boot)
+ENDFUNCTION()
+
+# Function to add all subdirectories with CMakeLists.txt in a given base directory
+FUNCTION(ADD_SUB_DIRS BASE_DIR)
+    IF(NOT BASE_DIR)
+        SET(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    ENDIF()
+
+    FILE(GLOB CHILD_DIRS RELATIVE ${BASE_DIR} ${BASE_DIR}/*)
+
+    FOREACH (dir ${CHILD_DIRS})
+        IF(IS_DIRECTORY ${BASE_DIR}/${dir})
+            IF(EXISTS ${BASE_DIR}/${dir}/CMakeLists.txt)
+                add_subdirectory(${BASE_DIR}/${dir} ${dir})
+            ENDIF()
+        ENDIF()
+    ENDFOREACH()
+ENDFUNCTION()
 
 # Look to build in these directories
 ADD_SUBDIRECTORY(kernel)

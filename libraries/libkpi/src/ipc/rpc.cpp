@@ -10,6 +10,7 @@
 
 #include <ipc/rpc.h>
 
+using namespace MaxOS;
 using namespace MaxOS::KPI::processes;
 
 namespace MaxOS::KPI::ipc {
@@ -142,10 +143,9 @@ namespace MaxOS::KPI::ipc {
 	 *
 	 * @param value The string value to add
 	 */
-	void ArgList::push_string(const char* value) {
+	void ArgList::push_string(const string& value) {
 
-		size_t length = strlen(value) + 1; // Include null terminator
-		add_arg(ArgType::STRING, value, length);
+		add_arg(ArgType::STRING, value.c_str(), value.length() + 1);
 
 	}
 
@@ -232,11 +232,11 @@ namespace MaxOS::KPI::ipc {
 	 * @return The string value
 	 *
 	 */
-	const char* ArgList::get_string(size_t index) const {
+	string ArgList::get_string(size_t index) const {
 
 		// Get the argument
 		const arg_entry_t& entry = m_entries[index];
-		return (const char*) (m_payload + entry.offset);
+		return String((const char*) (m_payload + entry.offset));
 
 	}
 
@@ -475,8 +475,8 @@ namespace MaxOS::KPI::ipc {
 			auto header = (rpc_header_t*) message.get_blob(0);
 
 			// Get the function and response endpoint
-			function_entry_t function_entry = find_function(message.get_string(1));
-			uint64_t response_endpoint = open_endpoint(message.get_string(2));
+			function_entry_t function_entry = find_function(message.get_string(1).c_str());
+			uint64_t response_endpoint = open_endpoint(message.get_string(2).c_str());
 
 			// Validate request
 			if (response_endpoint == 0 || function_entry.function == nullptr)

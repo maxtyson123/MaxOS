@@ -1,3 +1,1 @@
-# The libraries
-add_subdirectory(libkpi)
-add_subdirectory(libcommon)
+ADD_SUB_DIRS(${CMAKE_CURRENT_SOURCE_DIR})

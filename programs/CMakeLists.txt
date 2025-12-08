@@ -1,3 +1,1 @@
-# The programs
-add_subdirectory(Example)
-add_subdirectory(Example2)
+ADD_SUB_DIRS(${CMAKE_CURRENT_SOURCE_DIR})

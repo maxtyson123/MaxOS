@@ -8,14 +8,14 @@
 
 #include <common/logger.h>
 #include <stdarg.h>
-#include <drivers/console/vesaboot.h>
+#include <console/vesaboot.h>
 #include <common/version.h>
 #include <system/cpu.h>
 #include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
-using namespace MaxOS::drivers::console;
+using namespace MaxOS::console;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 
@@ -29,7 +29,7 @@ Logger::Logger()
 	s_active_logger = this;
 
 	// The following line is generated automatically by the MaxOS build system.
-	s_progress_total = 22;
+	s_progress_total = 16;
 
 }
 
