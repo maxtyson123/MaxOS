@@ -1,6 +1,6 @@
 /**
  * @file mouse.h
- * @brief Defines a MouseDriver for handling PS/2 mouse input and generating mouse events
+ * @brief Defines a Mouse for handling PS/2 mouse input and generating mouse events
  *
  * @date 10th October 2022
  * @author Max Tyson
@@ -84,10 +84,10 @@ namespace MaxOS::drivers::peripherals {
 	};
 
 	/**
-	 * @class MouseDriver
+	 * @class Mouse
 	 * @brief Driver for the PS/2 mouse, manages the mouse and triggers events when the mouse moves or a button is pressed
 	 */
-	class MouseDriver : public hardwarecommunication::InterruptHandler, public Driver, public common::EventManager<MouseEvents> {
+	class Mouse : public hardwarecommunication::InterruptHandler, public Driver, public common::EventManager<MouseEvents> {
 
 		private:
 			hardwarecommunication::Port8Bit data_port;
@@ -100,8 +100,8 @@ namespace MaxOS::drivers::peripherals {
 			uint8_t m_buttons = 0;
 
 		public:
-			MouseDriver();
-			~MouseDriver();
+			Mouse();
+			~Mouse();
 
 			void activate() final;
 			string device_name() final;

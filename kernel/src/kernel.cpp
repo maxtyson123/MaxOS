@@ -116,3 +116,29 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
  * @todo Once kernel done, turn into mono repo and separate components
  * @todo Doxy for progs & libs
  */
+
+// Finish LibDriver
+//
+// init flow:
+// - parse multiboot for init program, fileserver and ramdisk
+// - schedule init program and fileserver
+// - init program tells fileserver to load & parse ramdisk
+// - init (via fileserver) reads ramdisk and starts all under "run/*" (driver manager, disks)
+// = = =
+// - - DM scans via selectors and builds list of initial devices
+// - - DM trys to init those devices (early ret, no fs)
+// - - DM loop:
+// - - - handle rpc calls (new devices added (ie from usb), device messages such as init suc/fail)
+// - - - try init devices that havent been started
+// = = =
+// - - FS loop:
+// - - - handle rpc calls (io, dm event: new disk)
+// - - - try parse new disk
+// = = =
+// - - DSK instance get info (args, fail then req from manager)
+// - - DSK init
+// - - DSK tell DM init done
+// - - DSK run server()
+// = = =
+// - future steps
+// - yeild forever

@@ -9,6 +9,8 @@
 #include <generic/disk.h>
 
 using namespace LibDriver::generic;
+using namespace MaxOS;
+using namespace MaxOS::common;
 
 Disk::Disk() = default;
 
@@ -20,10 +22,9 @@ Disk::~Disk() = default;
  * @param sector The sector to read from
  * @param data_buffer The buffer to read the data into
  */
-void Disk::read(uint32_t sector, void* data_buffer) {
+void Disk::read(uint32_t sector, buffer_t* data_buffer) {
 
-//	size_t amount = (data_buffer->capacity() > 512) ? 512 : data_buffer->capacity();
-	size_t amount = 512;
+	size_t amount = (data_buffer->capacity() > 512) ? 512 : data_buffer->capacity();
 	read(sector, data_buffer, amount);
 
 }
@@ -45,10 +46,9 @@ void Disk::read(uint32_t sector, void* data_buffer, size_t amount) {
  * @param sector The sector to write to
  * @param data The buffer to write the data from
  */
-void Disk::write(uint32_t sector, void* data) {
+void Disk::write(uint32_t sector, buffer_t* data) {
 
-//	size_t amount = (data->capacity() > 512) ? 512 : data->capacity();
-	size_t amount = 512;
+	size_t amount = (data->capacity() > 512) ? 512 : data->capacity();
 	write(sector, data, amount);
 
 }

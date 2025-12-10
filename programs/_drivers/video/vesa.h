@@ -23,7 +23,7 @@ namespace MaxOS::drivers::video {
 	 * @class VideoElectronicsStandardsAssociation
 	 * @brief Driver for the VESA video controller, handles the rendering of pixels to the screen using VESA
 	 */
-	class VideoElectronicsStandardsAssociation : public VideoDriver {
+	class VideoElectronicsStandardsAssociation : public Video {
 
 		private:
 			bool internal_set_mode(uint32_t width, uint32_t height, uint32_t) final;

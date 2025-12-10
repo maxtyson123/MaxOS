@@ -64,7 +64,7 @@ Event<KeyboardEvents> *KeyboardEventHandler::on_event(Event<KeyboardEvents> *eve
 /**
  * @brief Construct a new Keyboard Driver object, registering it as an interrupt handler for interrupt 0x21
  */
-KeyboardDriver::KeyboardDriver()
+Keyboard::Keyboard()
 : InterruptHandler(0x21, 0x1, 0x12),
   m_data_port(0x60),
   m_command_port(0x64)
@@ -73,12 +73,12 @@ KeyboardDriver::KeyboardDriver()
 
 }
 
-KeyboardDriver::~KeyboardDriver() = default;
+Keyboard::~Keyboard() = default;
 
 /**
  * @brief activate the keyboard driver
  */
-void KeyboardDriver::activate() {
+void Keyboard::activate() {
 
 	// Wait for user to stop pressing key (this is for the start-up key e.g. hold 'F12' for boot menu or hold 'del' for bios )
 	while (m_command_port.read() & 0x1)
@@ -102,7 +102,7 @@ void KeyboardDriver::activate() {
 /**
  * @brief deactivate the keyboard driver
  */
-void KeyboardDriver::handle_interrupt() {
+void Keyboard::handle_interrupt() {
 
 	// Pass the scan code to the m_handlers
 	uint8_t key = m_data_port.read();
@@ -114,7 +114,7 @@ void KeyboardDriver::handle_interrupt() {
  * @brief Get the device name
  * @return The device name
  */
-string KeyboardDriver::device_name() {
+string Keyboard::device_name() {
 	return "Keyboard";
 }
 

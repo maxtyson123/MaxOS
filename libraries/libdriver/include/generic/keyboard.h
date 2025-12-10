@@ -1,6 +1,6 @@
 /**
  * @file keyboard.h
- * @brief Defines a generic KeyboardDriver class for handling keyboard input.
+ * @brief Defines a generic Keyboard class for handling keyboard input.
  *
  * @date 24th November 2025
  * @author 98max
@@ -8,6 +8,7 @@
 
 #include <cstdint>
 #include <driver.h>
+#include <inputStream.h>
 
 #ifndef LIBDRIVER_GENERIC_KEYBOARD_H
 #define LIBDRIVER_GENERIC_KEYBOARD_H
@@ -219,7 +220,7 @@ namespace LibDriver::generic {
 	 * @class KeyboardInterpreter
 	 * @brief Interprets the scan codes from the keyboard
 	 */
-	class KeyboardInterpreter { //  public common::InputStreamEventHandler<uint8_t>, public common::EventManager<KeyboardEvents>
+	class KeyboardInterpreter : public MaxOS::common::InputStreamEventHandler<uint8_t> {
 
 		protected:
 			KeyboardState m_keyboard_state;                    ///< The current state of what special keys are pressed on the keyboard
@@ -375,14 +376,14 @@ namespace LibDriver::generic {
 	};
 
 	/**
-	 * @class KeyboardDriver
+	 * @class Keyboard
 	 * @brief Driver for the Keyboard Controller, manages the events and the keyboard state
 	 */
-	class KeyboardDriver :  public Driver { // public common::GenericInputStream<uint8_t>
+	class Keyboard :  public Driver, MaxOS::common::GenericInputStream<uint8_t> {
 
 		public:
-			KeyboardDriver();
-			~KeyboardDriver();
+			Keyboard();
+			~Keyboard();
 
 			void activate() final;
 			string device_name() final;

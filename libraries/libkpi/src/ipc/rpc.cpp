@@ -95,6 +95,17 @@ namespace MaxOS::KPI::ipc {
 	}
 
 	/**
+	 * @brief Adds a boolean argument to the end of the argument list
+	 *
+	 * @param value The boolean value to add
+	 */
+	void ArgList::push_bool(bool value) {
+
+		add_arg(ArgType::BOOL, &value, sizeof(bool));
+
+	}
+
+	/**
 	 * @brief Adds a uint32_t argument to the end of the argument list
 	 *
 	 * @param value The uint32_t value to add
@@ -158,6 +169,22 @@ namespace MaxOS::KPI::ipc {
 	void ArgList::push_blob(const void* data, size_t length) {
 
 		add_arg(ArgType::BLOB, data, length);
+
+	}
+
+	/**
+	 * @brief Gets a boolean argument from the argument list
+	 *
+	 * @param index The index of the argument to get
+	 * @return The boolean value
+	 */
+	bool ArgList::get_bool(size_t index) const {
+
+		// Get the argument
+		bool value = false;
+		ArgType type;
+		get_arg(index, type, &value, sizeof(bool));
+		return value;
 
 	}
 

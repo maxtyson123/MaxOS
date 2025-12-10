@@ -63,6 +63,7 @@ namespace MaxOS::KPI::ipc {
 	 */
 	enum class ArgType {
 		NONE,
+		BOOL,
 		UINT32,
 		UINT64,
 		INT32,
@@ -108,6 +109,7 @@ namespace MaxOS::KPI::ipc {
 			bool get_arg(size_t index, ArgType& type, void* buffer, size_t buffer_size) const;
 			size_t arg_count() const;
 
+			void push_bool(bool value);
 			void push_uint32(uint32_t value);
 			void push_uint64(uint64_t value);
 			void push_int32(int32_t value);
@@ -115,6 +117,7 @@ namespace MaxOS::KPI::ipc {
 			void push_string(const string& value);
 			void push_blob(const void* data, size_t length);
 
+			bool get_bool(size_t index) const;
 			uint32_t get_uint32(size_t index) const;
 			uint64_t get_uint64(size_t index) const;
 			int32_t  get_int32(size_t index) const;

@@ -11,15 +11,15 @@
 using namespace LibDriver;
 using namespace LibDriver::generic;
 
-EthernetDriver::EthernetDriver() = default;
-EthernetDriver::~EthernetDriver() = default;
+Ethernet::Ethernet() = default;
+Ethernet::~Ethernet() = default;
 
 /**
  * @brief Get the MAC address
  *
  * @return the MAC address
  */
-MediaAccessControlAddress EthernetDriver::get_media_access_control_address() {
+MediaAccessControlAddress Ethernet::get_media_access_control_address() {
 	return 0;
 }
 
@@ -29,21 +29,8 @@ MediaAccessControlAddress EthernetDriver::get_media_access_control_address() {
  * @param buffer  The buffer to send
  * @param size The size of the buffer
  */
-void EthernetDriver::send(uint8_t* buffer, uint32_t size) {
+void Ethernet::send(uint8_t* buffer, uint32_t size) {
 
-	// Raise the event
-//	raise_event(new BeforeSendEvent(buffer, size));
-
-	do_send(buffer, size);
-}
-
-/**
- * @brief (Device Side) send the data
- *
- * @param buffer The buffer to handle
- * @param size The size of the buffer
- */
-void EthernetDriver::do_send(uint8_t* buffer, uint32_t size) {
 }
 
 
@@ -60,7 +47,7 @@ void EthernetDriver::do_send(uint8_t* buffer, uint32_t size) {
  * @param digit6 The last digit
  * @return The MAC address
  */
-MediaAccessControlAddress EthernetDriver::create_media_access_control_address(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6) {
+MediaAccessControlAddress Ethernet::create_media_access_control_address(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6) {
 	return // digit6 is the most significant byte
 			(uint64_t) digit6 << 40
 			| (uint64_t) digit5 << 32

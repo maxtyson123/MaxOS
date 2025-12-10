@@ -74,21 +74,21 @@ void MouseEventHandler::on_mouse_move_event(int8_t, int8_t) {
 MouseEventHandler::~MouseEventHandler() = default;
 
 /**
- * @brief Constructs a new MouseDriver object and registers it as an interrupt handler for interrupt 0x2C
+ * @brief Constructs a new Mouse object and registers it as an interrupt handler for interrupt 0x2C
  */
-MouseDriver::MouseDriver()
+Mouse::Mouse()
 		: InterruptHandler(0x2C, 0xC, 0x28),
 		data_port(0x60),
 		command_port(0x64) {
 
 }
 
-MouseDriver::~MouseDriver() = default;
+Mouse::~Mouse() = default;
 
 /**
  * @brief activate the mouse
  */
-void MouseDriver::activate() {
+void Mouse::activate() {
 
 	//  Get the current state of the mouse
 	command_port.write(0x20);
@@ -110,7 +110,7 @@ void MouseDriver::activate() {
 /**
  * @brief Handle the mouse interrupt
  */
-void MouseDriver::handle_interrupt() {
+void Mouse::handle_interrupt() {
 
 	// Check if there is data to handle
 	uint8_t status = command_port.read();
@@ -152,7 +152,7 @@ void MouseDriver::handle_interrupt() {
  *
  * @return The name of the device
  */
-string MouseDriver::device_name() {
+string Mouse::device_name() {
 	return "Mouse";
 }
 

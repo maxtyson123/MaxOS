@@ -11,6 +11,7 @@ ROOT_DIR = SCRIPT_DIR.parent.parent
 
 # TYPE CONVERSIONS
 TYPE_MAP = {
+    "bool" : "bool",
     "uint32": "uint32_t",
     "uint64": "uint64_t",
     "int32": "int32_t",
@@ -21,6 +22,7 @@ TYPE_MAP = {
 }
 
 PUSH_FUNC_MAP = {
+    "bool": "push_bool",
     "uint32": "push_uint32",
     "uint64": "push_uint64",
     "int32": "push_int32",
@@ -30,6 +32,7 @@ PUSH_FUNC_MAP = {
 }
 
 GET_FUNC_MAP = {
+    "bool": "get_bool",
     "uint32": "get_uint32",
     "uint64": "get_uint64",
     "int32": "get_int32",
@@ -45,6 +48,7 @@ RPC_FLAGS_MAP = {
 }
 
 CPP_TO_IDL = {
+    "bool": "bool",
     "uint32_t": "uint32",
     "uint64_t": "uint64",
     "int32_t": "int32",
@@ -128,29 +132,63 @@ def log(msg):
 def idl_to_cpp(idl_type):
     return TYPE_MAP.get(idl_type, idl_type)
 
+def normalize_pointer_spacing(t: str) -> str:
+    """
+    Normalize spacing for pointer tokens so that 'char *', 'char * const' etc.
+    become 'char*' (keeping the '*' attached). Preserve '*' so pointer information
+    can be detected by cpp_type_to_idl.
+    """
+    if not t:
+        return t
+    s = t.strip()
+    # Remove extra spaces around '*' and collapse multiple spaces
+    s = re.sub(r'\s*\*\s*', '*', s)
+    s = re.sub(r'\s+', ' ', s)
+    return s.strip()
+
 def cpp_type_to_idl(t: str) -> str:
 
     # Get the base type
     t = t.strip()
-    t = re.sub(r'\bconst\b', '', t)
-    t = t.replace('&', '').replace('*', '').strip()
+    # Keep pointer '*' information — only remove the 'const' keyword but preserve '*'
+    t = re.sub(r'\bconst\b', 'const', t)  # placeholder to ensure word boundary usage
+    t = re.sub(r'\bconst\b\s*', '', t)    # remove 'const' but don't touch '*'
+    t = t.replace('&', '').strip()
+    t = normalize_pointer_spacing(t)
 
-    if t.endswith("string"):
+    # Quick direct mapping first (handles 'char*', 'const void*', etc.)
+    if t in CPP_TO_IDL:
+        return CPP_TO_IDL[t]
+
+    # string heuristics: char*/std::string
+    if re.search(r'char\*$', t) or re.search(r'\bstd::string\b', t) or t.endswith("string"):
         return "string"
     if "string" in t:
         return "string"
-    if t in CPP_TO_IDL:
-        return CPP_TO_IDL[t]
-    if re.match(r'uint32', t) or 'uint32_t' in t:
+
+    # integer patterns
+    if re.match(r'^(uint32(_t)?|unsigned\s+int)$', t) or 'uint32_t' in t:
         return "uint32"
-    if re.match(r'uint64', t) or 'uint64_t' in t:
+    if re.match(r'^(uint64(_t)?|unsigned\s+long)$', t) or 'uint64_t' in t:
         return "uint64"
-    if re.match(r'int32', t) or 'int32_t' in t:
+    if re.match(r'^(int32(_t)?|int)$', t) or 'int32_t' in t:
         return "int32"
-    if re.match(r'int64', t) or 'int64_t' in t:
+    if re.match(r'^(int64(_t)?|long)$', t) or 'int64_t' in t:
         return "int64"
+
+    # void or empty -> void
     if t == '' or t.lower() == 'void':
         return "void"
+
+    # fallback: if pointer to void or unknown pointer, treat as blob
+    if re.search(r'void\*$', t) or re.search(r'\*$' , t):
+        # if it's something like 'MyType*' and not explicitly mapped, consider it blob
+        # (user can refine mapping if necessary)
+        if 'void*' in t or t.endswith('void*'):
+            return "blob"
+        # pointer to char handled earlier; other pointers -> blob
+        return "blob"
+
     return t
 
 def sanitize_cpp_type(t: str) -> str:
@@ -289,8 +327,9 @@ def parse_class_header(header_path: Path, class_name: str) -> Dict[str, Tuple[st
                 p_type = tokens[0]
                 p_name = "arg0"
 
-            # Normalise type
-            p_type = p_type.replace("const ", "").strip()
+            # Normalise type: remove 'const' but keep pointer '*' attached
+            p_type = re.sub(r'\bconst\b', '', p_type).strip()
+            p_type = normalize_pointer_spacing(p_type)
             param_list.append((p_type, p_name))
 
         out[name] = (return_type, param_list)
@@ -312,7 +351,7 @@ def parse_rpc_file(file_path: Path) -> RpcService:
     # Class servers can have a header and namespace
     class_header_match = re.search(r'^\s*class\s*<([^>]+)>', content, re.MULTILINE)
     class_header = class_header_match.group(1).strip() if class_header_match else None
-    namespace = re.search(r'^\s*namespace\s+([\w\.]+);?', content, re.MULTILINE)
+    namespace = re.search(r'^\s*namespace\s+([\w:]+);?', content, re.MULTILINE)
 
     # Check for a class service: "service class ClassName service_pattern { ... }"
     service_re = re.compile(r'^\s*service\s+class\s+(\w+)\s+([\w\{\}_]+)\s*\{(.*?)\}', re.MULTILINE | re.DOTALL)
@@ -573,7 +612,6 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             "    rpc_server_loop(server_name.c_str());",
             "}",
             ""
-
 
 
         ])

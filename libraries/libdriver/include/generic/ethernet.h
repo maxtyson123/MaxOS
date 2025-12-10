@@ -21,18 +21,16 @@ namespace LibDriver::generic {
 	 * @class EthernetDriver
 	 * @brief Driver for the Ethernet Controller, manages the sending and receiving of data, the mac address, and the events
 	 */
-	class EthernetDriver : public LibDriver::Driver {
-		protected:
-			virtual void do_send(uint8_t* buffer, uint32_t size);
+	class Ethernet : public LibDriver::Driver {
 
 		public:
-			EthernetDriver();
-			~EthernetDriver();
+			Ethernet();
+			~Ethernet();
 
 			static MediaAccessControlAddress create_media_access_control_address(uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6);
 			virtual MediaAccessControlAddress get_media_access_control_address();
 
-			void send(uint8_t* buffer, uint32_t size);
+			virtual void send(uint8_t* buffer, uint32_t size);
 	};
 
 }
