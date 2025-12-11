@@ -1,2 +1,2 @@
 MAKE_PROG_NOSTD(DriverManager src)
-TARGET_LINK_LIBRARIES(DriverManager.elf libdriver_static)
+TARGET_LINK_LIBRARIES(DriverManager.elf driver_static)

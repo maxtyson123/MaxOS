@@ -8,7 +8,7 @@
 
 #include <common/logger.h>
 #include <stdarg.h>
-#include <console/vesaboot.h>
+#include <console/framebuffer.h>
 #include <common/version.h>
 #include <system/cpu.h>
 #include <processes/scheduler.h>
@@ -29,7 +29,7 @@ Logger::Logger()
 	s_active_logger = this;
 
 	// The following line is generated automatically by the MaxOS build system.
-	s_progress_total = 16;
+	s_progress_total = 15;
 
 }
 
@@ -87,7 +87,7 @@ void Logger::set_log_level(LogLevel log_level) {
 
 	// Update the progress bar
 	if (log_level == LogLevel::INFO) {
-		VESABootConsole::update_progress_bar((m_progress_current * 100) / s_progress_total);
+		FramebufferConsole::update_progress_bar((m_progress_current * 100) / s_progress_total);
 		m_progress_current++;
 	}
 

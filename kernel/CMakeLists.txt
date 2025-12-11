@@ -48,7 +48,7 @@ FUNCTION(BUILD_KERNEL target_name)
     SET_TARGET_PROPERTIES(${target_name} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 
     # Set the include directories
-    TARGET_LINK_LIBRARIES(${target_name} PRIVATE gcc libkpi_static libcommon_kernel)
+    TARGET_LINK_LIBRARIES(${target_name} PRIVATE gcc kpi common_kernel)
     target_link_options(${target_name} PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
     TARGET_INCLUDE_DIRECTORIES(${target_name} PRIVATE include)
 endfunction()

@@ -11,6 +11,7 @@
 using namespace DriverManager;
 using namespace DriverManager::core;
 using namespace LibDriver;
+using namespace MaxOS::common;
 
 /**
  * @brief Constructs the Driver Manager, adding any default driver selectors

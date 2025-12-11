@@ -15,7 +15,7 @@
 #include <vector.h>
 #include <buffer.h>
 #include <filesystem/path.h>
-#include <libkpi/include/filesystem/file.h>
+#include <kpi/include/filesystem/file.h>
 
 
 namespace MaxOS::filesystem {

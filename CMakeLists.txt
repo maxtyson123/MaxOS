@@ -85,14 +85,14 @@ FUNCTION(MAKE_PROG_NOSTD TARGET_NAME SRC_DIR)
     ADD_EXECUTABLE(${TARGET_NAME}.elf ${PROJ_SRCS})
 
     # Set the linker script path
-    SET(LINKER_SCRIPT ${SRC_DIR}/linker.ld)
+    SET(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/linker.ld)
 
     # Ensure the target rebuilds if the linker script changes
     SET_TARGET_PROPERTIES(${TARGET_NAME}.elf PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 
     # Link libraries and pass linker options
-    TARGET_LINK_LIBRARIES(${TARGET_NAME}.elf gcc libkpi_static)
-    TARGET_COMPILE_OPTIONS(${TARGET_NAME}.elf PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
+    TARGET_LINK_LIBRARIES(${TARGET_NAME}.elf gcc kpi)
+    TARGET_LINK_OPTIONS(${TARGET_NAME}.elf PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
     TARGET_INCLUDE_DIRECTORIES(${TARGET_NAME}.elf PRIVATE include)
 
     # Install the executable to the boot filesystem

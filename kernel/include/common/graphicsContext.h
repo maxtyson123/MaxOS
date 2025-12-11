@@ -51,6 +51,7 @@ namespace MaxOS::common {
 			GraphicsContext();
 			~GraphicsContext();
 
+			static uint32_t colour_to_int(const Colour& colour, uint32_t color_depth);
 			uint32_t colour_to_int(const Colour&);
 			Colour int_to_colour(uint32_t);
 

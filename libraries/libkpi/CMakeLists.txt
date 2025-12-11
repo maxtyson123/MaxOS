@@ -9,14 +9,8 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-pointer-arith -Wno-address-of-packe
 # Collect sources
 FILE(GLOB_RECURSE KPI_SRCS src/*.cpp src/*.s)
 
-# Build as a dynamic library
-ADD_LIBRARY(libkpi SHARED ${KPI_SRCS})
-TARGET_INCLUDE_DIRECTORIES(libkpi PUBLIC include)
-TARGET_LINK_LIBRARIES(libkpi PUBLIC libcommon)
-INSTALL(TARGETS libkpi LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
-
 # Build as a static library
-ADD_LIBRARY(libkpi_static STATIC ${KPI_SRCS})
-TARGET_INCLUDE_DIRECTORIES(libkpi_static PUBLIC include)
-TARGET_LINK_LIBRARIES(libkpi_static PUBLIC libcommon)
-INSTALL(TARGETS libkpi_static DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
+ADD_LIBRARY(kpi STATIC ${KPI_SRCS})
+TARGET_INCLUDE_DIRECTORIES(kpi PUBLIC include)
+TARGET_LINK_LIBRARIES(kpi PUBLIC common)
+INSTALL(TARGETS kpi DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)

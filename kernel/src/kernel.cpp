@@ -10,29 +10,23 @@
 #include <common/logger.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/clock.h>
-#include <drivers/console/serial.h>
-#include <drivers/console/vesaboot.h>
-#include <gui/desktop.h>
+#include <console/serial.h>
+#include <console/framebuffer.h>
 #include <processes/scheduler.h>
 #include <system/cpu.h>
 #include <system/syscalls.h>
 #include <memory/memorymanagement.h>
 #include <memory/physical.h>
 #include <memory/virtual.h>
-#include <filesystem/vfs.h>
-#include <filesystem/vfsresource.h>
 #include <tests/test.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
-using namespace MaxOS::drivers;
-using namespace MaxOS::drivers::console;
+using namespace MaxOS::console;
 using namespace MaxOS::hardwarecommunication;
-using namespace MaxOS::gui;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
-using namespace MaxOS::filesystem;
 using namespace MaxOS::tests;
 
 extern "C" void call_constructors();        ///< Calls the C++ static constructors
@@ -85,8 +79,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	MemoryManager memory_manager(&vmm);
 
 	Logger::HEADER() << "Stage {1.2}: Console Initialisation\n";
-	VideoElectronicsStandardsAssociation vesa(multiboot.framebuffer());
-	VESABootConsole console(&vesa);
+	FramebufferConsole console(multiboot.framebuffer());
 
 	Logger::HEADER() << "Stage {2}: Hardware Initialisation\n";
 	CPU cpu(&gdt, &multiboot);

@@ -60,8 +60,16 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 
 	// Copy the args into userspace
 	uint64_t argc = arg_amount;
-	void* argv = parent->memory_manager->handle_malloc(arg_amount * sizeof(void*));
-	memcpy(argv, args, arg_amount * sizeof(void*));
+	size_t arg_size = argc * sizeof(void*);
+	void* argv = parent->memory_manager->handle_malloc(arg_size);
+	for (int i = 0; i < argc; i++) {
+
+		// Copy each argument
+		size_t len = strlen(((char**)args)[i]) + 1;
+		((char**)argv)[i] = (char*) parent->memory_manager->handle_malloc(len);
+		memcpy((void*) ((char**)argv)[i], (void*) ((char**)args)[i], len);
+
+	}
 
 	execution_state.rdi = argc;
 	execution_state.rsi = (uint64_t) argv;

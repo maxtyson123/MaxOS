@@ -1,1 +1,0 @@
-MAKE_PROG_NOSTD(test1 src)

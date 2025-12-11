@@ -1,0 +1,1 @@
+MAKE_PROG_NOSTD(Init src)

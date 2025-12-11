@@ -29,7 +29,7 @@ namespace LibDriver {
 
 			virtual void activate();
 			virtual void deactivate();
-			virtual void initialise(uint32_t argtest);
+			virtual void initialise();
 			virtual uint32_t reset();
 
 			virtual string vendor_name();

@@ -25,8 +25,8 @@ namespace DriverManager::core {
 	class Manager : public SelectorEventHandler {
 
 		private:
-			Vector<LibDriver::Driver*> m_drivers;
-			Vector<Selector*> m_driver_selectors;
+			MaxOS::common::Vector<LibDriver::Driver*> m_drivers;
+			MaxOS::common::Vector<Selector*> m_driver_selectors;
 
 		public:
 			Manager();

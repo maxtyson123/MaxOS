@@ -4,8 +4,6 @@
  *
  * @date 27th October 2022
  * @author Max Tyson
- *
- * @todo '<system/syscalls.h>' Rename / make clear that this references the system lib
  */
 
 #ifndef MAXOS_SYSTEM_SYSCALLS_H
@@ -18,7 +16,6 @@
 #include <colour.h>
 #include <memory/memorymanagement.h>
 #include <processes/scheduler.h>
-#include <system/syscalls.h>
 #include <libkpi/include/syscalls.h>
 
 

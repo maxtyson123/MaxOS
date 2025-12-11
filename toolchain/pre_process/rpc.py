@@ -16,8 +16,7 @@ TYPE_MAP = {
     "uint64": "uint64_t",
     "int32": "int32_t",
     "int64": "int64_t",
-    "string": "string",#"const char*",
-    "blob": "const void*",
+    "string": "mstring",#"const char*",
     "void": "void"
 }
 
@@ -27,8 +26,7 @@ PUSH_FUNC_MAP = {
     "uint64": "push_uint64",
     "int32": "push_int32",
     "int64": "push_int64",
-    "string": "push_string",
-    "blob": "push_blob"
+    "mstring": "push_string",
 }
 
 GET_FUNC_MAP = {
@@ -37,8 +35,7 @@ GET_FUNC_MAP = {
     "uint64": "get_uint64",
     "int32": "get_int32",
     "int64": "get_int64",
-    "string": "get_string",
-    "blob": "get_blob"
+    "mstring": "get_string",
 }
 
 RPC_FLAGS_MAP = {
@@ -53,13 +50,9 @@ CPP_TO_IDL = {
     "uint64_t": "uint64",
     "int32_t": "int32",
     "int64_t": "int64",
-    "string": "string",
-    "string": "string",
-    "const char*": "string",
-    "char*": "string",
-    "void": "void",
-    "const void*": "blob",
-    "void*": "blob",
+    "string": "mstring",
+    "const char*": "mstring",
+    "char*": "mstring",
 }
 
 # CLASSES
@@ -162,9 +155,9 @@ def cpp_type_to_idl(t: str) -> str:
 
     # string heuristics: char*/std::string
     if re.search(r'char\*$', t) or re.search(r'\bstd::string\b', t) or t.endswith("string"):
-        return "string"
+        return "mstring"
     if "string" in t:
-        return "string"
+        return "mstring"
 
     # integer patterns
     if re.match(r'^(uint32(_t)?|unsigned\s+int)$', t) or 'uint32_t' in t:
@@ -179,15 +172,6 @@ def cpp_type_to_idl(t: str) -> str:
     # void or empty -> void
     if t == '' or t.lower() == 'void':
         return "void"
-
-    # fallback: if pointer to void or unknown pointer, treat as blob
-    if re.search(r'void\*$', t) or re.search(r'\*$' , t):
-        # if it's something like 'MyType*' and not explicitly mapped, consider it blob
-        # (user can refine mapping if necessary)
-        if 'void*' in t or t.endswith('void*'):
-            return "blob"
-        # pointer to char handled earlier; other pointers -> blob
-        return "blob"
 
     return t
 
@@ -231,7 +215,11 @@ def extract_arguments(function: RpcMethod, lines: List[str], get: bool = True) -
             continue
 
         # Cant get the arg easily, fallback to blob
-        lines.append(f"     {fn_result}_args{access}{'get' if get else 'push'}_blob({i}); // unsupported arg; fallback to blob")
+        if get:
+            lines.append(f"     {idl_to_cpp(arg.type_idl)} {arg.name} = ({idl_to_cpp(arg.type_idl)})_args->get_blob({i}); // unsupported arg; fallback to blob")
+        else:
+            lines.append(f"    _args.push_blob(&{fn_param}, sizeof({idl_to_cpp(arg.type_idl)})); // unsupported arg; fallback to blob")
+
         call_args.append(arg.name)
     return call_args
 
@@ -495,7 +483,7 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
         add_lines("", both)
 
         # Add namespace if needed
-        add_lines("using string = MaxOS::string;", both)
+        add_lines("using mstring = MaxOS::string;", both)
         add_lines("", both)
         if service.namespace != "": add_lines(f"namespace {service.namespace} {{", both)
         add_lines("", both)
@@ -513,7 +501,7 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             f"           static {class_name}Server* server();",
             f"           static {class_name}* driver();",
             "",
-            "            void start(string id);",
+            "            void start(mstring id);",
             "    };",
             ""
 
@@ -523,9 +511,9 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
         cli_h_lines.extend([
             f"   class {class_name}Client : public {class_name} " + "{",
             "      private:",
-            "            string m_id;",
+            "            mstring m_id;",
             "      public:",
-            f"          explicit {class_name}Client(string id);",
+            f"          explicit {class_name}Client(mstring id);",
             f"          ~{class_name}Client();",
             ""
         ])
@@ -607,8 +595,8 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             "    return s_instance->m_driver;",
             "}",
             "",
-            f"void {class_name}Server::start(string id) {{",
-            "    string server_name = id;",
+            f"void {class_name}Server::start(mstring id) {{",
+            "    mstring server_name = id;",
             "    rpc_server_loop(server_name.c_str());",
             "}",
             ""
@@ -629,10 +617,11 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
 
             # Extract the args from the args list
             call_args = extract_arguments(function, srv_cpp_lines, get=True)
+            srv_cpp_lines.append("")
 
             # Void function
             if function.cpp_return_type == "void" or (len(function.return_types) == 1 and function.return_types[0].lower() == "void"):
-                srv_cpp_lines.append(f"    driver->{function.name}({', '.join(call_args)});")
+                srv_cpp_lines.append(f"     driver->{function.name}({', '.join(call_args)});")
                 srv_cpp_lines.append("}")
                 srv_cpp_lines.append("")
                 continue
@@ -650,8 +639,8 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             srv_cpp_lines.append("")
 
         # Client: class (TODO: build constructor with pattern
-        cli_cpp_lines.append(f"{class_name}Client::{class_name}Client(string id) {{")
-        cli_cpp_lines.append(f'   m_id = (string)"driver_" + id;')
+        cli_cpp_lines.append(f"{class_name}Client::{class_name}Client(mstring id) {{")
+        cli_cpp_lines.append(f'   m_id = (mstring)"driver_" + id;')
         cli_cpp_lines.append("}")
         cli_cpp_lines.append("")
         cli_cpp_lines.append(f"{class_name}Client::~{class_name}Client() = default;")
@@ -719,7 +708,7 @@ def generate_types_header(service: RpcService, output_path: Path):
     lines.extend([
         "#include <cstdint>",
         "#include <ipc/rpc.h>",
-        "using string = MaxOS::string;",
+        "using mstring = MaxOS::string;",
         ""
     ])
 
@@ -754,7 +743,7 @@ def generate_server_header(service: RpcService, output_path: Path, include_prefi
     lines.extend([
         "#include <ipc/rpc.h>",
         f"#include <{include_prefix}{service.name}_types.h>",
-        "using string = MaxOS::string;",
+        "using mstring = MaxOS::string;",
         "",
         f"void register_{service.name}_functions();",
         f"void run_{service.name}();",
@@ -784,7 +773,7 @@ def generate_client_header(service: RpcService, output_path: Path, include_prefi
         f"#include <{include_prefix}{service.name}_types.h>",
         "",
         "using namespace MaxOS::KPI::ipc;",
-        "using string = MaxOS::string;",
+        "using mstring = MaxOS::string;",
         "",
         f"void wait_for_{service.name}_server();",
         ""

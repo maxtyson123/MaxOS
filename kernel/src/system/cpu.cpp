@@ -9,16 +9,15 @@
 #include <system/cpu.h>
 #include <common/logger.h>
 #include <processes/scheduler.h>
-#include <drivers/console/vesaboot.h>
+#include <console/framebuffer.h>
 #include <memory/memorymanagement.h>
-#include <drivers/clock/clock.h>
+#include <hardwarecommunication/clock.h>
 #include <common/symbols.h>
 
 using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
-using namespace MaxOS::drivers;
-using namespace MaxOS::drivers::clock;
+using namespace MaxOS::console;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
@@ -514,7 +513,7 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 
 	// We are panicking
 	panic_core = executing_core();
-	console::VESABootConsole::print_logo(true);
+	console::FramebufferConsole::print_logo(true);
 	panic_lock.unlock();
 	return nullptr;
 }

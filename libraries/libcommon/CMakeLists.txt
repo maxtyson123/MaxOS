@@ -10,14 +10,14 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-pointer-arith -Wno-address-of-packe
 FILE(GLOB_RECURSE COMMON_SRCS src/*.cpp src/*.s)
 
 # Build as a user library
-ADD_LIBRARY(libcommon STATIC ${COMMON_SRCS})
-TARGET_INCLUDE_DIRECTORIES(libcommon PUBLIC include)
-TARGET_INCLUDE_DIRECTORIES(libcommon PRIVATE ${CMAKE_SOURCE_DIR}/libraries/libkpi/include)
-INSTALL(TARGETS libcommon DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
+ADD_LIBRARY(common STATIC ${COMMON_SRCS})
+TARGET_INCLUDE_DIRECTORIES(common PUBLIC include)
+TARGET_INCLUDE_DIRECTORIES(common PRIVATE ${CMAKE_SOURCE_DIR}/libraries/libkpi/include)
+INSTALL(TARGETS common DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
 
 # Build as a kernel library
-ADD_LIBRARY(libcommon_kernel STATIC ${COMMON_SRCS})
-TARGET_INCLUDE_DIRECTORIES(libcommon_kernel PUBLIC include)
-TARGET_INCLUDE_DIRECTORIES(libcommon_kernel PRIVATE ${CMAKE_SOURCE_DIR}/kernel/include)
-TARGET_COMPILE_DEFINITIONS(libcommon_kernel PUBLIC MAXOS_KERNEL)
-INSTALL(TARGETS libcommon_kernel DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
+ADD_LIBRARY(common_kernel STATIC ${COMMON_SRCS})
+TARGET_INCLUDE_DIRECTORIES(common_kernel PUBLIC include)
+TARGET_INCLUDE_DIRECTORIES(common_kernel PRIVATE ${CMAKE_SOURCE_DIR}/kernel/include)
+TARGET_COMPILE_DEFINITIONS(common_kernel PUBLIC MAXOS_KERNEL)
+INSTALL(TARGETS common_kernel DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
