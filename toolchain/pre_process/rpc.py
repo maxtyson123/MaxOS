@@ -51,8 +51,6 @@ CPP_TO_IDL = {
     "int32_t": "int32",
     "int64_t": "int64",
     "string": "mstring",
-    "const char*": "mstring",
-    "char*": "mstring",
 }
 
 # CLASSES

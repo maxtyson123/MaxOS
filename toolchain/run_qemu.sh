@@ -32,7 +32,7 @@ while [ "$#" -gt "0" ]; do
 done
 
 # Is slower
-GET_QEMU_CRASH_REASON=0
+GET_QEMU_CRASH_REASON=1
 if [ "$GET_QEMU_CRASH_REASON" -ne 0 ]; then
     GET_QEMU_CRASH_RESON=1
     DEBUG_LOGS="-d guest_errors"

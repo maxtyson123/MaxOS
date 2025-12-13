@@ -194,5 +194,5 @@ void MaxOS::KPI::processes::thread_exit(uint64_t exit_code) {
 void MaxOS::KPI::processes::sleep(uint64_t sleep_time_ms) {
 
 	resource_write(get_current_thread(), &sleep_time_ms, sizeof(sleep_time_ms), (size_t)ThreadFlags::WRITE_SLEEP_TIME);
-
+	yeild();
 }

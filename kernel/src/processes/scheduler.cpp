@@ -27,8 +27,8 @@ GlobalScheduler::GlobalScheduler(Multiboot& multiboot)
   m_shared_messages_registry(resource_type_t::MESSAGE_ENDPOINT),
   m_thread_resource_registry(),
   m_process_resource_registry(),
-  m_next_pid(-1),
-  m_next_tid(-1)
+  m_next_pid(0),
+  m_next_tid(0)
 {
 
 	// Set up the global scheduler
@@ -562,8 +562,7 @@ cpu_status_t* Scheduler::yield() {
 
 	// Set the current thread to waiting if running
 	auto thread = current_thread();
-	if (thread->thread_state == ThreadState::RUNNING)
-		thread->thread_state = ThreadState::READY;
+	thread->thread_state = ThreadState::SLEEPING;
 
 	// Schedule the next thread
 	return schedule_next(&thread->execution_state);
