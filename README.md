@@ -147,6 +147,7 @@ will look for a Windows installation of QEMU)
    ```sh
    git clone https://github.com/maxtyson123/MaxOS.git
    cd MaxOS
+   git submodule update --init --recursive
    ```
 
 2. Create the cross-compiler (This will take a while)
