@@ -113,10 +113,15 @@ mkdir build-gcc
 cd build-gcc
 extra_config_args=()
 if [ "$IS_MACOS" -eq 1 ]; then
+
+  # Add the mac required libraries
   for library in gmp mpfr mpc; do
 	  [ "$library" = "mpc" ] && brew_formula="libmpc" || brew_formula="$library"
 	  extra_config_args+=("--with-$library=$(brew --prefix --installed "$brew_formula")")
 	done
+
+	# Mac cant compile libgcov
+	extra_config_args+=("--disable-gcov")
 fi
 
 ../gcc-$GCC_VERSION/configure --prefix="$PREFIX" --target="$TARGET" --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx "${extra_config_args[@]}" || fail "Configuring gcc failed"

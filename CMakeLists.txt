@@ -1,22 +1,18 @@
-# Set the minimum version of CMake that can be used
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
+# Ignore cross compiler
+LIST(FILTER SOURCES EXCLUDE REGEX ".*/toolchain/cross_compiler.*")
 
-# Set the project name and the languages
+# Setup CMAKE
+CMAKE_MINIMUM_REQUIRED(VERSION 3.5.0)
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+SET(CMAKE_SKIP_RPATH TRUE)
+SET(CMAKE_CXX_STANDARD 20)
 PROJECT(MaxOS C CXX ASM)
 
-# Logs the compiler commands
-SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Setup LibC
+SET(LIBC_TARGET "example")
 
-# don't enable runtime type information
-SET(CMAKE_SKIP_RPATH TRUE)
-
-# Set the standard to C++20
-SET(CMAKE_CXX_STANDARD 20)
-
-# Set where the libraries are located
+# Set up libraries
 INCLUDE_DIRECTORIES(libraries/)
-
-# Tell the linker to look in the toolchain for libraries
 LINK_DIRECTORIES(${TOOLCHAIN_ROOT_DIR}/lib/gcc/${TOOLCHAIN_PLATFORM}/${GCC_VER}/)
 LINK_DIRECTORIES(${TOOLCHAIN_ROOT_DIR}/${TOOLCHAIN_PLATFORM}/lib/)
 
@@ -36,68 +32,6 @@ ADD_CUSTOM_TARGET(rpc
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     USES_TERMINAL
 )
-
-# Function to make a library easier
-FUNCTION(MAKE_LIBRARY LIBNAME)
-
-    # TODO: ADD_DEPENDENCIES(${LIBNAME} libc) (& for static)
-
-    # Install dynamic library
-    ADD_LIBRARY(${LIBNAME} SHARED ${LIBRARY_SRCS})
-    TARGET_INCLUDE_DIRECTORIES(${LIBNAME} PUBLIC include)
-    INSTALL(TARGETS ${LIBNAME} LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
-
-    # Install static library
-    ADD_LIBRARY(${LIBNAME}_static STATIC ${LIBRARY_SRCS})
-    TARGET_INCLUDE_DIRECTORIES(${LIBNAME}_static PUBLIC include)
-    INSTALL(TARGETS ${LIBNAME}_static DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
-
-    # TODO: Install headers onto fs
-
-ENDFUNCTION()
-
-FUNCTION(MAKE_LIBRARY_NOSTD LIBNAME LIBRARY_SRCS)
-
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -mno-red-zone -mno-80387 -mno-mmx -fno-use-cxa-atexit")
-
-    # Disable noisy warnings
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-pointer-arith -Wno-address-of-packed-member -Wno-trigraphs -Wno-unused-variable -Wno-unused-function")
-
-    # Find all .cpp and .s files recursively in the given source directory
-    FILE(GLOB_RECURSE PROJ_SRCS ${LIBRARY_SRCS}/*.cpp ${LIBRARY_SRCS}/*.s)
-
-    # Build as a static library
-    ADD_LIBRARY(${LIBNAME}_static STATIC ${PROJ_SRCS})
-    TARGET_INCLUDE_DIRECTORIES(${LIBNAME}_static PUBLIC ${CMAKE_SOURCE_DIR}/${LIBRARY_SRCS}/include)
-    INSTALL(TARGETS ${LIBNAME}_static DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
-ENDFUNCTION()
-
-# Function to make a program easier
-FUNCTION(MAKE_PROG_NOSTD TARGET_NAME SRC_DIR)
-
-    # Set compiler flags freestanding no stdlib
-    SET(CMAKE_CXX_FLAGS "-ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g -fno-use-cxa-atexit" CACHE STRING "" FORCE)
-
-    # Find all .cpp and .s files recursively in the given source directory
-    FILE(GLOB_RECURSE PROJ_SRCS ${SRC_DIR}/*.cpp ${SRC_DIR}/*.s)
-
-    # Create the executable
-    ADD_EXECUTABLE(${TARGET_NAME}.elf ${PROJ_SRCS})
-
-    # Set the linker script path
-    SET(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/linker.ld)
-
-    # Ensure the target rebuilds if the linker script changes
-    SET_TARGET_PROPERTIES(${TARGET_NAME}.elf PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
-
-    # Link libraries and pass linker options
-    TARGET_LINK_LIBRARIES(${TARGET_NAME}.elf gcc kpi)
-    TARGET_LINK_OPTIONS(${TARGET_NAME}.elf PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
-    TARGET_INCLUDE_DIRECTORIES(${TARGET_NAME}.elf PRIVATE include)
-
-    # Install the executable to the boot filesystem
-    INSTALL(TARGETS ${TARGET_NAME}.elf DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/boot)
-ENDFUNCTION()
 
 # Function to add all subdirectories with CMakeLists.txt in a given base directory
 FUNCTION(ADD_SUB_DIRS BASE_DIR)

@@ -13,7 +13,7 @@
 
 #include <cstdint>
 #include <colour.h>
-
+#include <stdint.h>
 
 namespace MaxOS::common {
 

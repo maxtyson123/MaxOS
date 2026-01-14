@@ -51,7 +51,6 @@ FILESYSTEM_TYPE="EXT2"
 IS_MACOS=0
 if [[ ($(uname) == "Darwin") ]]; then
   IS_MACOS=1
-  msg "Running on MacOS"
 
   #Set the path to the brew binary
   BREW_PATH=$(which brew)

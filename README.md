@@ -174,7 +174,7 @@ will look for a Windows installation of QEMU)
 5. Build the operating system & Run it in QEMU
    ```sh
    # Replace 'run' with 'gdb' on a debug build to make the kernel wait for gdb to attach on port 1234  
-   make run
+   make install run
    ```
 
 6. (OPTIONAL) I use CLion IDE for development, if you want to use it to follow these steps for IDE features:
@@ -239,6 +239,7 @@ No user usage so far (userland will be added in the future)
 - [x] Multiple Cores Support (SMP & Scheduler)
 - [x] Move VFS & drivers to userspace
 - [ ] Porting & Dynamically Linking Libc
+- [ ] Reorganise project (central repo that points to org sub repos - unifies documentation for each subrepo and build etc)
 - [ ] Move networking to userspace (& rewrite, fix)
 - [ ] Clean up ALL Todos
 
