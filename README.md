@@ -118,6 +118,10 @@ these automatically)
 * telnet
 * rsync
 
+_Note: If you want to run the operating system in a virtual machine, you will need to install QEMU. (If in WSL the script
+will look for a Windows installation of QEMU)_
+
+
 Linux:
 
   ```sh
@@ -128,13 +132,11 @@ Linux:
 Mac:
 
 ```sh
-  # Install Devtools (via Xcode or some other method)
-  # Install Homebrew
+  # User: Install Devtools (via Xcode or some other method)
+  # User: Install Homebrew
+  brew install --cask macfuse
   brew install coreutils bison gmp libmpc mpfr texinfo gcc@13 cmake nasm telnet
 ```
-
-Note: If you want to run the operating system in a virtual machine, you will need to install QEMU. (If in WSL the script
-will look for a Windows installation of QEMU)
 
 ### Installation
 

@@ -14,9 +14,6 @@ using namespace MaxOS::KPI;
 
 extern "C" void _start(int argc, char* argv[]){
 
-	while(true)
-		asm("nop");
-
 	// Parse the ram disk
 	klog("Loaded with %d args.\n", argc);
 	for(int i = 0; i < argc; i++)
@@ -28,7 +25,7 @@ extern "C" void _start(int argc, char* argv[]){
 
 	// Wait for fileserver to parse disks
 
-	// Start core servers
+	// Start core services
 
 	// Handoff to user login
 

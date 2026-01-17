@@ -25,7 +25,7 @@ else
   msg "Pulling changes made during run"
 fi
 
-# Bootscript maps 8MB of kernel memory so ensure that the elf file is less than 8MB
+# Bootscript maps 8MB of kernel memory so ensure that the elf file is less than 8MB (todo: I think I changed this)
 KERNEL_SIZE=$($STAT_EXC -c %s "$SCRIPTDIR/../filesystem/boot/MaxOSk64")
 if [ "$KERNEL_SIZE" -gt 8000000 ]; then
   fail "Error: Kernel size is greater than 8MB. Please reduce the kernel size. Or increase the size of the boot script. Kernel size: ${KERNEL_SIZE} bytes"

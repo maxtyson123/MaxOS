@@ -5,6 +5,7 @@ source $SCRIPTDIR/MaxOS.sh
 
 # TODO: Scalability for partition size and amount of partitions
 # TODO: Better loop device handling
+# TODO: too much if nesting
 
 IMAGE="../MaxOS.img"
 
@@ -81,49 +82,50 @@ else
   part1="${dev}p1"
   part2="${dev}p2"
 fi
-msg "${part1}"
-msg "${part2}"
 
-## IMAGE 1
-msg "Creating filesystem for partition 1"
-sudo mkdir -p "$MOUNT_DIR/MaxOS_img_1" || fail "Could not create mount point"
-if [ "$FILESYSTEM_TYPE" = "FAT" ]; then
-  if [ "$IS_MACOS" -eq 1 ]; then
-    sudo diskutil unmount "$part1" || warn "Couldn't unmount $part1 before formatting"
-    sudo mount -t msdos "$part1" "$MOUNT_DIR/MaxOS_img_1" || fail "Could not mount partition 1"
-  else
-    sudo mkfs.vfat -F 32 "$part1" || fail "Could not create FAT32 filesystem"
-    sudo mount "$part1" "$MOUNT_DIR/MaxOS_img_1" || fail "Could not mount image to mount point"
-  fi
-else
-  if [ "$IS_MACOS" -eq 1 ]; then
-    fail "EXT2 is not supported on macOS by default"
-  else
-    sudo mkfs.ext2 "$part1" || fail "Could not create EXT2 filesystem"
-    sudo mount "$part1" "$MOUNT_DIR/MaxOS_img_1" || fail "Could not mount image to mount point"
-  fi
-fi
+# Create the images
+create_fs_part() {
 
-## IMAGE 2
-msg "Creating filesystem for partition 2"
-sudo mkdir -p "$MOUNT_DIR/MaxOS_img_2" || fail "Could not create mount point"
+  local part="$1"
+  local number="$2"
+  msg "${part} - ${number}"
 
-if [ "$FILESYSTEM_TYPE" = "FAT" ]; then
-  if [ "$IS_MACOS" -eq 1 ]; then
-    sudo diskutil unmount "$part2" || warn "Couldn't unmount $part2 before formatting"
-    sudo mount -t msdos "$part2" "$MOUNT_DIR/MaxOS_img_2" || fail "Could not mount partition 2"
+  msg "Creating filesystem for partition $number"
+  sudo mkdir -p "$MOUNT_DIR/MaxOS_img_$number" || fail "Could not create mount point"
+
+  if [ "$FILESYSTEM_TYPE" = "FAT" ]; then
+    if [ "$IS_MACOS" -eq 1 ]; then
+      sudo diskutil unmount "$part" || warn "Couldn't unmount $part before formatting"
+      sudo mount -t msdos "$part" "$MOUNT_DIR/MaxOS_img_$number" || fail "Could not mount partition $number"
+    else
+      sudo mkfs.vfat -F 32 "$part" || fail "Could not create FAT32 filesystem"
+      sudo mount "$part" "$MOUNT_DIR/MaxOS_img_$number" || fail "Could not mount image to mount point"
+    fi
   else
-    sudo mkfs.vfat -F 32 "$part2" || fail "Could not create FAT32 filesystem"
-    sudo mount "$part2" "$MOUNT_DIR/MaxOS_img_2" || fail "Could not mount image to mount point"
+
+    # Format the image
+    MKFS="mkfs.ext2"
+    if [ "$IS_MACOS" -eq 1 ]; then
+      MKFS="/opt/homebrew/opt/e2fsprogs/sbin/$MKFS"
+    fi
+    sudo "$MKFS" "$part" || fail "Could not create EXT2 filesystem"
+
+    if [ "$IS_MACOS" -eq 1 ]; then
+
+      # Ensure tooling is setup
+      if ! command -v fuse-ext2 >/dev/null 2>&1; then
+          cd external
+          ./ext2fuse.sh
+          cd ../
+      fi
+      sudo fuse-ext2 "/dev/r${part#/dev/}" "$MOUNT_DIR/MaxOS_img_$number" -o rw+,allow_other || fail "Could not mount image to mount point"
+    else
+      sudo mount "$part" "$MOUNT_DIR/MaxOS_img_$number" || fail "Could not mount image to mount point"
+    fi
   fi
-else
-  if [ "$IS_MACOS" -eq 1 ]; then
-    fail "EXT2 is not supported on macOS by default"
-  else
-    sudo mkfs.ext2 "$part2" || fail "Could not create EXT2 filesystem"
-    sudo mount "$part2" "$MOUNT_DIR/MaxOS_img_2" || fail "Could not mount image to mount point"
-  fi
-fi
+}
+create_fs_part "$part1" "1"
+create_fs_part "$part2" "2"
 
 # Sync
 msg "Syncing filesystem"

@@ -110,7 +110,7 @@ InterruptManager::InterruptManager() {
 	set_interrupt_descriptor_table_entry(0x04, &HandleException0x04, 0);   // Overflow
 	set_interrupt_descriptor_table_entry(0x05, &HandleException0x05, 0);   // Bound Range Exceeded
 	set_interrupt_descriptor_table_entry(0x06, &HandleException0x06, 0);   // Invalid Opcode
-	set_interrupt_descriptor_table_entry(0x06, &HandleException0x07, 0);   // Device Not Available
+	set_interrupt_descriptor_table_entry(0x07, &HandleException0x07, 0);   // Device Not Available
 	set_interrupt_descriptor_table_entry(0x08, &HandleInterruptError0x08, 0);   // Double Fault
 	set_interrupt_descriptor_table_entry(0x09, &HandleException0x09, 0);   // Coprocessor Segment Overrun
 	set_interrupt_descriptor_table_entry(0x0A, &HandleInterruptError0x0A, 0);   // Invalid TSS

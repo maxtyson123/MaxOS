@@ -8,6 +8,7 @@ if [ "$1" != "--no-deps" ]; then
     # If we are on MacOS, install dependencies using brew
     if [ "$IS_MACOS" -eq 1 ]; then
         msg "Installing dependencies using brew"
+        brew install --cask macfuse
         brew install  coreutils\
                       bison \
                       gmp \
