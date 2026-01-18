@@ -2,6 +2,12 @@
 #TODO: now that have the STD lib no need for this, just do MAKE_PROG
 FUNCTION(MAKE_PROG_NOSTD TARGET_NAME SRC_DIR)
 
+    # Get the location arg
+    SET(_LOCATION "/os/apps")
+    IF(ARGC GREATER 2)
+        SET(_LOCATION "${ARGV2}")
+    ENDIF()
+
     # Set compiler flags freestanding no stdlib
     SET(CMAKE_CXX_FLAGS "-ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -mno-red-zone -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mcmodel=kernel -g -fno-use-cxa-atexit" CACHE STRING "" FORCE)
 
@@ -23,7 +29,7 @@ FUNCTION(MAKE_PROG_NOSTD TARGET_NAME SRC_DIR)
     TARGET_INCLUDE_DIRECTORIES(${TARGET_NAME}.elf PRIVATE include)
 
     # Install the executable to the boot filesystem
-    INSTALL(TARGETS ${TARGET_NAME}.elf DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/boot)
+    INSTALL(TARGETS ${TARGET_NAME}.elf DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/${_LOCATION})
 ENDFUNCTION()
 
 ADD_SUB_DIRS(${CMAKE_CURRENT_SOURCE_DIR})

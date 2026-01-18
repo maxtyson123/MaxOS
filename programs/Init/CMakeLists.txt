@@ -1,1 +1,1 @@
-MAKE_PROG_NOSTD(Init src)
+MAKE_PROG_NOSTD(Init src /boot)

@@ -25,13 +25,24 @@ else
   msg "Pulling changes made during run"
 fi
 
+# Locations
+BOOT_DIR="$SCRIPTDIR/../filesystem/boot/"
+INIT_DIR="$SCRIPTDIR/../filesystem/initrd/"
+
 # Bootscript maps 8MB of kernel memory so ensure that the elf file is less than 8MB (todo: I think I changed this)
-KERNEL_SIZE=$($STAT_EXC -c %s "$SCRIPTDIR/../filesystem/boot/MaxOSk64")
+KERNEL_SIZE=$($STAT_EXC -c %s "$BOOT_DIR/MaxOSk64")
 if [ "$KERNEL_SIZE" -gt 8000000 ]; then
   fail "Error: Kernel size is greater than 8MB. Please reduce the kernel size. Or increase the size of the boot script. Kernel size: ${KERNEL_SIZE} bytes"
 fi
 
 DESTINATION="$MOUNT_DIR/MaxOS_img_1"
+
+# Create the inital ram disk
+INIT_FILE="$(cd "$SCRIPTDIR/../filesystem/boot" && pwd)/maxos.initrd"
+rm -f "$INIT_FILE"
+ls $INIT_DATA >/dev/null 2>&1 || fail "Cant find init elfs: $INIT_DIR/*.elf"
+( cd "$INIT_DIR" && tar -cf "$INIT_FILE" --no-xattrs --disable-copyfile *.elf )
+
 
 
 : "${USE_ISO:=0}"
@@ -62,10 +73,10 @@ fi
 # Syncing local filesystem
 if [ "$REVERSE" -ne 1 ]; then
   msg "Copying filesystem to image"
-  sudo rsync --no-o --no-g -a --delete -c "$SCRIPTDIR/../filesystem/"  "$MOUNT_DIR/MaxOS_img_1/"
+  sudo rsync --exclude='._*' --no-xattrs --no-o --no-g -a --delete -c "$SCRIPTDIR/../filesystem/"  "$MOUNT_DIR/MaxOS_img_1/"
 else
   msg "Copying changes on image to local filesystem"
-  sudo rsync --itemize-changes --chown=$(id -un):$(id -gn) -a --delete -c "$MOUNT_DIR/MaxOS_img_1/" "$SCRIPTDIR/../filesystem/"
+  sudo rsync --exclude='._*' --no-xattrs --itemize-changes --chown=$(id -un):$(id -gn) -a --delete -c "$MOUNT_DIR/MaxOS_img_1/" "$SCRIPTDIR/../filesystem/"
 fi
 
 # Create the iso

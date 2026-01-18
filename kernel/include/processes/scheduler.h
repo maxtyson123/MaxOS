@@ -61,6 +61,7 @@ namespace MaxOS::processes {
 			void balance();
 
 			static void load_multiboot_elfs(system::Multiboot* multiboot);
+			static void prepare_initrd(multiboot_tag_module* module);
 			static void print_running_header();
 
 			uint64_t add_process(Process* process);

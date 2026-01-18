@@ -157,7 +157,7 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 	if (reusable_chunk != nullptr) {
 
 		// If the chunk is not being reserved then the old memory needs to be unmapped
-		if (flags & VirtualFlags::RESERVE) {
+		if (flags & RESERVE) {
 
 			// Unmap the memory
 			size_t pages = PhysicalMemoryManager::size_to_frames(size);

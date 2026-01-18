@@ -12,12 +12,25 @@
 using namespace MaxOS::KPI::processes;
 using namespace MaxOS::KPI;
 
+struct tar_header
+{
+	char filename[100];
+	char mode[8];
+	char uid[8];
+	char gid[8];
+	char size[12];
+	char mtime[12];
+	char chksum[8];
+	char typeflag[1];
+};
+
 extern "C" void _start(int argc, char* argv[]){
 
+	klog("hi\n");
+
 	// Parse the ram disk
-	klog("Loaded with %d args.\n", argc);
-	for(int i = 0; i < argc; i++)
-		klog("Arg %d: %s\n", i, argv[i]);
+	auto header = (struct tar_header*)0xFFF000;
+	klog(header->filename);
 
 	// Pass to fileserver
 

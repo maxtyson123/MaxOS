@@ -10,6 +10,7 @@
 #include <common/logger.h>
 
 using namespace MaxOS;
+using namespace MaxOS::common;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
 using namespace MaxOS::hardwarecommunication;
@@ -134,34 +135,65 @@ void GlobalScheduler::balance() {
  * @brief Loads any valid ELF files from the multiboot structure
  *
  * @param multiboot The multiboot structure
- *
- * @todo Handle passing multiple args to the process
  */
 void GlobalScheduler::load_multiboot_elfs(Multiboot* multiboot) {
 
 	for (multiboot_tag* tag = multiboot->start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag->size + 7) & ~7))) {
 
-		// Tag is not an ELF
+		// Tag is not an module
 		if (tag->type != MULTIBOOT_TAG_TYPE_MODULE)
 			continue;
 
-		// Try to create the elf from the module
+		// Get the tag
 		auto* module = (struct multiboot_tag_module*) tag;
-		ELF64 elf((uintptr_t) PhysicalMemoryManager::to_dm_region(module->mod_start));
+		auto start	= (uintptr_t)PhysicalMemoryManager::to_dm_region(module->mod_start);
+		Logger::DEBUG() << "Creating process from multiboot module for " << module->cmdline << " (at 0x" << (uint64_t) module->mod_start << ")\n";
+
+		// Handle the init ramdisk
+		if (strcmp(module->cmdline, "initrd"))
+			prepare_initrd(module);
+
+		// Try to create the elf from the module
+		ELF64 elf(start);
 		if (!elf.is_valid())
 			continue;
-
-		Logger::DEBUG() << "Creating process from multiboot module for " << module->cmdline << " (at 0x" << (uint64_t) module->mod_start << ")\n";
 
 		// Create an array of args for the process
 		char* args[1] = {module->cmdline};
 
 		// Create the process
 		auto* process = new Process(module->cmdline, args, 1, &elf);
-		GlobalScheduler::system_scheduler() -> add_process(process);
+		system_scheduler() -> add_process(process);
 
 		Logger::DEBUG() << "ELF loaded to pid " << process->pid() << "\n";
 	}
+}
+
+/**
+ * @brief Loads the initrd into the init program at 0xFFF000
+ *
+ * @param module The initrd module
+ *
+ * @todo dont hardcode pid (and maybe not rely on Init being ordered after module)
+ */
+void GlobalScheduler::prepare_initrd(multiboot_tag_module* module) {
+
+	// Find the Init process
+	Process* init_process = get_process(4);
+	ASSERT(init_process != nullptr, "Can't find init process\n");
+
+	// Extract info
+	auto start	= (uintptr_t)PhysicalMemoryManager::to_dm_region(module->mod_start);
+	size_t size = module->mod_end - module->mod_start;
+
+
+	// Prepare
+	MemoryManager::switch_active_memory_manager(init_process->memory_manager);
+	init_process->memory_manager->vmm()->allocate(0xFFF000, size, WRITE | PRESENT);
+
+	// Copy
+	memcpy((void*)0xFFF000, (void*)start, size);
+	MemoryManager::switch_active_memory_manager(MemoryManager::s_kernel_memory_manager);
 }
 
 /**
