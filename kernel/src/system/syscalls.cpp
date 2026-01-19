@@ -15,6 +15,7 @@ using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 using namespace MaxOS::processes;
+using namespace MaxOS::processes::resources;
 using namespace MaxOS::memory;
 
 /**
@@ -274,6 +275,27 @@ syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
 
 	// Write to the resource
 	args->return_value = resource->read(buffer,size,flags);
+	return args;
+}
+
+/**
+ * @brief System call to create a new resource registry
+ *
+ * @todo resource type system
+ *
+ * @param args Arg0 = Endpoint Name, Arg1 = Resource Type
+ * @return 1 for success 0 for failure
+ */
+syscall_args_t* SyscallManager::syscall_registry_create(syscall_args_t* args) {
+
+	// Parse params
+	auto name	= (char*)args->arg0;
+	auto type	= (size_t)args->arg1;
+
+	// Create the registry
+	auto registery = new ServiceResourceRegistry(name, type);
+
+	args->return_value = registery ? 1 : 0;
 	return args;
 }
 

@@ -16,6 +16,7 @@
 #include <colour.h>
 #include <memory/memorymanagement.h>
 #include <processes/scheduler.h>
+#include <processes/resources/service_resources.h>
 #include <libkpi/include/syscalls.h>
 
 
@@ -79,6 +80,7 @@ namespace MaxOS::system {
 			static syscall_args_t* syscall_resource_close(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_write(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_read(syscall_args_t* args);
+			static syscall_args_t* syscall_registry_create(syscall_args_t* args);
 
 			static syscall_args_t* syscall_yield(syscall_args_t* args);
 	};

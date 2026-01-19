@@ -15,7 +15,7 @@
 #include <processes/process.h>
 #include <memory/memorymanagement.h>
 #include <processes/ipc.h>
-#include <processes/scheduler_resources.h>
+#include <processes/resources/scheduler_resources.h>
 
 
 namespace MaxOS::processes {
@@ -30,11 +30,11 @@ namespace MaxOS::processes {
 			inline static GlobalScheduler* s_instance = nullptr;
 			bool m_active = false;
 
-			GlobalResourceRegistry m_global_resource_registry = { };
-			ResourceRegistry<SharedMemory> m_shared_memory_registry;
-			ResourceRegistry<SharedMessageEndpoint> m_shared_messages_registry;
-			ThreadResourceRegistry m_thread_resource_registry;
-			ProcessResourceRegistry m_process_resource_registry;
+			resources::GlobalResourceRegistry m_global_resource_registry = { };
+			resources::ResourceRegistry<SharedMemory> m_shared_memory_registry;
+			resources::ResourceRegistry<SharedMessageEndpoint> m_shared_messages_registry;
+			resources::ThreadResourceRegistry m_thread_resource_registry;
+			resources::ProcessResourceRegistry m_process_resource_registry;
 
 			common::Spinlock m_lock;
 

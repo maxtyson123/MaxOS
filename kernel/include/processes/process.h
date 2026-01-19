@@ -18,7 +18,7 @@
 #include <memory/memorymanagement.h>
 #include <memory/memoryIO.h>
 #include <processes/elf.h>
-#include <processes/resource.h>
+#include <processes/resources/resource.h>
 
 namespace MaxOS::processes {
 	class Process;
@@ -110,7 +110,7 @@ namespace MaxOS::processes {
 			string working_directory = "/";                             ///< The working directory of the process
 
 			memory::MemoryManager* memory_manager = nullptr;            ///< The manager for memory used by this process
-			ResourceManager resource_manager;                           ///< The manger for resources used by this process
+			resources::ResourceManager resource_manager;                ///< The manger for resources used by this process
 	};
 }
 

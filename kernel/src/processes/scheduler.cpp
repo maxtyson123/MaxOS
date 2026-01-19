@@ -12,6 +12,7 @@
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::processes;
+using namespace MaxOS::processes::resources;
 using namespace MaxOS::memory;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;

@@ -17,16 +17,21 @@
 #include <spinlock.h>
 #include <memory/physical.h>
 #include <memory/memoryIO.h>
-#include <processes/resource.h>
+#include <processes/resources/resource.h>
 
 
 namespace MaxOS::processes {
+
+	typedef struct IPCIOVector {
+		const void* address;
+		size_t length;
+	} ipc_iovec_t;
 
 	/**
 	 * @class SharedMemory
 	 * @brief A block memory that is mapped into multiple processes
 	 */
-	class SharedMemory final : public Resource {
+	class SharedMemory final : public resources::Resource {
 
 		private:
 			uintptr_t m_physical_address;
@@ -35,7 +40,7 @@ namespace MaxOS::processes {
 			common::Map<size_t, uintptr_t> m_mappings;
 
 		public:
-			SharedMemory(const string& name, size_t size, resource_type_t type);
+			SharedMemory(const string& name, size_t size, resources::resource_type_t type);
 			~SharedMemory() final;
 
 			void open(size_t flags) final;
@@ -51,15 +56,17 @@ namespace MaxOS::processes {
 	 * @class SharedMessageEndpoint
 	 * @brief A endpoint that allows processes to queue messages on
 	 */
-	class SharedMessageEndpoint final : public Resource {
+	class SharedMessageEndpoint final : public resources::Resource {
 
 		private:
 			common::Vector<common::buffer_t*> m_queue { };
 			common::Spinlock m_message_lock;
 
 		public:
-			SharedMessageEndpoint(const string& name, size_t size, resource_type_t type);
+			SharedMessageEndpoint(const string& name, size_t size, resources::resource_type_t type);
 			~SharedMessageEndpoint() final;
+
+			void send(const ipc_iovec_t* vec, size_t count)
 
 			int read(void* buffer, size_t size, size_t flags) final;
 			int write(const void* buffer, size_t size, size_t flags) final;

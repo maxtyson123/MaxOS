@@ -13,6 +13,7 @@
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
 using namespace MaxOS::processes;
+using namespace MaxOS::processes::resources;
 
 /**
  * @brief Construct a new Virtual Memory Manager object and set up the initial page tables (kernel mapped into the hh)

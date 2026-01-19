@@ -6,8 +6,8 @@
  * @author Max Tyson
  */
 
-#ifndef MAXOS_PROCESSES_RESOURCE_H
-#define MAXOS_PROCESSES_RESOURCE_H
+#ifndef MAXOS_PROCESSES_RESOURCES_RESOURCE_H
+#define MAXOS_PROCESSES_RESOURCES_RESOURCE_H
 
 #include <cstddef>
 #include <map.h>
@@ -17,11 +17,10 @@
 #include <syscalls.h>
 #include <mem.h>
 
+namespace MaxOS::processes::resources {
 
-namespace MaxOS::processes {
-
-	typedef ::MaxOS::KPI::ResourceType resource_type_t;                    ///< Alias to make the libsyscore ResourceType accessible here
-	typedef ::MaxOS::KPI::ResourceErrorBase resource_error_base_t;         ///< Alias to make the libsyscore ResourceErrorBase accessible here
+	typedef KPI::ResourceType resource_type_t;                    ///< Alias to make the libsyscore ResourceType accessible here
+	typedef KPI::ResourceErrorBase resource_error_base_t;         ///< Alias to make the libsyscore ResourceErrorBase accessible here
 
 	/**
 	 * @class Resource
@@ -66,10 +65,10 @@ namespace MaxOS::processes {
 
 			resource_type_t type();
 
-			virtual Resource* get_resource(const string& name);
-			virtual bool register_resource(Resource* resource);
+			bool register_resource(Resource* resource);
+			void close_resource(Resource* resource, size_t flags);
 
-			virtual void close_resource(Resource* resource, size_t flags);
+			virtual Resource* get_resource(const string& name);
 			virtual Resource* create_resource(const string& name, size_t flags);
 	};
 
@@ -161,4 +160,4 @@ namespace MaxOS::processes {
 }
 
 
-#endif //MAXOS_PROCESSES_RESOURCE_H
+#endif //MAXOS_PROCESSES_RESOURCES_RESOURCE_H

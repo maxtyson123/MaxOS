@@ -43,8 +43,6 @@ rm -f "$INIT_FILE"
 ls $INIT_DATA >/dev/null 2>&1 || fail "Cant find init elfs: $INIT_DIR/*.elf"
 ( cd "$INIT_DIR" && tar -cf "$INIT_FILE" --no-xattrs --disable-copyfile *.elf )
 
-
-
 : "${USE_ISO:=0}"
 # Produce an ISO? default to no
 if [ "$USE_ISO" -eq 1 ]; then

@@ -7,11 +7,12 @@
  * @author Max Tyson
  */
 
-#include <processes/scheduler_resources.h>
+#include <processes/resources/scheduler_resources.h>
 #include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::processes;
+using namespace MaxOS::processes::resources;
 using namespace MaxOS::memory;
 using namespace MaxOS::common;
 using namespace MaxOS::KPI::processes;

@@ -6,10 +6,13 @@
  * @author Max Tyson
  */
 
-#include <processes/resource.h>
+#include <processes/resources/resource.h>
+
+#include "processes/resources/scheduler_resources.h"
 
 using namespace MaxOS;
 using namespace MaxOS::processes;
+using namespace MaxOS::processes::resources;
 
 /**
  * @brief Constructs a new Resource object

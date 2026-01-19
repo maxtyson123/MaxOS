@@ -13,6 +13,7 @@
 
 using namespace MaxOS;
 using namespace MaxOS::processes;
+using namespace MaxOS::processes::resources;
 using namespace MaxOS::common;
 using namespace MaxOS::memory;
 
@@ -126,12 +127,41 @@ SharedMessageEndpoint::~SharedMessageEndpoint() {
 }
 
 /**
+ * @brief Combines a multipart message and sends it to the endpoint
+ * @param vec The io vector containing the parts
+ * @param count How many entries the vector has
+ *
+ * @todo validate stuff
+ */
+void SharedMessageEndpoint::send(const ipc_iovec_t *vec, size_t count) {
+
+	m_message_lock.lock();
+
+	// Parse the message parts
+	size_t size;
+	for (size_t i = 0; i < count; ++i)
+		size += vec[i].length;
+
+	// Create the message
+	auto* new_message = new buffer_t(size);
+	for (size_t i = 0; i < count; ++i)
+		new_message->copy_from(vec[i].address, vec[i].length);
+
+	// Send the message
+	m_queue.push_back(new_message);
+	m_message_lock.unlock();
+
+}
+
+/**
  * @brief Reads the first message from the endpoint or will yield until a message has been written
  *
  * @param buffer Where to write the message to
  * @param size Max size of the message to be read
  * @param flags Unused
  * @return The amount of bytes read
+ *
+ * @todo auto block instead
  */
 int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
 
@@ -143,6 +173,8 @@ int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
 	buffer_t* message = m_queue.pop_front();
 	size_t readable = size > message->capacity() ? message->capacity() : size;
 	memcpy(buffer, message -> raw(), readable);
+
+	//@todo free the message mem here now aswell?
 
 	return readable;
 }
@@ -157,13 +189,9 @@ int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
  */
 int SharedMessageEndpoint::write(void const* buffer, size_t size, size_t flags) {
 
-	m_message_lock.lock();
+	// Send the buffer as the entire message
+	ipc_iovec_t message = {buffer, size};
+	send(&message, 1);
 
-	// Create the message
-	auto* new_message = new buffer_t(size);
-	new_message->copy_from(buffer, size);
-	m_queue.push_back(new_message);
-
-	m_message_lock.unlock();
 	return size;
 }
