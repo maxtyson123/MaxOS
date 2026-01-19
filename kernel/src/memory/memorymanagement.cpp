@@ -16,74 +16,65 @@ using namespace MaxOS::common;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 
+
+MemoryChunkHandler::MemoryChunkHandler() = default;
+MemoryChunkHandler::~MemoryChunkHandler() = default;
+
 /**
- * @brief Construct a new Memory Manager object. Will switch the pml4 to use the calling process's page tables.
+ * @brief Expands the memory region by a given size
  *
- * @param vmm The virtual memory manager to use, if nullptr a new one will be created
+ * @param size The size to expand the region by
+ * @return The new space of memory
  */
-MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
-: m_virtual_memory_manager(vmm) {
+void* MemoryChunkHandler::allocate_extra_space(size_t size) {
+	return nullptr;
+}
 
-	// Create the VMM if not provided
-	if(m_virtual_memory_manager == nullptr)
-		m_virtual_memory_manager = new VirtualMemoryManager();
+/**
+ * @brief Expands the heap by a given size
+ *
+ * @param size The size to expand the heap by
+ * @return The new chunk of memory
+ */
+MemoryChunk* MemoryChunkHandler::expand_heap(size_t size) {
 
-	// Enable the memory manager
-	switch_active_memory_manager(this);
+	// Create a new chunk of memory
+	auto* chunk = (MemoryChunk*)allocate_extra_space(size);
+	if(chunk == nullptr)
+		return nullptr;
 
-	// Set up the first chunk of memory
-	this->m_first_memory_chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(PAGE_SIZE + sizeof(MemoryChunk), 0);
+	// Set the chunk's properties
+	chunk->allocated = false;
+	chunk->size = size;
+	chunk->next = nullptr;
+
+	// Insert the chunk into the linked list
+	m_last_memory_chunk->next = chunk;
+	chunk->prev = m_last_memory_chunk;
+	m_last_memory_chunk = chunk;
+
+	// If it is possible to merge the new chunk with the previous chunk then do so (note: this happens if the
+	// previous chunk is free but cant contain the size required)
+	if(!chunk->prev->allocated)
+		handle_free((void*) ((size_t) chunk + sizeof(MemoryChunk)));
+
+	return chunk;
+}
+
+void MemoryChunkHandler::setup_region(uintptr_t address, size_t length) {
+
+	// Create a free chunk that covers the entire region
+	this->m_first_memory_chunk = (MemoryChunk*)address;
 	m_first_memory_chunk->allocated = false;
 	m_first_memory_chunk->prev = nullptr;
 	m_first_memory_chunk->next = nullptr;
-	m_first_memory_chunk->size = PAGE_SIZE - sizeof(MemoryChunk);
+	m_first_memory_chunk->size = length;
+
 	m_last_memory_chunk = m_first_memory_chunk;
-
-	// First memory manager is the kernel memory manager
-	if(s_kernel_memory_manager == nullptr)
-		s_kernel_memory_manager = this;
+	m_setup = true;
 
 }
 
-/**
- * @brief Destroy the Memory Manager object, frees the VMM if not the kernel memory manager
- */
-MemoryManager::~MemoryManager() {
-
-	// Free the VMM (if this is not the kernel memory manager)
-	if(m_virtual_memory_manager != nullptr)
-		delete m_virtual_memory_manager;
-
-	// Remove the kernel reference to this
-	if(s_kernel_memory_manager == this)
-		s_kernel_memory_manager = nullptr;
-}
-
-/**
- * @brief Allocates a block of memory in the current USERSPACE heap
- *
- * @param size size of the block
- * @return a pointer to the block, 0 if no block is available or no memory manager is set
- */
-void* MemoryManager::malloc(size_t size) {
-
-	return GlobalScheduler::current_process()->memory_manager->handle_malloc(size);
-}
-
-/**
- * @brief Allocates a block of memory in the KERNEL space
- *
- * @param size The size of the block
- * @return The pointer to the block, or nullptr if no block is available
- */
-void* MemoryManager::kmalloc(size_t size) {
-
-	// Make sure there is a kernel memory manager
-	if(s_kernel_memory_manager == nullptr)
-		return nullptr;
-
-	return s_kernel_memory_manager->handle_malloc(size);
-}
 
 /**
  * @brief Allocates a block of memory
@@ -91,7 +82,7 @@ void* MemoryManager::kmalloc(size_t size) {
  * @param size The size of the block to allocate
  * @return A pointer to the block, or nullptr if no block is available
  */
-void* MemoryManager::handle_malloc(size_t size) {
+void* MemoryChunkHandler::handle_malloc(size_t size) {
 
 	MemoryChunk* result = nullptr;
 
@@ -111,6 +102,10 @@ void* MemoryManager::handle_malloc(size_t size) {
 	// If there is no free chunk then make more room
 	if(result == nullptr)
 		result = expand_heap(size);
+
+	// No space to expand heap
+	if (result == nullptr)
+		return nullptr;
 
 	// If there is not left over space to store extra chunks there is no need to split the chunk
 	if(result->size < size + sizeof(MemoryChunk) + 1) {
@@ -144,28 +139,33 @@ void* MemoryManager::handle_malloc(size_t size) {
 	return (void*) (((size_t) result) + sizeof(MemoryChunk));
 }
 
-/**
- * @brief Frees a block of memory using the current memory manager
- *
- * @param pointer The pointer to the block
- */
-void MemoryManager::free(void* pointer) {
 
-	return  GlobalScheduler::current_process()->memory_manager->handle_free(pointer);
+/**
+ * @brief Returns the amount of memory used
+ *
+ * @return The amount of memory used
+ */
+size_t MemoryChunkHandler::memory_used() {
+
+	size_t result = 0;
+
+	// Loop through all the chunks and add up the size of the allocated chunks
+	for(MemoryChunk* chunk = m_first_memory_chunk; chunk != nullptr; chunk = chunk->next)
+		if(chunk->allocated)
+			result += chunk->size;
+
+	return result;
 }
 
 /**
- * @brief Frees a block of memory using the kernel memory manager
+ * @brief Aligns the size to the chunk alignment
  *
- * @param pointer The pointer to the block
+ * @param size The size to align
+ * @return The aligned size
  */
-void MemoryManager::kfree(void* pointer) {
+size_t MemoryChunkHandler::align(size_t size) {
 
-	// Make sure there is a kernel memory manager
-	if(s_kernel_memory_manager == nullptr)
-		return;
-
-	s_kernel_memory_manager->handle_free(pointer);
+	return (size / CHUNK_ALIGNMENT + 1) * CHUNK_ALIGNMENT;
 }
 
 /**
@@ -173,7 +173,7 @@ void MemoryManager::kfree(void* pointer) {
  *
  * @param pointer A pointer to the block
  */
-void MemoryManager::handle_free(void* pointer) {
+void MemoryChunkHandler::handle_free(void* pointer) {
 
 	// Cant free unallocated memory
 	if(pointer == nullptr)
@@ -219,67 +219,111 @@ void MemoryManager::handle_free(void* pointer) {
 }
 
 /**
- * @brief Expands the heap by a given size
+ * @brief Construct a new Memory Manager object. Will switch the pml4 to use the calling process's page tables.
  *
- * @param size The size to expand the heap by
- * @return The new chunk of memory
+ * @param vmm The virtual memory manager to use, if nullptr a new one will be created
  */
-MemoryChunk* MemoryManager::expand_heap(size_t size) {
+MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
+: MemoryChunkHandler(0,0),
+  m_virtual_memory_manager(vmm)
+{
+
+	// Create the VMM if not provided
+	if(m_virtual_memory_manager == nullptr)
+		m_virtual_memory_manager = new VirtualMemoryManager();
+
+	// Enable the memory manager
+	switch_active_memory_manager(this);
+
+	// Set up the first chunk of memory
+	auto address = (uintptr_t)m_virtual_memory_manager->allocate(PAGE_SIZE + sizeof(MemoryChunk), 0);
+	setup_region(address, PAGE_SIZE - sizeof(MemoryChunk));
+
+	// First memory manager is the kernel memory manager
+	if(s_kernel_memory_manager == nullptr)
+		s_kernel_memory_manager = this;
+
+}
+
+/**
+ * @brief Destroy the Memory Manager object, frees the VMM if not the kernel memory manager
+ */
+MemoryManager::~MemoryManager() {
+
+	// Free the VMM (if this is not the kernel memory manager)
+	if(m_virtual_memory_manager != nullptr)
+		delete m_virtual_memory_manager;
+
+	// Remove the kernel reference to this
+	if(s_kernel_memory_manager == this)
+		s_kernel_memory_manager = nullptr;
+}
+
+/**
+ * @brief Expands the memory region by a given size
+ *
+ * @param size The size to expand the region by
+ * @return The new space of memory
+ */
+void* MemoryManager::allocate_extra_space(size_t size) {
 
 	// Create a new chunk of memory
-	auto* chunk = (MemoryChunk*) m_virtual_memory_manager->allocate(size, PRESENT | WRITE | NO_EXECUTE);
+	auto* chunk = m_virtual_memory_manager->allocate(size, PRESENT | WRITE | NO_EXECUTE);
 	ASSERT(chunk != nullptr, "Out of memory - kernel cannot allocate any more memory");
 
-	// Handled by assert, but just in case
-	if(chunk == nullptr)
+	return chunk;
+
+}
+
+/**
+ * @brief Allocates a block of memory in the current USERSPACE heap
+ *
+ * @param size size of the block
+ * @return a pointer to the block, 0 if no block is available or no memory manager is set
+ */
+void* MemoryManager::malloc(size_t size) {
+
+	return GlobalScheduler::current_process()->memory_manager->handle_malloc(size);
+}
+
+/**
+ * @brief Allocates a block of memory in the KERNEL space
+ *
+ * @param size The size of the block
+ * @return The pointer to the block, or nullptr if no block is available
+ */
+void* MemoryManager::kmalloc(size_t size) {
+
+	// Make sure there is a kernel memory manager
+	if(s_kernel_memory_manager == nullptr)
 		return nullptr;
 
-	// Set the chunk's properties
-	chunk->allocated = false;
-	chunk->size = size;
-	chunk->next = nullptr;
-
-	// Insert the chunk into the linked list
-	m_last_memory_chunk->next = chunk;
-	chunk->prev = m_last_memory_chunk;
-	m_last_memory_chunk = chunk;
-
-	// If it is possible to merge the new chunk with the previous chunk then do so (note: this happens if the
-	// previous chunk is free but cant contain the size required)
-	if(!chunk->prev->allocated)
-		handle_free((void*) ((size_t) chunk + sizeof(MemoryChunk)));
-
-	return chunk;
+	return s_kernel_memory_manager->handle_malloc(size);
 }
 
 /**
- * @brief Returns the amount of memory used
+ * @brief Frees a block of memory using the current memory manager
  *
- * @return The amount of memory used
+ * @param pointer The pointer to the block
  */
-size_t MemoryManager::memory_used() {
+void MemoryManager::free(void* pointer) {
 
-	size_t result = 0;
-
-	// Loop through all the chunks and add up the size of the allocated chunks
-	for(MemoryChunk* chunk = m_first_memory_chunk; chunk != nullptr; chunk = chunk->next)
-		if(chunk->allocated)
-			result += chunk->size;
-
-	return result;
+	return  GlobalScheduler::current_process()->memory_manager->handle_free(pointer);
 }
 
 /**
- * @brief Aligns the size to the chunk alignment
+ * @brief Frees a block of memory using the kernel memory manager
  *
- * @param size The size to align
- * @return The aligned size
+ * @param pointer The pointer to the block
  */
-size_t MemoryManager::align(size_t size) {
+void MemoryManager::kfree(void* pointer) {
 
-	return (size / CHUNK_ALIGNMENT + 1) * CHUNK_ALIGNMENT;
+	// Make sure there is a kernel memory manager
+	if(s_kernel_memory_manager == nullptr)
+		return;
+
+	s_kernel_memory_manager->handle_free(pointer);
 }
-
 
 /**
  * @brief Switches the active memory manager

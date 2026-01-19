@@ -33,19 +33,41 @@ namespace MaxOS::memory {
 
 	constexpr size_t CHUNK_ALIGNMENT = 0x10;    ///< How many bytes the chunks should be a multiple of (round up to this)
 
-	/**
-	 * @class MemoryManager
-	 * @brief Handles memory allocation and deallocation
-	 */
-	class MemoryManager {
+	class MemoryChunkHandler {
 
 		private:
 			MemoryChunk* m_first_memory_chunk;
 			MemoryChunk* m_last_memory_chunk;
 
-			VirtualMemoryManager* m_virtual_memory_manager;
-
 			MemoryChunk* expand_heap(size_t size);
+			virtual void* allocate_extra_space(size_t size);
+
+			bool m_setup = false;
+
+		public:
+			MemoryChunkHandler();
+			virtual ~MemoryChunkHandler();
+
+			void setup_region(uintptr_t address, size_t length);
+
+			void* handle_malloc(size_t size);
+			void handle_free(void* pointer);
+
+			size_t memory_used();
+			static size_t align(size_t size);
+
+	};
+
+	/**
+	 * @class MemoryManager
+	 * @brief Handles memory allocation and deallocation
+	 */
+	class MemoryManager : public MemoryChunkHandler {
+
+		private:
+
+			VirtualMemoryManager* m_virtual_memory_manager;
+			void* allocate_extra_space(size_t size) final;
 
 		public:
 			inline static MemoryManager* s_kernel_memory_manager = nullptr;             ///< The memory manager for any kernel processes and all kernel allocations
@@ -62,13 +84,7 @@ namespace MaxOS::memory {
 			static void kfree(void* pointer);
 
 			// Internal Memory Management
-			void* handle_malloc(size_t size);
-			void handle_free(void* pointer);
 			VirtualMemoryManager* vmm();
-
-			// Utility Functions
-			size_t memory_used();
-			static size_t align(size_t size);
 			static void switch_active_memory_manager(MemoryManager* manager);
 	};
 }

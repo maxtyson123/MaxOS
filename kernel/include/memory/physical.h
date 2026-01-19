@@ -93,10 +93,8 @@ namespace MaxOS::memory {
 	constexpr uint64_t HIGHER_HALF_KERNEL_OFFSET = 0xFFFFFFFF80000000;                                  ///< Where the kernel is mapped in higher half memory
 	constexpr uint64_t HIGHER_HALF_MEM_OFFSET = 0xFFFF800000000000;                                     ///< Where higher half memory starts
 	constexpr uint64_t HIGHER_HALF_MEM_RESERVED = 0x280000000;                                          ///< Reserved higher half memory for kernel use (10GB)
-	constexpr uint64_t HIGHER_HALF_OFFSET = HIGHER_HALF_MEM_OFFSET +
-											HIGHER_HALF_MEM_RESERVED;          ///< Where higher half memory usable space starts
-	constexpr uint64_t HIGHER_HALF_DIRECT_MAP = HIGHER_HALF_OFFSET +
-												PAGE_SIZE;                         ///< Where the map of physical memory to higher half starts
+	constexpr uint64_t HIGHER_HALF_OFFSET = HIGHER_HALF_MEM_OFFSET + HIGHER_HALF_MEM_RESERVED;          ///< Where higher half memory usable space starts
+	constexpr uint64_t HIGHER_HALF_DIRECT_MAP = HIGHER_HALF_OFFSET + PAGE_SIZE;                         ///< Where the map of physical memory to higher half starts
 
 	/**
 	 * @class PhysicalMemoryManager
