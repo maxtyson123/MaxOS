@@ -52,20 +52,20 @@ namespace MaxOS::processes {
 			static Scheduler* core_scheduler();
 
 			system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
-			static system::cpu_status_t* yield(system::cpu_status_t* current);
 
 			static void activate();
 			static void deactivate();
 			static bool is_active();
 
 			void balance();
+			system::Core* least_busy_core(bool check_threads=false);
 
 			static void load_multiboot_elfs(system::Multiboot* multiboot);
 			static void prepare_initrd(multiboot_tag_module* module);
 			static void print_running_header();
 
-			uint64_t add_process(Process* process);
-			uint64_t add_thread(Thread* thread);
+			uint64_t add_process(Process* process, Scheduler* scheduler = nullptr);
+			uint64_t add_thread(Thread* thread, Scheduler* scheduler = nullptr);
 
 			static uint64_t remove_process(Process* process);
 			static system::cpu_status_t* force_remove_process(Process* process);
@@ -96,16 +96,16 @@ namespace MaxOS::processes {
 			bool m_active;
 
 			uint64_t m_ticks;
+			uintptr_t m_core_id;
 
 			static system::cpu_status_t* load_process(Process* process, Thread* thread);
 
 		public:
-			Scheduler();
+			Scheduler(uint64_t core_id);
 			~Scheduler();
 
 			system::cpu_status_t* schedule(system::cpu_status_t* cpu_state);
 			system::cpu_status_t* schedule_next(system::cpu_status_t* status);
-			system::cpu_status_t* yield();
 
 			uint64_t add_process(Process* process);
 			uint64_t remove_process(Process* process);
@@ -121,6 +121,7 @@ namespace MaxOS::processes {
 			uint64_t thread_amount();
 
 			[[nodiscard]] uint64_t ticks() const;
+			[[nodiscard]] uint64_t core_id() const;
 
 			void activate();
 			void deactivate();

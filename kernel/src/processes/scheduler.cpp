@@ -39,7 +39,7 @@ GlobalScheduler::GlobalScheduler(Multiboot& multiboot)
 
 	// Set up the per core scheduler
 	for(const auto& core : CPU::cores)
-		core -> scheduler = new Scheduler();
+		core -> scheduler = new Scheduler(core->id);
 
 	// Load the elfs
 	load_multiboot_elfs(&multiboot);
@@ -72,17 +72,6 @@ system::cpu_status_t* GlobalScheduler::handle_interrupt(system::cpu_status_t* st
 	auto s = core_scheduler()->schedule(status);
 	ASSERT(s->rip != 0, "Cant run a empty state\n");
 	return s;
-}
-
-/**
- * @brief Pass execution to the next thread
- *
- * @param current where to resume this thread to
- * @return The cpu state of the next thread to run
- */
-system::cpu_status_t* GlobalScheduler::yield(cpu_status_t* current) {
-	current_thread()->execution_state = *current;
-	return core_scheduler()->yield();
 }
 
 /**
@@ -128,6 +117,26 @@ void GlobalScheduler::deactivate() {
  * @todo Implement
  */
 void GlobalScheduler::balance() {
+
+}
+
+/**
+ * @brief Finds the core with the least amount of threads/processes.
+ *
+ * @param check_threads If true check for least amount of threads, defaults to false
+ * @return The core with the lowest work load
+ */
+Core* GlobalScheduler::least_busy_core(bool check_threads) {
+
+	// Find the scheduler with the lowest work load
+	auto core = CPU::cores[0];
+	for(const auto& current : CPU::cores)
+		if((check_threads && current->scheduler->thread_amount()  < core->scheduler->thread_amount())
+						 ||  current->scheduler->process_amount() < core->scheduler->process_amount())
+			core = current;
+
+
+	return core;
 
 }
 
@@ -209,31 +218,26 @@ void GlobalScheduler::print_running_header() {
 	auto process = current_process();
 	auto thread   = current_thread();
 
-	Logger::Out() << "(" << process->name << ":t" << thread->tid  << "c" << CPU::executing_core()->id << ") ";
+	Logger::active_logger()->printf("(%s:t%dc%d) ",process->name.c_str(), thread->tid,CPU::executing_core()->id);
 }
 
 /**
  * @brief Adds a process to the least busy core
  *
  * @param process The process to add
+ * @param scheduler Optional, specify a specific scheduler to add to
  * @return The pid of the new process
  */
-uint64_t GlobalScheduler::add_process(Process* process) {
+uint64_t GlobalScheduler::add_process(Process* process, Scheduler* scheduler) {
 
 	// No cores?
 	if(CPU::cores.empty())
 		return 0;
 
 	// Find the core with the least processes
-	uint64_t core_id = 0;
-	Scheduler* scheduler = CPU::cores[core_id]->scheduler;
-	for(const auto& core : CPU::cores){
-		auto core_scheduler = core->scheduler;
-		if(core_scheduler->process_amount() < scheduler->process_amount()){
-			core_id = core->id;
-			scheduler = core_scheduler;
-		}
-	}
+	if (!scheduler)
+		scheduler = least_busy_core()->scheduler;
+	auto core_id = scheduler->core_id();
 
 	// Save the pid
 	auto pid = scheduler->add_process(process);
@@ -247,24 +251,19 @@ uint64_t GlobalScheduler::add_process(Process* process) {
  * @brief Adds a thread to the least busy core
  *
  * @param thread The thread to add
+ *  @param scheduler Optional, specify a specific scheduler to add to
  * @return The tid of the new thread
  */
-uint64_t GlobalScheduler::add_thread(Thread* thread) {
+uint64_t GlobalScheduler::add_thread(Thread* thread, Scheduler* scheduler) {
 
 	// No cores?
 	if(CPU::cores.empty())
 		return 0;
 
 	// Find the core with the least threads
-	uint64_t core_id = 0;
-	Scheduler* scheduler = CPU::cores[core_id]->scheduler;
-	for(const auto& core : CPU::cores){
-		auto core_scheduler = core->scheduler;
-		if(core_scheduler->thread_amount() < scheduler->thread_amount()){
-			core_id = core->id;
-			scheduler = core_scheduler;
-		}
-	}
+	if (!scheduler)
+		scheduler = least_busy_core(true)->scheduler;
+	auto core_id = scheduler->core_id();
 
 	// Save the tid
 	auto tid = scheduler->add_thread(thread);
@@ -391,23 +390,33 @@ Scheduler* GlobalScheduler::core_scheduler() {
  * @return True if the scheduler is active, false otherwise
  */
 bool GlobalScheduler::is_active() {
+	if (!s_instance)
+		return false;
+
 	return s_instance->m_active;
 }
 
 /**
  * @brief Constructs a new Scheduler object and creates the idle process
  */
-Scheduler::Scheduler()
+Scheduler::Scheduler(uint64_t core_id)
 : m_next_thread_index(0),
   m_active(false),
-  m_ticks(0)
+  m_ticks(0),
+  m_core_id(core_id)
 {
 
+	// Name the idle
+	string name = "Idle c";
+	name += string(m_core_id);
+
 	// Create this idle process
-	auto* idle = new Process("Idle", nullptr, nullptr, 0, true);
+	auto* idle = new Process(name, nullptr, nullptr, 0, true);
+	GlobalScheduler::system_scheduler()->add_process(idle, this);
+
+	// Idle must use the correct kernel memory
 	idle->memory_manager = MemoryManager::s_kernel_memory_manager;
-	idle->set_pid(0);
-	add_process(idle);
+	idle->threads()[0]->set_tss_pointer(CPU::cores[core_id]->tss.rsp0);
 }
 
 Scheduler::~Scheduler() = default;
@@ -583,22 +592,13 @@ uint64_t Scheduler::ticks() const {
 }
 
 /**
- * @brief Pass execution to the next thread
+ * @brief Gets the core that this scheduler handles processes for
  *
- * @return The cpu state of the next thread to run
+ * @return The id of the core
  */
-cpu_status_t* Scheduler::yield() {
+uint64_t Scheduler::core_id() const {
 
-	// If this is the only thread, can't yield
-	if (m_threads.size() <= 1)
-		return &current_thread()->execution_state;
-
-	// Set the current thread to waiting if running
-	auto thread = current_thread();
-	thread->thread_state = ThreadState::SLEEPING;
-
-	// Schedule the next thread
-	return schedule_next(&thread->execution_state);
+	return m_core_id;
 }
 
 /**

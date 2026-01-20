@@ -445,7 +445,7 @@ pte_t* PhysicalMemoryManager::get_entry(virtual_address_t* virtual_address, pml_
 	// Kernel memory must be in the higher half
 	size_t flags = PRESENT | WRITE;
 	if(!in_higher_region((uint64_t) virtual_address))
-		flags |= USER;
+		flags |= (USER | GLOBAL);
 
 	uint16_t pml4_index = PML4_GET_INDEX((uint64_t) virtual_address);
 	uint16_t pdpr_index = PML3_GET_INDEX((uint64_t) virtual_address);
@@ -512,7 +512,7 @@ virtual_address_t* PhysicalMemoryManager::map(physical_address_t* physical_addre
 
 	// If it is in a lower region then assume it is the user space
 	if(!in_higher_region((uint64_t) virtual_address))
-		flags |= USER;
+		flags |= (USER | GLOBAL);
 
 	// If the entry already exists then the mapping is already done
 	pte_t* pte = get_entry(virtual_address, (pml_t*) pml4_table);

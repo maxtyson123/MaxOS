@@ -18,10 +18,9 @@ using namespace MaxOS::common;
  */
 ServiceHandler::ServiceHandler() {
 
-
     // Setup the shared memory
     size_t size = sizeof(service_message_ring_t) + DATA_SIZE;
-    uintptr_t address = 0;
+    uintptr_t address = 0; //@TODO SETUP SHM
     m_data_region = address + sizeof(service_message_ring_t);
 
     setup_region(m_data_region, DATA_SIZE);
@@ -47,6 +46,7 @@ size_t ServiceHandler::store_data(const void *buffer, size_t size, bool reserve_
     return (size_t)data - m_data_region;
 
 }
+void block(){}
 
 /**
  * @brief Wait until a free spot for a message is available and then claim it
@@ -59,19 +59,16 @@ service_resource_message_t* ServiceHandler::aquire_slot() {
     while (true) {
 
         // Get the data
-        size_t head = m_message_ring->head;
-        size_t tail = m_message_ring->tail;
+        size_t head = m_message_ring->head.load(std::memory_order_relaxed);
+        size_t tail = m_message_ring->tail.load(std::memory_order_acquire);
 
-        // No spot available
-        if (((head + 1) % MESSAGE_SLOTS) == tail) {
-            block();
+        // Try to claim a spot
+        size_t next = (head + 1) % MESSAGE_SLOTS;
+        if(!m_message_ring->head.compare_exchange_weak(head,next,std::memory_order_acq_rel,std::memory_order_relaxed))
             continue;
-        }
 
         // Claim slot
         size_t slot = head;
-        m_message_ring->head = (head + 1) % MESSAGE_SLOTS;
-
         return &m_message_ring->ring_buffer[slot];
     }
 }
@@ -84,6 +81,7 @@ service_resource_message_t* ServiceHandler::aquire_slot() {
 size_t ServiceHandler::allocate_id() {
     return m_next_id++;
 }
+
 
 
 /**
@@ -115,7 +113,7 @@ int64_t ServiceHandler::send_to_service(size_t id, ServiceResourceCommand comman
 
     // Wait for a response
     while (slot -> state == ServiceMessageSlotState::REQUEST)
-        block();
+        GlobalScheduler::current_thread()->yield();
 
     // Read request
     if (is_read)

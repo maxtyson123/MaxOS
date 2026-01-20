@@ -163,6 +163,7 @@ int ProcessResource::write(const void* buffer, size_t size, size_t flags) {
 			// Kill the process
 			exit_code = *((uint64_t*)buffer);
 			GlobalScheduler::remove_process(process);
+			process->threads()[0]->yield();
 
 			return size;
 		}
@@ -269,6 +270,12 @@ int ThreadResource::write(const void* buffer, size_t size, size_t flags) {
 			// Kill the thread
 			exit_code = *((uint64_t*)buffer);
 			thread->thread_state = ThreadState::STOPPED;
+			thread->yield();
+			return size;
+		}
+
+		case ThreadFlags::WRITE_YIELD: {
+			thread->yield();
 			return size;
 		}
 

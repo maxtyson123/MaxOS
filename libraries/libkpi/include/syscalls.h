@@ -40,8 +40,6 @@ namespace MaxOS::KPI{
 		RESOURCE_CLOSE,
 		RESOURCE_WRITE,
 		RESOURCE_READ,
-
-		YEILD,
 	};
 
 	void* make_syscall(SyscallType type, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
@@ -56,8 +54,6 @@ namespace MaxOS::KPI{
 	void resource_close(uint64_t handle, size_t flags);
 	size_t resource_write(uint64_t handle, const void* buffer, size_t size, size_t flags);
 	size_t resource_read(uint64_t handle, void* buffer, size_t size, size_t flags);
-
-	void yeild();
 }
 
 #endif //MAXOS_KPI_SYSCALLS_H

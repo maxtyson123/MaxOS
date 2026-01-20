@@ -18,7 +18,7 @@
 #include <memory/physical.h>
 #include <memory/memoryIO.h>
 #include <processes/resources/resource.h>
-
+#include <processes/block.h>
 
 namespace MaxOS::processes {
 
@@ -60,13 +60,13 @@ namespace MaxOS::processes {
 
 		private:
 			common::Vector<common::buffer_t*> m_queue { };
-			common::Spinlock m_message_lock;
+			BlockingLock m_message_lock;
 
 		public:
 			SharedMessageEndpoint(const string& name, size_t size, resources::resource_type_t type);
 			~SharedMessageEndpoint() final;
 
-			void send(const ipc_iovec_t* vec, size_t count)
+			void send(const ipc_iovec_t* vec, size_t count);
 
 			int read(void* buffer, size_t size, size_t flags) final;
 			int write(const void* buffer, size_t size, size_t flags) final;

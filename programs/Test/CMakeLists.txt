@@ -1,0 +1,1 @@
+MAKE_PROG_NOSTD(Test src /boot)

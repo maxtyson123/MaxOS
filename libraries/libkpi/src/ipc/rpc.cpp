@@ -9,6 +9,7 @@
  */
 
 #include <ipc/rpc.h>
+#include <processes/thread.h>
 
 using namespace MaxOS;
 using namespace MaxOS::KPI::processes;
@@ -535,7 +536,7 @@ namespace MaxOS::KPI::ipc {
 		// Try to open the greeter server endpoint until it is available
 		uint64_t endpoint = open_endpoint(server);
 		while (endpoint == 0) {
-			yeild();
+			yield();
 			endpoint = open_endpoint(server);
 		}
 

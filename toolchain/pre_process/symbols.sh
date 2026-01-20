@@ -12,7 +12,6 @@ if [ -z "$INPUT" ] || [ -z "$OUT" ]; then
   fail "Usage: $0 <elf_input> <out_cpp>"
 fi
 
-
 # Empty file as there needs to be something to compile to grab the symbols from
 TMPDIR="$(mktemp -d /tmp/gen_sym.XXXXXX)"
 trap 'rm -rf "$TMPDIR"' EXIT
@@ -27,12 +26,8 @@ else
   fi
 
   # Locate the required commands
-  CXXFILT="$(command -v c++filt || true)"
-  NM="$(command -v nm || true)"
-  if [ -z "$NM" ]; then
-    echo "Error: nm not found (required to read ELF input)"
-    exit 3
-  fi
+  CXXFILT="$SCRIPTDIR/../cross_compiler/cross/bin/x86_64-elf-c++filt"
+  NM="$SCRIPTDIR/../cross_compiler/cross/bin/x86_64-elf-gcc-nm"
 
   # Get all the function addresses
   $NM --defined-only --numeric-sort "$INPUT" | awk '$2=="T" || $2=="t" { printf "%s\t%s\n",$1,$3 }' > "$RAW"

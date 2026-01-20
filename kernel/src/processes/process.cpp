@@ -8,12 +8,14 @@
 
 #include <processes/process.h>
 #include <common/logger.h>
+#include <processes/scheduler.h> //@todo infinite recursion
 
 using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::processes;
 using namespace MaxOS::common;
+using namespace MaxOS::hardwarecommunication;
 
 /**
  * @brief Constructor for the Thread class
@@ -41,7 +43,7 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 		m_tss_stack_pointer = CPU::executing_core() -> tss.rsp0;
 
 	} else {
-		m_tss_stack_pointer = (uintptr_t) parent->memory_manager->handle_malloc(STACK_SIZE) + STACK_SIZE;
+		m_tss_stack_pointer = (uintptr_t) parent->memory_manager->kmalloc(STACK_SIZE) + STACK_SIZE;
 	}
 
 	// Mak sure there is a stack
@@ -93,6 +95,31 @@ void Thread::sleep(size_t milliseconds) {
 	// Update the state
 	thread_state = ThreadState::SLEEPING;
 	wakeup_time  = milliseconds;
+	yield();
+}
+
+/**
+ * @brief Pass execution to the next ready thread
+ */
+void Thread::yield() {
+
+	// Only update the state if the caller hasn't specified the resume condition state
+	if (thread_state == ThreadState::RUNNING)
+		thread_state = ThreadState::READY;
+
+	// Save a checkpoint (resumed state is ret of the below function: execution after yield will be there)
+	save_cpu_state();
+
+	// Schedule the replacement thread, but guard against infinite loops where thread continusly pass execution to the
+	// next thread after scheduler resumes it post yield)
+	if(thread_state != ThreadState::RUNNING){
+
+		// Yield to the next thread
+		cpu_status_t* next = GlobalScheduler::core_scheduler()->schedule_next(&execution_state);
+		InterruptManager::ForceInterruptReturn(next);
+	}
+
+	Logger::DEBUG() << "RET FROM YIELD\n";
 }
 
 /**
@@ -122,63 +149,99 @@ void Thread::restore_sse_state() {
 }
 
 /**
+ * @brief Save the state of the CPU at the exit of this function
+ * @param location Where to save the state to
+ */
+extern "C" void save_cpu_state_naked(volatile void* location) __attribute__((naked));
+extern "C" void save_cpu_state_naked(volatile void* location) {
+    asm volatile(
+
+        // Save registers
+        "pushq %rax\n"
+        "pushq %rbx\n"
+        "pushq %rcx\n"
+        "pushq %rdx\n"
+        "pushq %rbp\n"
+        "pushq %rsi\n"
+        "pushq %rdi\n"
+        "pushq %r8\n"
+        "pushq %r9\n"
+        "pushq %r10\n"
+        "pushq %r11\n"
+        "pushq %r12\n"
+        "pushq %r13\n"
+        "pushq %r14\n"
+        "pushq %r15\n"
+
+        // Store the save location
+        "movq %rdi, %rsi\n"
+
+        // Save general registers
+        "movq   0(%rsp), %rax\n"   "movq %rax, 0x00(%rsi)\n"
+        "movq   8(%rsp), %rax\n"   "movq %rax, 0x08(%rsi)\n"
+        "movq  16(%rsp), %rax\n"   "movq %rax, 0x10(%rsi)\n"
+        "movq  24(%rsp), %rax\n"   "movq %rax, 0x18(%rsi)\n"
+        "movq  32(%rsp), %rax\n"   "movq %rax, 0x20(%rsi)\n"
+        "movq  40(%rsp), %rax\n"   "movq %rax, 0x28(%rsi)\n"
+        "movq  48(%rsp), %rax\n"   "movq %rax, 0x30(%rsi)\n"
+        "movq  56(%rsp), %rax\n"   "movq %rax, 0x38(%rsi)\n"
+        "movq  64(%rsp), %rax\n"   "movq %rax, 0x40(%rsi)\n"
+        "movq  72(%rsp), %rax\n"   "movq %rax, 0x48(%rsi)\n"
+        "movq  80(%rsp), %rax\n"   "movq %rax, 0x50(%rsi)\n"
+        "movq  88(%rsp), %rax\n"   "movq %rax, 0x58(%rsi)\n"
+        "movq  96(%rsp), %rax\n"   "movq %rax, 0x60(%rsi)\n"
+        "movq 104(%rsp), %rax\n"   "movq %rax, 0x68(%rsi)\n"
+        "movq 112(%rsp), %rax\n"   "movq %rax, 0x70(%rsi)\n"
+
+        // Save the return address as the instruction pointer
+        "movq 120(%rsp), %rax\n"
+        "movq %rax, 0x88(%rsi)\n"
+
+        // CS
+        "xorq %rax, %rax\n"
+        "movw %cs, %ax\n"
+        "movq %rax, 0x90(%rsi)\n"
+
+        // RFLAGS
+        "pushfq\n"
+        "popq %rax\n"
+        "movq %rax, 0x98(%rsi)\n"
+
+        // RSP
+        "leaq 120(%rsp), %rax\n"
+        "movq %rax, 0xA0(%rsi)\n"
+
+        // SS
+        "xorq %rax, %rax\n"
+        "movw %ss, %ax\n"
+        "movq %rax, 0xA8(%rsi)\n"
+
+        // Restore registers
+        "popq %r15\n"
+        "popq %r14\n"
+        "popq %r13\n"
+        "popq %r12\n"
+        "popq %r11\n"
+        "popq %r10\n"
+        "popq %r9\n"
+        "popq %r8\n"
+        "popq %rdi\n"
+        "popq %rsi\n"
+        "popq %rbp\n"
+        "popq %rdx\n"
+        "popq %rcx\n"
+        "popq %rbx\n"
+        "popq %rax\n"
+        "ret\n"
+    );
+}
+
+
+/**
  * @brief Saves the CPU state into the thread's execution_state structure
  */
 void Thread::save_cpu_state() {
-	asm volatile(
-			// Store return address before stack is modified
-			"movq (%%rsp), %%rax\n"
-
-			// Store RDI before stack is modified
-			"pushq %%rdi\n"
-			"movq %0, %%rdi\n"
-
-			// Store general purpose
-			"movq %%r15, 0x00(%%rdi)\n"
-			"movq %%r14, 0x08(%%rdi)\n"
-			"movq %%r13, 0x10(%%rdi)\n"
-			"movq %%r12, 0x18(%%rdi)\n"
-			"movq %%r11, 0x20(%%rdi)\n"
-			"movq %%r10, 0x28(%%rdi)\n"
-			"movq %%r9,  0x30(%%rdi)\n"
-			"movq %%r8,  0x38(%%rdi)\n"
-			"movq %%rdi, 0x40(%%rdi)\n"
-			"movq %%rsi, 0x48(%%rdi)\n"
-			"movq %%rbp, 0x50(%%rdi)\n"
-			"movq %%rdx, 0x58(%%rdi)\n"
-			"movq %%rcx, 0x60(%%rdi)\n"
-			"movq %%rbx, 0x68(%%rdi)\n"
-			"movq %%rax, 0x70(%%rdi)\n"
-
-			// Reserved
-			"movq $0,    0x78(%%rdi)\n"
-			"movq $0,    0x80(%%rdi)\n"
-
-			// RIP from earlier
-			"movq %%rax, 0x88(%%rdi)\n"
-
-			// Get cs
-			"xorq %%rax, %%rax\n"
-			"movw %%cs, %%ax\n"
-			"movq %%rax, 0x90(%%rdi)\n"
-
-			// Store flags
-			"pushfq\n"
-			"popq %%rax\n"
-			"movq %%rax, 0x98(%%rdi)\n"
-
-			// Get RSP and SS
-			"movq %%rsp, 0xA0(%%rdi)\n"
-			"xorq %%rax, %%rax\n"
-			"movw %%ss, %%ax\n"
-			"movq %%rax, 0xA8(%%rdi)\n"
-
-			// Restore RDI
-			"popq %%rdi\n"
-			:
-			: "r" (&execution_state)
-			: "rax", "cc", "memory"
-			);
+	save_cpu_state_naked(&execution_state);
 }
 
 /**

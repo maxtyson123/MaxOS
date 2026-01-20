@@ -142,8 +142,9 @@ InterruptManager::InterruptManager() {
 	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x02, &HandleInterruptRequest0x02, 0);   // PIT Interrupt
 	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
 
-	// Set up the system call interrupt
+	// Set up the software interrupts
 	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x61, &HandleInterruptRequest0x61, 0);   // Kill this core
 
 	// Tell the processor to use the IDT
 	load_current();
@@ -229,11 +230,19 @@ void InterruptManager::deactivate() {
  *
  * @param status The current cpu status
  * @return The updated cpu status
+ *
+ * @todo Exception handlers
  */
 system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t* status) {
 
 	// Default Fault Handlers
 	switch (status->interrupt_number) {
+
+		case 0x6: {
+			string msg = StringBuilder() << "Invaild opcode executed at 0x" << status->rip << "\n";
+			CPU::PANIC(msg.c_str(), status);
+			break;
+		}
 
 		case 0x7:
 			CPU::PANIC("Device Not Available: FPU Not Enabled", status);
@@ -244,6 +253,9 @@ system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t* st
 
 		case 0x0E:
 			return page_fault(status);
+
+		case 0x81:
+			CPU::halt();
 	}
 
 	// If there is an interrupt manager handle interrupt
@@ -286,11 +298,9 @@ cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 	// Where to go afterward
 	cpu_status_t* new_status = status;
 
-	// If there is an interrupt manager, handle the interrupt
-	if (m_interrupt_handlers[status->interrupt_number] != nullptr)
-		new_status = m_interrupt_handlers[status->interrupt_number]->handle_interrupt(status);
-	else
-		Logger::WARNING() << "Interrupt " << (int) status->interrupt_number << " not handled\n";
+	// Handle the interrupt
+	ASSERT(m_interrupt_handlers[status->interrupt_number] != nullptr, "Interrupt 0x%x not handled\n", status->interrupt_number);
+	new_status = m_interrupt_handlers[status->interrupt_number]->handle_interrupt(status);
 
 	// Send the EOI to the APIC
 	if (HARDWARE_INTERRUPT_OFFSET <= status->interrupt_number && status->interrupt_number < HARDWARE_INTERRUPT_OFFSET + 16)
@@ -333,7 +343,6 @@ cpu_status_t* InterruptManager::page_fault(system::cpu_status_t* status) {
 	uint64_t core_id = core ? core->id : 0;
 
 	string msg = StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ") for core " << core_id << "\n";
-
 
 	// Try kill the process so the system doesn't die
 	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);

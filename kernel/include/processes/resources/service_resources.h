@@ -11,11 +11,13 @@
 
 #include <processes/resources/resource.h>
 #include <processes/process.h>
+#include <processes/scheduler.h>
 #include <processes/ipc.h>
 #include <memory/memorymanagement.h>
+#include <hardwarecommunication/interrupts.h>
 
 #include <stddef.h>
-#include <stdatomic.h>
+#include <atomic>
 
 #include <stdint.h>
 
@@ -67,17 +69,19 @@ namespace MaxOS::processes::resources {
 
 	typedef struct ServiceMessageRing {
 
-		atomic_size_t head;
-		atomic_size_t tail;
+		std::atomic<size_t> head {0};
+		std::atomic<size_t> tail {0};
 
 		service_resource_message_t ring_buffer[MESSAGE_SLOTS];
 
 	} service_message_ring_t;
+	static_assert(std::atomic<size_t>::is_always_lock_free, "atomic<size_t> must be lock-free in the kernel");
 
 	class ServiceHandler : public memory::MemoryChunkHandler {
 
 		private:
 			size_t m_next_id = 0;
+			processes::BlockingLock m_lock;
 
 			uintptr_t m_shared_region;
 			service_message_ring_t* m_message_ring;

@@ -16,6 +16,7 @@
 #include <colour.h>
 #include <memory/memorymanagement.h>
 #include <processes/scheduler.h>
+#include <processes/block.h>
 #include <processes/resources/service_resources.h>
 #include <libkpi/include/syscalls.h>
 
@@ -58,8 +59,6 @@ namespace MaxOS::system {
 
 		private:
 			syscall_func_t m_syscall_handlers[256] = { };
-
-			inline static common::Spinlock s_lock = { };
 
 		public:
 			SyscallManager();

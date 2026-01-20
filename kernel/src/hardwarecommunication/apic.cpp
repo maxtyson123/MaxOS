@@ -123,31 +123,21 @@ void LocalAPIC::send_eoi() const {
 }
 
 /**
- * @brief send the init IPI to another apic
+ * @brief Send an Interrupt Command Register (ICR) to the local apic
  *
- * @param apic_id The id of the apic to send to
- * @param assert Is this an assert code (drive / release the signal)
+ * @param icr_low Lower 32 bits of the ICR (vector, delivery mode, shorthand).
+ * @param icr_high Upper 32 bits of the ICR (destination APIC ID, if used).
+ * @param use_shorthand True if a destination shorthand is encoded in icr_low (icr_high is ignored).
  */
-void LocalAPIC::send_init(uint8_t apic_id, bool assert) const {
-
-	uint32_t icr_low = 0;
-
-	// Delivery mode = INIT (101b at bits 8-10)
-	icr_low |= (0b101 << 8);
-
-	// Level (bit 14): 1 = assert, 0 = de-assert
-	if (assert)
-		icr_low |= (1 << 14);
-
-	// Trigger mode: Level = 1
-	icr_low |= (1 << 15);
+void LocalAPIC::send_icr(uint32_t icr_low, uint32_t icr_high, bool use_shorthand) const {
 
 	if (!m_x2apic) {
 
 		// Select target core
-		write(0x310, apic_id << 24);
+		if (!use_shorthand)
+			write(0x310, icr_high << 24);
 
-		// Send INIT (Delivery mode = INIT, Level = 1)
+		// Send the interrupt
 		write(0x300, icr_low);
 
 		// Wait for delivery
@@ -156,37 +146,94 @@ void LocalAPIC::send_init(uint8_t apic_id, bool assert) const {
 
 	} else {
 
-		// x2APIC
-		CPU::write_msr(0x830, (uint64_t)apic_id << 32 | icr_low);
+		// x2APIC: pack and write the full 64-bit ICR
+		uint64_t icr = icr_low;
+		if (!use_shorthand)
+			icr |= (uint64_t)icr_high << 32;
+
+		CPU::write_msr(0x830, icr);
 	}
+
 }
 
 /**
- * @brief send the start up IPI to another apic
+ * @brief send the init IPI to another apic
+ *
+ * @param apic_id The id of the apic to send to
+ * @param assert Is this an assert code (drive / release the signal)
+ */
+void LocalAPIC::send_init(uint8_t apic_id, bool assert) const {
+
+	uint32_t icr_low = 0;
+	uint32_t icr_high = apic_id;
+
+	// Set delivery mode to INIT
+	icr_low |= (0b101 << 8);
+
+	// Set assert if needed
+	if (assert)
+		icr_low |= (1 << 14);
+
+	// Level triggered
+	icr_low |= (1 << 15);
+
+	// Send the init command
+	send_icr(icr_low, icr_high, false);
+}
+
+/**
+ * @brief Send the start up IPI to another apic
  *
  * @param apic_id The apic to send it to
  * @param vector Where to start executing
  */
 void LocalAPIC::send_startup(uint8_t apic_id, uint8_t vector) const {
 
-	if (!m_x2apic) {
+	uint32_t icr_low = 0;
+	uint32_t icr_high = apic_id;
 
-		// Select target core
-		write(0x310, apic_id << 24);
+	// Vector being sent
+	icr_low |= vector;
 
-		// Send SIPI (Delivery mode = STARTUP)
-		write(0x300, 0x4600 | vector);
+	// Set delivery mode to STARTUP
+	icr_low |= (0b110 << 8);
 
-		// Wait for delivery
-		while (read(0x300) & (1 << 12))
-		 	asm volatile("pause");
+	// Send the startup command
+	send_icr(icr_low, icr_high, false);
+}
 
+
+/**
+ * @brief Send an interrupt to a specific core
+ *
+ * @param apic_id The core to send to (ignored if specfied in flags)
+ * @param vector The interrupt vector
+ * @param flags Flags for how to send
+ */
+void LocalAPIC::send_interrupt(uint8_t apic_id, uint8_t vector, size_t flags) const {
+
+	uint32_t icr_low = 0;
+	uint32_t icr_high = 0;
+
+	// Vector (bits 0–7)
+	icr_low |= vector;
+
+	// Destination
+	bool use_shorthand = true;
+	if (flags & SEND_ALL) {
+		// All including self (11b)
+		icr_low |= (0b11 << 18);
+	} else if (flags & EXCLUDE_SELF) {
+		// All excluding self (10b)
+		icr_low |= (0b10 << 18);
 	} else {
-
-		// x2APIC
-		CPU::write_msr(0x831, (uint64_t)apic_id << 32 | 0x4600 | vector);
+		// Specific core
+		icr_high = ((uint32_t)apic_id) << 24;
+		use_shorthand = false;
 	}
 
+	// Send the vector
+	send_icr(icr_low, icr_high, use_shorthand);
 
 }
 

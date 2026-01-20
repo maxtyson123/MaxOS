@@ -43,6 +43,8 @@ Core::Core(hardwarecommunication::madt_processor_apic_t* madt_item)
 	m_enabled 		= (m_madt->flags & 0x1) != 0;
 	m_can_enable 	= (m_madt->flags & 0x2) != 0;
 
+	m_stack = (uint64_t)MemoryManager::kmalloc(BOOT_STACK_SIZE);
+
 	Logger::DEBUG() << "Found CPU ID: " << id << " with APIC ID: " << m_apic_id << " (enabled = " << (string)m_enabled << ", can be enabled = " <<  (string)m_can_enable  << ")\n";
 
 }
@@ -64,10 +66,9 @@ void Core::wake_up(CPU* cpu) {
 	}
 
 	Logger::DEBUG() << "Starting core: " << id << "\n";
-	m_stack = (uint64_t)MemoryManager::kmalloc(BOOT_STACK_SIZE);
 
 	// Core specific boot info
-	auto info = (core_boot_info_t*)(core_boot_info);
+	volatile auto info = (core_boot_info_t*)(core_boot_info);
 	info->activated = false;
 	info->id = id;
 	info->stack = m_stack + BOOT_STACK_SIZE;
@@ -475,10 +476,11 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	// Print some text to the user
 	Logger::ERROR() << "----------------------------\n";
 	Logger::ERROR() << "There has been a fatal error in MaxOS and the system has been halted.\n";
+	Logger::ERROR() << "Please check the logs for more info.\n";		// TODO: save to a file
 	Logger::ERROR() << "Please restart the system.\n";
 
 	// Print the logo
-	Logger::ERROR() << "----------------------------\n";
+	Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
 
 	// Halt
 	halt();
@@ -508,13 +510,21 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 			return GlobalScheduler::force_remove_process(process);
 		}
 
-		// Otherwise occurred whilst the kernel was doing something for the process
+		// Otherwise occurred whilst the kernel was doing something for the process, thus a fault in the kernel fault
+		// and is unrecoverable
 	}
 
-	// We are panicking
-	panic_core = executing_core();
-	console::FramebufferConsole::print_logo(true);
+	// Kill the others to make sure everything else stops
+	executing_core()->local_apic->send_interrupt(0, 0x81, EXCLUDE_SELF);
+	GlobalScheduler::deactivate();
+
+	// Prepare for printing debug messages
+	FramebufferConsole::print_logo(true);
+	Logger::active_logger() -> enable_all_log_writers();
+
+	// Unresumable state
 	panic_lock.unlock();
+	panic_core = executing_core();
 	return nullptr;
 }
 

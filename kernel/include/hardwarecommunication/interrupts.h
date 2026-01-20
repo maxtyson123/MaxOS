@@ -119,6 +119,7 @@ namespace MaxOS::hardwarecommunication {
 			static void HandleInterruptRequest0x0F();   ///< Stub (see interrupts.s)
 			static void HandleInterruptRequest0x31();   ///< Stub (see interrupts.s)
 			static void HandleInterruptRequest0x60();   ///< Stub (see interrupts.s)
+			static void HandleInterruptRequest0x61();   ///< Stub (see interrupts.s)
 
 			// Exceptions
 			static void HandleException0x00();          ///< Stub (see interrupts.s)

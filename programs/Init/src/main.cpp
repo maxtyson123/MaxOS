@@ -30,7 +30,7 @@ extern "C" void _start(int argc, char* argv[]){
 
 	// Parse the ram disk
 	auto header = (struct tar_header*)0xFFF000;
-	klog(header->filename);
+	klog("Initrd filename: %s \n", header->filename);
 
 	// Pass to fileserver
 
@@ -44,6 +44,7 @@ extern "C" void _start(int argc, char* argv[]){
 
 	// Don't be scheduled again, but cant kms as that would kill child processes and thus core servers
 	while(true)
-		sleep(UINT32_MAX);
+		asm("nop");
+		// sleep(UINT32_MAX);
 
 }

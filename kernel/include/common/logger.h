@@ -39,11 +39,18 @@ namespace MaxOS {
 	constexpr LogLevel MAX_LOG_LEVEL = LogLevel::DEBUG;     ///< The maximum log level for this build (messages above this level will not be logged)
 #endif
 
+
+
+	class LogRecord;
+
 	/**
 	 * @class Logger
 	 * @brief A class that handles logging messages to the console and files.
 	 */
 	class Logger : public MaxOS::common::OutputStream {
+
+		friend class LogRecord;
+
 		private:
 
 			// Cant use vector as this needs to be init before the heap
@@ -56,6 +63,7 @@ namespace MaxOS {
 			uint8_t m_progress_current = 0;
 
 			static inline Logger* s_active_logger = nullptr;
+			inline static common::Spinlock s_loggers_lock = {};
 
 			LogLevel m_log_level = LogLevel::INFO;
 
@@ -65,6 +73,8 @@ namespace MaxOS {
 
 			void add_log_writer(OutputStream* log_writer);
 			void disable_log_writer(OutputStream* log_writer);
+			void enable_log_writer(OutputStream* log_writer);
+			void enable_all_log_writers();
 
 			void set_log_level(LogLevel log_level);
 
@@ -75,17 +85,42 @@ namespace MaxOS {
 
 			static Logger* active_logger();
 
-			static Logger& Out();
+			static LogRecord Out();
 
-			static Logger ERROR();
-			static Logger WARNING();
-			static Logger HEADER();
-			static Logger INFO();
-			static Logger TEST();
-			static Logger DEBUG();
+			static LogRecord ERROR();
+			static LogRecord WARNING();
+			static LogRecord HEADER();
+			static LogRecord INFO();
+			static LogRecord TEST();
+			static LogRecord DEBUG();
 
 			using OutputStream::operator <<;
 			Logger& operator <<(LogLevel log_level);
+	};
+
+	/**
+	 * @class LogRecord
+	 * @brief
+	 */
+	class LogRecord {
+
+		private:
+			Logger& m_logger;
+
+		public:
+			explicit LogRecord(Logger& logger, LogLevel level);
+			~LogRecord();
+
+			template<typename T>
+			LogRecord& operator<<(const T& value) {
+				m_logger.write(value);
+				return *this;
+			}
+
+			LogRecord& operator<<(char c) {
+				m_logger.write_char(c);
+				return *this;
+			}
 	};
 }
 

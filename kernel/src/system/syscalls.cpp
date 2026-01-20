@@ -39,7 +39,6 @@ SyscallManager::SyscallManager()
 	set_syscall_handler(SyscallType::RESOURCE_WRITE, syscall_resource_write);
 	set_syscall_handler(SyscallType::RESOURCE_READ, syscall_resource_read);
 
-	set_syscall_handler(SyscallType::YEILD, syscall_yield);
 
 }
 
@@ -118,22 +117,16 @@ void SyscallManager::remove_syscall_handler(SyscallType syscall) {
  */
 syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 
-	s_lock.lock();
-
 	// Ensure a message was provided
 	char* message = (char*) args->arg0;
-	if(!message){
-		s_lock.unlock();
+	if(!message)
 		return args;
-	}
 
 	// If the first two characters are %h then no header
 	if (message[0] == '%' && message[1] == 'h')
 		Logger::Out() << message + 2;
 	else
 		Logger::INFO() << message;
-
-	s_lock.unlock();
 
 	return args;
 }
@@ -283,32 +276,17 @@ syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
  *
  * @todo resource type system
  *
- * @param args Arg0 = Endpoint Name, Arg1 = Resource Type
+ * @param args Arg0 = Resource Type
  * @return 1 for success 0 for failure
  */
 syscall_args_t* SyscallManager::syscall_registry_create(syscall_args_t* args) {
 
 	// Parse params
-	auto name	= (char*)args->arg0;
-	auto type	= (size_t)args->arg1;
+	auto type	= (size_t)args->arg0;
 
 	// Create the registry
-	auto registery = new ServiceResourceRegistry(name, type);
+	auto registery = new ServiceResourceRegistry(type);
 
 	args->return_value = registery ? 1 : 0;
-	return args;
-}
-
-/**
- * @brief System call to yield the current process
- *
- * @param args Nothing
- * @return Nothing
- */
-syscall_args_t* SyscallManager::syscall_yield(syscall_args_t* args) {
-
-	// Yield
-	args->return_state = GlobalScheduler::yield(args->return_state);
-
 	return args;
 }

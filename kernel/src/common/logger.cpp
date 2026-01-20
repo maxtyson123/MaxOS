@@ -29,7 +29,7 @@ Logger::Logger()
 	s_active_logger = this;
 
 	// The following line is generated automatically by the MaxOS build system.
-	s_progress_total =                                                                                                                                                                                                       15;
+	s_progress_total =                                                                                                                                                                                     15;
 
 }
 
@@ -76,6 +76,15 @@ void Logger::disable_log_writer(OutputStream* log_writer) {
 }
 
 /**
+ * @brief Mark all log writes as allowed to output to
+ */
+void Logger::enable_all_log_writers() {
+	for (int i = 0; i < m_log_writer_count; i++)
+		if (!m_log_writers_enabled[i])
+			m_log_writers_enabled[i] = true;
+}
+
+/**
  * @brief Sets the log level of the logger
  *
  * @param log_level The log level to set
@@ -95,27 +104,27 @@ void Logger::set_log_level(LogLevel log_level) {
 	switch (log_level) {
 
 		case LogLevel::HEADER:
-			*this << ANSI_COLOURS[ANSIColour::FG_Blue] << "[  BOOT    ] ";
+			*this << ANSI_COLOURS[FG_Blue]	 << "[  BOOT    ] ";
 			break;
 
 		case LogLevel::INFO:
-			*this << ANSI_COLOURS[ANSIColour::FG_Cyan] << "[  INFO    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
+			*this << ANSI_COLOURS[FG_Cyan]	 << "[  INFO    ]" << ANSI_COLOURS[FG_White] << " ";
 			break;
 
 		case LogLevel::TEST:
-			*this << ANSI_COLOURS[ANSIColour::FG_Green] << "[  TEST    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
+			*this << ANSI_COLOURS[FG_Green]	 << "[  TEST    ]" << ANSI_COLOURS[FG_White] << " ";
 			break;
 
 		case LogLevel::DEBUG:
-			*this << ANSI_COLOURS[ANSIColour::FG_Yellow] << "[  DEBUG   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
+			*this << ANSI_COLOURS[FG_Yellow] << "[  DEBUG   ]" << ANSI_COLOURS[Reset] << " ";
 			break;
 
 		case LogLevel::WARNING:
-			*this << ANSI_COLOURS[ANSIColour::BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
+			*this << ANSI_COLOURS[BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[Reset] << " ";
 			break;
 
 		case LogLevel::ERROR:
-			*this << ANSI_COLOURS[ANSIColour::BG_Red] << "[  ERROR   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
+			*this << ANSI_COLOURS[BG_Red]	<< "[  ERROR   ]" << ANSI_COLOURS[Reset] << " ";
 			break;
 	}
 
@@ -146,79 +155,35 @@ void Logger::write_char(char c) {
  *
  * @return The active logger
  */
-Logger &Logger::Out() {
+LogRecord Logger::Out() {
 
-	return *active_logger();
+	return LogRecord(*s_active_logger, s_active_logger->m_log_level);
 }
 
-/**
- * @brief Gets active logger set to task level
- *
- * @return The task logger
- */
-Logger Logger::HEADER() {
-
-	s_active_logger->set_log_level(LogLevel::HEADER);
-	return Out();
-
+LogRecord Logger::TEST() {
+	return LogRecord(*s_active_logger, LogLevel::TEST);
 }
 
-/**
- * @brief Gets active logger set to info level
- *
- * @return The info logger
- */
-Logger Logger::INFO() {
-
-	s_active_logger->set_log_level(LogLevel::INFO);
-	return Out();
+LogRecord Logger::INFO() {
+	return LogRecord(*s_active_logger, LogLevel::INFO);
 }
 
-/**
- * @brief Gets active logger set to test level
- *
- * @return The test logger
- */
-Logger Logger::TEST() {
-
-	s_active_logger->set_log_level(LogLevel::TEST);
-	return Out();
+LogRecord Logger::DEBUG() {
+	return LogRecord(*s_active_logger, LogLevel::DEBUG);
 }
 
-/**
- * @brief Gets active logger set to DEBUG level
- *
- * @return The debug logger
- */
-Logger Logger::DEBUG() {
-
-	s_active_logger->set_log_level(LogLevel::DEBUG);
-	return Out();
-
+LogRecord Logger::WARNING() {
+	return LogRecord(*s_active_logger, LogLevel::WARNING);
 }
 
-/**
- * @brief Gets active logger set to WARNING level
- *
- * @return The warning logger
- */
-Logger Logger::WARNING() {
-
-	s_active_logger->set_log_level(LogLevel::WARNING);
-	return Out();
+LogRecord Logger::ERROR() {
+	return LogRecord(*s_active_logger, LogLevel::ERROR);
 }
 
-/**
- * @brief Gets active logger set to ERROR level
- *
- * @return The error logger
- */
-Logger Logger::ERROR() {
-
-	s_active_logger->set_log_level(LogLevel::ERROR);
-	return Out();
-
+LogRecord Logger::HEADER() {
+	return LogRecord(*s_active_logger, LogLevel::HEADER);
 }
+
 
 /**
  * @brief Gets the active logger (to be used to modify the logger)
@@ -230,12 +195,13 @@ Logger *Logger::active_logger() {
 }
 
 /**
- * @brief Prints a formatted string to the logger
+ * @brief Prints a formatted string to the logger (thread safe)
  *
  * @param format The format string
  * @param ... The arguments to format
  */
 void Logger::printf(char const *format, ...) {
+
 
 	// Create a pointer to the data
 	va_list parameters;
@@ -260,7 +226,7 @@ void Logger::ASSERT(bool condition, char const *message, ...) {
 	va_start(parameters, message);
 
 	// Hang the system
-	system::CPU::PANIC(String::formatted(message, parameters).c_str());
+	CPU::PANIC(String::formatted(message, parameters).c_str());
 }
 
 /**
@@ -273,5 +239,20 @@ Logger &Logger::operator<<(LogLevel log_level) {
 
 	set_log_level(log_level);
 	return *this;
+
+}
+
+LogRecord::LogRecord(Logger& logger, LogLevel level)
+: m_logger(logger)
+{
+
+	// Wait for the logger to be free
+	Logger::s_loggers_lock.lock();
+	m_logger.set_log_level(level);
+}
+
+LogRecord::~LogRecord() {
+
+	Logger::s_loggers_lock.unlock();
 
 }

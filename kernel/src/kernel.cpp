@@ -51,7 +51,7 @@ extern "C" [[noreturn]] void core_main() {
 
 	// Wait to be scheduled
 	while(true)
-		asm("nop");
+		CPU::halt();
 }
 
 /**
@@ -94,10 +94,6 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	console.finish();
 	GlobalScheduler::activate();
 
-	//TO MOVE:
-	//	VirtualFileSystem vfs;
-	//	VFSResourceRegistry vfs_registry(&vfs);
-
 	// Idle loop  (read Idle.md)
 	while(true)
 		asm("hlt");
@@ -138,5 +134,5 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 // - - DSK tell DM init done
 // - - DSK run server()
 // = = =
-// - future steps
-// - yeild forever
+// - any future steps
+// - mark self as unschedulable forever

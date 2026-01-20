@@ -224,8 +224,7 @@ void MemoryChunkHandler::handle_free(void* pointer) {
  * @param vmm The virtual memory manager to use, if nullptr a new one will be created
  */
 MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
-: MemoryChunkHandler(0,0),
-  m_virtual_memory_manager(vmm)
+: m_virtual_memory_manager(vmm)
 {
 
 	// Create the VMM if not provided

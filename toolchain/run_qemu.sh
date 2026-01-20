@@ -35,8 +35,8 @@ done
 GET_QEMU_CRASH_REASON=1
 if [ "$GET_QEMU_CRASH_REASON" -ne 0 ]; then
     GET_QEMU_CRASH_RESON=1
-    DEBUG_LOGS="-d guest_errors"
-#    DEBUG_LOGS="$DEBUG_LOGS,int"
+    DEBUG_LOGS="-D qemu.log -d guest_errors"
+    DEBUG_LOGS="$DEBUG_LOGS,int"
     DEBUG_LOGS="$DEBUG_LOGS,cpu_reset"
     DEBUG_LOGS="$DEBUG_LOGS,unimp"
 else

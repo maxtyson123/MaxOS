@@ -33,11 +33,13 @@ namespace MaxOS::KPI::processes {
 
 		WRITE_SLEEP_TIME,
 		WRITE_KILL,
+		WRITE_YIELD,
 	};
 
 	// General thread functions
 
 	uint64_t spawn_thread(uint64_t process_handle, void (* entry_point)(void*), void* args, size_t arg_amount);
+	void yield();
 
 	uint64_t get_thread(uint64_t tid);
 	void close_thread_handle(uint64_t handle);

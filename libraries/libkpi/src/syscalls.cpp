@@ -180,15 +180,7 @@ namespace MaxOS::KPI{
 	 */
 	size_t resource_write(uint64_t handle, const void* buffer, size_t size, size_t flags){
 
-		int response = 0;
-		while (true){
-			response = (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_WRITE, handle, (uint64_t)buffer, size, flags, 0, 0);
-			if(response == as_error(ResourceErrorBase::SHOULD_BLOCK))
-				yeild();
-			else
-				break;
-		}
-		return response;
+		return (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_WRITE, handle, (uint64_t)buffer, size, flags, 0, 0);
 	}
 
 	/**
@@ -201,21 +193,7 @@ namespace MaxOS::KPI{
 	 * @return The number of bytes successfully read
 	 */
 	size_t resource_read(uint64_t handle, void* buffer, size_t size, size_t flags){
-		int response = 0;
-		while (true){
-			response = (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_READ, handle, (uint64_t)buffer, size, flags, 0, 0);
-			if(response == as_error(ResourceErrorBase::SHOULD_BLOCK))
-				yeild();
-			else
-				break;
-		}
-		return response;
-	}
 
-	/**
-	 * @brief Yield the current thread's execution
-	 */
-	void yeild(){
-		make_syscall(SyscallType::YEILD, 0, 0, 0, 0, 0, 0);
+		return (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_WRITE, handle, (uint64_t)buffer, size, flags, 0, 0);
 	}
 }

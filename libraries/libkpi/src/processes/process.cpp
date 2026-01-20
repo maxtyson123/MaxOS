@@ -7,6 +7,7 @@
  */
 
 #include <processes/process.h>
+#include <processes/thread.h>
 
 using namespace MaxOS::KPI;
 using namespace MaxOS::KPI::processes;
@@ -43,7 +44,7 @@ uint64_t MaxOS::KPI::processes::exec_file(const char* path, const char** args, s
 
 		// If the process is killed it wont have a PID
 		if(stats.pid != 0)
-			yeild();
+			yield();
 
 		close_process_handle(result);
 		return stats.exit_code;
@@ -242,7 +243,6 @@ uint64_t MaxOS::KPI::processes::pid() {
 void MaxOS::KPI::processes::exit(uint64_t exit_code) {
 
 	kill_process_handle(get_current_process(), exit_code);
-	yeild();
 }
 
 /**

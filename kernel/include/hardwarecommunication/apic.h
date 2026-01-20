@@ -17,6 +17,11 @@
 
 namespace MaxOS::hardwarecommunication {
 
+	enum LAPICSendInterruptFlags {
+		SEND_ALL		= (1 << 0),
+		EXCLUDE_SELF	= (1 << 1),
+	};
+
 	/**
 	 * @class LocalAPIC
 	 * @brief Handles the local APIC for the current core
@@ -38,9 +43,11 @@ namespace MaxOS::hardwarecommunication {
 
 			[[nodiscard]] uint32_t id() const;
 			void send_eoi() const;
+			void send_icr(uint32_t icr_low, uint32_t icr_high, bool use_shorthand) const;
 
 			void send_init(uint8_t apic_id, bool assert) const;
 			void send_startup(uint8_t apic_id, uint8_t vector) const;
+			void send_interrupt(uint8_t apic_id, uint8_t vector, size_t flags) const;
 
 	};
 

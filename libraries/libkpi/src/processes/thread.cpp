@@ -26,6 +26,11 @@ uint64_t MaxOS::KPI::processes::spawn_thread(uint64_t process_handle, void (* en
 
 }
 
+void processes::yield() {
+
+	resource_write(get_current_thread(), 0,0, (size_t)ThreadFlags::WRITE_YIELD);
+}
+
 /**
  * @brief Gets a handle to a thread by its thread ID
  *
@@ -182,7 +187,6 @@ uint64_t MaxOS::KPI::processes::tid() {
 void MaxOS::KPI::processes::thread_exit(uint64_t exit_code) {
 
 	resource_write(get_current_thread(), &exit_code, sizeof(exit_code), (size_t)ThreadFlags::WRITE_KILL);
-	yeild();
 
 }
 
@@ -194,5 +198,4 @@ void MaxOS::KPI::processes::thread_exit(uint64_t exit_code) {
 void MaxOS::KPI::processes::sleep(uint64_t sleep_time_ms) {
 
 	resource_write(get_current_thread(), &sleep_time_ms, sizeof(sleep_time_ms), (size_t)ThreadFlags::WRITE_SLEEP_TIME);
-	yeild();
 }
