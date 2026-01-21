@@ -11,23 +11,10 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <resource.h>
 
 namespace MaxOS::KPI{
 
-	enum class ResourceType{
-		MESSAGE_ENDPOINT,
-		SHARED_MEMORY,
-		FILESYSTEM,
-		PROCESS,
-		THREAD,
-	};
-
-	enum class ResourceErrorBase{
-		SHOULD_BLOCK = 1,
-
-		_END // Use this to extend errors
-	};
-	int as_error(ResourceErrorBase code);
 
 	enum class SyscallType{
 		KLOG,
@@ -40,6 +27,8 @@ namespace MaxOS::KPI{
 		RESOURCE_CLOSE,
 		RESOURCE_WRITE,
 		RESOURCE_READ,
+
+		RESOURCE_REGISTRY_CREATE,
 	};
 
 	void* make_syscall(SyscallType type, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5);
@@ -54,6 +43,8 @@ namespace MaxOS::KPI{
 	void resource_close(uint64_t handle, size_t flags);
 	size_t resource_write(uint64_t handle, const void* buffer, size_t size, size_t flags);
 	size_t resource_read(uint64_t handle, void* buffer, size_t size, size_t flags);
+
+	bool resource_registry_create(char* name, size_t resource_id);
 }
 
 #endif //MAXOS_KPI_SYSCALLS_H

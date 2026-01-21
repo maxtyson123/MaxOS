@@ -12,7 +12,6 @@
 
 #include <processes/resources/resource.h>
 #include <processes/process.h>
-#include <memory/memorymanagement.h>
 #include <libkpi/include/processes/process.h>
 #include <libkpi/include/processes/thread.h>
 

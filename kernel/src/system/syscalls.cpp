@@ -39,6 +39,8 @@ SyscallManager::SyscallManager()
 	set_syscall_handler(SyscallType::RESOURCE_WRITE, syscall_resource_write);
 	set_syscall_handler(SyscallType::RESOURCE_READ, syscall_resource_read);
 
+	set_syscall_handler(SyscallType::RESOURCE_REGISTRY_CREATE, syscall_resource_registry_create);
+
 
 }
 
@@ -276,16 +278,17 @@ syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
  *
  * @todo resource type system
  *
- * @param args Arg0 = Resource Type
+ * @param args Arg0 = Name of the shared memory region Arg1 = Resource Type
  * @return 1 for success 0 for failure
  */
-syscall_args_t* SyscallManager::syscall_registry_create(syscall_args_t* args) {
+syscall_args_t* SyscallManager::syscall_resource_registry_create(syscall_args_t* args) {
 
 	// Parse params
-	auto type	= (size_t)args->arg0;
+	auto name	= (char*)args->arg0;
+	auto type	= (size_t)args->arg1;
 
 	// Create the registry
-	auto registery = new ServiceResourceRegistry(type);
+	auto registery = new BridgeResourceRegistry(name, type);
 
 	args->return_value = registery ? 1 : 0;
 	return args;

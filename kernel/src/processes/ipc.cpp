@@ -166,8 +166,8 @@ void SharedMessageEndpoint::send(const ipc_iovec_t *vec, size_t count) {
 int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
 
 	// Wait for a message
-	if(m_queue.empty())
-		return -1 * (int)resource_error_base_t::SHOULD_BLOCK;
+	while(m_queue.empty())
+		GlobalScheduler::current_thread()->yield();
 
 	// Read the message into the buffer
 	buffer_t* message = m_queue.pop_front();

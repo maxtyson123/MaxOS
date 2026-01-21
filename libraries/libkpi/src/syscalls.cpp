@@ -8,10 +8,6 @@
 
 namespace MaxOS::KPI{
 
-	int as_error(ResourceErrorBase code){
-		return -1 * (int)code;
-	}
-
 	/**
 	 * @brief Make a syscall
 	 *
@@ -195,5 +191,18 @@ namespace MaxOS::KPI{
 	size_t resource_read(uint64_t handle, void* buffer, size_t size, size_t flags){
 
 		return (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_WRITE, handle, (uint64_t)buffer, size, flags, 0, 0);
+	}
+
+	/**
+	 * @brief Create a new resource registry bridge to a resource server
+	 *
+	 * @param name The name of the shared memory region for kernel I/O
+	 * @param resource_id The id of the resource this server provides
+	 * @return True if it could be created, false otherwise
+	 */
+	bool resource_registry_create(char *name, size_t resource_id) {
+
+		return (bool)make_syscall(SyscallType::RESOURCE_REGISTRY_CREATE, name, resource_id,0,0,0,0);
+
 	}
 }

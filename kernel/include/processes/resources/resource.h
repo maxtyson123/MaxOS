@@ -16,36 +16,12 @@
 #include <common/logger.h>
 #include <syscalls.h>
 #include <mem.h>
+#include <libkpi/include/resource.h>
 
 namespace MaxOS::processes::resources {
 
-	typedef KPI::ResourceType resource_type_t;                    ///< Alias to make the libsyscore ResourceType accessible here
-	typedef KPI::ResourceErrorBase resource_error_base_t;         ///< Alias to make the libsyscore ResourceErrorBase accessible here
-
-	/**
-	 * @class Resource
-	 * @brief Represents a generic resource that can be opened, closed, read from and written to
-	 */
-	class Resource {
-
-		private:
-			string m_name;
-			resource_type_t m_type;
-
-		public:
-
-			Resource(const string& name, size_t flags, resource_type_t type);
-			virtual ~Resource();
-
-			string name();
-			resource_type_t type();
-
-			virtual void open(size_t flags);
-			virtual void close(size_t flags);
-
-			virtual int read(void* buffer, size_t size, size_t flags);
-			virtual int write(const void* buffer, size_t size, size_t flags);
-	};
+	typedef KPI::ResourceType resource_type_t;	///< Alias to make the libsyscore ResourceType accessible here
+	typedef KPI::Resource Resource;				///< Alias to make the libsyscore Resource accessible here
 
 	/**
 	 * @class BaseResourceRegistry

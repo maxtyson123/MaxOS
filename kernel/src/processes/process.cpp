@@ -118,8 +118,6 @@ void Thread::yield() {
 		cpu_status_t* next = GlobalScheduler::core_scheduler()->schedule_next(&execution_state);
 		InterruptManager::ForceInterruptReturn(next);
 	}
-
-	Logger::DEBUG() << "RET FROM YIELD\n";
 }
 
 /**
