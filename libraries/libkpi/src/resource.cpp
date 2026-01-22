@@ -102,10 +102,6 @@ ResourceServer::ResourceServer(string server_name, size_t resource_id)
 : m_server_name(server_name)
 {
 
-    // Cant use a kernel resource id
-    if (resource_id <= (size_t)ResourceType::_END)
-        return;
-
     // Create the shared memory
     string shared_name = (m_server_name + "_resource_server");
     m_shared_region = create_shared_memory(shared_name.c_str(), SERVICE_SHARED_MEM_SIZE);
@@ -201,6 +197,17 @@ void ResourceServer::advance_queue() {
 
 }
 
+/**
+ * @brief Get a reference to the message currently being processed by the resource server
+ *
+ * @return The message or nullptr if the server is not currently processing a message.
+ */
+service_resource_message_t * ResourceServer::current_processed_message() {
+
+    return m_current_processed_message;
+
+}
+
 void ResourceServer::process_message(service_resource_message_t *message) {
 
     // Parse the message
@@ -254,6 +261,8 @@ void ResourceServer::process_message(service_resource_message_t *message) {
 
             // Delegate
             resource->close(message->flags);
+            m_resource_map.erase(message->resource_id);
+            delete resource;
             break;
 
         }
@@ -282,6 +291,18 @@ void ResourceServer::process_message(service_resource_message_t *message) {
     message->state = ServiceMessageSlotState::RESPONSE;
 }
 
+void ResourceServer::process_next() {
+
+    // Try to get the message that has been waiting the longest
+    auto message = peek_front();
+    if (!message)
+        return;
+
+    // Handle the message
+    process_message(message);
+    advance_queue();
+}
+
 void ResourceServer::loop() {
 
     while (true) {
@@ -292,13 +313,7 @@ void ResourceServer::loop() {
             continue;
         }
 
-        // Proccess the message that has been waiting the longest
-        auto message = peek_front();
-        process_message(message);
-
-        // Move to the next message
-        advance_queue();
-
+        process_next();
     }
 }
 

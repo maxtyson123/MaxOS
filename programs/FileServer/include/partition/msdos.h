@@ -6,17 +6,17 @@
  * @author Max Tyson
  */
 
-#ifndef MAXOS_FILESYSTEM_PARTITION_MSDOS_H
-#define MAXOS_FILESYSTEM_PARTITION_MSDOS_H
+#ifndef FILESERVER_PARTITION_MSDOS_H
+#define FILESERVER_PARTITION_MSDOS_H
 
 #include <cstdint>
-#include <drivers/disk/disk.h>
-#include <filesystem/format/fat32.h>
-#include <filesystem/format/ext2.h>
-#include <filesystem/vfs.h>
+#include <libdriver/include/generic/disk.h>
+#include <format/fat32.h>
+#include <format/ext2.h>
+#include <vfs.h>
 
 
-namespace MaxOS::filesystem::partition {
+namespace FileServer::partition {
 
 	/// Credit: http://www.osdever.net/documents/pdf/partitiontypes.pdf
 	enum class PartitionType {
@@ -349,9 +349,9 @@ namespace MaxOS::filesystem::partition {
 	 */
 	class MSDOSPartition {
 		public:
-			static void mount_partitions(drivers::disk::Disk* disk);
+			static void mount_partitions(LibDriver::generic::Disk* disk);
 	};
 }
 
 
-#endif //MAXOS_FILESYSTEM_PARTITION_MSDOS_H
+#endif //FILESERVER_PARTITION_MSDOS_H

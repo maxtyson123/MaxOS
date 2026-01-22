@@ -6,12 +6,12 @@
  * @author Max Tyson
  */
 
-#include <filesystem/filesystem.h>
-#include <common/logger.h>
+#include <filesystem.h>
 
+using namespace FileServer;
 using namespace MaxOS;
-using namespace MaxOS::filesystem;
 using namespace MaxOS::common;
+using namespace LibFS;
 
 File::File() = default;
 
@@ -32,7 +32,7 @@ void File::write(buffer_t* data, size_t amount) {
  * @param data The byte buffer to read into
  * @param amount The amount of data to read
  */
-void File::read(common::buffer_t* data, size_t amount) {
+void File::read(buffer_t* data, size_t amount) {
 }
 
 /**
@@ -121,7 +121,7 @@ void Directory::read_from_disk() {
  *
  * @return A list of all the files in the directory
  */
-common::Vector<File*> Directory::files() {
+Vector<File*> Directory::files() {
 	return m_files;
 }
 
@@ -165,7 +165,7 @@ void Directory::remove_file(const string &name) {
  *
  * @return The subdirectories in the directory
  */
-common::Vector<Directory*> Directory::subdirectories() {
+Vector<Directory*> Directory::subdirectories() {
 	return m_subdirectories;
 }
 

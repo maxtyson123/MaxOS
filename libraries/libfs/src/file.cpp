@@ -2,10 +2,12 @@
 // Created by 98max on 9/1/2025.
 //
 
-#include <filesystem/file.h>
+#include <file.h>
 
+using namespace MaxOS;
+using namespace MaxOS::KPI;
 
-namespace MaxOS::KPI::filesystem {
+namespace LibFS {
 
 	uint64_t open_file(const char* path) {
 		return resource_open(ResourceType::FILESYSTEM, path, 0);
@@ -33,7 +35,7 @@ namespace MaxOS::KPI::filesystem {
 
 	void rename_file(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, strlen(name), (size_t) FileFlags::WRITE_NAME);
+		resource_write(handle, name, KPI::strlen(name), (size_t) FileFlags::WRITE_NAME);
 	}
 
 	void seek_file(uint64_t handle, size_t position, SeekType seek_type) {

@@ -2,16 +2,17 @@
 // Created by 98max on 9/1/2025.
 //
 
-#ifndef MAXOS_KPI_FILESYSTEM_DIRECTORY_H
-#define MAXOS_KPI_FILESYSTEM_DIRECTORY_H
+#ifndef LIBFS_DIRECTORY_H
+#define LIBFS_DIRECTORY_H
 
 #include <cstdint>
 #include <cstddef>
 #include <common.h>
 #include <syscalls.h>
 
+///@todo Moving files
 
-namespace MaxOS::KPI::filesystem {
+namespace LibFS {
 
 	enum class DirectoryFlags {
 		READ_ENTRIES,
@@ -44,4 +45,4 @@ namespace MaxOS::KPI::filesystem {
 	void remove_directory(uint64_t handle, const char* name);
 }
 
-#endif //MAXOS_KPI_FILESYSTEM_DIRECTORY_H
+#endif //LIBFS_DIRECTORY_H

@@ -6,11 +6,11 @@
  * @author Max Tyson
  */
 
-#include <filesystem/path.h>
+#include <path.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
-using namespace MaxOS::filesystem;
+using namespace FileServer;
 
 /**
  * @brief Check if a path is valid

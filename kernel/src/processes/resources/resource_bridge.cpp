@@ -113,6 +113,7 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
 
     // Construct the message
     auto slot = aquire_slot();
+    slot -> sending_pid = GlobalScheduler::current_process()->pid();
     slot -> resource_id = id;
     slot -> flags       = flags;
     slot -> command     = command;

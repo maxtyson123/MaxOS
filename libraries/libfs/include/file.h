@@ -3,16 +3,15 @@
 //
 
 
-#ifndef MAXOS_KPI_FILESYSTEM_FILE_H
-#define MAXOS_KPI_FILESYSTEM_FILE_H
+#ifndef LIBFS_FILE_H
+#define LIBFS_FILE_H
 
 #include <cstdint>
 #include <cstddef>
 #include <common.h>
 #include <syscalls.h>
 
-
-namespace MaxOS::KPI::filesystem {
+namespace LibFS {
 
 	enum class FileFlags {
 		DEFAULT,
@@ -44,4 +43,4 @@ namespace MaxOS::KPI::filesystem {
 }
 
 
-#endif //MAXOS_KPI_FILESYSTEM_FILE_H
+#endif //LIBFS_FILE_H

@@ -6,19 +6,19 @@
  * @author Max Tyson
  */
 
-#ifndef MAXOS_FILESYSTEM_EXT2_H
-#define MAXOS_FILESYSTEM_EXT2_H
+#ifndef FILESERVER_FORMAT_EXT2_H
+#define FILESERVER_FORMAT_EXT2_H
 
 #include <cstdint>
 #include <spinlock.h>
 #include <macros.h>
-#include <drivers/disk/disk.h>
-#include <drivers/clock/clock.h>
-#include <filesystem/filesystem.h>
-#include <memory/memoryIO.h>
+#include <filesystem.h>
+#include <libdriver/include/generic/disk.h>
 
 
-namespace MaxOS::filesystem::format::ext2 {
+namespace FileServer::format::ext2 {
+
+	namespace common = MaxOS::common;
 
 	/**
 	 * @struct SuperBlock
@@ -330,10 +330,10 @@ namespace MaxOS::filesystem::format::ext2 {
 			void write_back_superblock();
 
 		public:
-			Ext2Volume(drivers::disk::Disk* disk, lba_t partition_offset);
+			Ext2Volume(LibDriver::generic::Disk* disk, lba_t partition_offset);
 			~Ext2Volume();
 
-			drivers::disk::Disk* disk;                          ///< The disk that this volume is on
+			LibDriver::generic::Disk* disk;                     ///< The disk that this volume is on
 			lba_t partition_offset;                             ///< How far into the disk this partition starts
 
 			superblock_t superblock;                            ///< The superblock of the ext2 filesystem
@@ -376,15 +376,15 @@ namespace MaxOS::filesystem::format::ext2 {
 
 			void parse_indirect(uint32_t level, uint32_t block, common::buffer_t* buffer);
 			void write_indirect(uint32_t level, uint32_t& block, size_t& index);
-			void store_blocks(const common::Vector<uint32_t>& blocks);
+			void store_blocks(const MaxOS::common::Vector<uint32_t>& blocks);
 
 		public:
 			InodeHandler(Ext2Volume* volume, uint32_t inode);
 			~InodeHandler();
 
-			uint32_t inode_number;                      ///< The index of the inode
-			inode_t inode;                              ///< The inode metadata for this file/directory
-			common::Vector<uint32_t> block_cache;       ///< All the blocks used by this inode
+			uint32_t inode_number;							///< The index of the inode
+			inode_t inode;									///< The inode metadata for this file/directory
+			MaxOS::common::Vector<uint32_t> block_cache;    ///< All the blocks used by this inode
 
 			[[nodiscard]] size_t size() const;
 			void set_size(size_t size);
@@ -458,11 +458,11 @@ namespace MaxOS::filesystem::format::ext2 {
 			Ext2Volume m_volume;
 
 		public:
-			Ext2FileSystem(drivers::disk::Disk* disk, uint32_t partition_offset);
+			Ext2FileSystem(LibDriver::generic::Disk* disk, uint32_t partition_offset);
 			~Ext2FileSystem() final;
 	};
 
 }
 
 
-#endif // MAXOS_FILESYSTEM_EXT2_H
+#endif // FILESERVER_FORMAT_EXT2_H

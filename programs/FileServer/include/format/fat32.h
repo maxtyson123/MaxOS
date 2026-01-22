@@ -10,16 +10,16 @@
  * @todo Implment: create/delete/rename files & directories
  */
 
-#ifndef MAXOS_FILESYSTEM_FAT32_H
-#define MAXOS_FILESYSTEM_FAT32_H
+#ifndef FILESERVER_FORMAT_FAT32_H
+#define FILESERVER_FORMAT_FAT32_H
 
 #include <cstdint>
 #include <macros.h>
-#include <drivers/disk/disk.h>
-#include <filesystem/filesystem.h>
+#include <libdriver/include/generic/disk.h>
+#include <filesystem.h>
 
 
-namespace MaxOS::filesystem::format {
+namespace FileServer::format {
 
 	/**
 	 * @struct BiosParameterBlock32
@@ -170,7 +170,7 @@ namespace MaxOS::filesystem::format {
 	 */
 	class Fat32Volume {
 		public:
-			Fat32Volume(drivers::disk::Disk* disk, lba_t partition_offset);
+			Fat32Volume(LibDriver::generic::Disk* disk, lba_t partition_offset);
 			~Fat32Volume();
 
 			bpb32_t bpb = { };                   ///< The BIOS Parameter Block for the FAT32 volume
@@ -184,7 +184,7 @@ namespace MaxOS::filesystem::format {
 			lba_t data_lba;                     ///< The starting LBA of the data region
 			lba_t root_lba;                     ///< The starting LBA of the root directory
 
-			drivers::disk::Disk* disk;          ///< The disk that this volume is on
+			LibDriver::generic::Disk* disk;          ///< The disk that this volume is on
 
 			[[nodiscard]] uint32_t next_cluster(uint32_t cluster) const;
 			uint32_t set_next_cluster(uint32_t cluster, uint32_t next_cluster) const;
@@ -217,8 +217,8 @@ namespace MaxOS::filesystem::format {
 			Fat32File(Fat32Volume* volume, Fat32Directory* parent, dir_entry_t* info, const string& name);
 			~Fat32File() final;
 
-			void write(common::buffer_t* data, size_t amount) final;
-			void read(common::buffer_t* data, size_t amount) final;
+			void write(MaxOS::common::buffer_t* data, size_t amount) final;
+			void read(MaxOS::common::buffer_t* data, size_t amount) final;
 			void flush() final;
 
 			/**
@@ -242,7 +242,7 @@ namespace MaxOS::filesystem::format {
 			lba_t m_last_cluster = 0;
 			size_t m_current_cluster_length = 0;
 
-			common::Vector<dir_entry_t> m_entries;
+			MaxOS::common::Vector<dir_entry_t> m_entries;
 
 			dir_entry_t* create_entry(const string& name, bool is_directory);
 			void remove_entry(lba_t cluster);
@@ -252,7 +252,7 @@ namespace MaxOS::filesystem::format {
 			int64_t find_free_entries(size_t amount);
 			int expand_directory(size_t amount);
 
-			static common::Vector<long_file_name_entry_t> to_long_filenames(string name);
+			static MaxOS::common::Vector<long_file_name_entry_t> to_long_filenames(string name);
 			static string parse_long_filename(long_file_name_entry_t* entry, const string& current);
 
 		protected:
@@ -288,11 +288,11 @@ namespace MaxOS::filesystem::format {
 			Fat32Volume m_volume;
 
 		public:
-			Fat32FileSystem(drivers::disk::Disk* disk, uint32_t partition_offset);
+			Fat32FileSystem(LibDriver::generic::Disk* disk, uint32_t partition_offset);
 			~Fat32FileSystem() final;
 	};
 
 }
 
 
-#endif //MAXOS_FILESYSTEM_FAT32_H
+#endif //FILESERVER_FORMAT_FAT32_H

@@ -316,7 +316,7 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 				uint32_t bit = (start_column + i) % ROW_BITS;
 
 				// Check bounds
-				ASSERT(index >= m_total_entries || bit >= ROW_BITS, "Index out of bounds\n");
+				ASSERT(index < m_total_entries && bit < ROW_BITS, "Index out of bounds\n");
 
 				// Mark the bit as used
 				m_bit_map[index] |= (1ULL << bit);

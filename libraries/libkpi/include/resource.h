@@ -81,6 +81,7 @@ namespace MaxOS::KPI {
      * @brief Alais for BridgeResourceMessage
      */
     typedef struct ServiceResourceMessage {
+        uint64_t sending_pid;
         size_t resource_id;
         size_t flags;
         ServiceResourceCommand command;
@@ -109,6 +110,12 @@ namespace MaxOS::KPI {
     constexpr size_t MESSAGE_SIZE				= sizeof(service_message_ring_t);	///< How much space to allocate for the message region
     constexpr size_t SERVICE_SHARED_MEM_SIZE	= MESSAGE_SIZE + DATA_SIZE;			///< Total space required for the shared memory
 
+    /**
+     * @class ResourceServer
+     * @brief Manages resources and allows for this process to provide resources to other processes
+     *
+     * @warning Single threaded, do not call resource server functions concurrently
+     */
     class ResourceServer {
 
         private:
@@ -116,9 +123,11 @@ namespace MaxOS::KPI {
             string m_server_name;
 
             service_message_ring_t* m_message_ring = nullptr;
+            service_resource_message_t* m_current_processed_message;
             void* m_data_region;
 
             common::Map<uint64_t, Resource*> m_resource_map;
+
 
         public:
             ResourceServer(string server_name, size_t resource_id);
@@ -129,7 +138,9 @@ namespace MaxOS::KPI {
             service_resource_message_t* dequeue_front();
             void advance_queue();
 
+            service_resource_message_t* current_processed_message();
             void process_message(service_resource_message_t* message);
+            void process_next();
             void loop();
 
             virtual Resource* 	get_resource(const string& name);

@@ -6,14 +6,14 @@
  * @author Max Tyson
  */
 
-#include <filesystem/partition/msdos.h>
+#include <partition/msdos.h>
 
-using namespace MaxOS;
-using namespace MaxOS::common;
-using namespace MaxOS::filesystem;
-using namespace MaxOS::filesystem::partition;
-using namespace MaxOS::filesystem::format;
-using namespace MaxOS::drivers::disk;
+using namespace FileServer;
+using namespace FileServer::format;
+using namespace FileServer::format::ext2;
+using namespace FileServer::partition;
+using namespace LibDriver::generic;
+using namespace MaxOS::KPI;
 
 /**
  * @brief read the partition table of a given hard disk
@@ -29,7 +29,7 @@ void MSDOSPartition::mount_partitions(Disk* disk) {
 
 	// Check if the magic number is correct
 	if (mbr.magic != 0xAA55) {
-		Logger::WARNING() << "Could not find valid MBR on disk 0x" << (uint64_t) disk << "\n";
+		klog("Could not find valid MBR on disk 0x%x\n", disk);
 		return;
 	}
 
@@ -43,27 +43,22 @@ void MSDOSPartition::mount_partitions(Disk* disk) {
 		if (entry.type == 0)
 			continue;
 
-		Logger::DEBUG() << "Partition 0x" << (uint64_t) entry.type << " at 0x" << (uint64_t) entry.start_LBA << ": ";
-
 		// Create a file system for the partition
 		switch ((PartitionType) entry.type) {
 			case PartitionType::EMPTY:
-				Logger::Out() << "Empty partition\n";
+				klog("Empty partition\n");
 				break;
 
 			case PartitionType::FAT32:
-				Logger::Out() << "FAT32 partition\n";
 				vfs->mount_filesystem(new Fat32FileSystem(disk, entry.start_LBA));
 				break;
 
 			case PartitionType::LINUX_EXT2:
-				Logger::Out() << "EXT2 partition\n";
 				vfs->mount_filesystem(new ext2::Ext2FileSystem(disk, entry.start_LBA));
 				break;
 
 			default:
-				Logger::Out() << "Unknown or unimplemented partition type: 0x" << (uint64_t) entry.type << "\n";
-
+				klog("Unknown or unimplemented partition type: 0x%x\n", (uint64_t) entry.type );
 		}
 	}
 }

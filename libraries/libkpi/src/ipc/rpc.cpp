@@ -476,6 +476,55 @@ namespace MaxOS::KPI::ipc {
 	}
 
 	/**
+	 * @brief Attempt to handle the next RPC message on the endpoint
+	 *
+	 * @param endpoint The message queue endpoint to handle
+	 * @param block If true yield the thread until a message is queued.
+	 * @return True if a message was received and handled (either successfully or unsuccessfully) , False if there were no messages to handle
+	 *
+	 * @todo validation
+	 */
+	bool rpc_server_process_next(uint64_t endpoint, bool block) {
+
+		// Read the message
+		ArgList message;
+		uint8_t buffer[MAX_SERIALIZED_SIZE];
+		size_t size = read_message(endpoint, buffer, sizeof(buffer));
+
+		// No messages
+		if (!block && size == 0)
+			return false;
+
+		// Load the message header
+		message.deserialise(buffer, size);
+		auto header = (rpc_header_t*) message.get_blob(0);
+
+		// Get the function and response endpoint
+		function_entry_t function_entry = find_function(message.get_string(1).c_str());
+		uint64_t response_endpoint = open_endpoint(message.get_string(2).c_str());
+
+		// Validate request
+		if (response_endpoint == 0 || function_entry.function == nullptr)
+			return true;
+
+		// Extract the arguments
+		ArgList args;
+		args.append_args(message, 3);
+
+		// Delegate to the function
+		ArgList return_values;
+		function_entry.function(&args, &return_values);
+
+		// Send the response
+		if (!(header->flags & (size_t) RPCMEssageFlags::ONE_WAY)) {
+			size = return_values.serialise(buffer, sizeof(buffer));
+			send_message(response_endpoint, (void*) buffer, size);
+		}
+
+		return true;
+	}
+
+	/**
 	 * @brief Starts the RPC server loop to delegate incoming RPC calls to registered functions.
 	 *
 	 * @param server The name of the server
@@ -490,40 +539,26 @@ namespace MaxOS::KPI::ipc {
 		if (endpoint == 0)
 			return;
 
+		rpc_server_loop(endpoint);
+	}
+
+	/**
+	 * @brief Starts the RPC server loop to delegate incoming RPC calls to registered functions.
+	 *
+	 * @param endpoint The server endpoint to loop on
+	 *
+	 * @note Will yield the thread when no messages are available.
+	 * @todo Implement loading from shared mem
+	 */
+	[[noreturn]] void rpc_server_loop(uint64_t endpoint) {
+
+		// Validate the endpoint
+		if (endpoint == 0)
+			return;
+
 		// Server loop
-		while (true) {
-
-			// Read the message
-			ArgList message;
-			uint8_t buffer[MAX_SERIALIZED_SIZE];
-			size_t size = read_message(endpoint, buffer, sizeof(buffer));
-			message.deserialise(buffer, size);
-
-			// Load the message header
-			auto header = (rpc_header_t*) message.get_blob(0);
-
-			// Get the function and response endpoint
-			function_entry_t function_entry = find_function(message.get_string(1).c_str());
-			uint64_t response_endpoint = open_endpoint(message.get_string(2).c_str());
-
-			// Validate request
-			if (response_endpoint == 0 || function_entry.function == nullptr)
-				continue;
-
-			// Extract the arguments
-			ArgList args;
-			args.append_args(message, 3);
-
-			// Delegate to the function
-			ArgList return_values;
-			function_entry.function(&args, &return_values);
-
-			// Send the response
-			if (!(header->flags & (size_t) RPCMEssageFlags::ONE_WAY)) {
-				size = return_values.serialise(buffer, sizeof(buffer));
-				send_message(response_endpoint, (void*) buffer, size);
-			}
-		}
+		while (true)
+			rpc_server_process_next(endpoint, true);
 	}
 
 	/**

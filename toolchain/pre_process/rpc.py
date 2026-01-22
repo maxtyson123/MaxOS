@@ -743,7 +743,7 @@ def generate_server_header(service: RpcService, output_path: Path, include_prefi
         f"#include <{include_prefix}{service.name}_types.h>",
         "using mstring = MaxOS::string;",
         "",
-        f"void register_{service.name}_functions();",
+        f"uint64_t register_{service.name}();",
         f"void run_{service.name}();",
         ""
     ])
@@ -828,16 +828,17 @@ def generate_server_source(service: RpcService, output_path: Path, include_prefi
         lines.append("")
 
     # Server registerer
-    lines.append(f"void register_{service.name}_functions() {{")
+    lines.append(f"uint64_t register_{service.name}() {{")
     for function in service.functions:
         lines.append(f'    register_function("{function.name}", {function.name}_wrapper);')
+    lines.append(f'')
+    lines.append(f'    return create_endpoint("{service.name}");')
     lines.append("}")
     lines.append("")
 
     # Server loop
     lines.append(f"void run_{service.name}() {{")
-    lines.append(f"    register_{service.name}_functions();")
-    lines.append(f'    rpc_server_loop("{service.name}");')
+    lines.append(f'    rpc_server_loop(register_{service.name}());')
     lines.append("}")
 
 

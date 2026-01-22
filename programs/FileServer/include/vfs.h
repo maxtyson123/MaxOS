@@ -7,26 +7,31 @@
  * @author Max Tyson
  */
 
-#ifndef MAXOS_FILESYSTEM_VFS_H
-#define MAXOS_FILESYSTEM_VFS_H
+#ifndef FILESERVER_VFS_H
+#define FILESERVER_VFS_H
 
 #include <map.h>
 #include <pair.h>
-#include <filesystem/filesystem.h>
+#include <filesystem.h>
 
 
-namespace MaxOS::filesystem {
+namespace FileServer {
 
 	/**
 	 * @class VirtualFileSystem
 	 * @brief Combines all the filesystems across the partitions on each disk into a single filesystems and exposes
 	 * a single API to interact with them
+	 *
+	 * @todo mulithread safe cache
 	 */
 	class VirtualFileSystem {
 
 		private:
-			common::Map<FileSystem*, string> filesystems;
+			MaxOS::common::Map<FileSystem*, string> filesystems;
 			inline static VirtualFileSystem* s_current_file_system = nullptr;
+
+			MaxOS::common::Map<string, Directory*>	m_directory_cache;
+			MaxOS::common::Map<string, File*>		m_file_cache;
 
 		public:
 			VirtualFileSystem();
@@ -65,8 +70,12 @@ namespace MaxOS::filesystem {
 
 			void delete_file(const string& path);
 			static void delete_file(Directory* parent, const string& name);
+
+		    void update_cache(string old_path, string new_path);
+			void remove_cache(string old_path);
+
 	};
 }
 
 
-#endif //MAXOS_FILESYSTEM_VFS_H
+#endif //FILESERVER_VFS_H

@@ -6,15 +6,14 @@
  * @author Max Tyson
  */
 
-#include <filesystem/format/ext2.h>
+#include <format/ext2.h>
 
 using namespace MaxOS;
+using namespace FileServer;
 using namespace MaxOS::common;
-using namespace MaxOS::filesystem;
-using namespace MaxOS::filesystem::format::ext2;
-using namespace MaxOS::drivers;
-using namespace MaxOS::drivers::disk;
-using namespace MaxOS::drivers::clock;
+using namespace FileServer::format::ext2;
+using namespace LibDriver;
+using namespace LibDriver::generic;
 
 /**
  * @brief Construct a new Ext2 Volume object, reads the superblock and block group descriptors
@@ -24,7 +23,7 @@ using namespace MaxOS::drivers::clock;
  *
  * @todo Should lock per file and not expose volume lock
  */
-Ext2Volume::Ext2Volume(drivers::disk::Disk* disk, lba_t partition_offset)
+Ext2Volume::Ext2Volume(Disk* disk, lba_t partition_offset)
 : disk(disk),
   partition_offset(partition_offset),
   superblock({})
@@ -412,8 +411,8 @@ uint32_t Ext2Volume::create_inode(bool is_directory) {
 
 	// Create the inode
 	inode_t inode { };
-	inode.creation_time = time_to_epoch(Clock::active_clock()->get_time());
-	inode.last_modification_time = time_to_epoch(Clock::active_clock()->get_time());
+	//TODO: CLOCK inode.creation_time = time_to_epoch(Clock::active_clock()->get_time());
+	//TODO: CLOCK inode.last_modification_time = time_to_epoch(Clock::active_clock()->get_time());
 	inode.block_pointers[0] = allocate_block();
 	inode.hard_links = is_directory ? 2 : 1;
 	inode.type = ((uint16_t) (is_directory ? InodeType::DIRECTORY : InodeType::FILE) >> 12) & 0xF;
@@ -628,8 +627,6 @@ void InodeHandler::write_indirect(uint32_t level, uint32_t& block, size_t& index
  */
 void InodeHandler::store_blocks(Vector<uint32_t> const& blocks) {
 
-	Logger::DEBUG() << "STORING BLOCKS\n";
-
 	// Store in cache
 	for(auto block : blocks)
 		block_cache.push_back(block);
@@ -754,7 +751,7 @@ void Ext2File::write(buffer_t* data, size_t amount) {
 		m_size = m_inode.grow((m_offset + amount) - m_size, false);
 
 	// Save the updated metadata
-	m_inode.inode.last_modification_time = time_to_epoch(Clock::active_clock()->get_time());
+	//TODO: CLOCK m_inode.inode.last_modification_time = time_to_epoch(Clock::active_clock()->get_time());
 	m_inode.save();
 
 	// Convert bytes to blocks
@@ -890,7 +887,7 @@ void Ext2Directory::parse_block(buffer_t* buffer) {
 				break;
 
 			default:
-				Logger::WARNING() << "Unknown entry type: " << entry->type << "\n";
+				KPI::klog("Unknown entry type: %d \n", entry->type);
 
 		}
 
@@ -1013,7 +1010,7 @@ void Ext2Directory::write_entries() {
 
 	// Save the updated metadata
 	m_inode.set_size(blocks_required * block_size);
-	m_inode.inode.last_modification_time = time_to_epoch(Clock::active_clock()->get_time());
+	//TODO: CLOCK m_inode.inode.last_modification_time = time_to_epoch(Clock::active_clock()->get_time());
 	m_inode.save();
 
 	// Write each entry

@@ -6,23 +6,25 @@
  * @author Max Tyson
  */
 
-#ifndef MAXOS_FILESYSTEM_FILESYSTEM_H
-#define MAXOS_FILESYSTEM_FILESYSTEM_H
+#ifndef FILESERVER_FILESYSTEM_H
+#define FILESERVER_FILESYSTEM_H
 
 #include <cstdint>
 #include <cstddef>
 #include <string.h>
 #include <vector.h>
 #include <buffer.h>
-#include <filesystem/path.h>
-#include <kpi/include/filesystem/file.h>
+#include <path.h>
+#include <libfs/include/file.h>
+#include <time.h>
 
 
-namespace MaxOS::filesystem {
+namespace FileServer {
 
-
+	typedef MaxOS::string string;
+	typedef MaxOS::common::buffer_t buffer_t;
 	typedef uint32_t lba_t;                             ///< Logical Block Addressing type
-	typedef MaxOS::KPI::filesystem::SeekType SeekType;     ///< Seek type for file operations
+	typedef LibFS::SeekType SeekType;     ///< Seek type for file operations
 
 	/**
 	 * @class File
@@ -39,8 +41,8 @@ namespace MaxOS::filesystem {
 			File();
 			virtual ~File();
 
-			virtual void write(common::buffer_t* data, size_t size);
-			virtual void read(common::buffer_t* data, size_t size);
+			virtual void write(buffer_t* data, size_t size);
+			virtual void read(buffer_t* data, size_t size);
 			virtual void flush();
 
 			void seek(SeekType seek_type, size_t offset);
@@ -56,8 +58,8 @@ namespace MaxOS::filesystem {
 	 */
 	class Directory {
 		protected:
-			common::Vector<File*> m_files;                  ///< The files in this directory
-			common::Vector<Directory*> m_subdirectories;    ///< The subdirectories in this directory
+			MaxOS::common::Vector<File*> m_files;                  ///< The files in this directory
+			MaxOS::common::Vector<Directory*> m_subdirectories;    ///< The subdirectories in this directory
 
 			string m_name;                                  ///< The name of this directory
 
@@ -67,8 +69,8 @@ namespace MaxOS::filesystem {
 
 			virtual void read_from_disk();
 
-			common::Vector<File*> files();
-			common::Vector<Directory*> subdirectories();
+			MaxOS::common::Vector<File*> files();
+			MaxOS::common::Vector<Directory*> subdirectories();
 
 			File* open_file(const string& name);
 			Directory* open_subdirectory(const string& name);
@@ -110,4 +112,4 @@ namespace MaxOS::filesystem {
 }
 
 
-#endif //MAXOS_FILESYSTEM_FILESYSTEM_H
+#endif //FILESERVER_FILESYSTEM_H

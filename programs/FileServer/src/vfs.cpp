@@ -6,11 +6,10 @@
  * @author Max Tyson
  */
 
-#include <filesystem/vfs.h>
-#include <common/logger.h>
+#include <vfs.h>
 
 using namespace MaxOS;
-using namespace MaxOS::filesystem;
+using namespace FileServer;
 using namespace MaxOS::common;
 
 /**
@@ -55,10 +54,8 @@ VirtualFileSystem* VirtualFileSystem::current_file_system() {
 void VirtualFileSystem::mount_filesystem(FileSystem* filesystem) {
 
 	// Check if the filesystem is already mounted
-	if (filesystems.find(filesystem) != filesystems.end()) {
-		Logger::WARNING() << "Filesystem already mounted\n";
+	if (filesystems.find(filesystem) != filesystems.end())
 		return;
-	}
 
 	// Get the mount point for the filesystem
 	string mount_point = "/filesystem_" + filesystems.size();
@@ -80,10 +77,8 @@ void VirtualFileSystem::mount_filesystem(FileSystem* filesystem) {
 void VirtualFileSystem::mount_filesystem(FileSystem* filesystem, const string& mount_point) {
 
 	// Check if the filesystem is already mounted
-	if (filesystems.find(filesystem) != filesystems.end()) {
-		Logger::WARNING() << "Filesystem already mounted at " << mount_point << "\n";
+	if (filesystems.find(filesystem) != filesystems.end())
 		return;
-	}
 
 	// Add the filesystem to the map
 	filesystems.insert(filesystem, mount_point);
@@ -119,8 +114,6 @@ void VirtualFileSystem::unmount_filesystem(const string& mount_point) {
 		if (filesystem.second == mount_point)
 			return unmount_filesystem(filesystem.first);
 
-	// Filesystem not found
-	Logger::WARNING() << "Filesystem not found at " << mount_point << "\n";
 }
 
 /**
@@ -248,6 +241,11 @@ Directory* VirtualFileSystem::open_directory(const string &path) {
 	if (!Path::valid(path))
 		return nullptr;
 
+	// Check if the directory has been cached
+	auto cache = m_directory_cache.find(path);
+	if (cache != m_directory_cache.end())
+		return cache->second;
+
 	// Try to find the filesystem that is responsible for the path
 	FileSystem* fs = find_filesystem(path);
 	if (!fs)
@@ -350,6 +348,9 @@ void VirtualFileSystem::delete_directory(string path) {
 	// Delete the directory
 	string directory_name = Path::file_name(path);
 	delete_directory(parent_directory, directory_name);
+
+	// Remove from the cache
+	remove_cache(path);
 }
 
 /**
@@ -462,6 +463,11 @@ File* VirtualFileSystem::open_file(const string &path, size_t offset) {
 	if (!Path::valid(path))
 		return nullptr;
 
+	// Check if the file is cached
+	auto file_cache = m_file_cache.find(path);
+	if (file_cache != m_file_cache.end())
+		return file_cache->second;
+
 	// Open the directory
 	Directory* directory = open_directory(path);
 	if (!directory)
@@ -510,6 +516,9 @@ void VirtualFileSystem::delete_file(const string &path) {
 	// Delete the file
 	string file_name = Path::file_name(path);
 	delete_file(directory, file_name);
+
+	// Remove from the cache
+	remove_cache(path);
 }
 
 /**
@@ -522,4 +531,44 @@ void VirtualFileSystem::delete_file(Directory* parent, string const &name) {
 
 	// Delete the file
 	parent->remove_file(name);
+}
+
+/**
+ * @brief Update a directory/file cache entry
+ *
+ * @param old_path The old entry name
+ * @param new_path The new entry name
+ */
+void VirtualFileSystem::update_cache(string old_path, string new_path) {
+
+	if (Path::is_file(old_path)) {
+
+		// Get the item in the cache
+		auto cache = m_file_cache.find(old_path);
+		if (cache == m_file_cache.end())
+			return;
+
+		// Update the cache
+		m_file_cache.insert(new_path, cache->second);
+		m_file_cache.erase(old_path);
+
+	} else {
+
+		// Get the item in the cache
+		auto cache = m_directory_cache.find(old_path);
+		if (cache == m_directory_cache.end())
+			return;
+
+		// Update the cache
+		m_directory_cache.insert(new_path, cache->second);
+		m_directory_cache.erase(old_path);
+	}
+}
+
+void VirtualFileSystem::remove_cache(string old_path) {
+
+	if (Path::is_file(old_path))
+		m_file_cache.erase(old_path);
+	else
+		m_directory_cache.erase(old_path);
 }

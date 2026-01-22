@@ -2,10 +2,12 @@
 // Created by 98max on 9/1/2025.
 //
 
-#include <filesystem/directory.h>
+#include <directory.h>
 
+using namespace MaxOS;
+using namespace MaxOS::KPI;
 
-namespace MaxOS::KPI::filesystem {
+namespace LibFS {
 
 
 	/**
@@ -25,7 +27,7 @@ namespace MaxOS::KPI::filesystem {
 	 * @param name What to rename the directory to
 	 */
 	void rename_directory(uint64_t handle, const char* name) {
-		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_NAME);
+		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_NAME);
 	}
 
 	/**
@@ -67,7 +69,7 @@ namespace MaxOS::KPI::filesystem {
 	 */
 	void new_file(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_NEW_FILE);
+		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_NEW_FILE);
 	}
 
 	/**
@@ -78,7 +80,7 @@ namespace MaxOS::KPI::filesystem {
 	 */
 	void new_directory(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_NEW_DIR);
+		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_NEW_DIR);
 	}
 
 	/**
@@ -89,7 +91,7 @@ namespace MaxOS::KPI::filesystem {
 	 */
 	void remove_file(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_FILE);
+		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_FILE);
 	}
 
 	/**
@@ -100,7 +102,7 @@ namespace MaxOS::KPI::filesystem {
 	 */
 	void remove_directory(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_DIR);
+		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_DIR);
 	}
 
 }

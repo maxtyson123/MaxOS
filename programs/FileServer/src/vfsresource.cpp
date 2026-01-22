@@ -6,13 +6,13 @@
  * @author Max Tyson
  */
 
-#include <filesystem/vfsresource.h>
+#include <vfsresource.h>
 
 using namespace MaxOS;
-using namespace MaxOS::filesystem;
-using namespace MaxOS::processes;
+using namespace FileServer;
 using namespace MaxOS::common;
-using namespace MaxOS::KPI::filesystem;
+using namespace MaxOS::KPI;
+using namespace LibFS;
 
 /**
  * @brief Construct a new File Resource object
@@ -21,7 +21,7 @@ using namespace MaxOS::KPI::filesystem;
  * @param flags The flags for the resource when opened
  * @param type The type of the resource
  */
-FileResource::FileResource(string const& name, size_t flags, processes::resource_type_t type)
+FileResource::FileResource(string const& name, size_t flags, ResourceType type)
 : Resource(name, flags, type),
   file(nullptr)	// Initialised by the registry
 {
@@ -76,6 +76,12 @@ int FileResource::read(void* buffer, size_t size, size_t flags) {
  * @param size The number of bytes to write
  * @param flags The flags to pass to the writing
  * @return The number of bytes successfully written or -1 on error
+ *
+ * @warning may cause two resources, current one with old path and duplicate one with new path, as the Bridge will still
+ * store the resource name as the old name. Due to the cache they will point to the same opened file object and in theory
+ * not cause issues with each other
+ *
+ * @todo May want to fix the out of sync of renaming a resource
  */
 int FileResource::write(void const* buffer, size_t size, size_t flags) {
 
@@ -107,12 +113,17 @@ int FileResource::write(void const* buffer, size_t size, size_t flags) {
 		case FileFlags::WRITE_NAME:{
 
 			// Open the parent
-			Resource* parent = GlobalResourceRegistry::get_registry(resource_type_t::FILESYSTEM)->get_resource(Path::parent_directory(name()));
-			auto parent_directory = ((DirectoryResource*)parent)->directory;
+			auto parent_directory = VirtualFileSystem::current_file_system()->open_directory(Path::parent_directory(name()));
 
-			// Rename
+			// Rename in the parent
 			string new_name = string((uint8_t*)buffer, size);
 			parent_directory->rename_file(file, new_name);
+
+			// Update name references
+			new_name = Path::join_path(Path::parent_directory(name()), new_name);
+			VirtualFileSystem::current_file_system()->update_cache(name(), new_name);
+			// rename_resource();
+
 			break;
 		}
 
@@ -131,7 +142,7 @@ int FileResource::write(void const* buffer, size_t size, size_t flags) {
  * @param flags The flags for the resource when opened
  * @param type The type of the resource
  */
-DirectoryResource::DirectoryResource(string const& name, size_t flags, processes::resource_type_t type)
+DirectoryResource::DirectoryResource(string const& name, size_t flags, ResourceType type)
 : Resource(name, flags, type),
   directory(nullptr)
 {
@@ -167,7 +178,7 @@ void DirectoryResource::write_entries(void const* buffer, size_t size) const {
 		entry->is_file = is_file;
 		entry->size = entry_size;
 		entry->entry_length = required_size;
-		memcpy(entry->name, name.c_str(), name.length());
+		common::memcpy(entry->name, name.c_str(), name.length());
 		entry->name[name.length()] = '\0';
 
 		// Not enough space
@@ -175,7 +186,7 @@ void DirectoryResource::write_entries(void const* buffer, size_t size) const {
 			return false;
 
 		// Copy the entry
-		memcpy((uint8_t*)buffer + amount_written, entry, entry->entry_length);
+		common::memcpy((uint8_t*)buffer + amount_written, entry, entry->entry_length);
 		amount_written += entry->entry_length;
 		return true;
 	};
@@ -265,19 +276,22 @@ int DirectoryResource::write(void const* buffer, size_t size, size_t flags) {
 	if(!directory)
 		return -1;
 
-	auto registry = GlobalResourceRegistry::get_registry(resource_type_t::FILESYSTEM);
-
 	switch ((DirectoryFlags)flags){
 
 		case DirectoryFlags::WRITE_NAME : {
 
 			// Open the parent
-			Resource* parent = registry->get_resource(Path::parent_directory(name()));
-			auto parent_directory = ((DirectoryResource*)parent)->directory;
+			auto parent_directory = VirtualFileSystem::current_file_system()->open_directory(Path::parent_directory(name()));
 
 			// Rename
 			string new_name = string((uint8_t*)buffer, size);
 			parent_directory->rename_subdirectory(directory, new_name);
+
+			// Update name references
+			new_name = Path::join_path(Path::parent_directory(name()), new_name);
+			VirtualFileSystem::current_file_system()->update_cache(name(), new_name);
+			// rename_resource(); - will also need to rename entries below this
+
 			break;
 		}
 
@@ -285,6 +299,7 @@ int DirectoryResource::write(void const* buffer, size_t size, size_t flags) {
 
 			string new_name = string((uint8_t*)buffer, size);
 			directory->create_file(new_name);
+
 			break;
 		}
 
@@ -321,14 +336,14 @@ int DirectoryResource::write(void const* buffer, size_t size, size_t flags) {
  *
  * @param vfs The virtual file system to use
  */
-VFSResourceRegistry::VFSResourceRegistry(VirtualFileSystem* vfs)
-: BaseResourceRegistry(resource_type_t::FILESYSTEM),
+VFSResourceServer::VFSResourceServer(VirtualFileSystem* vfs)
+: ResourceServer("vfs", (size_t)ResourceType::FILESYSTEM),
   m_vfs(vfs)
 {
 
 }
 
-VFSResourceRegistry::~VFSResourceRegistry() = default;
+VFSResourceServer::~VFSResourceServer() = default;
 
 /**
  * @brief Open a directory as a resource
@@ -337,17 +352,16 @@ VFSResourceRegistry::~VFSResourceRegistry() = default;
  * @param directory The directory to open
  * @return The new resource or nullptr if it failed to open
  */
-Resource* VFSResourceRegistry::open_as_resource(const string& name, Directory* directory) {
+Resource* VFSResourceServer::open_as_resource(const string& name, Directory* directory) {
 
 	// Doesnt exist
 	if(!directory)
 		return nullptr;
 
 	// Create the resource
-	auto resource = new DirectoryResource(name, 0, resource_type_t::FILESYSTEM);
+	auto resource = new DirectoryResource(name, 0, ResourceType::FILESYSTEM);
 	resource->directory = directory;
 
-	register_resource(resource);
 	return resource;
 }
 
@@ -358,54 +372,76 @@ Resource* VFSResourceRegistry::open_as_resource(const string& name, Directory* d
  * @param file The file to open
  * @return The new resource or nullptr if it failed to open
  */
-Resource* VFSResourceRegistry::open_as_resource(string const& name, File* file) {
+Resource* VFSResourceServer::open_as_resource(string const& name, File* file) {
 
 	// Doesnt exist
 	if(!file)
 		return nullptr;
 
 	// Create the resource
-	auto resource = new FileResource(name, 0, resource_type_t::FILESYSTEM);
+	auto resource = new FileResource(name, 0, ResourceType::FILESYSTEM);
 	resource->file = file;
 
-	register_resource(resource);
 	return resource;
 }
 
 
-Resource* VFSResourceRegistry::get_resource(string const& name) {
+Resource* VFSResourceServer::get_resource(string const& name) {
 
-	string path = Path::absolute_path(name);
-	path = Path::join_path(GlobalScheduler::current_process()->working_directory, path);
-
-	// Resource already opened
-	auto resource = BaseResourceRegistry::get_resource(path);
-	if(resource != nullptr)
-		return resource;
+	// Get the path from root
+	string path = process_relative_path(current_processed_message()->sending_pid, name);
 
 	// Open the resource
-	bool is_file = Path::is_file(path);
-	if(is_file)
+	if(Path::is_file(path))
 		return open_as_resource(path, m_vfs->open_file(path));
-	else
-		return open_as_resource(path, m_vfs->open_directory(path));
+
+
+	return open_as_resource(path, m_vfs->open_directory(path));
 }
 
-Resource* VFSResourceRegistry::create_resource(string const& name, size_t flags) {
+Resource* VFSResourceServer::create_resource(string const& name, size_t flags) {
 
-	string path = Path::absolute_path(name);
-	path = Path::join_path(GlobalScheduler::current_process()->working_directory, path);
-
-	// Resource already opened
-	auto resource = BaseResourceRegistry::get_resource(path);
-	if(resource != nullptr)
-		return resource;
+	// Get the path from root
+	string path = process_relative_path(current_processed_message()->sending_pid, name);
 
 	// Open the resource
-	bool is_file = Path::is_file(path);
-	if(is_file)
+	if(Path::is_file(path))
 		return open_as_resource(path, m_vfs->create_file(path));
-	else
-		return open_as_resource(path, m_vfs->create_directory(path));
 
+	return open_as_resource(path, m_vfs->create_directory(path));
+}
+
+/**
+ * @brief Change the directory in which a process's file operations are relative to
+ *
+ * @param pid The process of which the working directory needs to change
+ * @param dir The working directory for the process
+ */
+void VFSResourceServer::change_working_dir(uint64_t pid, string dir) {
+
+	// Insert also updates
+	m_working_directories.insert(pid, process_relative_path(pid, dir));
+
+}
+
+/**
+ * @brief Get the path from root relative to the processes working directory. If the process has not set its working directory it will be assumed root.
+ *
+ * @param pid The process to use the working directory for
+ * @param relative_path The path to compute relative to the process.
+ * @return The process working directory + the path.  If the path is already from root it will be returned the same
+ */
+string VFSResourceServer::process_relative_path(uint64_t pid, const string& relative_path) {
+
+	// Simplify the path
+	string path = Path::absolute_path(relative_path);
+	string working_path = "/";
+
+	// Try get the working directory
+	auto working_directory = m_working_directories.find(pid);
+	if (working_directory != m_working_directories.end())
+		working_path = working_directory->second;
+
+	// Combine
+	return Path::join_path(working_path, path);
 }

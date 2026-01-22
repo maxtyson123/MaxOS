@@ -158,16 +158,21 @@ void SharedMessageEndpoint::send(const ipc_iovec_t *vec, size_t count) {
  *
  * @param buffer Where to write the message to
  * @param size Max size of the message to be read
- * @param flags Unused
- * @return The amount of bytes read
+ * @param flags 0 to block, 1 for async
+ * @return The amount of bytes read (0 means no messages available for async)
  *
- * @todo auto block instead
+ * @todo int here to size_t in syscall - fix
  */
 int SharedMessageEndpoint::read(void* buffer, size_t size, size_t flags) {
 
 	// Wait for a message
-	while(m_queue.empty())
+	while(m_queue.empty()) {
+		if (flags)
+			return 0;
+
+		// Block
 		GlobalScheduler::current_thread()->yield();
+	}
 
 	// Read the message into the buffer
 	buffer_t* message = m_queue.pop_front();

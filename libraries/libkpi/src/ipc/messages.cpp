@@ -66,8 +66,8 @@ namespace MaxOS::KPI::ipc {
 	 *
 	 * @return The number of bytes read
 	 */
-	size_t read_message(uint64_t endpoint, void* buffer, size_t size) {
+	size_t read_message(uint64_t endpoint, void* buffer, size_t size, bool blocking) {
 		if(endpoint)
-			return resource_read(endpoint, buffer, size, 0);
+			return resource_read(endpoint, buffer, size, !blocking);
 	}
 }

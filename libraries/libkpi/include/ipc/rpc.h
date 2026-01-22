@@ -90,6 +90,12 @@ namespace MaxOS::KPI::ipc {
 	constexpr size_t MAX_PAYLOAD_SIZE = 1024; ///< The maximum size of the payload for RPC arguments
 	constexpr size_t MAX_SERIALIZED_SIZE = MAX_ARGS * sizeof(arg_entry_t) + MAX_PAYLOAD_SIZE; ///< The maximum size of the serialized ArgList
 
+	/**
+	 * @class ArgList
+	 * @brief Class to handle seralisation of args across an RPC shared message endpoint boundary
+	 *
+	 * @todo Allow for payloads larger than MAX_PAYLOAD_SIZE
+	 */
 	class ArgList {
 
 		private:
@@ -168,7 +174,9 @@ namespace MaxOS::KPI::ipc {
 	function_entry_t find_function(const char* name);
 
 	bool rpc_call(const char* server, const char* function, ArgList* args, ArgList* return_values, size_t flags = 0);
+	bool rpc_server_process_next(uint64_t endpoint, bool block);
 	[[noreturn]] void rpc_server_loop(const char* server);
+	[[noreturn]] void rpc_server_loop(uint64_t endpoint);
 	void rpc_wait_for_server(const char* server);
 
 

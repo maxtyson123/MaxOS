@@ -40,6 +40,7 @@ namespace MaxOS::KPI::processes {
 
 	} process_stats_t;
 
+	//TODO: make fetching this thread safe
 	typedef struct ProcessEnvironment {
 
 		const char** args;
@@ -101,6 +102,8 @@ namespace MaxOS::KPI::processes {
 
 	uint64_t pid();
 	void exit(uint64_t exit_code);
+
+	inline char* m_working_dir_cache = nullptr;
 	void change_working_directory(const char* path);
 
 }

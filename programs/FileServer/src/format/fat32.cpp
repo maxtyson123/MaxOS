@@ -6,16 +6,13 @@
  * @author Max Tyson
  */
 
-#include <filesystem/format/fat32.h>
-#include <memory/memoryIO.h>
+#include <format/fat32.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
-using namespace MaxOS::drivers;
-using namespace MaxOS::drivers::disk;
-using namespace MaxOS::filesystem;
-using namespace MaxOS::filesystem::format;
-using namespace MaxOS::memory;
+using namespace LibDriver::generic;
+using namespace FileServer;
+using namespace FileServer::format;
 
 /**
  * @brief Construct a new Fat32 Volume object
@@ -24,15 +21,14 @@ using namespace MaxOS::memory;
  * @param partition_offset The offset of the partition on the disk
  */
 Fat32Volume::Fat32Volume(Disk* disk, uint32_t partition_offset)
-		: disk(disk) {
+: disk(disk) {
 
 	// Read the BIOS parameter block
 	buffer_t bpb_buffer(&bpb, sizeof(bpb32_t));
 	disk->read(partition_offset, &bpb_buffer);
 
 	// Parse the FAT info
-	uint32_t total_data_sectors =
-			bpb.total_sectors_32 - (bpb.reserved_sectors + (bpb.table_copies * bpb.table_size_32));
+	uint32_t total_data_sectors = bpb.total_sectors_32 - (bpb.reserved_sectors + (bpb.table_copies * bpb.table_size_32));
 	fat_total_clusters = total_data_sectors / bpb.sectors_per_cluster;
 	fat_lba = partition_offset + bpb.reserved_sectors;
 	fat_copies = bpb.table_copies;
@@ -47,7 +43,7 @@ Fat32Volume::Fat32Volume(Disk* disk, uint32_t partition_offset)
 	// Validate the fat information
 	if(fsinfo.lead_signature != 0x41615252 || fsinfo.structure_signature != 0x61417272 ||
 	   fsinfo.trail_signature != 0xAA550000) {
-		Logger::ERROR() << "Invalid FAT32 filesystem information TODO: Handle this\n";
+		KPI::klog("Invalid FAT32 filesystem information TODO: Handle this\n");
 		return;
 	}
 }

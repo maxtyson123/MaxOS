@@ -114,8 +114,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 // Finish LibDriver
 //
 // init flow:
-// - parse multiboot for init program, fileserver and ramdisk
-// - schedule init program and fileserver
+// % parse multiboot for init program, fileserver and ramdisk
+// % schedule init program and fileserver
 // - init program tells fileserver to load & parse ramdisk
 // - init (via fileserver) reads ramdisk and starts all under "run/*" (driver manager, disks)
 // = = =

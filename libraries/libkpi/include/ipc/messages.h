@@ -19,7 +19,7 @@ namespace MaxOS::KPI::ipc {
 
 	void send_message(uint64_t endpoint, void* buffer, size_t size);
 
-	size_t read_message(uint64_t endpoint, void* buffer, size_t size);
+	size_t read_message(uint64_t endpoint, void* buffer, size_t size, bool blocking = true);
 }
 
 
