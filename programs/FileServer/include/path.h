@@ -26,6 +26,7 @@ namespace FileServer {
 			static MaxOS::string file_name(const MaxOS::string& path);
 			static MaxOS::string file_extension(const MaxOS::string& path);
 			static MaxOS::string file_path(const MaxOS::string& path);
+			static bool is_child_of(const MaxOS::string& path, const MaxOS::string& parent);
 
 			static MaxOS::string top_directory(const MaxOS::string& path);
 			static MaxOS::string parent_directory(const MaxOS::string& path);

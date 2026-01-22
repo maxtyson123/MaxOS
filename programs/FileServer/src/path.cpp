@@ -4,6 +4,9 @@
  *
  * @date 2nd September 2025
  * @author Max Tyson
+ *
+ * @todo assumes no trailing slash on directories
+ * @todo assumes all files have an extension
  */
 
 #include <path.h>
@@ -50,6 +53,8 @@ bool Path::is_file(const string& path) {
  *
  * @param path The path to get the file name from
  * @return The file name or the original path if it does not exist
+ *
+ * @todo reverse loop is quicker
  */
 string Path::file_name(const string& path) {
 
@@ -113,6 +118,16 @@ string Path::file_path(const string& path) {
 	// Get the file path
 	string file_path = path.substring(0, last_slash);
 	return file_path;
+
+}
+
+/**
+ *
+ * @param path The path to check
+ * @param parent The parent the
+ * @return
+ */
+bool Path::is_child_of(const MaxOS::string &path, const MaxOS::string &parent) {
 
 }
 

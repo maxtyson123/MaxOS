@@ -252,7 +252,7 @@ const char* String::c_str() const {
  * @param other The other string
  * @return True if the string starts with the other string, false otherwise
  */
-bool String::starts_with(String const& other) {
+bool String::starts_with(String const& other) const {
 
 	// Must at least be able to fit the other string
 	if (m_length < other.length())
@@ -364,6 +364,15 @@ size_t String::length(bool count_ansi) const {
 
 	// Return the length
 	return clean_length;
+}
+
+/**
+ * @brief Check if the string has any contents
+ *
+ * @return True if the string has no characters
+ */
+bool String::empty() const {
+	return m_length == 0;
 }
 
 /**
@@ -586,6 +595,62 @@ String String::center(size_t width, char fill) const {
 	centered.m_string[width] = '\0';
 
 	return centered;
+}
+
+bool String::contains(String const &other) const {
+
+	// Empty string is always contained
+	if (other.length() == 0)
+		return true;
+
+	// Cannot contain a longer string
+	if (other.length() > m_length)
+		return false;
+
+	// Search for the substring
+	for (size_t i = 0; i <= m_length - other.length(); i++) {
+		bool match = true;
+
+		// Check the other string
+		for (size_t j = 0; j < other.length(); j++) {
+			if (m_string[i + j] != other[j]) {
+				match = false;
+				break;
+			}
+		}
+
+		if (match)
+			return true;
+	}
+
+	return false;
+
+
+}
+
+int String::find(String const &other, int start) const {
+
+	// If start is out of bounds or substring is longer than remaining string
+	if (start >= m_length || other.length() == 0 || other.length() > m_length)
+		return -1;
+
+	// Search starting from the specified start
+	for (int i = start; i <= m_length - other.length(); i++) {
+		bool match = true;
+
+		for (size_t j = 0; j < other.length(); j++) {
+			if (m_string[i + j] != other[j]) {
+				match = false;
+				break;
+			}
+		}
+
+		if (match)
+			return i;
+	}
+
+	return -1;
+
 }
 
 /**

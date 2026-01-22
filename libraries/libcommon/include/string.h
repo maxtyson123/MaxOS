@@ -52,17 +52,20 @@ namespace MaxOS {
 			static String formatted(char const* format, va_list parameters);
 
 			[[nodiscard]] size_t length(bool count_ansi = true) const;
+			[[nodiscard]] bool	 empty() const;
+
 			[[nodiscard]] char* c_str();
 			[[nodiscard]] const char* c_str() const;
 
-			bool starts_with(String const& other);
 			[[nodiscard]] String substring(size_t start, size_t length) const;
-
 			[[nodiscard]] common::Vector<String> split(String const& delimiter) const;
 			[[nodiscard]] String strip(char strip_char = ' ') const;
 
-
 			[[nodiscard]] String center(size_t width, char fill = ' ') const;
+
+			[[nodiscard]] bool contains(String const& other) const;
+			[[nodiscard]] bool starts_with(String const& other) const;
+			[[nodiscard]] int  find(String const& other, int start = 0) const;
 
 			// Operator functions
 			[[nodiscard]] bool equals(String const& other) const;

@@ -720,8 +720,9 @@ InodeHandler::~InodeHandler() = default;
  * @param name The name of the file
  */
 Ext2File::Ext2File(Ext2Volume* volume, uint32_t inode, string const& name)
-		: m_volume(volume),
-		m_inode(volume, inode) {
+: m_volume(volume),
+  m_inode(volume, inode)
+{
 
 	// Set up the base information
 	m_name = name;
@@ -849,8 +850,8 @@ Ext2File::~Ext2File() = default;
  * @param name The name of the directory
  */
 Ext2Directory::Ext2Directory(Ext2Volume* volume, uint32_t inode, const string& name)
-		: m_volume(volume),
-		m_inode(m_volume, inode) {
+: m_volume(volume),
+  m_inode(m_volume, inode) {
 	m_name = name;
 }
 
@@ -1168,7 +1169,7 @@ Ext2Directory::~Ext2Directory() = default;
  * @param partition_offset The partition offset on the disk (in sectors)
  */
 Ext2FileSystem::Ext2FileSystem(Disk* disk, uint32_t partition_offset)
-		: m_volume(disk, partition_offset) {
+: m_volume(disk, partition_offset) {
 
 	// Create the root directory
 	m_root_directory = new Ext2Directory(&m_volume, 2, "/");
