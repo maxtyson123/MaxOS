@@ -190,7 +190,7 @@ namespace MaxOS::KPI{
 	 */
 	size_t resource_read(uint64_t handle, void* buffer, size_t size, size_t flags){
 
-		return (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_WRITE, handle, (uint64_t)buffer, size, flags, 0, 0);
+		return (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_READ, handle, (uint64_t)buffer, size, flags, 0, 0);
 	}
 
 	/**

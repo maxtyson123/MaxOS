@@ -138,7 +138,7 @@ void SharedMessageEndpoint::send(const ipc_iovec_t *vec, size_t count) {
 	m_message_lock.lock();
 
 	// Parse the message parts
-	size_t size;
+	size_t size = 0;
 	for (size_t i = 0; i < count; ++i)
 		size += vec[i].length;
 

@@ -142,7 +142,7 @@ void MaxOS::KPI::processes::thread_sleep(uint64_t tid, uint64_t sleep_time_ms) {
  *
  * @return A handle to the current thread
  */
-uint64_t MaxOS::KPI::processes::get_current_thread() {
+uint64_t processes::get_current_thread() {
 
 	if (m_current_thread_handle == 0)
 		m_current_thread_handle = resource_open(ResourceType::THREAD, "this", 0);

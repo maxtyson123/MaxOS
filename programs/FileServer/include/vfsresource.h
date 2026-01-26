@@ -11,8 +11,6 @@
 #define FILESERVER_VFSRESOURCE_H
 
 #include <vfs.h>
-#include <buffer.h>
-#include <libfs/include/file.h>
 #include <libfs/include/directory.h>
 #include <libkpi/include/resource.h>
 

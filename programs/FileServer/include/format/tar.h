@@ -94,7 +94,7 @@ namespace FileServer::format {
             TARVolume m_volume;
 
         public:
-            TARFileSystem(void* address, size_t size);
+            TARFileSystem(void* address);
             ~TARFileSystem() final;
     };
 

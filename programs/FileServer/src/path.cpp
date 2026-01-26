@@ -12,7 +12,7 @@
 #include <path.h>
 
 using namespace MaxOS;
-using namespace MaxOS::common;
+using namespace common;
 using namespace FileServer;
 
 /**
@@ -127,8 +127,42 @@ string Path::file_path(const string& path) {
  * @param parent The parent the
  * @return
  */
-bool Path::is_child_of(const MaxOS::string &path, const MaxOS::string &parent) {
+bool Path::is_child_of(const string &path, const string &parent) {
 
+	// Validation (@todo add to all)
+	if (!valid(path) || !valid(parent))
+		return false;
+
+	// Normalise both
+	string abs_path		= absolute_path(path);
+	string abs_parent	= absolute_path(parent);
+
+	// Ensure the parent is a directory
+	if (is_file(abs_parent))
+		abs_parent = parent_directory(abs_parent);
+
+	// Not a parent of itself
+	if (abs_path == abs_parent)
+		return false;
+
+	// Root is parent of all
+	if (abs_parent == "/")
+		return true;
+
+	// Child would have to be longer than parent
+	if (abs_path.length() <= abs_parent.length())
+		return false;
+
+	// Child prefix must be parent
+	if (abs_path.substring(0, abs_parent.length()) != abs_parent)
+		return false;
+
+	// Prefix must end with "/" otherwise could be a longer name of the parent ie "/a/b" vs "ab/b"
+	if (abs_path[abs_parent.length()] != '/')
+		return false;
+
+	// Must be parent
+	return true;
 }
 
 /**

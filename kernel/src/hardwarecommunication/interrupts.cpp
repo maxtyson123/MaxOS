@@ -369,7 +369,7 @@ cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t* s
 	uint64_t core_id = core ? core->id : 0;
 
 	uint64_t error_code = status->error_code;
-	string msg = StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " c" << core_id << "\n";
+	string msg = StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " cid: " << core_id << "\n";
 
 	// Try to avoid the panic
 	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);

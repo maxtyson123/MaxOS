@@ -9,15 +9,41 @@
 #include <cstdint>
 #include <processes/thread.h>
 #include <string.h>
-#include <libfs/include/server/fileserver_server.h>
+#include <server/fileserver_server.h>
 #include <vfsresource.h>
+#include <ipc/sharedmemory.h>
+#include <format/tar.h>
+#include <syscalls.h>
 
 using namespace MaxOS::KPI;
 using namespace MaxOS::KPI::processes;
 using namespace MaxOS::KPI::ipc;
 using namespace MaxOS::common;
 using namespace FileServer;
+using namespace FileServer::format;
 using namespace LibFS;
+
+void mount_ramdisk(mstring endpoint) {
+
+    klog("mounting ramdisk\n");
+
+    // Try oad the initrd
+    void* address = open_shared_memory(endpoint.c_str());
+    if (!address)
+        return;
+
+    // Parse the initrd (@todo verify and shit)
+    auto fs = new TARFileSystem(address);
+    fs->root_directory()->debug_contents();
+
+    // Mount
+    auto vfs = VirtualFileSystem::current_file_system();
+    if (!vfs)
+        return;
+
+    vfs->mount_filesystem(fs, "/initrd");
+    klog("mounted ramdisk\n");
+}
 
 extern "C" void _start(int argc, char* argv[]){
 
@@ -25,6 +51,7 @@ extern "C" void _start(int argc, char* argv[]){
 
     // Set up the virtual filesystem
     VirtualFileSystem vfs;
+    klog("Vfs at 0x%x\n", &vfs);
 
     // Setup the servers
     VFSResourceServer vfs_resources(&vfs);

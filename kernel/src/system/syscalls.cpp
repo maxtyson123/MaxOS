@@ -201,6 +201,7 @@ syscall_args_t* SyscallManager::syscall_resource_open(syscall_args_t* args) {
 
 	// Open the resource
 	args->return_value = GlobalScheduler::current_process()->resource_manager.open_resource(type, name, flags);
+
 	return args;
 }
 

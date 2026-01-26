@@ -194,9 +194,13 @@ void MemoryChunkHandler::handle_free(void* pointer) {
 		chunk->prev->size += chunk->size + sizeof(MemoryChunk);
 		chunk->prev->next = chunk->next;
 
+		if (chunk->prev->next == (void*)0x3000)
+			asm("nop");
+
 		// The chunk in front of the freed one now needs to point to the merged chunk
 		if(chunk->next != nullptr)
 			chunk->next->prev = chunk->prev;
+
 
 		// Freed chunk doesn't exist anymore so now working with the merged chunk
 		chunk = chunk->prev;

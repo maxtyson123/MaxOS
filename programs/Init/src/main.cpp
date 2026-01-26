@@ -8,33 +8,29 @@
 
 #include <cstdint>
 #include <processes/thread.h>
+#include <ipc/sharedmemory.h>
+#include <libcommon/include/mem.h>
+#include <server/fileserver_client.h>
 
 using namespace MaxOS::KPI::processes;
+using namespace MaxOS::KPI::ipc;
 using namespace MaxOS::KPI;
-
-struct tar_header
-{
-	char filename[100];
-	char mode[8];
-	char uid[8];
-	char gid[8];
-	char size[12];
-	char mtime[12];
-	char chksum[8];
-	char typeflag[1];
-};
+using namespace MaxOS::common;
 
 extern "C" void _start(int argc, char* argv[]){
 
-	klog("hi\n");
-
 	// Parse the ram disk
-	auto header = (struct tar_header*)0xFFF000;
-	klog("Initrd filename: %s \n", header->filename);
+	auto size	= (uint32_t)0xFFF000;
+	auto header = (struct tar_header*)(0xFFF000 + sizeof(uint32_t));
 
 	// Pass to fileserver
+	auto address = create_shared_memory("init_initrd", size);
+	klog("init_initrd at 0x%x\n", address);
 
-	// Start driver manager
+	MaxOS::KPI::memcpy(address, header, size);
+	mount_ramdisk("init_initrd");
+
+	// Start driver manager & drivers
 
 	// Wait for fileserver to parse disks
 

@@ -1,1 +1,2 @@
 MAKE_PROG_NOSTD(Init src /boot)
+TARGET_LINK_LIBRARIES(Init.elf fs)

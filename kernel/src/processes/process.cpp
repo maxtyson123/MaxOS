@@ -34,7 +34,7 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	ticks = 0;
 
 	// Create the stack (cant usee global MemoryManager::malloc() as process hasn't been registered with the seduler yet)
-	m_stack_pointer = (uintptr_t) parent->memory_manager->handle_malloc(STACK_SIZE);
+	m_stack_pointer = (uintptr_t) parent->memory_manager->handle_malloc(STACK_SIZE) + STACK_SIZE;
 
 	// Create the TSS stack
 	if (parent->is_kernel) {

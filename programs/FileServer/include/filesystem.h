@@ -89,6 +89,8 @@ namespace FileServer {
 
 			string name();
 			size_t size();
+
+			void debug_contents(uint64_t depth = 50);
 	};
 
 	/**

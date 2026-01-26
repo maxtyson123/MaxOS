@@ -194,15 +194,15 @@ void GlobalScheduler::prepare_initrd(multiboot_tag_module* module) {
 
 	// Extract info
 	auto start	= (uintptr_t)PhysicalMemoryManager::to_dm_region(module->mod_start);
-	size_t size = module->mod_end - module->mod_start;
-
+	uint32_t size = module->mod_end - module->mod_start;
 
 	// Prepare
 	MemoryManager::switch_active_memory_manager(init_process->memory_manager);
-	init_process->memory_manager->vmm()->allocate(0xFFF000, size, WRITE | PRESENT);
+	init_process->memory_manager->vmm()->allocate(0xFFF000, size + sizeof(uint32_t), WRITE | PRESENT);
 
 	// Copy
-	memcpy((void*)0xFFF000, (void*)start, size);
+	memcpy((void*)0xFFF000, &size, sizeof(uint32_t));
+	memcpy((void*)(0xFFF000 + sizeof(uint32_t)), (void*)start, size);
 	MemoryManager::switch_active_memory_manager(MemoryManager::s_kernel_memory_manager);
 }
 
@@ -348,6 +348,10 @@ uint64_t GlobalScheduler::next_pid() {
  * @return The currently executing thread
  */
 Thread* GlobalScheduler::current_thread() {
+
+	if(!s_instance || !s_instance ->m_active)
+		return nullptr;
+
 	return core_scheduler()->current_thread();
 }
 

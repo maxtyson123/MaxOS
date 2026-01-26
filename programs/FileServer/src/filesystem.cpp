@@ -231,6 +231,55 @@ size_t Directory::size() {
 
 }
 
+void Directory::debug_contents(uint64_t max_depth) {
+
+	struct StackEntry {
+		Directory* dir;
+		uint64_t depth;
+	};
+
+	// Small stack container (uses your kernel Vector)
+	Vector<StackEntry> stack;
+	stack.push_back({ this, 0 });
+
+	while (!stack.empty()) {
+		StackEntry entry = stack.pop_back();
+
+		Directory* cur = entry.dir;
+		uint64_t cur_depth = entry.depth;
+		if (!cur) continue;
+
+		// Build indent string (two spaces per depth)
+		string indent;
+		for (uint64_t i = 0; i < cur_depth; ++i)
+			indent += "  ";
+
+		// Print directory header
+		KPI::klog("%s[DIR ] %s\n", indent.c_str(), cur->name().c_str());
+
+		// Print files in the directory (non-recursive)
+		for (auto *f : cur->m_files) {
+			if (!f) continue;
+			KPI::klog("%s  [FILE] %s\n", indent.c_str(), f->name().c_str());
+		}
+
+		// Depth limit check: if we've reached max_depth, do not push children
+		if (max_depth != (uint64_t)-1 && cur_depth >= max_depth)
+			continue;
+
+		// Push subdirectories onto the stack.
+		// Push in reverse order so the output order matches the natural forward order.
+		size_t sub_count = cur->m_subdirectories.size();
+		for (size_t i = sub_count; i-- > 0; )
+		{
+			Directory* sd = cur->m_subdirectories[i];
+			if (!sd) continue;
+			stack.push_back({ sd, cur_depth + 1 });
+		}
+	}
+
+}
+
 /**
  * @brief Rename a file in the directory
  *

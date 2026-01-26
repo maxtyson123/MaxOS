@@ -21,7 +21,8 @@ TARVolume::TARVolume(uint64_t* start)
 
         // Get the header
         auto header = (tar_header_t*)address;
-        if (header->filename[i] == '\0')
+
+        if (header->filename[0] == '\0')
             break;
 
         // Cache
@@ -62,6 +63,7 @@ TARFile::TARFile(TARVolume *volume, tar_header_t* header)
   m_header(header)
 {
     m_size = m_volume->file_size(header);
+    m_name = Path::file_name(header->filename);
 }
 
 TARFile::~TARFile() = default;
@@ -73,7 +75,9 @@ void TARFile::read(MaxOS::common::buffer_t *data, size_t amount) {
 TARDirectory::TARDirectory(TARVolume *volume, const string &name)
 : m_volume(volume)
 {
-    m_parent = Path::parent_directory(name);
+
+    if (name != "")
+        m_parent = Path::parent_directory(name);
     m_name   = Path::file_name(name);           // Assume no trailing slash @todo enforce
 }
 
@@ -81,25 +85,24 @@ TARDirectory::~TARDirectory() = default;
 
 void TARDirectory::read_from_disk() {
 
-    //
-    const string this_path = m_parent.empty() ? m_name : (m_parent + "/" + m_name);
+    const string this_path = m_parent + "/" + m_name;
     Map<string, bool> seen_dirs;
 
     for (const auto& header : m_volume->headers()) {
-        const string& path = header->filename;
+        const string& path = (string)"/" + header->filename;
+
+        MaxOS::KPI::klog("Dir '%s' is checking %s \n", this_path.c_str(), path.c_str());
 
         // Only care about storing files in this directory
         if (!Path::is_child_of(path, this_path))
             continue;
 
         // Remainder after this directory
-        string rest = path.substring(0, this_path.length() + 1);
+        string rest = path.substring(this_path.length(), path.length() - this_path.length());
 
         // File
-        if (!rest.contains('/')) {
-            m_files.push_back(new TARFile(m_volume, header));
-            continue;
-        }
+        if (!rest.contains('/'))
+            m_files.push_back(new TARFile(m_volume, header));continue;
 
         // Make sure this subdirectory hasn't already been stored
         string subdir = rest.substring(0, rest.find('/'));
@@ -109,13 +112,14 @@ void TARDirectory::read_from_disk() {
 
         // Store the subdir
         seen_dirs.insert(subdir, true);
-        m_subdirectories.push_back(new TARDirectory(m_volume, path));
+        auto dir = new TARDirectory(m_volume, path);
+        m_subdirectories.push_back(dir);
 
     }
 }
 
-TARFileSystem::TARFileSystem(void *address, size_t size)
-: m_volume(address, size)
+TARFileSystem::TARFileSystem(void* address)
+: m_volume((uint64_t*)address)
 {
     m_root_directory = new TARDirectory(&m_volume, "");
     m_root_directory->read_from_disk();
