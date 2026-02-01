@@ -18,6 +18,15 @@
 
 namespace MaxOS::KPI::processes {
 
+
+	typedef struct ExecuteCommand {
+		const char** args;
+		size_t args_count;
+
+		const void* file_data;
+		size_t file_data_size;
+	} execute_command_t;
+
 	/**
 	 * @struct ProcessStats
 	 * @brief Structure containing various statistics about a process
@@ -70,8 +79,8 @@ namespace MaxOS::KPI::processes {
 	};
 
 	// General process functions
-
-	uint64_t exec_file(const char* path, const char** args, size_t arg_amount, bool wait_for_completion);
+	uint64_t exec_file(const char* name, const char* path, bool wait_for_completion = false);
+	uint64_t exec_file(const char* name, const char* path, const char** args, size_t arg_amount, bool wait_for_completion = false);
 
 	uint64_t get_process(uint64_t pid);
 	void close_process_handle(uint64_t handle);

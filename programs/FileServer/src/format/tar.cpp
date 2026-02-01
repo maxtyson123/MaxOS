@@ -9,12 +9,13 @@
 #include <format/tar.h>
 
 using namespace FileServer;
+using namespace LibFS;
 using namespace FileServer::format;
 using namespace MaxOS::common;
 
 TARVolume::TARVolume(uint64_t* start)
 {
-    uint64_t* address = start;
+    uint8_t* address = (uint8_t*)start;
 
     // Cache all the headers
     for (size_t i = 0; ; i++) {
@@ -46,7 +47,7 @@ Vector<tar_header_t *> TARVolume::headers() {
     return m_headers;
 }
 
-size_t TARVolume::file_size(tar_header_t* header) {
+size_t TARVolume::file_size(const tar_header_t* header) {
 
     size_t size = 0;
     size_t count = 1;
@@ -68,30 +69,50 @@ TARFile::TARFile(TARVolume *volume, tar_header_t* header)
 
 TARFile::~TARFile() = default;
 
-void TARFile::read(MaxOS::common::buffer_t *data, size_t amount) {
-    File::read(data, amount);
+void TARFile::read(buffer_t *data, size_t amount) {
+
+    // End of file
+    if (m_offset >= m_size)
+        return;
+
+    // Ensure bounds
+    if (amount > m_size - m_offset)
+        amount = m_size - m_offset;
+
+    // Copy into the buffer
+    uint8_t* file_data = (uint8_t*)m_header + 512;
+    data->copy_from(file_data + m_offset, amount);
+
+    m_offset += amount;
+
+
 }
 
 TARDirectory::TARDirectory(TARVolume *volume, const string &name)
 : m_volume(volume)
 {
-
-    if (name != "")
+    if (name == "/")
+        m_name = name;
+    else {
         m_parent = Path::parent_directory(name);
-    m_name   = Path::file_name(name);           // Assume no trailing slash @todo enforce
+        m_name   = Path::file_name(name);           // Assume no trailing slash @todo enforce
+    }
 }
 
 TARDirectory::~TARDirectory() = default;
 
 void TARDirectory::read_from_disk() {
 
-    const string this_path = m_parent + "/" + m_name;
+    //@todo this is called a lot, maybe dont? i think bc of cache
+
+    m_files.clear();
+    m_subdirectories.clear();
+
+    const string this_path = m_parent.empty() ? m_name : m_parent + "/" + m_name;
     Map<string, bool> seen_dirs;
 
     for (const auto& header : m_volume->headers()) {
         const string& path = (string)"/" + header->filename;
-
-        MaxOS::KPI::klog("Dir '%s' is checking %s \n", this_path.c_str(), path.c_str());
 
         // Only care about storing files in this directory
         if (!Path::is_child_of(path, this_path))
@@ -101,8 +122,10 @@ void TARDirectory::read_from_disk() {
         string rest = path.substring(this_path.length(), path.length() - this_path.length());
 
         // File
-        if (!rest.contains('/'))
-            m_files.push_back(new TARFile(m_volume, header));continue;
+        if (!rest.contains('/')) {
+            m_files.push_back(new TARFile(m_volume, header));
+            continue;
+        }
 
         // Make sure this subdirectory hasn't already been stored
         string subdir = rest.substring(0, rest.find('/'));
@@ -121,7 +144,7 @@ void TARDirectory::read_from_disk() {
 TARFileSystem::TARFileSystem(void* address)
 : m_volume((uint64_t*)address)
 {
-    m_root_directory = new TARDirectory(&m_volume, "");
+    m_root_directory = new TARDirectory(&m_volume, "/");
     m_root_directory->read_from_disk();
 
 }

@@ -9,33 +9,71 @@
 #include <processes/process.h>
 #include <processes/thread.h>
 
+#include <libfs/include/file.h>
+
 using namespace MaxOS::KPI;
 using namespace processes;
-
 
 /**
  * @brief Executes a file as a new process
  *
+ * @param name The name of the process
+ * @param path The path to the executable file
+ * @param wait_for_completion True to wait for the process to exit, false to return immediately
+ * @return The process ID of the new process, or the exit code if wait_for_completion is true
+ */
+uint64_t processes::exec_file(const char* name, const char *path, bool wait_for_completion) {
+
+	return exec_file(name, path, nullptr, 0, wait_for_completion);
+
+}
+
+/**
+ * @brief Executes a file as a new process
+ *
+ * @param name The name of the process
  * @param path The path to the executable file
  * @param args The arguments to pass to the executable
  * @param arg_amount The number of arguments
  * @param wait_for_completion True to wait for the process to exit, false to return immediately
  * @return The process ID of the new process, or the exit code if wait_for_completion is true
  *
- * @todo Implement mem allocation for full_args
  * @todo What if someone exec_file but not_wait and then never close the handle, will resource leak - should auto close when process ends?
  */
-uint64_t processes::exec_file(const char* path, const char** args, size_t arg_amount, bool wait_for_completion) {
+uint64_t processes::exec_file(const char* name, const char* path, const char** args, size_t arg_amount, bool wait_for_completion) {
 
 	// Add the path as the first argument
-	const char** full_args = args; // new const char*[arg_amount + 1];
+	const char** full_args =  new const char*[arg_amount + 1];
 	full_args[0] = path;
 	for (size_t i = 0; i < arg_amount; i++)
 		full_args[i + 1] = args[i];
 
-	// Create the resource
-	uint64_t result = resource_create(ResourceType::PROCESS, (const char*)full_args, arg_amount + 1);
-//	delete[] full_args;
+	// Open the file
+	auto handle = LibFS::open_file(path);
+	klog("file handle %d \n", handle);
+	if (!handle)
+		return 0;
+
+	// Load the ELF blob
+	size_t size = LibFS::file_size(handle);
+	auto buffer = new uint8_t[size];
+	klog("reading file size %d \n", size);
+	LibFS::file_read(handle, buffer, size);
+
+	// Create the process
+	execute_command_t command = {
+		.args = full_args,
+		.args_count = arg_amount + 1,
+		.file_data = buffer,
+		.file_data_size = size,
+	};
+	klog("executing command \n");
+	uint64_t result = resource_create(ResourceType::PROCESS, name, 0, &command);
+
+	// Clean up
+	delete[] full_args;
+	delete[] buffer;
+	LibFS::close_file(handle);
 
 	// Wait for completion if requested
 	if (wait_for_completion && result > 0){
@@ -43,8 +81,10 @@ uint64_t processes::exec_file(const char* path, const char** args, size_t arg_am
 		process_stats_t stats = get_process_stats_handle(result);
 
 		// If the process is killed it wont have a PID
-		if(stats.pid != 0)
+		while(stats.pid != 0) {
 			yield();
+			stats = get_process_stats_handle(result);
+		}
 
 		close_process_handle(result);
 		return stats.exit_code;

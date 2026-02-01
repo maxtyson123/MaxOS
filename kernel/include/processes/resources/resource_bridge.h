@@ -86,7 +86,7 @@ namespace MaxOS::processes::resources {
 			~BridgeResourceRegistry();
 
 			Resource* get_resource(const string& name) final;
-			Resource* create_resource(const string& name, size_t flags) final;
+			Resource* create_resource(const string& name, size_t flags, uintptr_t data) final;
 	};
 
 }

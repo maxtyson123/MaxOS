@@ -139,8 +139,8 @@ namespace MaxOS::KPI{
 	 * @param flags Optional flags to pass (unused by default but resource type specific)
 	 * @return The handle id of the resource or 0 if failed
 	 */
-	bool resource_create(ResourceType type, const char* name, size_t flags){
-		return (bool)make_syscall(SyscallType::RESOURCE_CREATE, (uint64_t)type, (uint64_t)name, flags, 0, 0, 0);
+	bool resource_create(ResourceType type, const char* name, size_t flags, uintptr_t data){
+		return (bool)make_syscall(SyscallType::RESOURCE_CREATE, (uint64_t)type, (uint64_t)name, flags, data, 0, 0);
 	}
 
 	/**

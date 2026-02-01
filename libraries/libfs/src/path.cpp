@@ -13,7 +13,7 @@
 
 using namespace MaxOS;
 using namespace common;
-using namespace FileServer;
+using namespace LibFS;
 
 /**
  * @brief Check if a path is valid
@@ -241,7 +241,7 @@ string Path::absolute_path(const string& path) {
 		absolute_path += component + "/";
 
 	// Remove trailing slash if file
-	if(Path::is_file(absolute_path) && absolute_path.length() > 1)
+	if(is_file(path) && absolute_path.length() > 1)
 		absolute_path = absolute_path.substring(0, absolute_path.length() - 1);
 
 	return absolute_path;

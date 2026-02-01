@@ -77,7 +77,7 @@ namespace MaxOS::processes::resources {
 			~ThreadResourceRegistry();
 
 			Resource* 	get_resource(const string& name) final;
-			Resource* create_resource(const string& name, size_t flags) final;
+			Resource* create_resource(const string& name, size_t flags, uintptr_t data) final;
 	};
 
 	class ProcessResourceRegistry : public ResourceRegistry<ProcessResource> {
@@ -87,7 +87,7 @@ namespace MaxOS::processes::resources {
 			~ProcessResourceRegistry();
 
 			Resource* 	get_resource(const string& name) final;
-			Resource* 	create_resource(const string& name, size_t flags) final;
+			Resource* 	create_resource(const string& name, size_t flags, uintptr_t data) final;
 	};
 
 

@@ -15,7 +15,7 @@ namespace MaxOS::KPI::ipc {
 	uint64_t create_endpoint(const char* name) {
 
 		// Create the resource
-		if(!resource_create(ResourceType::MESSAGE_ENDPOINT, name, 0))
+		if(!resource_create(ResourceType::MESSAGE_ENDPOINT, name, 0, 0))
 			return 0;
 
 		return open_endpoint(name);

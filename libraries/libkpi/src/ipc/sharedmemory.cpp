@@ -12,11 +12,13 @@ namespace MaxOS::KPI::ipc {
 	 * @param name The name of the region
 	 * @param size The size of the region
 	 * @return The start address of the region or nullptr if it failed to create
+	 *
+	 * @todo init with data optionally?
 	 */
 	void* create_shared_memory(const char* name, size_t size) {
 
 		// Create the resource
-		if (!resource_create(ResourceType::SHARED_MEMORY, name, size))
+		if (!resource_create(ResourceType::SHARED_MEMORY, name, size, 0))
 			return nullptr;
 
 		return open_shared_memory(name);

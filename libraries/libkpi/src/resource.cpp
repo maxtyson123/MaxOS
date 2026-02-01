@@ -154,7 +154,16 @@ service_resource_message_t* ResourceServer::peek_front() {
     if (tail == head)
         return nullptr;
 
-   return &m_message_ring->ring_buffer[tail];
+    // Get the slot at the start
+    service_resource_message_t* slot = &m_message_ring->ring_buffer[tail];
+
+    // Ensure the slot is ready (ie is not in the middle of being written to)
+    auto state = (ServiceMessageSlotState)__atomic_load_n(&slot->state, __ATOMIC_ACQUIRE);
+    if (state != ServiceMessageSlotState::REQUEST)
+        return nullptr;
+
+    // Now safe
+    return slot;
 }
 
 /**
@@ -164,20 +173,14 @@ service_resource_message_t* ResourceServer::peek_front() {
  */
 service_resource_message_t* ResourceServer::dequeue_front() {
 
-    // Get the queue indexes
-    size_t tail = __atomic_load_n(&m_message_ring->tail, __ATOMIC_RELAXED);
-    size_t head = __atomic_load_n(&m_message_ring->head, __ATOMIC_ACQUIRE);
-
-    // Queue empty
-    if (tail == head)
+    // Get current message
+    service_resource_message_t* msg = peek_front();
+    if (!msg)
         return nullptr;
 
-    // Get current message
-    service_resource_message_t* msg = &m_message_ring->ring_buffer[tail];
-
     // Advance tail
-    size_t next = (tail + 1) % MESSAGE_SLOTS;
-    __atomic_store_n(&m_message_ring->tail, next, __ATOMIC_RELEASE);
+    size_t tail = __atomic_load_n(&m_message_ring->tail, __ATOMIC_RELAXED);
+    __atomic_store_n(&m_message_ring->tail, (tail + 1) % MESSAGE_SLOTS, __ATOMIC_RELEASE);
 
     return msg;
 }
@@ -197,6 +200,17 @@ void ResourceServer::advance_queue() {
 
 }
 
+void ResourceServer::send_response(service_resource_message_t* message, int64_t response) {
+
+    // Atomically update the message
+    __atomic_store_n(&message->response, response,__ATOMIC_RELEASE);
+    __atomic_store_n(&message->state, (uint8_t)ServiceMessageSlotState::RESPONSE,__ATOMIC_RELEASE);
+
+    // No longer processing a message
+    m_current_processed_message = nullptr;
+
+}
+
 /**
  * @brief Get a reference to the message currently being processed by the resource server
  *
@@ -208,32 +222,43 @@ service_resource_message_t * ResourceServer::current_processed_message() {
 
 }
 
+/**
+ * @brief Extract the data from a message and pass it to the relevant resource function
+ *
+ * @param message The message to process
+ *
+ * @todo Create resource can now take a blob, handle that
+ */
 void ResourceServer::process_message(service_resource_message_t *message) {
+
+    m_current_processed_message = message;
 
     // Parse the message
     auto data = m_data_region + message->data_offset;
     auto resource   = m_resource_map[message->resource_id];
+    auto command = (ServiceResourceCommand)message -> command;
 
     // Ensure the resource exists
-    bool should_exist = !(message->command == ServiceResourceCommand::S_CREATE
-                       || message->command == ServiceResourceCommand::S_GET);
-    if (!resource && !should_exist) {
-        message->state = ServiceMessageSlotState::RESPONSE;
-        message->response = -1;
+    bool should_exist = !(command == ServiceResourceCommand::S_CREATE || command== ServiceResourceCommand::S_GET);
+    if (!resource && should_exist) {
+        send_response(message, -1);
         return;
     }
 
-    switch (message->command) {
+    // Handle the command
+    int64_t response = -1;
+    switch (command) {
 
         case ServiceResourceCommand::S_CREATE: {
 
             // Try to create the resource
-            resource = create_resource((char*)data, message->flags);
+            resource = create_resource((char*)data, message->flags, 0);
             if (!resource)
-                message->response = false;
+                break;
 
             // Store the resource
             m_resource_map.insert(message->resource_id, resource);
+            response = true;
             break;
         }
 
@@ -242,7 +267,7 @@ void ResourceServer::process_message(service_resource_message_t *message) {
             // Try to create the resource
             resource = get_resource((char*)data);
             if (!resource)
-                message->response = false;
+                break;
 
             // Store the resource
             m_resource_map.insert(message->resource_id, resource);
@@ -253,6 +278,7 @@ void ResourceServer::process_message(service_resource_message_t *message) {
 
             // Delegate
             resource->open(message->flags);
+            response = true;
             break;
 
         }
@@ -262,6 +288,7 @@ void ResourceServer::process_message(service_resource_message_t *message) {
             // Delegate
             resource->close(message->flags);
             m_resource_map.erase(message->resource_id);
+            response = true;
             delete resource;
             break;
 
@@ -270,7 +297,7 @@ void ResourceServer::process_message(service_resource_message_t *message) {
         case ServiceResourceCommand::R_WRITE: {
 
             // Delegate
-            message->response = resource->write(data, message->data_size, message->flags);
+            response = resource->write(data, message->data_size, message->flags);
             break;
 
         }
@@ -278,17 +305,17 @@ void ResourceServer::process_message(service_resource_message_t *message) {
         case ServiceResourceCommand::R_READ: {
 
             // Delegate
-            message->response = resource->read(data, message->data_size, message->flags);
+            response = resource->read(data, message->data_size, message->flags);
             break;
 
         }
 
         default:
-            message->response = false;
+            break;
     }
 
     // Done handling
-    message->state = ServiceMessageSlotState::RESPONSE;
+    send_response(message, response);
 }
 
 void ResourceServer::process_next() {
@@ -322,6 +349,6 @@ Resource* ResourceServer::get_resource(const string &name) {
     return nullptr;
 }
 
-Resource * ResourceServer::create_resource(const string &name, size_t flags) {
+Resource * ResourceServer::create_resource(const string &name, size_t flags, uintptr_t data) {
     return nullptr;
 }

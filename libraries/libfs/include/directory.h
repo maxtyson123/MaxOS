@@ -43,6 +43,12 @@ namespace LibFS {
 
 	void remove_file(uint64_t handle, const char* name);
 	void remove_directory(uint64_t handle, const char* name);
+
+	// return false to stop iteration early
+	using iterate_entry_callback_t = bool (*)(const entry_information_t* entry, const char* name);
+	void iterate_entries(const void* buffer, size_t size, iterate_entry_callback_t cb);
+
+
 }
 
 #endif //LIBFS_DIRECTORY_H

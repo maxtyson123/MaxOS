@@ -24,6 +24,8 @@ using namespace MaxOS::hardwarecommunication;
  * @param args The arguments to pass to the function
  * @param arg_amount The number of arguments
  * @param parent The proccess that owns this thread (started it)
+ *
+ * @todo Cant use rsp0 for kernel stack storage as once scheduler starts up it may point to a userspace rsp0 (nor is it good to use the same stack for every process)
  */
 Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process* parent)
 {
@@ -36,15 +38,8 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	// Create the stack (cant usee global MemoryManager::malloc() as process hasn't been registered with the seduler yet)
 	m_stack_pointer = (uintptr_t) parent->memory_manager->handle_malloc(STACK_SIZE) + STACK_SIZE;
 
-	// Create the TSS stack
-	if (parent->is_kernel) {
-
-		// Use the kernel stack
-		m_tss_stack_pointer = CPU::executing_core() -> tss.rsp0;
-
-	} else {
-		m_tss_stack_pointer = (uintptr_t) parent->memory_manager->kmalloc(STACK_SIZE) + STACK_SIZE;
-	}
+	// Use the kernel stack
+	m_tss_stack_pointer = parent->is_kernel ? CPU::executing_core() -> tss.rsp0 : (uintptr_t) parent->memory_manager->kmalloc(STACK_SIZE) + STACK_SIZE;
 
 	// Mak sure there is a stack
 	ASSERT(m_stack_pointer != 0 && m_tss_stack_pointer != 0, "Failed to allocate stack for thread");
@@ -70,7 +65,6 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 		size_t len = strlen(((char**)args)[i]) + 1;
 		((char**)argv)[i] = (char*) parent->memory_manager->handle_malloc(len);
 		memcpy((void*) ((char**)argv)[i], (void*) ((char**)args)[i], len);
-
 	}
 
 	execution_state.rdi = argc;
@@ -284,6 +278,8 @@ Process::Process(const string& p_name, void (* _entry_point)(void*), void* args,
  * @param arg_amount  The amount of arguments
  * @param elf  The elf file to load the process from
  * @param is_kernel  If the process is a kernel process
+ *
+ * @todo The elf class should be a subclass of Process
  */
 Process::Process(const string& p_name, void* args, int arg_amount, ELF64* elf, bool is_kernel)
 : Process(p_name, is_kernel)

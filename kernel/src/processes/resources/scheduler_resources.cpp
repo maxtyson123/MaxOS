@@ -301,9 +301,9 @@ ThreadResourceRegistry::ThreadResourceRegistry()
  *
  * @todo Implement opening threads
  */
-Resource* ThreadResourceRegistry::create_resource(string const& name, size_t flags) {
+Resource* ThreadResourceRegistry::create_resource(string const& name, size_t flags, uintptr_t data) {
 
-	return ResourceRegistry::create_resource(name, flags);
+	return ResourceRegistry::create_resource(name, flags, data);
 }
 
 Resource* ThreadResourceRegistry::get_resource(string const& name) {
@@ -338,11 +338,44 @@ ProcessResourceRegistry::ProcessResourceRegistry()
  * @param flags td
  * @return The Process resource created from the executable or nullptr if failed to open/execute
  *
- * @todo Implement opening executables
+ * @todo Process needs to own the Elf pointer and free it in destructor (do this when moving ELF as a superclass)
  */
-Resource* ProcessResourceRegistry::create_resource(string const& name, size_t flags) {
+Resource* ProcessResourceRegistry::create_resource(string const& name, size_t flags, uintptr_t data) {
 
-	return ResourceRegistry::create_resource(name, flags);
+	// Get the command
+	auto command = (execute_command_t*)data;
+	if (!command)
+		return nullptr;
+
+	// Kernel copy (@todo copy the data page into the new process so dont get unmapped error and also thus dont need a copy)
+	auto exec_buffer = buffer_t(command->file_data_size);
+	exec_buffer.copy_from(command->file_data, command->file_data_size);
+
+	// Copy the args into userspace (@todo bad, two copies)
+	uint64_t argc = command->args_count;
+	size_t arg_size = argc * sizeof(void*);
+	void* argv = MemoryManager::kmalloc(arg_size);
+	for (int i = 0; i < argc; i++) {
+
+		// Copy each argument
+		size_t len = strlen(((char**)command->args)[i]) + 1;
+		((char**)argv)[i] = (char*) MemoryManager::kmalloc(len);
+		memcpy((void*) ((char**)argv)[i], (void*) ((char**)command->args)[i], len);
+	}
+
+	// Load the elf
+	auto elf = new ELF64((uintptr_t)exec_buffer.raw());
+	if (!elf->is_valid())
+		return nullptr;
+
+	// Create the resource
+	auto process	= new Process(name, argv, argc, elf);
+	auto resource 	= new ProcessResource(name, flags, resource_type_t::PROCESS);
+	resource->process = process;
+
+	KPI::klog("Proc made\n");
+
+	return resource;
 }
 
 /**

@@ -45,7 +45,7 @@ namespace MaxOS::processes::resources {
 			void close_resource(Resource* resource, size_t flags);
 
 			virtual Resource* get_resource(const string& name);
-			virtual Resource* create_resource(const string& name, size_t flags);
+			virtual Resource* create_resource(const string& name, size_t flags, uintptr_t data);
 	};
 
 	/**
@@ -67,7 +67,7 @@ namespace MaxOS::processes::resources {
 			 * @param flags The flags to open the resource with
 			 * @return The created resource, or nullptr on failure
 			 */
-			Resource* create_resource(const string& name, size_t flags) override {
+			Resource* create_resource(const string& name, size_t flags, uintptr_t data) override {
 
 				auto resource = new Type(name, flags, type());
 

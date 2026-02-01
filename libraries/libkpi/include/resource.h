@@ -57,7 +57,7 @@ namespace MaxOS::KPI {
      * @enum ServiceResourceCommand
      * @brief
      */
-    enum class ServiceResourceCommand {
+    enum class ServiceResourceCommand : uint8_t {
         S_CREATE,
         S_GET,
         R_OPEN,
@@ -84,13 +84,13 @@ namespace MaxOS::KPI {
         uint64_t sending_pid;
         size_t resource_id;
         size_t flags;
-        ServiceResourceCommand command;
+        uint8_t command;
 
         size_t data_size;
         size_t data_offset;
 
         int64_t response;
-        ServiceMessageSlotState state;
+        uint8_t state;
     } service_resource_message_t;
 
 
@@ -138,13 +138,15 @@ namespace MaxOS::KPI {
             service_resource_message_t* dequeue_front();
             void advance_queue();
 
+            void send_response(service_resource_message_t* message, int64_t response);
+
             service_resource_message_t* current_processed_message();
             void process_message(service_resource_message_t* message);
             void process_next();
             void loop();
 
             virtual Resource* 	get_resource(const string& name);
-            virtual Resource* 	create_resource(const string& name, size_t flags);
+            virtual Resource* 	create_resource(const string& name, size_t flags, uintptr_t data);
 
     };
 

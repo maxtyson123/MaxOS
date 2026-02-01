@@ -177,9 +177,10 @@ syscall_args_t* SyscallManager::syscall_resource_create(syscall_args_t* args) {
 	auto type 	= (resource_type_t)args->arg0;
 	auto name 	= (char*)args->arg1;
 	auto flags 	= (size_t)args->arg2;
+	auto data   = (uintptr_t)args->arg3;
 
 	// Try to create the resource
-	auto resource = GlobalResourceRegistry::get_registry(type)->create_resource(name, flags);
+	auto resource = GlobalResourceRegistry::get_registry(type)->create_resource(name, flags, data);
 
 	// Handle response
 	args->return_value = resource ? 1 : 0;

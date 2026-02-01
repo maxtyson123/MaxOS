@@ -102,7 +102,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 
 /**
  * @todo IPC support zero copy on big buffers (>64kib)
- *
+ * @todo less copy on program creation
+ * @todo kernel flamegraph
  *
  * Longterm:
  * @todo Thread storage (when clib) & threads can use RPC

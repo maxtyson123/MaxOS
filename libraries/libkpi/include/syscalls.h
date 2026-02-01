@@ -38,7 +38,7 @@ namespace MaxOS::KPI{
 	void* allocate_memory(size_t size);
 	void free_memory(void* address);
 
-	bool resource_create(ResourceType type, const char* name, size_t flags);
+	bool resource_create(ResourceType type, const char* name, size_t flags, uintptr_t data);
 	uint64_t resource_open(ResourceType type, const char* name, size_t flags);
 	void resource_close(uint64_t handle, size_t flags);
 	size_t resource_write(uint64_t handle, const void* buffer, size_t size, size_t flags);

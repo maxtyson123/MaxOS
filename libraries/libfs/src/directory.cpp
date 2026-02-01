@@ -105,4 +105,35 @@ namespace LibFS {
 		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_DIR);
 	}
 
+	/**
+	* @brief Iterate over directory entries and call a callback function to handle.
+	*
+	* @note Will stop iterating if the callback returns false
+	*
+	* @param buffer Pointer to entries
+	* @param size Size of buffer in bytes
+	* @param cb Callback invoked for each entry
+	*/
+	void iterate_entries(const void* buffer, size_t size, iterate_entry_callback_t cb) {
+
+		// Iterate each entry
+		size_t offset = 0;
+		while (offset + sizeof(entry_information_t) <= size) {
+
+			// Get the entry
+			auto* entry = (const entry_information_t*)(buffer + offset);
+
+			// Check bounds
+			if (entry->entry_length < sizeof(entry_information_t) || offset + entry->entry_length > size)
+				break;
+
+			// Invoke callback
+			const char* name = entry->name;
+			if (!cb(entry, name))
+				break;
+
+			// Move the next entry
+			offset += entry->entry_length;
+		}
+	}
 }

@@ -22,10 +22,10 @@ BridgeHandler::BridgeHandler(string const& shared_name) {
 
     // Get the shared memory region
     auto shared_memory = (SharedMemory*)GlobalResourceRegistry::get_registry(resource_type_t::SHARED_MEMORY)->get_resource(shared_name);
-    ASSERT(shared_memory != nullptr, "Shared memory resource not found");
+    ASSERT(shared_memory != nullptr, "Shared memory resource not found\n");
 
     // Copy into the kernel
-    ASSERT(shared_memory->size() == SERVICE_SHARED_MEM_SIZE, "Shared memory resource size mismatch");
+    ASSERT(shared_memory->size() == SERVICE_SHARED_MEM_SIZE, "Shared memory resource size mismatch\n");
     auto address = MemoryManager::s_kernel_memory_manager->vmm()->load_shared_memory(shared_memory->physical_address(), SERVICE_SHARED_MEM_SIZE);
 
     // Setup the message region
@@ -113,17 +113,17 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
 
     // Construct the message
     auto slot = aquire_slot();
-    slot -> sending_pid = GlobalScheduler::current_process()->pid();
-    slot -> resource_id = id;
-    slot -> flags       = flags;
-    slot -> command     = command;
-    slot -> data_size   = size;
-    slot -> data_offset = offset;
-    slot -> response    = 0;
-    slot -> state       = ServiceMessageSlotState::REQUEST;
+    __atomic_store_n(&slot->sending_pid,    GlobalScheduler::current_process()->pid(),  __ATOMIC_RELAXED);
+    __atomic_store_n(&slot->resource_id,        id,                                         __ATOMIC_RELAXED);
+    __atomic_store_n(&slot->flags,              flags,                                      __ATOMIC_RELAXED);
+    __atomic_store_n(&slot->command,            (uint8_t)command,                           __ATOMIC_RELAXED);
+    __atomic_store_n(&slot->data_size,          size,                                       __ATOMIC_RELAXED);
+    __atomic_store_n(&slot->data_offset,        offset,                                     __ATOMIC_RELAXED);
+    __atomic_store_n(&slot->response,       0,                                          __ATOMIC_RELAXED);
+    __atomic_store_n(&slot->state,              (uint8_t)ServiceMessageSlotState::REQUEST,  __ATOMIC_RELEASE);
 
     // Wait for a response
-    while (slot -> state == ServiceMessageSlotState::REQUEST)
+    while (__atomic_load_n(&slot->state, __ATOMIC_ACQUIRE) == (uint8_t)ServiceMessageSlotState::REQUEST)
         GlobalScheduler::current_thread()->yield();
 
     // Read request
@@ -132,7 +132,7 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
 
     // Free resources
     handle_free((void*)m_data_region + offset);
-    slot->state = ServiceMessageSlotState::FREE;
+    __atomic_store_n(&slot->state, (uint8_t)ServiceMessageSlotState::FREE,__ATOMIC_RELEASE);
 
     return slot->response;
 }
@@ -242,7 +242,7 @@ Resource* BridgeResourceRegistry::get_resource(const string &name) {
  * @param flags The flags to pass
  * @return The new resource
  */
-Resource* BridgeResourceRegistry::create_resource(const string &name, size_t flags) {
+Resource* BridgeResourceRegistry::create_resource(const string &name, size_t flags, uintptr_t data) {
 
     // Create the resource
     auto resource = new BridgeResource(name, flags, m_type);

@@ -47,7 +47,7 @@ namespace FileServer::format {
             ~TARVolume();
 
             MaxOS::common::Vector<tar_header_t*> headers();
-            size_t file_size(tar_header_t* header);
+            size_t file_size(const tar_header_t* header);
 
     };
 

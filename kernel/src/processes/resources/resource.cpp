@@ -111,7 +111,7 @@ void BaseResourceRegistry::close_resource(Resource* resource, size_t flags) {
  * @param flags Optional flags to pass (unused by default but registry type specific)
  * @return The resource created or nullptr if failed to create the resource
  */
-Resource* BaseResourceRegistry::create_resource(string const& name, size_t flags) {
+Resource* BaseResourceRegistry::create_resource(string const& name, size_t flags, uintptr_t data) {
 	return nullptr;
 }
 

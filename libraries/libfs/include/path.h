@@ -6,13 +6,13 @@
  * @author Max Tyson
  */
 
-#ifndef FILESERVER_PATH_H
-#define FILESERVER_PATH_H
+#ifndef LIBFS_PATH_H
+#define LIBFS_PATH_H
 
 #include <string.h>
 
 
-namespace FileServer {
+namespace LibFS {
 
 	/**
 	* @class Path
@@ -39,4 +39,4 @@ namespace FileServer {
 }
 
 
-#endif //FILESERVER_PATH_H
+#endif //LIBFS_PATH_H

@@ -25,8 +25,6 @@ using namespace LibFS;
 
 void mount_ramdisk(mstring endpoint) {
 
-    klog("mounting ramdisk\n");
-
     // Try oad the initrd
     void* address = open_shared_memory(endpoint.c_str());
     if (!address)
@@ -34,7 +32,6 @@ void mount_ramdisk(mstring endpoint) {
 
     // Parse the initrd (@todo verify and shit)
     auto fs = new TARFileSystem(address);
-    fs->root_directory()->debug_contents();
 
     // Mount
     auto vfs = VirtualFileSystem::current_file_system();
@@ -42,7 +39,6 @@ void mount_ramdisk(mstring endpoint) {
         return;
 
     vfs->mount_filesystem(fs, "/initrd");
-    klog("mounted ramdisk\n");
 }
 
 extern "C" void _start(int argc, char* argv[]){
@@ -51,7 +47,6 @@ extern "C" void _start(int argc, char* argv[]){
 
     // Set up the virtual filesystem
     VirtualFileSystem vfs;
-    klog("Vfs at 0x%x\n", &vfs);
 
     // Setup the servers
     VFSResourceServer vfs_resources(&vfs);
@@ -63,7 +58,7 @@ extern "C" void _start(int argc, char* argv[]){
         bool did_handle = rpc_server_process_next(handle, false);
 
         // Check if there is anything to do
-        if (!vfs_resources.queue_empty() && !did_handle) {
+        if (vfs_resources.queue_empty() && !did_handle) {
             yield();
             continue;
         }
@@ -72,8 +67,5 @@ extern "C" void _start(int argc, char* argv[]){
 
         // Handle resource calls
         vfs_resources.process_next();
-
     }
-
-
 }

@@ -81,7 +81,7 @@ namespace FileServer {
 			~VFSResourceServer();
 
 			Resource* 	get_resource(const string& name) final;
-			Resource* 	create_resource(const string& name, size_t flags) final;
+			Resource* 	create_resource(const string& name, size_t flags, uintptr_t data) final;
 
 			void change_working_dir(uint64_t pid, string dir);
 			string process_relative_path(uint64_t pid, const string& relative_path);

@@ -489,7 +489,7 @@ namespace MaxOS::KPI::ipc {
 		// Read the message
 		ArgList message;
 		uint8_t buffer[MAX_SERIALIZED_SIZE];
-		size_t size = read_message(endpoint, buffer, sizeof(buffer));
+		size_t size = read_message(endpoint, buffer, sizeof(buffer), block);
 
 		// No messages
 		if (!block && size == 0)

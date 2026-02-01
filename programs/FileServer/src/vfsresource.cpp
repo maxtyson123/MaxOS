@@ -399,7 +399,7 @@ Resource* VFSResourceServer::get_resource(string const& name) {
 	return open_as_resource(path, m_vfs->open_directory(path));
 }
 
-Resource* VFSResourceServer::create_resource(string const& name, size_t flags) {
+Resource* VFSResourceServer::create_resource(string const& name, size_t flags, uintptr_t data) {
 
 	// Get the path from root
 	string path = process_relative_path(current_processed_message()->sending_pid, name);

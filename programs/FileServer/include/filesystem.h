@@ -14,7 +14,7 @@
 #include <string.h>
 #include <vector.h>
 #include <buffer.h>
-#include <path.h>
+#include <../../../libraries/libfs/include/path.h>
 #include <libfs/include/file.h>
 #include <time.h>
 

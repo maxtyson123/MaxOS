@@ -10,6 +10,7 @@
 
 using namespace MaxOS;
 using namespace FileServer;
+using namespace LibFS;
 using namespace MaxOS::common;
 
 /**
@@ -283,7 +284,7 @@ Directory* VirtualFileSystem::open_directory(Directory* parent, string const& na
 }
 
 /**
- * @brief Attempts to open the parent directory and creates the sub directory at the end of the path
+ * @brief Attempts to open the parent directory and creates the subdirectory at the end of the path
  *
  * @param path The path to the directory
  * @return The directory object or null if it could not be opened
