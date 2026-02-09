@@ -278,8 +278,6 @@ ConsoleColour FramebufferConsole::get_background_color(uint16_t x, uint16_t y) {
  */
 void FramebufferConsole::print_logo(bool is_panic) {
 
-	return;
-
 	// Load the logo
 	const char* logo = is_panic ? header_data_kp : header_data;
 	auto address = PhysicalMemoryManager::to_dm_region(s_framebuffer_info->common.framebuffer_addr);

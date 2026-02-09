@@ -84,6 +84,79 @@ system::cpu_status_t* InterruptHandler::handle_interrupt(system::cpu_status_t* s
 	return status;
 }
 
+cpu_status_t * InvaildOpCodeHandler::handle_interrupt(cpu_status_t *status) {
+
+	string msg = StringBuilder() << "Invaild opcode executed at 0x" << status->rip << "\n";
+
+	// Try to avoid the panic @todo make this a part of the execption class
+	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
+	if (can_avoid != nullptr)
+		return can_avoid;
+
+
+	CPU::PANIC(msg.c_str(), status);
+
+}
+
+cpu_status_t * GeneralProtectionHandler::handle_interrupt(cpu_status_t *status) {
+
+	// Get the core that the fault happened on
+	auto core = CPU::executing_core();
+	uint64_t core_id = core ? core->id : 0;
+
+	uint64_t error_code = status->error_code;
+	string msg = StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " cid: " << core_id << "\n";
+
+	// Try to avoid the panic
+	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
+	if (can_avoid != nullptr)
+		return can_avoid;
+
+	// Have to panic
+	CPU::PANIC(msg.c_str(), status);
+
+	// Shouldn't return, fault if this happens
+	return nullptr;
+
+}
+
+system::cpu_status_t * PageFaultHandler::handle_interrupt(cpu_status_t *status) {
+
+	// Extract the information about the fault
+	bool present = (status->error_code & 0x1) != 0;
+	bool write = (status->error_code & 0x2) != 0;
+	bool user_mode = (status->error_code & 0x4) != 0;
+	bool reserved_write = (status->error_code & 0x8) != 0;
+	bool instruction_fetch = (status->error_code & 0x10) != 0;
+	uint64_t faulting_address;
+	asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
+
+	// Get the core that the fault happened on
+	auto core = CPU::executing_core();
+	uint64_t core_id = core ? core->id : 0;
+
+	string msg = StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ") for core " << core_id << "\n";
+
+	// Try kill the process so the system doesn't die
+	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
+	if (can_avoid != nullptr)
+		return can_avoid;
+
+	// Cant avoid it so halt the kernel
+	CPU::PANIC(msg.c_str(), status);
+
+	// Shouldn't return, fault if this happens
+	return nullptr;
+}
+
+system::cpu_status_t * CPUStopHandler::handle_interrupt(system::cpu_status_t *status) {
+
+	CPU::halt();
+
+	// Shouldn't return, fault if this happens
+	return nullptr;
+}
+
 /**
  * @brief Constructs the Interrupt Manager and sets up the interrupt descriptor table (does not activate interrupts)
  */
@@ -204,7 +277,7 @@ void InterruptManager::activate() {
 	Logger::INFO() << "Activating Interrupts \n";
 
 	// Deactivate the current (old) interrupt manager
-	InterruptManager::deactivate();
+	deactivate();
 
 	// Set the current interrupt manager and start interrupts
 	s_active_interrupt_manager = this;
@@ -233,30 +306,7 @@ void InterruptManager::deactivate() {
  *
  * @todo Exception handlers
  */
-system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t* status) {
-
-	// Default Fault Handlers
-	switch (status->interrupt_number) {
-
-		case 0x6: {
-			string msg = StringBuilder() << "Invaild opcode executed at 0x" << status->rip << "\n";
-			CPU::PANIC(msg.c_str(), status);
-			break;
-		}
-
-		case 0x7:
-			CPU::PANIC("Device Not Available: FPU Not Enabled", status);
-			break;
-
-		case 0x0D:
-			return general_protection_fault(status);
-
-		case 0x0E:
-			return page_fault(status);
-
-		case 0x81:
-			CPU::halt();
-	}
+cpu_status_t* InterruptManager::HandleInterrupt(cpu_status_t* status) {
 
 	// If there is an interrupt manager handle interrupt
 	if (s_active_interrupt_manager != nullptr)
@@ -295,12 +345,9 @@ void InterruptManager::remove_interrupt_handler(uint8_t interrupt) {
  */
 cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
-	// Where to go afterward
-	cpu_status_t* new_status = status;
-
 	// Handle the interrupt
 	ASSERT(m_interrupt_handlers[status->interrupt_number] != nullptr, "Interrupt 0x%x not handled\n", status->interrupt_number);
-	new_status = m_interrupt_handlers[status->interrupt_number]->handle_interrupt(status);
+	cpu_status_t* new_status = m_interrupt_handlers[status->interrupt_number]->handle_interrupt(status);
 
 	// Send the EOI to the APIC
 	if (HARDWARE_INTERRUPT_OFFSET <= status->interrupt_number && status->interrupt_number < HARDWARE_INTERRUPT_OFFSET + 16)
@@ -321,6 +368,9 @@ void InterruptManager::set_apic(AdvancedProgrammableInterruptController* apic) {
 }
 
 
+ExceptionHandlers::ExceptionHandlers() = default;
+ExceptionHandlers::~ExceptionHandlers() = default;
+
 /**
  * @brief Handles a page fault
  *
@@ -329,58 +379,6 @@ void InterruptManager::set_apic(AdvancedProgrammableInterruptController* apic) {
  */
 cpu_status_t* InterruptManager::page_fault(system::cpu_status_t* status) {
 
-	// Extract the information about the fault
-	bool present = (status->error_code & 0x1) != 0;
-	bool write = (status->error_code & 0x2) != 0;
-	bool user_mode = (status->error_code & 0x4) != 0;
-	bool reserved_write = (status->error_code & 0x8) != 0;
-	bool instruction_fetch = (status->error_code & 0x10) != 0;
-	uint64_t faulting_address;
-	asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
-
-	// Get the core that the fault happened on
-	auto core = CPU::executing_core();
-	uint64_t core_id = core ? core->id : 0;
-
-	string msg = StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ") for core " << core_id << "\n";
-
-	// Try kill the process so the system doesn't die
-	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
-	if (can_avoid != nullptr)
-		return can_avoid;
-
-	// Cant avoid it so halt the kernel
-	CPU::PANIC(msg.c_str(), status);
-
-	// Probably should never get here
-	return status;
-}
-
-/**
- * @brief Handles a general protection fault
- *
- * @param status The cpu status
- * @return The updated cpu status (won't return if it panics)
- */
-cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t* status) {
-
-	// Get the core that the fault happened on
-	auto core = CPU::executing_core();
-	uint64_t core_id = core ? core->id : 0;
-
-	uint64_t error_code = status->error_code;
-	string msg = StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " cid: " << core_id << "\n";
-
-	// Try to avoid the panic
-	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
-	if (can_avoid != nullptr)
-		return can_avoid;
-
-	// Have to panic
-	CPU::PANIC(msg.c_str(), status);
-
-	// Probably should never get here
-	return status;
 }
 
 /**

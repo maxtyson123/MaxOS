@@ -72,6 +72,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	Multiboot multiboot(addr, magic);
 	GlobalDescriptorTable gdt;
 	InterruptManager interrupts;
+	ExceptionHandlers exceptions;
 
 	Logger::HEADER() << "Stage {1.1}: Memory Initialisation\n";
 	PhysicalMemoryManager pmm(&multiboot);
@@ -88,7 +89,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	kernel_clock.calibrate();
 	cpu.init_cores();
 
-	Logger::HEADER() << "Stage {3}: Userspace Initialisation\n";
+	Logger::HEADER() << "Stage {3}: Userspace Initialisation ASDASDAS\n";
 	SyscallManager syscalls;
 	GlobalScheduler scheduler(multiboot);
 	console.finish();

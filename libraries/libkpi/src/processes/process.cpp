@@ -50,14 +50,12 @@ uint64_t processes::exec_file(const char* name, const char* path, const char** a
 
 	// Open the file
 	auto handle = LibFS::open_file(path);
-	klog("file handle %d \n", handle);
 	if (!handle)
 		return 0;
 
 	// Load the ELF blob
 	size_t size = LibFS::file_size(handle);
 	auto buffer = new uint8_t[size];
-	klog("reading file size %d \n", size);
 	LibFS::file_read(handle, buffer, size);
 
 	// Create the process
@@ -67,7 +65,6 @@ uint64_t processes::exec_file(const char* name, const char* path, const char** a
 		.file_data = buffer,
 		.file_data_size = size,
 	};
-	klog("executing command \n");
 	uint64_t result = resource_create(ResourceType::PROCESS, name, 0, &command);
 
 	// Clean up
@@ -75,7 +72,7 @@ uint64_t processes::exec_file(const char* name, const char* path, const char** a
 	delete[] buffer;
 	LibFS::close_file(handle);
 
-	// Wait for completion if requested
+	// Wait for completion if requested @todo move this the scheduler resource create place so that it can be blocked properly
 	if (wait_for_completion && result > 0){
 
 		process_stats_t stats = get_process_stats_handle(result);

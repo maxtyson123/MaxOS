@@ -32,13 +32,42 @@ namespace MaxOS::hardwarecommunication {
 			uint8_t m_interrupt_number;     ///<  The interrupt number this handler handles
 
 			explicit InterruptHandler(uint8_t interrupt_number, int64_t redirect = -1, uint64_t redirect_index = 0);
-			~InterruptHandler();
+			virtual ~InterruptHandler();
 
 		public:
 			virtual void handle_interrupt();
 			virtual system::cpu_status_t* handle_interrupt(system::cpu_status_t* status);
 
 	};
+
+	class InvaildOpCodeHandler : public InterruptHandler {
+		public:
+			InvaildOpCodeHandler() : InterruptHandler(0x06) {	}
+
+			system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
+	};
+
+	class GeneralProtectionHandler : public InterruptHandler {
+		public:
+			GeneralProtectionHandler() : InterruptHandler(0x0D) { }
+
+			system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
+	};
+
+	class PageFaultHandler : public InterruptHandler {
+		public:
+			PageFaultHandler() : InterruptHandler(0x0E) { }
+
+		system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
+	};
+
+	class CPUStopHandler : public InterruptHandler {
+		public:
+			CPUStopHandler() : InterruptHandler(0x81) { }
+
+			system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
+	};
+
 
 	/**
 	 * @struct IDTR
@@ -73,6 +102,22 @@ namespace MaxOS::hardwarecommunication {
 
 	constexpr uint16_t HARDWARE_INTERRUPT_OFFSET = 0x20;    ///< The offset in the IDT where interrupts from hardware start
 	constexpr uint16_t MAX_INTERRUPT_HANDLERS = 256;        ///< The maximum number of interrupt handlers
+
+	class ExceptionHandlers {
+
+		private:
+
+			// Exception handles
+			InvaildOpCodeHandler m_opce_handler;
+			GeneralProtectionHandler m_gpe_handler;
+			PageFaultHandler m_page_fault_handler;
+			CPUStopHandler m_cpu_stop_handler;
+
+		public:
+			ExceptionHandlers();
+			~ExceptionHandlers();
+
+	};
 
 	/**
 	 * @class InterruptManager

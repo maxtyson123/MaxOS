@@ -17,6 +17,7 @@ using namespace MaxOS::KPI::processes;
 extern "C" void _start(void) {
 
 	MaxOS::KPI::klog("DRIVER MANAGER STARTED\n");
+	while (true) {};
 
 	// Start the driver manager
 	Manager driver_manager;

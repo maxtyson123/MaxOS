@@ -368,13 +368,22 @@ Resource* ProcessResourceRegistry::create_resource(string const& name, size_t fl
 	if (!elf->is_valid())
 		return nullptr;
 
-	// Create the resource
+	// Create the processs
 	auto process	= new Process(name, argv, argc, elf);
+	GlobalScheduler::system_scheduler() -> add_process(process);
+
+	// Create the resource
 	auto resource 	= new ProcessResource(name, flags, resource_type_t::PROCESS);
 	resource->process = process;
 
-	KPI::klog("Proc made\n");
+	// Clean up
+	// for (int i = 0; i < argc; i++)
+	// 	delete ((char**)argv)[i];
+	// delete argv;
 
+
+	// Switch back to the caller proc
+	MemoryManager::switch_active_memory_manager(GlobalScheduler::current_process()->memory_manager);
 	return resource;
 }
 

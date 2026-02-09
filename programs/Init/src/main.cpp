@@ -28,7 +28,7 @@ bool start_new(const entry_information_t* entry, const char* name) {
 
 	// Execute the file
 	string path = (string)"/initrd/" + name;
-	exec_file(Path::file_name(name).c_str(), path.c_str());
+	exec_file(Path::file_name(path).c_str(), path.c_str());
 
 	return true;
 

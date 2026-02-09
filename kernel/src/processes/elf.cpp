@@ -154,7 +154,6 @@ void ELF64::load_program_headers(VirtualMemoryManager* vmm) const {
 		// Allocate space at the requested address
 		void* address = vmm->allocate(program_header->virtual_address, program_header->memory_size, PRESENT | WRITE);
 		ASSERT(address != nullptr, "Failed to allocate memory for program header\n");
-		Logger::DEBUG() << "Loaded header at 0x" << (uint64_t)address << " with a size of 0x" << program_header->memory_size << "\n";
 
 		// Copy the program into memory at that address
 		memcpy(address, (void*) (m_elf_header_address + program_header->offset), program_header->file_size);

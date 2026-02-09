@@ -46,8 +46,6 @@ VirtualMemoryManager::VirtualMemoryManager() {
 			m_pml4_root_address[i] = PhysicalMemoryManager::s_current_manager->pml4_root_address()[i];
 
 		}
-		Logger::DEBUG() << "Mapped higher half of kernel\n";
-
 
 	} else {
 		m_pml4_root_address = PhysicalMemoryManager::s_current_manager->pml4_root_address();
@@ -58,7 +56,6 @@ VirtualMemoryManager::VirtualMemoryManager() {
 	uint64_t vmm_space = PhysicalMemoryManager::align_to_page(HIGHER_HALF_DIRECT_MAP + PhysicalMemoryManager::s_current_manager->memory_size() + PAGE_SIZE);
 	void* vmm_space_physical = PhysicalMemoryManager::s_current_manager->allocate_frame();
 	PhysicalMemoryManager::s_current_manager->map(vmm_space_physical, (virtual_address_t*) vmm_space, PRESENT | WRITE, m_pml4_root_address);
-	Logger::DEBUG() << "VMM space: physical - 0x" << (uint64_t) vmm_space_physical << ", virtual - 0x" << (uint64_t) vmm_space << "\n";
 
 	// Make sure everything is mapped correctly
 	if (!is_kernel)
@@ -72,8 +69,6 @@ VirtualMemoryManager::VirtualMemoryManager() {
 
 	// Calculate the next available address (kernel needs to reserve space for the higher half)
 	m_next_available_address = is_kernel ? vmm_space + VMM_RESERVED : PAGE_SIZE;
-	Logger::DEBUG() << "Next available address: 0x" << m_next_available_address << "\n";
-
 }
 
 /**

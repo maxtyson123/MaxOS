@@ -279,6 +279,8 @@ Process::Process(const string& p_name, void (* _entry_point)(void*), void* args,
  * @param elf  The elf file to load the process from
  * @param is_kernel  If the process is a kernel process
  *
+ * @warning This will load the constructed processes memory manager, if execution isn't passed to
+ *
  * @todo The elf class should be a subclass of Process
  */
 Process::Process(const string& p_name, void* args, int arg_amount, ELF64* elf, bool is_kernel)
