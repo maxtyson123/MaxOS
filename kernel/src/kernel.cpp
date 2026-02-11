@@ -29,15 +29,15 @@ using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::tests;
 
-extern "C" void call_constructors();        ///< Calls the C++ static constructors
-extern "C" uint8_t core_boot_info[];        ///< The boot info structure for the core being started
+extern "C" void call_constructors(); ///< Calls the C++ static constructors
+extern "C" uint8_t core_boot_info[]; ///< The boot info structure for the core being started
 
 /**
  * @brief The main entry point for secondary cores. Sets up the core and waits to be scheduled.
  */
-extern "C" [[noreturn]] void core_main() {
-
-	auto info = (core_boot_info_t*) (core_boot_info);
+extern "C" [[noreturn]] void core_main()
+{
+	auto info = (core_boot_info_t*)(core_boot_info);
 	info->activated = true;
 	auto core = CPU::executing_core();
 
@@ -50,7 +50,7 @@ extern "C" [[noreturn]] void core_main() {
 	asm("sti");
 
 	// Wait to be scheduled
-	while(true)
+	while (true)
 		CPU::halt();
 }
 
@@ -60,8 +60,8 @@ extern "C" [[noreturn]] void core_main() {
  * @param addr The address of the multiboot info struct
  * @param magic The multiboot magic number
  */
-extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic) {
-
+extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic)
+{
 	call_constructors();
 
 	Logger logger;
@@ -96,15 +96,15 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	GlobalScheduler::activate();
 
 	// Idle loop  (read Idle.md)
-	while(true)
+	while (true)
 		asm("hlt");
-
 }
 
 /**
  * @todo IPC support zero copy on big buffers (>64kib)
  * @todo less copy on program creation
  * @todo kernel flamegraph
+ * @todo better erroring with bridge calls
  *
  * Longterm:
  * @todo Thread storage (when clib) & threads can use RPC
@@ -118,8 +118,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 // init flow:
 // % parse multiboot for init program, fileserver and ramdisk
 // % schedule init program and fileserver
-// - init program tells fileserver to load & parse ramdisk
-// - init (via fileserver) reads ramdisk and starts all under "run/*" (driver manager, disks)
+// % init program tells fileserver to load & parse ramdisk
+// % init (via fileserver) reads ramdisk and starts all under "run/*" (driver manager, disks)
 // = = =
 // - - DM scans via selectors and builds list of initial devices
 // - - DM trys to init those devices (early ret, no fs)

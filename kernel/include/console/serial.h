@@ -9,7 +9,7 @@
 #ifndef MAXOS_SERIAL_H
 #define MAXOS_SERIAL_H
 
-#include <hardwarecommunication/port.h>
+#include <port.h>
 #include <common/logger.h>
 
 
@@ -23,12 +23,12 @@ namespace MaxOS::console {
 	class SerialConsole : public common::OutputStream {
 
 		private:
-			hardwarecommunication::Port8Bit m_data_port;
-			hardwarecommunication::Port8Bit m_interrupt_enable_port;
-			hardwarecommunication::Port8Bit m_fifo_control_port;
-			hardwarecommunication::Port8Bit m_line_control_port;
-			hardwarecommunication::Port8Bit m_modem_control_port;
-			hardwarecommunication::Port8Bit m_line_status_port;
+			common::Port8Bit m_data_port;
+			common::Port8Bit m_interrupt_enable_port;
+			common::Port8Bit m_fifo_control_port;
+			common::Port8Bit m_line_control_port;
+			common::Port8Bit m_modem_control_port;
+			common::Port8Bit m_line_status_port;
 
 		public:
 			explicit SerialConsole(Logger* logger);

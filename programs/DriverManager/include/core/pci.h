@@ -6,19 +6,18 @@
  * @author Max Tyson
  */
 
-#ifndef MAX_OS_HARDWARECOMMUNICATION_PCI_H
-#define MAX_OS_HARDWARECOMMUNICATION_PCI_H
+#ifndef DRIVER_MANAGER_CORE_PCI_H
+#define DRIVER_MANAGER_CORE_PCI_H
 
 #include <cstdint>
 #include <string.h>
-#include <drivers/driver.h>
-#include <memory/memorymanagement.h>
-#include <hardwarecommunication/port.h>
-#include <hardwarecommunication/interrupts.h>
-#include <drivers/video/vga.h>
+#include <driver.h>
+#include <mem.h>
+#include <port.h>
+#include <core/device.h>
 
 
-namespace MaxOS::hardwarecommunication {
+namespace DriverManager::core {
 
 	/**
 	 * @enum BARType
@@ -30,19 +29,19 @@ namespace MaxOS::hardwarecommunication {
 	};
 
 	/**
-	 * @class BaseAddressRegister
+	 * @struct BaseAddressRegister
 	 * @brief Used to store the Base Address Register (BAR) of a PCI device
 	 *
-	 * @todo Should be a struct
+	 * @typedef bar_t
+	 * @breif Alias for BaseAddressRegister
 	 */
-	class BaseAddressRegister {
-		public:
+	typedef struct  BaseAddressRegister {
 			bool pre_fetchable;                 ///< Reading from this address wont change the state of the device and data can be cached by the CPU
 			uint8_t* address;                   ///< The address of the device (IO port or memory address, can be 32 or 64 bit)
 			uint32_t size;                      ///< @todo Document Size of the address space
-			BARType type;                    ///< Where to access the device
+			BARType type;						///< Where to access the device
 
-	};
+	} bar_t;
 
 
 	/**
@@ -51,9 +50,9 @@ namespace MaxOS::hardwarecommunication {
 	 *
 	 * @todo Should be a struct aswell
 	 */
-	class PCIDeviceDescriptor {
-		public:
-			bool has_port_base = false;         ///< Whether the device has an IO port base address
+	typedef struct PCIDeviceDescriptor {
+
+		bool has_port_base = false;         ///< Whether the device has an IO port base address
 			uint32_t port_base = 0;             ///< The IO port base address
 
 			bool has_memory_base = false;       ///< Whether the device has a memory base address
@@ -65,31 +64,44 @@ namespace MaxOS::hardwarecommunication {
 			uint16_t device = 0;                ///< The device number on the PCI bus
 			uint16_t function = 0;              ///< The function number of the device
 
-			uint16_t vendor_id = 0;             ///< The company's that made the device unique identifier
+			uint16_t vendor_id = 0;             ///< The company that made the device unique identifier
 			uint16_t device_id = 0;             ///< The device's unique identifier
+			uint16_t sub_vendor_id = 0;			///< The company that made the subsystem
 
 			uint8_t class_id = 0;               ///< The class type of the device
 			uint8_t subclass_id = 0;            ///< The subclass type of the device
 			uint8_t interface_id = 0;           ///< The interface type of the device
 
 			uint8_t revision = 0;               ///< The device version number
+	} pci_device_descriptor_t;
 
-			PCIDeviceDescriptor();
-			~PCIDeviceDescriptor();
+	class PCIDevice : public Device {
 
-			[[nodiscard]] string get_type() const;
+		private:
+			pci_device_descriptor_t m_device_descriptor;
+
+			LibDriver::Driver* handle_driver_start();
+
+		public:
+			PCIDevice(pci_device_descriptor_t device_descriptor);
+			~PCIDevice();
+
+			bool builtin_driver();
+
+			static LibDriver::DriverType get_driver_type(const pci_device_descriptor_t& device_descriptor);
+
 	};
-
 
 	/**
 	 * @class PCIController
-	 * @brief Handles the selecting and loading of drivers for PCI devices
+	 * @brief Handles the enumeration and loading of drivers for PCI devices
 	 */
-	class PCIController final : public drivers::DriverSelector {
+	class PCIController final : public DeviceEnumerator {
+
 		private:
 			// Ports
-			Port32Bit m_data_port;
-			Port32Bit m_command_port;
+			MaxOS::common::Port32Bit m_data_port;
+			MaxOS::common::Port32Bit m_command_port;
 
 			// I/O
 			uint32_t read(uint16_t bus, uint16_t device, uint16_t function, uint32_t register_offset);
@@ -100,15 +112,27 @@ namespace MaxOS::hardwarecommunication {
 			BaseAddressRegister get_base_address_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar);
 			bool device_has_functions(uint16_t bus, uint16_t device);
 
+			char* m_pci_ids;
+			uint64_t m_pci_ids_file_handle;
+
+			MaxOS::common::Map<uint8_t, MaxOS::string> m_vendor_name_cache;
+			MaxOS::common::Map<uint8_t, MaxOS::string> m_device_name_cache;
+			MaxOS::common::Map<uint8_t, MaxOS::string> m_subvendor_name_cache;
+
 		public:
 			PCIController();
 			~PCIController() final;
 
-			void select_drivers(drivers::DriverSelectorEventHandler* handler) override;
-			static drivers::Driver* get_driver(PCIDeviceDescriptor dev);
-			static void list_known_device(const PCIDeviceDescriptor& dev);
+			void enumerate_devices(DeviceEnumeratorEventHandler* handler) final;
+			static LibDriver::Driver* get_driver(pci_device_descriptor_t dev);
+			static void list_known_device(const pci_device_descriptor_t& dev);
+
+			[[nodiscard]] MaxOS::string get_class_string(const pci_device_descriptor_t& dev) const;
+			[[nodiscard]] MaxOS::string get_pci_id_string(const pci_device_descriptor_t& dev) const;
+			[[nodiscard]] LibDriver::DriverType get_driver_type(const pci_device_descriptor_t& dev) const;
+
 	};
 }
 
 
-#endif //MAX_OS_HARDWARECOMMUNICATION_PCI_H
+#endif //DRIVER_MANAGER_CORE_PCI_H

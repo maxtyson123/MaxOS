@@ -6,12 +6,12 @@
  * @author Max Tyson
  */
 
-#ifndef MAX_OS_HARDWARECOMMUNICATION_PORT_H
-#define MAX_OS_HARDWARECOMMUNICATION_PORT_H
+#ifndef MAX_OS_PORT_H
+#define MAX_OS_PORT_H
 
 #include <cstdint>
 
-namespace MaxOS::hardwarecommunication {
+namespace MaxOS::common {
 
 	/**
 	 * @class Port
@@ -78,4 +78,4 @@ namespace MaxOS::hardwarecommunication {
 }
 
 
-#endif //MAX_OS_HARDWARECOMMUNICATION_PORT_H
+#endif //MAX_OS_PORT_H

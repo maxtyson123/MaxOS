@@ -311,6 +311,7 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 * [OSDev Subreddit](https://www.reddit.com/r/osdev/)
 * [Duck OS](https://github.com/byteduck/duckOS)
 * [Dream OS](https://github.com/dreamos82/Dreamos64)
+* [PCI IDs](https://pci-ids.ucw.cz)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

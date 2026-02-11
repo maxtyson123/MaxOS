@@ -17,9 +17,23 @@ namespace LibDriver {
 
 	using string = MaxOS::string;
 
+	enum class  DriverType {
+		UNKNOWN,
+		DISK,
+		ETHERNET,
+		KEYBOARD,
+		MOUSE,
+		VIDEO,
+	};
+
+
 	/**
 	 * @class Driver
 	 * @brief base class for all drivers, handles the activation, deactivation, initialisation and reset of the driver as well as error messages and identifying the device
+	 *
+	 * @note This is different from a device, which is the physical hardware that a driver talks to
+	 *
+	 * @todo store type?
 	 */
 	class Driver {
 		public:

@@ -20,6 +20,8 @@ inline void user_assert_handler(bool condition, const char* format, ...) {
 	if (condition)
 		return;
 
+	//todo print the
+
 	MaxOS::KPI::klog("Assert failed");
 	MaxOS::KPI::processes::exit(1);
 }

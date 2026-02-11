@@ -6,14 +6,14 @@
  * @author Max Tyson
  */
 
-#ifndef DRIVER_MANAGER_COMMON_MANAGER_H
-#define DRIVER_MANAGER_COMMON_MANAGER_H
+#ifndef DRIVER_MANAGER_CORE_MANAGER_H
+#define DRIVER_MANAGER_CORE_MANAGER_H
 
 #include <driver.h>
 #include <cstdint>
 #include <cstddef>
 
-#include <core/selector.h>
+#include <core/device.h>
 
 namespace DriverManager::core {
 
@@ -22,32 +22,36 @@ namespace DriverManager::core {
 	 * @class Manager
 	 * @brief Manages the drivers, handles the adding and removing of drivers
 	 */
-	class Manager : public SelectorEventHandler {
+	class Manager : public DeviceEnumeratorEventHandler {
 
 		private:
 			MaxOS::common::Vector<LibDriver::Driver*> m_drivers;
-			MaxOS::common::Vector<Selector*> m_driver_selectors;
+			size_t m_next_device_id = 0;
+
+			MaxOS::common::Vector<Device*> m_devices;
+			MaxOS::common::Vector<DeviceEnumerator*> m_device_enumerators;
 
 		public:
 			Manager();
-			~Manager();
+			~Manager() final;
 
-			void add_driver_selector(Selector*);
-			void remove_driver_selector(Selector*);
+			void add_device_enumerator(DeviceEnumerator*);
+			void remove_device_enumerator(DeviceEnumerator*);
 
 			void add_driver(LibDriver::Driver*);
 			void remove_driver(LibDriver::Driver*);
-			void on_driver_selected(LibDriver::Driver*) final;
 
-			void find_drivers();
-			uint32_t reset_devices();
-			void initialise_drivers();
-			void deactivate_drivers();
-			void activate_drivers();
+			void find_devices();
+			void on_device_enumerated(Device*) final;
 
+			bool all_drivers_started();
+			void start_drivers();
+			void start_disks();
+
+			size_t get_next_device_id();
 
 	};
 
 }
 
-#endif //DRIVER_MANAGER_COMMON_MANAGER_H
+#endif //DRIVER_MANAGER_CORE_MANAGER_H

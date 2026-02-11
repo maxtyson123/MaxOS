@@ -8,6 +8,8 @@
 
 #include <core/manager.h>
 
+#include <core/pci.h>
+
 using namespace DriverManager;
 using namespace DriverManager::core;
 using namespace LibDriver;
@@ -18,8 +20,7 @@ using namespace MaxOS::common;
  */
 Manager::Manager() {
 
-	// TODO: libc support for this
-	// add_driver_selector(new PCIController);
+	add_device_enumerator(new PCIController);
 	// add_driver_selector(new UniversalSerialBusController);
 }
 
@@ -33,8 +34,8 @@ Manager::~Manager() {
 		remove_driver(*m_drivers.begin());
 
 	// Free the driver selectors
-	for(auto& driver_selector : m_driver_selectors)
-		delete driver_selector;
+	for(auto& enumerator : m_device_enumerators)
+		delete enumerator;
 
 }
 
@@ -64,88 +65,70 @@ void Manager::remove_driver(Driver* driver) {
  *
  * @param driver The driver that was selected
  */
-void Manager::on_driver_selected(Driver* driver) {
-	add_driver(driver);
+void Manager::on_device_enumerated(Device* driver) {
+	m_devices.push_back(driver);
 }
 
 /**
- * @brief Add a driver selector to the manager
+ * @brief  Check if all the found drivers have been started
  *
- * @param driver_selector The driver selector to add
+ * @return True if all the drivers found by the manager have been started
  */
-void Manager::add_driver_selector(Selector* driver_selector) {
+bool Manager::all_drivers_started() {
 
-	m_driver_selectors.push_back(driver_selector);
+	for (const auto& device : m_devices)
+		if (!device->driver_started())
+			return false;
+
+	return true;
 
 }
 
 /**
- * @brief Remove a driver selector from the manager
+ * @brief Add a device enumerator to the driver manager
  *
- * @param driver_selector The driver selector to remove
+ * @param device_enumerator The driver selector to add
  */
-void Manager::remove_driver_selector(Selector* driver_selector) {
+void Manager::add_device_enumerator(DeviceEnumerator* device_enumerator) {
 
-	m_driver_selectors.erase(driver_selector);
+	m_device_enumerators.push_back(device_enumerator);
 
 }
 
 /**
- * @brief Find the drivers
+ * @brief Remove a device enumerator from the manager
+ *
+* @param device_enumerator The driver selector to add
  */
-void Manager::find_drivers() {
+void Manager::remove_device_enumerator(DeviceEnumerator* device_enumerator) {
+
+	m_device_enumerators.erase(device_enumerator);
+
+}
+
+/**
+ * @brief Find the devices
+ */
+void Manager::find_devices() {
 
 	// Select the drivers
-	for(auto& driver_selector : m_driver_selectors)
-		driver_selector->select_drivers(this);
+	for(auto& device_enumerator : m_device_enumerators)
+		device_enumerator->enumerate_devices(this);
 }
 
 /**
- * @brief Reset all the devices
- *
- * @return The longest time it takes to reset a device
+ * @brief Start the drivers any devices that haven't been started
  */
-uint32_t Manager::reset_devices() {
+void Manager::start_drivers() {
 
-	uint32_t reset_wait_time = 0;
-	for(auto& driver : m_drivers) {
-		// Reset the driver
-		uint32_t wait_time = driver->reset();
-
-		// If the wait time is longer than the current longest wait time, set it as the new longest wait time
-		if(wait_time > reset_wait_time)
-			reset_wait_time = wait_time;
-	}
-
-	return reset_wait_time;
-}
-
-/**
- * @brief Initialise the drivers
- */
-void Manager::initialise_drivers() {
-
-	for(auto& driver : m_drivers)
-		driver->initialise();
+	for (const auto& device : m_devices)
+		if (!device->driver_started())
+			device->start_driver();
 
 }
 
-/**
- * @brief Deactivate the drivers
- */
-void Manager::deactivate_drivers() {
+void Manager::start_disks() {
 
-	for(auto& driver : m_drivers)
-		driver->deactivate();
 
-}
-
-/**
- * @brief Activate the drivers
- */
-void Manager::activate_drivers() {
-
-	for(auto& driver : m_drivers)
-		driver->activate();
 
 }

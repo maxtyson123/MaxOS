@@ -6,9 +6,9 @@
  * @author Max Tyson
  */
 
-#include <hardwarecommunication/port.h>
+#include <port.h>
 
-using namespace MaxOS::hardwarecommunication;
+using namespace MaxOS::common;
 
 /**
  * @brief Construct a new Port object

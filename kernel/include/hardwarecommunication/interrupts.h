@@ -10,7 +10,7 @@
 #define MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H
 
 #include <cstdint>
-#include <hardwarecommunication/port.h>
+#include <port.h>
 #include <system/gdt.h>
 #include <inputStream.h>
 #include <outputStream.h>
@@ -40,25 +40,36 @@ namespace MaxOS::hardwarecommunication {
 
 	};
 
-	class InvaildOpCodeHandler : public InterruptHandler {
-		public:
-			InvaildOpCodeHandler() : InterruptHandler(0x06) {	}
+	class ExceptionHandler : public InterruptHandler {
 
-			system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
+		public:
+			ExceptionHandler(uint8_t interrupt_number);
+			~ExceptionHandler();
+
+			virtual string get_message(system::cpu_status_t* status);
+			virtual system::cpu_status_t* handle_interrupt(system::cpu_status_t* status);
+
 	};
 
-	class GeneralProtectionHandler : public InterruptHandler {
+	class InvaildOpCodeHandler : public ExceptionHandler {
 		public:
-			GeneralProtectionHandler() : InterruptHandler(0x0D) { }
+			InvaildOpCodeHandler() : ExceptionHandler(0x06) {	}
 
-			system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
+			string get_message(system::cpu_status_t* status) final;
 	};
 
-	class PageFaultHandler : public InterruptHandler {
+	class GeneralProtectionHandler : public ExceptionHandler {
 		public:
-			PageFaultHandler() : InterruptHandler(0x0E) { }
+			GeneralProtectionHandler() : ExceptionHandler(0x0D) { }
 
-		system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
+			string get_message(system::cpu_status_t* status) final;
+	};
+
+	class PageFaultHandler : public ExceptionHandler {
+		public:
+			PageFaultHandler() : ExceptionHandler(0x0E) { }
+
+			string get_message(system::cpu_status_t* status) final;
 	};
 
 	class CPUStopHandler : public InterruptHandler {

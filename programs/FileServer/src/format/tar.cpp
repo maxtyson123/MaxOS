@@ -69,7 +69,7 @@ TARFile::TARFile(TARVolume *volume, tar_header_t* header)
 
 TARFile::~TARFile() = default;
 
-void TARFile::read(buffer_t *data, size_t amount) {
+void TARFile::read(buffer_t* data, size_t amount) {
 
     // End of file
     if (m_offset >= m_size)

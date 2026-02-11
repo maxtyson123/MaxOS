@@ -10,7 +10,7 @@
 #define MAXOS_HARDWARECOMMUNICATION_APIC_H
 
 #include <macros.h>
-#include <hardwarecommunication/port.h>
+#include <port.h>
 #include <hardwarecommunication/acpi.h>
 #include <memory/physical.h>
 
@@ -238,10 +238,10 @@ namespace MaxOS::hardwarecommunication {
 			LocalAPIC* m_local_apic;
 			IOAPIC* m_io_apic;
 
-			Port8BitSlow m_pic_master_command_port;
-			Port8BitSlow m_pic_master_data_port;
-			Port8BitSlow m_pic_slave_command_port;
-			Port8BitSlow m_pic_slave_data_port;
+			common::Port8BitSlow m_pic_master_command_port;
+			common::Port8BitSlow m_pic_master_data_port;
+			common::Port8BitSlow m_pic_slave_command_port;
+			common::Port8BitSlow m_pic_slave_data_port;
 
 			void disable_pic();
 

@@ -98,8 +98,8 @@ namespace MaxOS::hardwarecommunication {
 			uint64_t m_ticks { 0 };
 
 			// Ports
-			Port8Bit m_data_port;
-			Port8Bit m_command_port;
+			common::Port8Bit m_data_port;
+			common::Port8Bit m_command_port;
 
 			// APIC
 			LocalAPIC* m_local_apic;
@@ -128,8 +128,8 @@ namespace MaxOS::hardwarecommunication {
 			bool m_24_hour_clock = true;
 
 			// Ports
-			Port8Bit m_data_port { 0x71 };
-			Port8Bit m_command_port { 0x70 };
+			common::Port8Bit m_data_port { 0x71 };
+			common::Port8Bit m_command_port { 0x70 };
 
 			// APIC
 			AdvancedProgrammableInterruptController* m_apic;
