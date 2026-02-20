@@ -141,8 +141,11 @@ syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
  */
 syscall_args_t* SyscallManager::syscall_allocate_memory(syscall_args_t* args) {
 
+
 	// Malloc the memory
 	size_t size = args->arg0;
+	if (size == 180016)
+		asm("nop");
 	void* address = MemoryManager::malloc(size);
 
 	// Return the address

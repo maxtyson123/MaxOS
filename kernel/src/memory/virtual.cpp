@@ -152,21 +152,25 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 	free_chunk_t* reusable_chunk = address == 0 ? find_and_remove_free_chunk(size) : nullptr;
 	if (reusable_chunk != nullptr) {
 
-		// If the chunk is not being reserved then the old memory needs to be unmapped
+		// If the chunk is being reserved then the old memory needs to be unmapped (as the owner of this reserved region will perform the mapping as required)
 		if (flags & RESERVE) {
 
 			// Unmap the memory
 			size_t pages = PhysicalMemoryManager::size_to_frames(size);
 			for (size_t i = 0; i < pages; i++) {
 
-				// Get the frame
-				physical_address_t* frame = PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*) reusable_chunk->start_address + (i * PAGE_SIZE), m_pml4_root_address);
-
 				// Free the frame
+				physical_address_t* frame = PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*) reusable_chunk->start_address + (i * PAGE_SIZE), m_pml4_root_address);
 				PhysicalMemoryManager::s_current_manager->free_frame(frame);
 
 			}
 		}
+
+		// Allocate the memory
+		virtual_memory_chunk_t* chunk = &m_current_region->chunks[m_current_chunk++];
+		chunk->size = size;
+		chunk->flags = flags;
+		chunk->start_address = reusable_chunk->start_address;
 
 		// Return the address
 		return (void*) reusable_chunk->start_address;
@@ -396,6 +400,48 @@ free_chunk_t* VirtualMemoryManager::find_and_remove_free_chunk(size_t size) {
 }
 
 /**
+ * @brief Find the currently allocated chunk that contains the region of memory provided
+ *
+ * @param start_address Where the region begins
+ * @param size The length
+ * @return
+ *
+ * @todo make a region iteration callback function
+ *
+ * @note Logic left un-simplfied for readability
+ */
+virtual_memory_chunk_t* VirtualMemoryManager::find_containing_chunk(const void* start_address, size_t size)
+{
+
+	// Search all the regions for the virtual chunk containing the range
+	virtual_memory_region_t* region = m_first_region;
+	while (region != nullptr) {
+		for (size_t i = 0; i < CHUNKS_PER_PAGE; i++) {
+
+			// Get the chunk info
+			auto chunk			= region->chunks[i];
+			auto chunk_start	= (void*)chunk.start_address;
+			auto chunk_end		= (void*)(chunk.start_address + chunk.size);
+
+			// Does the region start in this chunk?
+			if (!(start_address >= chunk_start && start_address <= chunk_end))
+				continue;
+
+			// Can this chunk contain the whole region?
+			if (!(start_address + size < chunk_end))
+				continue;
+
+			return &region->chunks[i];
+
+		}
+		region = region->next;
+	}
+
+	// Not found
+	return nullptr;
+}
+
+/**
  * @brief Get the physical address of the PML4 root
  *
  * @return The physical address of the PML4 root
@@ -461,6 +507,109 @@ void* VirtualMemoryManager::load_physical_into_address_space(uintptr_t physical_
 
 	// All done
 	return address;
+}
+
+/**
+ * @brief Loads the pages from a virtual memory region in another vmm into this one
+ *
+ * @param other_vmm The vmm that contains the region
+ * @param start_address The starting virtual address of the region
+ * @param size The length in bytes of the region
+ * @return The virtual address for the region in this vmm
+ *
+ * @warning Re security see todo: https://discord.com/channels/578193015433330698/884443149919993856/1471057118407950436
+ * @warning Assumes the range is contained in one chunk - cant think of a use case where a range would cross two chunks
+ * and still be sequential
+ *
+ * @todo maybe move from void* to uint8* ??
+ * @todo take flags for mapping (ro)
+ */
+void* VirtualMemoryManager::load_range_from_process(VirtualMemoryManager* other_vmm, const void* start_address, size_t size)
+{
+
+	// Check bounds
+	if (!other_vmm || !start_address || size == 0)
+		return nullptr;
+
+	// Convert given region to be page orientated
+	size_t aligned_start =  PhysicalMemoryManager::align_direct_to_page((size_t)start_address);
+	size_t offset = (size_t) start_address - aligned_start;
+	size_t total_size = offset + size;
+	size_t paged_size = PhysicalMemoryManager::align_up_to_page(total_size, PAGE_SIZE);
+
+	// Reserve space to receive the copy
+	auto dest = allocate(paged_size, RESERVE);
+	if (!dest)
+		return nullptr;
+
+	// Find the chunk that contains the region
+	auto containing_chunk = other_vmm -> find_containing_chunk(start_address, size);
+	size_t chunk_pages = PhysicalMemoryManager::size_to_frames(containing_chunk->size);
+
+	// Map each page in the range
+	for (size_t i = 0; i < chunk_pages; i++)
+	{
+		uintptr_t virtual_page = containing_chunk->start_address + i * PAGE_SIZE;
+
+		// Haven't reached the start of the region
+		if (virtual_page + PAGE_SIZE <= aligned_start)
+			continue;
+
+		// Dont copy pages past the region
+		if (virtual_page >= aligned_start + paged_size)
+			break;
+
+		// Map the page into this vmm
+		physical_address_t* frame = PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*)virtual_page, other_vmm->pml4_root_address());
+		PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*)(dest + virtual_page - aligned_start), PRESENT | WRITE, m_pml4_root_address);
+	}
+
+	// Return where the region actually starts, not the
+	return dest + offset;
+}
+
+/**
+ * @brief Unload a shared range of pages from this vmm
+ *
+ * @param start_address The start of the range
+ * @param size The length of the range in bytes
+ */
+void VirtualMemoryManager::unload_range_from_process(const void* start_address, size_t size)
+{
+
+	// Check bounds
+	if (!start_address || size == 0)
+		return;
+
+	// Convert given region to be page orientated
+	size_t aligned_start =  PhysicalMemoryManager::align_direct_to_page((size_t)start_address);
+	size_t offset = (size_t) start_address - aligned_start;
+	size_t total_size = offset + size;
+	size_t paged_size = PhysicalMemoryManager::align_up_to_page(total_size, PAGE_SIZE);
+
+	// Find the chunk that contains the region
+	auto containing_chunk = find_containing_chunk(start_address, size);
+	size_t chunk_pages = PhysicalMemoryManager::size_to_frames(containing_chunk->size);
+
+	// Unmap each page in the range
+	for (size_t i = 0; i < chunk_pages; i++)
+	{
+		uintptr_t virtual_page = containing_chunk->start_address + i * PAGE_SIZE;
+
+		// Haven't reached the start of the region
+		if (virtual_page + PAGE_SIZE <= aligned_start)
+			continue;
+
+		// Dont unmap pages past the region
+		if (virtual_page >= aligned_start + paged_size)
+			break;
+
+		// Free the page
+		PhysicalMemoryManager::s_current_manager->unmap((virtual_address_t*)virtual_page, m_pml4_root_address);
+	}
+
+	// Free the whole region
+	free((void*)aligned_start);
 }
 
 /**

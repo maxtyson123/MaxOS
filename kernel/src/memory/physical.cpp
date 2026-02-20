@@ -151,7 +151,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
  * @brief Converts a size to the number of frames
  *
  * @param size The size to convert
- * @return The number of frames
+ * @return The number of frames to fully cover the region (min 1 if size > 0)
  */
 size_t PhysicalMemoryManager::size_to_frames(size_t size) {
 
@@ -159,7 +159,7 @@ size_t PhysicalMemoryManager::size_to_frames(size_t size) {
 }
 
 /**
- * @brief Aligns a size to the page size
+ * @brief Aligns a size to the page size. (Rounds up to the next multiple of PAGE_SIZE)
  *
  * @param size The size to align
  * @return  The aligned size
@@ -170,7 +170,7 @@ size_t PhysicalMemoryManager::align_to_page(size_t size) {
 }
 
 /**
- * @brief Aligns a size up to the page size
+ * @brief Aligns a size up to the page size, given a page size to a power of 2
  *
  * @param size  The size to align
  * @param page_size The page size to align to
@@ -825,6 +825,8 @@ void PhysicalMemoryManager::reserve(uint64_t address, size_t size, const char* t
  * @param virtual_address The virtual address to get the physical address from
  * @param pml4_root The address of the root pml to use
  * @return  The physical address or nullptr if it does not exist
+ *
+ * @todo make static version
  */
 physical_address_t* PhysicalMemoryManager::get_physical_address(virtual_address_t* virtual_address, uint64_t* pml4_root) {
 

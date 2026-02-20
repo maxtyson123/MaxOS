@@ -18,7 +18,9 @@ using namespace MaxOS::KPI;
 /**
  * @brief Constructs a handler to manage resource commands over shared memory
  */
-BridgeHandler::BridgeHandler(string const& shared_name) {
+BridgeHandler::BridgeHandler(string const& shared_name, Process* owner_process)
+: m_owner_process(owner_process)
+{
 
     // Get the shared memory region
     auto shared_memory = (SharedMemory*)GlobalResourceRegistry::get_registry(resource_type_t::SHARED_MEMORY)->get_resource(shared_name);
@@ -36,24 +38,37 @@ BridgeHandler::BridgeHandler(string const& shared_name) {
     setup_region(m_data_region, DATA_SIZE);
 }
 
+
 BridgeHandler::~BridgeHandler() = default;
 
 /**
- * @brief Allocates space in the shared memory region for a resource data buffer and copies it into that space
+ * @brief Allocates space in the shared memory region for a resource data buffer and copies it into that space, or maps
+ * the pages into the resource server if the buffer is bigger than MAX_COPY_SIZE
  *
  * @param buffer The buffer that stores the data
  * @param size The amount of data to store
  * @param reserve_only If true, dont copy the data in the buffer just reserve the space for it
- * @return The offset from the start of shared data region
+ * @return The offset from the start of shared data region, or the virtual address of the mapped range
  */
 size_t BridgeHandler::store_data(const void *buffer, size_t size, bool reserve_only) {
 
-    // Setup the storage
-    auto data = handle_malloc(size);
-    if (!reserve_only)
+    // Nothing to store
+    if (!size)
+        return 0;
+
+    bool is_mapped = size >= MAX_COPY_SIZE;
+
+    // Set up the storage
+    auto data = is_mapped  ? m_owner_process->memory_manager->vmm()->load_range_from_process(GlobalScheduler::current_process()->memory_manager->vmm(), buffer, size)
+                                : handle_malloc(size);
+    ASSERT(data != nullptr, "Could not allocate memory for bridge\n");
+
+    // Copy the data
+    if (!reserve_only && !is_mapped)
         common::memcpy(data, buffer, size);
 
-    return (size_t)data - m_data_region;
+    // If not mapped then its an offset into the process's own virtual address for the shared mem
+    return (size_t)data - (is_mapped ? 0 : m_data_region);
 
 }
 void block(){}
@@ -109,6 +124,7 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
 
     // Copy data into shared region
     bool is_read = command == ServiceResourceCommand::R_READ; // || command == BridgeResourceCommand::R_READ_ATTR;
+    bool is_page_mapped = size >= MAX_COPY_SIZE;
     size_t offset = store_data(buffer, size, is_read);
 
     // Construct the message
@@ -119,6 +135,7 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
     __atomic_store_n(&slot->command,            (uint8_t)command,                           __ATOMIC_RELAXED);
     __atomic_store_n(&slot->data_size,          size,                                       __ATOMIC_RELAXED);
     __atomic_store_n(&slot->data_offset,        offset,                                     __ATOMIC_RELAXED);
+    __atomic_store_n(&slot->data_page_mapped,   is_page_mapped,                             __ATOMIC_RELAXED);
     __atomic_store_n(&slot->response,       0,                                          __ATOMIC_RELAXED);
     __atomic_store_n(&slot->state,              (uint8_t)ServiceMessageSlotState::REQUEST,  __ATOMIC_RELEASE);
 
@@ -128,10 +145,11 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
 
     // Read request
     if (is_read)
-        common::memcpy((void*)buffer, (void*)m_data_region + offset, size);
+        common::memcpy((void*)buffer, is_page_mapped ? (void*)offset : (void*)m_data_region + offset, size);
 
     // Free resources
-    handle_free((void*)m_data_region + offset);
+    is_page_mapped  ? m_owner_process->memory_manager->vmm()->unload_range_from_process((void*)offset, size)
+                    : handle_free((void*)m_data_region + offset);
     __atomic_store_n(&slot->state, (uint8_t)ServiceMessageSlotState::FREE,__ATOMIC_RELEASE);
 
     return slot->response;
@@ -206,7 +224,7 @@ void BridgeResource::create_on_bridge() {
 
 BridgeResourceRegistry::BridgeResourceRegistry(const string &shared_name, size_t resource_id)
 : ResourceRegistry((resource_type_t)resource_id),
-  m_handler(shared_name)
+  m_handler(shared_name, GlobalScheduler::current_process())
 {
 
 }

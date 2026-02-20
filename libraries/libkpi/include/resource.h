@@ -88,6 +88,7 @@ namespace MaxOS::KPI {
 
         size_t data_size;
         size_t data_offset;
+        bool   data_page_mapped;
 
         int64_t response;
         uint8_t state;

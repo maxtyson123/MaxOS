@@ -234,7 +234,7 @@ void ResourceServer::process_message(service_resource_message_t *message) {
     m_current_processed_message = message;
 
     // Parse the message
-    auto data = m_data_region + message->data_offset;
+    auto data = message->data_page_mapped ? (void*)message->data_offset : m_data_region + message->data_offset;
     auto resource   = m_resource_map[message->resource_id];
     auto command = (ServiceResourceCommand)message -> command;
 

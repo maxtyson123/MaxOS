@@ -37,8 +37,10 @@ namespace MaxOS::processes::resources {
 			size_t store_data(const void* buffer, size_t size, bool reserve_only);
 			KPI::service_resource_message_t* aquire_slot();
 
+			Process* m_owner_process;
+
 		public:
-			BridgeHandler(string const& shared_name);
+			BridgeHandler(string const& shared_name, Process* owner_process);
 			~BridgeHandler();
 
 			size_t allocate_id();
