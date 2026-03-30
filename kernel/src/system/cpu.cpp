@@ -459,7 +459,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	// Stack trace
 	Logger::ERROR() << "----------------------------\n";
 	Logger::ERROR() << "Stack Trace:\n";
-	stack_trace(10);
+	stack_trace(20);
 
 	// Register dump
 	Logger::ERROR() << "----------------------------\n";

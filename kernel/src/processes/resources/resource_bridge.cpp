@@ -144,8 +144,8 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
         GlobalScheduler::current_thread()->yield();
 
     // Read request
-    if (is_read)
-        common::memcpy((void*)buffer, is_page_mapped ? (void*)offset : (void*)m_data_region + offset, size);
+    if (is_read && !is_page_mapped)
+        common::memcpy((void*)buffer, (void*)m_data_region + offset, size);
 
     // Free resources
     is_page_mapped  ? m_owner_process->memory_manager->vmm()->unload_range_from_process((void*)offset, size)

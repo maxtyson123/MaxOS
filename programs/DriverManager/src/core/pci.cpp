@@ -23,9 +23,10 @@ using namespace LibFS;
  * @brief Construct a new PCI Controller object
  */
 PCIController::PCIController()
-	: m_data_port(0xCFC),
-	  m_command_port(0xCF8)
+: m_data_port(0xCFC),
+  m_command_port(0xCF8)
 {
+
 	// Try open the pci ids
 	m_pci_ids_file_handle = open_file("/initrd/pci.ids");
 	ASSERT(m_pci_ids_file_handle != 0, "Cant open PCI ids file\n");
