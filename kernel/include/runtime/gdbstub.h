@@ -35,14 +35,14 @@ namespace MaxOS::runtime {
 
     };
 
-    class BreakPointExcpetion : public hardwarecommunication::ExceptionHandler {
+    class BreakPointException : public hardwarecommunication::ExceptionHandler {
 
         private:
             GDBServer* m_gdb_handler;
 
         public:
-            BreakPointExcpetion(GDBServer* server);
-            ~BreakPointExcpetion();
+            BreakPointException(GDBServer* server);
+            ~BreakPointException();
 
             system::cpu_status_t* handle_interrupt(system::cpu_status_t *status) override;
 
@@ -64,7 +64,7 @@ namespace MaxOS::runtime {
             string format_register(uint64_t value, int num_bytes);
 
             TrapFlagExcpetion   m_trap_flag_handler;
-            BreakPointExcpetion m_break_point_handler;
+            BreakPointException m_break_point_handler;
 
             common::Map<void*, uint8_t> m_breakpoints;
 

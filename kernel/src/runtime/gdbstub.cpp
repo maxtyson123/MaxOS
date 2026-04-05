@@ -7,8 +7,7 @@
  */
 
 #include <runtime/gdbstub.h>
-
-#include "processes/scheduler.h"
+#include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::runtime;
@@ -19,7 +18,13 @@ using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 
-
+/**
+ * @brief Constructs a handler for remote debugging using GDB, also sets up interrupt handlers for traps and breakpoints
+ *
+ * @param serial The serial port where GDB will listen/send packets on
+ *
+ * @todo GDB owns the interrupt here, should move to a serial API
+ */
 GDBServer::GDBServer(SerialConsole *serial)
 : InterruptHandler(0x24, 4, 0x18),
   m_serial(serial),
@@ -30,6 +35,11 @@ GDBServer::GDBServer(SerialConsole *serial)
 
 GDBServer::~GDBServer() = default;
 
+/**
+ * @brief Begin debugging a thread, will start paused
+ *
+ * @param thread The thread to debug
+ */
 void GDBServer::attach(Thread* thread) {
 
     // Pause the thread
@@ -41,6 +51,9 @@ void GDBServer::attach(Thread* thread) {
 
 }
 
+/**
+ * @brief Handles a serial ready interrupt and trys to parse the command
+ */
 void GDBServer::handle_interrupt() {
 
     // Read the packet
@@ -50,7 +63,9 @@ void GDBServer::handle_interrupt() {
     try_handle_command();
 }
 
-
+/**
+ * @brief Attempts to dequeue a command from the buffer, delegating the command if it is valid
+ */
 void GDBServer::try_handle_command() {
 
     // Find the checksum
@@ -92,6 +107,11 @@ void GDBServer::try_handle_command() {
         try_handle_command();
 }
 
+/**
+ * @brief Performs the required operation for a given command, replying empty if its an unknown command
+ *
+ * @param command The command to handle
+ */
 void GDBServer::delegate_command(const string &command) {
 
     // GDB querying why halted?
@@ -165,10 +185,20 @@ void GDBServer::delegate_command(const string &command) {
 
 }
 
-constexpr char* HEX_CHARS = "0123456789abcdef";
+/**
+ * @brief Converts a register value to a little endian hex string
+ *
+ * @param value The current state of the register
+ * @param num_bytes How many bytes GDB wants from the register
+ * @return The string reprensentation
+ *
+ * @todo adapt to use String(addr, len)
+ */
 string GDBServer::format_register(uint64_t value, int num_bytes) {
 
     string out = "";
+    constexpr char* HEX_CHARS = "0123456789abcdef";
+
 
     for (int i = 0; i < num_bytes; ++i) {
 
@@ -183,6 +213,12 @@ string GDBServer::format_register(uint64_t value, int num_bytes) {
     return out;
 }
 
+/**
+ * @brief Calculates the GDB checksum of a command
+ *
+ * @param payload The command to get the checksum of
+ * @return The checksum string, always 2 chars wide
+ */
 string GDBServer::get_checksum(const string &payload) {
 
     // Sum each character
@@ -202,23 +238,49 @@ string GDBServer::get_checksum(const string &payload) {
 
 }
 
+/**
+ * @brief Validates the checksum of a commnad
+ *
+ * @param payload The command to validate
+ * @param checksum The expected checksum
+ * @return True if valid, false otherwise
+ */
 bool GDBServer::check_checksum(const string &payload, const string &checksum) {
     return get_checksum(payload).to_lower() == checksum;
 }
 
+/**
+ * @brief Converts a message into the form GDB expects, including and ACK package
+ *
+ * @param payload The message to convert
+ * @return The message plus its checksum and the related indicators
+ */
 string GDBServer::build_message(const string &payload) {
     return string("+$") + payload + "#" + get_checksum(payload);
 }
 
+/**
+ * @brief Converts a message to the required form and sends it over serial
+ *
+ * @param payload The message to send
+ */
 void GDBServer::send_message(const string &payload) {
     string message = build_message(payload.c_str());
     m_serial->write(message);
 }
 
+/**
+ * @brief Send an empty message to the GDB server
+ */
 void GDBServer::send_empty() {
     send_message("");
 }
 
+/**
+ * @brief Sends the features that this GDB stub supports to the GDB server
+ *
+ * @param peer_supported The features that the server has indicated that it supports
+ */
 void GDBServer::send_supported(const string& peer_supported) {
 
     string out = "PacketSize=4000;qXfer:features:read+;";
@@ -232,6 +294,9 @@ void GDBServer::send_supported(const string& peer_supported) {
     send_message(out);
 }
 
+/**
+ * @brief Sends the registers of the thread to the GDB server
+ */
 void GDBServer::send_registers() {
 
     string payload = "";
@@ -270,6 +335,11 @@ void GDBServer::send_registers() {
     send_message(payload);
 }
 
+/**
+ * @brief Send a chunk of memory to the GDB server
+ *
+ * @param message The GDB command requesting the chunk
+ */
 void GDBServer::send_memory(const string &message) {
 
     // Parse
@@ -280,7 +350,13 @@ void GDBServer::send_memory(const string &message) {
     send_memory((void*)address_str.hex_to_uint64(), length_str.hex_to_uint64());
 }
 
-void GDBServer::send_memory(void *address, size_t length) {
+/**
+ * @brief Send a chunk of memory to the GDB server
+ *
+ * @param address The start address of the chunk
+ * @param length How large the chunk is (in bytes)
+ */
+void GDBServer::send_memory(void* address, size_t length) {
 
     // Cant read
     if (address < (void*)0x1000) {
@@ -301,6 +377,9 @@ void GDBServer::send_memory(void *address, size_t length) {
 
 }
 
+/**
+ * @brief Set the trap flag and allow the thread to run
+ */
 void GDBServer::handle_step_instruction() {
 
     // Acknowledge
@@ -318,6 +397,11 @@ void GDBServer::handle_step_instruction() {
     // ...
 }
 
+/**
+ * @brief Set a software break point by replacing the instruction with a INT3
+ *
+ * @param message The GDB command requesting the breakpoint
+ */
 void GDBServer::handle_set_breakpoint(const string &message) {
 
     // Parse
@@ -328,6 +412,11 @@ void GDBServer::handle_set_breakpoint(const string &message) {
 
 }
 
+/**
+ * @brief Set a software break point by replacing the instruction with a INT3
+ *
+ * @param address The address to break on
+ */
 void GDBServer::handle_set_breakpoint(void* address) {
 
     // Invaild address
@@ -360,6 +449,11 @@ void GDBServer::handle_set_breakpoint(void* address) {
     send_message("OK");
 }
 
+/**
+ * @brief Remove a software break point, and replace the original opcode
+ *
+ * @param message The GDB command requesting the breakpoint removal
+ */
 void GDBServer::handle_remove_breakpoint(const string &message) {
 
     // Parse
@@ -370,6 +464,11 @@ void GDBServer::handle_remove_breakpoint(const string &message) {
 
 }
 
+/**
+ * @brief Remove a software break point, and replace the original opcode
+ *
+ * @param address The address to break on
+ */
 void GDBServer::handle_remove_breakpoint(void *address) {
 
     // Invaild address
@@ -403,6 +502,9 @@ void GDBServer::handle_remove_breakpoint(void *address) {
 
 }
 
+/**
+ * @brief Continues the exeuction of the thread, acknowledges the request and allows the thread to run
+ */
 void GDBServer::handle_continue() {
 
     // Acknowledge
@@ -412,6 +514,9 @@ void GDBServer::handle_continue() {
     m_attached_thread->thread_state = ThreadState::READY;
 }
 
+/**
+ * @brief Detaches the thread from the GDB, removing all breakpoints and allowing it to be scheduled as usual
+ */
 void GDBServer::handle_detach() {
 
     // Remove all breakpoints
@@ -423,12 +528,22 @@ void GDBServer::handle_detach() {
 
 }
 
+/**
+ * @brief Get the attached thread
+ *
+ * @return The attached thread
+ */
 Thread* GDBServer::attached_thread() {
 
     return m_attached_thread;
 
 }
 
+/**
+ * @brief Registers a handler for the TrapFlagException (interrupt 0x1)
+ *
+ * @param server The GDB stub that will handle the exception
+ */
 TrapFlagExcpetion::TrapFlagExcpetion(GDBServer *server)
 : ExceptionHandler(0x1),
   m_gdb_handler(server)
@@ -438,6 +553,12 @@ TrapFlagExcpetion::TrapFlagExcpetion(GDBServer *server)
 
 TrapFlagExcpetion::~TrapFlagExcpetion() = default;
 
+/**
+ * @brief Handles the interrupt 0x1 by clearing the trap flag and pausing the thread
+ *
+ * @param status The registers at time of exception
+ * @return The state to return to
+ */
 cpu_status_t * TrapFlagExcpetion::handle_interrupt(cpu_status_t* status) {
 
     // Clear flag
@@ -456,16 +577,27 @@ cpu_status_t * TrapFlagExcpetion::handle_interrupt(cpu_status_t* status) {
     return status;
 }
 
-BreakPointExcpetion::BreakPointExcpetion(GDBServer *server)
+/**
+ * @brief Registers a handler for the BreakPointException (interrupt 0x1)
+ *
+ * @param server The GDB stub that will handle the exception
+ */
+BreakPointException::BreakPointException(GDBServer *server)
 : ExceptionHandler(0x3),
   m_gdb_handler(server)
 {
 
 }
 
-BreakPointExcpetion::~BreakPointExcpetion() = default;
+BreakPointException::~BreakPointException() = default;
 
-cpu_status_t* BreakPointExcpetion::handle_interrupt(cpu_status_t *status) {
+/**
+ * @brief Handles the interrupt 0x3 by pausing the thread
+ *
+ * @param status The registers at time of exception
+ * @return The state to return to
+ */
+cpu_status_t* BreakPointException::handle_interrupt(cpu_status_t *status) {
 
     // Move back
     status->rip -= 1;
@@ -481,6 +613,4 @@ cpu_status_t* BreakPointExcpetion::handle_interrupt(cpu_status_t *status) {
     // Copy the registers back as they may have been modified elsewhere
     *status = m_gdb_handler->thread_regs;
     return status;
-
-
 }
