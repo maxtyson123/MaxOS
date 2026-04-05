@@ -23,6 +23,7 @@ namespace MaxOS {
 	 * @brief Priority levels for logging messages. Different levels may be used to filter messages based on their importance depending on build type.
 	 */
 	enum class LogLevel {
+		OUT,
 		ERROR,
 		WARNING,
 		HEADER,

@@ -20,6 +20,8 @@
 #include <memory/virtual.h>
 #include <tests/test.h>
 
+#include "runtime/gdbstub.h"
+
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::console;
@@ -28,6 +30,7 @@ using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
 using namespace MaxOS::tests;
+using namespace MaxOS::runtime;
 
 extern "C" void call_constructors(); ///< Calls the C++ static constructors
 extern "C" uint8_t core_boot_info[]; ///< The boot info structure for the core being started
@@ -65,7 +68,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	call_constructors();
 
 	Logger logger;
-	SerialConsole serial_console(&logger);
+	SerialConsole serial_console;
 	Logger::INFO() << "MaxOS Booted Successfully\n";
 
 	Logger::HEADER() << "Stage {1}: System Initialisation\n";
@@ -89,11 +92,17 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	kernel_clock.calibrate();
 	cpu.init_cores();
 
-	Logger::HEADER() << "Stage {3}: Userspace Initialisation ASDASDAS\n";
+	Logger::HEADER() << "Stage {3}: Userspace Initialisation\n";
 	SyscallManager syscalls;
 	GlobalScheduler scheduler(multiboot);
-	console.finish();
+
+
+	GDBServer server(&serial_console);
+	server.attach(GlobalScheduler::get_process(4)->threads()[0]);
+
+	// console.finish();
 	GlobalScheduler::activate();
+
 
 	// Idle loop  (read Idle.md)
 	while (true)

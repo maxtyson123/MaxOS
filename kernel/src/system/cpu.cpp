@@ -430,6 +430,30 @@ void CPU::stack_trace(size_t level) {
 	}
 }
 
+void CPU::enable_write_protect() {
+
+	// Read the current state
+	uint64_t cr0;
+	asm volatile("mov %%cr0, %0" : "=r"(cr0));
+
+	// Update to have WP bit enabled
+	cr0 |= (1ULL << 16);
+	asm volatile("mov %0, %%cr0" : : "r"(cr0));
+
+}
+
+void CPU::disable_write_protect() {
+
+	// Read the current state
+	uint64_t cr0;
+	asm volatile("mov %%cr0, %0" : "=r"(cr0));
+
+	// Update to have WP bit disabled
+	cr0 &= ~(1ULL << 16);
+	asm volatile("mov %0, %%cr0" : : "r"(cr0));
+
+}
+
 /**
  * @brief Puts the CPU into a panic state and halts it. Dumps the stack trace and registers.
  *

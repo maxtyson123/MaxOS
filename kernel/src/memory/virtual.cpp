@@ -618,6 +618,8 @@ void VirtualMemoryManager::unload_range_from_process(const void* start_address, 
  * @param address The address to fill up to
  * @param flags The flags to set on the memory
  * @param mark_used If true, mark the memory as used
+ *
+ * @todo redisgn, this allocates the pages which arent even being used
  */
 void VirtualMemoryManager::fill_up_to_address(uintptr_t address, size_t flags, bool mark_used) {
 

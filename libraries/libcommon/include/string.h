@@ -40,6 +40,7 @@ namespace MaxOS {
 			String(char c);
 			String(char const* string);
 			String(uint8_t const* string, int length);
+			String(void* address, int length);
 			String(String const& other);
 			String(int value);
 			String(uint64_t value);
@@ -67,6 +68,9 @@ namespace MaxOS {
 			[[nodiscard]] bool starts_with(String const& other) const;
 			[[nodiscard]] int  find(String const& other, int start = 0) const;
 
+			[[nodiscard]] String to_upper();
+			[[nodiscard]] String to_lower();
+
 			// Operator functions
 			[[nodiscard]] bool equals(String const& other) const;
 
@@ -75,7 +79,7 @@ namespace MaxOS {
 			[[nodiscard]] uint64_t to_uint64() const;
 
 			// Hex conversion
-//			[[nodiscard]] uint64_t hex_to_uint64() const; TODO
+			[[nodiscard]] uint64_t hex_to_uint64() const;
 
 			// Operators
 			String& operator =(String const& other);

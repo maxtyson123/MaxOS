@@ -77,7 +77,7 @@ namespace MaxOS::common {
 		if (ptr == nullptr)
 			return ptr;
 
-		auto* dst = (uint32_t*) ptr;
+		auto* dst = (uint8_t*) ptr;
 		for (size_t i = 0; i < num; i++)
 			dst[i] = value;
 		return ptr;

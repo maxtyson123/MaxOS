@@ -23,6 +23,14 @@ namespace MaxOS::hardwarecommunication {
 
 	class InterruptManager;
 
+	enum class InterruptPrivilegeLevel
+	{
+		KERNEL_ONLY,
+		RING_1,
+		RING_2,
+		USERSPACE
+	};
+
 	/**
 	 * @class InterruptHandler
 	 * @brief Handles a certain interrupt number
@@ -153,7 +161,7 @@ namespace MaxOS::hardwarecommunication {
 			InterruptHandler* m_interrupt_handlers[MAX_INTERRUPT_HANDLERS] = { };                                    ///< A map of index-to-interrupt of interrupt handlers to fire when an interrupt occurs
 			inline static InterruptDescriptor s_interrupt_descriptor_table[MAX_INTERRUPT_HANDLERS] = { };            ///< The Interrupt Descriptor Table (IDT)
 
-			static void set_interrupt_descriptor_table_entry(uint8_t interrupt, void (* handler)(), uint8_t descriptor_privilege_level);
+			static void set_interrupt_descriptor_table_entry(uint8_t interrupt, void (* handler)(), InterruptPrivilegeLevel descriptor_privilege_level);
 
 			//Various Interrupts
 			static void HandleInterruptRequest0x00();   ///< Stub (see interrupts.s)

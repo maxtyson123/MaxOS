@@ -32,7 +32,7 @@ while [ "$#" -gt "0" ]; do
 done
 
 # Is slower
-GET_QEMU_CRASH_REASON=1
+GET_QEMU_CRASH_REASON=0
 if [ "$GET_QEMU_CRASH_REASON" -ne 0 ]; then
     GET_QEMU_CRASH_RESON=1
     DEBUG_LOGS="-D qemu.log -d guest_errors"
@@ -159,11 +159,18 @@ else
   BOOT_DEVICE="-drive file=$IMAGE_PATH,format=raw,if=ide,cache=directsync,id=disk0,file.locking=off"
 fi
 
+USERSPACE_GDB=1
+if [ "$USERSPACE_GDB" -eq 1 ]; then
+  SERIAL='tcp:0.0.0.0:5555,server,nowait'
+else
+  SERIAL='stdio'
+fi
+
 # Create the args
 QEMU_ARGS=""
 QEMU_ARGS="$QEMU_ARGS -m 4G"                                            # 4 GB Ram
 QEMU_ARGS="$QEMU_ARGS -smp cores=4"                                     # 4 cores
-QEMU_ARGS="$QEMU_ARGS -serial stdio"                                    # Use stdio for serial
+QEMU_ARGS="$QEMU_ARGS -serial $SERIAL"                                  # Use stdio for serial
 #QEMU_ARGS="$QEMU_ARGS -monitor telnet::45454,server,nowait"             # Use telnet for monitor
 QEMU_ARGS="$QEMU_ARGS $DEBUG_LOGS"                        # Debug interrupts
 QEMU_ARGS="$QEMU_ARGS $DEBUG"                                           # Enable debugging

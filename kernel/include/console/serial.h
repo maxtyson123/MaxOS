@@ -16,6 +16,8 @@
 namespace MaxOS::console {
 
 
+
+
 	/**
 	 * @class SerialConsole
 	 * @brief A driver for the serial output
@@ -31,11 +33,15 @@ namespace MaxOS::console {
 			common::Port8Bit m_line_status_port;
 
 		public:
+			explicit SerialConsole();
 			explicit SerialConsole(Logger* logger);
 			~SerialConsole();
 
 			void put_character(char c);
 			void write_char(char c) final;
+
+			bool can_read();
+			char read_char();
 
 	};
 

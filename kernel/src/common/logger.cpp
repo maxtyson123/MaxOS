@@ -157,7 +157,7 @@ void Logger::write_char(char c) {
  */
 LogRecord Logger::Out() {
 
-	return LogRecord(*s_active_logger, s_active_logger->m_log_level);
+	return LogRecord(*s_active_logger, LogLevel::OUT);
 }
 
 LogRecord Logger::TEST() {
@@ -248,7 +248,8 @@ LogRecord::LogRecord(Logger& logger, LogLevel level)
 
 	// Wait for the logger to be free
 	Logger::s_loggers_lock.lock();
-	m_logger.set_log_level(level);
+	if (level != LogLevel::OUT)
+		m_logger.set_log_level(level);
 }
 
 LogRecord::~LogRecord() {

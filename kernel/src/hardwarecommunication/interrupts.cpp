@@ -98,7 +98,7 @@ string ExceptionHandler::get_message(system::cpu_status_t *status) {
 }
 
 
-cpu_status_t * ExceptionHandler::handle_interrupt(cpu_status_t *status) {
+cpu_status_t* ExceptionHandler::handle_interrupt(cpu_status_t *status) {
 
 	// Get the message
 	string msg = get_message(status);
@@ -174,48 +174,49 @@ InterruptManager::InterruptManager() {
 	}
 
 	//Set Up the base interrupts
-	set_interrupt_descriptor_table_entry(0x00, &HandleException0x00, 0);   // Division by zero
-	set_interrupt_descriptor_table_entry(0x01, &HandleException0x01, 0);   // Debug
-	set_interrupt_descriptor_table_entry(0x02, &HandleException0x02, 0);   // Non-maskable interrupt
-	set_interrupt_descriptor_table_entry(0x03, &HandleException0x03, 0);   // Breakpoint
-	set_interrupt_descriptor_table_entry(0x04, &HandleException0x04, 0);   // Overflow
-	set_interrupt_descriptor_table_entry(0x05, &HandleException0x05, 0);   // Bound Range Exceeded
-	set_interrupt_descriptor_table_entry(0x06, &HandleException0x06, 0);   // Invalid Opcode
-	set_interrupt_descriptor_table_entry(0x07, &HandleException0x07, 0);   // Device Not Available
-	set_interrupt_descriptor_table_entry(0x08, &HandleInterruptError0x08, 0);   // Double Fault
-	set_interrupt_descriptor_table_entry(0x09, &HandleException0x09, 0);   // Coprocessor Segment Overrun
-	set_interrupt_descriptor_table_entry(0x0A, &HandleInterruptError0x0A, 0);   // Invalid TSS
-	set_interrupt_descriptor_table_entry(0x0B, &HandleInterruptError0x0B, 0);   // Segment Not Present
-	set_interrupt_descriptor_table_entry(0x0C, &HandleInterruptError0x0C, 0);   // Stack-Segment Fault
-	set_interrupt_descriptor_table_entry(0x0D, &HandleInterruptError0x0D, 0);   // General Protection Fault
-	set_interrupt_descriptor_table_entry(0x0E, &HandleInterruptError0x0E, 0);   // Page Fault
-	set_interrupt_descriptor_table_entry(0x0F, &HandleException0x0F, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x10, &HandleException0x10, 0);   // x87 Floating-Point Exception
-	set_interrupt_descriptor_table_entry(0x11, &HandleInterruptError0x11, 0);   // Alignment Check
-	set_interrupt_descriptor_table_entry(0x12, &HandleException0x12, 0);   // Machine Check
-	set_interrupt_descriptor_table_entry(0x13, &HandleException0x13, 0);   // SIMD Floating-Point Exception
-	set_interrupt_descriptor_table_entry(0x14, &HandleException0x14, 0);   // Reserved: Virtualization Exception
-	set_interrupt_descriptor_table_entry(0x15, &HandleException0x15, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x16, &HandleException0x16, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x17, &HandleException0x17, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x18, &HandleException0x18, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x19, &HandleException0x19, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1A, &HandleException0x1A, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1B, &HandleException0x1B, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1C, &HandleException0x1C, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1D, &HandleException0x1D, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1E, &HandleException0x1E, 0);   // Security Exception
-	set_interrupt_descriptor_table_entry(0x1F, &HandleException0x1F, 0);   // Reserved
+	set_interrupt_descriptor_table_entry(0x00, &HandleException0x00,		InterruptPrivilegeLevel::KERNEL_ONLY);   // Division by zero
+	set_interrupt_descriptor_table_entry(0x01, &HandleException0x01, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Debug
+	set_interrupt_descriptor_table_entry(0x02, &HandleException0x02, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Non-maskable interrupt
+	set_interrupt_descriptor_table_entry(0x03, &HandleException0x03, 		InterruptPrivilegeLevel::USERSPACE);	 // Breakpoint
+	set_interrupt_descriptor_table_entry(0x04, &HandleException0x04, 		InterruptPrivilegeLevel::USERSPACE);	 // Overflow
+	set_interrupt_descriptor_table_entry(0x05, &HandleException0x05, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Bound Range Exceeded
+	set_interrupt_descriptor_table_entry(0x06, &HandleException0x06, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Invalid Opcode
+	set_interrupt_descriptor_table_entry(0x07, &HandleException0x07,		InterruptPrivilegeLevel::KERNEL_ONLY);   // Device Not Available
+	set_interrupt_descriptor_table_entry(0x08, &HandleInterruptError0x08,	InterruptPrivilegeLevel::KERNEL_ONLY);   // Double Fault
+	set_interrupt_descriptor_table_entry(0x09, &HandleException0x09,		InterruptPrivilegeLevel::KERNEL_ONLY);   // Coprocessor Segment Overrun
+	set_interrupt_descriptor_table_entry(0x0A, &HandleInterruptError0x0A, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Invalid TSS
+	set_interrupt_descriptor_table_entry(0x0B, &HandleInterruptError0x0B, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Segment Not Present
+	set_interrupt_descriptor_table_entry(0x0C, &HandleInterruptError0x0C, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Stack-Segment Fault
+	set_interrupt_descriptor_table_entry(0x0D, &HandleInterruptError0x0D, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // General Protection Fault
+	set_interrupt_descriptor_table_entry(0x0E, &HandleInterruptError0x0E, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Page Fault
+	set_interrupt_descriptor_table_entry(0x0F, &HandleException0x0F, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x10, &HandleException0x10, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // x87 Floating-Point Exception
+	set_interrupt_descriptor_table_entry(0x11, &HandleInterruptError0x11, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Alignment Check
+	set_interrupt_descriptor_table_entry(0x12, &HandleException0x12, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Machine Check
+	set_interrupt_descriptor_table_entry(0x13, &HandleException0x13, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // SIMD Floating-Point Exception
+	set_interrupt_descriptor_table_entry(0x14, &HandleException0x14, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved: Virtualization Exception
+	set_interrupt_descriptor_table_entry(0x15, &HandleException0x15, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x16, &HandleException0x16, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x17, &HandleException0x17, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x18, &HandleException0x18, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x19, &HandleException0x19, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1A, &HandleException0x1A, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1B, &HandleException0x1B, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1C, &HandleException0x1C, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1D, &HandleException0x1D, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1E, &HandleException0x1E, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Security Exception
+	set_interrupt_descriptor_table_entry(0x1F, &HandleException0x1F, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
 
 	// Set up the hardware interrupts
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x00, &HandleInterruptRequest0x00, 0);   // APIC Timer Interrupt
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x01, &HandleInterruptRequest0x01, 0);   // Keyboard Interrupt
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x02, &HandleInterruptRequest0x02, 0);   // PIT Interrupt
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x00, &HandleInterruptRequest0x00, InterruptPrivilegeLevel::KERNEL_ONLY);   // APIC Timer Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x01, &HandleInterruptRequest0x01, InterruptPrivilegeLevel::KERNEL_ONLY);   // Keyboard Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x02, &HandleInterruptRequest0x02, InterruptPrivilegeLevel::KERNEL_ONLY);   // PIT Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x04, &HandleInterruptRequest0x04, InterruptPrivilegeLevel::KERNEL_ONLY);   // Serial Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x0C, &HandleInterruptRequest0x0C, InterruptPrivilegeLevel::KERNEL_ONLY);   // Mouse Interrupt
 
 	// Set up the software interrupts
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x61, &HandleInterruptRequest0x61, 0);   // Kill this core
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x60, &HandleInterruptRequest0x60, InterruptPrivilegeLevel::USERSPACE);   // System Call Interrupt - Privilege Level 3 so that user space can call it
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x61, &HandleInterruptRequest0x61, InterruptPrivilegeLevel::KERNEL_ONLY);   // Kill this core
 
 	// Tell the processor to use the IDT
 	load_current();
@@ -235,7 +236,7 @@ InterruptManager::~InterruptManager() {
  * @param handler  Interrupt Handler
  * @param descriptor_privilege_level Descriptor Privilege Level
  */
-void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, void (* handler)(), uint8_t descriptor_privilege_level) {
+void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, void (* handler)(), InterruptPrivilegeLevel descriptor_privilege_level) {
 
 	// Get the address of the handler and the entry in the IDT
 	auto handler_address = (uint64_t) handler;
@@ -253,7 +254,7 @@ void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, v
 	interrupt_descriptor->ist = 0;
 
 	// Set the flags (Trap Gate, Present and the Descriptor Privilege Level)
-	interrupt_descriptor->flags = 0b1110 | ((descriptor_privilege_level & 0b11) << 5) | (1 << 7);
+	interrupt_descriptor->flags = 0b1110 | (((uint8_t)descriptor_privilege_level & 0b11) << 5) | (1 << 7);
 }
 
 /**

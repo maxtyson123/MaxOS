@@ -11,11 +11,8 @@
 using namespace MaxOS;
 using namespace MaxOS::console;
 
-/**
- * @brief Constructs a new Serial Console object and initialises the serial port
- * @param logger The logger which will use this serial console as a log writer
- */
-SerialConsole::SerialConsole(Logger* logger)
+
+SerialConsole::SerialConsole()
 : m_data_port(0x3F8),
   m_interrupt_enable_port(0x3F9),
   m_fifo_control_port(0x3FA),
@@ -23,7 +20,6 @@ SerialConsole::SerialConsole(Logger* logger)
   m_modem_control_port(0x3FC),
   m_line_status_port(0x3FD)
 {
-
 	// Disable all interrupts
 	m_interrupt_enable_port.write(0x00);
 
@@ -38,7 +34,7 @@ SerialConsole::SerialConsole(Logger* logger)
 	m_line_control_port.write(0x03);
 
 	// Enable FIFO, clear them, with 14-byte threshold
-	m_fifo_control_port.write(0xC7);
+	m_fifo_control_port.write(0x07);
 
 	// IRQs enabled, RTS/DSR set
 	m_modem_control_port.write(0x0B);
@@ -52,6 +48,22 @@ SerialConsole::SerialConsole(Logger* logger)
 	// Enable serial chip
 	m_modem_control_port.write(0x0F);
 
+	// Enable interrupts
+	m_interrupt_enable_port.write(0x01);
+
+	// Clear any prexisting state
+	m_fifo_control_port.read();
+	while (can_read())
+		read_char();
+}
+
+/**
+ * @brief Constructs a new Serial Console object and initialises the serial port
+ * @param logger The logger which will use this serial console as a log writer
+ */
+SerialConsole::SerialConsole(Logger* logger)
+: SerialConsole()
+{
 	// Set the active serial console
 	logger->add_log_writer(this);
 }
@@ -76,3 +88,13 @@ void SerialConsole::put_character(char c) {
 void SerialConsole::write_char(char c) {
 	put_character(c);
 }
+
+bool SerialConsole::can_read() {
+	return m_line_status_port.read() & 1;
+}
+
+char SerialConsole::read_char() {
+	return m_data_port.read();
+}
+
+

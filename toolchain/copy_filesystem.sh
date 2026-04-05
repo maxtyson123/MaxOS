@@ -41,7 +41,7 @@ DESTINATION="$MOUNT_DIR/MaxOS_img_1"
 INIT_FILE="$(cd "$SCRIPTDIR/../filesystem/boot" && pwd)/maxos.initrd"
 rm -f "$INIT_FILE"
 ls $INIT_DATA >/dev/null 2>&1 || fail "Cant find init files: $INIT_DIR/*"
-( cd "$INIT_DIR" && tar -cf "$INIT_FILE" --no-xattrs --disable-copyfile * )
+( cd "$INIT_DIR" && tar -cf "$INIT_FILE" --no-xattrs * )
 
 : "${USE_ISO:=0}"
 # Produce an ISO? default to no

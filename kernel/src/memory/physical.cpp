@@ -48,10 +48,7 @@ m_pml4_root((pte_t*) p4_table) {
 
 	// Find a region of memory available to be used
 	m_mmap_tag = m_multiboot->mmap();
-	for(multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry <
-	                                                       (multiboot_uint8_t*) m_mmap_tag +
-	                                                       m_mmap_tag->size; entry = (multiboot_mmap_entry*) (
-	(unsigned long) entry + m_mmap_tag->entry_size)) {
+	for(multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry < (multiboot_uint8_t*) m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry*) ( (unsigned long) entry + m_mmap_tag->entry_size)) {
 
 		// Skip if the region is not free or there is not enough space
 		if(entry->type != MULTIBOOT_MEMORY_AVAILABLE)
@@ -65,16 +62,12 @@ m_pml4_root((pte_t*) p4_table) {
 	m_memory_size = (m_mmap->addr + m_mmap->len);
 	m_bitmap_size = m_memory_size / PAGE_SIZE + 1;
 	m_total_entries = m_bitmap_size / ROW_BITS + 1;
-	Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x"
-	                << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x"
-	                << (uint64_t) PAGE_SIZE << "\n";
+	Logger::DEBUG() << "Memory Info: size = " << (int) (m_memory_size / 1024 / 1024) << "mb, bitmap size = 0x" << (uint64_t) m_bitmap_size << ", total entries = " << (int) m_total_entries << ", page size = 0x"<< (uint64_t) PAGE_SIZE << "\n";
 
 	// Map the physical memory into the virtual memory
-	Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap->addr + m_mmap->len)
-	                << " to higher half direct map at offset 0x" << HIGHER_HALF_DIRECT_MAP << "\n";
+	Logger::DEBUG() << "Mapping from 0x0 to 0x" << (uint64_t) (m_mmap->addr + m_mmap->len) << " to higher half direct map at offset 0x" << HIGHER_HALF_DIRECT_MAP << "\n";
 	for(uint64_t physical_address = 0; physical_address < (m_mmap->addr + m_mmap->len); physical_address += PAGE_SIZE)
-		map((physical_address_t*) physical_address, (virtual_address_t*) (HIGHER_HALF_DIRECT_MAP + physical_address),
-		    PRESENT | WRITE);
+		map((physical_address_t*) physical_address, (virtual_address_t*) (HIGHER_HALF_DIRECT_MAP + physical_address),PRESENT | WRITE);
 
 	// Kernel Setup
 	initialise_bit_map();
@@ -111,10 +104,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 
 	// Reserve the area for the mmap
 	uint64_t mem_end = m_mmap->addr + m_mmap->len;
-	for(multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry <
-	                                                       (multiboot_uint8_t*) m_mmap_tag +
-	                                                       m_mmap_tag->size; entry = (multiboot_mmap_entry*) (
-	(unsigned long) entry + m_mmap_tag->entry_size)) {
+	for(multiboot_mmap_entry* entry = m_mmap_tag->entries; (multiboot_uint8_t*) entry < (multiboot_uint8_t*) m_mmap_tag + m_mmap_tag->size; entry = (multiboot_mmap_entry*) ( (unsigned long) entry + m_mmap_tag->entry_size)) {
 
 		// Dont reserve free regions
 		if(entry->type <= MULTIBOOT_MEMORY_AVAILABLE)
@@ -128,9 +118,7 @@ void PhysicalMemoryManager::reserve_kernel_regions(Multiboot* multiboot) {
 	}
 
 	// Reserve the area for each multiboot module
-	for(multiboot_tag* tag = multiboot->start_tag();
-	    tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag +
-	                                                                        ((tag->size + 7) & ~7))) {
+	for(multiboot_tag* tag = multiboot->start_tag(); tag->type != MULTIBOOT_TAG_TYPE_END; tag = (struct multiboot_tag*) ((multiboot_uint8_t*) tag + ((tag->size + 7) & ~7))) {
 
 		if(tag->type != MULTIBOOT_TAG_TYPE_MODULE)
 			continue;
@@ -236,9 +224,15 @@ void* PhysicalMemoryManager::allocate_frame() {
 			// Thread safe
 			m_lock.unlock();
 
-			// Return the address
+			// Calculate the address
 			uint64_t frame_address = (row * ROW_BITS) + column;
-			return (void*) (frame_address * PAGE_SIZE);
+			frame_address *= PAGE_SIZE;
+
+			// Zero the page
+			void* virt = to_dm_region(frame_address);
+			memset(virt, 0, PAGE_SIZE);
+
+			return (void*)frame_address;
 		}
 	}
 
@@ -267,6 +261,7 @@ void PhysicalMemoryManager::free_frame(void* address) {
 
 /**
  * @brief Allocate an area of physical memory (ie reserve it)
+ * @todo freeing
  *
  * @param start_address The start of the block
  * @param size The size to allocate

@@ -286,6 +286,9 @@ namespace MaxOS::system {
 			static bool check_cpu_feature(CPU_FEATURE_EDX feature);
 
 			static void stack_trace(size_t);
+
+			static void enable_write_protect();
+			static void disable_write_protect();
 	};
 }
 

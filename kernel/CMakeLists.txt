@@ -61,11 +61,10 @@ SET(SYMBOLS_HEADER "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h")
 SET(SYMBOLS_HEADER_TMP "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h.tmp")
 SET(SYMBOLS_HEADER_DEP "${CMAKE_BINARY_DIR}/generated/symbols.dep")
 SET(GEN_SYM_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/symbols.sh")
-SET(OBJCOPY "${CMAKE_SOURCE_DIR}/toolchain/cross_compiler/cross/bin/x86_64-elf-objcopy")
 SET(SYM_ELF "${CMAKE_BINARY_DIR}/MaxOS.sym")
 ADD_CUSTOM_COMMAND(
         OUTPUT      ${SYMBOLS_HEADER_DEP}
-        COMMAND     ${OBJCOPY} --only-keep-debug $<TARGET_FILE:MaxOSk64_nosym> ${SYM_ELF}
+        COMMAND     ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE:MaxOSk64_nosym> ${SYM_ELF}
         COMMAND     ${GEN_SYM_SCRIPT} ${SYM_ELF} ${SYMBOLS_HEADER_TMP}
         COMMAND     ${CMAKE_COMMAND} -E copy_if_different "${SYMBOLS_HEADER_TMP}" "${SYMBOLS_HEADER}"
         COMMAND     ${CMAKE_COMMAND} -E remove "${SYMBOLS_HEADER_TMP}"

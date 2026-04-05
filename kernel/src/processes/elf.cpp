@@ -41,9 +41,7 @@ ELF64::~ELF64() = default;
  */
 void ELF64::load_into_memory(VirtualMemoryManager* vmm) const {
 
-	if (!is_valid())
-		return;
-
+	ASSERT(is_valid(), "Invaild ELF file loaded\n");
 	load_program_headers(vmm);
 
 }
@@ -158,9 +156,9 @@ void ELF64::load_program_headers(VirtualMemoryManager* vmm) const {
 		// Copy the program into memory at that address
 		memcpy(address, (void*) (m_elf_header_address + program_header->offset), program_header->file_size);
 
-		// Zero the rest of the memory if needed TODO: breaks
+		// Zero the rest of the memory if needed
 		size_t zero_size = program_header->memory_size - program_header->file_size;
-//		memset((void*) ((uintptr_t) address + program_header->file_size), 0, zero_size);
+		memset((void*) ((uintptr_t) address + program_header->file_size), 0, zero_size);
 
 		// Once the memory has been copied can now mark the pages as read only etc
 		uint64_t flags = to_vmm_flags(program_header->flags);

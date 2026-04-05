@@ -85,6 +85,35 @@ String::String(uint8_t const* string, int length) {
 }
 
 /**
+ * @brief Constructs the hex string representation of a memory chunk
+ *
+ * @param address The start of the memory region
+ * @param length The length of the memory region
+ */
+String::String(void* address, int length) {
+
+	// Allocate memory for the string
+	m_length = 2 * length;
+	allocate_self();
+
+	constexpr char* HEX_CHARS = "0123456789ABCDEF";
+	uint8_t* memory = (uint8_t*)address;
+
+	// Copy each byte
+	for (int i = 0; i < length; ++i) {
+		uint8_t byte = memory[i];
+
+		// Copy as little endian
+		m_string[i * 2]		= HEX_CHARS[(byte >> 4) & 0xF];
+		m_string[i * 2 + 1] = HEX_CHARS[byte & 0xF];
+
+	}
+
+	// Write the null terminator
+	m_string[m_length] = '\0';
+}
+
+/**
  * @brief Constructs a string from an integer (must be base 10)
  *
  * @param value The integer value
@@ -654,6 +683,57 @@ int String::find(String const &other, int start) const {
 }
 
 /**
+ * @brief Converts the string to uppercase
+ *
+ * @return The string in uppercase (new string)
+ */
+String String::to_upper() {
+
+	// The uppercase string
+	String upper;
+	upper.m_length = m_length;
+	upper.allocate_self();
+
+	// Convert to uppercase
+	for (size_t i = 0; i < m_length; i++) {
+		char c = m_string[i];
+		if (c >= 'a' && c <= 'z')
+			c -= ('a' - 'A');
+		upper.m_string[i] = c;
+	}
+
+	// Write the null terminator
+	upper.m_string[m_length] = '\0';
+
+	return upper;
+}
+
+/**
+ * @brief Converts the string to lowercase
+ *
+ * @return The string in lowercase (new string)
+ */
+String String::to_lower() {
+	// The lowercase string
+	String lower;
+	lower.m_length = m_length;
+	lower.allocate_self();
+
+	// Convert to lowercase
+	for (size_t i = 0; i < m_length; i++) {
+		char c = m_string[i];
+		if (c >= 'A' && c <= 'Z')
+			c += ('a' - 'A');
+		lower.m_string[i] = c;
+	}
+
+	// Write the null terminator
+	lower.m_string[m_length] = '\0';
+
+	return lower;
+}
+
+/**
  * @brief Strips the string of whitespace
  *
  * @param strip_char The character to strip (default = ' ')
@@ -771,6 +851,7 @@ int String::to_int() const {
 		result = result * 10 + (c - '0');
 	}
 
+	return result;
 }
 
 /**
@@ -790,6 +871,35 @@ uint64_t String::to_uint64() const {
 			return 0;
 
 		result = result * 10 + (c - '0');
+	}
+
+	return result;
+
+}
+
+uint64_t String::hex_to_uint64() const {
+
+	uint64_t result = 0;
+	size_t start = 0;
+
+	// Skip prefix
+	if (m_length >= 2 && m_string[0] == '0' && (m_string[1] == 'x' || m_string[1] == 'X'))
+		start = 2;
+
+	for (size_t i = start; i < m_length; i++) {
+		char c = m_string[i];
+		uint8_t value = 0;
+
+		if (c >= '0' && c <= '9') {
+			value = c - '0';
+		} else if (c >= 'a' && c <= 'f') {
+			value = c - 'a' + 10;
+		} else if (c >= 'A' && c <= 'F') {
+			value = c - 'A' + 10;
+		}
+
+		// Add to result
+		result = (result << 4) | value;
 	}
 
 	return result;
@@ -1049,3 +1159,4 @@ StringBuilder& StringBuilder::operator <<(bool value) {
 	out += string(value);
 	return *this;
 }
+
