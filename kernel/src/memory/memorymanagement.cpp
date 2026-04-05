@@ -235,9 +235,6 @@ MemoryManager::MemoryManager(VirtualMemoryManager* vmm)
 	if(m_virtual_memory_manager == nullptr)
 		m_virtual_memory_manager = new VirtualMemoryManager();
 
-	// Enable the memory manager
-	switch_active_memory_manager(this);
-
 	// Set up the first chunk of memory
 	auto address = (uintptr_t)m_virtual_memory_manager->allocate(PAGE_SIZE + sizeof(MemoryChunk), 0);
 	setup_region(address, PAGE_SIZE - sizeof(MemoryChunk));

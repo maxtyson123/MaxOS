@@ -31,6 +31,9 @@ extern "C" void _start(int argc, char* argv[])
 
 	// Pass ramdisk to fileserver
 	auto address = create_shared_memory("init_initrd", size);
+	if (address == nullptr)
+		klog("initrd is 0\n");
+
 	KPI::memcpy(address, header, size);
 	mount_ramdisk("init_initrd");
 

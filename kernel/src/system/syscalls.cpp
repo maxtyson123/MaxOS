@@ -144,7 +144,7 @@ syscall_args_t* SyscallManager::syscall_allocate_memory(syscall_args_t* args) {
 
 	// Malloc the memory
 	size_t size = args->arg0;
-	if (GlobalScheduler::current_process()->name == "DriverManager.elf")
+	if (GlobalScheduler::current_process()->name == "Init")
 		asm("nop");
 	void* address = MemoryManager::malloc(size);
 

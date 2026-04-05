@@ -68,7 +68,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	call_constructors();
 
 	Logger logger;
-	SerialConsole serial_console;
+	SerialConsole serial_console(&logger);
 	Logger::INFO() << "MaxOS Booted Successfully\n";
 
 	Logger::HEADER() << "Stage {1}: System Initialisation\n";
@@ -95,12 +95,7 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	Logger::HEADER() << "Stage {3}: Userspace Initialisation\n";
 	SyscallManager syscalls;
 	GlobalScheduler scheduler(multiboot);
-
-
-	GDBServer server(&serial_console);
-	server.attach(GlobalScheduler::get_process(4)->threads()[0]);
-
-	// console.finish();
+	console.finish();
 	GlobalScheduler::activate();
 
 

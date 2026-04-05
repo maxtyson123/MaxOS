@@ -4,6 +4,8 @@
  *
  * @date 11th February 2024
  * @author Max Tyson
+ *
+ * @todo VMM regions are right next to the userspace allocated blocks THIS IS BAD
  */
 
 #include <memory/virtual.h>
@@ -47,28 +49,20 @@ VirtualMemoryManager::VirtualMemoryManager() {
 
 		}
 
+		// Load the userspace pml4
+		asm volatile("mov %0, %%cr3"::"r"((uint64_t)m_pml4_root_physical_address) : "memory");
+
 	} else {
 		m_pml4_root_address = PhysicalMemoryManager::s_current_manager->pml4_root_address();
 		m_pml4_root_physical_address = (uint64_t*) PhysicalMemoryManager::to_lower_region((uint64_t) m_pml4_root_address);
 	}
 
-	// Allocate space for the vmm
-	uint64_t vmm_space = PhysicalMemoryManager::align_to_page(HIGHER_HALF_DIRECT_MAP + PhysicalMemoryManager::s_current_manager->memory_size() + PAGE_SIZE);
-	void* vmm_space_physical = PhysicalMemoryManager::s_current_manager->allocate_frame();
-	PhysicalMemoryManager::s_current_manager->map(vmm_space_physical, (virtual_address_t*) vmm_space, PRESENT | WRITE, m_pml4_root_address);
-
-	// Make sure everything is mapped correctly
-	if (!is_kernel)
-		ASSERT(vmm_space_physical != PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*) vmm_space, m_pml4_root_address), "Physical address does not match mapped address: 0x%x != 0x%x\n", vmm_space_physical,
-			   PhysicalMemoryManager::s_current_manager->get_physical_address((virtual_address_t*) vmm_space, m_pml4_root_address));
-
-	// Set the first region
-	m_first_region = (virtual_memory_region_t*) vmm_space;
-	m_current_region = m_first_region;
-	m_first_region->next = nullptr;
+	// Set up the first region
+	new_region();
+	m_first_region = m_current_region;
 
 	// Calculate the next available address (kernel needs to reserve space for the higher half)
-	m_next_available_address = is_kernel ? vmm_space + VMM_RESERVED : PAGE_SIZE;
+	m_next_available_address = is_kernel ? HIGHER_HALF_DIRECT_MAP + PhysicalMemoryManager::s_current_manager->memory_size() + VMM_RESERVED : PAGE_SIZE;
 }
 
 /**
@@ -240,7 +234,8 @@ void VirtualMemoryManager::new_region() {
 	}
 
 	// Set the current region
-	m_current_region->next = new_region;
+	if (m_current_region)
+		m_current_region->next = new_region;
 	m_current_chunk = 0;
 	m_current_region = new_region;
 }
@@ -428,7 +423,7 @@ virtual_memory_chunk_t* VirtualMemoryManager::find_containing_chunk(const void* 
 				continue;
 
 			// Can this chunk contain the whole region?
-			if (!(start_address + size < chunk_end))
+			if (!(start_address + size <= chunk_end))
 				continue;
 
 			return &region->chunks[i];
