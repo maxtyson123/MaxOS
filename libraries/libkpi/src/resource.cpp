@@ -242,6 +242,7 @@ void ResourceServer::process_message(service_resource_message_t *message) {
     bool should_exist = !(command == ServiceResourceCommand::S_CREATE || command== ServiceResourceCommand::S_GET);
     if (!resource && should_exist) {
         send_response(message, -1);
+        klog("rs err: resource doesnt exist when it should\n");
         return;
     }
 
@@ -311,6 +312,7 @@ void ResourceServer::process_message(service_resource_message_t *message) {
         }
 
         default:
+            klog("rs err: resource command unkown\n");
             break;
     }
 

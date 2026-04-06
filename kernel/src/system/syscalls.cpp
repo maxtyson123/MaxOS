@@ -144,8 +144,6 @@ syscall_args_t* SyscallManager::syscall_allocate_memory(syscall_args_t* args) {
 
 	// Malloc the memory
 	size_t size = args->arg0;
-	if (GlobalScheduler::current_process()->name == "Init")
-		asm("nop");
 	void* address = MemoryManager::malloc(size);
 
 	// Return the address
@@ -261,7 +259,7 @@ syscall_args_t* SyscallManager::syscall_resource_write(syscall_args_t* args) {
 syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
 
 	// Parse params
-	auto handle	= (uint64_t )args->arg0;
+	auto handle	= (uint64_t)args->arg0;
 	auto buffer = (void*)args->arg1;
 	auto size 	= (size_t)args->arg2;
 	auto flags 	= (size_t)args->arg3;

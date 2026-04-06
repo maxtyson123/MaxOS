@@ -240,6 +240,7 @@ No user usage so far (userland will be added in the future)
 - [x] Loading ELF
 - [x] Multiple Cores Support (SMP & Scheduler)
 - [x] Move VFS & drivers to userspace
+- [ ] Proper error system
 - [ ] Porting & Dynamically Linking Libc
 - [ ] Reorganise project (central repo that points to org sub repos - unifies documentation for each subrepo and build etc)
 - [ ] Move networking to userspace (& rewrite, fix)

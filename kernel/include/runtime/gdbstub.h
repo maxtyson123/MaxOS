@@ -21,6 +21,9 @@
 
 namespace MaxOS::runtime {
 
+	constexpr bool DO_DEBUGGING = false;
+    constexpr char* DEBUG_TARGET = "DriverManager.elf";
+
     class GDBServer;
     class TrapFlagExcpetion : public hardwarecommunication::ExceptionHandler {
 

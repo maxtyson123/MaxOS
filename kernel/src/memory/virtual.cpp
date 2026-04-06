@@ -244,8 +244,9 @@ void VirtualMemoryManager::new_region() {
  * @brief Free a chunk of virtual memory
  *
  * @param address The address of the memory to free
+ * @param reusable_pages Can these pages be reused (chunk will be added to free list)
  */
-void VirtualMemoryManager::free(void* address) {
+void VirtualMemoryManager::free(void* address, bool reusable_pages) {
 
 	// Make sure freeing something
 	if (address == nullptr)
@@ -278,17 +279,15 @@ void VirtualMemoryManager::free(void* address) {
 	if (chunk == nullptr)
 		return;
 
-	// If the chunk is shared, don't unmap it incase other processes are using it
+	// No longer using a shared memory chunk
 	if (chunk->flags & VirtualFlags::SHARED) {
 
 		// Find the resource
 		for(const auto& resource : GlobalScheduler::current_process()->resource_manager.resources()){
-
-			// Skip non-shared memory resources
 			if(resource.second->type() != resource_type_t::SHARED_MEMORY)
 				continue;
 
-			// Skip shared memory that points elsewhere
+			// Skip shared memory that points elsewhere TODO: this is vaddr so get paddr and comapre?
 			auto shared = (SharedMemory*)resource.second;
 			if((void*)shared->physical_address() != address)
 				continue;
@@ -298,8 +297,9 @@ void VirtualMemoryManager::free(void* address) {
 		}
 	}
 
-	// Add the chunk to the free list
-	add_free_chunk(chunk->start_address, chunk->size);
+	// Can only re use pages we own
+	if (reusable_pages)
+		add_free_chunk(chunk->start_address, chunk->size);
 
 	// Clear the chunk
 	chunk->size = 0;
@@ -559,7 +559,7 @@ void* VirtualMemoryManager::load_range_from_process(VirtualMemoryManager* other_
 		PhysicalMemoryManager::s_current_manager->map(frame, (virtual_address_t*)(dest + virtual_page - aligned_start), PRESENT | WRITE, m_pml4_root_address);
 	}
 
-	// Return where the region actually starts, not the
+	// Return where the region actually starts, not the chunk
 	return dest + offset;
 }
 
@@ -604,7 +604,7 @@ void VirtualMemoryManager::unload_range_from_process(const void* start_address, 
 	}
 
 	// Free the whole region
-	free((void*)aligned_start);
+	free((void*)aligned_start, false);
 }
 
 /**

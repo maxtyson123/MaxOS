@@ -125,7 +125,7 @@ namespace MaxOS {
 
 				void* allocate(size_t size, size_t flags);
 				void* allocate(uint64_t address, size_t size, size_t flags);
-				void free(void* address);
+				void free(void* address, bool reusable_pages = true);
 
 				void* load_physical_into_address_space(uintptr_t physical_address, size_t size, size_t flags);
 

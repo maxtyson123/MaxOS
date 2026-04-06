@@ -55,6 +55,7 @@ int FileResource::read(void* buffer, size_t size, size_t flags) {
 		}
 
 		case FileFlags::READ_SIZE:{
+			klog("Reading a file size of 0x%x\n", file->size());
 			return file->size();
 		}
 

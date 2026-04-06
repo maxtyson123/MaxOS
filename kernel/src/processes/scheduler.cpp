@@ -9,6 +9,8 @@
 #include <processes/scheduler.h>
 #include <common/logger.h>
 
+#include "runtime/gdbstub.h"
+
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::processes;
@@ -16,6 +18,8 @@ using namespace MaxOS::processes::resources;
 using namespace MaxOS::memory;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
+using namespace MaxOS::runtime;
+using namespace MaxOS::console;
 
 /**
  * @brief Constructs a new Global Scheduler object. Registers as the interrupt handler for interrupt 0x20 and setups
@@ -219,6 +223,7 @@ void GlobalScheduler::print_running_header() {
 	Logger::active_logger()->printf("(%s:t%dc%d) ",process->name.c_str(), thread->tid,CPU::executing_core()->id);
 }
 
+
 /**
  * @brief Adds a process to the least busy core
  *
@@ -240,6 +245,14 @@ uint64_t GlobalScheduler::add_process(Process* process, Scheduler* scheduler) {
 	// Save the pid
 	auto pid = scheduler->add_process(process);
 	m_core_pids.insert(pid,core_id);
+
+	//@TODO better way to do this
+	if (process->name == DEBUG_TARGET && DO_DEBUGGING) {
+		Logger::DEBUG() << "Starting PROG with GDB\n";
+		auto serial = new SerialConsole();
+		auto debugger = new GDBServer(serial);
+		debugger->attach(process->threads()[0]);
+	}
 
 	Logger::DEBUG() << "Adding process " << pid << ": " << process->name << " to core " << core_id <<"\n";
 	return pid;

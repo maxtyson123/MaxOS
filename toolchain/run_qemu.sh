@@ -159,7 +159,7 @@ else
   BOOT_DEVICE="-drive file=$IMAGE_PATH,format=raw,if=ide,cache=directsync,id=disk0,file.locking=off"
 fi
 
-USERSPACE_GDB=0
+USERSPACE_GDB=1
 if [ "$USERSPACE_GDB" -eq 1 ]; then
   SERIAL='tcp:0.0.0.0:5555,server,nowait'
 else

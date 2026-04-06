@@ -118,7 +118,7 @@ size_t BridgeHandler::allocate_id() {
  * @param size The size of the data buffer
  * @param flags Flags associated with the command
  *
- * @todo If data is too big should do page mapping
+ * @todo Get slot data before freeing
  */
 int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command, const void *buffer, size_t size, size_t flags) {
 

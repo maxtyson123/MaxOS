@@ -7,10 +7,11 @@
  */
 
 #include <console/serial.h>
+#include <runtime/gdbstub.h>
 
 using namespace MaxOS;
+using namespace MaxOS::runtime;
 using namespace MaxOS::console;
-
 
 SerialConsole::SerialConsole()
 : m_data_port(0x3F8),
@@ -65,7 +66,8 @@ SerialConsole::SerialConsole(Logger* logger)
 : SerialConsole()
 {
 	// Set the active serial console
-	logger->add_log_writer(this);
+	if (!DO_DEBUGGING)
+		logger->add_log_writer(this);
 }
 
 SerialConsole::~SerialConsole() = default;

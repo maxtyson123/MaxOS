@@ -95,9 +95,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	Logger::HEADER() << "Stage {3}: Userspace Initialisation\n";
 	SyscallManager syscalls;
 	GlobalScheduler scheduler(multiboot);
-	console.finish();
+	// console.finish();
 	GlobalScheduler::activate();
-
 
 	// Idle loop  (read Idle.md)
 	while (true)

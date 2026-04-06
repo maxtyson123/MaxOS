@@ -28,29 +28,36 @@ PCIController::PCIController()
 {
 
 	// Try open the pci ids
-	m_pci_ids_file_handle = open_file("/initrd/pci.ids");
-	ASSERT(m_pci_ids_file_handle != 0, "Cant open PCI ids file\n");
+	uint64_t pci_ids_file_handle = open_file("/initrd/pci.ids");
+	ASSERT(pci_ids_file_handle != 0, "Cant open PCI ids file\n");
 
 	// Read the pci ids
-	auto size = file_size(m_pci_ids_file_handle);
-	m_pci_ids = (char*)allocate_memory(size);
-	klog("Allocated PCI ids file at 0x%x with size of 0x%x\n", m_pci_ids, size);
+	auto size = file_size(pci_ids_file_handle);
+	auto pci_ids = (char*)allocate_memory(size);
+	file_read(pci_ids_file_handle, pci_ids, size);
 
-	file_read(m_pci_ids_file_handle, m_pci_ids, size);
+	// Split into lines so easier to parse
+	m_pci_id_lines = string(pci_ids).split("\n");
+	klog("Num lines: %d\n", m_pci_id_lines.size());
 
-	klog("PCI IDS: %s", m_pci_ids);
+	// Clean up
+	delete pci_ids;
+	close_file(pci_ids_file_handle);
+
 }
 
 PCIController::~PCIController()
 {
-	// Clean up
-	delete m_pci_ids;
-	close_file(m_pci_ids_file_handle);
+
+}
+
+MaxOS::string PCIController::get_class_string(const pci_device_descriptor_t &dev) const {
+	return "CLASS";
 }
 
 string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev) const
 {
-	return "";
+	return "DEVICE";
 }
 
 Driver* PCIDevice::handle_driver_start()
@@ -166,8 +173,7 @@ void PCIController::enumerate_devices(DeviceEnumeratorEventHandler* handler)
 						device_descriptor.port_base = (uint64_t)bar.address;
 				}
 
-				klog("DEVICE FOUND: %s - %s\n", get_class_string(device_descriptor).c_str(),
-				     get_pci_id_string(device_descriptor).c_str());
+				klog("DEVICE FOUND: %s - %s\n", get_class_string(device_descriptor).c_str(), get_pci_id_string(device_descriptor).c_str());
 				handler->on_device_enumerated(new PCIDevice(device_descriptor));
 			}
 		}
@@ -205,190 +211,6 @@ PCIDeviceDescriptor PCIController::get_device_descriptor(uint16_t bus, uint16_t 
 }
 
 /**
- * @brief Get the driver for the device
- *
- * @param dev Device descriptor
- * @return Driver for the device, null pointer if there is no driver
- */
-// Driver* PCIController::get_driver(PCIDeviceDescriptor dev) {
-//
-// 	switch (dev.vendor_id) {
-// 		case 0x1022:    //AMD
-// 		{
-// 			switch (dev.device_id) {
-// 				case 0x2000: {
-// 					return new AMD_AM79C973(&dev);
-//
-// 				}
-// 				default:
-// 					break;
-// 			}
-// 			break;
-// 		}
-// 		case 0x8086:  //Intel
-// 		{
-// 			switch (dev.device_id) {
-//
-// 				case 0x100E: //i217 (Ethernet Controller)
-// 				{
-// 					return new IntelI217(&dev);
-// 				}
-//
-// 				case 0x7010: // PIIX4 (IDE Controller)
-// 				{
-// 					return new IntegratedDriveElectronicsController(&dev);
-// 				}
-//
-// 				default:
-// 					break;
-// 			}
-// 			break;
-// 		}//End Intel
-// 	}
-//
-// 	//If there is no driver for the particular device, go into generic devices
-// 	switch (dev.class_id) {
-// 		case 0x03: //Graphics
-// 		{
-//
-// 			switch (dev.subclass_id) {
-// 				case 0x00:  //VGA
-// 				{
-// 					return new VideoGraphicsArray();
-// 				}
-// 			}
-// 			break;
-// 		}
-// 	}
-//
-// 	return nullptr;
-// }
-
-/**
- * @brief Print the vednor and device id of known devices, or "Unknown" + their ids if not known.
- *
- * @param dev The device to print
- */
-// void PCIController::list_known_device( const PCIDeviceDescriptor& dev) {
-//
-// 	switch (dev.vendor_id) {
-// 		case 0x1022: {
-// 			// The vendor is AMD
-// 			Logger::Out() << "AMD ";
-//
-// 			// List the device
-// 			switch (dev.device_id) {
-// 				default:
-// 					Logger::Out() << "0x%x" << dev.device_id;
-// 					break;
-// 			}
-// 			break;
-// 		}
-//
-// 		case 0x106B: {
-// 			// The vendor is Apple
-// 			Logger::Out() << "Apple ";
-//
-// 			// List the device
-// 			switch (dev.device_id) {
-// 				case 0x003F: {
-// 					Logger::Out() << "KeyLargo/Intrepid USB";
-// 					break;
-// 				}
-//
-// 				default:
-// 					Logger::Out() << "0x%x" << dev.device_id;
-// 					break;
-// 			}
-// 			break;
-// 		}
-//
-// 		case 1234: {
-// 			// The vendor is QEMU
-// 			Logger::Out() << "QEMU ";
-//
-// 			// List the device
-// 			switch (dev.device_id) {
-//
-// 				case 0x1111: {
-// 					Logger::Out() << "Virtual Video Controller";
-// 					break;
-// 				}
-// 			}
-// 			break;
-// 		}
-//
-// 		case 0x8086: {
-// 			// The vendor is Intel
-// 			Logger::Out() << "Intel ";
-//
-// 			// List the device
-// 			switch (dev.device_id) {
-//
-// 				case 0x1237: {
-// 					Logger::Out() << "440FX";
-// 					break;
-// 				}
-//
-// 				case 0x2415: {
-// 					Logger::Out() << "AC'97";
-// 					break;
-// 				}
-//
-// 				case 0x7000: {
-// 					Logger::Out() << "PIIX3";
-// 					break;
-//
-// 				}
-//
-// 				case 0x7111: {
-// 					Logger::Out() << "PIIX3 ACPI";
-// 					break;
-// 				}
-//
-// 				case 0x7113: {
-// 					Logger::Out() << "PIIX4 ACPI";
-// 					break;
-// 				}
-//
-// 				default:
-// 					Logger::Out() << "0x%x" << dev.device_id;
-// 					break;
-//
-// 			}
-// 			break;
-// 		}
-//
-// 		case 0x80EE: {
-//
-// 			// The vendor is VirtualBox
-// 			Logger::Out() << "VirtualBox ";
-//
-// 			// List the device
-// 			switch (dev.device_id) {
-//
-// 				case 0xBEEF: {
-// 					Logger::Out() << "Graphics Adapter";
-// 					break;
-// 				}
-//
-// 				case 0xCAFE: {
-// 					Logger::Out() << "Guest Service";
-// 					break;
-// 				}
-// 			}
-// 			break;
-// 		}
-//
-// 			// Unknown
-// 		default:
-// 			Logger::Out() << "Unknown (0x" << dev.vendor_id << ":0x" << dev.device_id << ")";
-// 			break;
-//
-// 	}
-// }
-
-/**
  * @brief Get the base address register
  *
  * @param bus Bus number
@@ -421,77 +243,4 @@ BaseAddressRegister PCIController::get_base_address_register(uint16_t bus, uint1
 	write(bus, device, function, 0x10 + 4 * bar, bar_value);
 
 	return result;
-}
-
-
-/**
- * @brief Get the type of the device
- *
- * @todo See wiki for more types to add
- *
- * @return Type of the device as a string (or Unknown if the type is not known)
- */
-string DriverManager::core::PCIController::get_class_string(const pci_device_descriptor_t& dev) const
-{
-	switch (dev.class_id)
-	{
-	case 0x00:
-		return (dev.subclass_id == 0x01) ? "VGA" : "Legacy";
-	case 0x01:
-		switch (dev.subclass_id)
-		{
-		case 0x01:
-			return "IDE interface";
-		case 0x06:
-			return "SATA controller";
-		default:
-			return "Storage";
-		}
-	case 0x02:
-		return "Network";
-	case 0x03:
-		return "Display";
-	case 0x04:
-		switch (dev.subclass_id)
-		{
-		case 0x00:
-			return "Video";
-		case 0x01:
-		case 0x03:
-			return "Audio";
-		default:
-			return "Multimedia";
-		}
-	case 0x06:
-		switch (dev.subclass_id)
-		{
-		case 0x00:
-			return "Host bridge";
-		case 0x01:
-			return "ISA bridge";
-		case 0x04:
-			return "PCI bridge";
-		default:
-			return "Bridge";
-		}
-	case 0x07:
-		switch (dev.subclass_id)
-		{
-		case 0x00:
-			return "Serial controller";
-		case 0x80:
-			return "Communication controller";
-		}
-		break;
-	case 0x0C:
-		switch (dev.subclass_id)
-		{
-		case 0x03:
-			return "USB";
-		case 0x05:
-			return "System Management Bus";
-		}
-		break;
-	}
-	return "Unknown";
 }

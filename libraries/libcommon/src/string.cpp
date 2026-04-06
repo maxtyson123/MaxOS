@@ -46,9 +46,9 @@ String::String(char c) {
  */
 String::String(char const* string) {
 
-	// Get the length of the string, prevent longer than 10000 because this should mean something's gone wrong
+	// Get the length of the string (@todo why not strlen?)
 	m_length = 0;
-	while (string[m_length] != '\0' && m_length <= 10000)
+	while (string[m_length] != '\0')
 		m_length++;
 	allocate_self();
 
@@ -56,11 +56,6 @@ String::String(char const* string) {
 	for (size_t i = 0; i < m_length; i++)
 		m_string[i] = string[i];
 
-	// If the length is more than 10,000 Replace the end with a warning incase future use actually requires that
-	const char* warning = "MAXOS: String length exceeded 10000 - might be a bug";
-	if (m_length > 10000)
-		for (int i = 0; i < 52; i++)
-			m_string[m_length - 52 + i] = warning[i];
 
 	m_string[m_length] = '\0';
 }

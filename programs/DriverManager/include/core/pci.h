@@ -112,8 +112,7 @@ namespace DriverManager::core {
 			BaseAddressRegister get_base_address_register(uint16_t bus, uint16_t device, uint16_t function, uint16_t bar);
 			bool device_has_functions(uint16_t bus, uint16_t device);
 
-			char* m_pci_ids;
-			uint64_t m_pci_ids_file_handle;
+			MaxOS::common::Vector<MaxOS::string> m_pci_id_lines;
 
 			MaxOS::common::Map<uint8_t, MaxOS::string> m_vendor_name_cache;
 			MaxOS::common::Map<uint8_t, MaxOS::string> m_device_name_cache;
