@@ -4,7 +4,6 @@
 
 #include <syscalls.h>
 #include <stdarg.h>
-#include <common.h>
 
 namespace MaxOS::KPI{
 

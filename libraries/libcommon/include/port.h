@@ -21,7 +21,7 @@ namespace MaxOS::common {
 		protected:
 			uint16_t m_port_number; ///< The port to write to / read from
 
-			explicit Port(uint16_t port_number);
+			explicit Port(uint16_t port_number, uint8_t port_bytes);
 			~Port();
 	};
 

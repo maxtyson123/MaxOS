@@ -8,8 +8,7 @@
 
 #include <processes/scheduler.h>
 #include <common/logger.h>
-
-#include "runtime/gdbstub.h"
+#include <runtime/gdbstub.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -125,7 +124,7 @@ void GlobalScheduler::balance() {
 /**
  * @brief Finds the core with the least amount of threads/processes.
  *
- * @param check_threads If true check for least amount of threads, defaults to false
+ * @param check_threads If true also check for least amount of threads, defaults to false
  * @return The core with the lowest work load
  */
 Core* GlobalScheduler::least_busy_core(bool check_threads) {
@@ -162,7 +161,7 @@ void GlobalScheduler::load_multiboot_elfs(Multiboot* multiboot) {
 		Logger::DEBUG() << "Creating process from multiboot module for " << module->cmdline << " (at 0x" << (uint64_t) module->mod_start << ")\n";
 
 		// Handle the init ramdisk
-		if (strcmp(module->cmdline, "initrd"))
+		if (strcmp(module->cmdline, "initrd") == 0)
 			prepare_initrd(module);
 
 		// Try to create the elf from the module
@@ -548,9 +547,15 @@ cpu_status_t* Scheduler::load_process(Process* process, Thread* thread) {
 	thread->thread_state = ThreadState::RUNNING;
 	thread->restore_sse_state();
 
-	// Load the thread's memory manager and task state
+	// Load into the threads memory region
 	MemoryManager::switch_active_memory_manager(process->memory_manager);
+
+	if (process->name == "DriverManager.elf")
+		asm("nop");
+
+	// Load the tss state for this thread
 	CPU::executing_core() -> tss.rsp0 = thread->tss_pointer();
+	thread->load_port_bitmap();
 
 	return &thread->execution_state;
 }

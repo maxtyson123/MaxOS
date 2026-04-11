@@ -279,6 +279,18 @@ int ThreadResource::write(const void* buffer, size_t size, size_t flags) {
 			return size;
 		}
 
+		case ThreadFlags::WRITE_ENABLE_PORT_IO: {
+			uint64_t port = *((uint64_t*)buffer);
+			thread->enable_port(port);
+			return size;
+		}
+
+		case ThreadFlags::WRITE_DISABLE_PORT_IO: {
+			uint64_t port = *((uint64_t*)buffer);
+			thread->disable_port(port);
+			return size;
+		}
+
 		default:
 			return -1;
 	}
@@ -313,14 +325,21 @@ Resource* ThreadResourceRegistry::get_resource(string const& name) {
 	if(resource != nullptr)
 		return resource;
 
+	// Get the thread
 	uint64_t tid = name.to_int();
+	auto thread = name == "this" ? GlobalScheduler::current_thread() : GlobalScheduler::get_thread(tid);
+
+	// Self refrence may already be open
+	resource = BaseResourceRegistry::get_resource(string(thread -> tid));
+	if(resource != nullptr)
+		return resource;
 
 	// Create the resource
-	auto thread = new ThreadResource(name, 0, resource_type_t::PROCESS);
-	thread->thread = name == "this" ? GlobalScheduler::current_thread() : GlobalScheduler::get_thread(tid);
+	auto thread_resource = new ThreadResource(string(thread -> tid), 0, resource_type_t::PROCESS);
+	thread_resource->thread = thread;
 
-	register_resource(thread);
-	return thread;
+	register_resource(thread_resource);
+	return thread_resource;
 }
 
 ThreadResourceRegistry::~ThreadResourceRegistry() = default;
@@ -392,6 +411,8 @@ Resource* ProcessResourceRegistry::create_resource(string const& name, size_t fl
  *
  * @param name
  * @return
+ *
+ * @todo 'this' is a bit mess
  */
 Resource* ProcessResourceRegistry::get_resource(string const& name) {
 
@@ -400,14 +421,21 @@ Resource* ProcessResourceRegistry::get_resource(string const& name) {
 	if(resource != nullptr)
 		return resource;
 
+	// Get the process
 	uint64_t pid = name.to_int();
+	auto process = name == "this" ? GlobalScheduler::current_process() : GlobalScheduler::get_process(pid);
+
+	// Self refrence may already be open
+	resource = BaseResourceRegistry::get_resource(string(process -> pid()));
+	if(resource != nullptr)
+		return resource;
 
 	// Create the resource
-	auto process = new ProcessResource(name, 0, resource_type_t::PROCESS);
-	process->process = name == "this" ? GlobalScheduler::current_process() : GlobalScheduler::get_process(pid);
+	auto process_resource = new ProcessResource(string(process -> pid()), 0, resource_type_t::PROCESS);
+	process_resource->process = process;
 
-	register_resource(process);
-	return process;
+	register_resource(process_resource);
+	return process_resource;
 }
 
 ProcessResourceRegistry::~ProcessResourceRegistry() = default;

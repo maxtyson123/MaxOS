@@ -8,7 +8,7 @@
 
 #include <mem.h>
 
-namespace MaxOS::common {
+extern "C" {
 
 
 	/**
@@ -60,26 +60,6 @@ namespace MaxOS::common {
 		auto* dst = (unsigned char*) ptr;
 		for (size_t i = 0; i < num; i++)
 			dst[i] = (unsigned char) value;
-		return ptr;
-	}
-
-	/**
-	 * @brief Fills a block of memory with a specified value
-	 *
-	 * @param ptr The pointer to the block of memory
-	 * @param value The value to fill the block of memory with
-	 * @param num The number of bytes to fill
-	 * @return The pointer to the block of memory
-	 */
-	void* memset(void* ptr, uint32_t value, uint64_t num) {
-
-		// Make sure the pointer exists
-		if (ptr == nullptr)
-			return ptr;
-
-		auto* dst = (uint8_t*) ptr;
-		for (size_t i = 0; i < num; i++)
-			dst[i] = value;
 		return ptr;
 	}
 

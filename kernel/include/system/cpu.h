@@ -63,6 +63,8 @@ namespace MaxOS::system {
 
 	} cpu_status_t;
 
+	constexpr size_t IO_BITMAP_SIZE = 8192; ///< The size of the IO bitmap to track 65536 ports
+
 	/**
 	 * @struct TaskStateSegment
 	 * @brief Structure representing the Task State Segment (TSS)
@@ -77,7 +79,6 @@ namespace MaxOS::system {
 		uint64_t rsp1;          ///< Stack pointer for ring 1
 		uint64_t rsp2;          ///< Stack pointer for ring 2
 		uint64_t reserved1;     ///< Unused, must be zero
-		uint64_t reserved2;     ///< Unused, must be zero
 		uint64_t ist1;          ///< Interrupt Stack Table entry 1
 		uint64_t ist2;          ///< Interrupt Stack Table entry 2
 		uint64_t ist3;          ///< Interrupt Stack Table entry 3
@@ -85,9 +86,10 @@ namespace MaxOS::system {
 		uint64_t ist5;          ///< Interrupt Stack Table entry 5
 		uint64_t ist6;          ///< Interrupt Stack Table entry 6
 		uint64_t ist7;          ///< Interrupt Stack Table entry 7
-		uint64_t reserved3;     ///< Unused, must be zero
-		uint16_t reserved4;     ///< Unused, must be zero
-		uint16_t io_bitmap_offset;  ///< Offset to the I/O bitmap
+		uint64_t reserved2;     ///< Unused, must be zero
+		uint16_t reserved3;     ///< Unused, must be zero
+		uint16_t io_bitmap_offset;				///< Offset to the I/O bitmap
+		uint8_t io_bitmap[IO_BITMAP_SIZE + 1];	///< The I/O bitmap (including terminator)
 
 	} tss_t;
 
@@ -285,7 +287,7 @@ namespace MaxOS::system {
 			static bool check_cpu_feature(CPU_FEATURE_ECX feature);
 			static bool check_cpu_feature(CPU_FEATURE_EDX feature);
 
-			static void stack_trace(size_t);
+			static void stack_trace(size_t, cpu_status_t* status = nullptr);
 
 			static void enable_write_protect();
 			static void disable_write_protect();

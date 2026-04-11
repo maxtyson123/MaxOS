@@ -55,7 +55,6 @@ int FileResource::read(void* buffer, size_t size, size_t flags) {
 		}
 
 		case FileFlags::READ_SIZE:{
-			klog("Reading a file size of 0x%x\n", file->size());
 			return file->size();
 		}
 
@@ -179,7 +178,7 @@ void DirectoryResource::write_entries(void const* buffer, size_t size) const {
 		entry->is_file = is_file;
 		entry->size = entry_size;
 		entry->entry_length = required_size;
-		common::memcpy(entry->name, name.c_str(), name.length());
+		memcpy(entry->name, name.c_str(), name.length());
 		entry->name[name.length()] = '\0';
 
 		// Not enough space
@@ -187,7 +186,7 @@ void DirectoryResource::write_entries(void const* buffer, size_t size) const {
 			return false;
 
 		// Copy the entry
-		common::memcpy((uint8_t*)buffer + amount_written, entry, entry->entry_length);
+		memcpy((uint8_t*)buffer + amount_written, entry, entry->entry_length);
 		amount_written += entry->entry_length;
 		return true;
 	};

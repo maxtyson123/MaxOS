@@ -65,7 +65,7 @@ size_t BridgeHandler::store_data(const void *buffer, size_t size, bool reserve_o
 
     // Copy the data
     if (!reserve_only && !is_mapped)
-        common::memcpy(data, buffer, size);
+        memcpy(data, buffer, size);
 
     // If not mapped then its an offset into the process's own virtual address for the shared mem
     return (size_t)data - (is_mapped ? 0 : m_data_region);
@@ -145,7 +145,7 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
 
     // Read request
     if (is_read && !is_page_mapped)
-        common::memcpy((void*)buffer, (void*)m_data_region + offset, size);
+        memcpy((void*)buffer, (void*)m_data_region + offset, size);
 
     // Free resources
     is_page_mapped  ? m_owner_process->memory_manager->vmm()->unload_range_from_process((void*)offset, size)

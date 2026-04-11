@@ -14,7 +14,7 @@
 #include <cstddef>
 
 #include <syscalls.h>
-#include <common.h>
+#include <mem.h>
 
 namespace MaxOS::KPI::processes {
 

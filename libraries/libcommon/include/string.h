@@ -128,10 +128,10 @@ char* itoa(int base, int64_t number);
 char* htoa(uint64_t number);
 
 // Compare functions
-bool strcmp(char const* str1, char const* str2);
-bool strcmp(char const* str1, MaxOS::String const& str2);
-bool strcmp(MaxOS::String const& str1, char const* str2);
-bool strcmp(MaxOS::String const& str1, MaxOS::String const& str2);
+int strcmp(char const* str1, char const* str2);
+int strcmp(char const* str1, MaxOS::String const& str2);
+int strcmp(MaxOS::String const& str1, char const* str2);
+int strcmp(MaxOS::String const& str1, MaxOS::String const& str2);
 
 // Compare limited functions
 bool strncmp(char const* str1, char const* str2, int length);

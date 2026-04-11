@@ -8,7 +8,6 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <common.h>
 #include <syscalls.h>
 
 namespace LibFS {

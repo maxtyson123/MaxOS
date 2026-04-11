@@ -110,7 +110,7 @@ void FramebufferConsole::put_character(uint16_t x, uint16_t y, char c) {
 			ansi_code[ansi_code_length] = '\0';
 			ansi_code_length = -1;
 
-			if(strcmp("\033[0m", ansi_code) != 0) {
+			if(strcmp("\033[0m", ansi_code) == 0) {
 				m_foreground_color = ConsoleColour::Uninitialised;
 				m_background_color = ConsoleColour::Uninitialised;
 				return;

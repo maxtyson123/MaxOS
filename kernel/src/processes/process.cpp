@@ -35,7 +35,7 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	wakeup_time = 0;
 	ticks = 0;
 
-	// Create the stack (cant usee global MemoryManager::malloc() as process hasn't been registered with the seduler yet)
+	// Create the stack (cant usee global MemoryManager::malloc() as process hasn't been registered with the scheduler yet)
 	m_stack_pointer = (uintptr_t) parent->memory_manager->handle_malloc(STACK_SIZE) + STACK_SIZE;
 
 	// Use the kernel stack
@@ -64,12 +64,15 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 		// Copy each argument
 		size_t len = strlen(((char**)args)[i]) + 1;
 		((char**)argv)[i] = (char*) parent->memory_manager->handle_malloc(len);
-		memcpy((void*) ((char**)argv)[i], (void*) ((char**)args)[i], len);
+		memcpy(((char**)argv)[i], ((char**)args)[i], len);
 	}
 
 	execution_state.rdi = argc;
 	execution_state.rsi = (uint64_t) argv;
 	//execution_state->rdx = (uint64_t)env_args;
+
+	// All ports denied by default
+	memset(m_io_bitmap, 0xFF, sizeof(m_io_bitmap));
 
 	parent_pid = parent->pid();
 }
@@ -234,6 +237,36 @@ extern "C" void save_cpu_state_naked(volatile void* location) {
  */
 void Thread::save_cpu_state() {
 	save_cpu_state_naked(&execution_state);
+}
+
+/**
+ * @brief Sets bits in the threads TSS to allow a port for I/O
+ */
+void Thread::enable_port(uint64_t port) {
+
+	// Enable the port
+	m_io_bitmap[port / 8] &= ~(1U << (port % 8));
+	load_port_bitmap();
+
+}
+
+/**
+ * @brief Sets bits in the threads TSS to disallow a port for I/O
+ */
+void Thread::disable_port(uint64_t port) {
+
+	// Disable the port
+	m_io_bitmap[port / 8] |= (1U << (port % 8));
+	load_port_bitmap();
+}
+
+/**
+ * @brief Copy this ports
+ */
+void Thread::load_port_bitmap() {
+
+	memcpy(CPU::executing_core()->tss.io_bitmap, &m_io_bitmap, sizeof(m_io_bitmap));
+
 }
 
 /**

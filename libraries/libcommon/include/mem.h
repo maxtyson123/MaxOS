@@ -8,10 +8,10 @@
 #include <cstdint>
 #include <cstddef>
 
-namespace MaxOS::common {
+extern "C" {
 
 	void* memcpy(void* destination, const void* source, uint64_t num);
-	void* memset(void* ptr, uint32_t value, uint64_t num);
+	void* memset(void* ptr, unsigned char value, uint64_t num);
 	void* memmove(void* destination, const void* source, uint64_t num);
 	int memcmp(const void* ptr1, const void* ptr2, uint64_t num);
 

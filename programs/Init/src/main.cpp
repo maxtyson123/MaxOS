@@ -31,14 +31,11 @@ extern "C" void _start(int argc, char* argv[])
 
 	// Pass ramdisk to fileserver
 	auto address = create_shared_memory("init_initrd", size);
-	if (address == nullptr)
-		klog("initrd is 0\n");
-
-	KPI::memcpy(address, header, size);
+	memcpy(address, header, size);
 	mount_ramdisk("init_initrd");
 
 	// Start driver manager
-	string dm_path = "/initrd/DriverManager.elf";
+	string dm_path = "/boot/initrd/DriverManager.elf";
 	exec_file(Path::file_name(dm_path).c_str(), dm_path.c_str());
 
 	// Wait for fileserver to parse disks

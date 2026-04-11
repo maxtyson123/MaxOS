@@ -977,32 +977,28 @@ char* htoa(uint64_t number) {
 }
 
 /**
- * @brief Checks if one string pointer is equal to another string pointer
+ * @brief Compares two strings
  *
  * @param str1 The first string
  * @param str2 The second string
- * @return True if the strings are equal, false otherwise
+ * @return 0 if the strings are equal, a negative value if str1 is less than str2, or a positive value if str1 is greater than str2
  */
-bool strcmp(char const* str1, char const* str2) {
-
-	// Check if the strings are equal
-	for (int i = 0; str1[i] != '\0' || str2[i] != '\0'; i++)
-		if (str1[i] != str2[i])
-			return false;
-
-	// The strings are equal
-	return true;
-
+int strcmp(const char* str1, const char* str2) {
+	while (*str1 && (*str1 == *str2)) {
+		str1++;
+		str2++;
+	}
+	return *(unsigned char*)str1 - *(unsigned char*)str2;
 }
 
 /**
- * @brief Checks if one string pointer is equal to a String
+ * @brief Compares two strings
  *
  * @param str1 The first string
  * @param str2 The second string
- * @return True if the strings are equal, false otherwise
+ * @return 0 if the strings are equal, a negative value if str1 is less than str2, or a positive value if str1 is greater than str2
  */
-bool strcmp(char const* str1, String const& str2) {
+int strcmp(char const* str1, String const& str2) {
 
 	// Use the other strcmp function
 	return strcmp(str1, str2.c_str());
@@ -1010,26 +1006,26 @@ bool strcmp(char const* str1, String const& str2) {
 }
 
 /**
- * @brief Checks if one String is equal to a string pointer
+ * @brief Compares two strings
  *
  * @param str1 The first string
  * @param str2 The second string
- * @return True if the strings are equal, false otherwise
+ * @return 0 if the strings are equal, a negative value if str1 is less than str2, or a positive value if str1 is greater than str2
  */
-bool strcmp(String const& str1, char const* str2) {
+int strcmp(String const& str1, char const* str2) {
 
 	// Use the other strcmp function
 	return strcmp(str1.c_str(), str2);
 }
 
 /**
- * @brief Checks if one String is equal to another String (better use is of "==")
+ * @brief Compares two strings
  *
  * @param str1 The first string
  * @param str2 The second string
- * @return True if the strings are equal, false otherwise
+ * @return 0 if the strings are equal, a negative value if str1 is less than str2, or a positive value if str1 is greater than str2
  */
-bool strcmp(String const& str1, String const& str2) {
+int strcmp(String const& str1, String const& str2) {
 
 	// Use the other strcmp function
 	return strcmp(str1.c_str(), str2.c_str());

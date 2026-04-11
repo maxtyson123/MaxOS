@@ -10,14 +10,26 @@
 
 using namespace MaxOS::common;
 
+extern "C" {
+	__attribute__((weak)) void userspace_port_enable_hook(uint16_t port, uint8_t bytes) {
+		// Default: Do nothing (Kernel mode or libkpi not linked)
+	}
+}
+
 /**
  * @brief Construct a new Port object
  *
  * @param port_number The IO port number
  */
-Port::Port(uint16_t port_number)
+Port::Port(uint16_t port_number, uint8_t port_bytes)
 : m_port_number(port_number)
 {
+
+	// Userspace needs to enable the ports
+	#ifndef MAXOS_KERNEL
+		userspace_port_enable_hook(port_number, port_bytes);
+	#endif
+
 }
 
 Port::~Port() = default;
@@ -28,7 +40,7 @@ Port::~Port() = default;
  * @param port_number The IO port number
  */
 Port8Bit::Port8Bit(uint16_t port_number)
-: Port(port_number) {
+: Port(port_number, 1) {
 }
 
 Port8Bit::~Port8Bit() = default;
@@ -82,7 +94,7 @@ void Port8BitSlow::write(uint8_t data) {
  * @param port_number The IO port number
  */
 Port16Bit::Port16Bit(uint16_t port_number)
-: Port(port_number) {
+: Port(port_number, 2) {
 }
 
 Port16Bit::~Port16Bit() = default;
@@ -115,7 +127,7 @@ uint16_t Port16Bit::read() {
  * @param port_number The IO port number
  */
 Port32Bit::Port32Bit(uint16_t port_number)
-: Port(port_number) {
+: Port(port_number, 4) {
 }
 
 Port32Bit::~Port32Bit() = default;

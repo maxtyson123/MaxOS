@@ -52,6 +52,8 @@ namespace MaxOS::processes {
 			uintptr_t m_stack_pointer;
 			uintptr_t m_tss_stack_pointer;
 
+			uint8_t m_io_bitmap[system::IO_BITMAP_SIZE];
+
 			char m_sse_save_region[512] __attribute__((aligned(16)));
 
 		public:
@@ -77,6 +79,10 @@ namespace MaxOS::processes {
 			void restore_sse_state();
 
 			void save_cpu_state();
+
+			void enable_port(uint64_t port);
+			void disable_port(uint64_t port);
+			void load_port_bitmap();
 	};
 
 	/**

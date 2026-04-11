@@ -35,7 +35,7 @@ namespace LibFS {
 
 	void rename_file(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, KPI::strlen(name), (size_t) FileFlags::WRITE_NAME);
+		resource_write(handle, name, strlen(name), (size_t) FileFlags::WRITE_NAME);
 	}
 
 	void seek_file(uint64_t handle, size_t position, SeekType seek_type) {

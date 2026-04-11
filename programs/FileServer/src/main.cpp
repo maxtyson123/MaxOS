@@ -38,7 +38,7 @@ void mount_ramdisk(mstring endpoint) {
     if (!vfs)
         return;
 
-    vfs->mount_filesystem(fs, "/initrd");
+    vfs->mount_filesystem(fs, "/boot/initrd");
 }
 
 extern "C" void _start(int argc, char* argv[]){

@@ -10,10 +10,13 @@
 #include <libfs/include/file.h>
 #include <assert.h>
 
+#include "processes/thread.h"
+
 
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::KPI;
+using namespace MaxOS::KPI::processes;
 using namespace DriverManager;
 using namespace DriverManager::core;
 using namespace LibDriver;
@@ -28,7 +31,7 @@ PCIController::PCIController()
 {
 
 	// Try open the pci ids
-	uint64_t pci_ids_file_handle = open_file("/initrd/pci.ids");
+	uint64_t pci_ids_file_handle = open_file("/boot/initrd/pci.ids");
 	ASSERT(pci_ids_file_handle != 0, "Cant open PCI ids file\n");
 
 	// Read the pci ids
@@ -38,7 +41,6 @@ PCIController::PCIController()
 
 	// Split into lines so easier to parse
 	m_pci_id_lines = string(pci_ids).split("\n");
-	klog("Num lines: %d\n", m_pci_id_lines.size());
 
 	// Clean up
 	delete pci_ids;
@@ -51,7 +53,7 @@ PCIController::~PCIController()
 
 }
 
-MaxOS::string PCIController::get_class_string(const pci_device_descriptor_t &dev) const {
+string PCIController::get_class_string(const pci_device_descriptor_t& dev) const {
 	return "CLASS";
 }
 
@@ -79,7 +81,7 @@ bool PCIDevice::builtin_driver()
 	return false;
 }
 
-LibDriver::DriverType PCIDevice::get_driver_type(const pci_device_descriptor_t& device_descriptor)
+DriverType PCIDevice::get_driver_type(const pci_device_descriptor_t& device_descriptor)
 {
 	return DriverType::UNKNOWN;
 }

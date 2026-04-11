@@ -129,10 +129,57 @@ void MaxOS::KPI::processes::thread_sleep_handle(uint64_t thread_handle, uint64_t
  * @param tid The thread ID of the thread
  * @param sleep_time_ms The amount of time to sleep in milliseconds
  */
-void MaxOS::KPI::processes::thread_sleep(uint64_t tid, uint64_t sleep_time_ms) {
+void processes::thread_sleep(uint64_t tid, uint64_t sleep_time_ms) {
 
 	uint64_t handle = get_thread(tid);
 	thread_sleep_handle(handle, sleep_time_ms);
+	close_thread_handle(handle);
+
+}
+
+/**
+ * @brief Enable a port's I/O (asm inb/outb) for a thread
+ *
+ * @param thread_handle The opened thread handle to enable port I/O on
+ * @param port The port to enable
+ */
+void processes::thread_enable_port_io_handle(uint64_t thread_handle, uint64_t port) {
+	resource_write(thread_handle, &port, sizeof(port), (size_t)ThreadFlags::WRITE_ENABLE_PORT_IO);
+}
+
+/**
+ *  @brief Enable a port's I/O (asm inb/outb) for a thread
+ *
+ * @param tid The thread ID of the thread
+ * @param port The port to enable
+ */
+void processes::thread_enable_port_io(uint64_t tid, uint64_t port) {
+	uint64_t handle = get_thread(tid);
+	thread_enable_port_io_handle(handle, port);
+	close_thread_handle(handle);
+
+}
+
+
+/**
+ * @brief Disable a port's I/O (asm inb/outb) for a thread
+ *
+ * @param thread_handle The opened thread handle to enable port I/O on
+ * @param port The port to enable
+ */
+void processes::thread_disable_port_io_handle(uint64_t thread_handle, uint64_t port) {
+	resource_write(thread_handle, &port, sizeof(port), (size_t)ThreadFlags::WRITE_DISABLE_PORT_IO);
+}
+
+/**
+ * @brief Disable a port's I/O (asm inb/outb) for a thread
+ *
+ * @param tid The thread ID of the thread
+ * @param port The port to enable
+ */
+void processes::thread_disable_port_io(uint64_t tid, uint64_t port) {
+	uint64_t handle = get_thread(tid);
+	thread_enable_port_io_handle(handle, port);
 	close_thread_handle(handle);
 
 }
@@ -198,4 +245,9 @@ void MaxOS::KPI::processes::thread_exit(uint64_t exit_code) {
 void MaxOS::KPI::processes::sleep(uint64_t sleep_time_ms) {
 
 	resource_write(get_current_thread(), &sleep_time_ms, sizeof(sleep_time_ms), (size_t)ThreadFlags::WRITE_SLEEP_TIME);
+}
+
+extern "C" void userspace_port_enable_hook(uint16_t port, uint8_t bytes) {
+	for (int i = 0; i < bytes; ++i)
+		thread_enable_port_io_handle(get_current_thread(), port + i);
 }

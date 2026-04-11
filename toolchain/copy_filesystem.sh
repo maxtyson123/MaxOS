@@ -27,7 +27,7 @@ fi
 
 # Locations
 BOOT_DIR="$SCRIPTDIR/../filesystem/boot/"
-INIT_DIR="$SCRIPTDIR/../filesystem/initrd/"
+INIT_DIR="$SCRIPTDIR/../filesystem/boot/initrd/"
 
 # Bootscript maps 8MB of kernel memory so ensure that the elf file is less than 8MB (todo: I think I changed this)
 KERNEL_SIZE=$($STAT_EXC -c %s "$BOOT_DIR/MaxOSk64")

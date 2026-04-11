@@ -103,9 +103,7 @@ void Core::wake_up(CPU* cpu) {
 }
 
 /**
- * @brief Initialises the task state segment for this core
- *
- * @todo Implement IO bitmap when adding userspace drivers
+ * @brief Initialises the task state segment for this cor
  */
 void Core::init_tss() {
 
@@ -114,14 +112,13 @@ void Core::init_tss() {
 	tss.reserved1 = 0;
 	tss.reserved2 = 0;
 	tss.reserved3 = 0;
-	tss.reserved4 = 0;
 
-	// The stacks
-	tss.rsp0 = (uint64_t)m_stack + BOOT_STACK_SIZE;       // Kernel stack (scheduler will set the threads stack)
+	// Kernel stack (scheduler will set the threads stack)
+	tss.rsp0 = (uint64_t)m_stack + BOOT_STACK_SIZE;
 	tss.rsp1 = 0;
 	tss.rsp2 = 0;
 
-	// Interrupt stacks can all be 0
+	// Interrupt stacks can all be 0 (@todo implment)
 	tss.ist1 = 0;
 	tss.ist2 = 0;
 	tss.ist3 = 0;
@@ -130,8 +127,10 @@ void Core::init_tss() {
 	tss.ist6 = 0;
 	tss.ist7 = 0;
 
-	// Ports
-	tss.io_bitmap_offset = 0;
+	// All ports denied by default
+	memset(&tss.io_bitmap, 0xFF, sizeof(tss.io_bitmap));
+	tss.io_bitmap[IO_BITMAP_SIZE] = 0xFF;
+	tss.io_bitmap_offset = offsetof(tss_t, io_bitmap);
 
 	// Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
 	auto base = (uint64_t) &tss;
@@ -410,10 +409,11 @@ void CPU::cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint
  * @brief Prints a stack trace up to the specified level
  *
  * @param level The number of stack frames to print
+ * @param status The execution state to trace (optional, null will be interpreted as use the current state)
  */
-void CPU::stack_trace(size_t level) {
+void CPU::stack_trace(size_t level, cpu_status_t* status) {
 
-	auto* frame = (stack_frame_t*) __builtin_frame_address(0);
+	auto* frame = status ? (stack_frame_t*)status->rbp : (stack_frame_t*) __builtin_frame_address(0);
 
 	// Loop through the frames logging
 	for (size_t current_level = 0; current_level < level; current_level++) {
@@ -483,7 +483,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	// Stack trace
 	Logger::ERROR() << "----------------------------\n";
 	Logger::ERROR() << "Stack Trace:\n";
-	stack_trace(20);
+	stack_trace(20, status);
 
 	// Register dump
 	Logger::ERROR() << "----------------------------\n";
@@ -539,8 +539,10 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 	}
 
 	// Kill the others to make sure everything else stops
-	executing_core()->local_apic->send_interrupt(0, 0x81, EXCLUDE_SELF);
-	GlobalScheduler::deactivate();
+	if (GlobalScheduler::is_active()) {
+		executing_core()->local_apic->send_interrupt(0, 0x81, EXCLUDE_SELF);
+		GlobalScheduler::deactivate();
+	}
 
 	// Prepare for printing debug messages
 	FramebufferConsole::print_logo(true);

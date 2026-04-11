@@ -34,6 +34,8 @@ namespace MaxOS::KPI::processes {
 		WRITE_SLEEP_TIME,
 		WRITE_KILL,
 		WRITE_YIELD,
+		WRITE_ENABLE_PORT_IO,	//@TODO secure this
+		WRITE_DISABLE_PORT_IO,	//@TODO secure this
 	};
 
 	// General thread functions
@@ -52,6 +54,12 @@ namespace MaxOS::KPI::processes {
 
 	void thread_sleep_handle(uint64_t thread_handle, uint64_t sleep_time_ms);
 	void thread_sleep(uint64_t tid, uint64_t sleep_time_ms);
+
+	void thread_enable_port_io_handle(uint64_t handle, uint64_t port);
+	void thread_enable_port_io(uint64_t tid, uint64_t port);
+
+	void thread_disable_port_io_handle(uint64_t handle, uint64_t port);
+	void thread_disable_port_io(uint64_t tid, uint64_t port);
 
 	// Current thread functions
 	uint64_t get_current_thread();

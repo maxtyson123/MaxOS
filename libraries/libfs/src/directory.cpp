@@ -27,7 +27,7 @@ namespace LibFS {
 	 * @param name What to rename the directory to
 	 */
 	void rename_directory(uint64_t handle, const char* name) {
-		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_NAME);
+		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_NAME);
 	}
 
 	/**
@@ -69,7 +69,7 @@ namespace LibFS {
 	 */
 	void new_file(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_NEW_FILE);
+		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_NEW_FILE);
 	}
 
 	/**
@@ -80,7 +80,7 @@ namespace LibFS {
 	 */
 	void new_directory(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_NEW_DIR);
+		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_NEW_DIR);
 	}
 
 	/**
@@ -91,7 +91,7 @@ namespace LibFS {
 	 */
 	void remove_file(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_FILE);
+		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_FILE);
 	}
 
 	/**
@@ -102,7 +102,7 @@ namespace LibFS {
 	 */
 	void remove_directory(uint64_t handle, const char* name) {
 
-		resource_write(handle, name, KPI::strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_DIR);
+		resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_DIR);
 	}
 
 	/**

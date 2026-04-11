@@ -104,10 +104,10 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 }
 
 /**
- * @todo IPC support zero copy on big buffers (>64kib)
  * @todo less copy on program creation
  * @todo kernel flamegraph
  * @todo better erroring with bridge calls
+ * @todo resource attr instead of flag fuckery
  *
  * Longterm:
  * @todo Thread storage (when clib) & threads can use RPC
@@ -140,4 +140,4 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 // - - DSK run server()
 // = = =
 // - any future steps
-// - mark self as unschedulable forever
+// % mark self as unschedulable forever
