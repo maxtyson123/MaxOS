@@ -729,6 +729,69 @@ String String::to_lower() {
 }
 
 /**
+ * @brief Returns a new string padded to the left at desired length
+ *
+ * @param padding The string to append to the left
+ * @param total_length The total length of the new string
+ * @return The padded string, or the original if the current length is >= total length.
+ */
+String String::padleft(String padding, int total_length)
+{
+	// No need for padding
+	if (m_length >= total_length || padding.empty())
+		return *this;
+
+	// Allocate space for the padded string
+	String out;
+	out.m_length = total_length;
+	out.allocate_self();
+
+	// Fill the left side with the padding string
+	int pad_needed = total_length - m_length;
+	for (int i = 0; i < pad_needed; i++)
+		out.m_string[i] = padding[i % padding.length()];
+
+	// Copy the original string to the remaining space
+	for (size_t i = 0; i < m_length; i++)
+		out.m_string[pad_needed + i] = m_string[i];
+
+	out.m_string[total_length] = '\0';
+	return out;
+
+}
+
+/**
+ * @brief Returns a new string padded to the right at desired length
+ *
+ * @param padding The string to append to the left
+ * @param total_length The total length of the new string
+ * @return The padded string, or the original if the current length is >= total length.
+ */
+String String::padright(String padding, int total_length)
+{
+	// No need for padding
+	if (m_length >= total_length || padding.empty())
+		return *this;
+
+	// Allocate space for the padded string
+	String out;
+	out.m_length = total_length;
+	out.allocate_self();
+
+	// Copy the original string first
+	for (size_t i = 0; i < m_length; i++)
+		out.m_string[i] = m_string[i];
+
+	// Fill the rest with the padding string
+	for (int i = m_length; i < total_length; i++)
+		out.m_string[i] = padding[(i - m_length) % padding.length()];
+
+	out.m_string[total_length] = '\0';
+	return out;
+
+}
+
+/**
  * @brief Strips the string of whitespace
  *
  * @param strip_char The character to strip (default = ' ')

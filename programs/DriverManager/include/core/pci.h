@@ -126,9 +126,9 @@ namespace DriverManager::core {
 			static LibDriver::Driver* get_driver(pci_device_descriptor_t dev);
 			static void list_known_device(const pci_device_descriptor_t& dev);
 
-			[[nodiscard]] MaxOS::string get_class_string(const pci_device_descriptor_t& dev) const;
-			[[nodiscard]] MaxOS::string get_pci_id_string(const pci_device_descriptor_t& dev) const;
-			[[nodiscard]] LibDriver::DriverType get_driver_type(const pci_device_descriptor_t& dev) const;
+			[[nodiscard]] MaxOS::string get_class_string(const pci_device_descriptor_t& dev);
+			[[nodiscard]] MaxOS::string get_pci_id_string(const pci_device_descriptor_t& dev);
+			[[nodiscard]] LibDriver::DriverType get_driver_type(const pci_device_descriptor_t& dev);
 
 	};
 }

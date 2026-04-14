@@ -48,18 +48,104 @@ PCIController::PCIController()
 
 }
 
-PCIController::~PCIController()
-{
+PCIController::~PCIController() = default;
 
-}
-
-string PCIController::get_class_string(const pci_device_descriptor_t& dev) const {
+string PCIController::get_class_string(const pci_device_descriptor_t& dev) {
 	return "CLASS";
 }
 
-string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev) const
+string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev)
 {
-	return "DEVICE";
+
+	// Get any cached names @todo store in cache
+	auto vendor_cached = m_vendor_name_cache.find((uint8_t)dev.vendor_id);
+	auto device_cached = m_device_name_cache.find((uint8_t)dev.device_id);
+	auto subvendor_cached = m_subvendor_name_cache.find((uint8_t)dev.sub_vendor_id);
+
+	// All found
+	if (vendor_cached != m_subvendor_name_cache.end() && device_cached != m_subvendor_name_cache.end() && subvendor_cached != m_subvendor_name_cache.end())
+		return vendor_cached->second + " " + device_cached->second + " " + subvendor_cached->second;
+
+	// Convert into the expected format
+	string vendor_id  = string((uint64_t)dev.vendor_id).to_lower().padleft("0",4);
+	string device_id  = string((uint64_t)dev.device_id).to_lower().padleft("0",4);
+	string sub_vendor_id  = string((uint64_t)dev.sub_vendor_id).to_lower().padleft("0",4);
+
+	string vendor = "";
+	string device = "";
+	string subvendor = "";
+
+	// Parse the file
+	for (size_t i = 0; i < m_pci_id_lines.size(); ++i)
+	{
+
+		// Skip comments
+		auto line = m_pci_id_lines[i];
+		if (line.starts_with("#") || line.length() == 0)
+			continue;
+
+		// End of file
+		if (line.starts_with("C"))
+			break;
+
+		// Searching for vendor
+		if (vendor == ""){
+
+			// Skip non vendor entries
+			if (line.starts_with("\t"))
+				continue;
+
+			// Not the vendor
+			if (!line.starts_with(vendor_id))
+				continue;
+
+			vendor = line.substring(6, line.length() - 6);
+			continue;
+		}
+
+		// Vendor must have been found so now looking at devices
+		if (device == "")
+		{
+
+			// No more device entries (not found)
+			if (!line.starts_with("\t"))
+				break;
+
+			// Not the device
+			if (!line.starts_with(string("\t") + device_id))
+				continue;
+
+			device = line.substring(7, line.length() - 7);
+			continue;
+		}
+
+		// Device must have been found so now looking at subvendors (@todo subsytem)
+		if (subvendor == "")
+		{
+
+			// No more subvendor entries (not found)
+			if (!line.starts_with("\t\t"))
+				break;
+
+			// Not the device
+			if (!line.starts_with(string("\t\t") + sub_vendor_id))
+				continue;
+
+			subvendor = line.substring(13, line.length() - 13);
+			break;
+		}
+	}
+
+	// Replace not found entries with the ids
+	if (vendor == "")
+		vendor = vendor_id;
+	if (device == "")
+		device = device_id;
+	if (subvendor == "" && sub_vendor_id != "0000")
+		subvendor = sub_vendor_id;
+
+	return vendor + " " + device + " " + subvendor;
+
 }
 
 Driver* PCIDevice::handle_driver_start()

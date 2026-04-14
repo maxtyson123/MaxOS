@@ -71,6 +71,9 @@ namespace MaxOS {
 			[[nodiscard]] String to_upper();
 			[[nodiscard]] String to_lower();
 
+			[[nodiscard]] String padleft(String padding, int total_length);
+			[[nodiscard]] String padright(String padding, int total_length);
+
 			// Operator functions
 			[[nodiscard]] bool equals(String const& other) const;
 
