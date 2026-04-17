@@ -40,14 +40,11 @@ FUNCTION(ADD_SUB_DIRS BASE_DIR)
         SET(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     ENDIF()
 
-    FILE(GLOB CHILD_DIRS RELATIVE ${BASE_DIR} ${BASE_DIR}/*)
+    FILE(GLOB_RECURSE CMAKE_FILES RELATIVE ${BASE_DIR} "${BASE_DIR}/*/CMakeLists.txt")
 
-    FOREACH (dir ${CHILD_DIRS})
-        IF(IS_DIRECTORY ${BASE_DIR}/${dir})
-            IF(EXISTS ${BASE_DIR}/${dir}/CMakeLists.txt)
-                add_subdirectory(${BASE_DIR}/${dir} ${dir})
-            ENDIF()
-        ENDIF()
+    FOREACH (file ${CMAKE_FILES})
+        GET_FILENAME_COMPONENT(dir ${file} DIRECTORY)
+        ADD_SUBDIRECTORY(${BASE_DIR}/${dir} ${CMAKE_CURRENT_BINARY_DIR}/${dir})
     ENDFOREACH()
 ENDFUNCTION()
 

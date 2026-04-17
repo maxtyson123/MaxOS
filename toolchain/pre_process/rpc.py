@@ -2,8 +2,8 @@
 import os
 import re
 import sys
+from dataclasses import dataclass, field
 from pathlib import Path
-from dataclasses import dataclass
 from typing import List, Optional, Tuple, Dict
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -115,6 +115,7 @@ class RpcService:
     class_name: Optional[str] = None
     service_pattern: Optional[str] = None
     namespace: Optional[str] = None
+    extra_includes: List[str] = field(default_factory=list)
 
 # HELPERS
 def log(msg):
@@ -178,6 +179,12 @@ def sanitize_cpp_type(t: str) -> str:
         return "void"
     return t.strip()
 
+def default_cpp_value_expr(cpp_type: str) -> str:
+    t = cpp_type.strip()
+    if "*" in t:
+        return "nullptr"
+    return f"{t}()"
+
 def arg_decl_list(args: List[Argument]) -> str:
     return ", ".join([f"{idl_to_cpp(a.type_idl)} {a.name}" for a in args])
 
@@ -193,6 +200,10 @@ def end_header(lines: List[str], gaurd: str):
 def add_lines(line: str, files: List[List[str]]):
     for f in files:
         f.append(line)
+
+def add_extra_includes(lines: List[str], includes: List[str]):
+    for inc in dict.fromkeys(includes):
+        lines.append(f"#include {inc}")
 
 def extract_arguments(function: RpcMethod, lines: List[str], get: bool = True) -> List[str]:
 
@@ -214,9 +225,13 @@ def extract_arguments(function: RpcMethod, lines: List[str], get: bool = True) -
 
         # Cant get the arg easily, fallback to blob
         if get:
-            lines.append(f"     {idl_to_cpp(arg.type_idl)} {arg.name} = ({idl_to_cpp(arg.type_idl)})_args->get_blob({i}); // unsupported arg; fallback to blob")
+            cpp_type = idl_to_cpp(arg.type_idl)
+            blob_name = f"_{arg.name}_blob"
+            lines.append(f"    const void* {blob_name} = _args->get_blob({i}); // custom arg; fallback to blob")
+            lines.append(f"    {cpp_type} {arg.name} = {default_cpp_value_expr(cpp_type)};")
+            lines.append(f"    if ({blob_name} != nullptr) {arg.name} = *(({cpp_type} const*){blob_name});")
         else:
-            lines.append(f"    _args.push_blob(&{fn_param}, sizeof({idl_to_cpp(arg.type_idl)})); // unsupported arg; fallback to blob")
+            lines.append(f"    _args.push_blob(&{fn_param}, sizeof({idl_to_cpp(arg.type_idl)})); // custom arg; fallback to blob")
 
         call_args.append(arg.name)
     return call_args
@@ -338,6 +353,7 @@ def parse_rpc_file(file_path: Path) -> RpcService:
     class_header_match = re.search(r'^\s*class\s*<([^>]+)>', content, re.MULTILINE)
     class_header = class_header_match.group(1).strip() if class_header_match else None
     namespace = re.search(r'^\s*namespace\s+([\w:]+);?', content, re.MULTILINE)
+    include_matches = re.findall(r'^\s*include\s+(<[^>]+>|"[^"]+")\s*;?\s*$', content, re.MULTILINE)
 
     # Check for a class service: "service class ClassName service_pattern { ... }"
     service_re = re.compile(r'^\s*service\s+class\s+(\w+)\s+([\w\{\}_]+)\s*\{(.*?)\}', re.MULTILINE | re.DOTALL)
@@ -359,17 +375,23 @@ def parse_rpc_file(file_path: Path) -> RpcService:
 
 
     # RPC functions can either be provided or fetched from the class
-    rpc_pattern_full = re.compile(r'^\s*rpc\s+(?:\[(.*?)\])?\s*(?:\((.*?)\)|(\w+))\s+(\w+)\s*\((.*?)\)\s*;?', re.MULTILINE | re.DOTALL)
+    rpc_pattern_full = re.compile(r'^\s*rpc\s+(?:\[(.*?)\]\s*)?(?:\(([^)]*)\)|([^\s(]+))\s+(\w+)\s*\(([^)]*)\)\s*(?:\[(.*?)\]\s*)?;?\s*$',re.MULTILINE,)
     rpc_pattern_auto = re.compile(r'^\s*rpc\s+(\w+)\s*;\s*$', re.MULTILINE)
 
     # Fine all full definitions
     for match in rpc_pattern_full.finditer(body):
 
         # Extract the flags, return types, name, and args
-        flags_str, multiret_str, singleret_str, function_name, args_str = match.groups()
+        flags_prefix_str, multiret_str, singleret_str, function_name, args_str, flags_suffix_str = match.groups()
 
         # Parse the extracted data
-        flags = [f.strip() for f in flags_str.split(',')] if flags_str else []
+        flags = []
+        if flags_prefix_str:
+            flags.extend([f.strip() for f in flags_prefix_str.split(',') if f.strip()])
+        if flags_suffix_str:
+            flags.extend([f.strip() for f in flags_suffix_str.split(',') if f.strip()])
+        # Keep first occurrence order while removing duplicates when both forms are used.
+        flags = list(dict.fromkeys(flags))
         arguments = parse_args(args_str)
 
         # Get the return types of the function
@@ -383,7 +405,7 @@ def parse_rpc_file(file_path: Path) -> RpcService:
     # Find all auto definitions that weren't already defined (will be filled from class header later)
     for match in rpc_pattern_auto.finditer(body):
         function_name = match.group(1)
-        if function_name in functions:
+        if any(f.name == function_name for f in functions):
             continue
         functions.append(RpcMethod(name=function_name, args=[], return_types=["void"], flags=[]))
 
@@ -398,7 +420,8 @@ def parse_rpc_file(file_path: Path) -> RpcService:
         class_header=class_header,
         class_name=class_name,
         service_pattern=service_pattern,
-        namespace=namespace.group(1) if namespace else ""
+        namespace=namespace.group(1) if namespace else "",
+        extra_includes=include_matches
     )
 
 # GENERATORS
@@ -478,6 +501,8 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
         add_lines("#include <ipc/rpc.h>", both)
         add_lines("#include <string.h>", both)
         if header_file: add_lines(f'#include <{header_file}>', both)
+        add_extra_includes(srv_h_lines, service.extra_includes)
+        add_extra_includes(cli_h_lines, service.extra_includes)
         add_lines("", both)
 
         # Add namespace if needed
@@ -626,13 +651,14 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
 
             # Get the return value
             return_value = function.cpp_return_type
-            push_fn = PUSH_FUNC_MAP.get(cpp_type_to_idl(return_value))
-            if not push_fn:
-                raise ValueError(f"Unsupported return type '{return_value}' for function '{function.name}' in service class generation.")
 
             # Call the function and push the return value
             srv_cpp_lines.append(f"    {return_value} _ret = driver->{function.name}({', '.join(call_args)});")
-            srv_cpp_lines.append(f"    _returns->{push_fn}(_ret);")
+            push_fn = PUSH_FUNC_MAP.get(cpp_type_to_idl(return_value))
+            if push_fn:
+                srv_cpp_lines.append(f"    _returns->{push_fn}(_ret);")
+            else:
+                srv_cpp_lines.append(f"    _returns->push_blob(&_ret, sizeof({return_value}));")
             srv_cpp_lines.append("}")
             srv_cpp_lines.append("")
 
@@ -672,11 +698,12 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             # Get the return value
             return_value = function.cpp_return_type
             get_fn = GET_FUNC_MAP.get(cpp_type_to_idl(return_value))
-            if not get_fn:
-                raise ValueError(f"Unsupported return type '{return_value}' for function '{function.name}' in service class generation.")
-
-            # Return the value
-            cli_cpp_lines.append(f"    return _returns.{get_fn}(0);")
+            if get_fn:
+                cli_cpp_lines.append(f"    return _returns.{get_fn}(0);")
+            else:
+                cli_cpp_lines.append("    const void* _ret_blob = _returns.get_blob(0);")
+                cli_cpp_lines.append(f"    if (_ret_blob != nullptr) return *(({return_value} const*)_ret_blob);")
+                cli_cpp_lines.append(f"    return {default_cpp_value_expr(return_value)};")
             cli_cpp_lines.append("}")
             cli_cpp_lines.append("")
 
@@ -709,6 +736,9 @@ def generate_types_header(service: RpcService, output_path: Path):
         "using mstring = MaxOS::string;",
         ""
     ])
+    add_extra_includes(lines, service.extra_includes)
+    if service.extra_includes:
+        lines.append("")
 
     # Multi-return structs
     for function in service.functions:
@@ -741,6 +771,9 @@ def generate_server_header(service: RpcService, output_path: Path, include_prefi
     lines.extend([
         "#include <ipc/rpc.h>",
         f"#include <{include_prefix}{service.name}_types.h>",
+    ])
+    add_extra_includes(lines, service.extra_includes)
+    lines.extend([
         "using mstring = MaxOS::string;",
         "",
         f"uint64_t register_{service.name}();",
@@ -769,6 +802,9 @@ def generate_client_header(service: RpcService, output_path: Path, include_prefi
     lines.extend([
         "#include <ipc/rpc.h>",
         f"#include <{include_prefix}{service.name}_types.h>",
+    ])
+    add_extra_includes(lines, service.extra_includes)
+    lines.extend([
         "",
         "using namespace MaxOS::KPI::ipc;",
         "using mstring = MaxOS::string;",
@@ -791,10 +827,13 @@ def generate_server_source(service: RpcService, output_path: Path, include_prefi
     # Includes
     lines = [
         f"#include <{include_prefix}{service.name}_server.h>",
+    ]
+    add_extra_includes(lines, service.extra_includes)
+    lines.extend([
         "",
         "using namespace MaxOS::KPI::ipc;",
         ""
-    ]
+    ])
 
     # Wrappers TODO: make into reusable function for both
     for function in service.functions:
@@ -814,7 +853,7 @@ def generate_server_source(service: RpcService, output_path: Path, include_prefi
                 if push_fn:
                     lines.append(f"    _returns->{push_fn}(_ret.v{i});")
                 else:
-                    lines.append(f"    // TODO: Unsupported return type '{r_type}'")
+                    lines.append(f"    _returns->push_blob(&_ret.v{i}, sizeof({idl_to_cpp(r_type)}));")
         elif function.cpp_return_type == "void":
             lines.append(f"    {call_str};")
         else:
@@ -823,7 +862,7 @@ def generate_server_source(service: RpcService, output_path: Path, include_prefi
             if push_fn:
                 lines.append(f"    _returns->{push_fn}(_ret);")
             else:
-                lines.append(f"    // TODO: Unsupported return type '{function.return_types[0]}'")
+                lines.append(f"    _returns->push_blob(&_ret, sizeof({function.cpp_return_type}));")
         lines.append("}")
         lines.append("")
 
@@ -850,6 +889,9 @@ def generate_client_source(service: RpcService, output_path: Path, include_prefi
     # Includes and consistent functions
     lines = [
         f"#include <{include_prefix}{service.name}_client.h>",
+    ]
+    add_extra_includes(lines, service.extra_includes)
+    lines.extend([
         "",
         "using namespace MaxOS::KPI::ipc;",
         "",
@@ -857,7 +899,7 @@ def generate_client_source(service: RpcService, output_path: Path, include_prefi
         f'    rpc_wait_for_server("{service.name}");',
         "}",
         ""
-    ]
+    ])
 
     # Declare functions
     for function in service.functions:
@@ -878,20 +920,24 @@ def generate_client_source(service: RpcService, output_path: Path, include_prefi
 
         # Handle returns
         if function.is_multireturn:
-            init_list = []
+            lines.append(f"    {function.cpp_return_type} _ret{{}};")
             for i, r_type in enumerate(function.return_types):
                 get_fn = GET_FUNC_MAP.get(r_type)
                 if get_fn:
-                    init_list.append(f"_returns.{get_fn}({i})")
+                    lines.append(f"    _ret.v{i} = _returns.{get_fn}({i});")
                 else:
-                    init_list.append("/* unsupported */")
-            lines.append(f"    return {function.cpp_return_type}{{ {', '.join(init_list)} }};")
+                    field_type = idl_to_cpp(r_type)
+                    lines.append(f"    const void* _ret_blob_{i} = _returns.get_blob({i});")
+                    lines.append(f"    if (_ret_blob_{i} != nullptr) _ret.v{i} = *(({field_type} const*)_ret_blob_{i});")
+            lines.append("    return _ret;")
         elif function.cpp_return_type != "void":
             get_fn = GET_FUNC_MAP.get(function.return_types[0])
             if get_fn:
                 lines.append(f"    return _returns.{get_fn}(0);")
             else:
-                lines.append(f"    return ({function.cpp_return_type})0; // Unsupported return")
+                lines.append("    const void* _ret_blob = _returns.get_blob(0);")
+                lines.append(f"    if (_ret_blob != nullptr) return *(({function.cpp_return_type} const*)_ret_blob);")
+                lines.append(f"    return {default_cpp_value_expr(function.cpp_return_type)};")
         else:
             lines.append("    return;")
         lines.append("}")

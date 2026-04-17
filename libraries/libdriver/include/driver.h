@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <string.h>
 #include <ipc/rpc.h>
+#include <hardwarecommunication/mapping.h>
 
 namespace LibDriver {
 
@@ -39,7 +40,7 @@ namespace LibDriver {
 		public:
 
 			Driver();
-			~Driver();
+			virtual ~Driver();
 
 			virtual void activate();
 			virtual void deactivate();

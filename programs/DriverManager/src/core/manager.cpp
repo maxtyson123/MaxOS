@@ -129,6 +129,4 @@ void Manager::start_drivers() {
 
 void Manager::start_disks() {
 
-
-
 }

@@ -19,8 +19,6 @@ using namespace MaxOS::KPI::ipc;
 
 extern "C" void _start(void) {
 
-	MaxOS::KPI::klog("DRIVER MANAGER STARTED\n");
-
 	// Start the driver manager
 	Manager driver_manager;
 	driver_manager.find_devices();
@@ -28,12 +26,10 @@ extern "C" void _start(void) {
 	// Disks must be setup to load the found drivers
 	driver_manager.start_disks();
 
-
 	// Start the servers
 	uint64_t handle = register_drivermanager();
 
 	while (true) {
-
 
 		// Process events
 		bool did_handle = rpc_server_process_next(handle, false);
@@ -49,5 +45,5 @@ extern "C" void _start(void) {
 	}
 
 	// Should never exit
-	exit(1);
+	exit(-1);
 }

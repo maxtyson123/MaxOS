@@ -52,7 +52,7 @@ namespace DriverManager::core {
 	 */
 	typedef struct PCIDeviceDescriptor {
 
-		bool has_port_base = false;         ///< Whether the device has an IO port base address
+			bool has_port_base = false;         ///< Whether the device has an IO port base address
 			uint32_t port_base = 0;             ///< The IO port base address
 
 			bool has_memory_base = false;       ///< Whether the device has a memory base address
