@@ -52,9 +52,9 @@ namespace MaxOS::common {
 			bool empty();
 			int size();
 
-			iterator begin();
-			iterator end();
-			iterator find(Key);
+			iterator begin() const;
+			iterator end() const;
+			iterator find(Key) const;
 
 			iterator push_back(Key, Value);
 			Pair<Key, Value> pop_back();
@@ -126,7 +126,7 @@ namespace MaxOS::common {
 	 * @tparam Value The value type
 	 * @return The m_first_memory_chunk element in the map
 	 */
-	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::begin() {
+	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::begin() const{
 		return m_elements.begin();
 	}
 
@@ -137,7 +137,7 @@ namespace MaxOS::common {
 	 * @tparam Value The value type
 	 * @return The last element in the map
 	 */
-	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::end() {
+	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::end() const{
 		return m_elements.end();
 	}
 
@@ -149,7 +149,7 @@ namespace MaxOS::common {
 	 * @param element The key to search for
 	 * @return The iterator of the element, or the end iterator if not found
 	 */
-	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::find(Key element) {
+	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::find(Key element) const{
 
 		// Search for the element
 		for(iterator it = begin(); it != end(); it++)

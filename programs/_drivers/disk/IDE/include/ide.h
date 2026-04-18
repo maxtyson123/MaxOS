@@ -9,8 +9,8 @@
 #ifndef IDEDRIVER_IDE_H
 #define IDEDRIVER_IDE_H
 
-#include <libdriver/include/driver.h>
-#include <libdriver/include/hardwarecommunication/mapping.h>
+#include <driver.h>
+#include <hardwarecommunication/mapping.h>
 
 namespace IDEDriver {
 
@@ -23,13 +23,6 @@ namespace IDEDriver {
 		public:
 			explicit IntegratedDriveElectronicsController(LibDriver::HardwareCommunication::hardware_mapping_t& hmap);
 			~IntegratedDriveElectronicsController() final;
-
-			void initialise() final;
-			void activate() final;
-
-			MaxOS::string vendor_name() final;
-			MaxOS::string device_name() final;
-
 
 	};
 }

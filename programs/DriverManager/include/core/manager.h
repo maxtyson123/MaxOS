@@ -25,10 +25,9 @@ namespace DriverManager::core {
 	class Manager : public DeviceEnumeratorEventHandler {
 
 		private:
-			MaxOS::common::Vector<LibDriver::Driver*> m_drivers;
 			size_t m_next_device_id = 0;
-
 			MaxOS::common::Vector<Device*> m_devices;
+
 			MaxOS::common::Vector<DeviceEnumerator*> m_device_enumerators;
 
 		public:
@@ -38,11 +37,11 @@ namespace DriverManager::core {
 			void add_device_enumerator(DeviceEnumerator*);
 			void remove_device_enumerator(DeviceEnumerator*);
 
-			void add_driver(LibDriver::Driver*);
-			void remove_driver(LibDriver::Driver*);
-
 			void find_devices();
+			void register_device(Device* device);
 			void on_device_enumerated(Device*) final;
+
+			Device* get_device(int id);
 
 			bool all_drivers_started();
 			void start_drivers();

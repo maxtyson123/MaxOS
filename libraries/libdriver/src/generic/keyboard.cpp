@@ -24,21 +24,6 @@ Keyboard::Keyboard()
 
 Keyboard::~Keyboard() = default;
 
-/**
- * @brief activate the keyboard driver
- */
-void Keyboard::activate() {
-
-}
-
-/**
- * @brief Get the device name
- * @return The device name
- */
-string Keyboard::device_name() {
-	return "Keyboard";
-}
-
 KeyboardState::KeyboardState() = default;
 
 KeyboardState::~KeyboardState() = default;

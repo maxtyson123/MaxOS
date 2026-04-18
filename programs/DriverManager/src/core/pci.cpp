@@ -10,9 +10,6 @@
 #include <libfs/include/file.h>
 #include <assert.h>
 
-#include "processes/thread.h"
-
-
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace MaxOS::KPI;
@@ -20,6 +17,7 @@ using namespace MaxOS::KPI::processes;
 using namespace DriverManager;
 using namespace DriverManager::core;
 using namespace LibDriver;
+using namespace LibDriver::HardwareCommunication;
 using namespace LibFS;
 
 /**
@@ -50,21 +48,135 @@ PCIController::PCIController()
 
 PCIController::~PCIController() = default;
 
-string PCIController::get_class_string(const pci_device_descriptor_t& dev) {
-	return "CLASS";
+HardwareRangeType PCIController::get_range_type(BaseAddressRegister& bar) {
+
+	// Bar empty
+	if (bar.address == nullptr || bar.size == 0)
+		return HardwareRangeType::NONE;
+
+	switch (bar.type) {
+
+		case BARType::InputOutput:
+			return HardwareRangeType::PORT;
+
+		case BARType::MemoryMapped:
+			return HardwareRangeType::MEMORY;
+
+	}
+
+	return HardwareRangeType::NONE;
+
 }
 
-string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev)
-{
+Vector<string> PCIController::get_class_string_parts(const pci_device_descriptor_t &dev) {
 
-	// Get any cached names @todo store in cache
-	auto vendor_cached = m_vendor_name_cache.find((uint8_t)dev.vendor_id);
-	auto device_cached = m_device_name_cache.find((uint8_t)dev.device_id);
-	auto subvendor_cached = m_subvendor_name_cache.find((uint8_t)dev.sub_vendor_id);
 
-	// All found
-	if (vendor_cached != m_subvendor_name_cache.end() && device_cached != m_subvendor_name_cache.end() && subvendor_cached != m_subvendor_name_cache.end())
-		return vendor_cached->second + " " + device_cached->second + " " + subvendor_cached->second;
+	// Convert into the expected format
+	string class_id			= string((uint64_t)dev.class_id).to_lower().padleft("0",2);
+	string subclass_id		= string((uint64_t)dev.subclass_id).to_lower().padleft("0",2);
+	string interface_id		= string((uint64_t)dev.interface_id).to_lower().padleft("0",2);
+
+	string sclass = "";
+	string subclass = "";
+	string interface = "";
+
+	size_t start_line = 0;
+
+	// Get any cached names
+	if (check_cache_entry(m_class_name_cache, dev.class_id, sclass, start_line))
+		if (check_cache_entry(m_subclass_name_cache, dev.subclass_id, subclass, start_line))
+			check_cache_entry(m_interface_name_cache, dev.interface_id, interface, start_line);
+
+	// Find the start of the class section
+	if (start_line == 0)
+		for (size_t i = m_pci_id_lines.size(); i > 0; --i)
+			if (m_pci_id_lines[i].starts_with("C 00")) {
+				start_line = i;
+				break;
+			}
+
+	// Parse the file
+	for (size_t i = start_line; i < m_pci_id_lines.size(); ++i)
+	{
+
+		// Skip comments
+		auto line = m_pci_id_lines[i];
+		if (line.starts_with("#") || line.length() == 0)
+			continue;
+
+		// Searching for vendor
+		if (sclass == ""){
+
+			// Skip non vendor entries
+			if (!line.starts_with("C"))
+				continue;
+
+			// Not the vendor
+			if (!line.starts_with(string("C ") + class_id))
+				continue;
+
+			// Extract the vendor
+			sclass = line.substring(6, line.length() - 6);
+			m_class_name_cache.insert(dev.class_id, {i, sclass});
+
+			continue;
+		}
+
+		// Vendor must have been found so now looking at devices
+		if (subclass == "")
+		{
+
+			// No more device entries (not found)
+			if (!line.starts_with("\t"))
+				break;
+
+			// Not the device
+			if (!line.starts_with(string("\t") + subclass_id))
+				continue;
+
+			subclass = line.substring(5, line.length() - 5);
+			m_subclass_name_cache.insert(dev.subclass_id, {i, subclass});
+
+			continue;
+		}
+
+		// Device must have been found so now looking at subvendors
+		if (interface == "")
+		{
+
+			// No more subvendor entries (not found)
+			if (!line.starts_with("\t\t"))
+				break;
+
+			// Not the device
+			if (!line.starts_with(string("\t\t") + interface_id))
+				continue;
+
+			interface = line.substring(6, line.length() - 6);
+			m_interface_name_cache.insert(dev.sub_vendor_id, {i, interface});
+
+			break;
+		}
+	}
+
+	// Replace not found entries with the ids
+	if (sclass == "")
+		sclass = class_id;
+	if (subclass == "")
+		subclass = subclass_id;
+	if (interface == "" && interface_id != "00")
+		interface = interface_id;
+
+	return {sclass, subclass, interface};
+
+}
+
+string PCIController::get_class_string(const pci_device_descriptor_t& dev) {
+	auto parts = get_class_string_parts(dev);
+	return parts[0] + ": " + parts[1];
+}
+
+Vector<string> PCIController::get_pci_id_string_parts(const pci_device_descriptor_t &dev) {
 
 	// Convert into the expected format
 	string vendor_id  = string((uint64_t)dev.vendor_id).to_lower().padleft("0",4);
@@ -75,8 +187,16 @@ string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev)
 	string device = "";
 	string subvendor = "";
 
+	size_t start_line = 0;
+
+	// Get any cached names
+	if (check_cache_entry(m_vendor_name_cache, dev.vendor_id, vendor, start_line))
+		if (check_cache_entry(m_device_name_cache, dev.device_id, device, start_line))
+			check_cache_entry(m_subvendor_name_cache, dev.sub_vendor_id, subvendor, start_line);
+
+
 	// Parse the file
-	for (size_t i = 0; i < m_pci_id_lines.size(); ++i)
+	for (size_t i = start_line; i < m_pci_id_lines.size(); ++i)
 	{
 
 		// Skip comments
@@ -99,7 +219,10 @@ string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev)
 			if (!line.starts_with(vendor_id))
 				continue;
 
+			// Extract the vendor
 			vendor = line.substring(6, line.length() - 6);
+			m_vendor_name_cache.insert(dev.vendor_id, {i, vendor});
+
 			continue;
 		}
 
@@ -116,10 +239,12 @@ string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev)
 				continue;
 
 			device = line.substring(7, line.length() - 7);
+			m_device_name_cache.insert(dev.device_id, {i, device});
+
 			continue;
 		}
 
-		// Device must have been found so now looking at subvendors (@todo subsytem)
+		// Device must have been found so now looking at subvendors
 		if (subvendor == "")
 		{
 
@@ -132,6 +257,8 @@ string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev)
 				continue;
 
 			subvendor = line.substring(13, line.length() - 13);
+			m_subvendor_name_cache.insert(dev.sub_vendor_id, {i, subvendor});
+
 			break;
 		}
 	}
@@ -144,32 +271,42 @@ string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev)
 	if (subvendor == "" && sub_vendor_id != "0000")
 		subvendor = sub_vendor_id;
 
-	return vendor + " " + device + " " + subvendor;
+	return {vendor, device, subvendor};
 
 }
 
-Driver* PCIDevice::handle_driver_start()
+string PCIController::get_pci_id_string(const pci_device_descriptor_t& dev)
 {
-	//@todo
-	return nullptr;
+	auto parts = get_pci_id_string_parts(dev);
+	return parts[0] + " " + parts[1] + " " + parts[2];
+
 }
 
-PCIDevice::PCIDevice(pci_device_descriptor_t device_descriptor)
-	: Device(get_driver_type(device_descriptor)),
-	  m_device_descriptor(device_descriptor)
-{
-}
+device_identification_t PCIController::pci_desc_to_dev_info(const pci_device_descriptor_t &dev) {
 
-PCIDevice::~PCIDevice() = default;
+	auto parts = get_pci_id_string_parts(dev);
 
-bool PCIDevice::builtin_driver()
-{
-	return false;
-}
+	return {
 
-DriverType PCIDevice::get_driver_type(const pci_device_descriptor_t& device_descriptor)
-{
-	return DriverType::UNKNOWN;
+		.model = {
+			.vendor = dev.vendor_id,
+			.device = dev.device_id,
+			.revision = dev.sub_vendor_id,
+		},
+
+		.class_info = {
+			.base		= dev.class_id,
+			.sub		= dev.subclass_id,
+			.interface	= dev.interface_id,
+		},
+
+		.driver_type = DriverType::UNKNOWN,
+
+		.vendor_name = parts[0],
+		.device_name = parts[1] + " ("  + parts[2] +  ")",
+
+		.class_string = get_class_string(dev),
+	};
 }
 
 /**
@@ -247,22 +384,30 @@ void PCIController::enumerate_devices(DeviceEnumeratorEventHandler* handler)
 			for (int function = 0; function < num_functions; ++function)
 			{
 				// Get the device descriptor, if the vendor id is 0x0000 or 0xFFFF, the device is not present/ready
-				PCIDeviceDescriptor device_descriptor = get_device_descriptor(bus, device,
-				                                                              function);
+				PCIDeviceDescriptor device_descriptor = get_device_descriptor(bus, device, function);
 				if (device_descriptor.vendor_id == 0x0000 || device_descriptor.vendor_id == 0x0001 ||
 					device_descriptor.vendor_id == 0xFFFF)
 					continue;
 
-				// Get the earliest port number
-				for (int bar_num = 5; bar_num >= 0; bar_num--)
+				// Build the hardware ranges from the BAR
+				hardware_mapping_t hmap;
+				for (int bar_num = 0; bar_num < 6; bar_num++)
 				{
 					BaseAddressRegister bar = get_base_address_register(bus, device, function, bar_num);
-					if (bar.address && (bar.type == BARType::InputOutput))
-						device_descriptor.port_base = (uint64_t)bar.address;
-				}
+					hardware_range_t* range = &hmap.ranges[bar_num];
 
-				klog("DEVICE FOUND: %s - %s\n", get_class_string(device_descriptor).c_str(), get_pci_id_string(device_descriptor).c_str());
-				handler->on_device_enumerated(new PCIDevice(device_descriptor));
+					range -> address_base		= (uint64_t)bar.address;
+					range -> address_length		= bar.size;
+					range -> type				= get_range_type(bar);
+				}
+				hmap.irq = device_descriptor.interrupt;
+
+				// Store the device
+				auto info = pci_desc_to_dev_info(device_descriptor);
+				auto device = new Device(info, hmap);
+				handler->on_device_enumerated(device);
+
+				klog("DEVICE FOUND: %s - %s %s\n", info.class_string.c_str(), info.vendor_name.c_str(), info.device_name.c_str());
 			}
 		}
 	}

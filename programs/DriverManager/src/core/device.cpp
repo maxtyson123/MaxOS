@@ -11,6 +11,7 @@
 using namespace DriverManager;
 using namespace DriverManager::core;
 using namespace LibDriver;
+using namespace LibDriver::HardwareCommunication;
 
 /**
  * @brief Internally start the driver for this device
@@ -23,32 +24,19 @@ Driver* Device::handle_driver_start() {
     return nullptr;
 }
 
-Device::Device(DriverType type)
-: m_driver_type(type) {
+Device::Device(device_identification_t info, hardware_mapping_t hmap)
+: m_id_info(info),
+  m_hmap(hmap)
+{
 
 }
 
 Device::~Device() = default;
 
-/**
- * @brief Check if the driver has been started and associated with this device
- *
- * @return True if the driver has been started
- *
- * @note If true, can assume driver() is not nullptr
- */
-bool Device::driver_started() {
-    return m_driver_started && driver();
+device_identification_t Device::id_info() {
+    return m_id_info;
 }
 
-/**
- * @brief Gets the type of driver associated with this device
- *
- * @return The type of driver
- */
-DriverType Device::driver_type() {
-    return m_driver_type;
-}
 
 /**
  * @brief Get the driver for this device
@@ -59,10 +47,13 @@ Driver* Device::driver() {
     return m_driver;
 }
 
+hardware_mapping_t Device::hardware_mapping() {
+    return m_hmap;
+}
+
 void Device::start_driver() {
 
     m_driver = handle_driver_start();
-    m_driver_started = m_driver != nullptr;
 
 }
 

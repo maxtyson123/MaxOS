@@ -43,12 +43,17 @@ namespace DriverManager::core {
 
 	} bar_t;
 
+	typedef struct IDStringCacheItem {
+		size_t line;
+		MaxOS::string value;
+	} id_string_cache_item_t;
+
 
 	/**
 	 * @class PCIDeviceDescriptor
 	 * @brief Stores information about a PCI device
 	 *
-	 * @todo Should be a struct aswell
+	 * @todo Not really needed anymore
 	 */
 	typedef struct PCIDeviceDescriptor {
 
@@ -75,23 +80,6 @@ namespace DriverManager::core {
 			uint8_t revision = 0;               ///< The device version number
 	} pci_device_descriptor_t;
 
-	class PCIDevice : public Device {
-
-		private:
-			pci_device_descriptor_t m_device_descriptor;
-
-			LibDriver::Driver* handle_driver_start();
-
-		public:
-			PCIDevice(pci_device_descriptor_t device_descriptor);
-			~PCIDevice();
-
-			bool builtin_driver();
-
-			static LibDriver::DriverType get_driver_type(const pci_device_descriptor_t& device_descriptor);
-
-	};
-
 	/**
 	 * @class PCIController
 	 * @brief Handles the enumeration and loading of drivers for PCI devices
@@ -114,9 +102,24 @@ namespace DriverManager::core {
 
 			MaxOS::common::Vector<MaxOS::string> m_pci_id_lines;
 
-			MaxOS::common::Map<uint8_t, MaxOS::string> m_vendor_name_cache;
-			MaxOS::common::Map<uint8_t, MaxOS::string> m_device_name_cache;
-			MaxOS::common::Map<uint8_t, MaxOS::string> m_subvendor_name_cache;
+			MaxOS::common::Map<uint16_t, id_string_cache_item_t> m_vendor_name_cache;
+			MaxOS::common::Map<uint16_t, id_string_cache_item_t> m_device_name_cache;
+			MaxOS::common::Map<uint16_t, id_string_cache_item_t> m_subvendor_name_cache;
+
+			MaxOS::common::Map<uint16_t, id_string_cache_item_t> m_class_name_cache;
+			MaxOS::common::Map<uint16_t, id_string_cache_item_t> m_subclass_name_cache;
+			MaxOS::common::Map<uint16_t, id_string_cache_item_t> m_interface_name_cache;
+
+			template <typename CacheType> static bool check_cache_entry(const CacheType& cache, uint16_t id, MaxOS::string& out_str, size_t& start_line) {
+				auto it = cache.find(id);
+				if (it != cache.end()) {
+					out_str = it->second.value;
+					start_line = it->second.line + 1;
+					return true;
+				}
+
+				return false;
+			}
 
 		public:
 			PCIController();
@@ -126,9 +129,14 @@ namespace DriverManager::core {
 			static LibDriver::Driver* get_driver(pci_device_descriptor_t dev);
 			static void list_known_device(const pci_device_descriptor_t& dev);
 
+			static LibDriver::HardwareCommunication::HardwareRangeType get_range_type(BaseAddressRegister& bar);
+
+			[[nodiscard]] MaxOS::common::Vector<MaxOS::string> get_class_string_parts(const pci_device_descriptor_t& dev);
 			[[nodiscard]] MaxOS::string get_class_string(const pci_device_descriptor_t& dev);
+			[[nodiscard]] MaxOS::common::Vector<MaxOS::string> get_pci_id_string_parts(const pci_device_descriptor_t& dev);
 			[[nodiscard]] MaxOS::string get_pci_id_string(const pci_device_descriptor_t& dev);
-			[[nodiscard]] LibDriver::DriverType get_driver_type(const pci_device_descriptor_t& dev);
+
+			[[nodiscard]] device_identification_t pci_desc_to_dev_info(const pci_device_descriptor_t& dev);
 
 	};
 }

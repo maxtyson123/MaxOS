@@ -26,8 +26,6 @@ namespace LibDriver::generic {
 			Mouse();
 			~Mouse();
 
-			void activate() final;
-			string device_name() final;
 	};
 }
 

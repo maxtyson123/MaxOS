@@ -18,19 +18,3 @@ using namespace LibDriver::generic;
  */
 Mouse::Mouse() = default;
 Mouse::~Mouse() = default;
-
-/**
- * @brief activate the mouse
- */
-void Mouse::activate() {
-
-}
-
-/**
- * @brief Get the name of the device
- *
- * @return The name of the device
- */
-string Mouse::device_name() {
-	return "Mouse";
-}

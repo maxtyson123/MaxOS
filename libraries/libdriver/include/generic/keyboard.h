@@ -384,9 +384,6 @@ namespace LibDriver::generic {
 		public:
 			Keyboard();
 			~Keyboard();
-
-			void activate() final;
-			string device_name() final;
 	};
 
 }

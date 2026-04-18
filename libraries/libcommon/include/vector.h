@@ -11,6 +11,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <initializer_list>
 
 
 namespace MaxOS::common {
@@ -49,6 +50,7 @@ namespace MaxOS::common {
 			Vector(int size, Type element);
 			Vector(const Vector<Type>& other);
 			Vector(Vector<Type>&& other);
+			Vector(std::initializer_list<Type> list);
 			~Vector();
 
 			Type& operator [](uint32_t index) const;
@@ -142,6 +144,23 @@ namespace MaxOS::common {
 		other.m_size = 0;
 		other.m_capacity = 0;
 
+	}
+
+	/**
+	 * @brief Initialiser list constructor
+	 *
+	 * @param list The list of elements
+	 */
+	template<class Type> Vector<Type>::Vector(std::initializer_list<Type> list) {
+
+		// Allocate space for the list
+		m_size = list.size();
+		m_capacity = m_size > 0 ? m_size : 1;
+		m_elements = new Type[m_capacity];
+
+		// Copy the elements
+		for (int i = 0; i < m_size; ++i)
+			m_elements[i] = list.begin()[i];
 	}
 
 	/**

@@ -29,45 +29,12 @@ Manager::Manager() {
  */
 Manager::~Manager() {
 
-	// Remove any drivers that are still attached
-	while(!m_drivers.empty())
-		remove_driver(*m_drivers.begin());
-
 	// Free the driver selectors
 	for(auto& enumerator : m_device_enumerators)
 		delete enumerator;
 
 }
 
-/**
- * @brief Adds a driver to the manager
- *
- * @param driver The driver to add
- */
-void Manager::add_driver(Driver* driver) {
-	m_drivers.push_back(driver);
-}
-
-/**
- * @brief Removes a driver from the driver vector
- *
- * @param driver The driver to remove
- */
-void Manager::remove_driver(Driver* driver) {
-
-	driver->deactivate();
-	m_drivers.erase(driver);
-
-}
-
-/**
- * @brief When a driver is selected add it to the manager
- *
- * @param driver The driver that was selected
- */
-void Manager::on_device_enumerated(Device* driver) {
-	m_devices.push_back(driver);
-}
 
 /**
  * @brief  Check if all the found drivers have been started
@@ -77,7 +44,7 @@ void Manager::on_device_enumerated(Device* driver) {
 bool Manager::all_drivers_started() {
 
 	for (const auto& device : m_devices)
-		if (!device->driver_started())
+		if (!device->driver_started)
 			return false;
 
 	return true;
@@ -117,12 +84,38 @@ void Manager::find_devices() {
 }
 
 /**
+ * @brief When a driver is selected add it to the manager
+ *
+ * @param driver The driver that was selected
+ */
+void Manager::on_device_enumerated(Device* driver) {
+	register_device(driver);
+}
+
+Device * Manager::get_device(int id) {
+
+	for (const auto& device : m_devices)
+		if (device -> id == id)
+			return device;
+
+	return nullptr;
+}
+
+
+void Manager::register_device(Device *device) {
+
+	device -> id = m_next_device_id++;
+	m_devices.push_back(device);
+
+}
+
+/**
  * @brief Start the drivers any devices that haven't been started
  */
 void Manager::start_drivers() {
 
 	for (const auto& device : m_devices)
-		if (!device->driver_started())
+		if (!device->driver_started)
 			device->start_driver();
 
 }

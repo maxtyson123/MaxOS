@@ -33,11 +33,6 @@ namespace LibDriver::generic {
 			virtual void write(uint32_t sector, void* data, size_t count);
 
 			virtual void flush();
-
-			void activate() override;
-
-			string device_name() override;
-			string vendor_name() override;
 	};
 }
 

@@ -70,28 +70,3 @@ void Disk::write(uint32_t sector, void* data, size_t count) {
  */
 void Disk::flush() {
 }
-
-/**
- * @brief Activate the disk driver
- */
-void Disk::activate() {
-	Driver::activate();
-}
-
-/**
- * @brief Get the device name
- *
- * @return The name of the device
- */
-string Disk::device_name() {
-	return "Disk";
-}
-
-/**
- * @brief Get the vendor name
- *
- * @return The name of the vendor
- */
-string Disk::vendor_name() {
-	return "Generic";
-}

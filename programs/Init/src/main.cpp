@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <processes/thread.h>
 #include <ipc/sharedmemory.h>
-#include <libcommon/include/mem.h>
+#include <mem.h>
 #include <server/fileserver_client.h>
 #include <string.h>
 #include <directory.h>

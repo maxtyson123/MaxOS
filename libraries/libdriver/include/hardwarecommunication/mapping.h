@@ -8,16 +8,25 @@
 namespace LibDriver::HardwareCommunication
 {
 
-	typedef struct HardwareMapping
-	{
-		uint32_t	port_base;
-		size_t		port_length;
+	enum class HardwareRangeType {
+		NONE,
+		PORT,
+		MEMORY,
+	};
 
-		uintptr_t	memio_base;
-		size_t		memio_length;
+	typedef struct HardwareRange {
+		uint64_t address_base;
+		size_t address_length;
 
-		uint32_t	interrupts_base;
-		size_t		interrupts_length;
+		HardwareRangeType type;
+	} hardware_range_t;
+
+	constexpr size_t NUM_HARDWARE_RANGES = 6;		///< @todo may change when adding other enumerators
+
+	typedef struct HardwareMapping{
+
+		hardware_range_t ranges[NUM_HARDWARE_RANGES];
+		uint32_t	irq;
 
 	} hardware_mapping_t;
 
