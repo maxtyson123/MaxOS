@@ -12,7 +12,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-namespace common {
+namespace MaxOS::common {
+
+	bool is_digit(char c);
 
 //
 //	uint64_t min(uint64_t val1, uint64_t val2);

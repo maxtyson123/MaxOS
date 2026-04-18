@@ -586,6 +586,7 @@ String String::operator *(int times) const {
 
 }
 
+
 /**
  * @brief Centers the string in a specified width
  *

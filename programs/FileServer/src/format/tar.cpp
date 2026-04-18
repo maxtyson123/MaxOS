@@ -11,6 +11,7 @@
 using namespace FileServer;
 using namespace LibFS;
 using namespace FileServer::format;
+using namespace MaxOS;
 using namespace MaxOS::common;
 
 TARVolume::TARVolume(uint64_t* start)
@@ -112,7 +113,7 @@ void TARDirectory::read_from_disk() {
     Map<string, bool> seen_dirs;
 
     for (const auto& header : m_volume->headers()) {
-        const string& path = (string)"/" + header->filename;
+        const string& path = "/"s + header->filename;
 
         // Only care about storing files in this directory
         if (!Path::is_child_of(path, this_path))

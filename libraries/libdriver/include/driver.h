@@ -16,8 +16,6 @@
 
 namespace LibDriver {
 
-	using string = MaxOS::string;
-
 	enum class  DriverType {
 		UNKNOWN,
 		DISK,

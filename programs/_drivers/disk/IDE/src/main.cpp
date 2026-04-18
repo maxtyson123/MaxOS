@@ -7,6 +7,7 @@
 #include <server/drivermanager_client.h>
 
 using namespace IDEDriver;
+using namespace MaxOS;
 using namespace LibDriver;
 using namespace LibDriver::HardwareCommunication;
 

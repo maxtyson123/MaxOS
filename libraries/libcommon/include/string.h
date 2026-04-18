@@ -105,6 +105,10 @@ namespace MaxOS {
 
 	} string;   ///< Typedef for String
 
+	inline string operator""s(const char* str, size_t len) {
+		return string((uint8_t*)str, (uint32_t)len);
+	}
+
 	/**
 	 * @class StringBuilder
 	 * @brief Creates a string using a using a combination of parts with the '<<' operator. Simmilar to the logger.

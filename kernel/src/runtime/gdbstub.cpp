@@ -232,7 +232,7 @@ string GDBServer::get_checksum(const string &payload) {
     // Convert to hex
     string hex = string((uint64_t)checksum);
     if (hex.length() == 1)
-        hex = string("0") + hex;
+        hex = "0"s + hex;
 
     return hex;
 
@@ -256,7 +256,7 @@ bool GDBServer::check_checksum(const string &payload, const string &checksum) {
  * @return The message plus its checksum and the related indicators
  */
 string GDBServer::build_message(const string &payload) {
-    return string("+$") + payload + "#" + get_checksum(payload);
+    return "+$"s + payload + "#" + get_checksum(payload);
 }
 
 /**
@@ -330,7 +330,7 @@ void GDBServer::send_registers() {
     payload += format_register(thread_regs.ss, 4);
 
     // Remaining
-    payload += (string)"x" * (8 * 4);
+    payload += "x"s * (8 * 4);
 
     send_message(payload);
 }

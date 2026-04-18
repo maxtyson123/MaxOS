@@ -112,7 +112,7 @@ Vector<string> PCIController::get_class_string_parts(const pci_device_descriptor
 				continue;
 
 			// Not the vendor
-			if (!line.starts_with(string("C ") + class_id))
+			if (!line.starts_with("C "s + class_id))
 				continue;
 
 			// Extract the vendor
@@ -131,7 +131,7 @@ Vector<string> PCIController::get_class_string_parts(const pci_device_descriptor
 				break;
 
 			// Not the device
-			if (!line.starts_with(string("\t") + subclass_id))
+			if (!line.starts_with("\t"s + subclass_id))
 				continue;
 
 			subclass = line.substring(5, line.length() - 5);
@@ -149,7 +149,7 @@ Vector<string> PCIController::get_class_string_parts(const pci_device_descriptor
 				break;
 
 			// Not the device
-			if (!line.starts_with(string("\t\t") + interface_id))
+			if (!line.starts_with("\t\t"s + interface_id))
 				continue;
 
 			interface = line.substring(6, line.length() - 6);
@@ -235,7 +235,7 @@ Vector<string> PCIController::get_pci_id_string_parts(const pci_device_descripto
 				break;
 
 			// Not the device
-			if (!line.starts_with(string("\t") + device_id))
+			if (!line.starts_with("\t"s + device_id))
 				continue;
 
 			device = line.substring(7, line.length() - 7);
@@ -253,7 +253,7 @@ Vector<string> PCIController::get_pci_id_string_parts(const pci_device_descripto
 				break;
 
 			// Not the device
-			if (!line.starts_with(string("\t\t") + sub_vendor_id))
+			if (!line.starts_with("\t\t"s + sub_vendor_id))
 				continue;
 
 			subvendor = line.substring(13, line.length() - 13);
