@@ -136,6 +136,19 @@ string JSONNode::to_string(int level) {
 
 }
 
+size_t JSONNode::array_size() {
+
+	if (m_type == ARRAY)
+		return ((Vector<JSONNode*>*)(m_value))->size();
+
+	return 0;
+
+}
+
+bool JSONNode::is_null() {
+	return m_type == UNKNOWN;
+}
+
 JSONObject::JSONObject(string key, Map<string, JSONNode*> values)
 	: JSONNode(key, this, OBJECT),
 	  m_values(values),

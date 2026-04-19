@@ -7,8 +7,6 @@
  */
 
 #include <cstdint>
-#include <file.h>
-#include <json.h>
 #include <processes/thread.h>
 #include <core/manager.h>
 #include <core/pci.h>
@@ -22,7 +20,6 @@ using namespace MaxOS::common;
 using namespace MaxOS::KPI;
 using namespace MaxOS::KPI::processes;
 using namespace MaxOS::KPI::ipc;
-using namespace LibFS;
 
 Manager* driver_manager = nullptr;
 
@@ -61,21 +58,8 @@ extern "C" void _start(void) {
 	driver_manager = new Manager();
 	driver_manager -> find_devices();
 
-	auto jhandle = open_file("/boot/initrd/initdrivers.json");
-	auto size = file_size(jhandle);
-	auto jsonstr = (char*)allocate_memory(size);
-	file_read(jhandle, jsonstr, size);
-	klog(jsonstr);
-	klog("\n--\n");
-
-	auto jstr = MaxOS::string(jsonstr);
-	auto json = new JSONParser(&jstr);
-	auto root = json->root();
-	string test = (*root)["drivers"s][0]["name"s];
-	klog(test.c_str());
-
 	// Disks must be setup to load the found drivers
-	driver_manager -> start_disks();
+	driver_manager -> start_inital_drivers();
 
 	// Start the servers
 	uint64_t handle = register_drivermanager();

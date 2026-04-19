@@ -41,6 +41,9 @@ namespace MaxOS::common {
 			JSONNode &operator [](string key);
 
 			virtual string to_string(int level = 0);
+
+			size_t array_size();
+			bool is_null();
 	};
 
 	class JSONObject : public JSONNode {

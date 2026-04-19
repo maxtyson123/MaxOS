@@ -12,6 +12,7 @@
 #include <driver.h>
 #include <cstdint>
 #include <cstddef>
+#include <json.h>
 
 #include <core/device.h>
 
@@ -30,6 +31,9 @@ namespace DriverManager::core {
 
 			MaxOS::common::Vector<DeviceEnumerator*> m_device_enumerators;
 
+			MaxOS::common::JSONNode* m_initial_drivers;
+			MaxOS::common::JSONNode* m_installed_drivers;
+
 		public:
 			Manager();
 			~Manager() final;
@@ -45,7 +49,7 @@ namespace DriverManager::core {
 
 			bool all_drivers_started();
 			void start_drivers();
-			void start_disks();
+			void start_inital_drivers();
 
 			size_t get_next_device_id();
 

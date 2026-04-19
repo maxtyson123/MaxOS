@@ -7,12 +7,17 @@
  */
 
 #include <core/manager.h>
-
 #include <core/pci.h>
+#include <file.h>
+#include <json.h>
+#include <mem.h>
 
 using namespace DriverManager;
 using namespace DriverManager::core;
+using namespace LibFS;
 using namespace LibDriver;
+using namespace MaxOS;
+using namespace MaxOS::KPI;
 using namespace MaxOS::common;
 
 /**
@@ -22,6 +27,20 @@ Manager::Manager() {
 
 	add_device_enumerator(new PCIController);
 	// add_driver_selector(new UniversalSerialBusController);
+
+	// Read the list of inital devices
+	auto jhandle = open_file("/boot/initrd/initdrivers.json");
+	auto size = file_size(jhandle);
+	auto jsonstr = string((uint8_t*)allocate_memory(size), size);
+	file_read(jhandle, jsonstr.c_str(), size);
+
+	// Parse the json
+	JSONParser parser(&jsonstr);
+	m_initial_drivers = parser.root();
+
+	// Clean uo
+	close_file(jhandle);
+	delete jsonstr.c_str();
 }
 
 /**
@@ -120,6 +139,39 @@ void Manager::start_drivers() {
 
 }
 
-void Manager::start_disks() {
+void Manager::start_inital_drivers() {
 
+	// Start each driver
+	auto drivers = (*m_initial_drivers)["drivers"s];
+	for (int i = 0; i < drivers.array_size(); ++i) {
+		auto driver = drivers[i];
+		auto model = driver["device"s]["model"s];
+
+		// Parse
+		string name = driver["name"s];
+		string path = driver["file"s];
+		string vendor_str = model["vendor"s];
+		string device_str = model["device"s];
+		int vendor_id = vendor_str.to_int();
+		int device_id = device_str.to_int();
+
+		// Get the device
+		Device* device = nullptr;
+		for (const auto& dev : m_devices) {
+
+			auto info = dev->id_info().model;
+
+			if (info.vendor == vendor_id && info.device == device_id) {
+				device = dev;
+				break;
+			}
+		}
+
+		// No device found
+		if (!device)
+			break;
+
+		klog("Starting driver: %s\n", name.c_str());
+
+	}
 }
