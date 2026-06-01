@@ -1,6 +1,13 @@
 # Ignore cross compiler
 LIST(FILTER SOURCES EXCLUDE REGEX ".*/toolchain/cross_compiler.*")
 
+# Stop mac messing with cross compiler
+set(CMAKE_OSX_ARCHITECTURES "" CACHE STRING "" FORCE)
+set(CMAKE_C_COMPILER_ID_RUN TRUE)
+set(CMAKE_CXX_COMPILER_ID_RUN TRUE)
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_OSX_ARCHITECTURES "")
+
 # Setup CMAKE
 CMAKE_MINIMUM_REQUIRED(VERSION 3.5.0)
 SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -56,7 +63,6 @@ ADD_SUBDIRECTORY(programs)
 ADD_CUSTOM_TARGET(image
         # Everything needs to be installed (compiled) before we can create the disk image
         # DEPENDS install (TODO Rewrite so auto installs)
-
         # Create the disk image
         COMMENT "Creating disk image"
         COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/make_disk_img.sh

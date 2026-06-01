@@ -19,6 +19,7 @@ if [ "$1" != "--no-deps" ]; then
                       cmake \
                       nasm \
                       telnet \
+                      i686-elf-grub \ 
                       || fail "Couldn't install dependencies"
 
         # Scripting tools that linux has by default
@@ -94,6 +95,7 @@ cd build-binutils
 ../binutils-$BINUTILS_VERSION/configure --target=$TARGET --prefix="$PREFIX" --with-sysroot --disable-nls --disable-werror || fail "Configuring binutils failed"
 
 # Build binutils
+#
 msg "Building binutils-$BINUTILS_VERSION"
 make -j "$NUM_JOBS"       || fail "Building binutils failed"
 make install              || fail "Installing binutils to $PREFIX failed"

@@ -21,7 +21,13 @@ namespace MaxOS {
 
 	/**
 	 * @class String
-	 * @brief Dynamically sized string with various operations
+	 * @brief Dynamically sized string with various operations asdasd
+	 * 
+	 * todo test as
+	 * TODO test as
+	 * @todo test as
+	 * @TODO test as
+	 *
 	 */
 	typedef class String {
 		private:

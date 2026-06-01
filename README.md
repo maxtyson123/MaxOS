@@ -162,21 +162,22 @@ Mac:
 3. Generate makefiles
    ```sh
    # If you edit the CMakeLists.txt file you will need to delete the build directory contents (not the folder) and regenerate the makefiles
-   cd cmake-build
+   mkdir cmake-build
    
    # Change to -DCMAKE_BUILD_TYPE=Debug to enable debug mode
-   cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt -DCMAKE_BUILD_TYPE=Release 
+   cmake -S . -B cmake-build -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=filesystem/os/
    ```
 
 4. Clean the build directory
    ```sh
-   make clean
+   cmake --build cmake-build --target clean
    ```
 
 5. Build the operating system & Run it in QEMU
    ```sh
    # Replace 'run' with 'gdb' on a debug build to make the kernel wait for gdb to attach on port 1234  
-   make install run
+   cmake --build cmake-build --target install
+   cmake --build cmake-build --target run
    ```
 
 6. (OPTIONAL) I use CLion IDE for development, if you want to use it to follow these steps for IDE features:

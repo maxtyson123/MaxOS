@@ -114,9 +114,9 @@ create_fs_part() {
 
       # Ensure tooling is setup
       if ! command -v fuse-ext2 >/dev/null 2>&1; then
-          cd external
-          ./ext2fuse.sh
-          cd ../
+         pushd "$SCRIPTDIR/external" > /dev/null
+        ./ext2fuse.sh
+        popd > /dev/null      
       fi
       sudo fuse-ext2 "/dev/r${part#/dev/}" "$MOUNT_DIR/MaxOS_img_$number" -o rw+,allow_other || fail "Could not mount image to mount point"
     else

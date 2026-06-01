@@ -112,7 +112,7 @@ if "$QEMU_EXECUTABLE" --display help | grep -q "sdl"; then
   DISPLAY_TYPE="-display sdl"
 elif "$QEMU_EXECUTABLE" --display help | grep -q "cocoa"; then
   msg "Using cocoa display."
-  DISPLAY_TYPE="-display cocoa"
+  DISPLAY_TYPE="-display cocoa,zoom-to-fit=on"
 else
   fail "Error: No display type found."
 fi

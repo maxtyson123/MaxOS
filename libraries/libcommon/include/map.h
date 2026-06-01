@@ -170,7 +170,7 @@ namespace MaxOS::common {
 	 * @param value The value
 	 * @return The iterator of the new element
 	 */
-	template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_back(Key key, Value value) {
+	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::push_back(Key key, Value value) {
 		return m_elements.push_back(Pair<Key, Value>(key, value));
 	}
 
@@ -194,7 +194,7 @@ namespace MaxOS::common {
 	 * @param value The value
 	 * @return
 	 */
-	template<class Key, class Value> Map<Key, Value>::iterator Map<Key, Value>::push_front(Key key, Value value) {
+	template<class Key, class Value> typename Map<Key, Value>::iterator Map<Key, Value>::push_front(Key key, Value value) {
 		return m_elements.push_front({ key, value });
 	}
 

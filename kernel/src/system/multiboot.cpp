@@ -31,6 +31,8 @@ Multiboot::Multiboot(unsigned long address, unsigned long magic)
 
 	multiboot_tag* tag = start_tag();
 
+
+
 	// Loop through the tags and load them
 	while (true) {
 
@@ -43,6 +45,7 @@ Multiboot::Multiboot(unsigned long address, unsigned long magic)
 
 			case MULTIBOOT_TAG_TYPE_FRAMEBUFFER:
 				m_framebuffer = (multiboot_tag_framebuffer*) tag;
+				Logger::DEBUG() << "Framebuffer: addr=0x" << (uint64_t) m_framebuffer -> common.framebuffer_addr << ", screen=" << (uint64_t) m_framebuffer -> common.framebuffer_height<< "x" << (uint64_t) m_framebuffer -> common.framebuffer_width  << "\n";
 				break;
 
 			case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:

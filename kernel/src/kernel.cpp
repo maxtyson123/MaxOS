@@ -1,5 +1,5 @@
 /**
- * @file kernel.cpp
+* @file kernel.cpp
  * @brief The main kernel entry point for the bsp and other cores. Handles initialisation of all core systems.
  *
  * @date 2022
@@ -101,7 +101,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 	// Idle loop  (read Idle.md)
 	while (true)
 		asm("hlt");
-}
+
+} // I use maxos btw
 
 /**
  * @todo less copy on program creation

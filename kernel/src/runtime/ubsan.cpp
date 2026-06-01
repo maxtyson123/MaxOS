@@ -41,7 +41,7 @@ void UBSanHandler::print_type_mismatch(type_mismatch_info_t* info, uintptr_t ptr
 	if (info->alignment != 0 && ubsan_aligned(ptr, info->alignment))
 		msg = "misaligned memory access";
 	else
-		msg = (StringBuilder)TYPE_CHECK_KINDS[info->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info->type->name;
+		msg = StringBuilder() << TYPE_CHECK_KINDS[info->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info->type->name;
 
 	// Print the location
 	handle(info->location, msg.c_str());
