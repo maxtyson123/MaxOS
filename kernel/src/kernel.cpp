@@ -18,9 +18,6 @@
 #include <memory/memorymanagement.h>
 #include <memory/physical.h>
 #include <memory/virtual.h>
-#include <tests/test.h>
-
-#include "runtime/gdbstub.h"
 
 using namespace MaxOS;
 using namespace MaxOS::common;
@@ -29,8 +26,6 @@ using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 using namespace MaxOS::memory;
-using namespace MaxOS::tests;
-using namespace MaxOS::runtime;
 
 extern "C" void call_constructors(); ///< Calls the C++ static constructors
 extern "C" uint8_t core_boot_info[]; ///< The boot info structure for the core being started

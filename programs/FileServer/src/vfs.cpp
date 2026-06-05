@@ -59,11 +59,7 @@ void VirtualFileSystem::mount_filesystem(FileSystem* filesystem) {
 		return;
 
 	// Get the mount point for the filesystem
-	string mount_point = "/filesystem_" + filesystems.size();
-
-	// If this is the first filesystem to be mounted, set the root filesystem
-	if (filesystems.size() == 0)
-		mount_point = "/";
+	string mount_point = "/" + filesystems.size();
 
 	// Add the filesystem to the map
 	filesystems.insert(filesystem, mount_point);

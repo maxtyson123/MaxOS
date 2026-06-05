@@ -6,10 +6,10 @@
  * @author Max Tyson
  */
 
+#include <libkpi/syscalls.h>
+
 #include <processes/elf.h>
 #include <common/logger.h>
-
-#include "syscalls.h"
 
 using namespace MaxOS;
 using namespace MaxOS::processes;

@@ -10,8 +10,9 @@
 #define MAXOS_CONSOLE_CONSOLE_H
 
 #include <cstdint>
-#include <outputStream.h>
-#include <colour.h>
+
+#include <libcommon/outputStream.h>
+#include <libcommon/colour.h>
 
 
 namespace MaxOS::console {

@@ -11,7 +11,8 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <assert.h>
+
+#include <libcommon/assert.h>
 
 namespace MaxOS::runtime {
 

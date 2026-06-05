@@ -9,18 +9,19 @@
 #ifndef MAXOS_PROCESSES_RESOURCES_SERVICE_RESOURCES_H
 #define MAXOS_PROCESSES_RESOURCES_SERVICE_RESOURCES_H
 
+
+#include <stddef.h>
+#include <atomic>
+#include <stdint.h>
+
+#include <libkpi/resource.h>
+
 #include <processes/resources/resource.h>
 #include <processes/process.h>
 #include <processes/scheduler.h>
 #include <processes/ipc.h>
 #include <memory/memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
-#include <libkpi/include/resource.h>
-
-#include <stddef.h>
-#include <atomic>
-
-#include <stdint.h>
 
 namespace MaxOS::processes::resources {
 

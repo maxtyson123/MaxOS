@@ -9,14 +9,14 @@
 #ifndef MAXOS_PROCESSES_PROCESS_H
 #define MAXOS_PROCESSES_PROCESS_H
 
+#include <libcommon/vector.h>
+#include <libcommon/string.h>
+
 #include <system/cpu.h>
-#include <vector.h>
-#include <string.h>
 #include <memory/virtual.h>
 #include <memory/memorymanagement.h>
 #include <processes/elf.h>
 #include <processes/resources/resource.h>
-
 #include <hardwarecommunication/interrupts.h>
 
 namespace MaxOS::processes {

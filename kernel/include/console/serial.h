@@ -9,9 +9,9 @@
 #ifndef MAXOS_SERIAL_H
 #define MAXOS_SERIAL_H
 
-#include <port.h>
-#include <common/logger.h>
+#include <libcommon/port.h>
 
+#include <common/logger.h>
 
 namespace MaxOS::console {
 

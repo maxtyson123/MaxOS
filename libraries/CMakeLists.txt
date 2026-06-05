@@ -1,1 +1,43 @@
+FUNCTION(MAKE_LIB_NOSTD TARGET_NAME SRC_DIR)
+  
+    # Find the sysroot
+    INCLUDE(GNUInstallDirs)
+    IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+        MESSAGE(FATAL_ERROR "CMAKE_INSTALL_PREFIX is not set. Set it explicitly to a sysroot: -DCMAKE_INSTALL_PREFIX=/path/to/sysroot")
+    ENDIF()
+
+    # Setup the library
+    FILE(GLOB_RECURSE LIB_SOURCES ${SRC_DIR}/*.cpp ${SRC_DIR}/*.s)
+    ADD_LIBRARY(${TARGET_NAME} STATIC ${LIB_SOURCES})
+
+    # Setup headers for this project and others
+    TARGET_INCLUDE_DIRECTORIES(${TARGET_NAME}
+            PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    )
+
+    # Set the flags
+    TARGET_COMPILE_OPTIONS(${TARGET_NAME} PRIVATE  -Wall)
+    TARGET_COMPILE_OPTIONS(${TARGET_NAME} PRIVATE -nostdlib -ffreestanding)
+
+    # Install
+    INSTALL(
+            DIRECTORY include/
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+    INSTALL(TARGETS ${TARGET_NAME}
+            EXPORT Lib${TARGET_NAME}Targets
+            ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+    INSTALL(EXPORT Lib${TARGET_NAME}Targets
+            FILE Lib${TARGET_NAME}Targets.cmake
+            NAMESPACE ${TARGET_NAME}::
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/Lib${TARGET_NAME}"
+    )
+
+ENDFUNCTION()
+
+
 ADD_SUB_DIRS(${CMAKE_CURRENT_SOURCE_DIR})

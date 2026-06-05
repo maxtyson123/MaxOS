@@ -10,15 +10,16 @@
 #define MAXOS_SYSTEM_SYSCALLS_H
 
 #include <cstdint>
-#include <cstddef>
+
+#include <libkpi/syscalls.h>
+#include <libcommon/vector.h>
+#include <libcommon/colour.h>
+
 #include <hardwarecommunication/interrupts.h>
-#include <vector.h>
-#include <colour.h>
 #include <memory/memorymanagement.h>
 #include <processes/scheduler.h>
 #include <processes/block.h>
 #include <processes/resources/resource_bridge.h>
-#include <libkpi/include/syscalls.h>
 
 
 namespace MaxOS::system {

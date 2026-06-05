@@ -10,11 +10,13 @@
 #define MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H
 
 #include <cstdint>
-#include <port.h>
+
+#include <libcommon/port.h>
+#include <libcommon/inputStream.h>
+#include <libcommon/outputStream.h>
+#include <libcommon/map.h>
+
 #include <system/gdt.h>
-#include <inputStream.h>
-#include <outputStream.h>
-#include <map.h>
 #include <system/cpu.h>
 #include <hardwarecommunication/apic.h>
 

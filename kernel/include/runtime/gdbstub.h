@@ -14,8 +14,9 @@
 #ifndef MAXOS_RUNTIME_GDBSTUB_H
 #define MAXOS_RUNTIME_GDBSTUB_H
 
+#include <libcommon/string.h>
+
 #include <console/serial.h>
-#include <string.h>
 #include <processes/process.h>
 #include <hardwarecommunication/interrupts.h>
 

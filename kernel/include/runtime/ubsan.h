@@ -10,7 +10,8 @@
 #define MAXOS_RUNTIME_UBSAN_H
 
 #include <cstdint>
-#include <assert.h>
+
+#include <libcommon/assert.h>
 
 /// Check if a value is aligned to the given alignment
 #define ubsan_aligned(value, alignment) !(value & (alignment - 1))

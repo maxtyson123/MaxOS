@@ -11,9 +11,11 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <system/multiboot.h>
+
+#include <libcommon/assert.h>
+
 #include <memory/virtual.h>
-#include <assert.h>
+#include <system/multiboot.h>
 
 namespace MaxOS::memory {
 

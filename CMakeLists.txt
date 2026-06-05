@@ -67,8 +67,7 @@ ADD_CUSTOM_TARGET(image
         COMMENT "Creating disk image"
         COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/make_disk_img.sh
         BYPRODUCTS ${CMAKE_SOURCE_DIR}/MaxOS.img
-        BYPRODUCTS ${CMAKE_SOURCE_DIR}/filesystem/boot/MaxOSk64
-        BYPRODUCTS ${CMAKE_SOURCE_DIR}/filesystem/boot/test.elf
+        BYPRODUCTS ${CMAKE_SOURCE_DIR}/filesystem/0/boot/MaxOSk64
 
 
         # Copy the files to the disk image

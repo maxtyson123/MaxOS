@@ -42,7 +42,7 @@ fail () {
 SED_EXC=sed
 STAT_EXC=stat
 
-MOUNT_DIR="/mnt"
+
 
 # Filesystem type: "FAT" or "EXT2"
 FILESYSTEM_TYPE="EXT2"
@@ -62,6 +62,4 @@ if [[ ($(uname) == "Darwin") ]]; then
   # Ensure use of gnu tools
   SED_EXC=gsed
   STAT_EXC=gstat
-
-  MOUNT_DIR="/Volumes"
 fi

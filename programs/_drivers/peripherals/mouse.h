@@ -9,14 +9,12 @@
 #ifndef MAX_OS_DRIVERS_PERIPHERALS_MOUSE_H
 #define MAX_OS_DRIVERS_PERIPHERALS_MOUSE_H
 
-
 #include <cstdint>
-#include <vector.h>
-#include <string.h>
-#include <eventHandler.h>
-#include <hardwarecommunication/interrupts.h>
-#include <hardwarecommunication/port.h>
-#include <drivers/driver.h>
+
+#include <libcommon/vector.h>
+#include <libcommon/string.h>
+#include <libcommon/eventHandler.h>
+
 
 
 namespace MaxOS::drivers::peripherals {

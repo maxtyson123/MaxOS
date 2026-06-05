@@ -35,7 +35,7 @@ extern "C" void _start(int argc, char* argv[])
 	mount_ramdisk("init_initrd");
 
 	// Start driver manager
-	string dm_path = "/boot/initrd/DriverManager.elf";
+	string dm_path = "/0/boot/initrd/DriverManager.elf";
 	exec_file(Path::file_name(dm_path).c_str(), dm_path.c_str());
 
 	// Wait for fileserver to parse disks

@@ -12,7 +12,8 @@
 #define MAXOS_RUNTIME_CPLUSPLUS_H
 
 #include <cstdint>
-#include <assert.h>
+
+#include <libcommon/assert.h>
 
 namespace MaxOS::runtime {
 

@@ -10,13 +10,15 @@
 #define MAXOS_CONSOLE_VESABOOTCONSOLE_H
 
 #include <cstdint>
+
+#include <libcommon/colour.h>
+#include <libcommon/mem.h>
+
 #include <console/console.h>
 #include <common/logo.h>
 #include <common/logo_kp.h>
 #include <common/graphicsContext.h>
-#include <colour.h>
 #include <system/cpu.h>
-#include <mem.h>
 #include <memory/memorymanagement.h>
 
 

@@ -165,7 +165,7 @@ Mac:
    mkdir cmake-build
    
    # Change to -DCMAKE_BUILD_TYPE=Debug to enable debug mode
-   cmake -S . -B cmake-build -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=filesystem/os/
+   cmake -S . -B cmake-build -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=filesystem/1/os/
    ```
 
 4. Clean the build directory

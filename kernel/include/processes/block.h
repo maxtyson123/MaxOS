@@ -9,7 +9,7 @@
 #ifndef MAXOS_PROCESSES_BLOCK_H
 #define MAXOS_PROCESSES_BLOCK_H
 
-#include <vector.h>
+#include <libcommon/vector.h>
 
 namespace MaxOS::processes {
 

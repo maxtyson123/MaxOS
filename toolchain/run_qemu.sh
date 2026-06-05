@@ -145,7 +145,7 @@ if [  "$USE_DEBUG" -ne 0 ]; then
       ACCELERATOR=""
     fi
 
-    $SCRIPTDIR/../toolchain/cross_compiler/cross/bin/x86_64-elf-objcopy --only-keep-debug $SCRIPTDIR/../filesystem/boot/MaxOSk64 ../MaxOS.sym
+    $SCRIPTDIR/../toolchain/cross_compiler/cross/bin/x86_64-elf-objcopy --only-keep-debug $SCRIPTDIR/../filesystem/0/boot/MaxOSk64 ../MaxOS.sym
     msg "Generated debug symbols"
 fi
 

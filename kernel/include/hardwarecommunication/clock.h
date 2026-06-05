@@ -10,11 +10,13 @@
 #define MAXOS_HARDWARECOMMUNICATION_CLOCK_H
 
 #include <cstdint>
-#include <time.h>
+
+#include <libcommon/time.h>
+#include <libcommon/vector.h>
+#include <libcommon/eventHandler.h>
+
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/apic.h>
-#include <vector.h>
-#include <eventHandler.h>
 
 
 namespace MaxOS::hardwarecommunication {

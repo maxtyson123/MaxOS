@@ -439,11 +439,11 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
     if not class_name:
         raise ValueError("Service class generation requested but no class name specified.")
 
-    # Make sure header file exists
-    header_path = service.source_file.parent / "include" / header_file
+    lib_name = service.source_file.parent.name
+    header_path = service.source_file.parent / "include" / lib_name / header_file
     if header_file:
         if not header_path.exists():
-            raise ValueError(f"Header file '{header_file}' not found for service class '{class_name}'.")
+            raise ValueError(f"Header file '{header_file}' not found for service class '{class_name}' at '{header_path}'.")
 
     # Parse the header to get the function signatures
     parsed_functions = {}
@@ -498,9 +498,11 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
         start_header(cli_h_lines, client_gaurd)
 
         # Setup includes
-        add_lines("#include <ipc/rpc.h>", both)
-        add_lines("#include <string.h>", both)
-        if header_file: add_lines(f'#include <{header_file}>', both)
+        lib_name = service.source_file.parent.name
+        add_lines("#include <libkpi/ipc/rpc.h>", both)
+        add_lines("#include <libcommon/string.h>", both)
+        if header_file: 
+            add_lines(f'#include <{lib_name}/{header_file}>', both)
         add_extra_includes(srv_h_lines, service.extra_includes)
         add_extra_includes(cli_h_lines, service.extra_includes)
         add_lines("", both)
@@ -565,7 +567,8 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
         both = [srv_cpp_lines, cli_cpp_lines]
 
         # Path to the headers
-        path = f"{service.clean_path}/" if service.clean_path else ""
+        lib_name = service.source_file.parent.name
+        path = f"{lib_name}/{service.clean_path}/" if service.clean_path else ""
 
         # Setup header stuff
         srv_cpp_lines.append(f'#include <{path}{srv_h.name}>')
@@ -732,7 +735,7 @@ def generate_types_header(service: RpcService, output_path: Path):
     # Includes
     lines.extend([
         "#include <cstdint>",
-        "#include <ipc/rpc.h>",
+        "#include <libkpi/ipc/rpc.h>",
         "using mstring = MaxOS::string;",
         ""
     ])
@@ -769,7 +772,7 @@ def generate_server_header(service: RpcService, output_path: Path, include_prefi
 
     # Includes and consistent function
     lines.extend([
-        "#include <ipc/rpc.h>",
+        "#include <libkpi/ipc/rpc.h>",
         f"#include <{include_prefix}{service.name}_types.h>",
     ])
     add_extra_includes(lines, service.extra_includes)
@@ -800,7 +803,7 @@ def generate_client_header(service: RpcService, output_path: Path, include_prefi
 
     # Includes and consistent function
     lines.extend([
-        "#include <ipc/rpc.h>",
+        "#include <libkpi/ipc/rpc.h>",
         f"#include <{include_prefix}{service.name}_types.h>",
     ])
     add_extra_includes(lines, service.extra_includes)
@@ -960,13 +963,14 @@ def process_file(file_path: Path):
     log(f"  Path:    {service.path_raw}")
 
     # Directory setup
+    lib_name = service.source_file.parent.name
     folder = file_path.parent
-    inc_dir = folder / "include" / service.clean_path
+    inc_dir = folder / "include" / lib_name /  service.clean_path
     src_dir = folder / "src" / service.clean_path
     inc_dir.mkdir(parents=True, exist_ok=True)
     src_dir.mkdir(parents=True, exist_ok=True)
 
-    include_prefix = f"{service.clean_path}/" if service.clean_path else ""
+    include_prefix = f"{lib_name}/{service.clean_path}/" if service.clean_path else ""
 
     # If this is a service class directive (class header + service class ...), produce server/client classes
     if service.class_header and service.class_name:

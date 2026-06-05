@@ -6,7 +6,7 @@
  * @author Max Tyson
 */
 
-#include <mem.h>
+#include <libcommon/mem.h>
 
 extern "C" {
 
@@ -125,7 +125,7 @@ extern "C" {
 #ifdef MAXOS_KERNEL
 	#include <memory/memorymanagement.h>
 #else
-	#include <syscalls.h>
+	#include <libkpi/syscalls.h>
 #endif
 
 /**

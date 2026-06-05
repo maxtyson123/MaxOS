@@ -11,11 +11,13 @@
 
 #include <cstdint>
 #include <cstddef>
+
+#include <libcommon/string.h>
+#include <libcommon/mem.h>
+#include <libcommon/assert.h>
+
 #include <system/multiboot.h>
-#include <string.h>
 #include <memory/memorymanagement.h>
-#include <mem.h>
-#include <assert.h>
 #include <memory/physical.h>
 
 namespace MaxOS::hardwarecommunication {

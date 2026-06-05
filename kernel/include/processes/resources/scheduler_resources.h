@@ -10,13 +10,15 @@
 #ifndef MAXOS_PROCESSES_RESOURCES_SCHEDULER_RESOURCES_H
 #define MAXOS_PROCESSES_RESOURCES_SCHEDULER_RESOURCES_H
 
-#include <processes/resources/resource.h>
-#include <processes/process.h>
-#include <libkpi/include/processes/process.h>
-#include <libkpi/include/processes/thread.h>
 
 #include <stddef.h>
 #include <stdint.h>
+
+#include <libkpi/processes/thread.h>
+#include <libkpi/processes/process.h>
+
+#include <processes/process.h>
+#include <processes/resources/resource.h>
 
 namespace MaxOS::processes::resources {
 

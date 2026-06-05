@@ -12,8 +12,9 @@
 #define MaxOS_COMMON_GRAPHICSCONTEX_H
 
 #include <cstdint>
-#include <colour.h>
 #include <stdint.h>
+
+#include <libcommon/colour.h>
 
 namespace MaxOS::common {
 

@@ -12,8 +12,9 @@
 #include <cstdint>
 #include <cstddef>
 
+#include <libcommon/mem.h>
+
 #include <memory/memorymanagement.h>
-#include <mem.h>
 
 namespace MaxOS::processes {
 

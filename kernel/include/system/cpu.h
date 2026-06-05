@@ -9,9 +9,10 @@
 #ifndef MAXOS_SYSTEM_CPU_H
 #define MAXOS_SYSTEM_CPU_H
 
-#include <cpuid.h>
 #include <cstddef>
 #include <cstdint>
+#include <cpuid.h>
+
 #include <system/gdt.h>
 #include <hardwarecommunication/acpi.h>
 #include <hardwarecommunication/apic.h>

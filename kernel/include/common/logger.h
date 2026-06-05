@@ -11,9 +11,9 @@
 #ifndef MAXOS_COMMON_LOGGER_H
 #define MAXOS_COMMON_LOGGER_H
 
-#include <outputStream.h>
-#include <colour.h>
-#include <spinlock.h>
+#include <libcommon/outputStream.h>
+#include <libcommon/colour.h>
+#include <libcommon/spinlock.h>
 
 namespace MaxOS {
 

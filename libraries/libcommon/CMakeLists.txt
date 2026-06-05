@@ -1,23 +1,8 @@
-# NOTE: Cant use MAKE_LIBRARY() as dependency of libc
-
-# Set compiler flags
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffreestanding -fno-exceptions -fno-rtti -fpermissive -nostdlib -Wall -Wextra -mcmodel=kernel -mno-red-zone -mno-80387 -mno-mmx -fno-use-cxa-atexit")
-
-# Disable noisy warnings
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-pointer-arith -Wno-address-of-packed-member -Wno-trigraphs -Wno-unused-variable -Wno-unused-function")
-
-# Collect sources
-FILE(GLOB_RECURSE COMMON_SRCS src/*.cpp src/*.s)
-
 # Build as a user library
-ADD_LIBRARY(common STATIC ${COMMON_SRCS})
-TARGET_INCLUDE_DIRECTORIES(common PUBLIC include)
+MAKE_LIB_NOSTD(common src/)
 TARGET_INCLUDE_DIRECTORIES(common PRIVATE ${CMAKE_SOURCE_DIR}/libraries/libkpi/include)
-INSTALL(TARGETS common DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
 
 # Build as a kernel library
-ADD_LIBRARY(common_kernel STATIC ${COMMON_SRCS})
-TARGET_INCLUDE_DIRECTORIES(common_kernel PUBLIC include)
+MAKE_LIB_NOSTD(common_kernel src/)
 TARGET_INCLUDE_DIRECTORIES(common_kernel PRIVATE ${CMAKE_SOURCE_DIR}/kernel/include)
 TARGET_COMPILE_DEFINITIONS(common_kernel PUBLIC MAXOS_KERNEL)
-INSTALL(TARGETS common_kernel DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)

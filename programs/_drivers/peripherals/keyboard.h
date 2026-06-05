@@ -9,17 +9,14 @@
 #ifndef MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H
 #define MAX_OS_DRIVERS_PERIPHERALS_KEYBOARD_H
 
-#include <map.h>
-#include <eventHandler.h>
-#include <inputStream.h>
-#include <string.h>
-#include <vector.h>
-#include <drivers/driver.h>
-#include <hardwarecommunication/interrupts.h>
-#include <hardwarecommunication/port.h>
-#include <hardwarecommunication/apic.h>
 #include <cstdint>
 
+#include <libdriver/driver.h>
+#include <libcommon/map.h>
+#include <libcommon/eventHandler.h>
+#include <libcommon/inputStream.h>
+#include <libcommon/string.h>
+#include <libcommon/vector.h>
 
 namespace MaxOS::drivers::peripherals {
 

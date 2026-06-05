@@ -11,8 +11,10 @@
 
 #include <stdint.h>
 #include <stddef.h>
+
+#include <libcommon/string.h>
+
 #include <memory/physical.h>
-#include <string.h>
 
 
 namespace MaxOS::processes

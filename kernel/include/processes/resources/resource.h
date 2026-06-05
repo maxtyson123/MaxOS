@@ -10,13 +10,15 @@
 #define MAXOS_PROCESSES_RESOURCES_RESOURCE_H
 
 #include <cstddef>
-#include <map.h>
-#include <vector.h>
-#include <string.h>
+
+#include <libcommon/map.h>
+#include <libcommon/vector.h>
+#include <libcommon/string.h>
+#include <libcommon/mem.h>
+#include <libkpi/syscalls.h>
+#include <libkpi/resource.h>
+
 #include <common/logger.h>
-#include <syscalls.h>
-#include <mem.h>
-#include <libkpi/include/resource.h>
 
 namespace MaxOS::processes::resources {
 
