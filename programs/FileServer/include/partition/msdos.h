@@ -10,7 +10,9 @@
 #define FILESERVER_PARTITION_MSDOS_H
 
 #include <cstdint>
-#include <libdriver/include/generic/disk.h>
+
+#include <libdriver/generic/disk.h>
+
 #include <format/fat32.h>
 #include <format/ext2.h>
 #include <vfs.h>

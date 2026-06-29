@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <generic/keyboard.h>
+#include <libdriver/generic/keyboard.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;

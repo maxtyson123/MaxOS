@@ -14,8 +14,10 @@
 #define FILESERVER_FORMAT_FAT32_H
 
 #include <cstdint>
-#include <macros.h>
-#include <libdriver/include/generic/disk.h>
+
+#include <libcommon/macros.h>
+#include <libdriver/generic/disk.h>
+
 #include <filesystem.h>
 
 

@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <colour.h>
+#include <libcommon/colour.h>
 
 using namespace MaxOS::common;
 

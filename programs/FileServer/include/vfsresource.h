@@ -10,9 +10,10 @@
 #ifndef FILESERVER_VFSRESOURCE_H
 #define FILESERVER_VFSRESOURCE_H
 
+#include <libfs/directory.h>
+#include <libkpi/resource.h>
+
 #include <vfs.h>
-#include <libfs/include/directory.h>
-#include <libkpi/include/resource.h>
 
 namespace FileServer {
 

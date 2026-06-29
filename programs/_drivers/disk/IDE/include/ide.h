@@ -9,8 +9,8 @@
 #ifndef IDEDRIVER_IDE_H
 #define IDEDRIVER_IDE_H
 
-#include <driver.h>
-#include <hardwarecommunication/mapping.h>
+#include <libdriver/driver.h>
+#include <libdriver/hardwarecommunication/mapping.h>
 
 namespace IDEDriver {
 

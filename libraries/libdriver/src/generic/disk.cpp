@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <generic/disk.h>
+#include <libdriver/generic/disk.h>
 
 using namespace LibDriver::generic;
 using namespace MaxOS;

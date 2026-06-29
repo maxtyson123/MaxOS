@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <buffer.h>
+#include <libcommon/buffer.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;

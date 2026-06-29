@@ -11,13 +11,13 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <string.h>
-#include <vector.h>
-#include <buffer.h>
-#include <../../../libraries/libfs/include/path.h>
-#include <libfs/include/file.h>
-#include <time.h>
 
+#include <libcommon/string.h>
+#include <libcommon/vector.h>
+#include <libcommon/buffer.h>
+#include <libcommon/time.h>
+#include <libfs/path.h>
+#include <libfs/file.h>
 
 namespace FileServer {
 

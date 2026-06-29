@@ -6,10 +6,10 @@
  * @author Max Tyson
  */
 
-#include <processes/process.h>
-#include <processes/thread.h>
+#include <libkpi/processes/process.h>
+#include <libkpi/processes/thread.h>
 
-#include <libfs/include/file.h>
+#include <libfs/file.h>
 
 using namespace MaxOS::KPI;
 using namespace processes;

@@ -9,10 +9,10 @@
 #ifndef DRIVER_MANAGER_CORE_MANAGER_H
 #define DRIVER_MANAGER_CORE_MANAGER_H
 
-#include <driver.h>
+#include <libdriver/driver.h>
 #include <cstdint>
 #include <cstddef>
-#include <json.h>
+#include <libcommon/json.h>
 
 #include <core/device.h>
 

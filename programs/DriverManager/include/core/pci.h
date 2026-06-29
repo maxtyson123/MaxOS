@@ -10,10 +10,12 @@
 #define DRIVER_MANAGER_CORE_PCI_H
 
 #include <cstdint>
-#include <string.h>
-#include <driver.h>
-#include <mem.h>
-#include <port.h>
+
+#include <libcommon/string.h>
+#include <libdriver/driver.h>
+#include <libcommon/mem.h>
+#include <libcommon/port.h>
+
 #include <core/device.h>
 
 

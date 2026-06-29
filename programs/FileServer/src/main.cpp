@@ -7,13 +7,15 @@
  */
 
 #include <cstdint>
-#include <processes/thread.h>
-#include <string.h>
-#include <server/fileserver_server.h>
-#include <vfsresource.h>
-#include <ipc/sharedmemory.h>
+
+#include <libkpi/processes/thread.h>
+#include <libcommon/string.h>
+#include <libfs/server/fileserver_server.h>
+#include <libkpi/ipc/sharedmemory.h>
+#include <libkpi/syscalls.h>
+
 #include <format/tar.h>
-#include <syscalls.h>
+#include <vfsresource.h>
 
 using namespace MaxOS::KPI;
 using namespace MaxOS::KPI::processes;

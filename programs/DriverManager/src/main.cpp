@@ -7,10 +7,12 @@
  */
 
 #include <cstdint>
-#include <processes/thread.h>
+
+#include <libkpi/processes/thread.h>
+
 #include <core/manager.h>
 #include <core/pci.h>
-#include <server/drivermanager_server.h>
+#include <libdriver/server/drivermanager_server.h>
 
 using namespace DriverManager;
 using namespace DriverManager::core;

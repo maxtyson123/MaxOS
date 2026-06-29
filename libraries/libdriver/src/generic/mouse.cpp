@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <generic/mouse.h>
+#include <libdriver/generic/mouse.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;

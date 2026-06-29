@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <generic/video.h>
+#include <libdriver/generic/video.h>
 
 using namespace LibDriver;
 using namespace LibDriver::generic;

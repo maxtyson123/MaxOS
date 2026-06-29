@@ -2,7 +2,7 @@
 // Created by 98max on 9/1/2025.
 //
 
-#include <directory.h>
+#include <libfs/directory.h>
 
 using namespace MaxOS;
 using namespace MaxOS::KPI;

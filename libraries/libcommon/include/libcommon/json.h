@@ -5,9 +5,9 @@
 #ifndef MAXOS_COMMON_JSON_H
 #define MAXOS_COMMON_JSON_H
 
-#include <string.h>
-#include <map.h>
-#include <math.h>
+#include <libcommon/string.h>
+#include <libcommon/map.h>
+#include <libcommon/math.h>
 
 namespace MaxOS::common {
 	enum JSONNodeType {

@@ -7,7 +7,7 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <syscalls.h>
+#include <libkpi/syscalls.h>
 
 
 namespace MaxOS::KPI::ipc {

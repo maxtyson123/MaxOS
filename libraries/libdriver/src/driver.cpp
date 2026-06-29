@@ -6,7 +6,7 @@
  * @author Max Tyson
 */
 
-#include <driver.h>
+#include <libdriver/driver.h>
 
 using namespace LibDriver;
 using namespace MaxOS;

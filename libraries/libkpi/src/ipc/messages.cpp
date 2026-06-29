@@ -2,7 +2,7 @@
 // Created by 98max on 8/31/2025.
 //
 
-#include <ipc/messages.h>
+#include <libkpi/ipc/messages.h>
 
 namespace MaxOS::KPI::ipc {
 

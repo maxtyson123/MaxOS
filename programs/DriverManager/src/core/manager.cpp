@@ -6,11 +6,12 @@
  * @author Max Tyson
  */
 
+#include <libfs/file.h>
+#include <libcommon/json.h>
+#include <libcommon/mem.h>
+
 #include <core/manager.h>
 #include <core/pci.h>
-#include <file.h>
-#include <json.h>
-#include <mem.h>
 
 using namespace DriverManager;
 using namespace DriverManager::core;

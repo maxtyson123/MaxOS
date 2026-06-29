@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <spinlock.h>
+#include <libcommon/spinlock.h>
 //#include <processes/scheduler.h>
 
 using namespace MaxOS;

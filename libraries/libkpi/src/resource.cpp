@@ -8,10 +8,10 @@
  * @todo errors
  */
 
-#include <resource.h>
-#include <syscalls.h>
-#include <ipc/sharedmemory.h>
-#include <processes/thread.h>
+#include <libkpi/resource.h>
+#include <libkpi/syscalls.h>
+#include <libkpi/ipc/sharedmemory.h>
+#include <libkpi/processes/thread.h>
 
 using namespace MaxOS;
 using namespace MaxOS::KPI;

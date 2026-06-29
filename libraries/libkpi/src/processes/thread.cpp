@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <processes/thread.h>
+#include <libkpi/processes/thread.h>
 
 using namespace MaxOS::KPI;
 using namespace MaxOS::KPI::processes;

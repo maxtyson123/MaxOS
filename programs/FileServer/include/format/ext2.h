@@ -10,11 +10,12 @@
 #define FILESERVER_FORMAT_EXT2_H
 
 #include <cstdint>
-#include <spinlock.h>
-#include <macros.h>
-#include <filesystem.h>
-#include <libdriver/include/generic/disk.h>
 
+#include <libcommon/spinlock.h>
+#include <libcommon/macros.h>
+#include <libdriver/generic/disk.h>
+
+#include <filesystem.h>
 
 namespace FileServer::format::ext2 {
 

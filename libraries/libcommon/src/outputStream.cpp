@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <outputStream.h>
+#include <libcommon/outputStream.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;

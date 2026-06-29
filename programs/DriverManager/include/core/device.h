@@ -9,7 +9,7 @@
 #ifndef DRIVER_MANAGER_COMMON_SELECTOR_H
 #define DRIVER_MANAGER_COMMON_SELECTOR_H
 
-#include <driver.h>
+#include <libdriver/driver.h>
 
 namespace DriverManager::core {
 

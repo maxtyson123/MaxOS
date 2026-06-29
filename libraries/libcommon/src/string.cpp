@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <string.h>
+#include <libcommon/string.h>
 
 using namespace MaxOS;
 

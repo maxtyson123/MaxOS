@@ -2,9 +2,10 @@
 // Created by Max Tyson on 14/04/2026.
 //
 
+#include <libdriver/server/driver_server.h>
+#include <libdriver/server/drivermanager_client.h>
+
 #include <ide.h>
-#include <server/driver_server.h>
-#include <server/drivermanager_client.h>
 
 using namespace IDEDriver;
 using namespace MaxOS;

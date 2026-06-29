@@ -117,7 +117,7 @@ create_fs_part() {
     if [ "$IS_MACOS" -eq 1 ]; then
       MKFS="/opt/homebrew/opt/e2fsprogs/sbin/$MKFS"
     fi
-    "$MKFS" "$part" 2>/dev/null || fail "Could not create EXT2 filesystem"
+    sudo "$MKFS" "$part" 2>/dev/null || fail "Could not create EXT2 filesystem"
 
     if [ "$IS_MACOS" -eq 1 ]; then
 
@@ -129,7 +129,7 @@ create_fs_part() {
       fi
       fuse-ext2 "/dev/r${part#/dev/}" "$mount_point" -o rw+,allow_other,noappledouble 2>/dev/null || fail "Could not mount image to mount point"
     else
-      mount "$part" "$mount_point" 2>/dev/null || fail "Could not mount image to mount point"
+      sudo mount "$part" "$mount_point" 2>/dev/null || fail "Could not mount image to mount point"
     fi
   fi
 }
@@ -147,13 +147,13 @@ chmod -R 755 "$MOUNT_DIR"
 
 # Restore (TODO dynamic with partitions) (uses tart here to stream as one and faster)
 msg "Restore bak"
+CPF="-r"
+if [ "$IS_MACOS" -eq 1 ]; then
+  CPF="-rX"
+fi
 if [ -d "$BACKUP_DIR" ]; then
-    if [ -d "$BACKUP_DIR/0" ]; then
-        cp -rX "$BACKUP_DIR/0/"* "$MOUNT_DIR/0/" || fail "Failed copying to part 0"
-    fi
-    if [ -d "$BACKUP_DIR/1" ]; then
-        cp -rX "$BACKUP_DIR/1/"* "$MOUNT_DIR/1/" || fail "Failed copying to part 1"
-    fi
+      cp "$CPF" "$BACKUP_DIR/0/"* "$MOUNT_DIR/0/" || fail "Failed copying to part 0"
+      cp "$CPF" "$BACKUP_DIR/1/"* "$MOUNT_DIR/1/" || fail "Failed copying to part 1"
 fi
 rm -rf "$BACKUP_DIR"
 
@@ -194,9 +194,7 @@ if [ "$IS_MACOS" -eq 1 ]; then
     sync
 else
   msg "installing grub to disk image: $dev"
-  grub-install --root-directory="$MOUNT_DIR/0" --no-floppy --modules="$GRUB_MODULES" "$dev" 2>/dev/null || fail "could not install grub"
-  umount "${part1}" "${part2}" 2>/dev/null || fail "could not unmount"
-  losetup -d "$dev" 2>/dev/null || fail "could not setup loopbacks"
+  sudo grub-install --root-directory="$MOUNT_DIR/0" --no-floppy --modules="$GRUB_MODULES" "$dev" 2>/dev/null || fail "could not install grub"
 fi
 
 # Clean up the bullshit

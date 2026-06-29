@@ -7,14 +7,15 @@
  */
 
 #include <cstdint>
-#include <processes/thread.h>
-#include <ipc/sharedmemory.h>
-#include <mem.h>
-#include <server/fileserver_client.h>
-#include <string.h>
-#include <directory.h>
-#include <file.h>
-#include <path.h>
+
+#include <libkpi/processes/thread.h>
+#include <libkpi/ipc/sharedmemory.h>
+#include <libcommon/mem.h>
+#include <libcommon/string.h>
+#include <libfs/server/fileserver_client.h>
+#include <libfs/directory.h>
+#include <libfs/file.h>
+#include <libfs/path.h>
 
 using namespace MaxOS::KPI::processes;
 using namespace MaxOS::KPI::ipc;

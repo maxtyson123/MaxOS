@@ -8,8 +8,8 @@
  * @todo may need to optimise for less syscalls per RPC round trip
  */
 
-#include <ipc/rpc.h>
-#include <processes/thread.h>
+#include <libkpi/ipc/rpc.h>
+#include <libkpi/processes/thread.h>
 
 using namespace MaxOS;
 using namespace MaxOS::KPI::processes;

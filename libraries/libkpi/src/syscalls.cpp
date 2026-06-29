@@ -2,7 +2,7 @@
 // Created by 98max on 8/31/2025.
 //
 
-#include <syscalls.h>
+#include <libkpi/syscalls.h>
 #include <stdarg.h>
 
 namespace MaxOS::KPI{

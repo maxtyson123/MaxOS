@@ -10,8 +10,9 @@
 #ifndef FILESERVER_VFS_H
 #define FILESERVER_VFS_H
 
-#include <map.h>
-#include <pair.h>
+#include <libcommon/map.h>
+#include <libcommon/pair.h>
+
 #include <filesystem.h>
 
 

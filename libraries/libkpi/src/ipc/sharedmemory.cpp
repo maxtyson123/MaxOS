@@ -2,7 +2,7 @@
 // Created by 98max on 8/31/2025.
 //
 
-#include <ipc/sharedmemory.h>
+#include <libkpi/ipc/sharedmemory.h>
 
 namespace MaxOS::KPI::ipc {
 

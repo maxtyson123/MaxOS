@@ -9,7 +9,7 @@
  * @todo assumes all files have an extension
  */
 
-#include <path.h>
+#include <libfs/path.h>
 
 using namespace MaxOS;
 using namespace common;

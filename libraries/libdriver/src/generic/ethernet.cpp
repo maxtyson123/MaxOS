@@ -6,7 +6,7 @@
  * @author Max Tyson
  */
 
-#include <generic/ethernet.h>
+#include <libdriver/generic/ethernet.h>
 
 using namespace LibDriver;
 using namespace LibDriver::generic;

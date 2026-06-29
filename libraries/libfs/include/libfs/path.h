@@ -9,7 +9,7 @@
 #ifndef LIBFS_PATH_H
 #define LIBFS_PATH_H
 
-#include <string.h>
+#include <libcommon/string.h>
 
 
 namespace LibFS {

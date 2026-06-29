@@ -6,20 +6,6 @@ SCRIPTDIR=$(dirname "$BASH_SOURCE")
 MOUNT_DIR="$(cd "$SCRIPTDIR/.." && pwd)/filesystem"
 source $SCRIPTDIR/MaxOS.sh
 
-# Parse the args
-REVERSE=0
-while [ "$#" -gt "0" ]; do
-  case "$1" in
-    --reverse)
-      REVERSE=1
-      shift 1
-      ;;
-    *)
-      warn "Error: Unknown argument $1"
-      ;;
-  esac
-done
-
 #TODO MAKE SURE MOUNTED
 
 # Locations
@@ -61,3 +47,5 @@ if [ "$USE_ISO" -eq 1 ]; then
   i686-elf-grub-mkrescue --modules="part_msdos fat normal" --output="$SCRIPTDIR/../MaxOS.iso" $DESTINATION || fail "Failed to create rescue ISO"
   rm -rf $DESTINATION 2>/dev/null || sudo rm -rf $DESTINATION
 fi
+
+sync
