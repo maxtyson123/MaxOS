@@ -19,7 +19,9 @@ using namespace LibFS;
 using namespace LibDriver;
 using namespace MaxOS;
 using namespace MaxOS::KPI;
+using namespace MaxOS::KPI::processes;
 using namespace MaxOS::common;
+
 
 /**
  * @brief Constructs the Driver Manager, adding any default driver selectors
@@ -29,19 +31,8 @@ Manager::Manager() {
 	add_device_enumerator(new PCIController);
 	// add_driver_selector(new UniversalSerialBusController);
 
-	// Read the list of inital devices
-	auto jhandle = open_file("/boot/initrd/initdrivers.json");
-	auto size = file_size(jhandle);
-	auto jsonstr = string((uint8_t*)allocate_memory(size), size);
-	file_read(jhandle, jsonstr.c_str(), size);
-
-	// Parse the json
-	JSONParser parser(&jsonstr);
-	m_initial_drivers = parser.root();
-
-	// Clean uo
-	close_file(jhandle);
-	delete jsonstr.c_str();
+	// Load the inital drivers
+	load_driver_list("/0/boot/initrd/initdrivers.json");
 }
 
 /**
@@ -55,6 +46,85 @@ Manager::~Manager() {
 
 }
 
+void Manager::load_driver_list(string path) {
+
+	// Read the list of inital devices
+	auto jhandle = open_file(path.c_str());
+	auto size = file_size(jhandle);
+	auto jsonstr = string((uint8_t*)allocate_memory(size), size);
+	file_read(jhandle, jsonstr.c_str(), size);
+
+	// Parse the json
+	JSONParser parser(&jsonstr);
+	JSONNode* m_initial_drivers = parser.root();
+	parse_driver_list(m_initial_drivers);
+
+	// Clean up
+	close_file(jhandle);
+	delete jsonstr.c_str();
+
+}
+
+void Manager::parse_driver_list(JSONNode* list) {
+
+	// Cache each driver
+	auto drivers = (*list)["drivers"s];
+	for (int i = 0; i < drivers.array_size(); ++i) {
+
+		auto& driver = drivers[i];
+		auto& device_node = driver["device"s];
+		auto& model = device_node["model"s];
+
+		// Parse
+		string name = driver["name"s];
+		string path = driver["file"s];
+		string vendor = model["vendor"s];
+		string device = model["device"s];
+		string revision = model["revision"s];
+
+		// Build the device id
+		device_identification_t id {};
+		id.model = {
+			.vendor		= (uint16_t)vendor.hex_to_uint64(),
+			.device		= (uint16_t)device.hex_to_uint64(),
+			.revision	= (uint16_t)revision.hex_to_uint64(),
+		};
+
+		// Build the driver id
+		driver_entry_t entry {
+			.name =  name,
+			.path =  path,
+		};
+
+		// Cache
+		m_driver_list.insert(id, entry);
+	}
+}
+
+void Manager::start_driver(Device* device) {
+
+	ASSERT(device != nullptr, "Cant start a driver without an associated device");
+
+	// Driver already started
+	if (device->driver_started)
+		return;
+
+	// Get the driver details for this device
+	auto it = m_driver_list.find(device->id_info());
+	if (it == m_driver_list.end())
+		return;
+
+	// Pass the ID
+	const char** args =  new const char*[1];
+	args[0] = string(device->id).c_str();
+
+	// Start the driver
+	auto driver = it->second;
+	exec_file(driver.name.c_str(), driver.path.c_str(), args, 1);
+
+	device->driver_started = true;
+	klog("Started driver: %s (%s) for device %d\n", driver.name.c_str(), driver.path.c_str(), device->id);
+}
 
 /**
  * @brief  Check if all the found drivers have been started
@@ -136,43 +206,6 @@ void Manager::start_drivers() {
 
 	for (const auto& device : m_devices)
 		if (!device->driver_started)
-			device->start_driver();
+			start_driver(device);
 
-}
-
-void Manager::start_inital_drivers() {
-
-	// Start each driver
-	auto drivers = (*m_initial_drivers)["drivers"s];
-	for (int i = 0; i < drivers.array_size(); ++i) {
-		auto driver = drivers[i];
-		auto model = driver["device"s]["model"s];
-
-		// Parse
-		string name = driver["name"s];
-		string path = driver["file"s];
-		string vendor_str = model["vendor"s];
-		string device_str = model["device"s];
-		int vendor_id = vendor_str.to_int();
-		int device_id = device_str.to_int();
-
-		// Get the device
-		Device* device = nullptr;
-		for (const auto& dev : m_devices) {
-
-			auto info = dev->id_info().model;
-
-			if (info.vendor == vendor_id && info.device == device_id) {
-				device = dev;
-				break;
-			}
-		}
-
-		// No device found
-		if (!device)
-			break;
-
-		klog("Starting driver: %s\n", name.c_str());
-
-	}
 }

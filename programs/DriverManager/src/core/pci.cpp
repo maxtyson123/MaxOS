@@ -30,7 +30,7 @@ PCIController::PCIController()
 {
 
 	// Try open the pci ids
-	uint64_t pci_ids_file_handle = open_file("/boot/initrd/pci.ids");
+	uint64_t pci_ids_file_handle = open_file("/0/boot/initrd/pci.ids");
 	ASSERT(pci_ids_file_handle != 0, "Cant open PCI ids file\n");
 
 	// Read the pci ids

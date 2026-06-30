@@ -120,11 +120,11 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 // % init program tells fileserver to load & parse ramdisk
 // % init (via fileserver) reads ramdisk and starts all under "run/*" (driver manager, disks)
 // = = =
-// - - DM scans via selectors and builds list of initial devices
+// % - DM scans via selectors and builds list of initial devices
 // - - DM trys to init those devices (early ret, no fs)
 // - - DM loop:
-// - - - handle rpc calls (new devices added (ie from usb), device messages such as init suc/fail)
-// - - - try init devices that havent been started
+// - - handle rpc calls (new devices added (ie from usb), device messages such as init suc/fail)
+// % - - try init devices that havent been started
 // = = =
 // - - FS loop:
 // - - - handle rpc calls (io, dm event: new disk)

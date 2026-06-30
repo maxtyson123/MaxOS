@@ -215,8 +215,13 @@ common::Map<uint64_t, Resource*> ResourceManager::resources() {
  */
 uint64_t ResourceManager::open_resource(resource_type_t type, string const& name, size_t flags) {
 
-	// Get the resource
-	auto resource = GlobalResourceRegistry::get_registry(type) -> get_resource(name);
+	// Make sure there is a registry of the requested type
+	auto registry = GlobalResourceRegistry::get_registry(type);
+	if(!registry)
+		return 0;
+
+	// Make sure the registry holds the requested resource
+	auto resource = registry -> get_resource(name);
 	if(!resource)
 		return 0;
 

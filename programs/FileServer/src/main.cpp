@@ -40,6 +40,7 @@ void mount_ramdisk(mstring endpoint) {
     if (!vfs)
         return;
 
+
     vfs->mount_filesystem(fs, "/0/boot/initrd");
 }
 

@@ -104,11 +104,11 @@ namespace MaxOS {
 		class VirtualMemoryManager {
 
 			private:
-				uint64_t* m_pml4_root_address;
-				uint64_t* m_pml4_root_physical_address;
+				uint64_t* m_pml4_root_address = nullptr;
+				uint64_t* m_pml4_root_physical_address = nullptr;
 
-				virtual_memory_region_t* m_first_region;
-				virtual_memory_region_t* m_current_region;
+				virtual_memory_region_t* m_first_region = nullptr;
+				virtual_memory_region_t* m_current_region = nullptr;
 				size_t m_current_chunk = 0;
 				size_t m_next_available_address;
 

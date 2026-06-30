@@ -8,16 +8,18 @@
 #include <ide.h>
 
 using namespace IDEDriver;
+using namespace MaxOS::KPI;
 using namespace MaxOS;
 using namespace LibDriver;
 using namespace LibDriver::HardwareCommunication;
 
 extern "C" void _start(int argc, char* argv[])
 {
-	// Parse args
-	if (argc <= 0)
+
+	// Fetch the device id
+	if (argc <= 1)
 		return;
-	string id = argv[0];
+	string id = argv[1];
 
 	// Initialise the device
 	hardware_mapping_t hmap = get_hardware_mapping(id);
@@ -27,5 +29,4 @@ extern "C" void _start(int argc, char* argv[])
 	DriverServer server(&ide);
 	driver_ready(id);
 	server.start(id);
-
 }

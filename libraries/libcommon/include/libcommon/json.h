@@ -1,6 +1,12 @@
-//
-// Created by 98max on 18/04/2026.
-//
+/**
+ * @file json.h
+ * @breif Defines utility classes to parse JSON
+ *
+ * @author Max Tyson
+ * @date 18th May 2026
+ *
+ * @warning Nodes created by the parser are managed by the parent nodes, ensure access by reference to avoid GPEs caused by destruction
+ */
 
 #ifndef MAXOS_COMMON_JSON_H
 #define MAXOS_COMMON_JSON_H

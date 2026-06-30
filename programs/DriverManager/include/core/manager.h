@@ -9,15 +9,20 @@
 #ifndef DRIVER_MANAGER_CORE_MANAGER_H
 #define DRIVER_MANAGER_CORE_MANAGER_H
 
-#include <libdriver/driver.h>
 #include <cstdint>
 #include <cstddef>
-#include <libcommon/json.h>
 
+#include <libfs/path.h>
+#include <libcommon/json.h>
 #include <core/device.h>
 
 namespace DriverManager::core {
 
+
+	typedef struct DriverEntry {
+		MaxOS::string name;
+		MaxOS::string path;
+	} driver_entry_t;
 
 	/**
 	 * @class Manager
@@ -31,8 +36,12 @@ namespace DriverManager::core {
 
 			MaxOS::common::Vector<DeviceEnumerator*> m_device_enumerators;
 
-			MaxOS::common::JSONNode* m_initial_drivers;
-			MaxOS::common::JSONNode* m_installed_drivers;
+			MaxOS::common::Map<device_identification_t, driver_entry_t> m_driver_list;
+			void start_driver(Device* device);
+
+			void load_driver_list(MaxOS::string path);
+			void parse_driver_list(MaxOS::common::JSONNode*);
+
 
 		public:
 			Manager();
@@ -49,10 +58,6 @@ namespace DriverManager::core {
 
 			bool all_drivers_started();
 			void start_drivers();
-			void start_inital_drivers();
-
-			size_t get_next_device_id();
-
 	};
 
 }

@@ -43,6 +43,9 @@ void driver_ready(mstring id) {
 
 hardware_mapping_t get_hardware_mapping(mstring id) {
 
+	klog("getting dev for %s\n", id.c_str());
+
+
 	if (!driver_manager)
 		return {};
 
@@ -50,6 +53,7 @@ hardware_mapping_t get_hardware_mapping(mstring id) {
 	auto device = driver_manager->get_device(id.to_int());
 	if (!device)
 		return {};
+
 
 	return device->hardware_mapping();
 }
@@ -59,9 +63,6 @@ extern "C" void _start(void) {
 	// Start the driver manager
 	driver_manager = new Manager();
 	driver_manager -> find_devices();
-
-	// Disks must be setup to load the found drivers
-	driver_manager -> start_inital_drivers();
 
 	// Start the servers
 	uint64_t handle = register_drivermanager();

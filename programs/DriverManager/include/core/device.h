@@ -10,6 +10,8 @@
 #define DRIVER_MANAGER_COMMON_SELECTOR_H
 
 #include <libdriver/driver.h>
+#include <libcommon/assert.h>
+
 
 namespace DriverManager::core {
 
@@ -36,7 +38,15 @@ namespace DriverManager::core {
 			MaxOS::string device_name;
 			MaxOS::string class_string;
 
+
 	} device_identification_t;
+
+	inline bool operator == (const device_identification_t& lhs, const device_identification_t& rhs) {
+		return (lhs.model.vendor == rhs.model.vendor &&
+				lhs.model.device == rhs.model.device &&
+				lhs.model.revision == rhs.model.revision);
+	}
+
 
 	/**
 	 * @class Device
@@ -54,8 +64,6 @@ namespace DriverManager::core {
 			device_identification_t m_id_info;
 			LibDriver::HardwareCommunication::hardware_mapping_t m_hmap;
 
-			virtual LibDriver::Driver* handle_driver_start();
-
 		public:
 			Device(device_identification_t id_info, LibDriver::HardwareCommunication::hardware_mapping_t hmap);
 			virtual ~Device();
@@ -67,9 +75,7 @@ namespace DriverManager::core {
 			bool driver_started = false;
 
 			LibDriver::Driver* driver();
-			void start_driver();
-
-
+			void set_driver(LibDriver::Driver* driver);
 	};
 
 	/**

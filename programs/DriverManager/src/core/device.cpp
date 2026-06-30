@@ -8,21 +8,13 @@
 
 #include <core/device.h>
 
-using namespace DriverManager;
-using namespace DriverManager::core;
+using namespace MaxOS::common;
 using namespace LibDriver;
 using namespace LibDriver::HardwareCommunication;
 
-/**
- * @brief Internally start the driver for this device
- *
- * @return The driver for the device or nullptr if it failed to start
- *
- * @note This should be overridden by the device implementation
- */
-Driver* Device::handle_driver_start() {
-    return nullptr;
-}
+using namespace DriverManager;
+using namespace DriverManager::core;
+
 
 Device::Device(device_identification_t info, hardware_mapping_t hmap)
 : m_id_info(info),
@@ -47,14 +39,16 @@ Driver* Device::driver() {
     return m_driver;
 }
 
-hardware_mapping_t Device::hardware_mapping() {
-    return m_hmap;
+void Device::set_driver(Driver* driver) {
+
+	// There should only be one driver per device
+	ASSERT(m_driver == nullptr, "Attempt to set driver when device already has driver");
+
+	m_driver = driver;
 }
 
-void Device::start_driver() {
-
-    m_driver = handle_driver_start();
-
+hardware_mapping_t Device::hardware_mapping() {
+    return m_hmap;
 }
 
 DeviceEnumeratorEventHandler::DeviceEnumeratorEventHandler() = default;
