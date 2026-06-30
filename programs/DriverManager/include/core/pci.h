@@ -77,7 +77,7 @@ namespace DriverManager::core {
 
 			uint8_t class_id = 0;               ///< The class type of the device
 			uint8_t subclass_id = 0;            ///< The subclass type of the device
-			uint8_t interface_id = 0;           ///< The interface type of the device
+			uint8_t interface_id = 0;           ///< The programming interface type of the device
 
 			uint8_t revision = 0;               ///< The device version number
 	} pci_device_descriptor_t;

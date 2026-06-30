@@ -3,15 +3,16 @@
 //
 
 #include <libdriver/device.h>
-#include <libdriver/server/driver_server.h>
+#include <libdriver/server/disk_server.h>
 #include <libdriver/server/drivermanager_client.h>
 
-#include <ide.h>
+#include <ata.h>
 
-using namespace IDEDriver;
+using namespace ATADriver;
 using namespace MaxOS::KPI;
 using namespace MaxOS;
 using namespace LibDriver;
+using namespace LibDriver::generic;
 using namespace LibDriver::HardwareCommunication;
 
 extern "C" void _start(int argc, char* argv[])
@@ -22,13 +23,15 @@ extern "C" void _start(int argc, char* argv[])
 		return;
 	string id = argv[1];
 
+	klog("ata driv %s\n", id.c_str());
+
 	// Initialise the device
 	hardware_mapping_t hmap = get_hardware_mapping(id);
 	device_identification_t device = get_device_identification(id);
-	IntegratedDriveElectronicsController ide(device, hmap);
+	AdvancedTechnologyAttachment ata(device, hmap);
 
 	// Wait for events
-	DriverServer server(&ide);
+	DiskServer server(&ata);
 	driver_ready(id);
 	server.start(id);
 }

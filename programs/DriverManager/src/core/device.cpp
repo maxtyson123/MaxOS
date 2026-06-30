@@ -29,24 +29,6 @@ device_identification_t Device::id_info() {
     return m_id_info;
 }
 
-
-/**
- * @brief Get the driver for this device
- *
- * @return The driver for the device or nullptr if not found / not ready yet
- */
-Driver* Device::driver() {
-    return m_driver;
-}
-
-void Device::set_driver(Driver* driver) {
-
-	// There should only be one driver per device
-	ASSERT(m_driver == nullptr, "Attempt to set driver when device already has driver");
-
-	m_driver = driver;
-}
-
 hardware_mapping_t Device::hardware_mapping() {
     return m_hmap;
 }

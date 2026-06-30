@@ -4,6 +4,8 @@
  *
  * @date 18th April 2025
  * @author Max Tyson
+ *
+ * @todo split > 512 into multiple calls / error
  */
 
 #include <libdriver/generic/disk.h>
@@ -21,11 +23,12 @@ Disk::~Disk() = default;
  *
  * @param sector The sector to read from
  * @param data_buffer The buffer to read the data into
+ *
  */
-void Disk::read(uint32_t sector, buffer_t* data_buffer) {
+void Disk::read(uint32_t sector, buffer_t* data_buffer, size_t amount) {
 
-	size_t amount = (data_buffer->capacity() > 512) ? 512 : data_buffer->capacity();
-	read(sector, data_buffer, amount);
+	size_t length = (data_buffer->capacity() > amount) ? amount : data_buffer->capacity();
+	read(sector, data_buffer->raw(), length);
 
 }
 
@@ -36,7 +39,7 @@ void Disk::read(uint32_t sector, buffer_t* data_buffer) {
  * @param data_buffer The buffer to read the data into
  * @param amount The amount of data to read
  */
-void Disk::read(uint32_t sector, void* data_buffer, size_t amount) {
+void Disk::read(uint32_t sector, uint8_t* data_buffer, size_t amount) {
 
 }
 
@@ -46,10 +49,10 @@ void Disk::read(uint32_t sector, void* data_buffer, size_t amount) {
  * @param sector The sector to write to
  * @param data The buffer to write the data from
  */
-void Disk::write(uint32_t sector, buffer_t* data) {
+void Disk::write(uint32_t sector, buffer_t* data, size_t amount) {
 
-	size_t amount = (data->capacity() > 512) ? 512 : data->capacity();
-	write(sector, data, amount);
+	size_t length = (data->capacity() > 512) ? 512 : data->capacity();
+	write(sector, data->raw(), length);
 
 }
 
@@ -60,7 +63,7 @@ void Disk::write(uint32_t sector, buffer_t* data) {
  * @param data The buffer to write the data into
  * @param count The amount of data to write
  */
-void Disk::write(uint32_t sector, void* data, size_t count) {
+void Disk::write(uint32_t sector, uint8_t* data, size_t count) {
 }
 
 /**

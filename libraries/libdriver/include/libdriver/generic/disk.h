@@ -26,11 +26,11 @@ namespace LibDriver::generic {
 			Disk();
 			~Disk();
 
-			void read(uint32_t sector, MaxOS::common::buffer_t* data_buffer);
-			virtual void read(uint32_t sector, void* data_buffer, size_t amount);
+			void read(uint32_t sector, MaxOS::common::buffer_t* data_buffer, size_t amount = 512);
+			virtual void read(uint32_t sector, uint8_t* data_buffer, size_t amount);
 
-			void write(uint32_t sector, MaxOS::common::buffer_t* data);
-			virtual void write(uint32_t sector, void* data, size_t count);
+			void write(uint32_t sector, MaxOS::common::buffer_t* data, size_t amount = 512);
+			virtual void write(uint32_t sector, uint8_t* data, size_t count);
 
 			virtual void flush();
 	};

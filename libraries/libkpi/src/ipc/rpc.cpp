@@ -441,11 +441,16 @@ namespace MaxOS::KPI::ipc {
 		if (endpoint == 0)
 			return false;
 
+
 		// Set up a response endpoint if not already done
+		string response_end_name = "response_"s + string(pid());
+		if (m_response_endpoint == 0)
+			m_response_endpoint = create_endpoint(response_end_name.c_str());
+
+		// Still no response endpoint
 		if (m_response_endpoint == 0) {
-			m_response_endpoint = create_endpoint("response");
-			if (m_response_endpoint == 0)
-				return false;
+			klog("ERR: cant create response endpoint\n");
+			return false;
 		}
 
 		// Add the header to the message
@@ -458,13 +463,13 @@ namespace MaxOS::KPI::ipc {
 		ArgList message;
 		message.push_blob(&header, sizeof(RPCHeader));
 		message.push_string(function);
-		message.push_string("response");
+		message.push_string(response_end_name);
 		message.append_args(*args);
 
 		// Send the message
 		uint8_t buffer[MAX_SERIALIZED_SIZE];
 		size_t size = message.serialise(buffer, sizeof(buffer));
-		send_message(endpoint, (void*) buffer, size);
+		send_message(endpoint, buffer, size);
 
 		// Read the response
 		if (!(flags & (size_t) RPCMEssageFlags::ONE_WAY)) {

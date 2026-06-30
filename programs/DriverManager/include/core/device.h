@@ -10,43 +10,13 @@
 #define DRIVER_MANAGER_COMMON_SELECTOR_H
 
 #include <libdriver/driver.h>
+#include <libdriver/device.h>
 #include <libcommon/assert.h>
 
 
 namespace DriverManager::core {
 
-	typedef struct DeviceModel {
-		uint16_t vendor;
-		uint16_t device;
-		uint16_t revision;
-	} device_model_t;
-
-	typedef struct DeviceClass {
-		uint8_t base;
-		uint8_t sub;
-		uint8_t interface;
-	} device_class_t;
-
-	typedef struct  DeviceIdentification {
-
-			device_model_t model;
-			device_class_t class_info;
-
-			LibDriver::DriverType driver_type;
-
-			MaxOS::string vendor_name;
-			MaxOS::string device_name;
-			MaxOS::string class_string;
-
-
-	} device_identification_t;
-
-	inline bool operator == (const device_identification_t& lhs, const device_identification_t& rhs) {
-		return (lhs.model.vendor == rhs.model.vendor &&
-				lhs.model.device == rhs.model.device &&
-				lhs.model.revision == rhs.model.revision);
-	}
-
+	typedef LibDriver::device_identification_t device_identification_t;
 
 	/**
 	 * @class Device
@@ -57,9 +27,6 @@ namespace DriverManager::core {
 	class Device {
 
 		private:
-
-			LibDriver::Driver* m_driver = nullptr;
-			LibDriver::DriverType m_driver_type;
 
 			device_identification_t m_id_info;
 			LibDriver::HardwareCommunication::hardware_mapping_t m_hmap;
@@ -73,9 +40,6 @@ namespace DriverManager::core {
 
 			size_t id = 0;
 			bool driver_started = false;
-
-			LibDriver::Driver* driver();
-			void set_driver(LibDriver::Driver* driver);
 	};
 
 	/**

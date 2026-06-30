@@ -25,6 +25,7 @@ using namespace MaxOS::KPI::ipc;
 
 Manager* driver_manager = nullptr;
 
+
 void driver_ready(mstring id) {
 
 	if (!driver_manager)
@@ -43,7 +44,18 @@ void driver_ready(mstring id) {
 
 hardware_mapping_t get_hardware_mapping(mstring id) {
 
-	klog("getting dev for %s\n", id.c_str());
+	if (!driver_manager)
+		return {};
+
+	// Make sure the device exists
+	auto device = driver_manager->get_device(id.to_int());
+	if (!device)
+		return {};
+
+	return device->hardware_mapping();
+}
+
+device_identification_t get_device_identification(mstring id) {
 
 
 	if (!driver_manager)
@@ -54,8 +66,18 @@ hardware_mapping_t get_hardware_mapping(mstring id) {
 	if (!device)
 		return {};
 
+	return device->id_info();
+}
 
-	return device->hardware_mapping();
+int register_device(hardware_mapping_t hmap, device_identification_t did) {
+
+	// Register the device
+	auto device = new Device(did, hmap);
+	driver_manager->register_device(device);
+
+	// Externally registered devices have to set up their own drivers
+	device->driver_started = true;
+	return  device->id;
 }
 
 extern "C" void _start(void) {
@@ -69,16 +91,17 @@ extern "C" void _start(void) {
 	while (true) {
 
 		// Process events
-		bool did_handle = rpc_server_process_next(handle, false);
-
-		// Check if there is anything to do
-		if (driver_manager -> all_drivers_started() && !did_handle) {
-			yield();
-			continue;
-		}
+		bool did_work = rpc_server_process_next(handle, false);
 
 		// Try start devices
-		driver_manager -> start_drivers();
+		if (!driver_manager -> all_drivers_started()) {
+			driver_manager -> start_drivers();
+			did_work = true;
+		}
+
+		// If no work was done for either task then dont hog the cpu
+		if (!did_work)
+			yield();
 	}
 
 	// Should never exit
