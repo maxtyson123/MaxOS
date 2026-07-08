@@ -320,16 +320,21 @@ void ResourceServer::process_message(service_resource_message_t *message) {
     send_response(message, response);
 }
 
-void ResourceServer::process_next() {
+bool ResourceServer::process_next() {
+
+	// Nothing to process
+	if (queue_empty())
+		return false;
 
     // Try to get the message that has been waiting the longest
     auto message = peek_front();
     if (!message)
-        return;
+        return false;
 
     // Handle the message
     process_message(message);
     advance_queue();
+	return true;
 }
 
 void ResourceServer::loop() {

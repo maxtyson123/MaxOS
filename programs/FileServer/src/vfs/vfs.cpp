@@ -6,12 +6,14 @@
  * @author Max Tyson
  */
 
-#include <vfs.h>
+#include <vfs/vfs.h>
 
 using namespace MaxOS;
-using namespace FileServer;
 using namespace LibFS;
 using namespace MaxOS::common;
+
+using namespace FileServer;
+using namespace FileServer::vfs;
 
 /**
  * @brief Construct a new Virtual File System object and set it as the current file system

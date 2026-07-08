@@ -12,6 +12,7 @@
 #include <libkpi/processes/thread.h>
 
 using namespace MaxOS;
+using namespace MaxOS::common;
 using namespace MaxOS::KPI::processes;
 
 namespace MaxOS::KPI::ipc {
@@ -26,6 +27,8 @@ namespace MaxOS::KPI::ipc {
 
 		m_payload_size = 0;
 		m_entry_count = 0;
+
+		reset_cursor();
 
 	}
 
@@ -71,6 +74,7 @@ namespace MaxOS::KPI::ipc {
 		// Index out of bounds
 		if (index >= m_entry_count)
 			return false;
+		m_last_entry = index;
 
 		// Get the entry
 		const arg_entry_t& entry = m_entries[index];
@@ -281,6 +285,17 @@ namespace MaxOS::KPI::ipc {
 		const arg_entry_t& entry = m_entries[index];
 		return (void*) (m_payload + entry.offset);
 
+	}
+
+	/**
+	 * @brief Reset the index of the last read arg
+	 */
+	void ArgList::reset_cursor() {
+		m_last_entry = 0;
+	}
+
+	bool ArgList::has_more() const {
+		return m_last_entry < m_entry_count;
 	}
 
 	/**
@@ -564,6 +579,32 @@ namespace MaxOS::KPI::ipc {
 		// Server loop
 		while (true)
 			rpc_server_process_next(endpoint, true);
+	}
+
+	/**
+	 * @brief Starts the RPC server loop to delegate incoming RPC calls to registered functions.
+	 *
+	 * @param endpoints The servers to loop on
+	 *
+	 * @note Will yield the thread when no messages are available.
+	 * @todo Implement loading from shared mem
+	 */
+	[[noreturn]] void rpc_server_loop(Vector<uint64_t> endpoints) {
+
+		// Server loop
+		while (true) {
+
+			bool did_work = false;
+
+			// Try handle messages on each valid endpoint
+			for (const auto& endpoint : endpoints)
+				if (endpoint != 0)
+					did_work = did_work || rpc_server_process_next(endpoint, false);
+
+			// Dont hog the CPU
+			if (!did_work)
+				yield();
+		}
 	}
 
 	/**

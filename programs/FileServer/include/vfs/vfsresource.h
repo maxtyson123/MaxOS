@@ -13,11 +13,12 @@
 #include <libfs/directory.h>
 #include <libkpi/resource.h>
 
-#include <vfs.h>
+#include <vfs/vfs.h>
 
-namespace FileServer {
+namespace FileServer::vfs {
 
 	typedef MaxOS::KPI::Resource Resource;
+	typedef MaxOS::string string;
 
 	/**
 	 * @class FileResource
@@ -32,7 +33,7 @@ namespace FileServer {
 			FileResource(const string& name, size_t flags, MaxOS::KPI::ResourceType type);
 			~FileResource() final;
 
-			File* file; ///< The file that this resource handles & exposes
+			filesystem::File* file; ///< The file that this resource handles & exposes
 
 			int read(void* buffer, size_t size, size_t flags) final;
 			int write(const void* buffer, size_t size, size_t flags) final;
@@ -55,7 +56,7 @@ namespace FileServer {
 			DirectoryResource(const string& name, size_t flags, MaxOS::KPI::ResourceType type);
 			~DirectoryResource() final;
 
-			Directory* directory; ///< The directory that this resource handles & exposes
+			filesystem::Directory* directory; ///< The directory that this resource handles & exposes
 
 			int read(void* buffer, size_t size, size_t flags) final;
 			int write(const void* buffer, size_t size, size_t flags) final;
@@ -73,8 +74,8 @@ namespace FileServer {
 
 			MaxOS::common::Map<uint64_t, string> m_working_directories;
 
-			Resource* open_as_resource(const string& name, Directory* directory);
-			Resource* open_as_resource(const string& name, File* file);
+			Resource* open_as_resource(const string& name, filesystem::Directory* directory);
+			Resource* open_as_resource(const string& name, filesystem::File* file);
 
 		public:
 

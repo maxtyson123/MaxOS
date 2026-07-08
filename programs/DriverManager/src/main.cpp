@@ -25,7 +25,6 @@ using namespace MaxOS::KPI::ipc;
 
 Manager* driver_manager = nullptr;
 
-
 void driver_ready(mstring id) {
 
 	if (!driver_manager)
@@ -37,8 +36,7 @@ void driver_ready(mstring id) {
 		return;
 
 	// Mark the driver as ready
-	device->driver_started = true;
-
+	device->driver_ready = true;
 }
 
 
@@ -57,7 +55,6 @@ hardware_mapping_t get_hardware_mapping(mstring id) {
 
 device_identification_t get_device_identification(mstring id) {
 
-
 	if (!driver_manager)
 		return {};
 
@@ -74,6 +71,8 @@ int register_device(hardware_mapping_t hmap, device_identification_t did) {
 	// Register the device
 	auto device = new Device(did, hmap);
 	driver_manager->register_device(device);
+
+	fire_on_driver_ready(device->id);
 
 	// Externally registered devices have to set up their own drivers
 	device->driver_started = true;

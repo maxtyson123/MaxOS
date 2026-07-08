@@ -8,12 +8,15 @@
 
 #include <partition/msdos.h>
 
-using namespace FileServer;
-using namespace FileServer::format;
-using namespace FileServer::format::ext2;
-using namespace FileServer::partition;
 using namespace LibDriver::generic;
 using namespace MaxOS::KPI;
+
+using namespace FileServer;
+using namespace FileServer::format;
+using namespace FileServer::filesystem;
+using namespace FileServer::vfs;
+using namespace FileServer::format::ext2;
+using namespace FileServer::partition;
 
 /**
  * @brief read the partition table of a given hard disk

@@ -121,19 +121,19 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 // % init (via fileserver) reads ramdisk and starts all under "run/*" (driver manager, disks)
 // = = =
 // % - DM scans via selectors and builds list of initial devices
-// - - DM trys to init those devices (early ret, no fs)
-// - - DM loop:
-// - - handle rpc calls (new devices added (ie from usb), device messages such as init suc/fail)
+// % - DM trys to init those devices (early ret, no fs)
+// % - DM loop:
+// % - handle rpc calls (new devices added (ie from usb), device messages such as init suc/fail)
 // % - - try init devices that havent been started
 // = = =
 // - - FS loop:
 // - - - handle rpc calls (io, dm event: new disk)
 // - - - try parse new disk
 // = = =
-// - - DSK instance get info (args, fail then req from manager)
-// - - DSK init
-// - - DSK tell DM init done
-// - - DSK run server()
+// % - DSK instance get info (args, fail then req from manager)
+// % - DSK init
+// % - DSK tell DM init done
+// % - DSK run server()
 // = = =
 // - any future steps
 // % mark self as unschedulable forever

@@ -19,7 +19,7 @@
 #include <libfs/path.h>
 #include <libfs/file.h>
 
-namespace FileServer {
+namespace FileServer::filesystem {
 
 	typedef MaxOS::string string;
 	typedef MaxOS::common::buffer_t buffer_t;

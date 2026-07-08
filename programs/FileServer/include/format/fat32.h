@@ -18,10 +18,16 @@
 #include <libcommon/macros.h>
 #include <libdriver/generic/disk.h>
 
-#include <filesystem.h>
+#include <filesystem/filesystem.h>
 
 
 namespace FileServer::format {
+
+	typedef MaxOS::string string;
+	typedef filesystem::Directory Directory;
+	typedef filesystem::File File;
+	typedef filesystem::lba_t lba_t;
+
 
 	/**
 	 * @struct BiosParameterBlock32
@@ -285,7 +291,7 @@ namespace FileServer::format {
 	 * @class Fat32FileSystem
 	 * @brief Handles the FAT32 filesystem operations
 	 */
-	class Fat32FileSystem final : public FileSystem {
+	class Fat32FileSystem final : public filesystem::FileSystem {
 		private:
 			Fat32Volume m_volume;
 

@@ -13,7 +13,7 @@
 
 #include <libcommon/time.h>
 #include <libcommon/vector.h>
-#include <libcommon/eventHandler.h>
+#include <libcommon/event.h>
 
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/apic.h>

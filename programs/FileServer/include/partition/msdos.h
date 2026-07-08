@@ -15,7 +15,7 @@
 
 #include <format/fat32.h>
 #include <format/ext2.h>
-#include <vfs.h>
+#include <vfs/vfs.h>
 
 
 namespace FileServer::partition {

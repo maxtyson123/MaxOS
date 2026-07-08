@@ -143,7 +143,7 @@ namespace MaxOS::KPI {
 
             service_resource_message_t* current_processed_message();
             void process_message(service_resource_message_t* message);
-            void process_next();
+            bool process_next();
             void loop();
 
             virtual Resource* 	get_resource(const string& name);

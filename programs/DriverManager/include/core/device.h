@@ -40,6 +40,7 @@ namespace DriverManager::core {
 
 			size_t id = 0;
 			bool driver_started = false;
+			bool driver_ready = false;
 	};
 
 	/**

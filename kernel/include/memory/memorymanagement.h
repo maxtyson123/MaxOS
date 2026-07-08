@@ -4,6 +4,9 @@
  *
  * @date 20th October 2022
  * @author Max Tyson
+ *
+ * @todo major flaw that this has is that it is just a header prepended to the chunk requested, thus overflow causes the
+ *		next chunk to become garbage data, will need to figure out a way to move this tracking somewhere protected
  */
 
 #ifndef MAXOS_SYSTEM_MEMORYMANAGEMENT_H

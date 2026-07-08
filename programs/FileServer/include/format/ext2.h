@@ -15,11 +15,16 @@
 #include <libcommon/macros.h>
 #include <libdriver/generic/disk.h>
 
-#include <filesystem.h>
+#include <filesystem/filesystem.h>
 
 namespace FileServer::format::ext2 {
 
 	namespace common = MaxOS::common;
+
+	typedef MaxOS::string string;
+	typedef filesystem::Directory Directory;
+	typedef filesystem::File File;
+	typedef filesystem::lba_t lba_t;
 
 	/**
 	 * @struct SuperBlock
@@ -454,7 +459,7 @@ namespace FileServer::format::ext2 {
 	 * @class Ext2FileSystem
 	 * @brief Handles the ext2 filesystem operations
 	 */
-	class Ext2FileSystem final : public FileSystem {
+	class Ext2FileSystem final : public filesystem::FileSystem {
 		private:
 			Ext2Volume m_volume;
 

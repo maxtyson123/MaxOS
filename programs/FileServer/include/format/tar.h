@@ -11,9 +11,15 @@
 #ifndef FILESERVER_FORMAT_TAR_H
 #define FILESERVER_FORMAT_TAR_H
 
-#include <filesystem.h>
+#include <filesystem/filesystem.h>
 
 namespace FileServer::format {
+
+	typedef MaxOS::string string;
+	typedef filesystem::Directory Directory;
+	typedef filesystem::File File;
+	typedef filesystem::lba_t lba_t;
+
 
     /**
      * @struct TARHeader
@@ -88,7 +94,7 @@ namespace FileServer::format {
      * @class TARFileSystem
      * @brief Wraps a TAR archive as a filesystem
      */
-    class TARFileSystem final : public FileSystem {
+    class TARFileSystem final : public filesystem::FileSystem {
 
         private:
             TARVolume m_volume;

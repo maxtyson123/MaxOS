@@ -13,10 +13,15 @@
 #include <libcommon/map.h>
 #include <libcommon/pair.h>
 
-#include <filesystem.h>
+#include <filesystem/filesystem.h>
 
 
-namespace FileServer {
+namespace FileServer::vfs {
+
+	typedef MaxOS::string string;
+	typedef filesystem::File File;
+	typedef filesystem::Directory Directory;
+	typedef filesystem::FileSystem FileSystem;
 
 	/**
 	 * @class VirtualFileSystem

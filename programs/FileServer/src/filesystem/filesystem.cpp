@@ -6,9 +6,10 @@
  * @author Max Tyson
  */
 
-#include <filesystem.h>
+#include <filesystem/filesystem.h>
 
 using namespace FileServer;
+using namespace FileServer::filesystem;
 using namespace MaxOS;
 using namespace MaxOS::common;
 using namespace LibFS;

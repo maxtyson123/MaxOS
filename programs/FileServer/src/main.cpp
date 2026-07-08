@@ -13,9 +13,11 @@
 #include <libfs/server/fileserver_server.h>
 #include <libkpi/ipc/sharedmemory.h>
 #include <libkpi/syscalls.h>
+#include <libdriver/server/drivermanager_client.h>
 
 #include <format/tar.h>
-#include <vfsresource.h>
+#include <vfs/vfsresource.h>
+#include <filesystem/fs_event_handler.h>
 
 using namespace MaxOS::KPI;
 using namespace MaxOS::KPI::processes;
@@ -23,6 +25,8 @@ using namespace MaxOS::KPI::ipc;
 using namespace MaxOS::common;
 using namespace FileServer;
 using namespace FileServer::format;
+using namespace FileServer::filesystem;
+using namespace FileServer::vfs;
 using namespace LibFS;
 
 void mount_ramdisk(mstring endpoint) {
@@ -54,21 +58,23 @@ extern "C" void _start(int argc, char* argv[]){
     // Setup the servers
     VFSResourceServer vfs_resources(&vfs);
     uint64_t handle = register_fileserver();
+	FSDriverManagerEventHanlder fs_driver_manager_event_hanlder;
 
     while(true) {
 
         // Try to handle any rpc call
-        bool did_handle = rpc_server_process_next(handle, false);
+    	bool did_main_server = rpc_server_process_next(handle, false);
+    	bool did_event_server = fs_driver_manager_event_hanlder.process_next();
+
+    	// Handle resource calls
+    	bool did_resource = vfs_resources.process_next();
+
+    	// Try register for events (need driver manager to start)
+    	fs_driver_manager_event_hanlder.try_setup_self();
 
         // Check if there is anything to do
-        if (vfs_resources.queue_empty() && !did_handle) {
-            yield();
-            continue;
-        }
-        // If here is reached, either there is a resource call to handle OR a rpc call was handled and there may be a
-        // message waiting on the queue, cannot know until next loop OR both.
-
-        // Handle resource calls
-        vfs_resources.process_next();
+    	bool did_work = did_main_server || did_event_server || did_resource;
+        if (!did_work)
+        	yield();
     }
 }

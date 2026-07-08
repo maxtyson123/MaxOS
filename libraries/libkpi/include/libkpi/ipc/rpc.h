@@ -105,6 +105,7 @@ namespace MaxOS::KPI::ipc {
 
 			arg_entry_t m_entries[MAX_ARGS];
 			size_t   	m_entry_count = 0;
+			mutable size_t		m_last_entry = 0;
 
 		public:
 			ArgList();
@@ -131,6 +132,17 @@ namespace MaxOS::KPI::ipc {
 			int64_t  get_int64(size_t index) const;
 			string get_string(size_t index) const;
 			const void* get_blob(size_t index) const;
+
+			bool      get_bool()      { return get_bool(m_last_entry++); }
+			uint32_t  get_uint32()    { return get_uint32(m_last_entry++); }
+			uint64_t  get_uint64()    { return get_uint64(m_last_entry++); }
+			int32_t   get_int32()     { return get_int32(m_last_entry++); }
+			int64_t   get_int64()     { return get_int64(m_last_entry++); }
+			string    get_string()    { return get_string(m_last_entry++); }
+			const void* get_blob()    { return get_blob(m_last_entry++); }
+
+			void reset_cursor();
+			bool has_more() const;
 
 			const uint8_t* payload() const;
 			size_t payload_size() const;
@@ -176,8 +188,12 @@ namespace MaxOS::KPI::ipc {
 
 	bool rpc_call(const char* server, const char* function, ArgList* args, ArgList* return_values, size_t flags = 0);
 	bool rpc_server_process_next(uint64_t endpoint, bool block);
+
+
 	[[noreturn]] void rpc_server_loop(const char* server);
 	[[noreturn]] void rpc_server_loop(uint64_t endpoint);
+	[[noreturn]] void rpc_server_loop(common::Vector<uint64_t> endpoints);
+
 	void rpc_wait_for_server(const char* server);
 
 

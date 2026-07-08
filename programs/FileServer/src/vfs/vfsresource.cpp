@@ -6,13 +6,15 @@
  * @author Max Tyson
  */
 
-#include <vfsresource.h>
+#include <vfs/vfsresource.h>
 
 using namespace MaxOS;
-using namespace FileServer;
 using namespace MaxOS::common;
 using namespace MaxOS::KPI;
 using namespace LibFS;
+
+using namespace FileServer;
+using namespace FileServer::vfs;
 
 /**
  * @brief Construct a new File Resource object
