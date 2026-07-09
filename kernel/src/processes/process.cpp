@@ -26,6 +26,8 @@ using namespace MaxOS::hardwarecommunication;
  * @param parent The proccess that owns this thread (started it)
  *
  * @todo Cant use rsp0 for kernel stack storage as once scheduler starts up it may point to a userspace rsp0 (nor is it good to use the same stack for every process)
+ *
+ * @warning cant usee global MemoryManager::malloc() during constructor as process hasn't been registered with the scheduler yet
  */
 Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process* parent)
 {
@@ -35,8 +37,8 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	wakeup_time = 0;
 	ticks = 0;
 
-	// Create the stack (cant usee global MemoryManager::malloc() as process hasn't been registered with the scheduler yet)
-	m_stack_pointer = (uintptr_t) parent->memory_manager->handle_malloc(STACK_SIZE) + STACK_SIZE;
+	// Create the stack ()
+	m_stack_pointer = (uintptr_t) parent->memory_manager->allocate(STACK_SIZE) + STACK_SIZE;
 
 	// Use the kernel stack
 	m_tss_stack_pointer = parent->is_kernel ? CPU::executing_core() -> tss.rsp0 : (uintptr_t) parent->memory_manager->kmalloc(STACK_SIZE) + STACK_SIZE;
@@ -58,12 +60,12 @@ Thread::Thread(void (* _entry_point)(void*), void* args, int arg_amount, Process
 	// Copy the args into userspace
 	uint64_t argc = arg_amount;
 	size_t arg_size = argc * sizeof(void*);
-	void* argv = parent->memory_manager->handle_malloc(arg_size);
+	void* argv = parent->memory_manager->allocate(arg_size);
 	for (int i = 0; i < argc; i++) {
 
 		// Copy each argument
 		size_t len = strlen(((char**)args)[i]) + 1;
-		((char**)argv)[i] = (char*) parent->memory_manager->handle_malloc(len);
+		((char**)argv)[i] = (char*) parent->memory_manager->allocate(len);
 		memcpy(((char**)argv)[i], ((char**)args)[i], len);
 	}
 

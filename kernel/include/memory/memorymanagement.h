@@ -5,8 +5,6 @@
  * @date 20th October 2022
  * @author Max Tyson
  *
- * @todo major flaw that this has is that it is just a header prepended to the chunk requested, thus overflow causes the
- *		next chunk to become garbage data, will need to figure out a way to move this tracking somewhere protected
  */
 
 #ifndef MAXOS_SYSTEM_MEMORYMANAGEMENT_H
@@ -18,61 +16,37 @@
 #include <libcommon/assert.h>
 
 #include <memory/virtual.h>
+#include <memory/allocator/allocator.h>
+#include <memory/allocator/bump.h>
 #include <system/multiboot.h>
 
 namespace MaxOS::memory {
 
-	/**
-	 * @struct MemoryChunk
-	 * @brief A span of memory in the heap, can be allocated or free. Used as a node in a doubly linked list.
-	 */
-	struct MemoryChunk {
 
-		MemoryChunk* next;      ///< Pointer to the chunk after this one in the list
-		MemoryChunk* prev;      ///< Pointer to the chunk before this one in the list
-
-		bool allocated;         ///< Whether this chunk is in use or can be allocated
-		size_t size;            ///< The size of this span of memory (not including the MemoryChunk struct itself)
-
-	};
-
-	constexpr size_t CHUNK_ALIGNMENT = 0x10;    ///< How many bytes the chunks should be a multiple of (round up to this)
-
-	class MemoryChunkHandler {
+	class BumpMemoryManager : public allocator::BumpAllocator {
 
 		private:
-			MemoryChunk* m_first_memory_chunk;
-			MemoryChunk* m_last_memory_chunk;
 
-			MemoryChunk* expand_heap(size_t size);
-			virtual void* allocate_extra_space(size_t size);
+			VirtualMemoryManager* m_virtual_memory_manager;
 
-			bool m_setup = false;
+			void* allocate_extra_space(size_t size) final;
 
 		public:
-			MemoryChunkHandler();
-			virtual ~MemoryChunkHandler();
 
-			void setup_region(uintptr_t address, size_t length);
+			BumpMemoryManager(VirtualMemoryManager* virtual_memory_manager = nullptr);
+			~BumpMemoryManager();
 
-			void* handle_malloc(size_t size);
-			void handle_free(void* pointer);
-
-			size_t memory_used();
-			static size_t align(size_t size);
-
+			// Virtual Memory Management
+			VirtualMemoryManager* vmm();
+			static void switch_active_memory_manager(BumpMemoryManager* manager);
 	};
 
 	/**
 	 * @class MemoryManager
 	 * @brief Handles memory allocation and deallocation
 	 */
-	class MemoryManager : public MemoryChunkHandler {
+	class MemoryManager : public BumpMemoryManager {
 
-		private:
-
-			VirtualMemoryManager* m_virtual_memory_manager;
-			void* allocate_extra_space(size_t size) final;
 
 		public:
 			inline static MemoryManager* s_kernel_memory_manager = nullptr;             ///< The memory manager for any kernel processes and all kernel allocations
@@ -82,15 +56,11 @@ namespace MaxOS::memory {
 
 			// Public Memory Management
 			static void* malloc(size_t size);
-			static void free(void* pointer);
+			static void  free(void* pointer);
 
 			// Kernel Memory Management
 			static void* kmalloc(size_t size);
-			static void kfree(void* pointer);
-
-			// Internal Memory Management
-			VirtualMemoryManager* vmm();
-			static void switch_active_memory_manager(MemoryManager* manager);
+			static void  kfree(void* pointer);
 	};
 }
 

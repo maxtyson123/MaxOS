@@ -532,3 +532,21 @@ See also [Wikipedia - OSI Model](https://en.wikipedia.org/wiki/OSI_model)
 - It is important to network because it allows for the different layers to be implemented in different ways. For example, the physical layer can be implemented using a wireless connection or a wired connection. The network layer can be implemented using a router or a switch. The transport layer can be implemented using TCP or UDP. The application layer can be implemented using HTTP or FTP.
 - The operating system will implement the layers above the network layer (Application, Presentation, Session, Transport) and the network device will implement the layers below the network layer (Data Link, Physical)
 - The reason for this is that the network device is the only thing that can communicate with the physical layer and the network layer. The operating system can only communicate with the application layer and the transport layer.
+
+# Dev Log Notes
+
+### SLAB Allocator (8/7/26)
+Been a while since I have written notes, but thought might be good to bring it back.
+Something that has been an issue for most of this project has been memory management bugs, a lot with paging early on and 
+now with the userspace memory manage. 
+
+The main issue boils down to a chicken and the egg problem, that is how do we dynamically keep track of memory regions 
+allocated/free without having to rely on allocating space for that dynamic tracker to grow? 
+
+The current solution in the kernel is to have a linked list with each node having extra space at the end for the data to 
+be stored in. However, this is has the major flaw that overflowing the memory chunk will cause the node meta data to now be junk. 
+
+An alternative design for this is a SLAB allocator, which solves this by making it the userspace programs' problems and 
+not the kernel's when something over/under flows. For example, previously an overflow bug would overwrite the next node
+and could cause the kernel to crash if it tried to the next pointer & it was pointing to some garbage. Whereas with a 
+slab overflow it would just overwrite some of the userspace processes' other data.

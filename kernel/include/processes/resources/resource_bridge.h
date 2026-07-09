@@ -25,7 +25,7 @@
 
 namespace MaxOS::processes::resources {
 
-	class BridgeHandler : public memory::MemoryChunkHandler {
+	class BridgeHandler : public memory::allocator::BumpAllocator {
 
 		private:
 			size_t m_next_id = 0;

@@ -60,7 +60,7 @@ size_t BridgeHandler::store_data(const void *buffer, size_t size, bool reserve_o
 
     // Set up the storage
     auto data = is_mapped  ? m_owner_process->memory_manager->vmm()->load_range_from_process(GlobalScheduler::current_process()->memory_manager->vmm(), buffer, size)
-                                : handle_malloc(size);
+                                : allocate(size);
     ASSERT(data != nullptr, "Could not allocate memory for bridge\n");
 
     // Copy the data
@@ -149,7 +149,7 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
 
     // Free resources
     is_page_mapped  ? m_owner_process->memory_manager->vmm()->unload_range_from_process((void*)offset, size)
-                    : handle_free((void*)m_data_region + offset);
+                    : unallocate((void*)m_data_region + offset);
     __atomic_store_n(&slot->state, (uint8_t)ServiceMessageSlotState::FREE,__ATOMIC_RELEASE);
 
     return slot->response;
