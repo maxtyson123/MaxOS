@@ -550,3 +550,11 @@ An alternative design for this is a SLAB allocator, which solves this by making 
 not the kernel's when something over/under flows. For example, previously an overflow bug would overwrite the next node
 and could cause the kernel to crash if it tried to the next pointer & it was pointing to some garbage. Whereas with a 
 slab overflow it would just overwrite some of the userspace processes' other data.
+
+To do this, metadata is tracked externally to the memory regions. This can be done with a bump allocator, however with 
+worse performance: O(n) vs O(1) and worse cache usage. With other main attractions of a slab allocator being more minimised mem fragmentation and less metadata overhead.
+
+
+
+- Whilst doing research for this I found that the linux kernel uses a linked list for their slab allocator, which made me rethink the whole design and I now use canary based protection for the bump allcoator. This allows me to use both for better performance with small vs larege data 
+

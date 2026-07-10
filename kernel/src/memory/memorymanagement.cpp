@@ -26,8 +26,8 @@ BumpMemoryManager::BumpMemoryManager(VirtualMemoryManager* virtual_memory_manage
 		m_virtual_memory_manager = new VirtualMemoryManager();
 
 	// Set up the first chunk of memory
-	auto address = (uintptr_t)m_virtual_memory_manager->allocate(PAGE_SIZE + sizeof(MemoryChunk), 0);
-	setup_region(address, PAGE_SIZE - sizeof(MemoryChunk));
+	auto address = (uintptr_t)m_virtual_memory_manager->allocate(PAGE_SIZE, 0);
+	setup_region(address, PAGE_SIZE);
 
 }
 
@@ -45,10 +45,10 @@ BumpMemoryManager::~BumpMemoryManager() {
  * @param size The size to expand the region by
  * @return The new space of memory
  */
-void* BumpMemoryManager::allocate_extra_space(size_t size) {
+void* BumpMemoryManager::allocate_extra_space(size_t requested_size, size_t& actual_size) {
 
 	// Create a new chunk of memory
-	auto* chunk = m_virtual_memory_manager->allocate(size, PRESENT | WRITE | NO_EXECUTE);
+	auto* chunk = m_virtual_memory_manager->allocate(requested_size, actual_size, PRESENT | WRITE | NO_EXECUTE);
 	ASSERT(chunk != nullptr, "Out of memory - kernel cannot allocate any more memory");
 
 	return chunk;

@@ -16,7 +16,7 @@ void* MemoryAllocator::expand_heap(size_t size) {
 	return nullptr;
 }
 
-void* MemoryAllocator::allocate_extra_space(size_t size) {
+void* MemoryAllocator::allocate_extra_space(size_t requested_size, size_t& actual_size) {
 	return nullptr;
 }
 

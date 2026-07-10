@@ -44,6 +44,8 @@ namespace MaxOS::processes {
 	/**
 	 * @class Thread
 	 * @brief The execution context of a sub-process thread
+	 *
+	 * @todo io bitmap per process instead
 	 */
 	class Thread {
 

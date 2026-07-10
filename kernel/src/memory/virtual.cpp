@@ -98,17 +98,31 @@ VirtualMemoryManager::~VirtualMemoryManager() {
 	}
 }
 
+/**
+ * @brief Allocate a new chunk of virtual memory
+ *
+ * @param requested_size The size of the memory to allocate
+ * @param actual_size The size of the memory allocated (>= requested size)
+ * @param flags The flags to set on the memory
+ * @return The address of the allocated memory
+ */
+void* VirtualMemoryManager::allocate(size_t requested_size, size_t flags) {
+
+	size_t actual_size;
+	return allocate(0, requested_size, actual_size, flags);
+}
 
 /**
  * @brief Allocate a new chunk of virtual memory
  *
- * @param size The size of the memory to allocate
+ * @param requested_size The size of the memory to allocate
+ * @param actual_size The size of the memory allocated (>= requested size)
  * @param flags The flags to set on the memory
  * @return The address of the allocated memory
  */
-void* VirtualMemoryManager::allocate(size_t size, size_t flags) {
+void* VirtualMemoryManager::allocate(size_t requested_size, size_t& actual_size, size_t flags) {
 
-	return allocate(0, size, flags);
+	return allocate(0, requested_size, actual_size, flags);
 }
 
 
@@ -116,14 +130,15 @@ void* VirtualMemoryManager::allocate(size_t size, size_t flags) {
  * @brief Allocate a new chunk of virtual memory at a specific address (ie for mmap io devices)
  *
  * @param address The address to allocate at
- * @param size The size of the memory to allocate
+ * @param requested_size The size of the memory to allocate
+ * @param requested_size The size of the memory allocated (>= requested size)
  * @param flags The flags to set on the memory
  * @return The address of the allocated memory or nullptr if failed
  */
-void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags) {
+void* VirtualMemoryManager::allocate(uint64_t address, size_t requested_size, size_t& actual_size, size_t flags) {
 
 	// Make sure allocating something
-	if (size == 0)
+	if (requested_size == 0)
 		return nullptr;
 
 	// If specific address is given
@@ -140,17 +155,17 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 	}
 
 	// Make sure the size is aligned
-	size = PhysicalMemoryManager::align_up_to_page(size, PAGE_SIZE);
+	actual_size = PhysicalMemoryManager::align_up_to_page(requested_size, PAGE_SIZE);
 
 	// Check the free list for a chunk (if not asking for a specific address)
-	free_chunk_t* reusable_chunk = address == 0 ? find_and_remove_free_chunk(size) : nullptr;
+	free_chunk_t* reusable_chunk = address == 0 ? find_and_remove_free_chunk(actual_size) : nullptr;
 	if (reusable_chunk != nullptr) {
 
 		// If the chunk is being reserved then the old memory needs to be unmapped (as the owner of this reserved region will perform the mapping as required)
 		if (flags & RESERVE) {
 
 			// Unmap the memory
-			size_t pages = PhysicalMemoryManager::size_to_frames(size);
+			size_t pages = PhysicalMemoryManager::size_to_frames(actual_size);
 			for (size_t i = 0; i < pages; i++) {
 
 				// Free the frame
@@ -162,7 +177,7 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 
 		// Allocate the memory
 		virtual_memory_chunk_t* chunk = &m_current_region->chunks[m_current_chunk++];
-		chunk->size = size;
+		chunk->size = actual_size;
 		chunk->flags = flags;
 		chunk->start_address = reusable_chunk->start_address;
 
@@ -181,12 +196,12 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 
 	// Allocate the memory
 	virtual_memory_chunk_t* chunk = &m_current_region->chunks[m_current_chunk];
-	chunk->size = size;
+	chunk->size = actual_size;
 	chunk->flags = flags;
 	chunk->start_address = m_next_available_address;
 
 	// Update the next available address
-	m_next_available_address += size;
+	m_next_available_address += actual_size;
 	m_current_chunk++;
 
 	// If just reserving the space don't map it
@@ -194,7 +209,7 @@ void* VirtualMemoryManager::allocate(uint64_t address, size_t size, size_t flags
 		return (void*) chunk->start_address;
 
 	// Map the memory
-	size_t pages = PhysicalMemoryManager::size_to_frames(size);
+	size_t pages = PhysicalMemoryManager::size_to_frames(actual_size);
 	for (size_t i = 0; i < pages; i++) {
 
 		// Allocate a new frame

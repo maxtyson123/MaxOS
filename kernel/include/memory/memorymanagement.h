@@ -29,7 +29,7 @@ namespace MaxOS::memory {
 
 			VirtualMemoryManager* m_virtual_memory_manager;
 
-			void* allocate_extra_space(size_t size) final;
+			void* allocate_extra_space(size_t requested_size, size_t& actual_size) final;
 
 		public:
 

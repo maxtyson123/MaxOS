@@ -198,8 +198,9 @@ void GlobalScheduler::prepare_initrd(multiboot_tag_module* module) {
 	uint32_t size = module->mod_end - module->mod_start;
 
 	// Prepare
+	size_t actual_size;
 	MemoryManager::switch_active_memory_manager(init_process->memory_manager);
-	init_process->memory_manager->vmm()->allocate(0xFFF000, size + sizeof(uint32_t), WRITE | PRESENT);
+	init_process->memory_manager->vmm()->allocate(0xFFF000, size + sizeof(uint32_t), actual_size, WRITE | PRESENT);
 
 	// Copy
 	memcpy((void*)0xFFF000, &size, sizeof(uint32_t));

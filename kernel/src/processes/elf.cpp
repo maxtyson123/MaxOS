@@ -140,6 +140,7 @@ bool ELF64::is_valid() const {
  */
 void ELF64::load_program_headers(VirtualMemoryManager* vmm) const {
 
+	size_t actual_size;
 	for (size_t i = 0; i < header()->program_header_count; i++) {
 
 		// Get the header information
@@ -150,7 +151,7 @@ void ELF64::load_program_headers(VirtualMemoryManager* vmm) const {
 			continue;
 
 		// Allocate space at the requested address
-		void* address = vmm->allocate(program_header->virtual_address, program_header->memory_size, PRESENT | WRITE);
+		void* address = vmm->allocate(program_header->virtual_address, program_header->memory_size, actual_size, PRESENT | WRITE);
 		ASSERT(address != nullptr, "Failed to allocate memory for program header\n");
 
 		// Copy the program into memory at that address

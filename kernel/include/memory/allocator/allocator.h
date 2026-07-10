@@ -1,6 +1,12 @@
-//
-// Created by 98max on 8/07/2026.
-//
+/**
+ * @file allocator.h
+ * @brief needs breif
+ *
+ * @author Max Tyson
+ * @date 8th July 2026
+ *
+ * @todo Maybe have a allocation result instead of req,actual size
+ */
 
 #ifndef MAXOS_MEMORY_ALLOCATOR_H
 #define MAXOS_MEMORY_ALLOCATOR_H
@@ -15,7 +21,7 @@ namespace MaxOS::memory::allocator {
 		private:
 
 			virtual void* expand_heap(size_t size);
-			virtual void* allocate_extra_space(size_t size);
+			virtual void* allocate_extra_space(size_t requested_size, size_t& actual_size);
 
 		public:
 			MemoryAllocator();
