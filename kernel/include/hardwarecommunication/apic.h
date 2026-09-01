@@ -30,10 +30,10 @@ namespace MaxOS::hardwarecommunication {
 	class LocalAPIC {
 
 		private:
-			uint64_t m_apic_base { };
-			uint64_t m_apic_base_high { };
-			uint32_t m_id { };
-			bool m_x2apic { };
+			uint64_t m_apic_base = 0;
+			uint64_t m_apic_base_high = 0;
+			uint32_t m_id = 0;
+			bool m_x2apic = false;
 
 		public:
 			LocalAPIC();

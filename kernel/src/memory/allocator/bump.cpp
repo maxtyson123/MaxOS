@@ -204,6 +204,10 @@ void BumpAllocator::unallocate(void* pointer) {
 	// If there is a free chunk before this chunk then merge them
 	if(chunk->prev_chunk() != nullptr && !chunk->prev_chunk()->allocated) {
 
+		// If this chunk is the last one then the one it merges into is now the last one
+		if (chunk == m_last_memory_chunk)
+			m_last_memory_chunk = chunk->prev_chunk();
+
 		// Grow the chunk behind this one so that it now contains the freed one
 		chunk->prev_chunk()->size += chunk->size + CHUNK_HEADER_SIZE;
 		chunk->prev_chunk()->next = chunk->next_chunk();
@@ -219,6 +223,10 @@ void BumpAllocator::unallocate(void* pointer) {
 
 	// If there is a free chunk after this chunk then merge them
 	if(chunk->next_chunk() != nullptr && !chunk->next_chunk()->allocated) {
+
+		// Merging with the last mem chunk means this chunk is now the last mem chunk
+		if (chunk->next_chunk() == m_last_memory_chunk)
+			m_last_memory_chunk = chunk;
 
 		// Grow this chunk so that it now contains the free chunk in front of the old (now freed) one
 		chunk->size += chunk->next_chunk()->size + CHUNK_HEADER_SIZE;

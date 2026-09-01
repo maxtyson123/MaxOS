@@ -186,7 +186,11 @@ if [ "$IS_MACOS" -eq 1 ]; then
 
     # Copy GRUB modules to the image
     mkdir -p "$GRUB_DEST" 2>/dev/null || fail "Could not create grub directory"
-    cp -X "$GRUB_LOCAL_DIR"/*.mod "$GRUB_DEST/" || fail "Could not copy grub modules to image"    
+    cp -X "$GRUB_LOCAL_DIR"/*.mod "$GRUB_DEST/" || fail "Could not copy grub modules to image"
+
+    # Copy GRUB fonts to the image
+    mkdir -p "$SCRIPTDIR/../filesystem/0/boot/grub/fonts"
+    cp -X "/opt/homebrew/Cellar/i686-elf-grub/2.12/share/i686-elf-grub/fonts/unicode.pf2" "$SCRIPTDIR/../filesystem/0/boot/grub/fonts/" || fail "Could not copy grub font to image"
 
     rm -f $core_img
 
