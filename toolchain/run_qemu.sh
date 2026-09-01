@@ -88,6 +88,7 @@ else
     msg "Using KVM accelerator."
     ACCELERATOR="-enable-kvm"
   fi
+
 fi
 if [ "$GET_QEMU_CRASH_REASON" -ne 0 ]; then
     msg "Disabling accelerator for better crash logs."
@@ -112,7 +113,7 @@ if "$QEMU_EXECUTABLE" --display help | grep -q "sdl"; then
   DISPLAY_TYPE="-display sdl"
 elif "$QEMU_EXECUTABLE" --display help | grep -q "cocoa"; then
   msg "Using cocoa display."
-  DISPLAY_TYPE="-display cocoa,zoom-to-fit=on"
+  DISPLAY_TYPE="-display cocoa"
 else
   fail "Error: No display type found."
 fi
@@ -175,6 +176,7 @@ QEMU_ARGS="$QEMU_ARGS -serial $SERIAL"                                  # Use st
 QEMU_ARGS="$QEMU_ARGS $DEBUG_LOGS"                        # Debug interrupts
 QEMU_ARGS="$QEMU_ARGS $DEBUG"                                           # Enable debugging
 QEMU_ARGS="$QEMU_ARGS $ACCELERATOR"                                     # Enable acceleration
+QEMU_ARGS="$QEMU_ARGS --device virtio-vga,edid=on,xres=1280,yres=720"
 QEMU_ARGS="$QEMU_ARGS $DISPLAY_TYPE"                                    # Enable display
 QEMU_ARGS="$QEMU_ARGS -net nic,model=$NETWORK_DEVICE"                   # Add a network device
 QEMU_ARGS="$QEMU_ARGS $PORT_FORWARDING"                                 # Add port forwarding
