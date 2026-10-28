@@ -169,7 +169,7 @@ fi
 
 #Install grub to the image
 if [ "$IS_MACOS" -eq 1 ]; then
-  msg "Installing GRUB manually on macOS"
+    msg "Installing GRUB manually on macOS"
 
     CORE_IMG=core.img
     GRUB_PREFIX="(hd0,msdos1)/boot/grub"
@@ -185,14 +185,12 @@ if [ "$IS_MACOS" -eq 1 ]; then
     dd if=$CORE_IMG of=../MaxOS.img bs=512 seek=1 conv=notrunc 2>/dev/null || fail "Failed to write core.img to $dev"
 
     # Copy GRUB modules to the image
+    rm -rf "$GRUB_DEST"
     mkdir -p "$GRUB_DEST" 2>/dev/null || fail "Could not create grub directory"
     cp -X "$GRUB_LOCAL_DIR"/*.mod "$GRUB_DEST/" || fail "Could not copy grub modules to image"
+    chmod -R u+w "$GRUB_DEST"
 
-    # Copy GRUB fonts to the image
-    mkdir -p "$SCRIPTDIR/../filesystem/0/boot/grub/fonts"
-    cp -X "/opt/homebrew/Cellar/i686-elf-grub/2.12/share/i686-elf-grub/fonts/unicode.pf2" "$SCRIPTDIR/../filesystem/0/boot/grub/fonts/" || fail "Could not copy grub font to image"
-
-    rm -f $core_img
+    rm -f $CORE_IMG
 
     msg "grub manually installed to disk image"
     sync

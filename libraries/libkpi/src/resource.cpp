@@ -272,6 +272,7 @@ void ResourceServer::process_message(service_resource_message_t *message) {
 
             // Store the resource
             m_resource_map.insert(message->resource_id, resource);
+            response = true;
             break;
         }
 

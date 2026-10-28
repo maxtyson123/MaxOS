@@ -148,8 +148,12 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
         memcpy((void*)buffer, (void*)m_data_region + offset, size);
 
     // Free resources
-    is_page_mapped  ? m_owner_process->memory_manager->vmm()->unload_range_from_process((void*)offset, size)
-                    : unallocate((void*)m_data_region + offset);
+    if (size != 0) {
+        if (is_page_mapped)
+            m_owner_process->memory_manager->vmm()->unload_range_from_process((void*)offset, size);
+        else
+            unallocate((void*)m_data_region + offset);
+    }
     __atomic_store_n(&slot->state, (uint8_t)ServiceMessageSlotState::FREE,__ATOMIC_RELEASE);
 
     return slot->response;
@@ -206,7 +210,7 @@ void BridgeResource::attach_wrapper(BridgeHandler *wrapper) {
 bool BridgeResource::get_on_bridge() {
 
    // Let the bridge get the object on its end
-   return m_handler -> send_to_bridge(m_id, ServiceResourceCommand::S_GET, name().c_str(),name().length() + 1, 0);
+   return m_handler -> send_to_bridge(m_id, ServiceResourceCommand::S_GET, name().c_str(),name().length() + 1, 0) > 0;
 
 
 }

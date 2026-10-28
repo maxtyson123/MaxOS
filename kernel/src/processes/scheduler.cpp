@@ -531,6 +531,14 @@ cpu_status_t* Scheduler::schedule_next(cpu_status_t* cpu_state) {
 		break;
 	}
 
+    int pid0 = m_processes.size() > 0 ? (int) m_processes[0]->pid() : -1;
+    int pid1 = m_processes.size() > 1 ? (int) m_processes[1]->pid() : -1;
+    int pid2 = m_processes.size() > 2 ? (int) m_processes[2]->pid() : -1;
+    ASSERT(owner_process != nullptr, "No owner process: tid %d parent_pid %d core %d index %d threads %d processes %d pids %d %d %d\n",
+        (int) current_thread->tid, (int) current_thread->parent_pid, (int) m_core_id,
+        (int) m_next_thread_index, (int) m_threads.size(), (int) m_processes.size(), pid0, pid1, pid2);
+
+
 	// Load the thread's state
 	return load_process(owner_process, current_thread);
 }

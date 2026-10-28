@@ -254,7 +254,7 @@ void PhysicalMemoryManager::free_frame(void* address) {
 	// Mark the frame as not used
 	m_used_frames--;
 	uint64_t frame_address = (uint64_t) address / PAGE_SIZE;
-	m_bit_map[frame_address / ROW_BITS] &= ~(1 << (frame_address % ROW_BITS));
+	m_bit_map[frame_address / ROW_BITS] &= ~(1ULL << (frame_address % ROW_BITS));
 
 	m_lock.unlock();
 }
@@ -352,7 +352,7 @@ void PhysicalMemoryManager::free_area(uint64_t start_address, size_t size) {
 	// Mark the frames as not used
 	m_used_frames -= frame_count;
 	for(uint32_t i = 0; i < frame_count; ++i)
-		m_bit_map[(frame_address + i) / ROW_BITS] &= ~(1 << ((frame_address + i) % ROW_BITS));
+		m_bit_map[(frame_address + i) / ROW_BITS] &= ~(1ULL << ((frame_address + i) % ROW_BITS));
 
 	m_lock.unlock();
 }

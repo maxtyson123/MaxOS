@@ -17,6 +17,8 @@ using namespace LibDriver::HardwareCommunication;
 extern "C" void _start(int argc, char* argv[])
 {
 
+    klog("HI from ide driver\n");
+
 	// Fetch the device id
 	if (argc <= 1)
 		return;

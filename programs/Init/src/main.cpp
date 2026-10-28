@@ -27,17 +27,20 @@ using namespace LibFS;
 extern "C" void _start(int argc, char* argv[])
 {
 	// Parse the ram disk
-	auto size = (uint32_t)0xFFF000;
+    klog("Init: started\n");
+    auto size = *(volatile uint32_t*)0xFFF000;
 	auto header = (struct tar_header*)(0xFFF000 + sizeof(uint32_t));
 
 	// Pass ramdisk to fileserver
 	auto address = create_shared_memory("init_initrd", size);
 	memcpy(address, header, size);
 	mount_ramdisk("init_initrd");
+    klog("Init: ramdisk mounted\n");
 
 	// Start driver manager
 	string dm_path = "/0/boot/initrd/DriverManager.elf";
 	exec_file(Path::file_name(dm_path).c_str(), dm_path.c_str());
+    klog("Init: DriverManager launched\n");
 
 	// Wait for fileserver to parse disks
 
