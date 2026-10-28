@@ -51,14 +51,20 @@ resource_type_t BaseResourceRegistry::type() {
  */
 Resource* BaseResourceRegistry::get_resource(string const& name) {
 
+    m_lock.lock();
+
 	// Resource isn't stored in this registry
-	if(m_resources.find(name) == m_resources.end())
+	if(m_resources.find(name) == m_resources.end()) {
+	    m_lock.unlock();
 		return nullptr;
+	}
 
 	// Increment the use count of the resource and return it
 	m_resource_uses[name]++;
-	return m_resources[name];
+	auto resource = m_resources[name];
 
+	m_lock.unlock();
+    return resource;
 }
 
 /**
@@ -69,12 +75,18 @@ Resource* BaseResourceRegistry::get_resource(string const& name) {
  */
 bool BaseResourceRegistry::register_resource(Resource* resource) {
 
+    m_lock.lock();
+
 	// Resource name is already stored in this registry
-	if(m_resources.find(resource->name()) != m_resources.end())
+	if(m_resources.find(resource->name()) != m_resources.end()) {
+	    m_lock.unlock();
 		return false;
+	}
 
 	m_resources.insert(resource->name(), resource);
 	m_resource_uses.insert(resource->name(), 0);
+
+	m_lock.unlock();
 	return true;
 }
 
@@ -87,20 +99,28 @@ bool BaseResourceRegistry::register_resource(Resource* resource) {
  */
 void BaseResourceRegistry::close_resource(Resource* resource, size_t flags) {
 
+    m_lock.lock();
+
 	// Resource isn't stored in this registry
-	if(m_resources.find(resource->name()) == m_resources.end())
+	if(m_resources.find(resource->name()) == m_resources.end()) {
+	    m_lock.unlock();
 		return;
+	}
 
 	m_resource_uses[resource->name()]--;
 
 	// Don't close a resource that has more processes using it
-	if(m_resource_uses[resource->name()])
-		return;
+	if(m_resource_uses[resource->name()]) {
+	    m_lock.unlock();
+	    return;
+	}
 
 	// Can safely close the resource
 	resource->close(flags);
 	m_resources.erase(resource->name());
 	m_resource_uses.erase(resource->name());
+
+    m_lock.unlock();
 	delete resource;
 }
 

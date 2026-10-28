@@ -18,8 +18,10 @@ namespace MaxOS::KPI::ipc {
 	void* create_shared_memory(const char* name, size_t size) {
 
 		// Create the resource
-		if (!resource_create(ResourceType::SHARED_MEMORY, name, size, 0))
-			return nullptr;
+	    if (!resource_create(ResourceType::SHARED_MEMORY, name, size, 0)) {
+	        klog("shm: create '%s' (%d bytes) failed\n", name, (int)size);
+	        return nullptr;
+	    }
 
 		return open_shared_memory(name);
 	}
@@ -28,13 +30,17 @@ namespace MaxOS::KPI::ipc {
 
 		// Open the resource
 		uint64_t handle = resource_open(ResourceType::SHARED_MEMORY, name, 0);
-		if (!handle)
-			return nullptr;
+	    if (!handle) {
+	        klog("shm: '%s' not found\n", name);
+	        return nullptr;
+	    }
 
 		// Get the address
 		auto address = resource_read(handle, nullptr, 0, 0);
-		if (!address)
-			return nullptr;
+	    if (!address) {
+	        klog("shm: '%s' opened but not mapped into this process\n", name);
+	        return nullptr;
+	    }
 
 		return (void*) address;
 	}

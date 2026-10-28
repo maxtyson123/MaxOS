@@ -10,7 +10,11 @@ using namespace MaxOS::KPI;
 namespace LibFS {
 
 	uint64_t open_file(const char* path) {
-		return resource_open(ResourceType::FILESYSTEM, path, 0);
+
+	    uint64_t handle = resource_open(ResourceType::FILESYSTEM, path, 0);
+	    if (!handle)
+	        klog("LibFS: cant open file '%s'\n", path);
+	    return handle;
 	}
 
 	void close_file(uint64_t handle) {

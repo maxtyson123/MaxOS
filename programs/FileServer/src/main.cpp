@@ -31,21 +31,27 @@ using namespace LibFS;
 
 void mount_ramdisk(mstring endpoint) {
 
-    // Try oad the initrd
+    klog("mount_ramdisk('%s')\n", endpoint.c_str());
+
+    // Try load the initrd
     void* address = open_shared_memory(endpoint.c_str());
-    if (!address)
+    if (!address) {
+        klog("cant open shared memory '%s'\n", endpoint.c_str());
         return;
+    }
 
     // Parse the initrd (@todo verify and shit)
     auto fs = new TARFileSystem(address);
 
     // Mount
     auto vfs = VirtualFileSystem::current_file_system();
-    if (!vfs)
+    if (!vfs) {
+        klog("no VFS\n");
         return;
-
+    }
 
     vfs->mount_filesystem(fs, "/0/boot/initrd");
+    klog("initrd mounted\n");
 }
 
 extern "C" void _start(int argc, char* argv[]){

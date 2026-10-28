@@ -35,6 +35,8 @@ namespace MaxOS::processes::resources {
 			common::Map<string, Resource*> m_resources;         ///< The map of resource names to resource instances
 			common::Map<string, uint64_t> m_resource_uses;      ///< The map of resource names to how many processes are using them
 
+	        common::Spinlock m_lock;                            ///< The lock to make the registry threadsafe
+
 			resource_type_t m_type;                             ///< The resource type that this registry manages
 
 		public:

@@ -105,8 +105,10 @@ ResourceServer::ResourceServer(string server_name, size_t resource_id)
     // Create the shared memory
     string shared_name = (m_server_name + "_resource_server");
     m_shared_region = create_shared_memory(shared_name.c_str(), SERVICE_SHARED_MEM_SIZE);
-    if (!m_shared_region)
+    if (!m_shared_region) {
+        klog("ResourceServer: FAILED to create shared memory '%s' (%d bytes)\n", shared_name.c_str(), (int)SERVICE_SHARED_MEM_SIZE);
         return;
+    }
 
     // Register the server
     resource_registry_create(shared_name.c_str(), resource_id);
@@ -130,6 +132,9 @@ ResourceServer::~ResourceServer() {
  * @return True if there are no messages, false otherwise
  */
 bool ResourceServer::queue_empty() {
+
+    if (!m_message_ring)
+        return true;
 
     // Get the queue indexes
     size_t head = __atomic_load_n(&m_message_ring->head, __ATOMIC_ACQUIRE);
