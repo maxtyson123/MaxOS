@@ -13,6 +13,8 @@
 #include <libkpi/ipc/sharedmemory.h>
 #include <libkpi/processes/thread.h>
 
+#include "libcommon/assert.h"
+
 using namespace MaxOS;
 using namespace MaxOS::KPI;
 using namespace MaxOS::KPI::ipc;
@@ -110,12 +112,15 @@ ResourceServer::ResourceServer(string server_name, size_t resource_id)
         return;
     }
 
-    // Register the server
-    resource_registry_create(shared_name.c_str(), resource_id);
+    // Clear any garbage data
+    memset(m_shared_region, 0, SERVICE_SHARED_MEM_SIZE);
 
     // Load the regions
     m_message_ring = (service_message_ring_t*)m_shared_region;
     m_data_region  = (void*)m_shared_region + MESSAGE_SIZE;
+
+    // Register the server
+    resource_registry_create(shared_name.c_str(), resource_id);
 
 }
 
@@ -154,6 +159,7 @@ service_resource_message_t* ResourceServer::peek_front() {
     // Get the queue indexes
     size_t tail = __atomic_load_n(&m_message_ring->tail, __ATOMIC_RELAXED);
     size_t head = __atomic_load_n(&m_message_ring->head, __ATOMIC_ACQUIRE);
+    ASSERT(head < MESSAGE_SLOTS && tail < MESSAGE_SLOTS, "Invalid queue indexes for resource server\n");
 
     // Queue empty
     if (tail == head)
@@ -240,8 +246,10 @@ void ResourceServer::process_message(service_resource_message_t *message) {
 
     // Parse the message
     auto data = message->data_page_mapped ? (void*)message->data_offset : m_data_region + message->data_offset;
-    auto resource   = m_resource_map[message->resource_id];
     auto command = (ServiceResourceCommand)message -> command;
+
+    auto resource_it = m_resource_map.find(message->resource_id);
+    Resource* resource = (resource_it != m_resource_map.end()) ? resource_it->second : nullptr;
 
     // Ensure the resource exists
     bool should_exist = !(command == ServiceResourceCommand::S_CREATE || command== ServiceResourceCommand::S_GET);

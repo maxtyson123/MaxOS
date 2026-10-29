@@ -49,3 +49,8 @@ if [ "$USE_ISO" -eq 1 ]; then
 fi
 
 sync
+
+# fuse-ext2 only writes its metadata when it is flushed, normal sync doesn't reach it
+if [ "$IS_MACOS" -eq 1 ]; then
+  gsync "$MOUNT_DIR/0" "$MOUNT_DIR/1" 2>/dev/null || true || warn "Could not flush the image mounts"
+fi

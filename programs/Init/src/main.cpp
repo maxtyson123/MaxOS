@@ -33,10 +33,9 @@ extern "C" void _start(int argc, char* argv[])
 
 	// Pass ramdisk to fileserver
     auto address = create_shared_memory("init_initrd", size);
-
     if (!address) {
         klog("Init: initrd region FAILED\n");
-        return;
+        exit(1);
     }
 
 	memcpy(address, header, size);
@@ -57,6 +56,5 @@ extern "C" void _start(int argc, char* argv[])
 
 	// Don't be scheduled again, but cant kms as that would kill child processes and thus core servers
 	while (true)
-		asm("nop");
-	// sleep(UINT32_MAX);
+	    sleep(UINT32_MAX);
 }

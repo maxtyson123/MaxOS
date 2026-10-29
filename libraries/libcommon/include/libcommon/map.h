@@ -115,8 +115,15 @@ namespace MaxOS::common {
 	 */
 	template<class Key, class Value> Value& Map<Key, Value>::operator [](Key key) {
 
+	    // Find the key, adding a default value if it isn't there yet
+	    iterator it = find(key);
+	    if (it == end()) {
+	        m_elements.push_back(Pair<Key, Value>(key, Value()));
+	        it = end() - 1;
+	    }
+
 		// Return the value of the key (second item in the pair)
-		return find(key)->second;
+	    return it->second;
 	}
 
 	/**

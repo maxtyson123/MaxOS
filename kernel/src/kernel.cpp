@@ -126,8 +126,8 @@ extern "C" [[noreturn]] void kernel_main(unsigned long addr, unsigned long magic
 // % - handle rpc calls (new devices added (ie from usb), device messages such as init suc/fail)
 // % - - try init devices that havent been started
 // = = =
-// - - FS loop:
-// - - - handle rpc calls (io, dm event: new disk)
+// % - FS loop:
+// % - - handle rpc calls (io [x], dm event: new disk [ ])
 // - - - try parse new disk
 // = = =
 // % - DSK instance get info (args, fail then req from manager)

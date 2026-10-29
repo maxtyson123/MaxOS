@@ -29,7 +29,7 @@ namespace MaxOS::processes::resources {
 
 		private:
 			size_t m_next_id = 0;
-			BlockingLock m_lock;
+			common::Spinlock m_lock;
 
 			uintptr_t m_shared_region;
 			KPI::service_message_ring_t* m_message_ring;

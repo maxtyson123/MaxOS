@@ -59,8 +59,17 @@ size_t BridgeHandler::store_data(const void *buffer, size_t size, bool reserve_o
     bool is_mapped = size >= MAX_COPY_SIZE;
 
     // Set up the storage
-    auto data = is_mapped  ? m_owner_process->memory_manager->vmm()->load_range_from_process(GlobalScheduler::current_process()->memory_manager->vmm(), buffer, size)
-                                : allocate(size);
+    void* data;
+    if (is_mapped) {
+        MemoryManager* caller = GlobalScheduler::current_process()->memory_manager;
+        MemoryManager::switch_active_memory_manager(m_owner_process->memory_manager);
+        data = m_owner_process->memory_manager->vmm()->load_range_from_process(caller->vmm(), buffer, size);
+        MemoryManager::switch_active_memory_manager(caller);
+    } else {
+        m_lock.lock();
+        data = allocate(size);
+        m_lock.unlock();
+    }
     ASSERT(data != nullptr, "Could not allocate memory for bridge\n");
 
     // Copy the data
@@ -87,8 +96,16 @@ service_resource_message_t* BridgeHandler::aquire_slot() {
         size_t head = __atomic_load_n(&m_message_ring->head, __ATOMIC_RELAXED);
         size_t tail = __atomic_load_n(&m_message_ring->tail, __ATOMIC_ACQUIRE);
 
-        // Try to claim a spot
+        ASSERT((head < MESSAGE_SLOTS && tail < MESSAGE_SLOTS), "invalid queue indexes for resource bridge");
+
+        // No available spots to claim
         size_t next = (head + 1) % MESSAGE_SLOTS;
+        if (next == tail) {
+            GlobalScheduler::current_thread()->yield();
+            continue;
+        }
+
+        // Try to claim a spot
         if(!__atomic_compare_exchange_n(&m_message_ring->head, &head, next,true,__ATOMIC_ACQ_REL,__ATOMIC_RELAXED))
             continue;
 
@@ -104,7 +121,7 @@ service_resource_message_t* BridgeHandler::aquire_slot() {
  * @return The ID that the resource can use
  */
 size_t BridgeHandler::allocate_id() {
-    return m_next_id++;
+    return __atomic_fetch_add(&m_next_id, 1, __ATOMIC_RELAXED);
 }
 
 
@@ -149,14 +166,24 @@ int64_t BridgeHandler::send_to_bridge(size_t id, ServiceResourceCommand command,
 
     // Free resources
     if (size != 0) {
-        if (is_page_mapped)
+        if (is_page_mapped) {
+            MemoryManager* caller = GlobalScheduler::current_process()->memory_manager;
+            MemoryManager::switch_active_memory_manager(m_owner_process->memory_manager);
             m_owner_process->memory_manager->vmm()->unload_range_from_process((void*)offset, size);
-        else
+            MemoryManager::switch_active_memory_manager(caller);
+        }
+        else {
+            m_lock.lock();
             unallocate((void*)m_data_region + offset);
+            m_lock.unlock();
+        }
     }
+
+    // Get the response and then release the slot
+    int64_t response = __atomic_load_n(&slot->response, __ATOMIC_RELAXED);
     __atomic_store_n(&slot->state, (uint8_t)ServiceMessageSlotState::FREE,__ATOMIC_RELEASE);
 
-    return slot->response;
+    return response;
 }
 
 

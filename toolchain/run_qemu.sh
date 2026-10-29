@@ -196,6 +196,3 @@ fi
 # Run qemu
 msg "Running qemu with args: $QEMU_ARGS"
 "$QEMU_EXECUTABLE" $QEMU_ARGS
-
-# Cleanup
-bash $SCRIPTDIR/copy_filesystem.sh --reverse

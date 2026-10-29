@@ -61,8 +61,6 @@ void Manager::load_driver_list(string path) {
 
 	// Clean up
 	close_file(jhandle);
-	delete jsonstr.c_str();
-
 }
 
 void Manager::parse_driver_list(JSONNode* list) {
@@ -116,11 +114,13 @@ void Manager::start_driver(Device* device) {
 
 	// Pass the ID
 	const char** args =  new const char*[1];
-	args[0] = string(device->id).c_str();
+    string id_str(device->id);
+    args[0] = id_str.c_str();
 
 	// Start the driver
 	auto driver = it->second;
 	exec_file(driver.name.c_str(), driver.path.c_str(), args, 1);
+    delete[] args;
 
 	device->driver_started = true;
 	klog("Started driver: %s (%s) for device %d\n", driver.name.c_str(), driver.path.c_str(), device->id);

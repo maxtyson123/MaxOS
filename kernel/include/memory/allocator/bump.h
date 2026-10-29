@@ -15,7 +15,7 @@
 namespace MaxOS::memory::allocator {
 
 
-	constexpr uint8_t EXPECTED_CANARY = 0xC0DE;						/// Value that denotes a valid chunk canary value
+	constexpr uint16_t EXPECTED_CANARY = 0xC0DE;					/// Value that denotes a valid chunk canary value
 	constexpr size_t CHUNK_ALIGNMENT = 0x10;						///< How many bytes the chunks should be a multiple of (round up to this)
 
 	/**
@@ -24,12 +24,12 @@ namespace MaxOS::memory::allocator {
 	 */
 	typedef struct alignas(CHUNK_ALIGNMENT) ChunkHeader {
 
-		uint8_t canary;			///< Trip value to detect buffer overflows
+		uint16_t canary;		///< Trip value to detect buffer overflows
 
 		ChunkHeader* next;      ///< Pointer to the chunk after this one in the list
 		ChunkHeader* prev;      ///< Pointer to the chunk before this one in the list
 
-		bool allocated;         ///< Whether this chunk is in use or can be allocated
+		uint8_t allocated;        ///< Whether this chunk is in use or can be allocated
 		size_t size;            ///< The size of this span of memory (not including the MemoryChunk struct itself)
 
 		bool is_valid();

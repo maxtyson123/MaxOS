@@ -94,7 +94,9 @@ void* BumpAllocator::expand_heap(size_t size) {
 
     // If it is possible to merge the new chunk with the previous chunk then do so (note: this happens if the
     // previous chunk is free but cant contain the size required)
-    if (!chunk->prev_chunk()->allocated) {
+    chunk_header_t* prev_chunk = chunk->prev_chunk();
+    bool adjacent = (uintptr_t)prev_chunk + CHUNK_HEADER_SIZE + prev_chunk->size == (uintptr_t)chunk;
+    if (!prev_chunk->allocated && adjacent) {
 
         // The new chunk gets merged into the previous one (its header stops existing), so hand back the merged chunk
         chunk_header_t* merged = chunk->prev_chunk();
@@ -139,7 +141,11 @@ void* BumpAllocator::allocate(size_t size) {
 
     // Find the next free chunk that is big enough
     for (chunk_header_t* chunk = m_first_memory_chunk; chunk != nullptr && result == nullptr; chunk = chunk->next_chunk()) {
-        if (chunk->size >= size && !chunk->allocated)
+
+        ASSERT(chunk->is_valid(),"Invalid allocator chunk canary\n");
+        ASSERT(chunk->allocated <= 1, "Invalid allocator allocation state\n");
+
+        if (chunk->size >= size && chunk->allocated == 0)
             result = chunk;
     }
 
@@ -208,7 +214,7 @@ void BumpAllocator::unallocate(void* pointer) {
     chunk->allocated = false;
 
     // If there is a free chunk before this chunk then merge them
-    if (chunk->prev_chunk() != nullptr && !chunk->prev_chunk()->allocated) {
+    if (chunk->prev_chunk() != nullptr && !chunk->prev_chunk()->allocated && (uintptr_t)chunk->prev_chunk() + CHUNK_HEADER_SIZE + chunk->prev_chunk()->size == (uintptr_t)chunk) {
 
         // If this chunk is the last one then the one it merges into is now the last one
         if (chunk == m_last_memory_chunk)
@@ -228,7 +234,7 @@ void BumpAllocator::unallocate(void* pointer) {
     }
 
     // If there is a free chunk after this chunk then merge them
-    if (chunk->next_chunk() != nullptr && !chunk->next_chunk()->allocated) {
+    if (chunk->next_chunk() != nullptr && !chunk->next_chunk()->allocated && (uintptr_t)chunk + CHUNK_HEADER_SIZE + chunk->size == (uintptr_t)chunk->next_chunk()) {
 
         // Merging with the last mem chunk means this chunk is now the last mem chunk
         if (chunk->next_chunk() == m_last_memory_chunk)

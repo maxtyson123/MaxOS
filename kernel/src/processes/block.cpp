@@ -22,15 +22,12 @@ bool BlockingLock::must_spin() {
  */
 void BlockingLock::lock() {
     acquire();
-    m_locked = true;
 }
 
 /**
  * @brief Unlock the spinlock
  */
 void BlockingLock::unlock() {
-
-    m_locked = false;
     release();
 }
 

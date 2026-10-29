@@ -31,7 +31,6 @@ SharedMemory::SharedMemory(const string& name, size_t size, resource_type_t type
 : Resource(name, size, MaxOS::KPI::ResourceType::SHARED_MEMORY),
   m_size(size)
 {
-
 	m_physical_address = (uintptr_t) PhysicalMemoryManager::s_current_manager->allocate_area(0, size);
 }
 

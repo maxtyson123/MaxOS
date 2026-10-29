@@ -37,6 +37,7 @@ void driver_ready(mstring id) {
 
 	// Mark the driver as ready
 	device->driver_ready = true;
+	fire_on_driver_ready(device->id);
     klog("Driver ready: %s\n", device->id_info().device_name.c_str());
 }
 
@@ -72,8 +73,6 @@ int register_device(hardware_mapping_t hmap, device_identification_t did) {
 	// Register the device
 	auto device = new Device(did, hmap);
 	driver_manager->register_device(device);
-
-	fire_on_driver_ready(device->id);
 
 	// Externally registered devices have to set up their own drivers
 	device->driver_started = true;

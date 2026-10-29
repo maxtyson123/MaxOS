@@ -13,6 +13,7 @@ using namespace LibFS;
 using namespace FileServer::format;
 using namespace MaxOS;
 using namespace MaxOS::common;
+using namespace MaxOS::KPI;
 
 TARVolume::TARVolume(uint64_t* start)
 {
@@ -29,6 +30,7 @@ TARVolume::TARVolume(uint64_t* start)
 
         // Cache
         m_headers.push_back(header);
+        klog("TAR: '%s' size=%d\n", header->filename, (int)file_size(header));
 
         // Move to the starting block for the next header
         size_t size = file_size(header);

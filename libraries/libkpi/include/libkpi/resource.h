@@ -11,6 +11,7 @@
 
 #include <libcommon/string.h>
 #include <libcommon/map.h>
+#include <libcommon/mem.h>
 
 namespace MaxOS::KPI {
 

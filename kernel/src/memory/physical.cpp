@@ -208,7 +208,7 @@ void* PhysicalMemoryManager::allocate_frame() {
 	for(uint32_t row = 0; row < m_total_entries; ++row) {
 
 		// If the row is full continue
-		if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
+		if(m_bit_map[row] == 0xFFFFFFFFFFFFFFFF)
 			continue;
 
 		for(uint32_t column = 0; column < ROW_BITS; ++column) {
@@ -249,9 +249,9 @@ void* PhysicalMemoryManager::allocate_frame() {
  */
 void PhysicalMemoryManager::free_frame(void* address) {
 
-	m_lock.lock();
+    m_lock.lock();
 
-	// Mark the frame as not used
+    // Mark the frame as not used
 	m_used_frames--;
 	uint64_t frame_address = (uint64_t) address / PAGE_SIZE;
 	m_bit_map[frame_address / ROW_BITS] &= ~(1ULL << (frame_address % ROW_BITS));
@@ -280,8 +280,10 @@ void* PhysicalMemoryManager::allocate_area(uint64_t start_address, size_t size) 
 	for(uint32_t row = 0; row < m_total_entries; ++row) {
 
 		// Skip full rows
-		if(m_bit_map[row] == 0xFFFFFFFFFFFFFFF)
-			continue;
+	    if(m_bit_map[row] == 0xFFFFFFFFFFFFFFFF) {
+	        adjacent_frames = 0;
+	        continue;
+	    }
 
 		for(uint32_t column = 0; column < ROW_BITS; ++column) {
 
