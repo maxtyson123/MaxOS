@@ -9,16 +9,15 @@
 #ifndef MAXOS_PROCESSES_PROCESS_H
 #define MAXOS_PROCESSES_PROCESS_H
 
+#include <libcommon/vector.h>
+#include <libcommon/string.h>
+
 #include <system/cpu.h>
-#include <common/vector.h>
-#include <common/map.h>
-#include <common/string.h>
-#include <cstdint>
 #include <memory/virtual.h>
 #include <memory/memorymanagement.h>
-#include <memory/memoryIO.h>
 #include <processes/elf.h>
-#include <processes/resource.h>
+#include <processes/resources/resource.h>
+#include <hardwarecommunication/interrupts.h>
 
 namespace MaxOS::processes {
 	class Process;
@@ -45,6 +44,8 @@ namespace MaxOS::processes {
 	/**
 	 * @class Thread
 	 * @brief The execution context of a sub-process thread
+	 *
+	 * @todo io bitmap per process instead
 	 */
 	class Thread {
 
@@ -53,6 +54,8 @@ namespace MaxOS::processes {
 			uintptr_t m_stack_pointer;
 			uintptr_t m_tss_stack_pointer;
 
+			uint8_t m_io_bitmap[system::IO_BITMAP_SIZE];
+
 			char m_sse_save_region[512] __attribute__((aligned(16)));
 
 		public:
@@ -60,22 +63,28 @@ namespace MaxOS::processes {
 			~Thread();
 
 			void sleep(size_t milliseconds);
+			void yield();
 
 			uint64_t tid;                             ///< The thread ID
 			uint64_t parent_pid;                      ///< The parent process ID
 
-			system::cpu_status_t execution_state;     ///< The CPU state of the thread
-			thread_state_t thread_state;              ///< The current state of the thread
+			volatile system::cpu_status_t execution_state;		///< The CPU state of the thread
+			volatile thread_state_t thread_state;				///< The current state of the thread
 
-			size_t ticks;                             ///< The number of ticks the thread has run for
-			size_t wakeup_time;                       ///< The time at which the thread should wake up (if sleeping)
+			volatile size_t ticks;                              ///< The number of ticks the thread has run for
+			volatile size_t wakeup_time;						///< The time at which the thread should wake up (if sleeping)
 
 			[[nodiscard]] uintptr_t tss_pointer() const { return m_tss_stack_pointer; }    ///< Gets the stack pointer to use for the TSS when switching to this thread @return tss
+			void set_tss_pointer(uintptr_t new_tss_pointer) { m_tss_stack_pointer = new_tss_pointer; } ///< Sets the stack pointer to use for the TSS when switching to this thread
 
 			void save_sse_state();
 			void restore_sse_state();
 
 			void save_cpu_state();
+
+			void enable_port(uint64_t port);
+			void disable_port(uint64_t port);
+			void load_port_bitmap();
 	};
 
 	/**
@@ -110,7 +119,7 @@ namespace MaxOS::processes {
 			string working_directory = "/";                             ///< The working directory of the process
 
 			memory::MemoryManager* memory_manager = nullptr;            ///< The manager for memory used by this process
-			ResourceManager resource_manager;                           ///< The manger for resources used by this process
+			resources::ResourceManager resource_manager;                ///< The manger for resources used by this process
 	};
 }
 

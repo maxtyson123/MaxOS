@@ -1,22 +1,26 @@
-# Set the minimum version of CMake that can be used
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
+# Ignore cross compiler
+LIST(FILTER SOURCES EXCLUDE REGEX ".*/toolchain/cross_compiler.*")
 
-# Set the project name and the languages
+# Stop mac messing with cross compiler
+set(CMAKE_OSX_ARCHITECTURES "" CACHE STRING "" FORCE)
+set(CMAKE_C_COMPILER_ID_RUN TRUE)
+set(CMAKE_CXX_COMPILER_ID_RUN TRUE)
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_OSX_ARCHITECTURES "")
+
+# Setup CMAKE
+CMAKE_MINIMUM_REQUIRED(VERSION 3.5.0)
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+SET(CMAKE_SKIP_RPATH TRUE)
+SET(CMAKE_CXX_STANDARD 20)
+CMAKE_POLICY(SET CMP0177 NEW)
 PROJECT(MaxOS C CXX ASM)
 
-# Logs the compiler commands
-SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Setup LibC
+SET(LIBC_TARGET "example")
 
-# don't enable runtime type information
-SET(CMAKE_SKIP_RPATH TRUE)
-
-# Set the standard to C++20
-SET(CMAKE_CXX_STANDARD 20)
-
-# Set where the libraries are located
+# Set up libraries
 INCLUDE_DIRECTORIES(libraries/)
-
-# Tell the linker to look in the toolchain for libraries
 LINK_DIRECTORIES(${TOOLCHAIN_ROOT_DIR}/lib/gcc/${TOOLCHAIN_PLATFORM}/${GCC_VER}/)
 LINK_DIRECTORIES(${TOOLCHAIN_ROOT_DIR}/${TOOLCHAIN_PLATFORM}/lib/)
 
@@ -25,24 +29,31 @@ IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
 ENDIF()
 
-# Function to make a library easier
-function(MAKE_LIBRARY LIBNAME)
+# Generate RPC stubs when first setup
+SET(RPC_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/rpc.py")
+EXECUTE_PROCESS(COMMAND ${RPC_SCRIPT} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-    # TODO: ADD_DEPENDENCIES(${LIBNAME} libc) (& for static)
+# For manual RPC gen when changing IDL files
+ADD_CUSTOM_TARGET(rpc
+    COMMENT "Generating RPC stubs"
+    COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" python3 ${RPC_SCRIPT}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    USES_TERMINAL
+)
 
-    # Install dynamic library
-    ADD_LIBRARY(${LIBNAME} SHARED ${LIBRARY_SRCS})
-    TARGET_INCLUDE_DIRECTORIES(${LIBNAME} PUBLIC include)
-    INSTALL(TARGETS ${LIBNAME} LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
+# Function to add all subdirectories with CMakeLists.txt in a given base directory
+FUNCTION(ADD_SUB_DIRS BASE_DIR)
+    IF(NOT BASE_DIR)
+        SET(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    ENDIF()
 
-    # Install static library
-    ADD_LIBRARY(${LIBNAME}_static STATIC ${LIBRARY_SRCS})
-    TARGET_INCLUDE_DIRECTORIES(${LIBNAME}_static PUBLIC include)
-    INSTALL(TARGETS ${LIBNAME}_static DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/os/lib)
+    FILE(GLOB_RECURSE CMAKE_FILES RELATIVE ${BASE_DIR} "${BASE_DIR}/*/CMakeLists.txt")
 
-    # TODO: Install headers onto fs
-
-endfunction()
+    FOREACH (file ${CMAKE_FILES})
+        GET_FILENAME_COMPONENT(dir ${file} DIRECTORY)
+        ADD_SUBDIRECTORY(${BASE_DIR}/${dir} ${CMAKE_CURRENT_BINARY_DIR}/${dir})
+    ENDFOREACH()
+ENDFUNCTION()
 
 # Look to build in these directories
 ADD_SUBDIRECTORY(kernel)
@@ -52,13 +63,11 @@ ADD_SUBDIRECTORY(programs)
 ADD_CUSTOM_TARGET(image
         # Everything needs to be installed (compiled) before we can create the disk image
         # DEPENDS install (TODO Rewrite so auto installs)
-
         # Create the disk image
         COMMENT "Creating disk image"
-        COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/create_disk_img.sh
+        COMMAND ${CMAKE_COMMAND} -E env "SOURCE_DIR=${CMAKE_SOURCE_DIR}" ${CMAKE_SOURCE_DIR}/toolchain/make_disk_img.sh
         BYPRODUCTS ${CMAKE_SOURCE_DIR}/MaxOS.img
-        BYPRODUCTS ${CMAKE_SOURCE_DIR}/filesystem/boot/MaxOSk64
-        BYPRODUCTS ${CMAKE_SOURCE_DIR}/filesystem/boot/test.elf
+        BYPRODUCTS ${CMAKE_SOURCE_DIR}/filesystem/0/boot/MaxOSk64
 
 
         # Copy the files to the disk image

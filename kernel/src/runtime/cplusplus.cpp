@@ -27,7 +27,7 @@ extern "C" void __cxa_pure_virtual() {
  */
 extern "C" void __stack_chk_fail(void)
 {
-	ASSERT(false, "Stack Smashed");
+	// ASSERT(false, "Stack Smashed\n");
 }
 
 extern "C" constructor start_ctors; ///< Pointer to the start of the constructors section

@@ -8,14 +8,14 @@
 
 #include <common/logger.h>
 #include <stdarg.h>
-#include <drivers/console/vesaboot.h>
+#include <console/framebuffer.h>
 #include <common/version.h>
 #include <system/cpu.h>
 #include <processes/scheduler.h>
 
 using namespace MaxOS;
 using namespace MaxOS::common;
-using namespace MaxOS::drivers::console;
+using namespace MaxOS::console;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 
@@ -29,7 +29,7 @@ Logger::Logger()
 	s_active_logger = this;
 
 	// The following line is generated automatically by the MaxOS build system.
-	s_progress_total = 22;
+	s_progress_total =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               15;
 
 }
 
@@ -59,9 +59,9 @@ void Logger::add_log_writer(OutputStream* log_writer) {
 }
 
 /**
- * @brief Removes an output stream from the logger
+ * @brief Prevents an output stream from being used
  *
- * @param log_writer The output stream to remove
+ * @param log_writer The output stream to stop using
  */
 void Logger::disable_log_writer(OutputStream* log_writer) {
 
@@ -76,6 +76,33 @@ void Logger::disable_log_writer(OutputStream* log_writer) {
 }
 
 /**
+ * @brief Lets an output stream from be used
+ *
+ * @param log_writer The output stream to use
+ */
+void Logger::enable_log_writer(OutputStream* log_writer) {
+
+    // If the list is empty
+    if (m_log_writer_count == 0)
+        return;
+
+    // Find the output stream in the list
+    for (int i = 0; i < m_log_writer_count; i++)
+        if (m_log_writers[i] == log_writer)
+            m_log_writers_enabled[i] = true;
+
+}
+
+/**
+ * @brief Mark all log writes as allowed to output to
+ */
+void Logger::enable_all_log_writers() {
+	for (int i = 0; i < m_log_writer_count; i++)
+		if (!m_log_writers_enabled[i])
+			m_log_writers_enabled[i] = true;
+}
+
+/**
  * @brief Sets the log level of the logger
  *
  * @param log_level The log level to set
@@ -87,7 +114,7 @@ void Logger::set_log_level(LogLevel log_level) {
 
 	// Update the progress bar
 	if (log_level == LogLevel::INFO) {
-		VESABootConsole::update_progress_bar((m_progress_current * 100) / s_progress_total);
+		FramebufferConsole::update_progress_bar((m_progress_current * 100) / s_progress_total);
 		m_progress_current++;
 	}
 
@@ -95,27 +122,27 @@ void Logger::set_log_level(LogLevel log_level) {
 	switch (log_level) {
 
 		case LogLevel::HEADER:
-			*this << ANSI_COLOURS[ANSIColour::FG_Blue] << "[  BOOT    ] ";
+			*this << ANSI_COLOURS[FG_Blue]	 << "[  BOOT    ] ";
 			break;
 
 		case LogLevel::INFO:
-			*this << ANSI_COLOURS[ANSIColour::FG_Cyan] << "[  INFO    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
+			*this << ANSI_COLOURS[FG_Cyan]	 << "[  INFO    ]" << ANSI_COLOURS[FG_White] << " ";
 			break;
 
 		case LogLevel::TEST:
-			*this << ANSI_COLOURS[ANSIColour::FG_Green] << "[  TEST    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
+			*this << ANSI_COLOURS[FG_Green]	 << "[  TEST    ]" << ANSI_COLOURS[FG_White] << " ";
 			break;
 
 		case LogLevel::DEBUG:
-			*this << ANSI_COLOURS[ANSIColour::FG_Yellow] << "[  DEBUG   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
+			*this << ANSI_COLOURS[FG_Yellow] << "[  DEBUG   ]" << ANSI_COLOURS[Reset] << " ";
 			break;
 
 		case LogLevel::WARNING:
-			*this << ANSI_COLOURS[ANSIColour::BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
+			*this << ANSI_COLOURS[BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[Reset] << " ";
 			break;
 
 		case LogLevel::ERROR:
-			*this << ANSI_COLOURS[ANSIColour::BG_Red] << "[  ERROR   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
+			*this << ANSI_COLOURS[BG_Red]	<< "[  ERROR   ]" << ANSI_COLOURS[Reset] << " ";
 			break;
 	}
 
@@ -146,78 +173,63 @@ void Logger::write_char(char c) {
  *
  * @return The active logger
  */
-Logger &Logger::Out() {
+LogRecord Logger::Out() {
 
-	return *active_logger();
+	return LogRecord(*s_active_logger, LogLevel::OUT);
 }
 
 /**
- * @brief Gets active logger set to task level
+ * @brief Gets the active logger for testing logs
  *
- * @return The task logger
+ * @return The testing logger
  */
-Logger Logger::HEADER() {
-
-	s_active_logger->set_log_level(LogLevel::HEADER);
-	return Out();
-
+LogRecord Logger::TEST() {
+	return LogRecord(*s_active_logger, LogLevel::TEST);
 }
 
 /**
- * @brief Gets active logger set to info level
+ * @brief Gets the active logger for info logs
  *
  * @return The info logger
  */
-Logger Logger::INFO() {
-
-	s_active_logger->set_log_level(LogLevel::INFO);
-	return Out();
+LogRecord Logger::INFO() {
+	return LogRecord(*s_active_logger, LogLevel::INFO);
 }
 
 /**
- * @brief Gets active logger set to test level
- *
- * @return The test logger
- */
-Logger Logger::TEST() {
-
-	s_active_logger->set_log_level(LogLevel::TEST);
-	return Out();
-}
-
-/**
- * @brief Gets active logger set to DEBUG level
+ * @brief Gets the active logger for debug logs
  *
  * @return The debug logger
  */
-Logger Logger::DEBUG() {
-
-	s_active_logger->set_log_level(LogLevel::DEBUG);
-	return Out();
-
+LogRecord Logger::DEBUG() {
+	return LogRecord(*s_active_logger, LogLevel::DEBUG);
 }
 
 /**
- * @brief Gets active logger set to WARNING level
+ * @brief Gets the active logger for warnings
  *
  * @return The warning logger
  */
-Logger Logger::WARNING() {
-
-	s_active_logger->set_log_level(LogLevel::WARNING);
-	return Out();
+LogRecord Logger::WARNING() {
+	return LogRecord(*s_active_logger, LogLevel::WARNING);
 }
 
 /**
- * @brief Gets active logger set to ERROR level
+ * @brief Gets the active logger for error logs
  *
  * @return The error logger
  */
-Logger Logger::ERROR() {
+LogRecord Logger::ERROR() {
+	return LogRecord(*s_active_logger, LogLevel::ERROR);
+}
 
-	s_active_logger->set_log_level(LogLevel::ERROR);
-	return Out();
-
+/**
+ * @brief Gets the active logger for headers
+ *
+ * @return The header logger
+ */
+LogRecord Logger::HEADER() {
+	return LogRecord(*s_active_logger, LogLevel::HEADER);
 }
 
 /**
@@ -230,12 +242,13 @@ Logger *Logger::active_logger() {
 }
 
 /**
- * @brief Prints a formatted string to the logger
+ * @brief Prints a formatted string to the logger (thread safe)
  *
  * @param format The format string
  * @param ... The arguments to format
  */
 void Logger::printf(char const *format, ...) {
+
 
 	// Create a pointer to the data
 	va_list parameters;
@@ -249,8 +262,9 @@ void Logger::printf(char const *format, ...) {
  *
  * @param condition The condition to check if is met
  * @param message The message to print if the condition fails
+ * @param ... The arguments to format into the string
  */
-void Logger::ASSERT(bool condition, char const *message, ...) {
+void Logger::assert(bool condition, char const* message, ...) {
 
 	// If the condition is met then everything is ok
 	if (condition)
@@ -260,7 +274,7 @@ void Logger::ASSERT(bool condition, char const *message, ...) {
 	va_start(parameters, message);
 
 	// Hang the system
-	system::CPU::PANIC(String::formatted(message, parameters).c_str());
+	CPU::PANIC(String::formatted(message, parameters).c_str());
 }
 
 /**
@@ -273,5 +287,30 @@ Logger &Logger::operator<<(LogLevel log_level) {
 
 	set_log_level(log_level);
 	return *this;
+
+}
+
+/**
+ * Create a new log record, threadsafe
+ *
+ * @param logger The logger to use
+ * @param level  The level of the log
+ */
+LogRecord::LogRecord(Logger& logger, LogLevel level)
+: m_logger(logger)
+{
+
+	// Wait for the logger to be free
+	Logger::s_loggers_lock.lock();
+	if (level != LogLevel::OUT)
+		m_logger.set_log_level(level);
+}
+
+/**
+ * Destroys the log record, freeing the threadsafe lock
+ */
+LogRecord::~LogRecord() {
+
+	Logger::s_loggers_lock.unlock();
 
 }

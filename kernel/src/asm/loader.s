@@ -11,8 +11,8 @@
 %define KERNEL_VIRTUAL_ADDR 0xFFFFFFFF80000000
 %define PAGE_SIZE 0x1000
 %define FLAGS 0b10 | 1
-%define LOOP_LIMIT 2048
-%define PD_LOOP_LIMIT 4
+%define LOOP_LIMIT 16384
+%define PD_LOOP_LIMIT 32
 
 global p2_table
 global p4_table
@@ -61,7 +61,8 @@ start:
     or eax, FLAGS
     mov dword[(p3_table_hh - KERNEL_VIRTUAL_ADDR) + 510 * 8], eax
 
-    ; Map 8MB of kernel memory  (2 page directories)
+    ; Map 64MB of low physical memory so early multiboot parsing can safely
+    ; touch larger modules before the direct map exists
     mov ebx, 0
     mov eax, p1_tables - KERNEL_VIRTUAL_ADDR
     .map_pd_table:
@@ -146,7 +147,7 @@ p3_table_hh:
 p2_table:
     resb 4096
 p1_tables:
-    resb 16384
+    resb 131072
 
 ; The stack for the kernel 16KiB
 align 4096

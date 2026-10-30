@@ -118,6 +118,10 @@ these automatically)
 * telnet
 * rsync
 
+_Note: If you want to run the operating system in a virtual machine, you will need to install QEMU. (If in WSL the script
+will look for a Windows installation of QEMU)_
+
+
 Linux:
 
   ```sh
@@ -128,13 +132,11 @@ Linux:
 Mac:
 
 ```sh
-  # Install Devtools (via Xcode or some other method)
-  # Install Homebrew
+  # User: Install Devtools (via Xcode or some other method)
+  # User: Install Homebrew
+  brew install --cask macfuse
   brew install coreutils bison gmp libmpc mpfr texinfo gcc@13 cmake nasm telnet
 ```
-
-Note: If you want to run the operating system in a virtual machine, you will need to install QEMU. (If in WSL the script
-will look for a Windows installation of QEMU)
 
 ### Installation
 
@@ -147,6 +149,7 @@ will look for a Windows installation of QEMU)
    ```sh
    git clone https://github.com/maxtyson123/MaxOS.git
    cd MaxOS
+   git submodule update --init --recursive
    ```
 
 2. Create the cross-compiler (This will take a while)
@@ -159,21 +162,22 @@ will look for a Windows installation of QEMU)
 3. Generate makefiles
    ```sh
    # If you edit the CMakeLists.txt file you will need to delete the build directory contents (not the folder) and regenerate the makefiles
-   cd cmake-build
+   mkdir cmake-build
    
    # Change to -DCMAKE_BUILD_TYPE=Debug to enable debug mode
-   cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt -DCMAKE_BUILD_TYPE=Release 
+   cmake -S . -B cmake-build -DCMAKE_TOOLCHAIN_FILE=toolchain/CMakeToolchain.txt -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=filesystem/1/os/
    ```
 
 4. Clean the build directory
    ```sh
-   make clean
+   cmake --build cmake-build --target clean
    ```
 
 5. Build the operating system & Run it in QEMU
    ```sh
    # Replace 'run' with 'gdb' on a debug build to make the kernel wait for gdb to attach on port 1234  
-   make run
+   cmake --build cmake-build --target install
+   cmake --build cmake-build --target run
    ```
 
 6. (OPTIONAL) I use CLion IDE for development, if you want to use it to follow these steps for IDE features:
@@ -236,16 +240,17 @@ No user usage so far (userland will be added in the future)
 - [x] VFS
 - [x] Loading ELF
 - [x] Multiple Cores Support (SMP & Scheduler)
-- [ ] Move VFS & drivers to userspace
-- [ ] Porting & Dynamically Linking Libc
+- [x] Move VFS & drivers to userspace
+- [ ] Reorganise project (central repo that points to org sub repos - unifies documentation for each subrepo and build etc)
 - [ ] Move networking to userspace (& rewrite, fix)
+- [ ] Porting & Dynamically Linking Libc
+- [ ] Proper error system
 - [ ] Clean up ALL Todos
 
 #### Userland
-
+- [ ] connect to Clion with SMB for files and GDB for debugging in userspace
 - [ ] GUI
 - [ ] Terminal
-- [ ] connect to Clion with SMB for files and GDB for debugging in userspace
 - [ ] DOOM Port
 - [ ] Self-hosted os
 - [ ] GUI Framework
@@ -272,6 +277,8 @@ issues).
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any
 contributions you make are **greatly appreciated**.
+
+If you are wondering where to start have a look at the [TODOs](https://maxtyson123.github.io/MaxOS/html/todo.html).
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also
 simply open an issue with the tag "enhancement".
@@ -306,6 +313,7 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 * [OSDev Subreddit](https://www.reddit.com/r/osdev/)
 * [Duck OS](https://github.com/byteduck/duckOS)
 * [Dream OS](https://github.com/dreamos82/Dreamos64)
+* [PCI IDs](https://pci-ids.ucw.cz)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

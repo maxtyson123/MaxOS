@@ -11,10 +11,11 @@
 
 #include <cstdint>
 #include <cstddef>
-#include <common/macros.h>
-#include <system/multiboot.h>
 
-#include <common/spinlock.h>
+#include <libcommon/macros.h>
+#include <libcommon/spinlock.h>
+
+#include <system/multiboot.h>
 
 #define ENTRIES_TO_ADDRESS(pml4, pdpr, pd, pt)((pml4 << 39) | (pdpr << 30) | (pd << 21) |  (pt << 12))                  ///< Convert page map level indices to a virtual address
 #define PMLX_GET_INDEX(ADDR, LEVEL) (((uint64_t)ADDR & ((uint64_t)0x1ff << (12 + LEVEL * 9))) >> (12 + LEVEL * 9))      ///< Get the index for a given page map level from a virtual address
@@ -39,17 +40,17 @@ namespace MaxOS::memory {
 	 * @todo: fix. this is stupid: Leave as enum not enum class for bitwise operations
 	 */
 	typedef enum PageFlags {
-		NONE = 0,                ///< No flags
-		PRESENT = (1 << 0),         ///< The page is present in memory
-		WRITE = (1 << 1),         ///< Memory in this page is writable
-		USER = (1 << 2),         ///< This page is accessible from user mode
-		WRITE_THROUGH = (1 << 3),         ///< write through caching is enabled
-		CACHE_DISABLED = (1 << 4),         ///< Dont let the CPU cache this page
-		ACCESSED = (1 << 5),         ///< This page has been read from or written to
-		DIRTY = (1 << 6),         ///< This page has been written to
-		HUGE_PAGE = (1 << 7),         ///< This page is not 4Kib (2MB or 1GB)
-		GLOBAL = (1 << 8),         ///< The page can be shared  between processes
-		NO_EXECUTE = (1ULL << 63)      ///< Dont let the CPU execute code on this page
+		NONE = 0,               	///< No flags
+		PRESENT = (1 << 0),        	///< The page is present in memory
+		WRITE = (1 << 1),         	///< Memory in this page is writable
+		USER = (1 << 2),         	///< This page is accessible from user mode
+		WRITE_THROUGH = (1 << 3),   ///< write through caching is enabled
+		CACHE_DISABLED = (1 << 4),  ///< Dont let the CPU cache this page
+		ACCESSED = (1 << 5),        ///< This page has been read from or written to
+		DIRTY = (1 << 6),         	///< This page has been written to
+		HUGE_PAGE = (1 << 7),       ///< This page is not 4Kib (2MB or 1GB)
+		GLOBAL = (1 << 8),         	///< The page can be shared  between processes
+		NO_EXECUTE = (1ULL << 63)   ///< Dont let the CPU execute code on this page
 	} page_flags_t;
 
 	/**
@@ -61,17 +62,17 @@ namespace MaxOS::memory {
 	 */
 	typedef struct PACKED PageTableEntry {
 
-		bool present : 1;                    ///< *copydoc PageFlags::PRESENT
-		bool write : 1;                      ///< *copydoc PageFlags::WRITE
-		bool user : 1;                       ///< *copydoc PageFlags::USER
-		bool write_through : 1;              ///< *copydoc PageFlags::WRITE_THROUGH
-		bool cache_disabled : 1;             ///< *copydoc PageFlags::CACHE_DISABLED
-		bool accessed : 1;                   ///< *copydoc PageFlags::ACCESSED
-		bool dirty : 1;                      ///< *copydoc PageFlags::DIRTY
-		bool huge_page : 1;                  ///< *copydoc PageFlags::HUGE_PAGE
-		bool global : 1;                     ///< *copydoc PageFlags::GLOBAL
-		uint8_t available : 3;               ///< Extra metadata bytes available for OS use
-		uint64_t physical_address : 52;      ///< The address the page represents in memory
+		bool present: 1;                    ///< *copydoc PageFlags::PRESENT
+		bool write: 1;                      ///< *copydoc PageFlags::WRITE
+		bool user: 1;                       ///< *copydoc PageFlags::USER
+		bool write_through: 1;              ///< *copydoc PageFlags::WRITE_THROUGH
+		bool cache_disabled: 1;             ///< *copydoc PageFlags::CACHE_DISABLED
+		bool accessed: 1;                   ///< *copydoc PageFlags::ACCESSED
+		bool dirty: 1;                      ///< *copydoc PageFlags::DIRTY
+		bool huge_page: 1;                  ///< *copydoc PageFlags::HUGE_PAGE
+		bool global: 1;                     ///< *copydoc PageFlags::GLOBAL
+		uint8_t available: 3;               ///< Extra metadata bytes available for OS use
+		uint64_t physical_address: 52;      ///< The address the page represents in memory
 
 	} pte_t;
 
@@ -94,10 +95,8 @@ namespace MaxOS::memory {
 	constexpr uint64_t HIGHER_HALF_KERNEL_OFFSET = 0xFFFFFFFF80000000;                                  ///< Where the kernel is mapped in higher half memory
 	constexpr uint64_t HIGHER_HALF_MEM_OFFSET = 0xFFFF800000000000;                                     ///< Where higher half memory starts
 	constexpr uint64_t HIGHER_HALF_MEM_RESERVED = 0x280000000;                                          ///< Reserved higher half memory for kernel use (10GB)
-	constexpr uint64_t HIGHER_HALF_OFFSET = HIGHER_HALF_MEM_OFFSET +
-	                                        HIGHER_HALF_MEM_RESERVED;          ///< Where higher half memory usable space starts
-	constexpr uint64_t HIGHER_HALF_DIRECT_MAP = HIGHER_HALF_OFFSET +
-	                                            PAGE_SIZE;                         ///< Where the map of physical memory to higher half starts
+	constexpr uint64_t HIGHER_HALF_OFFSET = HIGHER_HALF_MEM_OFFSET + HIGHER_HALF_MEM_RESERVED;          ///< Where higher half memory usable space starts
+	constexpr uint64_t HIGHER_HALF_DIRECT_MAP = HIGHER_HALF_OFFSET + PAGE_SIZE;                         ///< Where the map of physical memory to higher half starts
 
 	/**
 	 * @class PhysicalMemoryManager
@@ -106,7 +105,6 @@ namespace MaxOS::memory {
 	 * @todo Global paging so dont have map in every process
 	 */
 	class PhysicalMemoryManager {
-
 		private:
 
 			uint64_t* m_bit_map = nullptr;

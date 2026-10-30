@@ -6,12 +6,15 @@
  * @author Max Tyson
  */
 
+#include <libkpi/syscalls.h>
+
 #include <processes/elf.h>
 #include <common/logger.h>
 
 using namespace MaxOS;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
+using namespace MaxOS::common;
 
 
 
@@ -33,14 +36,13 @@ ELF64::~ELF64() = default;
 /**
  * @brief Loads the elf program into memory if a valid elf file
  *
+ * @param vmm Which address space to load the elf into
  * @todo Error handling
  */
-void ELF64::load() {
+void ELF64::load_into_memory(VirtualMemoryManager* vmm) const {
 
-	if (!is_valid())
-		return;
-
-	load_program_headers();
+	ASSERT(is_valid(), "Invaild ELF file loaded\n");
+	load_program_headers(vmm);
 
 }
 
@@ -136,8 +138,9 @@ bool ELF64::is_valid() const {
 /**
  * @brief Loop through the program headers and load the program into memory at the give address with the given size
  */
-void ELF64::load_program_headers() const {
+void ELF64::load_program_headers(VirtualMemoryManager* vmm) const {
 
+	size_t actual_size;
 	for (size_t i = 0; i < header()->program_header_count; i++) {
 
 		// Get the header information
@@ -148,7 +151,7 @@ void ELF64::load_program_headers() const {
 			continue;
 
 		// Allocate space at the requested address
-		void* address = MemoryManager::s_current_memory_manager->vmm()->allocate(program_header->virtual_address, program_header->memory_size, PRESENT | WRITE);
+		void* address = vmm->allocate(program_header->virtual_address, program_header->memory_size, actual_size, PRESENT | WRITE);
 		ASSERT(address != nullptr, "Failed to allocate memory for program header\n");
 
 		// Copy the program into memory at that address
@@ -160,7 +163,7 @@ void ELF64::load_program_headers() const {
 
 		// Once the memory has been copied can now mark the pages as read only etc
 		uint64_t flags = to_vmm_flags(program_header->flags);
-		PhysicalMemoryManager::s_current_manager->change_page_flags(address, flags, MemoryManager::s_current_memory_manager->vmm()->pml4_root_address());
+		PhysicalMemoryManager::s_current_manager->change_page_flags(address, flags, vmm->pml4_root_address());
 	}
 }
 

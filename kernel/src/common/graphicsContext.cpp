@@ -232,7 +232,7 @@ uint32_t GraphicsContext::get_rendered_pixel_24_bit(uint32_t, uint32_t) {
  * @param y The y coordinate of the pixel
  * @return The 32Bit colour of the pixel
  */
-uint32_t GraphicsContext::get_rendered_pixel_32_bit(uint32_t, uint32_t) {
+uint32_t GraphicsContext::get_rendered_pixel_32_bit(uint32_t x, uint32_t y) {
 	return 0;
 }
 
@@ -243,13 +243,25 @@ uint32_t GraphicsContext::get_rendered_pixel_32_bit(uint32_t, uint32_t) {
  * @return The integer value of the colour
  */
 uint32_t GraphicsContext::colour_to_int(const Colour& colour) {
+	return colour_to_int(colour, m_color_depth);
+}
 
-	switch(m_color_depth) {
+/**
+ * @brief Converts a colour to an integer value based on the current color depth
+ *
+ * @param colour The colour class to convert
+ * @param color_depth How many bits can be used to store colour info
+ * @return The integer value of the colour
+ */
+uint32_t GraphicsContext::colour_to_int(const Colour& colour, uint32_t  color_depth) {
+
+	switch(color_depth) {
 		case 8: {
 			uint32_t result = 0;
 			int mindistance = 0xfffffff;
 			for(uint32_t i = 0; i <= 255; ++i) {
-				Colour* c = &m_colour_pallet[i];
+//				Colour* c = &m_colour_pallet[i];
+				Colour* c = nullptr; //@todo fix this
 				int distance =
 						((int) colour.red - (int) c->red) * ((int) colour.red - (int) c->red)
 						+ ((int) colour.green - (int) c->green) * ((int) colour.green - (int) c->green)

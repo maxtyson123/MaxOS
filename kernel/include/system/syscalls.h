@@ -4,21 +4,22 @@
  *
  * @date 27th October 2022
  * @author Max Tyson
- *
- * @todo '<system/syscalls.h>' Rename / make clear that this references the system lib
  */
 
 #ifndef MAXOS_SYSTEM_SYSCALLS_H
 #define MAXOS_SYSTEM_SYSCALLS_H
 
 #include <cstdint>
-#include <cstddef>
+
+#include <libkpi/syscalls.h>
+#include <libcommon/vector.h>
+#include <libcommon/colour.h>
+
 #include <hardwarecommunication/interrupts.h>
-#include <common/vector.h>
-#include <common/colour.h>
 #include <memory/memorymanagement.h>
 #include <processes/scheduler.h>
-#include <system/syscalls.h>
+#include <processes/block.h>
+#include <processes/resources/resource_bridge.h>
 
 
 namespace MaxOS::system {
@@ -60,29 +61,27 @@ namespace MaxOS::system {
 		private:
 			syscall_func_t m_syscall_handlers[256] = { };
 
-			inline static common::Spinlock s_lock = { };
-
 		public:
 			SyscallManager();
 			~SyscallManager();
 
 			cpu_status_t* handle_interrupt(cpu_status_t* esp) final;
 
-			void set_syscall_handler(::syscore::SyscallType syscall, syscall_func_t handler);
-			void remove_syscall_handler(::syscore::SyscallType syscall);
+			void set_syscall_handler(::MaxOS::KPI::SyscallType syscall, syscall_func_t handler);
+			void remove_syscall_handler(::MaxOS::KPI::SyscallType syscall);
 
-			static syscall_args_t* syscall_close_process(syscall_args_t* args);
 			static syscall_args_t* syscall_klog(syscall_args_t* args);
+
 			static syscall_args_t* syscall_allocate_memory(syscall_args_t* args);
 			static syscall_args_t* syscall_free_memory(syscall_args_t* args);
+
 			static syscall_args_t* syscall_resource_create(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_open(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_close(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_write(syscall_args_t* args);
 			static syscall_args_t* syscall_resource_read(syscall_args_t* args);
-			static syscall_args_t* syscall_thread_yield(syscall_args_t* args);
-			static syscall_args_t* syscall_thread_sleep(syscall_args_t* args);
-			static syscall_args_t* syscall_thread_close(syscall_args_t* args);
+			static syscall_args_t* syscall_resource_registry_create(syscall_args_t* args);
+
 	};
 }
 

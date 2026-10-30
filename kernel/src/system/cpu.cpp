@@ -9,16 +9,15 @@
 #include <system/cpu.h>
 #include <common/logger.h>
 #include <processes/scheduler.h>
-#include <drivers/console/vesaboot.h>
+#include <console/framebuffer.h>
 #include <memory/memorymanagement.h>
-#include <drivers/clock/clock.h>
+#include <hardwarecommunication/clock.h>
 #include <common/symbols.h>
 
 using namespace MaxOS;
 using namespace MaxOS::system;
 using namespace MaxOS::common;
-using namespace MaxOS::drivers;
-using namespace MaxOS::drivers::clock;
+using namespace MaxOS::console;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::processes;
 using namespace MaxOS::memory;
@@ -44,6 +43,8 @@ Core::Core(hardwarecommunication::madt_processor_apic_t* madt_item)
 	m_enabled 		= (m_madt->flags & 0x1) != 0;
 	m_can_enable 	= (m_madt->flags & 0x2) != 0;
 
+	m_stack = (uint64_t)MemoryManager::kmalloc(BOOT_STACK_SIZE);
+
 	Logger::DEBUG() << "Found CPU ID: " << id << " with APIC ID: " << m_apic_id << " (enabled = " << (string)m_enabled << ", can be enabled = " <<  (string)m_can_enable  << ")\n";
 
 }
@@ -65,10 +66,9 @@ void Core::wake_up(CPU* cpu) {
 	}
 
 	Logger::DEBUG() << "Starting core: " << id << "\n";
-	m_stack = (uint64_t)MemoryManager::kmalloc(BOOT_STACK_SIZE);
 
 	// Core specific boot info
-	auto info = (core_boot_info_t*)(core_boot_info);
+	volatile auto info = (core_boot_info_t*)(core_boot_info);
 	info->activated = false;
 	info->id = id;
 	info->stack = m_stack + BOOT_STACK_SIZE;
@@ -103,9 +103,7 @@ void Core::wake_up(CPU* cpu) {
 }
 
 /**
- * @brief Initialises the task state segment for this core
- *
- * @todo Implement IO bitmap when adding userspace drivers
+ * @brief Initialises the task state segment for this cor
  */
 void Core::init_tss() {
 
@@ -114,14 +112,13 @@ void Core::init_tss() {
 	tss.reserved1 = 0;
 	tss.reserved2 = 0;
 	tss.reserved3 = 0;
-	tss.reserved4 = 0;
 
-	// The stacks
-	tss.rsp0 = (uint64_t)m_stack + BOOT_STACK_SIZE;       // Kernel stack (scheduler will set the threads stack)
+	// Kernel stack (scheduler will set the threads stack)
+	tss.rsp0 = (uint64_t)m_stack + BOOT_STACK_SIZE;
 	tss.rsp1 = 0;
 	tss.rsp2 = 0;
 
-	// Interrupt stacks can all be 0
+	// Interrupt stacks can all be 0 (@todo implment)
 	tss.ist1 = 0;
 	tss.ist2 = 0;
 	tss.ist3 = 0;
@@ -130,8 +127,10 @@ void Core::init_tss() {
 	tss.ist6 = 0;
 	tss.ist7 = 0;
 
-	// Ports
-	tss.io_bitmap_offset = 0;
+	// All ports denied by default
+	memset(&tss.io_bitmap, 0xFF, sizeof(tss.io_bitmap));
+	tss.io_bitmap[IO_BITMAP_SIZE] = 0xFF;
+	tss.io_bitmap_offset = offsetof(tss_t, io_bitmap);
 
 	// Split the base into 4 parts (16 bits, 8 bits, 8 bits, 32 bits)
 	auto base = (uint64_t) &tss;
@@ -410,10 +409,11 @@ void CPU::cpuid(uint32_t leaf, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint
  * @brief Prints a stack trace up to the specified level
  *
  * @param level The number of stack frames to print
+ * @param status The execution state to trace (optional, null will be interpreted as use the current state)
  */
-void CPU::stack_trace(size_t level) {
+void CPU::stack_trace(size_t level, cpu_status_t* status) {
 
-	auto* frame = (stack_frame_t*) __builtin_frame_address(0);
+	auto* frame = status ? (stack_frame_t*)status->rbp : (stack_frame_t*) __builtin_frame_address(0);
 
 	// Loop through the frames logging
 	for (size_t current_level = 0; current_level < level; current_level++) {
@@ -428,6 +428,30 @@ void CPU::stack_trace(size_t level) {
 			break;
 
 	}
+}
+
+void CPU::enable_write_protect() {
+
+	// Read the current state
+	uint64_t cr0;
+	asm volatile("mov %%cr0, %0" : "=r"(cr0));
+
+	// Update to have WP bit enabled
+	cr0 |= (1ULL << 16);
+	asm volatile("mov %0, %%cr0" : : "r"(cr0));
+
+}
+
+void CPU::disable_write_protect() {
+
+	// Read the current state
+	uint64_t cr0;
+	asm volatile("mov %%cr0, %0" : "=r"(cr0));
+
+	// Update to have WP bit disabled
+	cr0 &= ~(1ULL << 16);
+	asm volatile("mov %0, %%cr0" : : "r"(cr0));
+
 }
 
 /**
@@ -447,6 +471,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	Process* process = GlobalScheduler::current_process();
 
 	// Print using the backend
+    Logger::Out()   << "\n";
 	Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
 	Logger::ERROR() << "Kernel Panic: " << message;
 	Logger::ERROR() << "On Core: " << (panic_core ? panic_core->id : 0) << "\n";
@@ -459,7 +484,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	// Stack trace
 	Logger::ERROR() << "----------------------------\n";
 	Logger::ERROR() << "Stack Trace:\n";
-	stack_trace(10);
+	stack_trace(20, status);
 
 	// Register dump
 	Logger::ERROR() << "----------------------------\n";
@@ -476,10 +501,11 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	// Print some text to the user
 	Logger::ERROR() << "----------------------------\n";
 	Logger::ERROR() << "There has been a fatal error in MaxOS and the system has been halted.\n";
+	Logger::ERROR() << "Please check the logs for more info.\n";		// TODO: save to a file
 	Logger::ERROR() << "Please restart the system.\n";
 
 	// Print the logo
-	Logger::ERROR() << "----------------------------\n";
+	Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
 
 	// Halt
 	halt();
@@ -503,19 +529,30 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 
 		// If the faulting address is in lower half just kill the process and move on
 		if (status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)) {
-			Logger::ERROR() << "CPU Panicked (i " << (int)status->interrupt_number << ") in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
-			Logger::ERROR() << msg;
-			panic_lock.unlock();
+		    Logger::Out() << "\n";
+            Logger::ERROR() << msg;
+            Logger::ERROR() << "CPU Panicked (i " << (int)status->interrupt_number << ") in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
+            panic_lock.unlock();
 			return GlobalScheduler::force_remove_process(process);
 		}
 
-		// Otherwise occurred whilst the kernel was doing something for the process
+		// Otherwise occurred whilst the kernel was doing something for the process, thus a fault in the kernel fault
+		// and is unrecoverable
 	}
 
-	// We are panicking
-	panic_core = executing_core();
-	console::VESABootConsole::print_logo(true);
+	// Kill the others to make sure everything else stops
+	if (GlobalScheduler::is_active()) {
+		executing_core()->local_apic->send_interrupt(0, 0x81, EXCLUDE_SELF);
+		GlobalScheduler::deactivate();
+	}
+
+	// Prepare for printing debug messages
+	FramebufferConsole::print_logo(true);
+	Logger::active_logger() -> enable_all_log_writers();
+
+	// Unresumable state
 	panic_lock.unlock();
+	panic_core = executing_core();
 	return nullptr;
 }
 

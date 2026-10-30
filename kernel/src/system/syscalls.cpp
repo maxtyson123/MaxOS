@@ -9,12 +9,13 @@
 #include <system/syscalls.h>
 #include <common/logger.h>
 
-using namespace syscore;
 using namespace MaxOS;
+using namespace MaxOS::KPI;
 using namespace MaxOS::common;
 using namespace MaxOS::hardwarecommunication;
 using namespace MaxOS::system;
 using namespace MaxOS::processes;
+using namespace MaxOS::processes::resources;
 using namespace MaxOS::memory;
 
 /**
@@ -26,18 +27,20 @@ SyscallManager::SyscallManager()
 
 	// Register the handlers
 	Logger::INFO() << "Setting up Syscalls \n";
-	set_syscall_handler(SyscallType::CLOSE_PROCESS, syscall_close_process);
+
 	set_syscall_handler(SyscallType::KLOG, syscall_klog);
+
 	set_syscall_handler(SyscallType::ALLOCATE_MEMORY, syscall_allocate_memory);
 	set_syscall_handler(SyscallType::FREE_MEMORY, syscall_free_memory);
+
 	set_syscall_handler(SyscallType::RESOURCE_CREATE, syscall_resource_create);
 	set_syscall_handler(SyscallType::RESOURCE_OPEN, syscall_resource_open);
 	set_syscall_handler(SyscallType::RESOURCE_CLOSE, syscall_resource_close);
 	set_syscall_handler(SyscallType::RESOURCE_WRITE, syscall_resource_write);
 	set_syscall_handler(SyscallType::RESOURCE_READ, syscall_resource_read);
-	set_syscall_handler(SyscallType::THREAD_YIELD, syscall_thread_yield);
-	set_syscall_handler(SyscallType::THREAD_SLEEP, syscall_thread_sleep);
-	set_syscall_handler(SyscallType::THREAD_CLOSE, syscall_thread_close);
+
+	set_syscall_handler(SyscallType::RESOURCE_REGISTRY_CREATE, syscall_resource_registry_create);
+
 
 }
 
@@ -109,30 +112,6 @@ void SyscallManager::remove_syscall_handler(SyscallType syscall) {
 
 
 /**
- * @brief System call to close a process
- *
- * @param args Arg0 = pid Arg1 = exit code
- * @return Nothing
- */
-syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t* args) {
-
-	// Get the args
-	uint64_t pid = args->arg0;
-	int exit_code = (int) args->arg1;
-
-	// Close the process
-	Process* process = pid == 0 ? GlobalScheduler::current_process() : GlobalScheduler::get_process(pid);
-	GlobalScheduler::system_scheduler()->remove_process(process);
-
-	// Schedule the next process
-	cpu_status_t* next_process = GlobalScheduler::core_scheduler()->schedule_next(args->return_state);
-	args->return_state = next_process;
-
-	// Done
-	return args;
-}
-
-/**
  * @brief System call to log a message to the kernel log
  *
  * @param args Arg0 = message
@@ -140,22 +119,16 @@ syscall_args_t* SyscallManager::syscall_close_process(system::syscall_args_t* ar
  */
 syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
 
-	s_lock.lock();
-
 	// Ensure a message was provided
 	char* message = (char*) args->arg0;
-	if(!message){
-		s_lock.unlock();
+	if(!message)
 		return args;
-	}
 
 	// If the first two characters are %h then no header
 	if (message[0] == '%' && message[1] == 'h')
 		Logger::Out() << message + 2;
 	else
 		Logger::INFO() << message;
-
-	s_lock.unlock();
 
 	return args;
 }
@@ -167,6 +140,7 @@ syscall_args_t* SyscallManager::syscall_klog(syscall_args_t* args) {
  * @return The address of the memory block or null if failed
  */
 syscall_args_t* SyscallManager::syscall_allocate_memory(syscall_args_t* args) {
+
 
 	// Malloc the memory
 	size_t size = args->arg0;
@@ -201,12 +175,13 @@ syscall_args_t* SyscallManager::syscall_free_memory(syscall_args_t* args) {
 syscall_args_t* SyscallManager::syscall_resource_create(syscall_args_t* args) {
 
 	// Parse params
-	auto type 	= (ResourceType)args->arg0;
+	auto type 	= (resource_type_t)args->arg0;
 	auto name 	= (char*)args->arg1;
 	auto flags 	= (size_t)args->arg2;
+	auto data   = (uintptr_t)args->arg3;
 
 	// Try to create the resource
-	auto resource = GlobalResourceRegistry::get_registry(type)->create_resource(name, flags);
+	auto resource = GlobalResourceRegistry::get_registry(type)->create_resource(name, flags, data);
 
 	// Handle response
 	args->return_value = resource ? 1 : 0;
@@ -222,12 +197,13 @@ syscall_args_t* SyscallManager::syscall_resource_create(syscall_args_t* args) {
 syscall_args_t* SyscallManager::syscall_resource_open(syscall_args_t* args) {
 
 	// Parse params
-	auto type 	= (ResourceType)args->arg0;
+	auto type 	= (resource_type_t)args->arg0;
 	auto name 	= (char*)args->arg1;
 	auto flags 	= (size_t)args->arg2;
 
 	// Open the resource
 	args->return_value = GlobalScheduler::current_process()->resource_manager.open_resource(type, name, flags);
+
 	return args;
 }
 
@@ -283,7 +259,7 @@ syscall_args_t* SyscallManager::syscall_resource_write(syscall_args_t* args) {
 syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
 
 	// Parse params
-	auto handle	= (uint64_t )args->arg0;
+	auto handle	= (uint64_t)args->arg0;
 	auto buffer = (void*)args->arg1;
 	auto size 	= (size_t)args->arg2;
 	auto flags 	= (size_t)args->arg3;
@@ -301,60 +277,22 @@ syscall_args_t* SyscallManager::syscall_resource_read(syscall_args_t* args) {
 }
 
 /**
- * @brief System call to yield the current process
+ * @brief System call to create a new resource registry
  *
- * @param args Nothing
- * @return Nothing
- */
-syscall_args_t* SyscallManager::syscall_thread_yield(syscall_args_t* args) {
-
-	// Yield
-	args->return_state = GlobalScheduler::yield(args->return_state);
-
-	return args;
-}
-
-/**
- * @brief System call to sleep the current process
+ * @todo resource type system
  *
- * @param args Arg0 = milliseconds
- * @return Nothing
+ * @param args Arg0 = Name of the shared memory region Arg1 = Resource Type
+ * @return 1 for success 0 for failure
  */
-syscall_args_t* SyscallManager::syscall_thread_sleep(syscall_args_t* args) {
+syscall_args_t* SyscallManager::syscall_resource_registry_create(syscall_args_t* args) {
 
-	// Get the milliseconds
-	size_t milliseconds = args->arg0;
+	// Parse params
+	auto name	= (char*)args->arg0;
+	auto type	= (size_t)args->arg1;
 
-	// Sleep the thread
-	GlobalScheduler::current_thread()->sleep(milliseconds);
-	args->return_state = GlobalScheduler::yield(args->return_state);
+	// Create the registry
+	auto registery = new BridgeResourceRegistry(name, type);
 
-	// Done
-	return args;
-}
-
-/**
- * @brief System call to close a thread
- *
- * @param args Arg0 = tid Arg1 = exit code
- * @return Nothing
- */
-syscall_args_t* SyscallManager::syscall_thread_close(syscall_args_t* args) {
-
-	// Get the args
-	uint64_t tid = args->arg0;
-	int exit_code = (int) args->arg1;
-
-	// Get the thread if it is 0 then it is the current thread
-	Thread* thread = tid == 0 ? GlobalScheduler::current_thread() : GlobalScheduler::get_thread(tid);
-	thread->thread_state = ThreadState::STOPPED;
-
-	// Schedule the next thread
-	if(tid == 0){
-		cpu_status_t* next_thread = GlobalScheduler::core_scheduler()->schedule_next(args->return_state);
-		args->return_state = next_thread;
-	}
-
-	// Done
+	args->return_value = registery ? 1 : 0;
 	return args;
 }

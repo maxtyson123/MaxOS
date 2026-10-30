@@ -6,6 +6,10 @@ msg () {
   printf "\e[36m[INFO] $1 \e[39m\n"
 }
 
+rpcgen () {
+  printf "\e[36m[RPCGEN] $1 \e[39m\n"
+}
+
 warn () {
   printf "\e[33m[WARN] $1 \e[39m\n"
 }
@@ -38,7 +42,7 @@ fail () {
 SED_EXC=sed
 STAT_EXC=stat
 
-MOUNT_DIR="/mnt"
+
 
 # Filesystem type: "FAT" or "EXT2"
 FILESYSTEM_TYPE="EXT2"
@@ -47,7 +51,6 @@ FILESYSTEM_TYPE="EXT2"
 IS_MACOS=0
 if [[ ($(uname) == "Darwin") ]]; then
   IS_MACOS=1
-  msg "Running on MacOS"
 
   #Set the path to the brew binary
   BREW_PATH=$(which brew)
@@ -59,6 +62,4 @@ if [[ ($(uname) == "Darwin") ]]; then
   # Ensure use of gnu tools
   SED_EXC=gsed
   STAT_EXC=gstat
-
-  MOUNT_DIR="/Volumes"
 fi

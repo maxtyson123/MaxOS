@@ -53,8 +53,9 @@ cat > "${OUTPUT_FILE}" << EOF
 
 
 #include <stdint.h>
-#include <common/string.h>
-#include <common/time.h>
+
+#include <libcommon/string.h>
+#include <libcommon/time.h>
 
 namespace MaxOS {
 
@@ -101,8 +102,8 @@ namespace MaxOS {
 
 
 #include <stdint.h>
-#include <common/string.h>
-#include <common/time.h>
+#include <string.h>
+#include <time.h>
 
 namespace MaxOS{
 

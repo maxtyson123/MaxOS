@@ -10,11 +10,13 @@
 #define MAX_OS_HARDWARECOMMUNICATION_INTERRUPTS_H
 
 #include <cstdint>
-#include <hardwarecommunication/port.h>
+
+#include <libcommon/port.h>
+#include <libcommon/inputStream.h>
+#include <libcommon/outputStream.h>
+#include <libcommon/map.h>
+
 #include <system/gdt.h>
-#include <common/inputStream.h>
-#include <common/outputStream.h>
-#include <common/map.h>
 #include <system/cpu.h>
 #include <hardwarecommunication/apic.h>
 
@@ -22,6 +24,18 @@
 namespace MaxOS::hardwarecommunication {
 
 	class InterruptManager;
+
+    /**
+     * @enum InterruptPrivilegeLevel
+     * @brief Represents the CPU ring level that a interrupt is handler is executed in
+     */
+    enum class InterruptPrivilegeLevel
+	{
+		KERNEL_ONLY,
+		RING_1,
+		RING_2,
+		USERSPACE
+	};
 
 	/**
 	 * @class InterruptHandler
@@ -32,13 +46,94 @@ namespace MaxOS::hardwarecommunication {
 			uint8_t m_interrupt_number;     ///<  The interrupt number this handler handles
 
 			explicit InterruptHandler(uint8_t interrupt_number, int64_t redirect = -1, uint64_t redirect_index = 0);
-			~InterruptHandler();
+			virtual ~InterruptHandler();
 
 		public:
 			virtual void handle_interrupt();
 			virtual system::cpu_status_t* handle_interrupt(system::cpu_status_t* status);
 
 	};
+
+    /**
+    * @class ExceptionHandler
+    * @brief Base class for handing CPU expection interrupts
+    */
+	class ExceptionHandler : public InterruptHandler {
+
+		public:
+	    ExceptionHandler(uint8_t interrupt_number);
+			~ExceptionHandler();
+
+			virtual string get_message(system::cpu_status_t* status);
+			virtual system::cpu_status_t* handle_interrupt(system::cpu_status_t* status);
+
+	};
+
+    /**
+    * @class DivideByZeroHandler
+    * @brief Handles an attempt to divide by 0
+    */
+    class DivideByZeroHandler : public ExceptionHandler {
+        public:
+
+            /// Create a new DivideByZeroHandler
+            DivideByZeroHandler() : ExceptionHandler(0x00) {	}
+
+            string get_message(system::cpu_status_t* status) final;
+    };
+
+    /**
+    * @class InvaildOpCodeHandler
+    * @brief Handles calling an invalid assembly instruction for the configuration running on this architecture
+    */
+	class InvaildOpCodeHandler : public ExceptionHandler {
+		public:
+
+            /// Create a new InvaildOpCodeHandler
+			InvaildOpCodeHandler() : ExceptionHandler(0x06) {	}
+
+			string get_message(system::cpu_status_t* status) final;
+	};
+
+    /**
+    * @class GeneralProtectionHandler
+    * @brief Handles a general protection exception
+    */
+	class GeneralProtectionHandler : public ExceptionHandler {
+		public:
+
+            /// Create a new GeneralProtectionHandler
+			GeneralProtectionHandler() : ExceptionHandler(0x0D) { }
+
+			string get_message(system::cpu_status_t* status) final;
+	};
+
+    /**
+    * @class PageFaultHandler
+    * @brief Handles a page fault exception
+    */
+	class PageFaultHandler : public ExceptionHandler {
+		public:
+
+            /// Create a new PageFaultHandler
+			PageFaultHandler() : ExceptionHandler(0x0E) { }
+
+			string get_message(system::cpu_status_t* status) final;
+	};
+
+    /**
+     * @class CPUStopHandler
+     * @brief Handles a interrupt that tells a CPU core to stop running
+     */
+    class CPUStopHandler : public InterruptHandler {
+		public:
+
+            /// Create a new CPUStopHandler
+			CPUStopHandler() : InterruptHandler(0x81) { }
+
+			system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
+	};
+
 
 	/**
 	 * @struct IDTR
@@ -74,6 +169,27 @@ namespace MaxOS::hardwarecommunication {
 	constexpr uint16_t HARDWARE_INTERRUPT_OFFSET = 0x20;    ///< The offset in the IDT where interrupts from hardware start
 	constexpr uint16_t MAX_INTERRUPT_HANDLERS = 256;        ///< The maximum number of interrupt handlers
 
+    /**
+     * @class ExceptionHandlers
+     * @brief Holds and instantiates the CPU exception handlers
+     */
+    class ExceptionHandlers {
+
+		private:
+
+			// Exception handles
+            DivideByZeroHandler m_db0_handler;
+            InvaildOpCodeHandler m_opce_handler;
+            GeneralProtectionHandler m_gpe_handler;
+            PageFaultHandler m_page_fault_handler;
+            CPUStopHandler m_cpu_stop_handler;
+
+        public:
+			ExceptionHandlers();
+			~ExceptionHandlers();
+
+	};
+
 	/**
 	 * @class InterruptManager
 	 * @brief Handles all interrupts and passes them to the correct handler
@@ -97,7 +213,7 @@ namespace MaxOS::hardwarecommunication {
 			InterruptHandler* m_interrupt_handlers[MAX_INTERRUPT_HANDLERS] = { };                                    ///< A map of index-to-interrupt of interrupt handlers to fire when an interrupt occurs
 			inline static InterruptDescriptor s_interrupt_descriptor_table[MAX_INTERRUPT_HANDLERS] = { };            ///< The Interrupt Descriptor Table (IDT)
 
-			static void set_interrupt_descriptor_table_entry(uint8_t interrupt, void (* handler)(), uint8_t descriptor_privilege_level);
+			static void set_interrupt_descriptor_table_entry(uint8_t interrupt, void (* handler)(), InterruptPrivilegeLevel descriptor_privilege_level);
 
 			//Various Interrupts
 			static void HandleInterruptRequest0x00();   ///< Stub (see interrupts.s)
@@ -119,6 +235,7 @@ namespace MaxOS::hardwarecommunication {
 			static void HandleInterruptRequest0x0F();   ///< Stub (see interrupts.s)
 			static void HandleInterruptRequest0x31();   ///< Stub (see interrupts.s)
 			static void HandleInterruptRequest0x60();   ///< Stub (see interrupts.s)
+			static void HandleInterruptRequest0x61();   ///< Stub (see interrupts.s)
 
 			// Exceptions
 			static void HandleException0x00();          ///< Stub (see interrupts.s)

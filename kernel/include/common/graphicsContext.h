@@ -4,14 +4,17 @@
  *
  * @date 15th October 2022
  * @author Max Tyson
+ *
+ * @todo Move to drivers/video?
  */
 
 #ifndef MaxOS_COMMON_GRAPHICSCONTEX_H
 #define MaxOS_COMMON_GRAPHICSCONTEX_H
 
 #include <cstdint>
-#include <common/colour.h>
+#include <stdint.h>
 
+#include <libcommon/colour.h>
 
 namespace MaxOS::common {
 
@@ -49,6 +52,7 @@ namespace MaxOS::common {
 			GraphicsContext();
 			~GraphicsContext();
 
+			static uint32_t colour_to_int(const Colour& colour, uint32_t color_depth);
 			uint32_t colour_to_int(const Colour&);
 			Colour int_to_colour(uint32_t);
 

@@ -11,9 +11,16 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <memory/physical.h>
-#include <common/string.h>
 
+#include <libcommon/string.h>
+
+#include <memory/physical.h>
+
+
+namespace MaxOS::processes
+{
+	class Process;
+}
 
 namespace MaxOS {
 	namespace memory {
@@ -58,18 +65,19 @@ namespace MaxOS {
 		 *
 		 * @typedef free_chunk_t
 		 * @brief Alias for FreeChunk struct
+		 *
+		 * @todo Could just use virtual_memory_chunk_t and use "flags" as a pointer?
 		 */
 		typedef struct FreeChunk {
 
-			uintptr_t start_address;    ///< *copydoc VirtualMemoryChunk::start_address
-			size_t size;                ///< *copydoc VirtualMemoryChunk::size
+			uintptr_t start_address;    ///< @copydoc VirtualMemoryChunk::start_address
+			size_t size;                ///< @copydoc VirtualMemoryChunk::size
 			struct FreeChunk* next;     ///< Pointer to the next free chunk in the list (not sequential in memory)
 
 		} free_chunk_t;
 
-		static const size_t CHUNKS_PER_PAGE = PAGE_SIZE / sizeof(virtual_memory_chunk_t) -
-		                                      1;    ///< Number of chunks per virtual memory region (limited to fit in one page)
-		static const size_t VMM_RESERVED = 0x138000000;                                         ///< The starting address for the VMM to start allocating from when in higher half (otherwise can cause conflicts with kernel space)
+		constexpr size_t CHUNKS_PER_PAGE = PAGE_SIZE / sizeof(virtual_memory_chunk_t) - 1;   ///< Number of chunks per virtual memory region (limited to fit in one page)
+		constexpr size_t VMM_RESERVED = 0x138000000;                                         ///< The starting address for the VMM to start allocating from when in higher half (otherwise can cause conflicts with kernel space)
 
 		/**
 		 * @struct VirtualMemoryRegion
@@ -96,17 +104,19 @@ namespace MaxOS {
 		class VirtualMemoryManager {
 
 			private:
-				uint64_t* m_pml4_root_address;
-				uint64_t* m_pml4_root_physical_address;
+				uint64_t* m_pml4_root_address = nullptr;
+				uint64_t* m_pml4_root_physical_address = nullptr;
 
-				virtual_memory_region_t* m_first_region;
-				virtual_memory_region_t* m_current_region;
+				virtual_memory_region_t* m_first_region = nullptr;
+				virtual_memory_region_t* m_current_region = nullptr;
 				size_t m_current_chunk = 0;
 				size_t m_next_available_address;
 
 				free_chunk_t* m_free_chunks = nullptr;
 				void add_free_chunk(uintptr_t start_address, size_t size);
+
 				free_chunk_t* find_and_remove_free_chunk(size_t size);
+				virtual_memory_chunk_t* find_containing_chunk(const void* start_address, size_t size);
 
 				void new_region();
 				void fill_up_to_address(uintptr_t address, size_t flags, bool mark_used);
@@ -116,10 +126,14 @@ namespace MaxOS {
 				~VirtualMemoryManager();
 
 				void* allocate(size_t size, size_t flags);
-				void* allocate(uint64_t address, size_t size, size_t flags);
-				void free(void* address);
+				void* allocate(size_t requested_size, size_t& actual_size, size_t flags);
+				void* allocate(uint64_t address, size_t requested_size, size_t& actual_size, size_t flags);
+				void free(void* address, bool reusable_pages = true);
 
 				void* load_physical_into_address_space(uintptr_t physical_address, size_t size, size_t flags);
+
+				void* load_range_from_process(VirtualMemoryManager* other_vmm, const void* start_address, size_t size);
+				void  unload_range_from_process(const void* start_address, size_t size);
 
 				void* load_shared_memory(const string &name);
 				void* load_shared_memory(uintptr_t physical_address, size_t size);

@@ -4,14 +4,16 @@
  *
  * @date 4th April 2025
  * @author Max Tyson
+ *
+ * @todo move somewhere else (maybe even commonlib), rename common/ to generated/
  */
 
 #ifndef MAXOS_COMMON_LOGGER_H
 #define MAXOS_COMMON_LOGGER_H
 
-#include <common/outputStream.h>
-#include <common/colour.h>
-#include <common/spinlock.h>
+#include <libcommon/outputStream.h>
+#include <libcommon/colour.h>
+#include <libcommon/spinlock.h>
 
 namespace MaxOS {
 
@@ -21,6 +23,7 @@ namespace MaxOS {
 	 * @brief Priority levels for logging messages. Different levels may be used to filter messages based on their importance depending on build type.
 	 */
 	enum class LogLevel {
+		OUT,
 		ERROR,
 		WARNING,
 		HEADER,
@@ -37,11 +40,18 @@ namespace MaxOS {
 	constexpr LogLevel MAX_LOG_LEVEL = LogLevel::DEBUG;     ///< The maximum log level for this build (messages above this level will not be logged)
 #endif
 
+
+
+	class LogRecord;
+
 	/**
 	 * @class Logger
 	 * @brief A class that handles logging messages to the console and files.
 	 */
 	class Logger : public MaxOS::common::OutputStream {
+
+		friend class LogRecord;
+
 		private:
 
 			// Cant use vector as this needs to be init before the heap
@@ -54,6 +64,7 @@ namespace MaxOS {
 			uint8_t m_progress_current = 0;
 
 			static inline Logger* s_active_logger = nullptr;
+			inline static common::Spinlock s_loggers_lock = {};
 
 			LogLevel m_log_level = LogLevel::INFO;
 
@@ -63,42 +74,67 @@ namespace MaxOS {
 
 			void add_log_writer(OutputStream* log_writer);
 			void disable_log_writer(OutputStream* log_writer);
+			void enable_log_writer(OutputStream* log_writer);
+			void enable_all_log_writers();
 
 			void set_log_level(LogLevel log_level);
 
 			void write_char(char c) final;
 			void printf(const char* format, ...);
 
-			static void ASSERT(bool condition, const char* message, ...);
+			static void assert(bool condition, const char* message, ...);
 
 			static Logger* active_logger();
 
-			static Logger& Out();
+			static LogRecord Out();
 
-			static Logger ERROR();
-			static Logger WARNING();
-			static Logger HEADER();
-			static Logger INFO();
-			static Logger TEST();
-			static Logger DEBUG();
+			static LogRecord ERROR();
+			static LogRecord WARNING();
+			static LogRecord HEADER();
+			static LogRecord INFO();
+			static LogRecord TEST();
+			static LogRecord DEBUG();
 
 			using OutputStream::operator <<;
 			Logger& operator <<(LogLevel log_level);
 	};
 
 	/**
-	* @brief If the specified condition is not met then the kernel will crash with the specified message.
-	*
-	* This macro wraps Logger::ASSERT and supports printf-style formatting with variadic arguments.
-	*
-	* @param condition The condition to check.
-	* @param format The format string (like printf).
-	* @param ... Additional arguments to format.
-	*
-	* @see Logger::ASSERT
-	*/
-#define ASSERT(condition, format, ...) Logger::ASSERT(condition, format, ##__VA_ARGS__)
+	 * @class LogRecord
+	 * @brief A single logging event
+	 */
+	class LogRecord {
 
+		private:
+			Logger& m_logger;
+
+		public:
+			explicit LogRecord(Logger& logger, LogLevel level);
+			~LogRecord();
+
+            /**
+             * Write a variable to the log
+             *
+             * @tparam T The type of variable to write
+             * @param value The value of the variable to write
+             * @return The LogRecord instance
+             */
+            template<typename T> LogRecord& operator << (const T& value) {
+				m_logger.write(value);
+				return *this;
+			}
+
+            /**
+             * Write a single character to the log
+             *
+             * @param c The character to write
+             * @return The LogRecord instance
+             */
+            LogRecord& operator << (char c) {
+				m_logger.write_char(c);
+				return *this;
+			}
+	};
 }
 
 #endif // MAXOS_COMMON_LOGGER_H

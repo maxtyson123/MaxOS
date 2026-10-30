@@ -75,13 +75,128 @@ void InterruptHandler::handle_interrupt() {
  * @param status The status of the CPU
  * @return  The status of the CPU
  */
-system::cpu_status_t* InterruptHandler::handle_interrupt(system::cpu_status_t* status) {
+cpu_status_t* InterruptHandler::handle_interrupt(cpu_status_t* status) {
 
 	// For handlers that don't care about the status
 	handle_interrupt();
 
 	// Return the default status
 	return status;
+}
+
+/**
+ * @brief Create a new base exception handler for an interrupt
+ *
+ * @param interrupt_number The interrupt this exception handles
+ */
+ExceptionHandler::ExceptionHandler(uint8_t interrupt_number)
+: InterruptHandler(interrupt_number)
+{
+}
+
+/**
+ * Default destructor for a ExceptionHandler
+ */
+ExceptionHandler::~ExceptionHandler() = default;
+
+/**
+ * @brief Get an human readable error message explaining this exception
+ *
+ * @param status The CPU state at time of exception
+ * @return The error message
+ */
+string ExceptionHandler::get_message(system::cpu_status_t *status) {
+
+	return "Unimplemented message for exception\n";
+
+}
+
+/**
+ * @brief Handle the interrupt relating to this exception
+ *
+ * @param status The CPU state at time of exception
+ * @return The new CPU state to move to or null if no recoverable state
+ */
+cpu_status_t* ExceptionHandler::handle_interrupt(cpu_status_t *status) {
+
+	// Get the message
+	string msg = get_message(status);
+
+	// Try to avoid the panic
+	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
+	if (can_avoid != nullptr)
+		return can_avoid;
+
+	// Have to panic (must have occurred in kernel)
+	CPU::PANIC(msg.c_str(), status);
+
+	// Shouldn't return, fault if this happens
+	return nullptr;
+
+}
+
+/**
+ * @copydoc ExceptionHandler::get_message
+ */
+string DivideByZeroHandler::get_message(cpu_status_t *status) {
+
+    return  StringBuilder() << "Division by 0 executed at 0x" << status->rip << "\n";
+
+}
+
+
+/**
+ * @copydoc ExceptionHandler::get_message
+ */
+string InvaildOpCodeHandler::get_message(cpu_status_t *status) {
+
+	return  StringBuilder() << "Invaild opcode executed at 0x" << status->rip << "\n";
+
+}
+
+
+/**
+ * @copydoc ExceptionHandler::get_message
+ */
+string GeneralProtectionHandler::get_message(cpu_status_t *status) {
+
+	// Get the core that the fault happened on
+	auto core = CPU::executing_core();
+	uint64_t core_id = core ? core->id : 0;
+
+	uint64_t error_code = status->error_code;
+	return StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " cid: " << core_id << "\n";
+
+}
+
+
+/**
+ * @copydoc ExceptionHandler::get_message
+ */
+string PageFaultHandler::get_message(cpu_status_t *status) {
+
+	// Extract the information about the fault
+	bool present = (status->error_code & 0x1) != 0;
+	bool write = (status->error_code & 0x2) != 0;
+	bool user_mode = (status->error_code & 0x4) != 0;
+	bool reserved_write = (status->error_code & 0x8) != 0;
+	bool instruction_fetch = (status->error_code & 0x10) != 0;
+	uint64_t faulting_address;
+	asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
+
+	return StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ")\n";
+}
+
+
+/**
+ * @copydoc ExceptionHandler::handle_interrupt
+ */
+cpu_status_t * CPUStopHandler::handle_interrupt(cpu_status_t *status) {
+
+	CPU::halt();
+
+	// Shouldn't return, fault if this happens
+	return nullptr;
 }
 
 /**
@@ -103,47 +218,49 @@ InterruptManager::InterruptManager() {
 	}
 
 	//Set Up the base interrupts
-	set_interrupt_descriptor_table_entry(0x00, &HandleException0x00, 0);   // Division by zero
-	set_interrupt_descriptor_table_entry(0x01, &HandleException0x01, 0);   // Debug
-	set_interrupt_descriptor_table_entry(0x02, &HandleException0x02, 0);   // Non-maskable interrupt
-	set_interrupt_descriptor_table_entry(0x03, &HandleException0x03, 0);   // Breakpoint
-	set_interrupt_descriptor_table_entry(0x04, &HandleException0x04, 0);   // Overflow
-	set_interrupt_descriptor_table_entry(0x05, &HandleException0x05, 0);   // Bound Range Exceeded
-	set_interrupt_descriptor_table_entry(0x06, &HandleException0x06, 0);   // Invalid Opcode
-	set_interrupt_descriptor_table_entry(0x06, &HandleException0x07, 0);   // Device Not Available
-	set_interrupt_descriptor_table_entry(0x08, &HandleInterruptError0x08, 0);   // Double Fault
-	set_interrupt_descriptor_table_entry(0x09, &HandleException0x09, 0);   // Coprocessor Segment Overrun
-	set_interrupt_descriptor_table_entry(0x0A, &HandleInterruptError0x0A, 0);   // Invalid TSS
-	set_interrupt_descriptor_table_entry(0x0B, &HandleInterruptError0x0B, 0);   // Segment Not Present
-	set_interrupt_descriptor_table_entry(0x0C, &HandleInterruptError0x0C, 0);   // Stack-Segment Fault
-	set_interrupt_descriptor_table_entry(0x0D, &HandleInterruptError0x0D, 0);   // General Protection Fault
-	set_interrupt_descriptor_table_entry(0x0E, &HandleInterruptError0x0E, 0);   // Page Fault
-	set_interrupt_descriptor_table_entry(0x0F, &HandleException0x0F, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x10, &HandleException0x10, 0);   // x87 Floating-Point Exception
-	set_interrupt_descriptor_table_entry(0x11, &HandleInterruptError0x11, 0);   // Alignment Check
-	set_interrupt_descriptor_table_entry(0x12, &HandleException0x12, 0);   // Machine Check
-	set_interrupt_descriptor_table_entry(0x13, &HandleException0x13, 0);   // SIMD Floating-Point Exception
-	set_interrupt_descriptor_table_entry(0x14, &HandleException0x14, 0);   // Reserved: Virtualization Exception
-	set_interrupt_descriptor_table_entry(0x15, &HandleException0x15, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x16, &HandleException0x16, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x17, &HandleException0x17, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x18, &HandleException0x18, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x19, &HandleException0x19, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1A, &HandleException0x1A, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1B, &HandleException0x1B, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1C, &HandleException0x1C, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1D, &HandleException0x1D, 0);   // Reserved
-	set_interrupt_descriptor_table_entry(0x1E, &HandleException0x1E, 0);   // Security Exception
-	set_interrupt_descriptor_table_entry(0x1F, &HandleException0x1F, 0);   // Reserved
+	set_interrupt_descriptor_table_entry(0x00, &HandleException0x00,		InterruptPrivilegeLevel::KERNEL_ONLY);   // Division by zero
+	set_interrupt_descriptor_table_entry(0x01, &HandleException0x01, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Debug
+	set_interrupt_descriptor_table_entry(0x02, &HandleException0x02, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Non-maskable interrupt
+	set_interrupt_descriptor_table_entry(0x03, &HandleException0x03, 		InterruptPrivilegeLevel::USERSPACE);	 // Breakpoint
+	set_interrupt_descriptor_table_entry(0x04, &HandleException0x04, 		InterruptPrivilegeLevel::USERSPACE);	 // Overflow
+	set_interrupt_descriptor_table_entry(0x05, &HandleException0x05, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Bound Range Exceeded
+	set_interrupt_descriptor_table_entry(0x06, &HandleException0x06, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Invalid Opcode
+	set_interrupt_descriptor_table_entry(0x07, &HandleException0x07,		InterruptPrivilegeLevel::KERNEL_ONLY);   // Device Not Available
+	set_interrupt_descriptor_table_entry(0x08, &HandleInterruptError0x08,	InterruptPrivilegeLevel::KERNEL_ONLY);   // Double Fault
+	set_interrupt_descriptor_table_entry(0x09, &HandleException0x09,		InterruptPrivilegeLevel::KERNEL_ONLY);   // Coprocessor Segment Overrun
+	set_interrupt_descriptor_table_entry(0x0A, &HandleInterruptError0x0A, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Invalid TSS
+	set_interrupt_descriptor_table_entry(0x0B, &HandleInterruptError0x0B, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Segment Not Present
+	set_interrupt_descriptor_table_entry(0x0C, &HandleInterruptError0x0C, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Stack-Segment Fault
+	set_interrupt_descriptor_table_entry(0x0D, &HandleInterruptError0x0D, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // General Protection Fault
+	set_interrupt_descriptor_table_entry(0x0E, &HandleInterruptError0x0E, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Page Fault
+	set_interrupt_descriptor_table_entry(0x0F, &HandleException0x0F, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x10, &HandleException0x10, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // x87 Floating-Point Exception
+	set_interrupt_descriptor_table_entry(0x11, &HandleInterruptError0x11, 	InterruptPrivilegeLevel::KERNEL_ONLY);   // Alignment Check
+	set_interrupt_descriptor_table_entry(0x12, &HandleException0x12, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Machine Check
+	set_interrupt_descriptor_table_entry(0x13, &HandleException0x13, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // SIMD Floating-Point Exception
+	set_interrupt_descriptor_table_entry(0x14, &HandleException0x14, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved: Virtualization Exception
+	set_interrupt_descriptor_table_entry(0x15, &HandleException0x15, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x16, &HandleException0x16, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x17, &HandleException0x17, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x18, &HandleException0x18, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x19, &HandleException0x19, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1A, &HandleException0x1A, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1B, &HandleException0x1B, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1C, &HandleException0x1C, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1D, &HandleException0x1D, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
+	set_interrupt_descriptor_table_entry(0x1E, &HandleException0x1E, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Security Exception
+	set_interrupt_descriptor_table_entry(0x1F, &HandleException0x1F, 		InterruptPrivilegeLevel::KERNEL_ONLY);   // Reserved
 
 	// Set up the hardware interrupts
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x00, &HandleInterruptRequest0x00, 0);   // APIC Timer Interrupt
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x01, &HandleInterruptRequest0x01, 0);   // Keyboard Interrupt
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x02, &HandleInterruptRequest0x02, 0);   // PIT Interrupt
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x0C, &HandleInterruptRequest0x0C, 0);   // Mouse Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x00, &HandleInterruptRequest0x00, InterruptPrivilegeLevel::KERNEL_ONLY);   // APIC Timer Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x01, &HandleInterruptRequest0x01, InterruptPrivilegeLevel::KERNEL_ONLY);   // Keyboard Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x02, &HandleInterruptRequest0x02, InterruptPrivilegeLevel::KERNEL_ONLY);   // PIT Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x04, &HandleInterruptRequest0x04, InterruptPrivilegeLevel::KERNEL_ONLY);   // Serial Interrupt
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x0C, &HandleInterruptRequest0x0C, InterruptPrivilegeLevel::KERNEL_ONLY);   // Mouse Interrupt
 
-	// Set up the system call interrupt
-	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x60, &HandleInterruptRequest0x60, 3);   // System Call Interrupt - Privilege Level 3 so that user space can call it
+	// Set up the software interrupts
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x60, &HandleInterruptRequest0x60, InterruptPrivilegeLevel::USERSPACE);   // System Call Interrupt - Privilege Level 3 so that user space can call it
+	set_interrupt_descriptor_table_entry(HARDWARE_INTERRUPT_OFFSET + 0x61, &HandleInterruptRequest0x61, InterruptPrivilegeLevel::KERNEL_ONLY);   // Kill this core
 
 	// Tell the processor to use the IDT
 	load_current();
@@ -163,7 +280,7 @@ InterruptManager::~InterruptManager() {
  * @param handler  Interrupt Handler
  * @param descriptor_privilege_level Descriptor Privilege Level
  */
-void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, void (* handler)(), uint8_t descriptor_privilege_level) {
+void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, void (* handler)(), InterruptPrivilegeLevel descriptor_privilege_level) {
 
 	// Get the address of the handler and the entry in the IDT
 	auto handler_address = (uint64_t) handler;
@@ -181,7 +298,7 @@ void InterruptManager::set_interrupt_descriptor_table_entry(uint8_t interrupt, v
 	interrupt_descriptor->ist = 0;
 
 	// Set the flags (Trap Gate, Present and the Descriptor Privilege Level)
-	interrupt_descriptor->flags = 0b1110 | ((descriptor_privilege_level & 0b11) << 5) | (1 << 7);
+	interrupt_descriptor->flags = 0b1110 | (((uint8_t)descriptor_privilege_level & 0b11) << 5) | (1 << 7);
 }
 
 /**
@@ -203,7 +320,7 @@ void InterruptManager::activate() {
 	Logger::INFO() << "Activating Interrupts \n";
 
 	// Deactivate the current (old) interrupt manager
-	InterruptManager::deactivate();
+	deactivate();
 
 	// Set the current interrupt manager and start interrupts
 	s_active_interrupt_manager = this;
@@ -229,22 +346,10 @@ void InterruptManager::deactivate() {
  *
  * @param status The current cpu status
  * @return The updated cpu status
+ *
+ * @todo Exception handlers
  */
-system::cpu_status_t* InterruptManager::HandleInterrupt(system::cpu_status_t* status) {
-
-	// Default Fault Handlers
-	switch (status->interrupt_number) {
-
-		case 0x7:
-			CPU::PANIC("Device Not Available: FPU Not Enabled", status);
-			break;
-
-		case 0x0D:
-			return general_protection_fault(status);
-
-		case 0x0E:
-			return page_fault(status);
-	}
+cpu_status_t* InterruptManager::HandleInterrupt(cpu_status_t* status) {
 
 	// If there is an interrupt manager handle interrupt
 	if (s_active_interrupt_manager != nullptr)
@@ -283,14 +388,9 @@ void InterruptManager::remove_interrupt_handler(uint8_t interrupt) {
  */
 cpu_status_t* InterruptManager::handle_interrupt_request(cpu_status_t* status) {
 
-	// Where to go afterward
-	cpu_status_t* new_status = status;
-
-	// If there is an interrupt manager, handle the interrupt
-	if (m_interrupt_handlers[status->interrupt_number] != nullptr)
-		new_status = m_interrupt_handlers[status->interrupt_number]->handle_interrupt(status);
-	else
-		Logger::WARNING() << "Interrupt " << (int) status->interrupt_number << " not handled\n";
+	// Handle the interrupt
+	ASSERT(m_interrupt_handlers[status->interrupt_number] != nullptr, "Interrupt 0x%x not handled\n", status->interrupt_number);
+	cpu_status_t* new_status = m_interrupt_handlers[status->interrupt_number]->handle_interrupt(status);
 
 	// Send the EOI to the APIC
 	if (HARDWARE_INTERRUPT_OFFSET <= status->interrupt_number && status->interrupt_number < HARDWARE_INTERRUPT_OFFSET + 16)
@@ -311,67 +411,17 @@ void InterruptManager::set_apic(AdvancedProgrammableInterruptController* apic) {
 }
 
 
+ExceptionHandlers::ExceptionHandlers() = default;
+ExceptionHandlers::~ExceptionHandlers() = default;
+
 /**
  * @brief Handles a page fault
  *
  * @param status The cpu status
  * @return The updated cpu status (won't return if it panics)
  */
-cpu_status_t* InterruptManager::page_fault(system::cpu_status_t* status) {
+cpu_status_t* InterruptManager::page_fault(cpu_status_t* status) {
 
-	// Extract the information about the fault
-	bool present = (status->error_code & 0x1) != 0;
-	bool write = (status->error_code & 0x2) != 0;
-	bool user_mode = (status->error_code & 0x4) != 0;
-	bool reserved_write = (status->error_code & 0x8) != 0;
-	bool instruction_fetch = (status->error_code & 0x10) != 0;
-	uint64_t faulting_address;
-	asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
-
-	// Get the core that the fault happened on
-	auto core = CPU::executing_core();
-	uint64_t core_id = core ? core->id : 0;
-
-	string msg = StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ") for core " << core_id << "\n";
-
-
-	// Try kill the process so the system doesn't die
-	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
-	if (can_avoid != nullptr)
-		return can_avoid;
-
-	// Cant avoid it so halt the kernel
-	CPU::PANIC(msg.c_str(), status);
-
-	// Probably should never get here
-	return status;
-}
-
-/**
- * @brief Handles a general protection fault
- *
- * @param status The cpu status
- * @return The updated cpu status (won't return if it panics)
- */
-cpu_status_t* InterruptManager::general_protection_fault(system::cpu_status_t* status) {
-
-	// Get the core that the fault happened on
-	auto core = CPU::executing_core();
-	uint64_t core_id = core ? core->id : 0;
-
-	uint64_t error_code = status->error_code;
-	string msg = StringBuilder() << "General Protection Fault: (0x" << status->rip << "): " << (error_code & 0x1 ? "Protection-Exception" : "Not a Protection Exception") << " c" << core_id << "\n";
-
-	// Try to avoid the panic
-	cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
-	if (can_avoid != nullptr)
-		return can_avoid;
-
-	// Have to panic
-	CPU::PANIC(msg.c_str(), status);
-
-	// Probably should never get here
-	return status;
 }
 
 /**

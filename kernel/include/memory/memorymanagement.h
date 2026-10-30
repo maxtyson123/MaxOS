@@ -4,6 +4,7 @@
  *
  * @date 20th October 2022
  * @author Max Tyson
+ *
  */
 
 #ifndef MAXOS_SYSTEM_MEMORYMANAGEMENT_H
@@ -11,44 +12,46 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <system/multiboot.h>
-#include <memory/virtual.h>
 
+#include <libcommon/assert.h>
+
+#include <memory/virtual.h>
+#include <memory/allocator/allocator.h>
+#include <memory/allocator/bump.h>
+#include <system/multiboot.h>
 
 namespace MaxOS::memory {
 
-	/**
-	 * @struct MemoryChunk
-	 * @brief A span of memory in the heap, can be allocated or free. Used as a node in a doubly linked list.
-	 */
-	struct MemoryChunk {
+    /**
+     * @class BumpMemoryManager
+     * @brief Basic doubly linked list bump memory manager
+     */
+    class BumpMemoryManager : public allocator::BumpAllocator {
 
-		MemoryChunk* next;      ///< Pointer to the chunk after this one in the list
-		MemoryChunk* prev;      ///< Pointer to the chunk before this one in the list
+		private:
 
-		bool allocated;         ///< Whether this chunk is in use or can be allocated
-		size_t size;            ///< The size of this span of memory (not including the MemoryChunk struct itself)
+			VirtualMemoryManager* m_virtual_memory_manager;
 
+			void* allocate_extra_space(size_t requested_size, size_t& actual_size) final;
+
+		public:
+
+			BumpMemoryManager(VirtualMemoryManager* virtual_memory_manager = nullptr);
+			~BumpMemoryManager();
+
+			// Virtual Memory Management
+			VirtualMemoryManager* vmm();
+			static void switch_active_memory_manager(BumpMemoryManager* manager);
 	};
-
-	constexpr size_t CHUNK_ALIGNMENT = 0x10;    ///< How many bytes the chunks should be a multiple of (round up to this)
 
 	/**
 	 * @class MemoryManager
 	 * @brief Handles memory allocation and deallocation
 	 */
-	class MemoryManager {
+	class MemoryManager : public BumpMemoryManager {
 
-		private:
-			MemoryChunk* m_first_memory_chunk;
-			MemoryChunk* m_last_memory_chunk;
-
-			VirtualMemoryManager* m_virtual_memory_manager;
-
-			MemoryChunk* expand_heap(size_t size);
 
 		public:
-			inline static MemoryManager* s_current_memory_manager = nullptr;            ///< The memory manager for the current process
 			inline static MemoryManager* s_kernel_memory_manager = nullptr;             ///< The memory manager for any kernel processes and all kernel allocations
 
 			explicit MemoryManager(VirtualMemoryManager* virtual_memory_manager = nullptr);
@@ -56,36 +59,12 @@ namespace MaxOS::memory {
 
 			// Public Memory Management
 			static void* malloc(size_t size);
-			static void free(void* pointer);
+			static void  free(void* pointer);
 
 			// Kernel Memory Management
 			static void* kmalloc(size_t size);
-			static void kfree(void* pointer);
-
-			// Internal Memory Management
-			void* handle_malloc(size_t size);
-			void handle_free(void* pointer);
-			VirtualMemoryManager* vmm();
-
-			// Utility Functions
-			size_t memory_used();
-			static size_t align(size_t size);
-			static void switch_active_memory_manager(MemoryManager* manager);
+			static void  kfree(void* pointer);
 	};
 }
-
-
-void* operator new(size_t size) throw();
-void* operator new[](size_t size) throw();
-
-//Placement New
-void* operator new(size_t size, void* pointer);
-void* operator new[](size_t size, void* pointer);
-
-void operator delete(void* pointer);
-void operator delete[](void* pointer);
-
-void operator delete(void* pointer, size_t size);
-void operator delete[](void* pointer, size_t size);
 
 #endif //MAXOS_SYSTEM_MEMORYMANAGEMENT_H

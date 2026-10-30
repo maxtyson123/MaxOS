@@ -9,13 +9,23 @@
 #ifndef MAXOS_HARDWARECOMMUNICATION_APIC_H
 #define MAXOS_HARDWARECOMMUNICATION_APIC_H
 
-#include <common/macros.h>
-#include <hardwarecommunication/port.h>
+#include <libcommon/macros.h>
+#include <libcommon/port.h>
+
 #include <hardwarecommunication/acpi.h>
 #include <memory/physical.h>
 
 
 namespace MaxOS::hardwarecommunication {
+
+    /**
+     * @enum LAPICSendInterruptFlags
+     * @brief Represents bitfield entries in the LAPIC flags
+     */
+    enum LAPICSendInterruptFlags {
+		SEND_ALL		= (1 << 0),
+		EXCLUDE_SELF	= (1 << 1),
+	};
 
 	/**
 	 * @class LocalAPIC
@@ -24,10 +34,10 @@ namespace MaxOS::hardwarecommunication {
 	class LocalAPIC {
 
 		private:
-			uint64_t m_apic_base { };
-			uint64_t m_apic_base_high { };
-			uint32_t m_id { };
-			bool m_x2apic { };
+			uint64_t m_apic_base = 0;
+			uint64_t m_apic_base_high = 0;
+			uint32_t m_id = 0;
+			bool m_x2apic = false;
 
 		public:
 			LocalAPIC();
@@ -38,9 +48,11 @@ namespace MaxOS::hardwarecommunication {
 
 			[[nodiscard]] uint32_t id() const;
 			void send_eoi() const;
+			void send_icr(uint32_t icr_low, uint32_t icr_high, bool use_shorthand) const;
 
 			void send_init(uint8_t apic_id, bool assert) const;
 			void send_startup(uint8_t apic_id, uint8_t vector) const;
+			void send_interrupt(uint8_t apic_id, uint8_t vector, size_t flags) const;
 
 	};
 
@@ -231,10 +243,10 @@ namespace MaxOS::hardwarecommunication {
 			LocalAPIC* m_local_apic;
 			IOAPIC* m_io_apic;
 
-			Port8BitSlow m_pic_master_command_port;
-			Port8BitSlow m_pic_master_data_port;
-			Port8BitSlow m_pic_slave_command_port;
-			Port8BitSlow m_pic_slave_data_port;
+			common::Port8BitSlow m_pic_master_command_port;
+			common::Port8BitSlow m_pic_master_data_port;
+			common::Port8BitSlow m_pic_slave_command_port;
+			common::Port8BitSlow m_pic_slave_data_port;
 
 			void disable_pic();
 

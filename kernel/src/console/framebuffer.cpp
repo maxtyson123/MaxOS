@@ -1,0 +1,452 @@
+/**
+ * @file framebuffer.cpp
+ * @brief Implementation of a framebuffer Console for text output in graphics mode
+ *
+ * @date 2nd October 2023
+ * @author Max Tyson
+ *
+ * @todo less messy static calls to progress bar and logos
+ */
+
+#include <console/framebuffer.h>
+#include <common/logger.h>
+
+using namespace MaxOS;
+using namespace MaxOS::common;
+using namespace MaxOS::memory;
+using namespace MaxOS::console;
+using namespace MaxOS::system;
+
+/**
+ * @brief Constructs a new VESA Boot Console object, initializing the console area for text output
+ *
+ * @param framebuffer_info The frame buffer to draw text onto
+ */
+FramebufferConsole::FramebufferConsole(multiboot_tag_framebuffer *framebuffer_info)
+{
+
+	// Save the framebuffer info
+	s_framebuffer_info  = framebuffer_info;
+	m_framebuffer_bpp   = s_framebuffer_info->common.framebuffer_bpp;
+	m_framebuffer_pitch = s_framebuffer_info->common.framebuffer_pitch;
+	m_framebuffer_size  = s_framebuffer_info->common.framebuffer_height * m_framebuffer_pitch;
+	Logger::DEBUG() << "Framebuffer: bpp=" << m_framebuffer_bpp << ", pitch=" << m_framebuffer_pitch << ", size=" << m_framebuffer_size << "\n";
+
+	// Map the frame buffer into the higher half
+	auto physical_address = (uint64_t) s_framebuffer_info->common.framebuffer_addr;
+	m_framebuffer_address = (uint64_t *) PhysicalMemoryManager::to_dm_region(physical_address);
+	PhysicalMemoryManager::s_current_manager->map_area((physical_address_t *) physical_address, m_framebuffer_address, m_framebuffer_size, WRITE | PRESENT);
+
+	// Reserve the physical memory
+	size_t pages = PhysicalMemoryManager::size_to_frames(m_framebuffer_size);
+	PhysicalMemoryManager::s_current_manager->reserve(s_framebuffer_info->common.framebuffer_addr, pages, "Framebuffer");
+
+	// Log info
+	Logger::DEBUG() << "Framebuffer address: physical=0x" << (uint64_t) physical_address << ", virtual=0x" << (uint64_t) m_framebuffer_address << "\n";
+	Logger::DEBUG() << "Framebuffer mapped: 0x" << (uint64_t) m_framebuffer_address << " - 0x" << (uint64_t) (m_framebuffer_address + m_framebuffer_size) << " (pages: " << pages << ")\n";
+
+	// Prepare the console
+	m_video_memory_meta = (uint16_t*) MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
+	FramebufferConsole::clear();
+	print_logo();
+
+	// Set up the output area
+	m_console_area = new ConsoleArea(this, 0, 0, width() / 2 - 25, height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+	cout = new ConsoleStream(m_console_area);
+
+	// Only log to the screen when debugging
+#ifndef NDEBUG
+	Logger::active_logger()->add_log_writer(cout);
+	Logger::INFO() << "Console Stream set up \n";
+#endif
+}
+
+FramebufferConsole::~FramebufferConsole() = default;
+
+/**
+ * @brief Gets the width of the console
+ *
+ * @return The width of the console in characters
+ */
+uint16_t FramebufferConsole::width() {
+	return s_framebuffer_info->common.framebuffer_width / FONT_WIDTH;       // 8 pixels per character
+}
+
+/**
+ * @brief Gets the height of the console
+ *
+ * @return The height of the console in characters
+ */
+uint16_t FramebufferConsole::height() {
+	return s_framebuffer_info->common.framebuffer_height / FONT_HEIGHT;
+}
+
+/**
+ * @brief Places a character at the specified location
+ *
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @param c The character to place
+ */
+void FramebufferConsole::put_character(uint16_t x, uint16_t y, char c) {
+
+	// Parse any ansi codes
+	if(c == '\033') {
+
+		// Store the character
+		ansi_code_length = 0;
+		ansi_code[ansi_code_length++] = c;
+
+		// Do not draw the escape character
+		return;
+	}
+
+	if(ansi_code_length < 8) {
+
+		// Add the character to the ANSI code
+		ansi_code[ansi_code_length++] = c;
+
+		// If the ANSI code is complete
+		if(c == 'm') {
+			ansi_code[ansi_code_length] = '\0';
+			ansi_code_length = -1;
+
+			if(strcmp("\033[0m", ansi_code) == 0) {
+				m_foreground_color = ConsoleColour::Uninitialised;
+				m_background_color = ConsoleColour::Uninitialised;
+				return;
+			}
+
+			// Get the colour from the ANSI code
+			const Colour colour(ansi_code);
+
+			// Set the colour
+			bool foreground = ansi_code[4] == '3';
+			if(foreground)
+				m_foreground_color = colour.to_console_colour();
+			else
+				m_background_color = colour.to_console_colour();
+
+		}
+
+		// Do not draw the escape character
+		return;
+	}
+
+	// If the coordinates are out of bounds, return
+	if(x >= width() || y >= height())
+		return;
+
+	// Set the character at the offset, by masking the character with the current character (last 8 bits)
+	int offset = (y * width() + x);
+	m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xFF00) | (uint16_t) c;
+
+	// Convert the char into a string
+	char s[] = " ";
+	s[0] = c;
+
+	// Get the colour as a number
+	Colour foreground = m_foreground_color == ConsoleColour::Uninitialised ? Colour(get_foreground_color(x, y)) : Colour(m_foreground_color);
+	Colour background = m_background_color == ConsoleColour::Uninitialised ? Colour(get_background_color(x, y)) : Colour(m_background_color);
+	auto fg = GraphicsContext::colour_to_int(foreground, m_framebuffer_bpp);
+	auto bg = GraphicsContext::colour_to_int(background, m_framebuffer_bpp);
+
+	// Draw the text from top to bottom
+	for(int y_bit_map_offset = 0; y_bit_map_offset < FONT_WIDTH; y_bit_map_offset++) {
+		for(int x_bit_map_offset = 0; x_bit_map_offset < FONT_HEIGHT - (2 * FONT_PADDING); ++x_bit_map_offset) {
+
+			// Get the character
+			uint8_t character = c;
+
+			// Draw the pixel
+			bool set = AMIGA_FONT[(uint16_t) character * 8 + y_bit_map_offset] & (128 >> (x_bit_map_offset % 8));
+			put_pixel(x * 8 + x_bit_map_offset, y * FONT_HEIGHT + y_bit_map_offset, set ? fg : bg);
+
+		}
+	}
+}
+
+/**
+ * @brief Sets the foreground color at the specified location
+ *
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @param foreground The foreground color
+ */
+void FramebufferConsole::set_foreground_color(uint16_t x, uint16_t y, common::ConsoleColour foreground) {
+
+	// If the coordinates are out of bounds, return
+	if(x >= width() || y >= height())
+		return;
+
+	// Calculate the offset
+	int offset = (y * width() + x);
+
+	// Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
+	m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xF0FF) | ((uint16_t) foreground << 8);
+}
+
+/**
+ * @brief Sets the background color at the specified location
+ *
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @param background The background color
+ */
+void FramebufferConsole::set_background_color(uint16_t x, uint16_t y, common::ConsoleColour background) {
+
+	// If the coordinates are out of bounds, return
+	if(x >= width() || y >= height())
+		return;
+
+	// Calculate the offset
+	int offset = (y * width() + x);
+
+	// Set the background color at the offset, by masking the background color with the current background color (bits 12-15)
+	m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0x0FFF) | ((uint16_t) background << 12);
+}
+
+/**
+ * @brief Gets the character at the specified location
+ *
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @return The character at the specified location or a space if the coordinates are out of bounds
+ */
+char FramebufferConsole::get_character(uint16_t x, uint16_t y) {
+
+	// If the coordinates are out of bounds, return
+	if(x >= width() || y >= height())
+		return ' ';
+
+	// Calculate the offset
+	int offset = (y * width() + x);
+
+	// Return the character at the offset, by masking the character with the current character (last 8 bits)
+	return (char) (m_video_memory_meta[offset] & 0x00FF);
+}
+
+/**
+ * @brief  Gets the foreground color at the specified location
+ *
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @return The foreground color at the specified location or white if the coordinates are out of bounds
+ */
+ConsoleColour FramebufferConsole::get_foreground_color(uint16_t x, uint16_t y) {
+
+	if(CPU::panic_lock.is_locked())
+		return ConsoleColour::White;
+
+	// If the coordinates are out of bounds, return
+	if(x >= width() || y >= height())
+		return ConsoleColour::White;
+
+	// Calculate the offset
+	int offset = (y * width() + x);
+
+	// Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8-11)
+	return (ConsoleColour) ((m_video_memory_meta[offset] & 0x0F00) >> 8);
+}
+
+/**
+ * @brief Gets the background color at the specified location
+ * @param x The x coordinate
+ * @param y The y coordinate
+ *
+ * @return The background color at the specified location or black if the coordinates are out of bounds
+ */
+ConsoleColour FramebufferConsole::get_background_color(uint16_t x, uint16_t y) {
+
+	if(CPU::panic_lock.is_locked())
+		return ConsoleColour::Red;
+
+	// If the coordinates are out of bounds, return
+	if(x >= width() || y >= height())
+		return ConsoleColour::Black;
+
+	// Calculate the offset
+	int offset = (y * width() + x);
+
+	// Return the background color at the offset, by masking the background color with the current background color (bits 12-15)
+	return (ConsoleColour) ((m_video_memory_meta[offset] & 0xF000) >> 12);
+}
+
+/**
+ * @brief Prints the logo to the center of the screen
+ *
+ * @param is_panic Whether to print the kernel panic logo or the normal logo
+ */
+void FramebufferConsole::print_logo(bool is_panic) {
+
+	// Load the logo
+	const char* logo = is_panic ? header_data_kp : header_data;
+	auto address = PhysicalMemoryManager::to_dm_region(s_framebuffer_info->common.framebuffer_addr);
+	auto bpp = s_framebuffer_info->common.framebuffer_bpp;
+
+	// Find the center of the screen
+	uint32_t screen_width = s_framebuffer_info->common.framebuffer_width;
+	uint32_t screen_height = s_framebuffer_info->common.framebuffer_height;
+	uint32_t center_x = screen_width / 2;
+	uint32_t center_y = screen_height / 2 - 80;
+
+	// Fill the screen with the logo colour
+	auto col = GraphicsContext::colour_to_int(Colour(is_panic ? ConsoleColour::Red : ConsoleColour::Black), bpp);
+	memset(address, col, screen_width * screen_height * (bpp / 8));
+
+	// Draw the logo
+	for(uint32_t logo_y = 0; logo_y < LOGO_HEIGHT; ++logo_y) {
+		for(uint32_t logo_x = 0; logo_x < LOGO_WIDTH; ++logo_x) {
+
+			// Get the pixel from the logo
+			uint8_t pixel[3] = { 0 };
+			LOGO_HEADER_PIXEL(logo, pixel)
+
+			// Draw the pixel
+			auto col = GraphicsContext::colour_to_int(common::Colour(pixel[0], pixel[1], pixel[2]), bpp);
+			put_pixel(center_x - LOGO_WIDTH / 2 + logo_x, center_y - LOGO_HEIGHT / 2 + logo_y, col);
+		}
+	}
+
+	update_progress_bar(0);
+}
+
+
+/**
+ * @brief Scrolls the console up by 1 line
+ *
+ * @param left The left coordinate of the area to scroll
+ * @param top The top coordinate of the area to scroll
+ * @param width The width of the area to scroll
+ * @param height The height of the area to scroll
+ * @param foreground The foreground color of the new line
+ * @param background The background color of the new line
+ * @param fill The character to fill the new line with
+ */
+void FramebufferConsole::scroll_up(uint16_t left, uint16_t top, uint16_t width,
+                                uint16_t height,
+                                common::ConsoleColour foreground,
+                                common::ConsoleColour background, char fill) {
+
+
+	// Get the framebuffer info
+	uint64_t framebuffer_width = s_framebuffer_info->common.framebuffer_width;
+	uint64_t framebuffer_bpp = m_framebuffer_bpp; // in bits per pixel
+	uint64_t bytes_per_pixel = framebuffer_bpp / 8;
+	uint64_t framebuffer_pitch = framebuffer_width * bytes_per_pixel;
+
+	uint16_t line_height = FONT_HEIGHT;
+
+	// Region conversions
+	uint16_t region_pixel_y = top * line_height;
+	uint16_t region_pixel_height = height * line_height;
+	uint16_t region_pixel_left = left * FONT_WIDTH;
+	uint16_t region_pixel_width = width * FONT_WIDTH;
+	size_t row_bytes = region_pixel_width * bytes_per_pixel;
+
+	// Decide the colour of the pixel
+	ConsoleColour to_set_foreground = get_foreground_color(left, top + height - 1);
+	ConsoleColour to_set_background = get_background_color(left, top + height - 1);
+	uint32_t fill_value = GraphicsContext::colour_to_int(Colour(to_set_background), m_framebuffer_bpp);
+
+	// Scroll the region upward by one text line
+	for(uint16_t row = 0; row < region_pixel_height - line_height; row++) {
+		uint8_t* src = (uint8_t*)m_framebuffer_address + (region_pixel_y + row + line_height) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
+		uint8_t* dest = (uint8_t*)m_framebuffer_address + (region_pixel_y + row) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
+		memmove(dest, src, row_bytes);
+	}
+
+	// Clear the last line of the region
+	uint16_t clear_start_y = region_pixel_y + region_pixel_height - line_height;
+	for(uint16_t row = 0; row < line_height; row++) {
+		auto row_add = (uint32_t*) ((uint8_t*)m_framebuffer_address + (clear_start_y + row) * framebuffer_pitch + region_pixel_left * 4);
+		for(uint16_t col = 0; col < region_pixel_width; col++) {
+			row_add[col] = fill_value;
+		}
+	}
+
+	//Update any per-pixel colour metadata
+	uint16_t text_row = top + height - 1;
+	for(uint16_t x = left; x < left + width; x++) {
+		set_foreground_color(x, text_row, to_set_foreground);
+		set_background_color(x, text_row, to_set_background);
+	}
+}
+
+/**
+ * @brief Cleans up the boot console
+ */
+void FramebufferConsole::finish() const {
+
+	// Done
+	Logger::HEADER() << "MaxOS Kernel Successfully Booted\n" << ANSI_COLOURS[ANSIColour::Reset];
+	cout->set_cursor(0, 0);
+	Logger::active_logger()->disable_log_writer(cout);
+}
+
+/**
+ * @brief Updates the progress bar
+ *
+ * @param percentage The percentage to update the progress bar to (0-100)
+ */
+void FramebufferConsole::update_progress_bar(uint8_t percentage) {
+
+	// Not ready
+	if(!s_framebuffer_info)
+		return;
+
+	// Check bounds
+	if(percentage > 100)
+		percentage = 100;
+
+	uint8_t progress_height = 15;
+	uint8_t progress_spacing = 20;
+	uint8_t progress_width_cull = 40;
+
+	// Find the center of the screen
+	uint32_t right_x = (s_framebuffer_info->common.framebuffer_width / 2) - LOGO_WIDTH / 2;
+	uint32_t bottom_y = (s_framebuffer_info->common.framebuffer_height / 2 - 80) - LOGO_HEIGHT / 2;
+
+	// Find the bounds
+	uint32_t start_x = progress_width_cull;
+	uint32_t start_y = LOGO_HEIGHT + progress_spacing;
+	uint32_t end_x = LOGO_WIDTH - progress_width_cull;
+	uint32_t end_y = LOGO_HEIGHT + progress_height + progress_spacing;
+
+	// Draw the progress bar
+	for(uint32_t progress_y = start_y; progress_y < end_y; ++progress_y) {
+		for(uint32_t progress_x = start_x; progress_x < end_x; ++progress_x) {
+
+			// Check if drawing border
+			bool is_border = (progress_y == start_y) || (progress_y == end_y - 1) ||
+			                 (progress_x == start_x) || (progress_x == end_x - 1);
+
+			// Only draw the border if it is the first time drawing it
+			is_border = is_border && percentage == 0;
+
+			// If it is not within the percentage, skip it
+			uint32_t logo_progress_width = LOGO_WIDTH * percentage / 100;
+			if(progress_x > logo_progress_width && !is_border)
+				continue;
+
+			// Draw the pixel
+			auto col = GraphicsContext::colour_to_int(Colour(0xFF, 0xFF, 0xFF), s_framebuffer_info->common.framebuffer_bpp);
+			put_pixel(right_x + progress_x, bottom_y + progress_y, col);
+
+		}
+	}
+}
+
+/**
+ * @brief Writes a pixel to the frame buffer
+ *
+ * @param x Where to place the pixel horizontally
+ * @param y Where to place the pixel vertically
+ */
+void FramebufferConsole::put_pixel(uint32_t x, uint32_t y, uint32_t  colour) {
+
+	auto address = PhysicalMemoryManager::to_dm_region(s_framebuffer_info->common.framebuffer_addr);
+	auto *pixel_address = (uint32_t *) ((uint8_t *) address + (s_framebuffer_info->common.framebuffer_pitch * y) + (s_framebuffer_info->common.framebuffer_bpp * x) / 8);
+	*pixel_address = colour;
+
+}

@@ -11,8 +11,10 @@
 
 #include <cstdint>
 
+#include <libcommon/assert.h>
+
 /// Check if a value is aligned to the given alignment
-#define ubsan_aligned(value, alignment) !(value & (alignment - 1))
+#define UBSAN_ALIGNED(value, alignment) ((((uintptr_t)(value)) & ((alignment) - 1)) == 0)
 
 namespace MaxOS::runtime {
 

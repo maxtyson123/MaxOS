@@ -8,6 +8,7 @@ if [ "$1" != "--no-deps" ]; then
     # If we are on MacOS, install dependencies using brew
     if [ "$IS_MACOS" -eq 1 ]; then
         msg "Installing dependencies using brew"
+        brew install --cask macfuse
         brew install  coreutils\
                       bison \
                       gmp \
@@ -18,6 +19,7 @@ if [ "$1" != "--no-deps" ]; then
                       cmake \
                       nasm \
                       telnet \
+                      i686-elf-grub \
                       || fail "Couldn't install dependencies"
 
         # Scripting tools that linux has by default
@@ -93,6 +95,7 @@ cd build-binutils
 ../binutils-$BINUTILS_VERSION/configure --target=$TARGET --prefix="$PREFIX" --with-sysroot --disable-nls --disable-werror || fail "Configuring binutils failed"
 
 # Build binutils
+#
 msg "Building binutils-$BINUTILS_VERSION"
 make -j "$NUM_JOBS"       || fail "Building binutils failed"
 make install              || fail "Installing binutils to $PREFIX failed"
@@ -113,10 +116,15 @@ mkdir build-gcc
 cd build-gcc
 extra_config_args=()
 if [ "$IS_MACOS" -eq 1 ]; then
+
+  # Add the mac required libraries
   for library in gmp mpfr mpc; do
 	  [ "$library" = "mpc" ] && brew_formula="libmpc" || brew_formula="$library"
 	  extra_config_args+=("--with-$library=$(brew --prefix --installed "$brew_formula")")
 	done
+
+	# Mac cant compile libgcov
+	extra_config_args+=("--disable-gcov")
 fi
 
 ../gcc-$GCC_VERSION/configure --prefix="$PREFIX" --target="$TARGET" --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx "${extra_config_args[@]}" || fail "Configuring gcc failed"

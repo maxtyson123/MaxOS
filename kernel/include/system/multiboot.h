@@ -517,13 +517,13 @@ namespace MaxOS::system {
 	 */
 	class Multiboot {
 		private:
-			multiboot_tag_framebuffer* m_framebuffer;
-			multiboot_tag_basic_meminfo* m_basic_meminfo;
-			multiboot_tag_string* m_bootloader_name;
-			multiboot_tag_mmap* m_mmap;
-			multiboot_tag_old_acpi* m_old_acpi;
-			multiboot_tag_new_acpi* m_new_acpi;
-			multiboot_tag_module* m_module;
+			multiboot_tag_framebuffer* m_framebuffer = nullptr;
+			multiboot_tag_basic_meminfo* m_basic_meminfo = nullptr;
+			multiboot_tag_string* m_bootloader_name = nullptr;
+			multiboot_tag_mmap* m_mmap = nullptr;
+			multiboot_tag_old_acpi* m_old_acpi = nullptr;
+			multiboot_tag_new_acpi* m_new_acpi = nullptr;
+			multiboot_tag_module* m_module = nullptr;
 
 		public:
 			Multiboot(unsigned long address, unsigned long magic);

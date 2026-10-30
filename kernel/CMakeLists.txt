@@ -5,7 +5,6 @@ IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fstack-protector-all -g") # Debug -fsanitize=kernel-address
 ENDIF()
 
-
 # Enable assembly
 SET(CMAKE_ASM_FLAGS "-f elf64")
 SET(CMAKE_ASM_COMPILE_OBJECT "nasm <FLAGS> -o <OBJECT> <SOURCE>")
@@ -49,7 +48,7 @@ FUNCTION(BUILD_KERNEL target_name)
     SET_TARGET_PROPERTIES(${target_name} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 
     # Set the include directories
-    TARGET_LINK_LIBRARIES(${target_name} PRIVATE gcc syscore_static)
+    TARGET_LINK_LIBRARIES(${target_name} PRIVATE gcc kpi common_kernel)
     target_link_options(${target_name} PRIVATE -T ${LINKER_SCRIPT} -nostdlib -n)
     TARGET_INCLUDE_DIRECTORIES(${target_name} PRIVATE include)
 endfunction()
@@ -62,11 +61,10 @@ SET(SYMBOLS_HEADER "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h")
 SET(SYMBOLS_HEADER_TMP "${CMAKE_SOURCE_DIR}/kernel/include/common/symbols.h.tmp")
 SET(SYMBOLS_HEADER_DEP "${CMAKE_BINARY_DIR}/generated/symbols.dep")
 SET(GEN_SYM_SCRIPT "${CMAKE_SOURCE_DIR}/toolchain/pre_process/symbols.sh")
-SET(OBJCOPY "${CMAKE_SOURCE_DIR}/toolchain/cross_compiler/cross/bin/x86_64-elf-objcopy")
 SET(SYM_ELF "${CMAKE_BINARY_DIR}/MaxOS.sym")
 ADD_CUSTOM_COMMAND(
         OUTPUT      ${SYMBOLS_HEADER_DEP}
-        COMMAND     ${OBJCOPY} --only-keep-debug $<TARGET_FILE:MaxOSk64_nosym> ${SYM_ELF}
+        COMMAND     ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE:MaxOSk64_nosym> ${SYM_ELF}
         COMMAND     ${GEN_SYM_SCRIPT} ${SYM_ELF} ${SYMBOLS_HEADER_TMP}
         COMMAND     ${CMAKE_COMMAND} -E copy_if_different "${SYMBOLS_HEADER_TMP}" "${SYMBOLS_HEADER}"
         COMMAND     ${CMAKE_COMMAND} -E remove "${SYMBOLS_HEADER_TMP}"
@@ -82,4 +80,4 @@ BUILD_KERNEL(MaxOSk64)
 ADD_DEPENDENCIES(MaxOSk64 GenerateSymbols)
 
 # Install kernel
-INSTALL(TARGETS MaxOSk64 DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/boot)
+INSTALL(TARGETS MaxOSk64 DESTINATION ${CMAKE_SOURCE_DIR}/filesystem/0/boot)

@@ -1,0 +1,53 @@
+Subject: [PATCH] Working with latest macfuse
+---
+Index: tools/macosx/Makefile.am
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/tools/macosx/Makefile.am b/tools/macosx/Makefile.am
+--- a/tools/macosx/Makefile.am	(revision ae35afb9ab08d87c66c1e021df792b3a7c4308b0)
++++ b/tools/macosx/Makefile.am	(date 1768638283598)
+@@ -26,7 +26,5 @@
+ 	$(INSTALL) -m 644 $(top_srcdir)/tools/macosx/fuse-ext2.fs/Contents/Info.plist $(DESTDIR)/Library/Filesystems/fuse-ext2.fs/Contents/Info.plist
+ 	$(INSTALL) -m 644 $(top_srcdir)/tools/macosx/fuse-ext2.fs/Contents/PkgInfo $(DESTDIR)/Library/Filesystems/fuse-ext2.fs/Contents/PkgInfo
+ 	$(INSTALL) -m 644 $(top_srcdir)/tools/macosx/fuse-ext2.fs/Contents/Resources/English.lproj/InfoPlist.strings $(DESTDIR)/Library/Filesystems/fuse-ext2.fs/Contents/Resources/English.lproj/InfoPlist.strings
+-	$(INSTALL) -d $(DESTDIR)/Library/PreferencePanes
+-	cp -R $(top_srcdir)/tools/macosx/prefpane/build/Release/fuse-ext2.prefPane $(DESTDIR)/Library/PreferencePanes/fuse-ext2.prefPane
+ 
+ endif
+Index: fuse-ext2/op_getxattr.c
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/fuse-ext2/op_getxattr.c b/fuse-ext2/op_getxattr.c
+--- a/fuse-ext2/op_getxattr.c	(revision ae35afb9ab08d87c66c1e021df792b3a7c4308b0)
++++ b/fuse-ext2/op_getxattr.c	(date 1768637409165)
+@@ -15,7 +15,8 @@
+ static int do_getxattr(ext2_filsys e2fs, struct ext2_inode *node, const char *name,
+ 		char *value, size_t size);
+ 
+-int op_getxattr(const char *path, const char *name, char *value, size_t size) {
++int op_getxattr(const char *path, const char *name, char *value, size_t size, uint32_t position) {
++	(void)position;
+ 	int rt;
+ 	ext2_ino_t ino;
+ 	struct ext2_inode inode;
+Index: fuse-ext2/fuse-ext2.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/fuse-ext2/fuse-ext2.h b/fuse-ext2/fuse-ext2.h
+--- a/fuse-ext2/fuse-ext2.h	(revision ae35afb9ab08d87c66c1e021df792b3a7c4308b0)
++++ b/fuse-ext2/fuse-ext2.h	(date 1768637875917)
+@@ -178,7 +178,7 @@
+ 
+ int op_getattr (const char *path, struct stat *stbuf);
+ 
+-int op_getxattr(const char *path, const char *name, char *value, size_t size);
++int op_getxattr(const char *path, const char *name, char *value, size_t size, uint32_t position);
+ 
+ ext2_file_t do_open (ext2_filsys e2fs, const char *path, int flags);
+ 
