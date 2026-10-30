@@ -107,7 +107,6 @@ VirtualMemoryManager::~VirtualMemoryManager() {
  * @brief Allocate a new chunk of virtual memory
  *
  * @param requested_size The size of the memory to allocate
- * @param actual_size The size of the memory allocated (>= requested size)
  * @param flags The flags to set on the memory
  * @return The address of the allocated memory
  */
@@ -136,7 +135,7 @@ void* VirtualMemoryManager::allocate(size_t requested_size, size_t& actual_size,
  *
  * @param address The address to allocate at
  * @param requested_size The size of the memory to allocate
- * @param requested_size The size of the memory allocated (>= requested size)
+ * @param actual_size The size of the memory allocated (>= requested size)
  * @param flags The flags to set on the memory
  * @return The address of the allocated memory or nullptr if failed
  */

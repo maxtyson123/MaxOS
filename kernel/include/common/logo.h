@@ -5,7 +5,7 @@
  * @date unknown
  * @author Max Tyson
  *
- * @todo remove common directory, make this generated/*
+ * @todo remove common directory, make this generated
  */
 
 // Ignore warnings for this file

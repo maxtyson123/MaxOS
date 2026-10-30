@@ -18,8 +18,9 @@ using namespace MaxOS::console;
 using namespace MaxOS::system;
 
 /**
- * @brief Constructs a new VESA Boot Console object, initializing the console area for text output.
- * @param graphics_context The graphics context to use for rendering
+ * @brief Constructs a new VESA Boot Console object, initializing the console area for text output
+ *
+ * @param framebuffer_info The frame buffer to draw text onto
  */
 FramebufferConsole::FramebufferConsole(multiboot_tag_framebuffer *framebuffer_info)
 {
@@ -172,7 +173,7 @@ void FramebufferConsole::put_character(uint16_t x, uint16_t y, char c) {
  * @param y The y coordinate
  * @param foreground The foreground color
  */
-void FramebufferConsole::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour foreground) {
+void FramebufferConsole::set_foreground_color(uint16_t x, uint16_t y, common::ConsoleColour foreground) {
 
 	// If the coordinates are out of bounds, return
 	if(x >= width() || y >= height())
@@ -192,7 +193,7 @@ void FramebufferConsole::set_foreground_color(uint16_t x, uint16_t y, ConsoleCol
  * @param y The y coordinate
  * @param background The background color
  */
-void FramebufferConsole::set_background_color(uint16_t x, uint16_t y, ConsoleColour background) {
+void FramebufferConsole::set_background_color(uint16_t x, uint16_t y, common::ConsoleColour background) {
 
 	// If the coordinates are out of bounds, return
 	if(x >= width() || y >= height())

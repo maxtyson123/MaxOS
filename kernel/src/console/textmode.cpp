@@ -61,7 +61,7 @@ void TextModeConsole::put_character(uint16_t x, uint16_t y, char c) {
  * @param y The y coordinate
  * @param foreground The foreground color
  */
-void TextModeConsole::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour foreground) {
+void TextModeConsole::set_foreground_color(uint16_t x, uint16_t y, common::ConsoleColour foreground) {
 
 	// Check bounds
 	if (x >= width() || y >= height())
@@ -81,7 +81,7 @@ void TextModeConsole::set_foreground_color(uint16_t x, uint16_t y, ConsoleColour
  * @param y The y coordinate
  * @param background The background color
  */
-void TextModeConsole::set_background_color(uint16_t x, uint16_t y, ConsoleColour background) {
+void TextModeConsole::set_background_color(uint16_t x, uint16_t y, common::ConsoleColour background) {
 
 	// Check bounds
 	if (x >= width() || y >= height())

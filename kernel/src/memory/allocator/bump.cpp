@@ -8,10 +8,16 @@ using namespace MaxOS;
 using namespace MaxOS::memory;
 using namespace MaxOS::memory::allocator;
 
+/**
+ * @brief Creates a new bump memory allocator
+ */
 BumpAllocator::BumpAllocator() {
     static_assert(CHUNK_HEADER_SIZE == sizeof(chunk_header_t));
 };
 
+/**
+ * @brief Destructs a Bump memory allocator
+ */
 BumpAllocator::~BumpAllocator() = default;
 
 /**
@@ -107,6 +113,12 @@ void* BumpAllocator::expand_heap(size_t size) {
     return chunk;
 }
 
+/**
+ *  @brief Setup a region to be bump memory managed, creates a free chunk represent the whole region
+ *
+ * @param address The start of the region
+ * @param length The length of the region
+ */
 void BumpAllocator::setup_region(uintptr_t address, size_t length) {
 
     // Create a free chunk that covers the entire region

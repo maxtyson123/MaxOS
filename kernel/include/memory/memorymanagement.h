@@ -22,8 +22,11 @@
 
 namespace MaxOS::memory {
 
-
-	class BumpMemoryManager : public allocator::BumpAllocator {
+    /**
+     * @class BumpMemoryManager
+     * @brief Basic doubly linked list bump memory manager
+     */
+    class BumpMemoryManager : public allocator::BumpAllocator {
 
 		private:
 

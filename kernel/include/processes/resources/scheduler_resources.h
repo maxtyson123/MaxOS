@@ -72,7 +72,11 @@ namespace MaxOS::processes::resources {
 			int write(const void* buffer, size_t size, size_t flags) final;
 	};
 
-	class ThreadResourceRegistry : public ResourceRegistry<ThreadResource> {
+    /**
+     * @class ThreadResourceRegistry
+     * @brief Manages the creation, retention and destruction of resources representing threads
+     */
+    class ThreadResourceRegistry : public ResourceRegistry<ThreadResource> {
 
 		public:
 			ThreadResourceRegistry();
@@ -82,6 +86,10 @@ namespace MaxOS::processes::resources {
 			Resource* create_resource(const string& name, size_t flags, uintptr_t data) final;
 	};
 
+    /**
+    * @class ProcessResourceRegistry
+    * @brief Manages the creation, retention and destruction of resources representing processes
+    */
 	class ProcessResourceRegistry : public ResourceRegistry<ProcessResource> {
 
 		public:

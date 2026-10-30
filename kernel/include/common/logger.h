@@ -101,7 +101,7 @@ namespace MaxOS {
 
 	/**
 	 * @class LogRecord
-	 * @brief
+	 * @brief A single logging event
 	 */
 	class LogRecord {
 
@@ -112,13 +112,25 @@ namespace MaxOS {
 			explicit LogRecord(Logger& logger, LogLevel level);
 			~LogRecord();
 
-			template<typename T>
-			LogRecord& operator<<(const T& value) {
+            /**
+             * Write a variable to the log
+             *
+             * @tparam T The type of variable to write
+             * @param value The value of the variable to write
+             * @return The LogRecord instance
+             */
+            template<typename T> LogRecord& operator << (const T& value) {
 				m_logger.write(value);
 				return *this;
 			}
 
-			LogRecord& operator<<(char c) {
+            /**
+             * Write a single character to the log
+             *
+             * @param c The character to write
+             * @return The LogRecord instance
+             */
+            LogRecord& operator << (char c) {
 				m_logger.write_char(c);
 				return *this;
 			}

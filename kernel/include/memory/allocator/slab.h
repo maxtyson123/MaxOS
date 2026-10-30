@@ -10,7 +10,11 @@
 
 namespace MaxOS::memory::allocator {
 
-	typedef struct SlabHeader {
+    /**
+     * @struct SlabHeader
+     * @brief Metadata for a slab in the slab allocator
+     */
+    typedef struct SlabHeader {
 		SlabHeader* next;
 		void* page;
 
@@ -21,7 +25,11 @@ namespace MaxOS::memory::allocator {
 
 	} slab_header_t;
 
-	class SlabCache {
+    /**
+     * @class SlabCache
+     * @brief Slab handler for a given size
+     */
+    class SlabCache {
 
 		private:
 
@@ -41,7 +49,11 @@ namespace MaxOS::memory::allocator {
 
 	};
 
-	class SlabAllocator {
+    /**
+     * @class SlabAllocator
+     * @brief Memory allocator that handles fixed sized chunks of data
+     */
+    class SlabAllocator {
 
 		private:
 

@@ -41,7 +41,7 @@ namespace MaxOS::console {
 
 
 			virtual void put_character(uint16_t x, uint16_t y, char c, common::ConsoleColour foreground, common::ConsoleColour background);
-			virtual void put_string(uint16_t x, uint16_t y, string s, common::ConsoleColour foreground = common::ConsoleColour::LightGrey, common::ConsoleColour background = common::ConsoleColour::Black);
+			virtual void put_string(uint16_t x, uint16_t y, string string, common::ConsoleColour foreground = common::ConsoleColour::LightGrey, common::ConsoleColour background = common::ConsoleColour::Black);
 
 			virtual void scroll_up();
 			virtual void scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground = common::ConsoleColour::LightGrey, common::ConsoleColour background = common::ConsoleColour::Black, char fill = ' ');

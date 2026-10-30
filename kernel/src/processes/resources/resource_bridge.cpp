@@ -80,7 +80,6 @@ size_t BridgeHandler::store_data(const void *buffer, size_t size, bool reserve_o
     return (size_t)data - (is_mapped ? 0 : m_data_region);
 
 }
-void block(){}
 
 /**
  * @brief Wait until a free spot for a message is available and then claim it
@@ -195,28 +194,43 @@ BridgeResource::BridgeResource(const string &name, size_t flags, resource_type_t
 BridgeResource::~BridgeResource() = default;
 
 /**
- * @copydoc Resource::open
+ * @brief Opens the resource
+ *
+ * @param flags Optional flags to pass (unused by default but resource type specific)
  */
 void BridgeResource::open(size_t flags) {
      m_handler -> send_to_bridge(m_id, ServiceResourceCommand::R_OPEN, 0,0, flags);
 }
 
 /**
- * @copydoc Resource::close
+ * @brief Closes the resource
+ *
+ * @param flags Optional flags to pass (unused by default but resource type specific)
  */
 void BridgeResource::close(size_t flags) {
      m_handler -> send_to_bridge(m_id, ServiceResourceCommand::R_CLOSE, 0,0, flags);
 }
 
 /**
- * @copydoc Resource::read
+ * @brief Reads data from the resource
+ *
+ * @param buffer The buffer to read into
+ * @param size The number of bytes to read
+ * @param flags The flags to pass to the reading
+ *
+ * @return The number of bytes successfully read or -1 on error
  */
 int BridgeResource::read(void *buffer, size_t size, size_t flags) {
     return m_handler -> send_to_bridge(m_id, ServiceResourceCommand::R_READ, buffer, size, flags);
 }
 
 /**
- * @copydoc Resource::write
+ * @brief write a certain amount of bytes to a resource
+ *
+ * @param buffer The buffer to read from
+ * @param size How many bytes to write
+ * @param flags Optional flags to pass (unused by default but resource type specific)
+ * @return How many bytes were successfully written
  */
 int BridgeResource::write(const void *buffer, size_t size, size_t flags) {
     return m_handler -> send_to_bridge(m_id, ServiceResourceCommand::R_WRITE, buffer, size, flags);

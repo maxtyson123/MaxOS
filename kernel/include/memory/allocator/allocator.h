@@ -16,7 +16,11 @@
 
 namespace MaxOS::memory::allocator {
 
-	class MemoryAllocator {
+    /**
+     * @class MemoryAllocator
+     * @brief Generic memory allocator type
+     */
+    class MemoryAllocator {
 
 		private:
 

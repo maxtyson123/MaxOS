@@ -18,7 +18,11 @@
 
 namespace MaxOS::hardwarecommunication {
 
-	enum LAPICSendInterruptFlags {
+    /**
+     * @enum LAPICSendInterruptFlags
+     * @brief Represents bitfield entries in the LAPIC flags
+     */
+    enum LAPICSendInterruptFlags {
 		SEND_ALL		= (1 << 0),
 		EXCLUDE_SELF	= (1 << 1),
 	};

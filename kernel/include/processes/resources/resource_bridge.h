@@ -25,7 +25,11 @@
 
 namespace MaxOS::processes::resources {
 
-	class BridgeHandler : public memory::allocator::BumpAllocator {
+    /**
+     * @class BridgeHandler
+     * @brief A handler to manage resource commands over shared memory
+     */
+    class BridgeHandler : public memory::allocator::BumpAllocator {
 
 		private:
 			size_t m_next_id = 0;

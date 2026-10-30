@@ -24,9 +24,18 @@
 
 namespace MaxOS::processes {
 
-	typedef struct IPCIOVector {
+    /**
+     * @struct IPCIOVector
+     * @brief Read/Write call entry for a list of I/O requests in a RPC call
+     *
+     * @typedef ipc_iovec_t
+     * @brief Alias for IPCIOVector struct
+     */
+    typedef struct IPCIOVector {
+
 		const void* address;
 		size_t length;
+
 	} ipc_iovec_t;
 
 	/**

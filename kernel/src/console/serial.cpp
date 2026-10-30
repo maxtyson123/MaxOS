@@ -13,6 +13,9 @@ using namespace MaxOS;
 using namespace MaxOS::runtime;
 using namespace MaxOS::console;
 
+/**
+ * @brief Constructs a new Serial Console object and initialises the serial port
+ */
 SerialConsole::SerialConsole()
 : m_data_port(0x3F8),
   m_interrupt_enable_port(0x3F9),
@@ -60,6 +63,7 @@ SerialConsole::SerialConsole()
 
 /**
  * @brief Constructs a new Serial Console object and initialises the serial port
+ *
  * @param logger The logger which will use this serial console as a log writer
  */
 SerialConsole::SerialConsole(Logger* logger)
@@ -87,16 +91,29 @@ void SerialConsole::put_character(char c) {
 
 }
 
+/**
+ * @brief Waits for the serial port to be ready, then writes a character to it
+ *
+ * @param c  The character to write
+ */
 void SerialConsole::write_char(char c) {
 	put_character(c);
 }
 
+/**
+ * @brief Checks if data can be read from the serial port
+ *
+ * @return True if data is ready to be read
+ */
 bool SerialConsole::can_read() {
 	return m_line_status_port.read() & 1;
 }
 
+/**
+ * @brief Read data from the serial port
+ *
+ * @return The data read
+ */
 char SerialConsole::read_char() {
 	return m_data_port.read();
 }
-
-

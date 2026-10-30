@@ -17,6 +17,11 @@ using namespace MaxOS::common;
 using namespace MaxOS::processes;
 using namespace MaxOS::system;
 
+/**
+ * @brief Constructs a new BumpMemoryManager
+ *
+ * @param virtual_memory_manager The virtual memory region this allocator manages
+ */
 BumpMemoryManager::BumpMemoryManager(VirtualMemoryManager* virtual_memory_manager)
 	: m_virtual_memory_manager(virtual_memory_manager)
 {
@@ -31,6 +36,9 @@ BumpMemoryManager::BumpMemoryManager(VirtualMemoryManager* virtual_memory_manage
 
 }
 
+/**
+ * Destructs the BumpMemoryManager, freeing the VMM it manages
+ */
 BumpMemoryManager::~BumpMemoryManager() {
 
 	// Free the VMM (if this is not the kernel memory manager)

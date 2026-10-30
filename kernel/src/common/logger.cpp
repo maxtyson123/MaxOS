@@ -29,7 +29,7 @@ Logger::Logger()
 	s_active_logger = this;
 
 	// The following line is generated automatically by the MaxOS build system.
-	s_progress_total =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             15;
+	s_progress_total =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         15;
 
 }
 
@@ -59,9 +59,9 @@ void Logger::add_log_writer(OutputStream* log_writer) {
 }
 
 /**
- * @brief Removes an output stream from the logger
+ * @brief Prevents an output stream from being used
  *
- * @param log_writer The output stream to remove
+ * @param log_writer The output stream to stop using
  */
 void Logger::disable_log_writer(OutputStream* log_writer) {
 
@@ -73,6 +73,24 @@ void Logger::disable_log_writer(OutputStream* log_writer) {
 	for (int i = 0; i < m_log_writer_count; i++)
 		if (m_log_writers[i] == log_writer)
 			m_log_writers_enabled[i] = false;
+}
+
+/**
+ * @brief Lets an output stream from be used
+ *
+ * @param log_writer The output stream to use
+ */
+void Logger::enable_log_writer(OutputStream* log_writer) {
+
+    // If the list is empty
+    if (m_log_writer_count == 0)
+        return;
+
+    // Find the output stream in the list
+    for (int i = 0; i < m_log_writer_count; i++)
+        if (m_log_writers[i] == log_writer)
+            m_log_writers_enabled[i] = true;
+
 }
 
 /**
@@ -160,30 +178,59 @@ LogRecord Logger::Out() {
 	return LogRecord(*s_active_logger, LogLevel::OUT);
 }
 
+/**
+ * @brief Gets the active logger for testing logs
+ *
+ * @return The testing logger
+ */
 LogRecord Logger::TEST() {
 	return LogRecord(*s_active_logger, LogLevel::TEST);
 }
 
+/**
+ * @brief Gets the active logger for info logs
+ *
+ * @return The info logger
+ */
 LogRecord Logger::INFO() {
 	return LogRecord(*s_active_logger, LogLevel::INFO);
 }
 
+/**
+ * @brief Gets the active logger for debug logs
+ *
+ * @return The debug logger
+ */
 LogRecord Logger::DEBUG() {
 	return LogRecord(*s_active_logger, LogLevel::DEBUG);
 }
 
+/**
+ * @brief Gets the active logger for warnings
+ *
+ * @return The warning logger
+ */
 LogRecord Logger::WARNING() {
 	return LogRecord(*s_active_logger, LogLevel::WARNING);
 }
 
+/**
+ * @brief Gets the active logger for error logs
+ *
+ * @return The error logger
+ */
 LogRecord Logger::ERROR() {
 	return LogRecord(*s_active_logger, LogLevel::ERROR);
 }
 
+/**
+ * @brief Gets the active logger for headers
+ *
+ * @return The header logger
+ */
 LogRecord Logger::HEADER() {
 	return LogRecord(*s_active_logger, LogLevel::HEADER);
 }
-
 
 /**
  * @brief Gets the active logger (to be used to modify the logger)
@@ -215,8 +262,9 @@ void Logger::printf(char const *format, ...) {
  *
  * @param condition The condition to check if is met
  * @param message The message to print if the condition fails
+ * @param ... The arguments to format into the string
  */
-void Logger::ASSERT(bool condition, char const *message, ...) {
+void Logger::assert(bool condition, char const* message, ...) {
 
 	// If the condition is met then everything is ok
 	if (condition)
@@ -242,6 +290,12 @@ Logger &Logger::operator<<(LogLevel log_level) {
 
 }
 
+/**
+ * Create a new log record, threadsafe
+ *
+ * @param logger The logger to use
+ * @param level  The level of the log
+ */
 LogRecord::LogRecord(Logger& logger, LogLevel level)
 : m_logger(logger)
 {
@@ -252,6 +306,9 @@ LogRecord::LogRecord(Logger& logger, LogLevel level)
 		m_logger.set_log_level(level);
 }
 
+/**
+ * Destroys the log record, freeing the threadsafe lock
+ */
 LogRecord::~LogRecord() {
 
 	Logger::s_loggers_lock.unlock();

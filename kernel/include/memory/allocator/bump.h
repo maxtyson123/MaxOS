@@ -40,6 +40,10 @@ namespace MaxOS::memory::allocator {
 
 	constexpr size_t CHUNK_HEADER_SIZE = sizeof(chunk_header_t);	///< How much space the chunk meta data takes up
 
+    /**
+    * @class BumpAllocator
+    * @brief Basic doubly linked list bump memory allocator
+    */
 	class BumpAllocator : public MemoryAllocator {
 
 		private:

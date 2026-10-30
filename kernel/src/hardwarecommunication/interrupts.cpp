@@ -84,20 +84,39 @@ cpu_status_t* InterruptHandler::handle_interrupt(cpu_status_t* status) {
 	return status;
 }
 
+/**
+ * @brief Create a new base exception handler for an interrupt
+ *
+ * @param interrupt_number The interrupt this exception handles
+ */
 ExceptionHandler::ExceptionHandler(uint8_t interrupt_number)
 : InterruptHandler(interrupt_number)
 {
 }
 
+/**
+ * Default destructor for a ExceptionHandler
+ */
 ExceptionHandler::~ExceptionHandler() = default;
 
+/**
+ * @brief Get an human readable error message explaining this exception
+ *
+ * @param status The CPU state at time of exception
+ * @return The error message
+ */
 string ExceptionHandler::get_message(system::cpu_status_t *status) {
 
 	return "Unimplemented message for exception\n";
 
 }
 
-
+/**
+ * @brief Handle the interrupt relating to this exception
+ *
+ * @param status The CPU state at time of exception
+ * @return The new CPU state to move to or null if no recoverable state
+ */
 cpu_status_t* ExceptionHandler::handle_interrupt(cpu_status_t *status) {
 
 	// Get the message
@@ -116,19 +135,29 @@ cpu_status_t* ExceptionHandler::handle_interrupt(cpu_status_t *status) {
 
 }
 
-
+/**
+ * @copydoc ExceptionHandler::get_message
+ */
 string DivideByZeroHandler::get_message(cpu_status_t *status) {
 
     return  StringBuilder() << "Division by 0 executed at 0x" << status->rip << "\n";
 
 }
 
+
+/**
+ * @copydoc ExceptionHandler::get_message
+ */
 string InvaildOpCodeHandler::get_message(cpu_status_t *status) {
 
 	return  StringBuilder() << "Invaild opcode executed at 0x" << status->rip << "\n";
 
 }
 
+
+/**
+ * @copydoc ExceptionHandler::get_message
+ */
 string GeneralProtectionHandler::get_message(cpu_status_t *status) {
 
 	// Get the core that the fault happened on
@@ -140,6 +169,10 @@ string GeneralProtectionHandler::get_message(cpu_status_t *status) {
 
 }
 
+
+/**
+ * @copydoc ExceptionHandler::get_message
+ */
 string PageFaultHandler::get_message(cpu_status_t *status) {
 
 	// Extract the information about the fault
@@ -154,6 +187,10 @@ string PageFaultHandler::get_message(cpu_status_t *status) {
 	return StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ")\n";
 }
 
+
+/**
+ * @copydoc ExceptionHandler::handle_interrupt
+ */
 cpu_status_t * CPUStopHandler::handle_interrupt(cpu_status_t *status) {
 
 	CPU::halt();

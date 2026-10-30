@@ -25,7 +25,11 @@ namespace MaxOS::hardwarecommunication {
 
 	class InterruptManager;
 
-	enum class InterruptPrivilegeLevel
+    /**
+     * @enum InterruptPrivilegeLevel
+     * @brief Represents the CPU ring level that a interrupt is handler is executed in
+     */
+    enum class InterruptPrivilegeLevel
 	{
 		KERNEL_ONLY,
 		RING_1,
@@ -50,10 +54,14 @@ namespace MaxOS::hardwarecommunication {
 
 	};
 
+    /**
+    * @class ExceptionHandler
+    * @brief Base class for handing CPU expection interrupts
+    */
 	class ExceptionHandler : public InterruptHandler {
 
 		public:
-			ExceptionHandler(uint8_t interrupt_number);
+	    ExceptionHandler(uint8_t interrupt_number);
 			~ExceptionHandler();
 
 			virtual string get_message(system::cpu_status_t* status);
@@ -61,36 +69,66 @@ namespace MaxOS::hardwarecommunication {
 
 	};
 
+    /**
+    * @class DivideByZeroHandler
+    * @brief Handles an attempt to divide by 0
+    */
     class DivideByZeroHandler : public ExceptionHandler {
         public:
+
+            /// Create a new DivideByZeroHandler
             DivideByZeroHandler() : ExceptionHandler(0x00) {	}
 
             string get_message(system::cpu_status_t* status) final;
     };
 
+    /**
+    * @class InvaildOpCodeHandler
+    * @brief Handles calling an invalid assembly instruction for the configuration running on this architecture
+    */
 	class InvaildOpCodeHandler : public ExceptionHandler {
 		public:
+
+            /// Create a new InvaildOpCodeHandler
 			InvaildOpCodeHandler() : ExceptionHandler(0x06) {	}
 
 			string get_message(system::cpu_status_t* status) final;
 	};
 
+    /**
+    * @class GeneralProtectionHandler
+    * @brief Handles a general protection exception
+    */
 	class GeneralProtectionHandler : public ExceptionHandler {
 		public:
+
+            /// Create a new GeneralProtectionHandler
 			GeneralProtectionHandler() : ExceptionHandler(0x0D) { }
 
 			string get_message(system::cpu_status_t* status) final;
 	};
 
+    /**
+    * @class PageFaultHandler
+    * @brief Handles a page fault exception
+    */
 	class PageFaultHandler : public ExceptionHandler {
 		public:
+
+            /// Create a new PageFaultHandler
 			PageFaultHandler() : ExceptionHandler(0x0E) { }
 
 			string get_message(system::cpu_status_t* status) final;
 	};
 
-	class CPUStopHandler : public InterruptHandler {
+    /**
+     * @class CPUStopHandler
+     * @brief Handles a interrupt that tells a CPU core to stop running
+     */
+    class CPUStopHandler : public InterruptHandler {
 		public:
+
+            /// Create a new CPUStopHandler
 			CPUStopHandler() : InterruptHandler(0x81) { }
 
 			system::cpu_status_t* handle_interrupt(system::cpu_status_t* status) final;
@@ -131,7 +169,11 @@ namespace MaxOS::hardwarecommunication {
 	constexpr uint16_t HARDWARE_INTERRUPT_OFFSET = 0x20;    ///< The offset in the IDT where interrupts from hardware start
 	constexpr uint16_t MAX_INTERRUPT_HANDLERS = 256;        ///< The maximum number of interrupt handlers
 
-	class ExceptionHandlers {
+    /**
+     * @class ExceptionHandlers
+     * @brief Holds and instantiates the CPU exception handlers
+     */
+    class ExceptionHandlers {
 
 		private:
 

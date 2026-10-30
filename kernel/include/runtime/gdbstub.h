@@ -22,10 +22,18 @@
 
 namespace MaxOS::runtime {
 
+    /// Whether to use the serial for GDB communcation or for logging
 	constexpr bool DO_DEBUGGING = false;
+
+    /// The userspace process to attach to
     constexpr char* DEBUG_TARGET = "DriverManager.elf";
 
     class GDBServer;
+
+    /**
+     * @class TrapFlagExcpetion
+     * @brief Exception handler for a hardware mem watch
+     */
     class TrapFlagExcpetion : public hardwarecommunication::ExceptionHandler {
 
         private:
@@ -39,6 +47,10 @@ namespace MaxOS::runtime {
 
     };
 
+    /**
+    * @class BreakPointException
+    * @brief Exception handler for a hardware breakpoint
+    */
     class BreakPointException : public hardwarecommunication::ExceptionHandler {
 
         private:
@@ -52,6 +64,10 @@ namespace MaxOS::runtime {
 
     };
 
+    /**
+     * @class GDBServer
+     * @brief Handler for running a GDB server over serial
+     */
     class GDBServer : public hardwarecommunication::InterruptHandler{
 
         private:

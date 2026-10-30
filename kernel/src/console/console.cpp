@@ -108,7 +108,7 @@ ConsoleColour Console::get_background_color(uint16_t, uint16_t) {
  * @param foreground The foreground color of the character
  * @param background The background color of the character
  */
-void Console::put_character(uint16_t x, uint16_t y, char c, ConsoleColour foreground, ConsoleColour background) {
+void Console::put_character(uint16_t x, uint16_t y, char c, common::ConsoleColour foreground, common::ConsoleColour background) {
 
 	// Set the colors of the character
 	set_foreground_color(x, y, foreground);
@@ -154,7 +154,7 @@ void Console::scroll_up() {
  * @param background The background color of the new line
  * @param fill The character to fill the new line with
  */
-void Console::scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
+void Console::scroll_up(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground, common::ConsoleColour background, char fill) {
 
 	// Shift everything but the last line by getting what is below it
 	for(int y = top; y < top + height - 1; y++)
@@ -188,7 +188,7 @@ void Console::clear() {
  * @param background The background color of the area
  * @param fill The character to fill the area with
  */
-void Console::clear(uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background, char fill) {
+void Console::clear(uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground, common::ConsoleColour background, char fill) {
 
 	// Check bounds
 	if(left > this->width() || top > this->height() || width > this->width() || height > this->height())
@@ -247,7 +247,7 @@ ConsoleArea::ConsoleArea(Console* console, uint16_t left, uint16_t top, uint16_t
  * @param foreground The foreground color of the area
  * @param background The background color of the area
  */
-ConsoleArea::ConsoleArea(Console* console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, ConsoleColour foreground, ConsoleColour background)
+ConsoleArea::ConsoleArea(Console* console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground, common::ConsoleColour background)
 		: m_console(console),
 		m_left(left),
 		m_top(top),
