@@ -19,7 +19,7 @@ if [ "$1" != "--no-deps" ]; then
                       cmake \
                       nasm \
                       telnet \
-                      i686-elf-grub \ 
+                      i686-elf-grub \
                       || fail "Couldn't install dependencies"
 
         # Scripting tools that linux has by default
