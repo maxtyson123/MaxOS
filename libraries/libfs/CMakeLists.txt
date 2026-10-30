@@ -1,2 +1,0 @@
-MAKE_LIB_NOSTD(fs src/)
-TARGET_LINK_LIBRARIES(fs kpi)
