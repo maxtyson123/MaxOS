@@ -1,0 +1,146 @@
+.TH "MaxOS::runtime::BreakPointException" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::runtime::BreakPointException \- Exception handler for a hardware breakpoint\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <gdbstub\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::ExceptionHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBreakPointException\fP (\fBGDBServer\fP *server)"
+.br
+.RI "Registers a handler for the \fBBreakPointException\fP (interrupt 0x1) "
+.ti -1c
+.RI "\fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status) override"
+.br
+.RI "Handles the interrupt 0x3 by pausing the thread\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::ExceptionHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBExceptionHandler\fP (uint8_t interrupt_number)"
+.br
+.RI "Create a new base exception handler for an interrupt\&. "
+.ti -1c
+.RI "\fB~ExceptionHandler\fP ()"
+.br
+.ti -1c
+.RI "virtual string \fBget_message\fP (\fBsystem::cpu_status_t\fP *status)"
+.br
+.RI "Get an human readable error message explaining this exception\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "virtual void \fBhandle_interrupt\fP ()"
+.br
+.RI "Handles an interrupt\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBInterruptHandler\fP (uint8_t interrupt_number, int64_t redirect=\-1, uint64_t redirect_index=0)"
+.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "virtual \fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_interrupt_number\fP"
+.br
+.RI "The interrupt number this handler handles\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Exception handler for a hardware breakpoint\&. 
+.PP
+Definition at line \fB54\fP of file \fBgdbstub\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "BreakPointException::BreakPointException (\fBGDBServer\fP * server)"
+
+.PP
+Registers a handler for the \fBBreakPointException\fP (interrupt 0x1) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP The GDB stub that will handle the exception 
+.RE
+.PP
+
+.PP
+Definition at line \fB585\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+586 : ExceptionHandler(0x3),
+587   m_gdb_handler(server)
+588 {
+589 
+590 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBcpu_status_t\fP * BreakPointException::handle_interrupt (\fBsystem::cpu_status_t\fP * status)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Handles the interrupt 0x3 by pausing the thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The registers at time of exception 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The state to return to 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::hardwarecommunication::ExceptionHandler\fP\&.
+.PP
+Definition at line \fB600\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+600                                                                         {
+601 
+602     // Move back
+603     status\->rip \-= 1;
+604     m_gdb_handler\->thread_regs = *status;
+605     m_gdb_handler\->attached_thread()\->thread_state = ThreadState::WAITING;
+606 
+607     // Notify the server that it stopped
+608     m_gdb_handler\->send_message("S05");
+609 
+610     // Dont execute further until instructed by GDB
+611     GlobalScheduler::current_thread()\->yield();
+612 
+613     // Copy the registers back as they may have been modified elsewhere
+614     *status = m_gdb_handler\->thread_regs;
+615     return status;
+616 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::GDBServer::attached_thread()\fP, \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBMaxOS::runtime::GDBServer::send_message()\fP, \fBMaxOS::processes::Thread::thread_state\fP, and \fBMaxOS::processes::Thread::yield()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

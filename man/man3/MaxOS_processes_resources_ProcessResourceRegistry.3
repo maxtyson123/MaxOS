@@ -1,0 +1,237 @@
+.TH "MaxOS::processes::resources::ProcessResourceRegistry" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::resources::ProcessResourceRegistry \- Manages the creation, retention and destruction of resources representing processes\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <scheduler_resources\&.h>\fP
+.PP
+Inherits \fBMaxOS::processes::resources::ResourceRegistry< ProcessResource >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBResource\fP * \fBget_resource\fP (const string &name) final"
+.br
+.RI "The\&. "
+.ti -1c
+.RI "\fBResource\fP * \fBcreate_resource\fP (const string &name, size_t flags, uintptr_t data) final"
+.br
+.RI "Opens an executable\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::processes::resources::ResourceRegistry< ProcessResource >\fP
+.in +1c
+.ti -1c
+.RI "\fBResourceRegistry\fP (\fBresource_type_t\fP type)"
+.br
+.RI "Constructor for \fBResourceRegistry\fP of a specific type\&. "
+.ti -1c
+.RI "\fBResource\fP * \fBcreate_resource\fP (const string &name, size_t flags, uintptr_t data) override"
+.br
+.RI "Create a new resource of the specific type\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::processes::resources::BaseResourceRegistry\fP
+.in +1c
+.ti -1c
+.RI "\fBBaseResourceRegistry\fP (\fBresource_type_t\fP \fBtype\fP)"
+.br
+.RI "Constructs a new \fBBaseResourceRegistry\fP object and registers it globally\&. "
+.ti -1c
+.RI "\fB~BaseResourceRegistry\fP ()"
+.br
+.RI "Destructor for \fBBaseResourceRegistry\fP, removes it from the global list\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of resources this registry handles\&. "
+.ti -1c
+.RI "bool \fBregister_resource\fP (\fBResource\fP *resource)"
+.br
+.RI "Registers a resource in the registry\&. "
+.ti -1c
+.RI "void \fBclose_resource\fP (\fBResource\fP *resource, size_t flags)"
+.br
+.RI "Close the resource provided, if it exists in this registry\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::processes::resources::BaseResourceRegistry\fP
+.in +1c
+.ti -1c
+.RI "common::Map< string, \fBResource\fP * > \fBm_resources\fP"
+.br
+.RI "The map of resource names to resource instances\&. "
+.ti -1c
+.RI "common::Map< string, uint64_t > \fBm_resource_uses\fP"
+.br
+.RI "The map of resource names to how many processes are using them\&. "
+.ti -1c
+.RI "common::Spinlock \fBm_lock\fP"
+.br
+.RI "The lock to make the registry threadsafe\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBm_type\fP"
+.br
+.RI "The resource type that this registry manages\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Manages the creation, retention and destruction of resources representing processes\&. 
+.PP
+Definition at line \fB93\fP of file \fBscheduler_resources\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ProcessResourceRegistry::ProcessResourceRegistry ()"
+
+.PP
+Definition at line \fB347\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+348 : ResourceRegistry<ProcessResource>(resource_type_t::PROCESS)
+349 {
+350 
+351 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBResource\fP * ProcessResourceRegistry::create_resource (const string & name, size_t flags, uintptr_t data)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Opens an executable\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The path to the executable to open 
+.br
+\fIflags\fP td 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The \fBProcess\fP resource created from the executable or nullptr if failed to open/execute
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+\fBProcess\fP needs to own the Elf pointer and free it in destructor (do this when moving ELF as a superclass) 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::resources::BaseResourceRegistry\fP\&.
+.PP
+Definition at line \fB362\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+362                                                                                                    {
+363 
+364     // Get the command
+365     auto command = (execute_command_t*)data;
+366     if (!command)
+367         return nullptr;
+368 
+369     // Kernel copy (@todo copy the data page into the new process so dont get unmapped error and also thus dont need a copy)
+370     auto exec_buffer = buffer_t(command\->file_data_size);
+371     exec_buffer\&.copy_from(command\->file_data, command\->file_data_size);
+372 
+373     // Copy the args into userspace (@todo bad, two copies)
+374     uint64_t argc = command\->args_count;
+375     size_t arg_size = argc * sizeof(void*);
+376     void* argv = MemoryManager::kmalloc(arg_size);
+377     for (int i = 0; i < argc; i++) {
+378 
+379         // Copy each argument
+380         size_t len = strlen(((char**)command\->args)[i]) + 1;
+381         ((char**)argv)[i] = (char*) MemoryManager::kmalloc(len);
+382         memcpy((void*) ((char**)argv)[i], (void*) ((char**)command\->args)[i], len);
+383     }
+384 
+385     // Load the elf
+386     auto elf = new ELF64((uintptr_t)exec_buffer\&.raw());
+387     if (!elf\->is_valid())
+388         return nullptr;
+389 
+390     // Create the processs
+391     auto process    = new Process(name, argv, argc, elf);
+392     GlobalScheduler::system_scheduler() \-> add_process(process);
+393 
+394     // Create the resource
+395     auto resource   = new ProcessResource(name, flags, resource_type_t::PROCESS);
+396     resource\->process = process;
+397 
+398     // Clean up
+399     // for (int i = 0; i < argc; i++)
+400     //  delete ((char**)argv)[i];
+401     // delete argv;
+402 
+403 
+404     // Switch back to the caller proc
+405     MemoryManager::switch_active_memory_manager(GlobalScheduler::current_process()\->memory_manager);
+406     return resource;
+407 }
+.fi
+
+.PP
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, and \fBMaxOS::processes::GlobalScheduler::system_scheduler()\fP\&.
+.SS "\fBResource\fP * ProcessResourceRegistry::get_resource (const string & name)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+The\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+'this' is a bit mess 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::resources::BaseResourceRegistry\fP\&.
+.PP
+Definition at line \fB417\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+417                                                                   {
+418 
+419     // Resource already opened
+420     auto resource = BaseResourceRegistry::get_resource(name);
+421     if(resource != nullptr)
+422         return resource;
+423 
+424     // Get the process
+425     uint64_t pid = name\&.to_int();
+426     auto process = name == "this" ? GlobalScheduler::current_process() : GlobalScheduler::get_process(pid);
+427 
+428     // Self refrence may already be open
+429     resource = BaseResourceRegistry::get_resource(string(process \-> pid()));
+430     if(resource != nullptr)
+431         return resource;
+432 
+433     // Create the resource
+434     auto process_resource = new ProcessResource(string(process \-> pid()), 0, resource_type_t::PROCESS);
+435     process_resource\->process = process;
+436 
+437     register_resource(process_resource);
+438     return process_resource;
+439 }
+.fi
+
+.PP
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, and \fBMaxOS::processes::resources::BaseResourceRegistry::register_resource()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

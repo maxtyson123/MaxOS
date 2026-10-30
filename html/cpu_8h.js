@@ -75,5 +75,6 @@ var cpu_8h =
       [ "IA64", "cpu_8h.html#aabd92958148e45d498450aaf57c8d6aba4c2c294c51f3230d47a6bf0fb0cbe47a", null ],
       [ "PBE", "cpu_8h.html#aabd92958148e45d498450aaf57c8d6abaeff7c5571b267c9cf48a2c16d82e99f4", null ]
     ] ],
-    [ "BOOT_STACK_SIZE", "cpu_8h.html#a0cdb341b2d45114c2d033ec00bc3b356", null ]
+    [ "BOOT_STACK_SIZE", "cpu_8h.html#a0cdb341b2d45114c2d033ec00bc3b356", null ],
+    [ "IO_BITMAP_SIZE", "cpu_8h.html#a0a75a77464a08cf41da0ce8d28d431ec", null ]
 ];

@@ -1,4 +1,21 @@
 var searchData=
 [
-  ['zero_0',['zero',['../structMaxOS_1_1filesystem_1_1format_1_1LongFileNameEntry.html#aa1934da90620d3b818a14779277475db',1,'MaxOS::filesystem::format::LongFileNameEntry::zero'],['../structmultiboot__mmap__entry.html#a1e8db52da1ca1c6f5e2e96baec2c9256',1,'multiboot_mmap_entry::zero']]]
+  ['_7eadvancedprogrammableinterruptcontroller_0',['~AdvancedProgrammableInterruptController',['../classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController.html#a59519c4631e9ce4dacfed1bcc276141c',1,'MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController']]],
+  ['_7ebaseresourceregistry_1',['~BaseResourceRegistry',['../classMaxOS_1_1processes_1_1resources_1_1BaseResourceRegistry.html#ab7c3f284930089defa53bc1b0b83d26e',1,'MaxOS::processes::resources::BaseResourceRegistry']]],
+  ['_7ebumpallocator_2',['~BumpAllocator',['../classMaxOS_1_1memory_1_1allocator_1_1BumpAllocator.html#a3c7b3bc31ae2d741c5056f223d026e56',1,'MaxOS::memory::allocator::BumpAllocator']]],
+  ['_7ebumpmemorymanager_3',['~BumpMemoryManager',['../classMaxOS_1_1memory_1_1BumpMemoryManager.html#aa7da1f45e9d4073538e4978536729d97',1,'MaxOS::memory::BumpMemoryManager']]],
+  ['_7eelf64_4',['~ELF64',['../classMaxOS_1_1processes_1_1ELF64.html#a90a82f049a3346de9765553d1404c9cd',1,'MaxOS::processes::ELF64']]],
+  ['_7eexceptionhandler_5',['~ExceptionHandler',['../classMaxOS_1_1hardwarecommunication_1_1ExceptionHandler.html#acdb2dda4226305ca238bd975ef4ad67e',1,'MaxOS::hardwarecommunication::ExceptionHandler']]],
+  ['_7eglobalresourceregistry_6',['~GlobalResourceRegistry',['../classMaxOS_1_1processes_1_1resources_1_1GlobalResourceRegistry.html#a3a1da81c278924af3ff3d61843ef6f55',1,'MaxOS::processes::resources::GlobalResourceRegistry']]],
+  ['_7eglobalscheduler_7',['~GlobalScheduler',['../classMaxOS_1_1processes_1_1GlobalScheduler.html#a817a0407139e437686c29ee3367cab09',1,'MaxOS::processes::GlobalScheduler']]],
+  ['_7einterrupthandler_8',['~InterruptHandler',['../classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html#a12b87c89015a61b702184070354e7876',1,'MaxOS::hardwarecommunication::InterruptHandler']]],
+  ['_7einterruptmanager_9',['~InterruptManager',['../classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a91bd23784e8ca1fa3d4123051c107319',1,'MaxOS::hardwarecommunication::InterruptManager']]],
+  ['_7elogrecord_10',['~LogRecord',['../classMaxOS_1_1LogRecord.html#ab3e15a5b786ebbcc0f46add0998ea98b',1,'MaxOS::LogRecord']]],
+  ['_7ememoryallocator_11',['~MemoryAllocator',['../classMaxOS_1_1memory_1_1allocator_1_1MemoryAllocator.html#a29649a1c897a6edca2a223ee9a100f34',1,'MaxOS::memory::allocator::MemoryAllocator']]],
+  ['_7ememorymanager_12',['~MemoryManager',['../classMaxOS_1_1memory_1_1MemoryManager.html#ad4570910ccfc14b2da679bee58ee8f48',1,'MaxOS::memory::MemoryManager']]],
+  ['_7eprocess_13',['~Process',['../classMaxOS_1_1processes_1_1Process.html#a990776d181dbbde7ff8ac12713d814b3',1,'MaxOS::processes::Process']]],
+  ['_7eresourcemanager_14',['~ResourceManager',['../classMaxOS_1_1processes_1_1resources_1_1ResourceManager.html#a671c186e4630599e7e36d000c53eaf80',1,'MaxOS::processes::resources::ResourceManager']]],
+  ['_7esharedmessageendpoint_15',['~SharedMessageEndpoint',['../classMaxOS_1_1processes_1_1SharedMessageEndpoint.html#ae2982bf11f12533a986d08477d4c8d65',1,'MaxOS::processes::SharedMessageEndpoint']]],
+  ['_7ethread_16',['~Thread',['../classMaxOS_1_1processes_1_1Thread.html#a37d9edd3a1a776cbc27dedff949c9726',1,'MaxOS::processes::Thread']]],
+  ['_7evirtualmemorymanager_17',['~VirtualMemoryManager',['../classMaxOS_1_1memory_1_1VirtualMemoryManager.html#a77e2717ead1bd12e12da9c824b0c7921',1,'MaxOS::memory::VirtualMemoryManager']]]
 ];

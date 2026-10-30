@@ -8,8 +8,5 @@ var searchData=
   ['elfprogramtype_5',['ELFProgramType',['../elf_8h.html#a83adeee8bf15896cdc5e5e422b502367',1,'MaxOS::processes']]],
   ['elfsectiontype_6',['ELFSectionType',['../elf_8h.html#a6f9ae701d0dd29e5c4d8d567ce812845',1,'MaxOS::processes']]],
   ['elftype_7',['ELFType',['../elf_8h.html#a5ef699c81be4883849e492207cebf722',1,'MaxOS::processes']]],
-  ['elfversion_8',['ELFVersion',['../elf_8h.html#acd12ef8df8d99f540800283fd134c483',1,'MaxOS::processes']]],
-  ['entrytype_9',['EntryType',['../ext2_8h.html#a709285ce94200c1633a6f7baa9a30c4e',1,'MaxOS::filesystem::format::ext2']]],
-  ['erroroperation_10',['ErrorOperation',['../ext2_8h.html#a4e752b7e8aba4506619abf4c1fac1dcf',1,'MaxOS::filesystem::format::ext2']]],
-  ['ethernetdriverevents_11',['EthernetDriverEvents',['../ethernet_8h.html#a576d78fd01aa3b97b27424c6cb10aec4',1,'MaxOS::drivers::ethernet']]]
+  ['elfversion_8',['ELFVersion',['../elf_8h.html#acd12ef8df8d99f540800283fd134c483',1,'MaxOS::processes']]]
 ];

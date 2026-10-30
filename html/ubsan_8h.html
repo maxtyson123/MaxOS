@@ -112,6 +112,7 @@ $(document).ready(function(){initNavTree('ubsan_8h.html',''); initResizable(); }
 <p>Defines structures and a handler for Undefined Behavior Sanitizer (UBSan) runtime errors.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;libcommon/assert.h&gt;</code><br />
 </div>
 <p><a href="ubsan_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -153,9 +154,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a4dd3c18b7406fa01fd4d60cd4485183a" id="r_a4dd3c18b7406fa01fd4d60cd4485183a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ubsan_8h.html#a4dd3c18b7406fa01fd4d60cd4485183a">ubsan_aligned</a>(value,  alignment)&#160;&#160;&#160;!(value &amp; (alignment - 1))</td></tr>
-<tr class="memdesc:a4dd3c18b7406fa01fd4d60cd4485183a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a value is aligned to the given alignment.  <br /></td></tr>
-<tr class="separator:a4dd3c18b7406fa01fd4d60cd4485183a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad00c497d57e53ff391a678ca4f6b9e46" id="r_ad00c497d57e53ff391a678ca4f6b9e46"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ubsan_8h.html#ad00c497d57e53ff391a678ca4f6b9e46">UBSAN_ALIGNED</a>(value,  alignment)&#160;&#160;&#160;((((uintptr_t)(value)) &amp; ((alignment) - 1)) == 0)</td></tr>
+<tr class="memdesc:ad00c497d57e53ff391a678ca4f6b9e46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a value is aligned to the given alignment.  <br /></td></tr>
+<tr class="separator:ad00c497d57e53ff391a678ca4f6b9e46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -213,14 +214,14 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition in file <a class="el" href="ubsan_8h_source.html">ubsan.h</a>.</p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a4dd3c18b7406fa01fd4d60cd4485183a" name="a4dd3c18b7406fa01fd4d60cd4485183a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4dd3c18b7406fa01fd4d60cd4485183a">&#9670;&#160;</a></span>ubsan_aligned</h2>
+<a id="ad00c497d57e53ff391a678ca4f6b9e46" name="ad00c497d57e53ff391a678ca4f6b9e46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad00c497d57e53ff391a678ca4f6b9e46">&#9670;&#160;</a></span>UBSAN_ALIGNED</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define ubsan_aligned</td>
+          <td class="memname">#define UBSAN_ALIGNED</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">value, </td>
@@ -234,14 +235,14 @@ Variables</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;!(value &amp; (alignment - 1))</td>
+          <td></td><td>&#160;&#160;&#160;((((uintptr_t)(value)) &amp; ((alignment) - 1)) == 0)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Check if a value is aligned to the given alignment. </p>
 
-<p class="definition">Definition at line <a class="el" href="ubsan_8h_source.html#l00015">15</a> of file <a class="el" href="ubsan_8h_source.html">ubsan.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ubsan_8h_source.html#l00017">17</a> of file <a class="el" href="ubsan_8h_source.html">ubsan.h</a>.</p>
 
 </div>
 </div>
@@ -272,21 +273,21 @@ Variables</h2></td></tr>
 </div><!-- fragment -->
 <p>List of type check errors. </p>
 
-<p class="definition">Definition at line <a class="el" href="ubsan_8h_source.html#l00167">167</a> of file <a class="el" href="ubsan_8h_source.html">ubsan.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  167</span>                                     {</div>
-<div class="line"><span class="lineno">  168</span>            <span class="stringliteral">&quot;load of&quot;</span>,</div>
-<div class="line"><span class="lineno">  169</span>            <span class="stringliteral">&quot;store to&quot;</span>,</div>
-<div class="line"><span class="lineno">  170</span>            <span class="stringliteral">&quot;reference binding to&quot;</span>,</div>
-<div class="line"><span class="lineno">  171</span>            <span class="stringliteral">&quot;member access within&quot;</span>,</div>
-<div class="line"><span class="lineno">  172</span>            <span class="stringliteral">&quot;member call on&quot;</span>,</div>
-<div class="line"><span class="lineno">  173</span>            <span class="stringliteral">&quot;constructor call on&quot;</span>,</div>
-<div class="line"><span class="lineno">  174</span>            <span class="stringliteral">&quot;downcast of&quot;</span>,</div>
-<div class="line"><span class="lineno">  175</span>            <span class="stringliteral">&quot;downcast of&quot;</span>,</div>
-<div class="line"><span class="lineno">  176</span>            <span class="stringliteral">&quot;upcast of&quot;</span>,</div>
-<div class="line"><span class="lineno">  177</span>            <span class="stringliteral">&quot;cast to virtual base of&quot;</span>,</div>
-<div class="line"><span class="lineno">  178</span>    };</div>
+<p class="definition">Definition at line <a class="el" href="ubsan_8h_source.html#l00169">169</a> of file <a class="el" href="ubsan_8h_source.html">ubsan.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  169</span>                                     {</div>
+<div class="line"><span class="lineno">  170</span>            <span class="stringliteral">&quot;load of&quot;</span>,</div>
+<div class="line"><span class="lineno">  171</span>            <span class="stringliteral">&quot;store to&quot;</span>,</div>
+<div class="line"><span class="lineno">  172</span>            <span class="stringliteral">&quot;reference binding to&quot;</span>,</div>
+<div class="line"><span class="lineno">  173</span>            <span class="stringliteral">&quot;member access within&quot;</span>,</div>
+<div class="line"><span class="lineno">  174</span>            <span class="stringliteral">&quot;member call on&quot;</span>,</div>
+<div class="line"><span class="lineno">  175</span>            <span class="stringliteral">&quot;constructor call on&quot;</span>,</div>
+<div class="line"><span class="lineno">  176</span>            <span class="stringliteral">&quot;downcast of&quot;</span>,</div>
+<div class="line"><span class="lineno">  177</span>            <span class="stringliteral">&quot;downcast of&quot;</span>,</div>
+<div class="line"><span class="lineno">  178</span>            <span class="stringliteral">&quot;upcast of&quot;</span>,</div>
+<div class="line"><span class="lineno">  179</span>            <span class="stringliteral">&quot;cast to virtual base of&quot;</span>,</div>
+<div class="line"><span class="lineno">  180</span>    };</div>
 </div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="ubsan_8cpp_source.html#l00037">MaxOS::runtime::UBSanHandler::print_type_mismatch()</a>, and <a class="el" href="ubsan_8cpp_source.html#l00056">MaxOS::runtime::UBSanHandler::print_type_mismatch_v1()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="ubsan_8cpp_source.html#l00037">MaxOS::runtime::UBSanHandler::print_type_mismatch()</a>, and <a class="el" href="ubsan_8cpp_source.html#l00058">MaxOS::runtime::UBSanHandler::print_type_mismatch_v1()</a>.</p>
 
 </div>
 </div>

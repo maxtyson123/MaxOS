@@ -1,8 +1,9 @@
 var logger_8h =
 [
     [ "MaxOS::Logger", "classMaxOS_1_1Logger.html", "classMaxOS_1_1Logger" ],
-    [ "ASSERT", "logger_8h.html#adf7b5d69e4c25995b3211b91b27f33b6", null ],
+    [ "MaxOS::LogRecord", "classMaxOS_1_1LogRecord.html", "classMaxOS_1_1LogRecord" ],
     [ "LogLevel", "logger_8h.html#a26e76cbb3915e23f58416e56ab0860ae", [
+      [ "OUT", "logger_8h.html#a26e76cbb3915e23f58416e56ab0860aeaef373774188a51f80463f37b6bd9e83a", null ],
       [ "ERROR", "logger_8h.html#a26e76cbb3915e23f58416e56ab0860aeabb1ca97ec761fc37101737ba0aa2e7c5", null ],
       [ "WARNING", "logger_8h.html#a26e76cbb3915e23f58416e56ab0860aea059e9861e0400dfbe05c98a841f3f96b", null ],
       [ "HEADER", "logger_8h.html#a26e76cbb3915e23f58416e56ab0860aea7ad4905b4543ab4a1637dd23c50e36ce", null ],

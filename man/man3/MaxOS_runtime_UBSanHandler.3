@@ -29,7 +29,7 @@ MaxOS::runtime::UBSanHandler \- Handles undefined behaviour sanitizer runtime er
 .PP 
 Handles undefined behaviour sanitizer runtime errors\&. 
 .PP
-Definition at line \fB184\fP of file \fBubsan\&.h\fP\&.
+Definition at line \fB186\fP of file \fBubsan\&.h\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "void UBSanHandler::handle (\fBsource_location_t\fP location, const char * msg)\fC [static]\fP"
@@ -51,12 +51,12 @@ Definition at line \fB25\fP of file \fBubsan\&.cpp\fP\&..PP
 25                                                                      {
 26 
 27     // Print the location
-28     ASSERT(false, "UBSAN ERROR AT %s:%d:%d \- %s", location\&.file, location\&.line, location\&.column, msg);
+28     ASSERT(false, "UBSAN ERROR AT %s:%d:%d \- %s \\n", location\&.file, location\&.line, location\&.column, msg);
 29 }
 .fi
 
 .PP
-References \fBASSERT\fP, \fBMaxOS::runtime::SourceLocation::column\fP, \fBMaxOS::runtime::SourceLocation::file\fP, and \fBMaxOS::runtime::SourceLocation::line\fP\&.
+References \fBMaxOS::runtime::SourceLocation::column\fP, \fBMaxOS::runtime::SourceLocation::file\fP, and \fBMaxOS::runtime::SourceLocation::line\fP\&.
 .PP
 Referenced by \fB__ubsan_handle_add_overflow()\fP, \fB__ubsan_handle_builtin_unreachable()\fP, \fB__ubsan_handle_divrem_overflow()\fP, \fB__ubsan_handle_load_invalid_value()\fP, \fB__ubsan_handle_missing_return()\fP, \fB__ubsan_handle_mul_overflow()\fP, \fB__ubsan_handle_negate_overflow()\fP, \fB__ubsan_handle_out_of_bounds()\fP, \fB__ubsan_handle_pointer_overflow()\fP, \fB__ubsan_handle_shift_out_of_bounds()\fP, \fB__ubsan_handle_sub_overflow()\fP, \fB__ubsan_handle_vla_bound_not_positive()\fP, \fBprint_type_mismatch()\fP, and \fBprint_type_mismatch_v1()\fP\&.
 .SS "void UBSanHandler::print_type_mismatch (\fBtype_mismatch_info_t\fP * info, uintptr_t ptr)\fC [static]\fP"
@@ -79,18 +79,20 @@ Definition at line \fB37\fP of file \fBubsan\&.cpp\fP\&..PP
 38 
 39     // Print the error
 40     string msg;
-41     if (info\->alignment != 0 && ubsan_aligned(ptr, info\->alignment))
-42         msg = "misaligned memory access";
-43     else
-44         msg = (StringBuilder)TYPE_CHECK_KINDS[info\->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info\->type\->name;
-45 
-46     // Print the location
-47     handle(info\->location, msg\&.c_str());
-48 }
+41     if (ptr == 0)
+42         msg = "null pointer access";
+43     else if (info\->alignment != 0 && UBSAN_ALIGNED(ptr, info\->alignment))
+44         msg = StringBuilder() << "misaligned address 0x" << ptr;
+45     else
+46         msg = StringBuilder() << TYPE_CHECK_KINDS[info\->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info\->type\->name;
+47 
+48     // Print the location
+49     handle(info\->location, msg\&.c_str());
+50 }
 .fi
 
 .PP
-References \fBMaxOS::runtime::TypeMismatchInfo::alignment\fP, \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfo::location\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfo::type\fP, \fBMaxOS::runtime::TypeMismatchInfo::type_check_kind\fP, \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP, and \fBubsan_aligned\fP\&.
+References \fBMaxOS::runtime::TypeMismatchInfo::alignment\fP, \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfo::location\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfo::type\fP, \fBMaxOS::runtime::TypeMismatchInfo::type_check_kind\fP, \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP, and \fBUBSAN_ALIGNED\fP\&.
 .PP
 Referenced by \fB__ubsan_handle_type_mismatch()\fP\&.
 .SS "void UBSanHandler::print_type_mismatch_v1 (\fBtype_mismatch_info_v1_t\fP * info, uintptr_t ptr)\fC [static]\fP"
@@ -107,24 +109,26 @@ Prints the type mismatch error for UBSan v1\&.
 .PP
 
 .PP
-Definition at line \fB56\fP of file \fBubsan\&.cpp\fP\&..PP
+Definition at line \fB58\fP of file \fBubsan\&.cpp\fP\&..PP
 .nf
-56                                                                                       {
-57 
-58     // Print the error
-59     string msg;
-60     if (info\->log_alignment != 0 && ubsan_aligned(ptr, (1 << (info\->log_alignment))))
-61         msg = "misaligned memory access";
-62     else
-63         msg= StringBuilder() << TYPE_CHECK_KINDS[info\->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info\->type\->name;
-64 
-65     // Print the location
-66     handle(info\->location, msg\&.c_str());
-67 }
+58                                                                                       {
+59 
+60     // Print the error
+61     string msg;
+62     if (ptr == 0)
+63         msg = "null pointer access";
+64     else if (info\->log_alignment != 0 && UBSAN_ALIGNED(ptr, (1 << (info\->log_alignment))))
+65         msg = StringBuilder() << "misaligned address 0x" << ptr;
+66     else
+67         msg = StringBuilder() << TYPE_CHECK_KINDS[info\->type_check_kind] << " address 0x" << ptr << " with insufficient space for an object of type " << info\->type\->name;
+68 
+69     // Print the location
+70     handle(info\->location, msg\&.c_str());
+71 }
 .fi
 
 .PP
-References \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::location\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::log_alignment\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type_check_kind\fP, \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP, and \fBubsan_aligned\fP\&.
+References \fBhandle()\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::location\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::log_alignment\fP, \fBMaxOS::runtime::TypeDescriptor::name\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type\fP, \fBMaxOS::runtime::TypeMismatchInfoV1::type_check_kind\fP, \fBMaxOS::runtime::TYPE_CHECK_KINDS\fP, and \fBUBSAN_ALIGNED\fP\&.
 .PP
 Referenced by \fB__ubsan_handle_type_mismatch_v1()\fP\&.
 

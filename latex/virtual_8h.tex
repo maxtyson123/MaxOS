@@ -7,8 +7,8 @@ Defines a Virtual\+Memory\+Manager class for managing virtual memory allocation 
 
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$stddef.\+h$>$}\newline
+{\ttfamily \#include $<$libcommon/string.\+h$>$}\newline
 {\ttfamily \#include $<$memory/physical.\+h$>$}\newline
-{\ttfamily \#include $<$common/string.\+h$>$}\newline
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -27,8 +27,7 @@ typedef enum \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380}{Max\
 \begin{DoxyCompactList}\small\item\em Alias for Virtual\+Flags enum. \end{DoxyCompactList}\item 
 typedef struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Chunk}} \mbox{\hyperlink{virtual_8h_a420231f8e8c3f193602e00af76a7a44b}{Max\+OS\+::memory\+::virtual\+\_\+memory\+\_\+chunk\+\_\+t}}
 \begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1memory_1_1VirtualMemoryChunk}{Virtual\+Memory\+Chunk} struct. \end{DoxyCompactList}\item 
-\Hypertarget{virtual_8h_a1784dc53ca0b9a38fa243ee638fab7d4}\label{virtual_8h_a1784dc53ca0b9a38fa243ee638fab7d4} 
-typedef struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{Max\+OS\+::memory\+::\+Free\+Chunk}} {\bfseries Max\+OS\+::memory\+::free\+\_\+chunk\+\_\+t}
+typedef struct \mbox{\hyperlink{structMaxOS_1_1memory_1_1FreeChunk}{Max\+OS\+::memory\+::\+Free\+Chunk}} \mbox{\hyperlink{virtual_8h_a1784dc53ca0b9a38fa243ee638fab7d4}{Max\+OS\+::memory\+::free\+\_\+chunk\+\_\+t}}
 \begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1memory_1_1FreeChunk}{Free\+Chunk} struct. \end{DoxyCompactList}\item 
 typedef struct PACKED \mbox{\hyperlink{structMaxOS_1_1memory_1_1VirtualMemoryRegion}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Region}} \mbox{\hyperlink{virtual_8h_a0c2f8355820427cecb751d5b4e1c93fb}{Max\+OS\+::memory\+::virtual\+\_\+memory\+\_\+region\+\_\+t}}
 \begin{DoxyCompactList}\small\item\em Alias for \doxylink{structMaxOS_1_1memory_1_1VirtualMemoryRegion}{Virtual\+Memory\+Region} struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -39,6 +38,13 @@ enum \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380}{Max\+OS\+::m
 , \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380a997819290df7a1861b890d56d9f7c973}{Max\+OS\+::memory\+::\+SHARED}} = (1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 10)
  \}
 \begin{DoxyCompactList}\small\item\em Flags for chunks used in virtual memory allocation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr size\+\_\+t \mbox{\hyperlink{virtual_8h_adda157b1113c94c99f771858b8f600c0}{Max\+OS\+::memory\+::\+CHUNKS\+\_\+\+PER\+\_\+\+PAGE}} = \mbox{\hyperlink{physical_8h_acbb7ce85d6b04d80fa29a7292d4bc3ed}{PAGE\+\_\+\+SIZE}} / sizeof(\mbox{\hyperlink{virtual_8h_a420231f8e8c3f193602e00af76a7a44b}{virtual\+\_\+memory\+\_\+chunk\+\_\+t}}) -\/ 1
+\begin{DoxyCompactList}\small\item\em Number of chunks per virtual memory region (limited to fit in one page) \end{DoxyCompactList}\item 
+constexpr size\+\_\+t \mbox{\hyperlink{virtual_8h_af53c65745b62d8c6c0c51c1aed223b5f}{Max\+OS\+::memory\+::\+VMM\+\_\+\+RESERVED}} = 0x138000000
+\begin{DoxyCompactList}\small\item\em The starting address for the VMM to start allocating from when in higher half (otherwise can cause conflicts with kernel space) \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -57,6 +63,18 @@ Definition in file \mbox{\hyperlink{virtual_8h_source}{virtual.\+h}}.
 
 
 \doxysubsection{Typedef Documentation}
+\Hypertarget{virtual_8h_a1784dc53ca0b9a38fa243ee638fab7d4}\label{virtual_8h_a1784dc53ca0b9a38fa243ee638fab7d4} 
+\index{virtual.h@{virtual.h}!free\_chunk\_t@{free\_chunk\_t}}
+\index{free\_chunk\_t@{free\_chunk\_t}!virtual.h@{virtual.h}}
+\doxysubsubsection{\texorpdfstring{free\_chunk\_t}{free\_chunk\_t}}
+{\footnotesize\ttfamily \mbox{\hyperlink{virtual_8h_a1784dc53ca0b9a38fa243ee638fab7d4}{Max\+OS\+::memory\+::free\+\_\+chunk\+\_\+t}}}
+
+
+
+Alias for Free\+Chunk struct. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000015}{Todo}}]Could just use virtual\+\_\+memory\+\_\+chunk\+\_\+t and use "{}flags"{} as a pointer? \end{DoxyRefDesc}
 \Hypertarget{virtual_8h_a90b70bec64a59b73946d84a9e7572b8e}\label{virtual_8h_a90b70bec64a59b73946d84a9e7572b8e} 
 \index{virtual.h@{virtual.h}!virtual\_flags\_t@{virtual\_flags\_t}}
 \index{virtual\_flags\_t@{virtual\_flags\_t}!virtual.h@{virtual.h}}
@@ -124,15 +142,54 @@ SHARED&The memory is shared between multiple processes. \\
 \end{DoxyEnumFields}
 
 
-Definition at line \mbox{\hyperlink{virtual_8h_source_l00031}{31}} of file \mbox{\hyperlink{virtual_8h_source}{virtual.\+h}}.
+Definition at line \mbox{\hyperlink{virtual_8h_source_l00038}{38}} of file \mbox{\hyperlink{virtual_8h_source}{virtual.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00032\ }
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380a9b2ec1c1148770ef7ebf973def754e7c}{RESERVE}}\ =\ (1\ <<\ 9),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ SHARED\ =\ (1\ <<\ 10),\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00035\ }
-\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \}\ \mbox{\hyperlink{virtual_8h_a90b70bec64a59b73946d84a9e7572b8e}{virtual\_flags\_t}};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{virtual_8h_a12ca8e10f17e52d8375319daaaf6f380a9b2ec1c1148770ef7ebf973def754e7c}{RESERVE}}\ =\ (1\ <<\ 9),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ SHARED\ =\ (1\ <<\ 10),\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \}\ \mbox{\hyperlink{virtual_8h_a90b70bec64a59b73946d84a9e7572b8e}{virtual\_flags\_t}};}
 
 \end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{virtual_8h_adda157b1113c94c99f771858b8f600c0}\label{virtual_8h_adda157b1113c94c99f771858b8f600c0} 
+\index{virtual.h@{virtual.h}!CHUNKS\_PER\_PAGE@{CHUNKS\_PER\_PAGE}}
+\index{CHUNKS\_PER\_PAGE@{CHUNKS\_PER\_PAGE}!virtual.h@{virtual.h}}
+\doxysubsubsection{\texorpdfstring{CHUNKS\_PER\_PAGE}{CHUNKS\_PER\_PAGE}}
+{\footnotesize\ttfamily constexpr size\+\_\+t Max\+OS\+::memory\+::\+CHUNKS\+\_\+\+PER\+\_\+\+PAGE = PAGE\+\_\+\+SIZE / sizeof(virtual\+\_\+memory\+\_\+chunk\+\_\+t) -\/ 1\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Number of chunks per virtual memory region (limited to fit in one page) 
+
+
+
+Definition at line \mbox{\hyperlink{virtual_8h_source_l00079}{79}} of file \mbox{\hyperlink{virtual_8h_source}{virtual.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{virtual_8cpp_source_l00142}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::allocate()}}, \mbox{\hyperlink{virtual_8cpp_source_l00282}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::free()}}, \mbox{\hyperlink{virtual_8cpp_source_l00348}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::memory\+\_\+used()}}, and \mbox{\hyperlink{virtual_8cpp_source_l00071}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::\texorpdfstring{$\sim$}{\string~}\+Virtual\+Memory\+Manager()}}.
+
+\Hypertarget{virtual_8h_af53c65745b62d8c6c0c51c1aed223b5f}\label{virtual_8h_af53c65745b62d8c6c0c51c1aed223b5f} 
+\index{virtual.h@{virtual.h}!VMM\_RESERVED@{VMM\_RESERVED}}
+\index{VMM\_RESERVED@{VMM\_RESERVED}!virtual.h@{virtual.h}}
+\doxysubsubsection{\texorpdfstring{VMM\_RESERVED}{VMM\_RESERVED}}
+{\footnotesize\ttfamily constexpr size\+\_\+t Max\+OS\+::memory\+::\+VMM\+\_\+\+RESERVED = 0x138000000\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+The starting address for the VMM to start allocating from when in higher half (otherwise can cause conflicts with kernel space) 
+
+
+
+Definition at line \mbox{\hyperlink{virtual_8h_source_l00080}{80}} of file \mbox{\hyperlink{virtual_8h_source}{virtual.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{virtual_8cpp_source_l00025}{Max\+OS\+::memory\+::\+Virtual\+Memory\+Manager\+::\+Virtual\+Memory\+Manager()}}.
+

@@ -1,0 +1,263 @@
+.TH "MaxOS::processes::resources::ThreadResource" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::resources::ThreadResource \- A wrapper for a \fBThread\fP which exposes \fBThread\fP operations as Resource operations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <scheduler_resources\&.h>\fP
+.PP
+Inherits Resource\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBThreadResource\fP (const string &name, size_t flags, \fBresource_type_t\fP type)"
+.br
+.ti -1c
+.RI "void \fBclose\fP (size_t flags) final"
+.br
+.RI "Closes the thread resource, marking the thread to be removed by the scheduler\&. "
+.ti -1c
+.RI "int \fBread\fP (void *buffer, size_t size, size_t flags) final"
+.br
+.RI "Reads data from the thread resource\&. "
+.ti -1c
+.RI "int \fBwrite\fP (const void *buffer, size_t size, size_t flags) final"
+.br
+.RI "Writes data to the thread resource\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBThread\fP * \fBthread\fP"
+.br
+.RI "The thread that this resource handles & exposes\&. "
+.ti -1c
+.RI "uint64_t \fBexit_code\fP"
+.br
+.RI "The exit code of the thread once it has exited\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A wrapper for a \fBThread\fP which exposes \fBThread\fP operations as Resource operations\&. 
+
+
+.PP
+\fBSee also\fP
+.RS 4
+\fBThread\fP 
+.PP
+\fBResource\fP
+.RE
+.PP
+\fBNote\fP
+.RS 4
+The thread pointer will be freed by scheduler during \fBclose()\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB59\fP of file \fBscheduler_resources\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ThreadResource::ThreadResource (const string & name, size_t flags, \fBresource_type_t\fP type)"
+
+.PP
+Definition at line \fB179\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+180 : Resource(name, flags, type)
+181 {
+182 
+183 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void ThreadResource::close (size_t flags)\fC [final]\fP"
+
+.PP
+Closes the thread resource, marking the thread to be removed by the scheduler\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIflags\fP N/A 
+.RE
+.PP
+
+.PP
+Definition at line \fB190\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+190                                        {
+191 
+192     thread\->thread_state = ThreadState::STOPPED;
+193 }
+.fi
+
+.PP
+References \fBthread\fP, and \fBMaxOS::processes::Thread::thread_state\fP\&.
+.SS "int ThreadResource::read (void * buffer, size_t size, size_t flags)\fC [final]\fP"
+
+.PP
+Reads data from the thread resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to read into 
+.br
+\fIsize\fP The number of bytes to read 
+.br
+\fIflags\fP The flags to pass to the reading
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully read or -1 on error 
+.RE
+.PP
+
+.PP
+Definition at line \fB204\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+204                                                                 {
+205 
+206     // Thread not found
+207     if(!thread && flags != (size_t)ThreadFlags::READ_STATS)
+208         return \-1;
+209 
+210     switch ((ThreadFlags)flags) {
+211 
+212         case ThreadFlags::READ_STATS: {
+213 
+214             // Check bounds
+215             if(size < sizeof(thread_stats_t))
+216                 return \-1;
+217 
+218             // Get the info
+219             thread_stats_t stats = {};
+220 
+221             if(thread) {
+222                 stats\&.tid = thread\->tid;
+223                 stats\&.pid = thread\->parent_pid;
+224                 stats\&.ticks = thread\->ticks;
+225                 stats\&.state = (size_t)thread\->thread_state;
+226                 stats\&.wakeup_time_ms = thread\->wakeup_time;
+227             }
+228             stats\&.exit_code = exit_code;
+229 
+230             // Copy across
+231             memcpy(buffer, &stats, sizeof(thread_stats_t));
+232             return sizeof(thread_stats_t);
+233 
+234         }
+235 
+236         default:
+237             return \-1;
+238 
+239     }
+240 
+241 }
+.fi
+
+.PP
+References \fBexit_code\fP, \fBMaxOS::processes::Thread::parent_pid\fP, \fBthread\fP, \fBMaxOS::processes::Thread::thread_state\fP, \fBMaxOS::processes::Thread::ticks\fP, \fBMaxOS::processes::Thread::tid\fP, and \fBMaxOS::processes::Thread::wakeup_time\fP\&.
+.SS "int ThreadResource::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP"
+
+.PP
+Writes data to the thread resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to write from 
+.br
+\fIsize\fP The number of bytes to write 
+.br
+\fIflags\fP The flags to pass to the writing
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully written or -1 on error 
+.RE
+.PP
+
+.PP
+Definition at line \fB252\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+252                                                                        {
+253 
+254     // Thread not found
+255     if(!thread)
+256         return \-1;
+257 
+258     switch ((ThreadFlags)flags) {
+259 
+260         case ThreadFlags::WRITE_SLEEP_TIME: {
+261 
+262             // Set the sleep time
+263             uint64_t sleep_time = *((uint64_t*)buffer);
+264             thread\->sleep(sleep_time);
+265             return size;
+266         }
+267 
+268         case ThreadFlags::WRITE_KILL: {
+269 
+270             // Kill the thread
+271             exit_code = *((uint64_t*)buffer);
+272             thread\->thread_state = ThreadState::STOPPED;
+273             thread\->yield();
+274             return size;
+275         }
+276 
+277         case ThreadFlags::WRITE_YIELD: {
+278             thread\->yield();
+279             return size;
+280         }
+281 
+282         case ThreadFlags::WRITE_ENABLE_PORT_IO: {
+283             uint64_t port = *((uint64_t*)buffer);
+284             thread\->enable_port(port);
+285             return size;
+286         }
+287 
+288         case ThreadFlags::WRITE_DISABLE_PORT_IO: {
+289             uint64_t port = *((uint64_t*)buffer);
+290             thread\->disable_port(port);
+291             return size;
+292         }
+293 
+294         default:
+295             return \-1;
+296     }
+297 
+298 }
+.fi
+
+.PP
+References \fBMaxOS::processes::Thread::disable_port()\fP, \fBMaxOS::processes::Thread::enable_port()\fP, \fBexit_code\fP, \fBMaxOS::processes::Thread::sleep()\fP, \fBthread\fP, \fBMaxOS::processes::Thread::thread_state\fP, and \fBMaxOS::processes::Thread::yield()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint64_t MaxOS::processes::resources::ThreadResource::exit_code"
+
+.PP
+The exit code of the thread once it has exited\&. 
+.PP
+Definition at line \fB66\fP of file \fBscheduler_resources\&.h\fP\&.
+.PP
+Referenced by \fBread()\fP, and \fBwrite()\fP\&.
+.SS "\fBThread\fP* MaxOS::processes::resources::ThreadResource::thread"
+
+.PP
+The thread that this resource handles & exposes\&. 
+.PP
+Definition at line \fB65\fP of file \fBscheduler_resources\&.h\fP\&.
+.PP
+Referenced by \fBclose()\fP, \fBread()\fP, and \fBwrite()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

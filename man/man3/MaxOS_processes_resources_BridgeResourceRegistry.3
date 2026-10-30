@@ -1,0 +1,200 @@
+.TH "MaxOS::processes::resources::BridgeResourceRegistry" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::resources::BridgeResourceRegistry \- A generic wrapper for a registry of resources that exist on a userspace server\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <resource_bridge\&.h>\fP
+.PP
+Inherits \fBMaxOS::processes::resources::ResourceRegistry< BridgeResource >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBridgeResourceRegistry\fP (const string &shared_memory_name, size_t resource_id)"
+.br
+.ti -1c
+.RI "\fBResource\fP * \fBget_resource\fP (const string &name) final"
+.br
+.RI "Gets a resource from the registry by name\&. "
+.ti -1c
+.RI "\fBResource\fP * \fBcreate_resource\fP (const string &name, size_t flags, uintptr_t data) final"
+.br
+.RI "Create a new resource on the bridge\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::processes::resources::ResourceRegistry< BridgeResource >\fP
+.in +1c
+.ti -1c
+.RI "\fBResourceRegistry\fP (\fBresource_type_t\fP type)"
+.br
+.RI "Constructor for \fBResourceRegistry\fP of a specific type\&. "
+.ti -1c
+.RI "\fBResource\fP * \fBcreate_resource\fP (const string &name, size_t flags, uintptr_t data) override"
+.br
+.RI "Create a new resource of the specific type\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::processes::resources::BaseResourceRegistry\fP
+.in +1c
+.ti -1c
+.RI "\fBBaseResourceRegistry\fP (\fBresource_type_t\fP \fBtype\fP)"
+.br
+.RI "Constructs a new \fBBaseResourceRegistry\fP object and registers it globally\&. "
+.ti -1c
+.RI "\fB~BaseResourceRegistry\fP ()"
+.br
+.RI "Destructor for \fBBaseResourceRegistry\fP, removes it from the global list\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of resources this registry handles\&. "
+.ti -1c
+.RI "bool \fBregister_resource\fP (\fBResource\fP *resource)"
+.br
+.RI "Registers a resource in the registry\&. "
+.ti -1c
+.RI "void \fBclose_resource\fP (\fBResource\fP *resource, size_t flags)"
+.br
+.RI "Close the resource provided, if it exists in this registry\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::processes::resources::BaseResourceRegistry\fP
+.in +1c
+.ti -1c
+.RI "common::Map< string, \fBResource\fP * > \fBm_resources\fP"
+.br
+.RI "The map of resource names to resource instances\&. "
+.ti -1c
+.RI "common::Map< string, uint64_t > \fBm_resource_uses\fP"
+.br
+.RI "The map of resource names to how many processes are using them\&. "
+.ti -1c
+.RI "common::Spinlock \fBm_lock\fP"
+.br
+.RI "The lock to make the registry threadsafe\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBm_type\fP"
+.br
+.RI "The resource type that this registry manages\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A generic wrapper for a registry of resources that exist on a userspace server\&. 
+.PP
+Definition at line \fB86\fP of file \fBresource_bridge\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "BridgeResourceRegistry::BridgeResourceRegistry (const string & shared_memory_name, size_t resource_id)"
+
+.PP
+Definition at line \fB270\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+271 : ResourceRegistry((resource_type_t)resource_id),
+272   m_handler(shared_name, GlobalScheduler::current_process())
+273 {
+274 
+275 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBResource\fP * BridgeResourceRegistry::create_resource (const string & name, size_t flags, uintptr_t data)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Create a new resource on the bridge\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource 
+.br
+\fIflags\fP The flags to pass 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The new resource 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::resources::BaseResourceRegistry\fP\&.
+.PP
+Definition at line \fB308\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+308                                                                                                   {
+309 
+310     // Create the resource
+311     auto resource = new BridgeResource(name, flags, m_type);
+312 
+313     // Creation failed
+314     if(!register_resource(resource)) {
+315         delete resource;
+316         return nullptr;
+317     }
+318 
+319     // Handoff setup to bridge
+320     resource\->attach_wrapper(&m_handler);
+321     resource\->create_on_bridge();
+322     return resource;
+323 }
+.fi
+
+.PP
+References \fBMaxOS::processes::resources::BaseResourceRegistry::m_type\fP, and \fBMaxOS::processes::resources::BaseResourceRegistry::register_resource()\fP\&.
+.SS "\fBResource\fP * BridgeResourceRegistry::get_resource (const string & name)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets a resource from the registry by name\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource to find 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The resource or nullptr if the resource was not found 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::resources::BaseResourceRegistry\fP\&.
+.PP
+Definition at line \fB279\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+279                                                                  {
+280 
+281     // Resource already opened
+282     auto resource = BaseResourceRegistry::get_resource(name);
+283     if(resource != nullptr)
+284         return resource;
+285 
+286     // Setup a temporary resource
+287     auto attempt_resource = new BridgeResource(name, 0, m_type);
+288     attempt_resource\->attach_wrapper(&m_handler);
+289 
+290     // Try open on the server
+291     if (attempt_resource\->get_on_bridge()) {
+292         register_resource(attempt_resource);
+293         return attempt_resource;
+294     }
+295 
+296     // Must have failed to get on server
+297     delete attempt_resource;
+298     return nullptr;
+299 }
+.fi
+
+.PP
+References \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::m_type\fP, and \fBMaxOS::processes::resources::BaseResourceRegistry::register_resource()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

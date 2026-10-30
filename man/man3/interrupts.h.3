@@ -9,15 +9,15 @@
 .PP
 \fC#include <cstdint>\fP
 .br
-\fC#include <hardwarecommunication/port\&.h>\fP
+\fC#include <libcommon/port\&.h>\fP
+.br
+\fC#include <libcommon/inputStream\&.h>\fP
+.br
+\fC#include <libcommon/outputStream\&.h>\fP
+.br
+\fC#include <libcommon/map\&.h>\fP
 .br
 \fC#include <system/gdt\&.h>\fP
-.br
-\fC#include <common/inputStream\&.h>\fP
-.br
-\fC#include <common/outputStream\&.h>\fP
-.br
-\fC#include <common/map\&.h>\fP
 .br
 \fC#include <system/cpu\&.h>\fP
 .br
@@ -32,6 +32,30 @@
 .br
 .RI "Handles a certain interrupt number\&. "
 .ti -1c
+.RI "class \fBMaxOS::hardwarecommunication::ExceptionHandler\fP"
+.br
+.RI "Base class for handing CPU expection interrupts\&. "
+.ti -1c
+.RI "class \fBMaxOS::hardwarecommunication::DivideByZeroHandler\fP"
+.br
+.RI "Handles an attempt to divide by 0\&. "
+.ti -1c
+.RI "class \fBMaxOS::hardwarecommunication::InvaildOpCodeHandler\fP"
+.br
+.RI "Handles calling an invalid assembly instruction for the configuration running on this architecture\&. "
+.ti -1c
+.RI "class \fBMaxOS::hardwarecommunication::GeneralProtectionHandler\fP"
+.br
+.RI "Handles a general protection exception\&. "
+.ti -1c
+.RI "class \fBMaxOS::hardwarecommunication::PageFaultHandler\fP"
+.br
+.RI "Handles a page fault exception\&. "
+.ti -1c
+.RI "class \fBMaxOS::hardwarecommunication::CPUStopHandler\fP"
+.br
+.RI "Handles a interrupt that tells a CPU core to stop running\&. "
+.ti -1c
 .RI "struct \fBMaxOS::hardwarecommunication::IDTR\fP"
 .br
 .RI "A struct that holds the Interrupt Descriptor Table Register (\fBIDTR\fP) "
@@ -39,6 +63,10 @@
 .RI "struct \fBMaxOS::hardwarecommunication::InterruptDescriptor\fP"
 .br
 .RI "An entry in the Interrupt Descriptor Table (IDT) "
+.ti -1c
+.RI "class \fBMaxOS::hardwarecommunication::ExceptionHandlers\fP"
+.br
+.RI "Holds and instantiates the CPU exception handlers\&. "
 .ti -1c
 .RI "class \fBMaxOS::hardwarecommunication::InterruptManager\fP"
 .br
@@ -55,6 +83,14 @@
 .RI "typedef struct PACKED \fBMaxOS::hardwarecommunication::InterruptDescriptor\fP \fBMaxOS::hardwarecommunication::interrupt_descriptor_t\fP"
 .br
 .RI "Alias for \fBInterruptDescriptor\fP struct\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::hardwarecommunication::InterruptPrivilegeLevel\fP { \fBKERNEL_ONLY\fP, \fBRING_1\fP, \fBRING_2\fP, \fBUSERSPACE\fP }"
+.br
+.RI "Represents the CPU ring level that a interrupt is handler is executed in\&. "
 .in -1c
 .SS "Variables"
 
@@ -87,6 +123,23 @@ Max Tyson
 
 .PP
 Definition in file \fBinterrupts\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBMaxOS::hardwarecommunication::InterruptPrivilegeLevel\fP\fC [strong]\fP"
+
+.PP
+Represents the CPU ring level that a interrupt is handler is executed in\&. 
+.PP
+Definition at line \fB32\fP of file \fBinterrupts\&.h\fP\&..PP
+.nf
+33     {
+34         KERNEL_ONLY,
+35         RING_1,
+36         RING_2,
+37         USERSPACE
+38     };
+.fi
+
 .SH "Variable Documentation"
 .PP 
 .SS "constexpr uint16_t MaxOS::hardwarecommunication::HARDWARE_INTERRUPT_OFFSET = 0x20\fC [constexpr]\fP"
@@ -94,7 +147,7 @@ Definition in file \fBinterrupts\&.h\fP\&.
 .PP
 The offset in the IDT where interrupts from hardware start\&. 
 .PP
-Definition at line \fB74\fP of file \fBinterrupts\&.h\fP\&.
+Definition at line \fB169\fP of file \fBinterrupts\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\fP, and \fBMaxOS::hardwarecommunication::InterruptManager::InterruptManager()\fP\&.
 .SS "constexpr uint16_t MaxOS::hardwarecommunication::MAX_INTERRUPT_HANDLERS = 256\fC [constexpr]\fP"
@@ -102,7 +155,7 @@ Referenced by \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrup
 .PP
 The maximum number of interrupt handlers\&. 
 .PP
-Definition at line \fB75\fP of file \fBinterrupts\&.h\fP\&.
+Definition at line \fB170\fP of file \fBinterrupts\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

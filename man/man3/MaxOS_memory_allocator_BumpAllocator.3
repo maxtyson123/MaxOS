@@ -1,0 +1,344 @@
+.TH "MaxOS::memory::allocator::BumpAllocator" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::memory::allocator::BumpAllocator \- Basic doubly linked list bump memory allocator\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <bump\&.h>\fP
+.PP
+Inherits \fBMaxOS::memory::allocator::MemoryAllocator\fP\&.
+.PP
+Inherited by \fBMaxOS::memory::BumpMemoryManager\fP, and \fBMaxOS::processes::resources::BridgeHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBumpAllocator\fP ()"
+.br
+.RI "Creates a new bump memory allocator\&. "
+.ti -1c
+.RI "virtual \fB~BumpAllocator\fP ()"
+.br
+.RI "Destructs a Bump memory allocator\&. "
+.ti -1c
+.RI "void \fBsetup_region\fP (uintptr_t address, size_t length) final"
+.br
+.RI "Setup a region to be bump memory managed, creates a free chunk represent the whole region\&. "
+.ti -1c
+.RI "void * \fBallocate\fP (size_t size) final"
+.br
+.RI "Allocates a block of memory\&. "
+.ti -1c
+.RI "void \fBunallocate\fP (void *pointer) final"
+.br
+.RI "Frees a block of memory\&. "
+.ti -1c
+.RI "size_t \fBamount_used\fP () final"
+.br
+.RI "Returns the amount of memory used\&. "
+.ti -1c
+.RI "size_t \fBalign\fP (size_t size) final"
+.br
+.RI "Aligns the size to the chunk alignment\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::memory::allocator::MemoryAllocator\fP
+.in +1c
+.ti -1c
+.RI "\fBMemoryAllocator\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~MemoryAllocator\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Basic doubly linked list bump memory allocator\&. 
+.PP
+Definition at line \fB47\fP of file \fBbump\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "BumpAllocator::BumpAllocator ()"
+
+.PP
+Creates a new bump memory allocator\&. 
+.PP
+Definition at line \fB14\fP of file \fBbump\&.cpp\fP\&..PP
+.nf
+14                              {
+15     static_assert(CHUNK_HEADER_SIZE == sizeof(chunk_header_t));
+16 };
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "size_t BumpAllocator::align (size_t size)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Aligns the size to the chunk alignment\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The size to align 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The aligned size 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::memory::allocator::MemoryAllocator\fP\&.
+.PP
+Definition at line \fB290\fP of file \fBbump\&.cpp\fP\&..PP
+.nf
+290                                        {
+291 
+292     return (size + CHUNK_ALIGNMENT \- 1) / CHUNK_ALIGNMENT * CHUNK_ALIGNMENT;
+293 }
+.fi
+
+.PP
+Referenced by \fBallocate()\fP\&.
+.SS "void * BumpAllocator::allocate (size_t size)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Allocates a block of memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The size of the block to allocate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A pointer to the block, or nullptr if no block is available 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::memory::allocator::MemoryAllocator\fP\&.
+.PP
+Definition at line \fB144\fP of file \fBbump\&.cpp\fP\&..PP
+.nf
+144                                          {
+145 
+146     chunk_header_t* result = nullptr;
+147 
+148     // Nothing to allocate
+149     if (size == 0)
+150         return nullptr;
+151 
+152     size = align(size);
+153 
+154     // Find the next free chunk that is big enough
+155     for (chunk_header_t* chunk = m_first_memory_chunk; chunk != nullptr && result == nullptr; chunk = chunk\->next_chunk()) {
+156 
+157         ASSERT(chunk\->is_valid(),"Invalid allocator chunk canary\\n");
+158         ASSERT(chunk\->allocated <= 1, "Invalid allocator allocation state\\n");
+159 
+160         if (chunk\->size >= size && chunk\->allocated == 0)
+161             result = chunk;
+162     }
+163 
+164     // If there is no free chunk then make more room
+165     if (result == nullptr)
+166         result = (chunk_header_t*)expand_heap(size);
+167 
+168     // No space to expand heap
+169     if (result == nullptr)
+170         return nullptr;
+171 
+172     // If there is not left over space to store extra chunks there is no need to split the chunk
+173     if (result\->size < size + CHUNK_HEADER_SIZE + CHUNK_ALIGNMENT) {
+174         result\->allocated = true;
+175         void* p = (void*)(((size_t)result) + CHUNK_HEADER_SIZE);
+176         return p;
+177     }
+178 
+179     // Split the chunk into: what was requested + free overflow space for future allocates
+180     //  \- This prevents waste in the event that a big free chunk was found but the requested size would only use a portion of that
+181     auto* extra = (chunk_header_t*)((size_t)result + CHUNK_HEADER_SIZE + size);
+182     extra\->allocated = false;
+183     extra\->size = result\->size \- size \- CHUNK_HEADER_SIZE;
+184     extra\->prev = result;
+185     extra\->canary = EXPECTED_CANARY;
+186 
+187     // Add to the linked list
+188     extra\->next = result\->next;
+189     if (extra\->next != nullptr)
+190         extra\->next\->prev = extra;
+191 
+192     // Requested chunk is now allocated exactly to the size requested and points to the free (split) block of memory that
+193     // it did not use
+194     result\->size = size;
+195     result\->allocated = true;
+196     result\->next = extra;
+197     result\->canary = EXPECTED_CANARY;
+198 
+199     // Update the last memory chunk if necessary
+200     if (result == m_last_memory_chunk)
+201         m_last_memory_chunk = extra;
+202 
+203     return (void*)(((size_t)result) + CHUNK_HEADER_SIZE);
+204 }
+.fi
+
+.PP
+References \fBalign()\fP, \fBMaxOS::memory::allocator::ChunkHeader::allocated\fP, \fBMaxOS::memory::allocator::ChunkHeader::canary\fP, \fBMaxOS::memory::allocator::ChunkHeader::next\fP, \fBMaxOS::memory::allocator::ChunkHeader::next_chunk()\fP, \fBMaxOS::memory::allocator::ChunkHeader::prev\fP, and \fBMaxOS::memory::allocator::ChunkHeader::size\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBMaxOS::memory::MemoryManager::malloc()\fP, and \fBMaxOS::processes::Thread::Thread()\fP\&.
+.SS "size_t BumpAllocator::amount_used ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Returns the amount of memory used\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The amount of memory used 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::memory::allocator::MemoryAllocator\fP\&.
+.PP
+Definition at line \fB272\fP of file \fBbump\&.cpp\fP\&..PP
+.nf
+272                                   {
+273 
+274     size_t result = 0;
+275 
+276     // Loop through all the chunks and add up the size of the allocated chunks
+277     for (chunk_header_t* chunk = m_first_memory_chunk; chunk != nullptr; chunk = chunk\->next_chunk())
+278         if (chunk\->allocated)
+279             result += chunk\->size;
+280 
+281     return result;
+282 }
+.fi
+
+.PP
+References \fBMaxOS::memory::allocator::ChunkHeader::next_chunk()\fP\&.
+.SS "void BumpAllocator::setup_region (uintptr_t address, size_t length)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Setup a region to be bump memory managed, creates a free chunk represent the whole region\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The start of the region 
+.br
+\fIlength\fP The length of the region 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::memory::allocator::MemoryAllocator\fP\&.
+.PP
+Definition at line \fB122\fP of file \fBbump\&.cpp\fP\&..PP
+.nf
+122                                                                  {
+123 
+124     // Create a free chunk that covers the entire region
+125     this\->m_first_memory_chunk = (chunk_header_t*)address;
+126     m_first_memory_chunk\->allocated = false;
+127     m_first_memory_chunk\->prev = nullptr;
+128     m_first_memory_chunk\->next = nullptr;
+129     m_first_memory_chunk\->size = length \- CHUNK_HEADER_SIZE;
+130     m_first_memory_chunk\->canary = EXPECTED_CANARY;
+131 
+132     m_last_memory_chunk = m_first_memory_chunk;
+133     m_setup = true;
+134 
+135 }
+.fi
+
+.PP
+References \fBMaxOS::memory::allocator::ChunkHeader::allocated\fP, \fBMaxOS::memory::allocator::ChunkHeader::canary\fP, \fBMaxOS::memory::allocator::ChunkHeader::next\fP, \fBMaxOS::memory::allocator::ChunkHeader::prev\fP, and \fBMaxOS::memory::allocator::ChunkHeader::size\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::resources::BridgeHandler::BridgeHandler()\fP, and \fBMaxOS::memory::BumpMemoryManager::BumpMemoryManager()\fP\&.
+.SS "void BumpAllocator::unallocate (void * pointer)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Frees a block of memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP A pointer to the block 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::memory::allocator::MemoryAllocator\fP\&.
+.PP
+Definition at line \fB212\fP of file \fBbump\&.cpp\fP\&..PP
+.nf
+212                                             {
+213 
+214     // Cant free unallocated memory
+215     if (pointer == nullptr)
+216         return;
+217 
+218     // Check bounds
+219     auto heap_start = (uintptr_t)m_first_memory_chunk;
+220     auto heap_end = (uintptr_t)m_last_memory_chunk + CHUNK_HEADER_SIZE + m_last_memory_chunk\->size;
+221     if ((uintptr_t)pointer < heap_start || (uintptr_t)pointer > heap_end)
+222         return;
+223 
+224     // Get the chunk information from the pointer
+225     auto* chunk = (chunk_header_t*)((size_t)pointer \- CHUNK_HEADER_SIZE);
+226     chunk\->allocated = false;
+227 
+228     // If there is a free chunk before this chunk then merge them
+229     if (chunk\->prev_chunk() != nullptr && !chunk\->prev_chunk()\->allocated && (uintptr_t)chunk\->prev_chunk() + CHUNK_HEADER_SIZE + chunk\->prev_chunk()\->size == (uintptr_t)chunk) {
+230 
+231         // If this chunk is the last one then the one it merges into is now the last one
+232         if (chunk == m_last_memory_chunk)
+233             m_last_memory_chunk = chunk\->prev_chunk();
+234 
+235         // Grow the chunk behind this one so that it now contains the freed one
+236         chunk\->prev_chunk()\->size += chunk\->size + CHUNK_HEADER_SIZE;
+237         chunk\->prev_chunk()\->next = chunk\->next_chunk();
+238 
+239         // The chunk in front of the freed one now needs to point to the merged chunk
+240         if (chunk\->next_chunk() != nullptr)
+241             chunk\->next_chunk()\->prev = chunk\->prev_chunk();
+242 
+243         // Freed chunk doesn't exist anymore so now working with the merged chunk
+244         chunk = chunk\->prev_chunk();
+245 
+246     }
+247 
+248     // If there is a free chunk after this chunk then merge them
+249     if (chunk\->next_chunk() != nullptr && !chunk\->next_chunk()\->allocated && (uintptr_t)chunk + CHUNK_HEADER_SIZE + chunk\->size == (uintptr_t)chunk\->next_chunk()) {
+250 
+251         // Merging with the last mem chunk means this chunk is now the last mem chunk
+252         if (chunk\->next_chunk() == m_last_memory_chunk)
+253             m_last_memory_chunk = chunk;
+254 
+255         // Grow this chunk so that it now contains the free chunk in front of the old (now freed) one
+256         chunk\->size += chunk\->next_chunk()\->size + CHUNK_HEADER_SIZE;
+257 
+258         // Now that this chunk contains the next one, it has to point to the one in front of what has just been merged
+259         // and that has to point to this
+260         chunk\->next = chunk\->next_chunk()\->next_chunk();
+261         if (chunk\->next_chunk() != nullptr)
+262             chunk\->next_chunk()\->prev = chunk;
+263 
+264     }
+265 }
+.fi
+
+.PP
+References \fBMaxOS::memory::allocator::ChunkHeader::prev_chunk()\fP, and \fBMaxOS::memory::allocator::ChunkHeader::size\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::MemoryManager::free()\fP, \fBMaxOS::memory::MemoryManager::kfree()\fP, and \fBMaxOS::processes::resources::BridgeHandler::send_to_bridge()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

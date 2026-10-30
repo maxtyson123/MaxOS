@@ -11,7 +11,7 @@ var ubsan_8h =
     [ "MaxOS::runtime::InvaildValueInfo", "structMaxOS_1_1runtime_1_1InvaildValueInfo.html", "structMaxOS_1_1runtime_1_1InvaildValueInfo" ],
     [ "MaxOS::runtime::VLABoundNotPositiveInfo", "structMaxOS_1_1runtime_1_1VLABoundNotPositiveInfo.html", "structMaxOS_1_1runtime_1_1VLABoundNotPositiveInfo" ],
     [ "MaxOS::runtime::UBSanHandler", "classMaxOS_1_1runtime_1_1UBSanHandler.html", null ],
-    [ "ubsan_aligned", "ubsan_8h.html#a4dd3c18b7406fa01fd4d60cd4485183a", null ],
+    [ "UBSAN_ALIGNED", "ubsan_8h.html#ad00c497d57e53ff391a678ca4f6b9e46", null ],
     [ "invalid_value_info_t", "ubsan_8h.html#aee5268b4d21f530a711e7a40db21f54f", null ],
     [ "location_only_info_t", "ubsan_8h.html#a77879661cdbb44d6c6bcb58286f3c9cd", null ],
     [ "out_of_bounds_info_t", "ubsan_8h.html#a60ce8dd6d2ee4741d479d6d6b3164d59", null ],

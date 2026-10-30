@@ -10,7 +10,7 @@ MaxOS::Logger \- A class that handles logging messages to the console and files\
 .PP
 \fC#include <logger\&.h>\fP
 .PP
-Inherits \fBMaxOS::common::OutputStream\fP\&.
+Inherits MaxOS::common::OutputStream\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -19,237 +19,90 @@ Inherits \fBMaxOS::common::OutputStream\fP\&.
 .br
 .RI "Constructs a \fBLogger\fP object and sets it as the active logger\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBadd_log_writer\fP (\fBOutputStream\fP *\fBlog_writer\fP)"
+.RI "void \fBadd_log_writer\fP (OutputStream *log_writer)"
 .br
 .RI "Adds an output stream to the logger\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBdisable_log_writer\fP (\fBOutputStream\fP *\fBlog_writer\fP)"
+.RI "void \fBdisable_log_writer\fP (OutputStream *log_writer)"
 .br
-.RI "Removes an output stream from the logger\&. "
+.RI "Prevents an output stream from being used\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBset_log_level\fP (\fBLogLevel\fP \fBlog_level\fP)"
+.RI "void \fBenable_log_writer\fP (OutputStream *log_writer)"
+.br
+.RI "Lets an output stream from be used\&. "
+.ti -1c
+.RI "void \fBenable_all_log_writers\fP ()"
+.br
+.RI "Mark all log writes as allowed to output to\&. "
+.ti -1c
+.RI "void \fBset_log_level\fP (\fBLogLevel\fP log_level)"
 .br
 .RI "Sets the log level of the logger\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBwrite_char\fP (\fBchar\fP c) \fBfinal\fP"
+.RI "void \fBwrite_char\fP (char c) final"
 .br
 .RI "Writes a character to the logger\&. "
 .ti -1c
-.RI "\fBvoid\fP \fBprintf\fP (\fBconst\fP \fBchar\fP *format,\&.\&.\&.)"
+.RI "void \fBprintf\fP (const char *format,\&.\&.\&.)"
 .br
-.RI "Prints a formatted string to the logger\&. "
+.RI "Prints a formatted string to the logger (thread safe) "
 .ti -1c
-.RI "\fBLogger\fP & \fBoperator<<\fP (\fBLogLevel\fP \fBlog_level\fP)"
+.RI "\fBLogger\fP & \fBoperator<<\fP (\fBLogLevel\fP log_level)"
 .br
 .RI "Sets the log level of the logger\&. "
-.in -1c
-
-Public Member Functions inherited from \fBMaxOS::common::OutputStream\fP
-.in +1c
-.ti -1c
-.RI "\fBOutputStream\fP ()"
-.br
-.RI "Constructs an \fBOutputStream\fP object that uses strings as the underlying data type\&. "
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBline_feed\fP ()"
-.br
-.RI "Writes a newline to the output stream\&. "
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBcarriage_return\fP ()"
-.br
-.RI "Writes a carriage return to the output stream\&. "
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBclear\fP ()"
-.br
-.RI "Clears the output stream\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBwrite\fP (\fBstring\fP \fBstring_to_write\fP) \fBoverride\fP"
-.br
-.RI "Writes a string to the output stream\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBwrite\fP (\fBconst\fP \fBchar\fP *\fBstring_to_write\fP)"
-.br
-.RI "Writes a string to the output stream\&. "
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBwrite_int\fP (\fBint\fP \fBint_to_write\fP)"
-.br
-.RI "Writes an integer to the output stream\&. "
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBwrite_hex\fP (\fBuint64_t\fP \fBhex_to_write\fP)"
-.br
-.RI "Writes a hex to the output stream\&. "
-.ti -1c
-.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBstring\fP \fBstring_to_write\fP) \fBoverride\fP"
-.br
-.RI "Writes a string to the output stream\&. "
-.ti -1c
-.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBconst\fP \fBchar\fP *\fBstring_to_write\fP)"
-.br
-.RI "Writes a string to the output stream\&. "
-.ti -1c
-.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBint\fP \fBint_to_write\fP)"
-.br
-.RI "Writes a integer to the output stream\&. "
-.ti -1c
-.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBuint64_t\fP \fBhex_to_write\fP)"
-.br
-.RI "Writes a hexadecimal to the output stream\&. "
-.ti -1c
-.RI "\fBOutputStream\fP & \fBoperator<<\fP (\fBchar\fP \fBchar_to_write\fP)"
-.br
-.RI "Writes a character to the output stream\&. "
-.in -1c
-
-Public Member Functions inherited from \fBMaxOS::common::GenericOutputStream< string >\fP
-.in +1c
-.ti -1c
-.RI "\fBGenericOutputStream\fP ()"
-.br
-.RI "__________________________________________Templates__________________________________________________/// "
-.ti -1c
-.RI "\fB~GenericOutputStream\fP ()"
-.br
-.RI "Destructor of the \fBGenericOutputStream\fP class\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBon_stream_read\fP (\fBstring\fP) \fBoverride\fP"
-.br
-.RI "Writes the date that was read from the input stream to the output stream\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBstring\fP > *) \fBoverride\fP"
-.br
-.RI "Close the stream and remove it from the list of streams when the end of the stream is reached\&. "
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBwrite\fP (\fBstring\fP)"
-.br
-.RI "write an element to the stream\&. "
-.ti -1c
-.RI "\fBvirtual\fP \fBvoid\fP \fBclose\fP ()"
-.br
-.RI "Close the stream\&. "
-.ti -1c
-.RI "\fBvirtual\fP \fBGenericOutputStream\fP< \fBstring\fP > & \fBoperator<<\fP (\fBstring\fP)"
-.br
-.RI "Overload the << operator to write an element to the stream\&. "
-.in -1c
-
-Public Member Functions inherited from \fBMaxOS::common::InputStreamProcessor< Type, ProcessorType >\fP
-.in +1c
-.ti -1c
-.RI "\fBInputStreamProcessor\fP ()"
-.br
-.RI "Creates a new \fBInputStreamProcessor\fP\&. "
-.ti -1c
-.RI "\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *\fBgeneric_stream_event_handler\fP)"
-.br
-.RI "Creates a new \fBInputStreamProcessor\fP\&. "
-.ti -1c
-.RI "\fB~InputStreamProcessor\fP ()"
-.br
-.RI "Destroys the \fBInputStreamProcessor\fP\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBon_end_of_stream\fP (\fBGenericInputStream\fP< \fBType\fP > *\fBstream\fP) \fBoverride\fP"
-.br
-.RI "Called when a stream has finished\&. Passes the event on to the handlers and then removes the stream from the array of streams\&. "
-.in -1c
-
-Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
-.in +1c
-.ti -1c
-.RI "\fBInputStreamEventHandler\fP ()"
-.br
-.RI "_______________________________________________TEMPLATES_________________________________________________________________/// "
-.ti -1c
-.RI "\fB~InputStreamEventHandler\fP ()"
-.br
-.RI "Destroys the \fBInputStreamProcessor\fP and disconnects it from all streams\&. "
-.in -1c
-
-Public Member Functions inherited from \fBMaxOS::common::GenericInputStream< ProcessorType >\fP
-.in +1c
-.ti -1c
-.RI "\fBGenericInputStream\fP ()"
-.br
-.RI "Creates a new \fBGenericInputStream\fP\&. "
-.ti -1c
-.RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
-.br
-.RI "Creates a new \fBGenericInputStream\fP and connects it to the handler\&. "
-.ti -1c
-.RI "\fB~GenericInputStream\fP ()"
-.br
-.RI "Destroys the \fBGenericInputStream\fP and disconnects all handlers\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
-.br
-.RI "Adds a inputStreamEventHandler to the list of internetProtocolHandlers\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< \fBProcessorType\fP > *)"
-.br
-.RI "Removes a handler from the list of handlers\&. "
 .in -1c
 .SS "Static Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBstatic\fP \fBvoid\fP \fBASSERT\fP (\fBbool\fP \fBcondition\fP, \fBconst\fP \fBchar\fP *\fBmessage\fP,\&.\&.\&.)"
+.RI "static void \fBassert\fP (bool condition, const char *message,\&.\&.\&.)"
 .br
 .RI "Puts the system into a panic state if the condition is false, printing the message first\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBLogger\fP * \fBactive_logger\fP ()"
+.RI "static \fBLogger\fP * \fBactive_logger\fP ()"
 .br
 .RI "Gets the active logger (to be used to modify the logger) "
 .ti -1c
-.RI "\fBstatic\fP \fBLogger\fP & \fBOut\fP ()"
+.RI "static \fBLogRecord\fP \fBOut\fP ()"
 .br
 .RI "Gets the active logger\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBLogger\fP \fBERROR\fP ()"
+.RI "static \fBLogRecord\fP \fBERROR\fP ()"
 .br
-.RI "Gets active logger set to ERROR level\&. "
+.RI "Gets the active logger for error logs\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBLogger\fP \fBWARNING\fP ()"
+.RI "static \fBLogRecord\fP \fBWARNING\fP ()"
 .br
-.RI "Gets active logger set to WARNING level\&. "
+.RI "Gets the active logger for warnings\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBLogger\fP \fBHEADER\fP ()"
+.RI "static \fBLogRecord\fP \fBHEADER\fP ()"
 .br
-.RI "Gets active logger set to task level\&. "
+.RI "Gets the active logger for headers\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBLogger\fP \fBINFO\fP ()"
+.RI "static \fBLogRecord\fP \fBINFO\fP ()"
 .br
-.RI "Gets active logger set to info level\&. "
+.RI "Gets the active logger for info logs\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBLogger\fP \fBTEST\fP ()"
+.RI "static \fBLogRecord\fP \fBTEST\fP ()"
 .br
-.RI "Gets active logger set to test level\&. "
+.RI "Gets the active logger for testing logs\&. "
 .ti -1c
-.RI "\fBstatic\fP \fBLogger\fP \fBDEBUG\fP ()"
+.RI "static \fBLogRecord\fP \fBDEBUG\fP ()"
 .br
-.RI "Gets active logger set to DEBUG level\&. "
+.RI "Gets the active logger for debug logs\&. "
 .in -1c
-.SS "Additional Inherited Members"
+.SS "Friends"
 
-
-Protected Attributes inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
 .in +1c
 .ti -1c
-.RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< \fBType\fP > * > \fBm_generic_input_streams\fP"
+.RI "class \fBLogRecord\fP"
 .br
-.RI "List of streams being observed by this handler\&. "
-.in -1c
-
-Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< ProcessorType >\fP
-.in +1c
-.ti -1c
-.RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< \fBProcessorType\fP > * > \fBm_input_stream_event_handlers\fP"
-.br
-.RI "List of streams being observed by this handler\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 A class that handles logging messages to the console and files\&. 
 .PP
-Definition at line \fB44\fP of file \fBlogger\&.h\fP\&.
+Definition at line \fB51\fP of file \fBlogger\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Logger::Logger ()"
@@ -265,7 +118,7 @@ Definition at line \fB25\fP of file \fBlogger\&.cpp\fP\&..PP
 29     s_active_logger = this;
 30 
 31     // The following line is generated automatically by the MaxOS build system\&.
-32     s_progress_total = 22;
+32     s_progress_total =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               15;
 33 
 34 }
 .fi
@@ -284,16 +137,16 @@ The active logger
 .PP
 
 .PP
-Definition at line \fB228\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB240\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-228                               {
-229     return s_active_logger;
-230 }
+240                               {
+241     return s_active_logger;
+242 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::drivers::console::VESABootConsole::finish()\fP, \fBOut()\fP, and \fBMaxOS::drivers::console::VESABootConsole::VESABootConsole()\fP\&.
-.SS "\fBvoid\fP Logger::add_log_writer (\fBOutputStream\fP * log_writer)"
+Referenced by \fBMaxOS::console::FramebufferConsole::finish()\fP, \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, and \fBMaxOS::processes::GlobalScheduler::print_running_header()\fP\&.
+.SS "void Logger::add_log_writer (OutputStream * log_writer)"
 
 .PP
 Adds an output stream to the logger\&. 
@@ -328,8 +181,8 @@ Definition at line \fB44\fP of file \fBlogger\&.cpp\fP\&..PP
 .PP
 References \fBMaxOS::MAX_LOG_WRITERS\fP\&.
 .PP
-Referenced by \fBMaxOS::drivers::SerialConsole::SerialConsole()\fP\&.
-.SS "\fBvoid\fP Logger::ASSERT (\fBbool\fP condition, \fBconst\fP \fBchar\fP * message,  \&.\&.\&.)\fC [static]\fP"
+Referenced by \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, and \fBMaxOS::console::SerialConsole::SerialConsole()\fP\&.
+.SS "void Logger::assert (bool condition, const char * message,  \&.\&.\&.)\fC [static]\fP"
 
 .PP
 Puts the system into a panic state if the condition is false, printing the message first\&. 
@@ -339,32 +192,34 @@ Puts the system into a panic state if the condition is false, printing the messa
 \fIcondition\fP The condition to check if is met 
 .br
 \fImessage\fP The message to print if the condition fails 
+.br
+\fI\&.\&.\&.\fP The arguments to format into the string 
 .RE
 .PP
 
 .PP
-Definition at line \fB253\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB267\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-253                                                             {
-254 
-255     // If the condition is met then everything is ok
-256     if (condition)
-257         return;
-258 
-259     va_list parameters;
-260     va_start(parameters, message);
-261 
-262     // Hang the system
-263     system::CPU::PANIC(String::formatted(message, parameters)\&.c_str());
-264 }
+267                                                             {
+268 
+269     // If the condition is met then everything is ok
+270     if (condition)
+271         return;
+272 
+273     va_list parameters;
+274     va_start(parameters, message);
+275 
+276     // Hang the system
+277     CPU::PANIC(String::formatted(message, parameters)\&.c_str());
+278 }
 .fi
 
 .PP
-References \fBMaxOS::String::formatted()\fP, and \fBMaxOS::system::CPU::PANIC()\fP\&.
-.SS "\fBLogger\fP Logger::DEBUG ()\fC [static]\fP"
+References \fBMaxOS::system::CPU::PANIC()\fP\&.
+.SS "\fBLogRecord\fP Logger::DEBUG ()\fC [static]\fP"
 
 .PP
-Gets active logger set to DEBUG level\&. 
+Gets the active logger for debug logs\&. 
 .PP
 \fBReturns\fP
 .RS 4
@@ -373,28 +228,23 @@ The debug logger
 .PP
 
 .PP
-Definition at line \fB193\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB204\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-193                      {
-194 
-195     s_active_logger\->set_log_level(LogLevel::DEBUG);
-196     return Out();
-197 
-198 }
+204                         {
+205     return LogRecord(*s_active_logger, LogLevel::DEBUG);
+206 }
 .fi
 
 .PP
-References \fBOut()\fP\&.
-.PP
-Referenced by \fBMaxOS::processes::GlobalScheduler::add_process()\fP, \fBMaxOS::processes::GlobalScheduler::add_thread()\fP, \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP, \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController()\fP, \fBMaxOS::drivers::clock::Clock::calibrate()\fP, \fBMaxOS::system::CPU::check_nx()\fP, \fBMaxOS::system::Core::Core()\fP, \fBcore_main()\fP, \fBMaxOS::system::GlobalDescriptorTable::GlobalDescriptorTable()\fP, \fBMaxOS::system::Core::init_sse()\fP, \fBMaxOS::system::Core::init_tss()\fP, \fBMaxOS::drivers::disk::IntegratedDriveElectronicsController::initialise()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP, \fBMaxOS::system::GlobalDescriptorTable::load()\fP, \fBMaxOS::processes::GlobalScheduler::load_multiboot_elfs()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBMaxOS::filesystem::partition::MSDOSPartition::mount_partitions()\fP, \fBMaxOS::system::Multiboot::Multiboot()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::hardwarecommunication::PCIController::select_drivers()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP, \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP, \fBMaxOS::system::Core::wake_up()\fP, and \fBMaxOS::processes::Process::~Process()\fP\&.
-.SS "\fBvoid\fP Logger::disable_log_writer (\fBOutputStream\fP * log_writer)"
+Referenced by \fBMaxOS::processes::GlobalScheduler::add_process()\fP, \fBMaxOS::processes::GlobalScheduler::add_thread()\fP, \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP, \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController()\fP, \fBMaxOS::hardwarecommunication::Clock::calibrate()\fP, \fBMaxOS::system::CPU::check_nx()\fP, \fBMaxOS::system::Core::Core()\fP, \fBcore_main()\fP, \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBMaxOS::system::GlobalDescriptorTable::GlobalDescriptorTable()\fP, \fBMaxOS::system::Core::init_sse()\fP, \fBMaxOS::system::Core::init_tss()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP, \fBMaxOS::system::GlobalDescriptorTable::load()\fP, \fBMaxOS::processes::GlobalScheduler::load_multiboot_elfs()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBMaxOS::system::Multiboot::Multiboot()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::system::Core::wake_up()\fP, and \fBMaxOS::processes::Process::~Process()\fP\&.
+.SS "void Logger::disable_log_writer (OutputStream * log_writer)"
 
 .PP
-Removes an output stream from the logger\&. 
+Prevents an output stream from being used\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIlog_writer\fP The output stream to remove 
+\fIlog_writer\fP The output stream to stop using 
 .RE
 .PP
 
@@ -414,10 +264,54 @@ Definition at line \fB66\fP of file \fBlogger\&.cpp\fP\&..PP
 76 }
 .fi
 
-.SS "\fBLogger\fP Logger::ERROR ()\fC [static]\fP"
+.PP
+Referenced by \fBMaxOS::console::FramebufferConsole::finish()\fP\&.
+.SS "void Logger::enable_all_log_writers ()"
 
 .PP
-Gets active logger set to ERROR level\&. 
+Mark all log writes as allowed to output to\&. 
+.PP
+Definition at line \fB99\fP of file \fBlogger\&.cpp\fP\&..PP
+.nf
+99                                     {
+100     for (int i = 0; i < m_log_writer_count; i++)
+101         if (!m_log_writers_enabled[i])
+102             m_log_writers_enabled[i] = true;
+103 }
+.fi
+
+.SS "void Logger::enable_log_writer (OutputStream * log_writer)"
+
+.PP
+Lets an output stream from be used\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlog_writer\fP The output stream to use 
+.RE
+.PP
+
+.PP
+Definition at line \fB83\fP of file \fBlogger\&.cpp\fP\&..PP
+.nf
+83                                                        {
+84 
+85     // If the list is empty
+86     if (m_log_writer_count == 0)
+87         return;
+88 
+89     // Find the output stream in the list
+90     for (int i = 0; i < m_log_writer_count; i++)
+91         if (m_log_writers[i] == log_writer)
+92             m_log_writers_enabled[i] = true;
+93 
+94 }
+.fi
+
+.SS "\fBLogRecord\fP Logger::ERROR ()\fC [static]\fP"
+
+.PP
+Gets the active logger for error logs\&. 
 .PP
 \fBReturns\fP
 .RS 4
@@ -426,50 +320,40 @@ The error logger
 .PP
 
 .PP
-Definition at line \fB216\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB222\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-216                      {
-217 
-218     s_active_logger\->set_log_level(LogLevel::ERROR);
-219     return Out();
-220 
-221 }
+222                         {
+223     return LogRecord(*s_active_logger, LogLevel::ERROR);
+224 }
 .fi
 
 .PP
-References \fBOut()\fP\&.
-.PP
-Referenced by \fBMaxOS::filesystem::format::Fat32Volume::Fat32Volume()\fP, \fBMaxOS::system::SyscallManager::handle_interrupt()\fP, \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, \fBMaxOS::system::CPU::print_registers()\fP, \fBMaxOS::tests::Test::run()\fP, and \fBMaxOS::system::CPU::stack_trace()\fP\&.
-.SS "\fBLogger\fP Logger::HEADER ()\fC [static]\fP"
+Referenced by \fBMaxOS::system::SyscallManager::handle_interrupt()\fP, \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, \fBMaxOS::system::CPU::print_registers()\fP, and \fBMaxOS::system::CPU::stack_trace()\fP\&.
+.SS "\fBLogRecord\fP Logger::HEADER ()\fC [static]\fP"
 
 .PP
-Gets active logger set to task level\&. 
+Gets the active logger for headers\&. 
 .PP
 \fBReturns\fP
 .RS 4
-The task logger 
+The header logger 
 .RE
 .PP
 
 .PP
-Definition at line \fB159\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB231\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-159                       {
-160 
-161     s_active_logger\->set_log_level(LogLevel::HEADER);
-162     return Out();
-163 
-164 }
+231                          {
+232     return LogRecord(*s_active_logger, LogLevel::HEADER);
+233 }
 .fi
 
 .PP
-References \fBOut()\fP\&.
-.PP
-Referenced by \fBMaxOS::drivers::console::VESABootConsole::finish()\fP, and \fBkernel_main()\fP\&.
-.SS "\fBLogger\fP Logger::INFO ()\fC [static]\fP"
+Referenced by \fBMaxOS::console::FramebufferConsole::finish()\fP, and \fBkernel_main()\fP\&.
+.SS "\fBLogRecord\fP Logger::INFO ()\fC [static]\fP"
 
 .PP
-Gets active logger set to info level\&. 
+Gets the active logger for info logs\&. 
 .PP
 \fBReturns\fP
 .RS 4
@@ -478,19 +362,15 @@ The info logger
 .PP
 
 .PP
-Definition at line \fB171\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB195\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-171                     {
-172 
-173     s_active_logger\->set_log_level(LogLevel::INFO);
-174     return Out();
-175 }
+195                        {
+196     return LogRecord(*s_active_logger, LogLevel::INFO);
+197 }
 .fi
 
 .PP
-References \fBOut()\fP\&.
-.PP
-Referenced by \fBMaxOS::hardwarecommunication::InterruptManager::activate()\fP, \fBMaxOS::drivers::DriverManager::activate_drivers()\fP, \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP, \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController()\fP, \fBMaxOS::drivers::clock::Clock::calibrate()\fP, \fBMaxOS::drivers::clock::Clock::Clock()\fP, \fBMaxOS::system::CPU::CPU()\fP, \fBMaxOS::drivers::DriverManager::DriverManager()\fP, \fBMaxOS::drivers::DriverManager::find_drivers()\fP, \fBMaxOS::processes::GlobalScheduler::GlobalScheduler()\fP, \fBMaxOS::system::CPU::init_cores()\fP, \fBMaxOS::drivers::DriverManager::initialise_drivers()\fP, \fBMaxOS::hardwarecommunication::InterruptManager::InterruptManager()\fP, \fBkernel_main()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, \fBMaxOS::drivers::DriverManager::reset_devices()\fP, \fBMaxOS::system::SyscallManager::syscall_klog()\fP, \fBMaxOS::system::SyscallManager::SyscallManager()\fP, \fBMaxOS::drivers::console::VESABootConsole::VESABootConsole()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
+Referenced by \fBMaxOS::hardwarecommunication::InterruptManager::activate()\fP, \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::AdvancedConfigurationAndPowerInterface()\fP, \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController()\fP, \fBMaxOS::hardwarecommunication::Clock::calibrate()\fP, \fBMaxOS::hardwarecommunication::Clock::Clock()\fP, \fBMaxOS::system::CPU::CPU()\fP, \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBMaxOS::processes::GlobalScheduler::GlobalScheduler()\fP, \fBMaxOS::system::CPU::init_cores()\fP, \fBMaxOS::hardwarecommunication::InterruptManager::InterruptManager()\fP, \fBkernel_main()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, \fBMaxOS::system::SyscallManager::syscall_klog()\fP, and \fBMaxOS::system::SyscallManager::SyscallManager()\fP\&.
 .SS "\fBLogger\fP & Logger::operator<< (\fBLogLevel\fP log_level)"
 
 .PP
@@ -508,19 +388,19 @@ This logger
 .PP
 
 .PP
-Definition at line \fB272\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB286\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-272                                              {
-273 
-274     set_log_level(log_level);
-275     return *this;
-276 
-277 }
+286                                              {
+287 
+288     set_log_level(log_level);
+289     return *this;
+290 
+291 }
 .fi
 
 .PP
 References \fBset_log_level()\fP\&.
-.SS "\fBLogger\fP & Logger::Out ()\fC [static]\fP"
+.SS "\fBLogRecord\fP Logger::Out ()\fC [static]\fP"
 
 .PP
 Gets the active logger\&. 
@@ -532,22 +412,20 @@ The active logger
 .PP
 
 .PP
-Definition at line \fB149\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB176\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-149                     {
-150 
-151     return *active_logger();
-152 }
+176                       {
+177 
+178     return LogRecord(*s_active_logger, LogLevel::OUT);
+179 }
 .fi
 
 .PP
-References \fBactive_logger()\fP\&.
-.PP
-Referenced by \fBDEBUG()\fP, \fBERROR()\fP, \fBHEADER()\fP, \fBINFO()\fP, \fBMaxOS::hardwarecommunication::PCIController::list_known_device()\fP, \fBMaxOS::filesystem::partition::MSDOSPartition::mount_partitions()\fP, \fBMaxOS::processes::GlobalScheduler::print_running_header()\fP, \fBMaxOS::hardwarecommunication::PCIController::select_drivers()\fP, \fBMaxOS::system::SyscallManager::syscall_klog()\fP, \fBTEST()\fP, and \fBWARNING()\fP\&.
-.SS "\fBvoid\fP Logger::printf (\fBconst\fP \fBchar\fP * format,  \&.\&.\&.)"
+Referenced by \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, and \fBMaxOS::system::SyscallManager::syscall_klog()\fP\&.
+.SS "void Logger::printf (const char * format,  \&.\&.\&.)"
 
 .PP
-Prints a formatted string to the logger\&. 
+Prints a formatted string to the logger (thread safe) 
 .PP
 \fBParameters\fP
 .RS 4
@@ -558,21 +436,22 @@ Prints a formatted string to the logger\&.
 .PP
 
 .PP
-Definition at line \fB238\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB250\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-238                                            {
-239 
-240     // Create a pointer to the data
-241     va_list parameters;
-242     va_start(parameters, format);
-243 
-244     write(String::formatted(format, parameters));
-245 }
+250                                            {
+251 
+252 
+253     // Create a pointer to the data
+254     va_list parameters;
+255     va_start(parameters, format);
+256 
+257     write(String::formatted(format, parameters));
+258 }
 .fi
 
 .PP
-References \fBMaxOS::String::formatted()\fP, and \fBMaxOS::common::OutputStream::write()\fP\&.
-.SS "\fBvoid\fP Logger::set_log_level (\fBLogLevel\fP log_level)"
+Referenced by \fBMaxOS::processes::GlobalScheduler::print_running_header()\fP\&.
+.SS "void Logger::set_log_level (\fBLogLevel\fP log_level)"
 
 .PP
 Sets the log level of the logger\&. 
@@ -584,84 +463,78 @@ Sets the log level of the logger\&.
 .PP
 
 .PP
-Definition at line \fB83\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB110\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-83                                              {
-84 
-85     // Set the log level
-86     m_log_level = log_level;
-87 
-88     // Update the progress bar
-89     if (log_level == LogLevel::INFO) {
-90         VESABootConsole::update_progress_bar((m_progress_current * 100) / s_progress_total);
-91         m_progress_current++;
-92     }
-93 
-94     // Print the header
-95     switch (log_level) {
-96 
-97         case LogLevel::HEADER:
-98             *this << ANSI_COLOURS[ANSIColour::FG_Blue] << "[  BOOT    ] ";
-99             break;
-100 
-101         case LogLevel::INFO:
-102             *this << ANSI_COLOURS[ANSIColour::FG_Cyan] << "[  INFO    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
-103             break;
-104 
-105         case LogLevel::TEST:
-106             *this << ANSI_COLOURS[ANSIColour::FG_Green] << "[  TEST    ]" << ANSI_COLOURS[ANSIColour::FG_White] << " ";
-107             break;
-108 
-109         case LogLevel::DEBUG:
-110             *this << ANSI_COLOURS[ANSIColour::FG_Yellow] << "[  DEBUG   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
-111             break;
-112 
-113         case LogLevel::WARNING:
-114             *this << ANSI_COLOURS[ANSIColour::BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
-115             break;
-116 
-117         case LogLevel::ERROR:
-118             *this << ANSI_COLOURS[ANSIColour::BG_Red] << "[  ERROR   ]" << ANSI_COLOURS[ANSIColour::Reset] << " ";
-119             break;
-120     }
-121 
-122     GlobalScheduler::print_running_header();
-123 }
+110                                              {
+111 
+112     // Set the log level
+113     m_log_level = log_level;
+114 
+115     // Update the progress bar
+116     if (log_level == LogLevel::INFO) {
+117         FramebufferConsole::update_progress_bar((m_progress_current * 100) / s_progress_total);
+118         m_progress_current++;
+119     }
+120 
+121     // Print the header
+122     switch (log_level) {
+123 
+124         case LogLevel::HEADER:
+125             *this << ANSI_COLOURS[FG_Blue]   << "[  BOOT    ] ";
+126             break;
+127 
+128         case LogLevel::INFO:
+129             *this << ANSI_COLOURS[FG_Cyan]   << "[  INFO    ]" << ANSI_COLOURS[FG_White] << " ";
+130             break;
+131 
+132         case LogLevel::TEST:
+133             *this << ANSI_COLOURS[FG_Green]  << "[  TEST    ]" << ANSI_COLOURS[FG_White] << " ";
+134             break;
+135 
+136         case LogLevel::DEBUG:
+137             *this << ANSI_COLOURS[FG_Yellow] << "[  DEBUG   ]" << ANSI_COLOURS[Reset] << " ";
+138             break;
+139 
+140         case LogLevel::WARNING:
+141             *this << ANSI_COLOURS[BG_Yellow] << ANSI_COLOURS[FG_White] << "[ WARNING  ]" << ANSI_COLOURS[Reset] << " ";
+142             break;
+143 
+144         case LogLevel::ERROR:
+145             *this << ANSI_COLOURS[BG_Red]   << "[  ERROR   ]" << ANSI_COLOURS[Reset] << " ";
+146             break;
+147     }
+148 
+149     GlobalScheduler::print_running_header();
+150 }
 .fi
 
 .PP
-References \fBMaxOS::common::ANSI_COLOURS\fP, \fBMaxOS::processes::GlobalScheduler::print_running_header()\fP, and \fBMaxOS::drivers::console::VESABootConsole::update_progress_bar()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::print_running_header()\fP, and \fBMaxOS::console::FramebufferConsole::update_progress_bar()\fP\&.
 .PP
-Referenced by \fBoperator<<()\fP\&.
-.SS "\fBLogger\fP Logger::TEST ()\fC [static]\fP"
+Referenced by \fBMaxOS::LogRecord::LogRecord()\fP, and \fBoperator<<()\fP\&.
+.SS "\fBLogRecord\fP Logger::TEST ()\fC [static]\fP"
 
 .PP
-Gets active logger set to test level\&. 
+Gets the active logger for testing logs\&. 
 .PP
 \fBReturns\fP
 .RS 4
-The test logger 
+The testing logger 
 .RE
 .PP
 
 .PP
-Definition at line \fB182\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB186\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-182                     {
-183 
-184     s_active_logger\->set_log_level(LogLevel::TEST);
-185     return Out();
-186 }
+186                        {
+187     return LogRecord(*s_active_logger, LogLevel::TEST);
+188 }
 .fi
 
-.PP
-References \fBOut()\fP\&.
-.PP
-Referenced by \fBMaxOS::tests::Test::run()\fP, and \fBMaxOS::tests::TestRunner::run_all_tests()\fP\&.
-.SS "\fBLogger\fP Logger::WARNING ()\fC [static]\fP"
+.SS "\fBLogRecord\fP Logger::WARNING ()\fC [static]\fP"
 
 .PP
-Gets active logger set to WARNING level\&. 
+Gets the active logger for warnings\&. 
 .PP
 \fBReturns\fP
 .RS 4
@@ -670,20 +543,16 @@ The warning logger
 .PP
 
 .PP
-Definition at line \fB205\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB213\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-205                        {
-206 
-207     s_active_logger\->set_log_level(LogLevel::WARNING);
-208     return Out();
-209 }
+213                           {
+214     return LogRecord(*s_active_logger, LogLevel::WARNING);
+215 }
 .fi
 
 .PP
-References \fBOut()\fP\&.
-.PP
-Referenced by \fBMaxOS::tests::compare()\fP, \fBMaxOS::drivers::ethernet::AMD_AM79C973::handle_interrupt()\fP, \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\fP, \fBMaxOS::drivers::disk::AdvancedTechnologyAttachment::identify()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBMaxOS::filesystem::VirtualFileSystem::mount_filesystem()\fP, \fBMaxOS::filesystem::VirtualFileSystem::mount_filesystem()\fP, \fBMaxOS::filesystem::partition::MSDOSPartition::mount_partitions()\fP, \fBMaxOS::filesystem::VirtualFileSystem::unmount_filesystem()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
-.SS "\fBvoid\fP Logger::write_char (\fBchar\fP c)\fC [final]\fP, \fC [virtual]\fP"
+Referenced by \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
+.SS "void Logger::write_char (char c)\fC [final]\fP"
 
 .PP
 Writes a character to the logger\&. 
@@ -695,26 +564,32 @@ Writes a character to the logger\&.
 .PP
 
 .PP
-Reimplemented from \fBMaxOS::common::OutputStream\fP\&.
-.PP
-Definition at line \fB131\fP of file \fBlogger\&.cpp\fP\&..PP
+Definition at line \fB158\fP of file \fBlogger\&.cpp\fP\&..PP
 .nf
-131                               {
-132 
-133     // Ensure logging at this level is enabled
-134     if (m_log_level > MAX_LOG_LEVEL)
-135         return;
-136 
-137     // Write the character to all output streams
-138     for (int i = 0; i < m_log_writer_count; i++)
-139         if (m_log_writers_enabled[i])
-140             m_log_writers[i]\->write_char(c);
-141 
-142 }
+158                               {
+159 
+160     // Ensure logging at this level is enabled
+161     if (m_log_level > MAX_LOG_LEVEL)
+162         return;
+163 
+164     // Write the character to all output streams
+165     for (int i = 0; i < m_log_writer_count; i++)
+166         if (m_log_writers_enabled[i])
+167             m_log_writers[i]\->write_char(c);
+168 
+169 }
 .fi
 
 .PP
-References \fBMaxOS::MAX_LOG_LEVEL\fP, and \fBMaxOS::common::OutputStream::write_char()\fP\&.
+References \fBMaxOS::MAX_LOG_LEVEL\fP\&.
+.PP
+Referenced by \fBMaxOS::LogRecord::operator<<()\fP\&.
+.SH "Friends And Related Symbol Documentation"
+.PP 
+.SS "friend class \fBLogRecord\fP\fC [friend]\fP"
+
+.PP
+Definition at line \fB53\fP of file \fBlogger\&.h\fP\&.
 
 .SH "Author"
 .PP 

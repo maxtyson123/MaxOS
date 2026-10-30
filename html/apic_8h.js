@@ -26,6 +26,10 @@ var apic_8h =
       [ "INIT", "apic_8h.html#ae5961c617d1c9a84a7e86fbec0f59f44a01859f397850e5dcc67634552bd33915", null ],
       [ "EXTINT", "apic_8h.html#ae5961c617d1c9a84a7e86fbec0f59f44afa2c53b16f2e1c143a167036d8276c1a", null ]
     ] ],
+    [ "LAPICSendInterruptFlags", "apic_8h.html#ae752e1b8be7b45196bea1f10dde0d1da", [
+      [ "SEND_ALL", "apic_8h.html#ae752e1b8be7b45196bea1f10dde0d1daac9803942ab29dbca2d13c4120e1c1b6c", null ],
+      [ "EXCLUDE_SELF", "apic_8h.html#ae752e1b8be7b45196bea1f10dde0d1daaf401a8ec6b0f0f64c55a04b9cd677c9d", null ]
+    ] ],
     [ "MADT_TYPE", "apic_8h.html#a61a67b8f6beb43e8dbf2ed85e52292b0", [
       [ "PROCESSOR_APIC", "apic_8h.html#a61a67b8f6beb43e8dbf2ed85e52292b0a2902d6e05d31dd4df7a57d19b28a7528", null ],
       [ "IO_APIC", "apic_8h.html#a61a67b8f6beb43e8dbf2ed85e52292b0a963c670dfec75ad5cef3ae03e92b0250", null ],

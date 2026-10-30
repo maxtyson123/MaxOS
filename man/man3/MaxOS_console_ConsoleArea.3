@@ -1,0 +1,486 @@
+.TH "MaxOS::console::ConsoleArea" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::console::ConsoleArea \- A console that is a subsection of another console, limited by a width and height\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <console\&.h>\fP
+.PP
+Inherits \fBMaxOS::console::Console\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBConsoleArea\fP (\fBConsole\fP *console, uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP)"
+.br
+.RI "Construct a new \fBConsole\fP Area object\&. "
+.ti -1c
+.RI "\fBConsoleArea\fP (\fBConsole\fP *console, uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, common::ConsoleColour foreground, common::ConsoleColour background)"
+.br
+.RI "Construct a new \fBConsole\fP Area object with specified foreground and background colors\&. "
+.ti -1c
+.RI "uint16_t \fBwidth\fP () override"
+.br
+.RI "Return the width of the console area\&. "
+.ti -1c
+.RI "uint16_t \fBheight\fP () override"
+.br
+.RI "Return the height of the console area\&. "
+.ti -1c
+.RI "void \fBput_character\fP (uint16_t x, uint16_t y, char c) override"
+.br
+.RI "Place a character on the console area if the coordinates are within the area\&. "
+.ti -1c
+.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, common::ConsoleColour foreground) override"
+.br
+.RI "Change the foreground color of a character on the console area if the coordinates are within the area\&. "
+.ti -1c
+.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, common::ConsoleColour background) override"
+.br
+.RI "Change the background color of a character on the console area if the coordinates are within the area\&. "
+.ti -1c
+.RI "void \fBscroll_up\fP () override"
+.br
+.RI "Scroll the console area up by 1 line\&. "
+.ti -1c
+.RI "void \fBscroll_up\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black, char fill=' ') override"
+.br
+.RI "Scroll an area of the console up by 1 line\&. "
+.ti -1c
+.RI "char \fBget_character\fP (uint16_t x, uint16_t y) override"
+.br
+.RI "Return the character at the given coordinates if the coordinates are within the console area\&. "
+.ti -1c
+.RI "common::ConsoleColour \fBget_foreground_color\fP (uint16_t x, uint16_t y) override"
+.br
+.RI "Return the foreground color of the character at the given coordinates if the coordinates are within the console area\&. "
+.ti -1c
+.RI "common::ConsoleColour \fBget_background_color\fP (uint16_t x, uint16_t y) override"
+.br
+.RI "Return the background color of the character at the given coordinates if the coordinates are within the console area\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::console::Console\fP
+.in +1c
+.ti -1c
+.RI "virtual void \fBput_character\fP (uint16_t x, uint16_t y, char c, common::ConsoleColour foreground, common::ConsoleColour background)"
+.br
+.RI "Put a character on the console with a given foreground and background color\&. "
+.ti -1c
+.RI "virtual void \fBput_string\fP (uint16_t x, uint16_t y, string string, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black)"
+.br
+.RI "Put a string on the console\&. "
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black, char fill=' ')"
+.br
+.RI "Clear an area of the console\&. "
+.ti -1c
+.RI "virtual void \fBinvert_colors\fP (uint16_t x, uint16_t y)"
+.br
+.RI "Invert the colors of a character on the console\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A console that is a subsection of another console, limited by a width and height\&. 
+.PP
+Definition at line \fB60\fP of file \fBconsole\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ConsoleArea::ConsoleArea (\fBConsole\fP * console, uint16_t left, uint16_t top, uint16_t width, uint16_t height)"
+
+.PP
+Construct a new \fBConsole\fP Area object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIconsole\fP The console to create the area on 
+.br
+\fIleft\fP How far from the left the area starts 
+.br
+\fItop\fP How far from the top the area starts 
+.br
+\fIwidth\fP The width of the area 
+.br
+\fIheight\fP The height of the area 
+.RE
+.PP
+
+.PP
+Definition at line \fB230\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+231         : m_console(console),
+232         m_left(left),
+233         m_top(top),
+234         m_width(width),
+235         m_height(height) {
+236 
+237 }
+.fi
+
+.SS "ConsoleArea::ConsoleArea (\fBConsole\fP * console, uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground, common::ConsoleColour background)"
+
+.PP
+Construct a new \fBConsole\fP Area object with specified foreground and background colors\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIconsole\fP The console to create the area on 
+.br
+\fIleft\fP How far from the left the area starts 
+.br
+\fItop\fP How far from the top the area starts 
+.br
+\fIwidth\fP The width of the area 
+.br
+\fIheight\fP The height of the area 
+.br
+\fIforeground\fP The foreground color of the area 
+.br
+\fIbackground\fP The background color of the area 
+.RE
+.PP
+
+.PP
+Definition at line \fB250\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+251         : m_console(console),
+252         m_left(left),
+253         m_top(top),
+254         m_width(width),
+255         m_height(height) {
+256 
+257     // Store the colours of the console
+258     for(uint16_t y = top; y < top + height; y++)
+259         for(uint16_t x = left; x < left + width; x++) {
+260             console\->set_foreground_color(x, y, foreground);
+261             console\->set_background_color(x, y, background);
+262         }
+263 
+264 }
+.fi
+
+.PP
+References \fBheight()\fP, \fBMaxOS::console::Console::set_background_color()\fP, \fBMaxOS::console::Console::set_foreground_color()\fP, and \fBwidth()\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "ConsoleColour ConsoleArea::get_background_color (uint16_t x, uint16_t y)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Return the background color of the character at the given coordinates if the coordinates are within the console area\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The background color of the character at the given coordinates, if the coordinates are within the console area otherwise ConsoleColour::Black 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB382\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+382                                                                       {
+383 
+384     // Make sure the coordinates are within the console area
+385     if(x >= m_width || y >= m_height)
+386         return ConsoleColour::Black;
+387 
+388     // Return the background color of the character at the given coordinates
+389     return m_console\->get_background_color(m_left + x, m_top + y);
+390 }
+.fi
+
+.PP
+References \fBMaxOS::console::Console::get_background_color()\fP\&.
+.SS "char ConsoleArea::get_character (uint16_t x, uint16_t y)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Return the character at the given coordinates if the coordinates are within the console area\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The character at the given coordinates, if the coordinates are within the console area otherwise ' ' 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB347\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+347                                                       {
+348 
+349     // Make sure the coordinates are within the console area
+350     if(x >= m_width || y >= m_height)
+351         return ' ';
+352 
+353     // Return the character at the given coordinates
+354     return m_console\->get_character(m_left + x, m_top + y);
+355 }
+.fi
+
+.PP
+References \fBMaxOS::console::Console::get_character()\fP\&.
+.SS "ConsoleColour ConsoleArea::get_foreground_color (uint16_t x, uint16_t y)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Return the foreground color of the character at the given coordinates if the coordinates are within the console area\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The foreground color of the character at the given coordinates, if the coordinates are within the console area otherwise ConsoleColour::LightGrey 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB364\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+364                                                                       {
+365 
+366     // Make sure the coordinates are within the console area
+367     if(x >= m_width || y >= m_height)
+368         return ConsoleColour::LightGrey;
+369 
+370     // Return the foreground color of the character at the given coordinates
+371     return m_console\->get_foreground_color(m_left + x, m_top + y);
+372 
+373 }
+.fi
+
+.PP
+References \fBMaxOS::console::Console::get_foreground_color()\fP\&.
+.SS "uint16_t ConsoleArea::height ()\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Return the height of the console area\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The height of the console area 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB282\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+282                              {
+283     return m_height;
+284 }
+.fi
+
+.PP
+Referenced by \fBConsoleArea()\fP, and \fBscroll_up()\fP\&.
+.SS "void ConsoleArea::put_character (uint16_t x, uint16_t y, char c)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Place a character on the console area if the coordinates are within the area\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.br
+\fIc\fP The character to put on the console 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB293\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+293                                                               {
+294 
+295     // Check bounds
+296     if(x >= m_width || y >= m_height)
+297         return;
+298 
+299     // Write to the console
+300     m_console\->put_character(m_left + x, m_top + y, c);
+301 }
+.fi
+
+.PP
+References \fBMaxOS::console::Console::put_character()\fP\&.
+.SS "void ConsoleArea::scroll_up ()\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Scroll the console area up by 1 line\&. 
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB395\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+395                             {
+396 
+397     m_console\->scroll_up(m_left, m_top, m_width, m_height);
+398 }
+.fi
+
+.PP
+References \fBMaxOS::console::Console::scroll_up()\fP\&.
+.SS "void ConsoleArea::scroll_up (uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground = \fCcommon::ConsoleColour::LightGrey\fP, common::ConsoleColour background = \fCcommon::ConsoleColour::Black\fP, char fill = \fC' '\fP)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Scroll an area of the console up by 1 line\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIleft\fP The left coordinate of the area to scroll 
+.br
+\fItop\fP The top coordinate of the area to scroll 
+.br
+\fIwidth\fP The m_width of the area to scroll 
+.br
+\fIheight\fP The m_height of the area to scroll 
+.br
+\fIforeground\fP The foreground color of the new line 
+.br
+\fIbackground\fP The background color of the new line 
+.br
+\fIfill\fP The character to fill the new line with 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB411\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+413                                                                        {
+414 
+415     m_console\->scroll_up(m_left + left, m_top + top, width, height, foreground, background, fill);
+416 
+417 }
+.fi
+
+.PP
+References \fBheight()\fP, \fBMaxOS::console::Console::scroll_up()\fP, and \fBwidth()\fP\&.
+.SS "void ConsoleArea::set_background_color (uint16_t x, uint16_t y, common::ConsoleColour background)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Change the background color of a character on the console area if the coordinates are within the area\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.br
+\fIbackground\fP The background color of the character 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB329\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+329                                                                                        {
+330 
+331     // Make sure the coordinates are within the console area
+332     if(x >= m_width || y >= m_height)
+333         return;
+334 
+335     // Set the background color of the character
+336     m_console\->set_background_color(m_left + x, m_top + y, background);
+337 
+338 }
+.fi
+
+.PP
+References \fBMaxOS::console::Console::set_background_color()\fP\&.
+.SS "void ConsoleArea::set_foreground_color (uint16_t x, uint16_t y, common::ConsoleColour foreground)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Change the foreground color of a character on the console area if the coordinates are within the area\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the character 
+.br
+\fIy\fP The y coordinate of the character 
+.br
+\fIforeground\fP The foreground color of the character 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB311\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+311                                                                                        {
+312 
+313     // Make sure the coordinates are within the console area
+314     if(x >= m_width || y >= m_height)
+315         return;
+316 
+317     // Set the foreground color of the character
+318     m_console\->set_foreground_color(m_left + x, m_top + y, foreground);
+319 
+320 }
+.fi
+
+.PP
+References \fBMaxOS::console::Console::set_foreground_color()\fP\&.
+.SS "uint16_t ConsoleArea::width ()\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Return the width of the console area\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The width of the console area 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB273\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+273                             {
+274     return m_width;
+275 }
+.fi
+
+.PP
+Referenced by \fBConsoleArea()\fP, and \fBscroll_up()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,8 +1,11 @@
 var searchData=
 [
-  ['join_5fpath_0',['join_path',['../classMaxOS_1_1filesystem_1_1Path.html#aaff89023bdbf21b43c76583e7370265d',1,'MaxOS::filesystem::Path']]],
-  ['journal_5fdevice_1',['journal_device',['../structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1SuperBlock.html#aaaa33ed9500b2d162c87aa26b9e8e187',1,'MaxOS::filesystem::format::ext2::SuperBlock']]],
-  ['journal_5fid_2',['journal_id',['../structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1SuperBlock.html#a7dd4bf7ce27928b107fefdc6c725625d',1,'MaxOS::filesystem::format::ext2::SuperBlock']]],
-  ['journal_5finode_3',['journal_inode',['../structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1SuperBlock.html#a7e4fcea377c6d9603f87d851415b605c',1,'MaxOS::filesystem::format::ext2::SuperBlock']]],
-  ['jump_4',['jump',['../structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html#aee8e7d0e8b19bcf002247e3a9d0dcaab',1,'MaxOS::filesystem::format::BiosParameterBlock32']]]
+  ['kasan_2ecpp_0',['kasan.cpp',['../kasan_8cpp.html',1,'']]],
+  ['kasan_2eh_1',['kasan.h',['../kasan_8h.html',1,'']]],
+  ['kasanhandler_2',['KASanHandler',['../classMaxOS_1_1runtime_1_1KASanHandler.html',1,'MaxOS::runtime']]],
+  ['kernel_2ecpp_3',['kernel.cpp',['../kernel_8cpp.html',1,'']]],
+  ['kernel_5fmain_4',['kernel_main',['../kernel_8cpp.html#a5b3569dcd47463ac1cea04841fa25c53',1,'kernel.cpp']]],
+  ['kfree_5',['kfree',['../classMaxOS_1_1memory_1_1MemoryManager.html#abaa5e54c1428654efa1c81b69e12eb20',1,'MaxOS::memory::MemoryManager']]],
+  ['kind_6',['kind',['../structMaxOS_1_1runtime_1_1TypeDescriptor.html#a053fe7dbbf164798ca80420be69e540a',1,'MaxOS::runtime::TypeDescriptor']]],
+  ['kmalloc_7',['kmalloc',['../classMaxOS_1_1memory_1_1MemoryManager.html#a983c849ff604367f7c8a0e70172bb331',1,'MaxOS::memory::MemoryManager']]]
 ];

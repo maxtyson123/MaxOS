@@ -8,33 +8,28 @@ The main kernel entry point for the bsp and other cores. Handles initialisation 
 {\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$common/logger.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/interrupts.\+h$>$}\newline
-{\ttfamily \#include $<$drivers/console/serial.\+h$>$}\newline
-{\ttfamily \#include $<$drivers/console/vesaboot.\+h$>$}\newline
-{\ttfamily \#include $<$drivers/driver.\+h$>$}\newline
-{\ttfamily \#include $<$drivers/video/vesa.\+h$>$}\newline
-{\ttfamily \#include $<$gui/desktop.\+h$>$}\newline
+{\ttfamily \#include $<$hardwarecommunication/clock.\+h$>$}\newline
+{\ttfamily \#include $<$console/serial.\+h$>$}\newline
+{\ttfamily \#include $<$console/framebuffer.\+h$>$}\newline
 {\ttfamily \#include $<$processes/scheduler.\+h$>$}\newline
 {\ttfamily \#include $<$system/cpu.\+h$>$}\newline
 {\ttfamily \#include $<$system/syscalls.\+h$>$}\newline
 {\ttfamily \#include $<$memory/memorymanagement.\+h$>$}\newline
 {\ttfamily \#include $<$memory/physical.\+h$>$}\newline
 {\ttfamily \#include $<$memory/virtual.\+h$>$}\newline
-{\ttfamily \#include $<$filesystem/vfs.\+h$>$}\newline
-{\ttfamily \#include $<$filesystem/vfsresource.\+h$>$}\newline
-{\ttfamily \#include $<$tests/test.\+h$>$}\newline
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{kernel_8cpp_ac75524df0a1ac9de83987acf487c0150}{call\+\_\+constructors}} ()
 \begin{DoxyCompactList}\small\item\em Calls the C++ static constructors. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{kernel_8cpp_afa3328ea994a9f1d5d394a3f883cac43}{core\+\_\+main}} ()
+void \mbox{\hyperlink{kernel_8cpp_afa3328ea994a9f1d5d394a3f883cac43}{core\+\_\+main}} ()
 \begin{DoxyCompactList}\small\item\em The main entry point for secondary cores. Sets up the core and waits to be scheduled. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} \mbox{\hyperlink{kernel_8cpp_a5b3569dcd47463ac1cea04841fa25c53}{kernel\+\_\+main}} (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{unsigned}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{long}} addr, \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{unsigned}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{long}} magic)
+void \mbox{\hyperlink{kernel_8cpp_a5b3569dcd47463ac1cea04841fa25c53}{kernel\+\_\+main}} (unsigned long addr, unsigned long magic)
 \begin{DoxyCompactList}\small\item\em The main kernel entry point. Initialises all core systems and starts the scheduler. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\+\_\+t}} \mbox{\hyperlink{kernel_8cpp_a32bfa49e87f9c5c8e4b07eb74f8fcca9}{core\+\_\+boot\+\_\+info}} \mbox{[}$\,$\mbox{]}
+uint8\+\_\+t \mbox{\hyperlink{kernel_8cpp_a32bfa49e87f9c5c8e4b07eb74f8fcca9}{core\+\_\+boot\+\_\+info}} \mbox{[}$\,$\mbox{]}
 \begin{DoxyCompactList}\small\item\em The boot info structure for the core being started. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -83,13 +78,13 @@ References \mbox{\hyperlink{cplusplus_8cpp_source_l00034}{end\+\_\+ctors}}, and 
 
 
 
-Referenced by \mbox{\hyperlink{kernel_8cpp_source_l00073}{kernel\+\_\+main()}}.
+Referenced by \mbox{\hyperlink{kernel_8cpp_source_l00061}{kernel\+\_\+main()}}.
 
 \Hypertarget{kernel_8cpp_afa3328ea994a9f1d5d394a3f883cac43}\label{kernel_8cpp_afa3328ea994a9f1d5d394a3f883cac43} 
 \index{kernel.cpp@{kernel.cpp}!core\_main@{core\_main}}
 \index{core\_main@{core\_main}!kernel.cpp@{kernel.cpp}}
 \doxysubsubsection{\texorpdfstring{core\_main()}{core\_main()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} core\+\_\+main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void core\+\_\+main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
@@ -97,39 +92,38 @@ The main entry point for secondary cores. Sets up the core and waits to be sched
 
 
 
-Definition at line \mbox{\hyperlink{kernel_8cpp_source_l00048}{48}} of file \mbox{\hyperlink{kernel_8cpp_source}{kernel.\+cpp}}.
+Definition at line \mbox{\hyperlink{kernel_8cpp_source_l00036}{36}} of file \mbox{\hyperlink{kernel_8cpp_source}{kernel.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00037\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{auto}\ info\ =\ (\mbox{\hyperlink{cpu_8h_a8cc53adee7d9f2ae345e54f11cb80371}{core\_boot\_info\_t}}*)(\mbox{\hyperlink{kernel_8cpp_a32bfa49e87f9c5c8e4b07eb74f8fcca9}{core\_boot\_info}});}
+\DoxyCodeLine{00039\ \ \ \ \ info-\/>activated\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{auto}\ core\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{CPU::executing\_core}}();}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ correct\ core\ is\ being\ setup}}
+\DoxyCodeLine{00043\ \ \ \ \ ASSERT(info-\/>id\ ==\ core-\/>id,\ \textcolor{stringliteral}{"{}Current\ setup\ core\ isn't\ the\ core\ expected"{}});}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a44040e7f56db620657286c3dc2b230fb}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Core\ "{}}\ <<\ core-\/>id\ <<\ \textcolor{stringliteral}{"{}\ now\ in\ higher\ half\ \(\backslash\)n"{}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ Set\ up\ the\ core}}
+\DoxyCodeLine{00047\ \ \ \ \ core-\/>init();}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}sti"{}});}
 \DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{auto}\ info\ =\ (\mbox{\hyperlink{cpu_8h_a8cc53adee7d9f2ae345e54f11cb80371}{core\_boot\_info\_t}}*)\ (\mbox{\hyperlink{kernel_8cpp_a32bfa49e87f9c5c8e4b07eb74f8fcca9}{core\_boot\_info}});}
-\DoxyCodeLine{00051\ \ \ \ \ info-\/>activated\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core}}\ =\ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_adf91af6b880b57ae580a0a91ed4b71f7}{CPU::executing\_core}}();}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ the\ correct\ core\ is\ being\ setup}}
-\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{logger_8h_adf7b5d69e4c25995b3211b91b27f33b6}{ASSERT}}(info-\/>id\ ==\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core}}-\/>id,\ \textcolor{stringliteral}{"{}Current\ setup\ core\ isn't\ the\ core\ expected"{}});}
-\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Core\ "{}}\ <<\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core}}-\/>id\ <<\ \textcolor{stringliteral}{"{}\ now\ in\ higher\ half\ \(\backslash\)n"{}};}
-\DoxyCodeLine{00057\ }
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ Set\ up\ the\ core}}
-\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{core}}-\/>init();}
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}sti"{}});}
-\DoxyCodeLine{00061\ }
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{//\ Wait\ to\ be\ scheduled}}
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordflow}{while}(\textcolor{keyword}{true})}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}nop"{}});}
-\DoxyCodeLine{00065\ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Wait\ to\ be\ scheduled}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordflow}{while}\ (\textcolor{keyword}{true})}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU_a189729f4ca240ff52004a34b9057d448}{CPU::halt}}();}
+\DoxyCodeLine{00053\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{logger_8h_source_l00100}{ASSERT}}, \mbox{\hyperlink{kernel_8cpp_source_l00043}{core\+\_\+boot\+\_\+info}}, \mbox{\hyperlink{logger_8cpp_source_l00193}{Max\+OS\+::\+Logger\+::\+DEBUG()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00623}{Max\+OS\+::system\+::\+CPU\+::executing\+\_\+core()}}.
+References \mbox{\hyperlink{kernel_8cpp_source_l00031}{core\+\_\+boot\+\_\+info}}, \mbox{\hyperlink{logger_8cpp_source_l00204}{Max\+OS\+::\+Logger\+::\+DEBUG()}}, \mbox{\hyperlink{cpu_8cpp_source_l00660}{Max\+OS\+::system\+::\+CPU\+::executing\+\_\+core()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00275}{Max\+OS\+::system\+::\+CPU\+::halt()}}.
 
 \Hypertarget{kernel_8cpp_a5b3569dcd47463ac1cea04841fa25c53}\label{kernel_8cpp_a5b3569dcd47463ac1cea04841fa25c53} 
 \index{kernel.cpp@{kernel.cpp}!kernel\_main@{kernel\_main}}
 \index{kernel\_main@{kernel\_main}!kernel.cpp@{kernel.cpp}}
 \doxysubsubsection{\texorpdfstring{kernel\_main()}{kernel\_main()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{void}} kernel\+\_\+main (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{unsigned}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{long}}}]{addr,  }\item[{\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{unsigned}} \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{long}}}]{magic }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void kernel\+\_\+main (\begin{DoxyParamCaption}\item[{unsigned long}]{addr,  }\item[{unsigned long}]{magic }\end{DoxyParamCaption})}
 
 
 
@@ -144,66 +138,54 @@ The main kernel entry point. Initialises all core systems and starts the schedul
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{kernel_8cpp_source_l00073}{73}} of file \mbox{\hyperlink{kernel_8cpp_source}{kernel.\+cpp}}.
+Definition at line \mbox{\hyperlink{kernel_8cpp_source_l00061}{61}} of file \mbox{\hyperlink{kernel_8cpp_source}{kernel.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00062\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{kernel_8cpp_ac75524df0a1ac9de83987acf487c0150}{call\_constructors}}();}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger}{Logger}}\ logger;}
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole}{SerialConsole}}\ serial\_console(\&logger);}
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a6bcb1b11271a35f8bff3d7e20fec2e4f}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}MaxOS\ Booted\ Successfully\(\backslash\)n"{}};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a532098603fd6e5481f023ee7f3aeaeda}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1\}:\ System\ Initialisation\(\backslash\)n"{}};}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}}\ multiboot(addr,\ magic);}
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}\ gdt;}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}}\ interrupts;}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1ExceptionHandlers}{ExceptionHandlers}}\ exceptions;}
 \DoxyCodeLine{00074\ }
-\DoxyCodeLine{00075\ \ \ \ \ \mbox{\hyperlink{kernel_8cpp_ac75524df0a1ac9de83987acf487c0150}{call\_constructors}}();}
-\DoxyCodeLine{00076\ }
-\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger}{Logger}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logger}};}
-\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1SerialConsole}{SerialConsole}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{serial\_console}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{logger}});}
-\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a6fa276d92dbf0dd22dcab146f5c99da6}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}MaxOS\ Booted\ Successfully\(\backslash\)n"{}};}
-\DoxyCodeLine{00080\ }
-\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1\}:\ System\ Initialisation\(\backslash\)n"{}};}
-\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1Multiboot}{Multiboot}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}(addr,\ magic);}
-\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1GlobalDescriptorTable}{GlobalDescriptorTable}}\ gdt;}
-\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager}{InterruptManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupts}};}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1.1\}:\ Memory\ Initialisation\(\backslash\)n"{}};}
-\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{PhysicalMemoryManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{pmm}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}});}
-\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{VirtualMemoryManager}}\ vmm;}
-\DoxyCodeLine{00089\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{MemoryManager}}\ memory\_manager(\&vmm);}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1.2\}:\ Console\ Initialisation\(\backslash\)n"{}};}
-\DoxyCodeLine{00092\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation}{VideoElectronicsStandardsAssociation}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vesa}}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}}.framebuffer());}
-\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1console_1_1VESABootConsole}{VESABootConsole}}\ console(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vesa}});}
-\DoxyCodeLine{00094\ }
-\DoxyCodeLine{00095\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{2\}:\ Hardware\ Initialisation\(\backslash\)n"{}};}
-\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VirtualFileSystem}{VirtualFileSystem}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}};}
-\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}(\&gdt,\ \&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}});}
-\DoxyCodeLine{00098\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1clock_1_1Clock}{Clock}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}.apic,\ 1);}
-\DoxyCodeLine{00099\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1drivers_1_1DriverManager}{DriverManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}};}
-\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.add\_driver(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}});}
-\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.find\_drivers();}
-\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint32\_t}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reset\_wait\_time}}\ =\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.reset\_devices();}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{3\}:\ Device\ Finalisation\(\backslash\)n"{}};}
-\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{interrupts}}.activate();}
-\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}}.calibrate();}
-\DoxyCodeLine{00107\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{kernel\_clock}}.delay(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{reset\_wait\_time}});}
-\DoxyCodeLine{00108\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.initialise\_drivers();}
-\DoxyCodeLine{00109\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{driver\_manager}}.activate\_drivers();}
-\DoxyCodeLine{00110\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{cpu}}.init\_cores();}
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_ac852561ac37a51b7bf4f863a19a4fd40}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{4\}:\ System\ Finalisation\(\backslash\)n"{}};}
-\DoxyCodeLine{00113\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler}{GlobalScheduler}}\ scheduler(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{multiboot}});}
-\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1filesystem_1_1VFSResourceRegistry}{VFSResourceRegistry}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs\_registry}}(\&\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{vfs}});}
-\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager}{SyscallManager}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{syscalls}};}
-\DoxyCodeLine{00116\ \ \ \ \ console.finish();}
-\DoxyCodeLine{00117\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac257db7eb13dd4daca113e43a4623900}{GlobalScheduler::activate}}();}
-\DoxyCodeLine{00118\ }
-\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{//\ Idle\ loop\ \ (read\ Idle.md)}}
-\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordflow}{while}(\textcolor{keyword}{true})}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}hlt"{}});}
-\DoxyCodeLine{00122\ }
-\DoxyCodeLine{00123\ \}}
+\DoxyCodeLine{00075\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a532098603fd6e5481f023ee7f3aeaeda}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1.1\}:\ Memory\ Initialisation\(\backslash\)n"{}};}
+\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager}{PhysicalMemoryManager}}\ pmm(\&multiboot);}
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager}{VirtualMemoryManager}}\ vmm;}
+\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1MemoryManager}{MemoryManager}}\ memory\_manager(\&vmm);}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a532098603fd6e5481f023ee7f3aeaeda}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{1.2\}:\ Console\ Initialisation\(\backslash\)n"{}};}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole}{FramebufferConsole}}\ console(multiboot.framebuffer());}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a532098603fd6e5481f023ee7f3aeaeda}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{2\}:\ Hardware\ Initialisation\(\backslash\)n"{}};}
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1CPU}{CPU}}\ cpu(\&gdt,\ \&multiboot);}
+\DoxyCodeLine{00085\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock}{Clock}}\ kernel\_clock(\&cpu.apic,\ 1);}
+\DoxyCodeLine{00086\ \ \ \ \ interrupts.\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptManager_ab94a571ecb1d28fb72ffc14cb9840082}{activate}}();}
+\DoxyCodeLine{00087\ \ \ \ \ kernel\_clock.calibrate();}
+\DoxyCodeLine{00088\ \ \ \ \ cpu.init\_cores();}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a532098603fd6e5481f023ee7f3aeaeda}{Logger::HEADER}}()\ <<\ \textcolor{stringliteral}{"{}Stage\ \{3\}:\ Userspace\ Initialisation\(\backslash\)n"{}};}
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1system_1_1SyscallManager}{SyscallManager}}\ syscalls;}
+\DoxyCodeLine{00092\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler}{GlobalScheduler}}\ scheduler(multiboot);}
+\DoxyCodeLine{00093\ \ \ \ \ console.finish();}
+\DoxyCodeLine{00094\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ac257db7eb13dd4daca113e43a4623900}{GlobalScheduler::activate}}();}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//\ Idle\ loop\ \ (read\ Idle.md)}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordflow}{while}\ (\textcolor{keyword}{true})}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}(\textcolor{stringliteral}{"{}hlt"{}});}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \}\ \textcolor{comment}{//\ I\ use\ maxos\ btw}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{scheduler_8cpp_source_l00101}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::activate()}}, \mbox{\hyperlink{cplusplus_8cpp_source_l00039}{call\+\_\+constructors()}}, \mbox{\hyperlink{vesaboot_8cpp_source_l00349}{Max\+OS\+::drivers\+::console\+::\+VESABoot\+Console\+::finish()}}, \mbox{\hyperlink{logger_8cpp_source_l00159}{Max\+OS\+::\+Logger\+::\+HEADER()}}, and \mbox{\hyperlink{logger_8cpp_source_l00171}{Max\+OS\+::\+Logger\+::\+INFO()}}.
+References \mbox{\hyperlink{interrupts_8cpp_source_l00318}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Manager\+::activate()}}, \mbox{\hyperlink{scheduler_8cpp_source_l00095}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::activate()}}, \mbox{\hyperlink{cpu_8h_source_l00264}{Max\+OS\+::system\+::\+CPU\+::apic}}, \mbox{\hyperlink{clock_8cpp_source_l00118}{Max\+OS\+::hardwarecommunication\+::\+Clock\+::calibrate()}}, \mbox{\hyperlink{cplusplus_8cpp_source_l00039}{call\+\_\+constructors()}}, \mbox{\hyperlink{framebuffer_8cpp_source_l00379}{Max\+OS\+::console\+::\+Framebuffer\+Console\+::finish()}}, \mbox{\hyperlink{multiboot_8cpp_source_l00102}{Max\+OS\+::system\+::\+Multiboot\+::framebuffer()}}, \mbox{\hyperlink{logger_8cpp_source_l00231}{Max\+OS\+::\+Logger\+::\+HEADER()}}, \mbox{\hyperlink{logger_8cpp_source_l00195}{Max\+OS\+::\+Logger\+::\+INFO()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00588}{Max\+OS\+::system\+::\+CPU\+::init\+\_\+cores()}}.
 
 
 
@@ -212,7 +194,7 @@ References \mbox{\hyperlink{scheduler_8cpp_source_l00101}{Max\+OS\+::processes\+
 \index{kernel.cpp@{kernel.cpp}!core\_boot\_info@{core\_boot\_info}}
 \index{core\_boot\_info@{core\_boot\_info}!kernel.cpp@{kernel.cpp}}
 \doxysubsubsection{\texorpdfstring{core\_boot\_info}{core\_boot\_info}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uint8\+\_\+t}} core\+\_\+boot\+\_\+info\mbox{[}$\,$\mbox{]}}
+{\footnotesize\ttfamily uint8\+\_\+t core\+\_\+boot\+\_\+info\mbox{[}$\,$\mbox{]}}
 
 
 
@@ -220,9 +202,9 @@ The boot info structure for the core being started.
 
 
 
-Definition at line \mbox{\hyperlink{kernel_8cpp_source_l00043}{43}} of file \mbox{\hyperlink{kernel_8cpp_source}{kernel.\+cpp}}.
+Definition at line \mbox{\hyperlink{kernel_8cpp_source_l00031}{31}} of file \mbox{\hyperlink{kernel_8cpp_source}{kernel.\+cpp}}.
 
 
 
-Referenced by \mbox{\hyperlink{kernel_8cpp_source_l00048}{core\+\_\+main()}}, \mbox{\hyperlink{cpu_8cpp_source_l00551}{Max\+OS\+::system\+::\+CPU\+::init\+\_\+cores()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00059}{Max\+OS\+::system\+::\+Core\+::wake\+\_\+up()}}.
+Referenced by \mbox{\hyperlink{kernel_8cpp_source_l00036}{core\+\_\+main()}}, \mbox{\hyperlink{cpu_8cpp_source_l00588}{Max\+OS\+::system\+::\+CPU\+::init\+\_\+cores()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00060}{Max\+OS\+::system\+::\+Core\+::wake\+\_\+up()}}.
 

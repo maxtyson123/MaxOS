@@ -7,11 +7,11 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <cpuid\&.h>\fP
-.br
 \fC#include <cstddef>\fP
 .br
 \fC#include <cstdint>\fP
+.br
+\fC#include <cpuid\&.h>\fP
 .br
 \fC#include <system/gdt\&.h>\fP
 .br
@@ -86,6 +86,10 @@
 
 .in +1c
 .ti -1c
+.RI "constexpr size_t \fBMaxOS::system::IO_BITMAP_SIZE\fP = 8192"
+.br
+.RI "The size of the IO bitmap to track 65536 ports\&. "
+.ti -1c
 .RI "constexpr size_t \fBMaxOS::system::BOOT_STACK_SIZE\fP = 16384"
 .br
 .RI "The size of the stack allocated for booting a core (should align with the startup assembly code for the kernel) "
@@ -123,41 +127,41 @@ https://wiki.osdev.org/CPUID as the original author
 .PP
 
 .PP
-Definition at line \fB100\fP of file \fBcpu\&.h\fP\&..PP
+Definition at line \fB103\fP of file \fBcpu\&.h\fP\&..PP
 .nf
-100                                : int32_t {
-101         SSE3 = 1 << 0,
-102         PCLMUL = 1 << 1,
-103         DTES64 = 1 << 2,
-104         MONITOR = 1 << 3,
-105         DS_CPL = 1 << 4,
-106         VMX = 1 << 5,
-107         SMX = 1 << 6,
-108         EST = 1 << 7,
-109         TM2 = 1 << 8,
-110         SSSE3 = 1 << 9,
-111         CID = 1 << 10,
-112         SDBG = 1 << 11,
-113         FMA = 1 << 12,
-114         CX16 = 1 << 13,
-115         XTPR = 1 << 14,
-116         PDCM = 1 << 15,
-117         PCID = 1 << 17,
-118         DCA = 1 << 18,
-119         SSE4_1 = 1 << 19,
-120         SSE4_2 = 1 << 20,
-121         X2APIC = 1 << 21,
-122         MOVBE = 1 << 22,
-123         POPCNT = 1 << 23,
-124         TSC = 1 << 24,
-125         AES = 1 << 25,
-126         XSAVE = 1 << 26,
-127         OSXSAVE = 1 << 27,
-128         AVX = 1 << 28,
-129         F16C = 1 << 29,
-130         RDRAND = 1 << 30,
-131         HYPERVISOR = 1 << 31,
-132     };
+103                                : int32_t {
+104         SSE3 = 1 << 0,
+105         PCLMUL = 1 << 1,
+106         DTES64 = 1 << 2,
+107         MONITOR = 1 << 3,
+108         DS_CPL = 1 << 4,
+109         VMX = 1 << 5,
+110         SMX = 1 << 6,
+111         EST = 1 << 7,
+112         TM2 = 1 << 8,
+113         SSSE3 = 1 << 9,
+114         CID = 1 << 10,
+115         SDBG = 1 << 11,
+116         FMA = 1 << 12,
+117         CX16 = 1 << 13,
+118         XTPR = 1 << 14,
+119         PDCM = 1 << 15,
+120         PCID = 1 << 17,
+121         DCA = 1 << 18,
+122         SSE4_1 = 1 << 19,
+123         SSE4_2 = 1 << 20,
+124         X2APIC = 1 << 21,
+125         MOVBE = 1 << 22,
+126         POPCNT = 1 << 23,
+127         TSC = 1 << 24,
+128         AES = 1 << 25,
+129         XSAVE = 1 << 26,
+130         OSXSAVE = 1 << 27,
+131         AVX = 1 << 28,
+132         F16C = 1 << 29,
+133         RDRAND = 1 << 30,
+134         HYPERVISOR = 1 << 31,
+135     };
 .fi
 
 .SS "enum class \fBMaxOS::system::CPU_FEATURE_EDX\fP : int32_t\fC [strong]\fP"
@@ -172,40 +176,40 @@ https://wiki.osdev.org/CPUID as the original author
 .PP
 
 .PP
-Definition at line \fB140\fP of file \fBcpu\&.h\fP\&..PP
+Definition at line \fB143\fP of file \fBcpu\&.h\fP\&..PP
 .nf
-140                                : int32_t {
-141         FPU = 1 << 0,
-142         VME = 1 << 1,
-143         DE = 1 << 2,
-144         PSE = 1 << 3,
-145         TSC = 1 << 4,
-146         MSR = 1 << 5,
-147         PAE = 1 << 6,
-148         MCE = 1 << 7,
-149         CX8 = 1 << 8,
-150         APIC = 1 << 9,
-151         SEP = 1 << 11,
-152         MTRR = 1 << 12,
-153         PGE = 1 << 13,
-154         MCA = 1 << 14,
-155         CMOV = 1 << 15,
-156         PAT = 1 << 16,
-157         PSE36 = 1 << 17,
-158         PSN = 1 << 18,
-159         CLFLUSH = 1 << 19,
-160         DS = 1 << 21,
-161         ACPI = 1 << 22,
-162         MMX = 1 << 23,
-163         FXSR = 1 << 24,
-164         SSE = 1 << 25,
-165         SSE2 = 1 << 26,
-166         SS = 1 << 27,
-167         HTT = 1 << 28,
-168         TM = 1 << 29,
-169         IA64 = 1 << 30,
-170         PBE = 1 << 31
-171     };
+143                                : int32_t {
+144         FPU = 1 << 0,
+145         VME = 1 << 1,
+146         DE = 1 << 2,
+147         PSE = 1 << 3,
+148         TSC = 1 << 4,
+149         MSR = 1 << 5,
+150         PAE = 1 << 6,
+151         MCE = 1 << 7,
+152         CX8 = 1 << 8,
+153         APIC = 1 << 9,
+154         SEP = 1 << 11,
+155         MTRR = 1 << 12,
+156         PGE = 1 << 13,
+157         MCA = 1 << 14,
+158         CMOV = 1 << 15,
+159         PAT = 1 << 16,
+160         PSE36 = 1 << 17,
+161         PSN = 1 << 18,
+162         CLFLUSH = 1 << 19,
+163         DS = 1 << 21,
+164         ACPI = 1 << 22,
+165         MMX = 1 << 23,
+166         FXSR = 1 << 24,
+167         SSE = 1 << 25,
+168         SSE2 = 1 << 26,
+169         SS = 1 << 27,
+170         HTT = 1 << 28,
+171         TM = 1 << 29,
+172         IA64 = 1 << 30,
+173         PBE = 1 << 31
+174     };
 .fi
 
 .SH "Variable Documentation"
@@ -215,9 +219,17 @@ Definition at line \fB140\fP of file \fBcpu\&.h\fP\&..PP
 .PP
 The size of the stack allocated for booting a core (should align with the startup assembly code for the kernel) 
 .PP
-Definition at line \fB205\fP of file \fBcpu\&.h\fP\&.
+Definition at line \fB208\fP of file \fBcpu\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::system::Core::init_tss()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
+Referenced by \fBMaxOS::system::Core::Core()\fP, \fBMaxOS::system::Core::init_tss()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
+.SS "constexpr size_t MaxOS::system::IO_BITMAP_SIZE = 8192\fC [constexpr]\fP"
+
+.PP
+The size of the IO bitmap to track 65536 ports\&. 
+.PP
+Definition at line \fB67\fP of file \fBcpu\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::system::Core::init_tss()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

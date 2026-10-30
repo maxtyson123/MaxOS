@@ -11,9 +11,9 @@
 .br
 \fC#include <stddef\&.h>\fP
 .br
-\fC#include <memory/physical\&.h>\fP
+\fC#include <libcommon/string\&.h>\fP
 .br
-\fC#include <common/string\&.h>\fP
+\fC#include <memory/physical\&.h>\fP
 .br
 
 .SS "Classes"
@@ -64,6 +64,18 @@
 .br
 .RI "Flags for chunks used in virtual memory allocation\&. "
 .in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr size_t \fBMaxOS::memory::CHUNKS_PER_PAGE\fP = \fBPAGE_SIZE\fP / sizeof(\fBvirtual_memory_chunk_t\fP) \- 1"
+.br
+.RI "Number of chunks per virtual memory region (limited to fit in one page) "
+.ti -1c
+.RI "constexpr size_t \fBMaxOS::memory::VMM_RESERVED\fP = 0x138000000"
+.br
+.RI "The starting address for the VMM to start allocating from when in higher half (otherwise can cause conflicts with kernel space) "
+.in -1c
 .SH "Detailed Description"
 .PP 
 Defines a VirtualMemoryManager class for managing virtual memory allocation and mapping to physical memory\&. 
@@ -85,6 +97,17 @@ Max Tyson
 Definition in file \fBvirtual\&.h\fP\&.
 .SH "Typedef Documentation"
 .PP 
+.SS "\fBMaxOS::memory::free_chunk_t\fP"
+
+.PP
+Alias for FreeChunk struct\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Could just use virtual_memory_chunk_t and use 'flags' as a pointer? 
+.RE
+.PP
+
 .SS "\fBMaxOS::memory::virtual_flags_t\fP"
 
 .PP
@@ -139,16 +162,34 @@ Reserve the memory but do not map any physical memory to it\&.
 \fB\fISHARED \fP\fP
 The memory is shared between multiple processes\&. 
 .PP
-Definition at line \fB31\fP of file \fBvirtual\&.h\fP\&..PP
+Definition at line \fB38\fP of file \fBvirtual\&.h\fP\&..PP
 .nf
-31                                   {
-32 
-33             RESERVE = (1 << 9),         
-34             SHARED = (1 << 10),         
-35 
-36         } virtual_flags_t;
+38                                   {
+39 
+40             RESERVE = (1 << 9),         
+41             SHARED = (1 << 10),         
+42 
+43         } virtual_flags_t;
 .fi
 
+.SH "Variable Documentation"
+.PP 
+.SS "constexpr size_t MaxOS::memory::CHUNKS_PER_PAGE = PAGE_SIZE / sizeof(virtual_memory_chunk_t) \- 1\fC [constexpr]\fP"
+
+.PP
+Number of chunks per virtual memory region (limited to fit in one page) 
+.PP
+Definition at line \fB79\fP of file \fBvirtual\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::VirtualMemoryManager::free()\fP, \fBMaxOS::memory::VirtualMemoryManager::memory_used()\fP, and \fBMaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()\fP\&.
+.SS "constexpr size_t MaxOS::memory::VMM_RESERVED = 0x138000000\fC [constexpr]\fP"
+
+.PP
+The starting address for the VMM to start allocating from when in higher half (otherwise can cause conflicts with kernel space) 
+.PP
+Definition at line \fB80\fP of file \fBvirtual\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

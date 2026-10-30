@@ -1,5 +1,6 @@
 var structMaxOS_1_1system_1_1TaskStateSegment =
 [
+    [ "io_bitmap", "structMaxOS_1_1system_1_1TaskStateSegment.html#a83f4307e45cc199076419ed886d8862e", null ],
     [ "io_bitmap_offset", "structMaxOS_1_1system_1_1TaskStateSegment.html#a427ed86c3aaf8647d1aa6fea0353050f", null ],
     [ "ist1", "structMaxOS_1_1system_1_1TaskStateSegment.html#a8d01b90bb8d1b5e021e6151a48f2fbf7", null ],
     [ "ist2", "structMaxOS_1_1system_1_1TaskStateSegment.html#aeb3e348465989a883dddb0de180c735f", null ],
@@ -11,8 +12,7 @@ var structMaxOS_1_1system_1_1TaskStateSegment =
     [ "reserved0", "structMaxOS_1_1system_1_1TaskStateSegment.html#a31f8f92b3bc9bf978cba96a9111c78bd", null ],
     [ "reserved1", "structMaxOS_1_1system_1_1TaskStateSegment.html#a0266c59852b5047c7532581ce101f53e", null ],
     [ "reserved2", "structMaxOS_1_1system_1_1TaskStateSegment.html#a155653954b23b766c6d8bcafa1390d29", null ],
-    [ "reserved3", "structMaxOS_1_1system_1_1TaskStateSegment.html#a467bde19d244ce2434345bdfab497eb9", null ],
-    [ "reserved4", "structMaxOS_1_1system_1_1TaskStateSegment.html#aad8577b5d925bbf27b769920c536043e", null ],
+    [ "reserved3", "structMaxOS_1_1system_1_1TaskStateSegment.html#a3c8a8345199778e3ae72eef7c8a48c18", null ],
     [ "rsp0", "structMaxOS_1_1system_1_1TaskStateSegment.html#acda8112eafb6d584ac8d25b7031cd853", null ],
     [ "rsp1", "structMaxOS_1_1system_1_1TaskStateSegment.html#aaa6de6fcf9914c978dc6c6f8f5d12b2c", null ],
     [ "rsp2", "structMaxOS_1_1system_1_1TaskStateSegment.html#a14d5b2f2bf5d2c45bf7f006637b38ad3", null ]

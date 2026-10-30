@@ -1,0 +1,184 @@
+.TH "MaxOS::memory::allocator::ChunkHeader" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::memory::allocator::ChunkHeader \- A span of memory in the heap, can be allocated or free\&. Used as a node in a doubly linked list\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <bump\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBis_valid\fP ()"
+.br
+.ti -1c
+.RI "\fBChunkHeader\fP * \fBprev_chunk\fP ()"
+.br
+.ti -1c
+.RI "\fBChunkHeader\fP * \fBnext_chunk\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint16_t \fBcanary\fP"
+.br
+.RI "Trip value to detect buffer overflows\&. "
+.ti -1c
+.RI "\fBChunkHeader\fP * \fBnext\fP"
+.br
+.RI "Pointer to the chunk after this one in the list\&. "
+.ti -1c
+.RI "\fBChunkHeader\fP * \fBprev\fP"
+.br
+.RI "Pointer to the chunk before this one in the list\&. "
+.ti -1c
+.RI "uint8_t \fBallocated\fP"
+.br
+.RI "Whether this chunk is in use or can be allocated\&. "
+.ti -1c
+.RI "size_t \fBsize\fP"
+.br
+.RI "The size of this span of memory (not including the MemoryChunk struct itself) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A span of memory in the heap, can be allocated or free\&. Used as a node in a doubly linked list\&. 
+.PP
+Definition at line \fB25\fP of file \fBbump\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "bool ChunkHeader::is_valid ()"
+Validate that a given chunk is as expected
+.PP
+\fBReturns\fP
+.RS 4
+True if the chunk is valid, false if any check fails 
+.RE
+.PP
+
+.PP
+Definition at line \fB39\fP of file \fBbump\&.cpp\fP\&..PP
+.nf
+39                            {
+40     return canary == EXPECTED_CANARY;
+41 }
+.fi
+
+.PP
+References \fBcanary\fP\&.
+.PP
+Referenced by \fBnext_chunk()\fP, and \fBprev_chunk()\fP\&.
+.SS "\fBchunk_header_t\fP * ChunkHeader::next_chunk ()"
+Safely gets the next chunk\&. Will crash the program (not the kernel) if invalid chunk
+.PP
+\fBReturns\fP
+.RS 4
+The next chunk node in the linked list or nullptr if this is the last node
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+PANIC here to make easier to debug, change to crash the prog isntead 
+.RE
+.PP
+
+.PP
+Definition at line \fB67\fP of file \fBbump\&.cpp\fP\&..PP
+.nf
+67                                         {
+68 
+69     // Make sure the chunk is not poiting to garbage
+70     if (!is_valid())
+71         ASSERT(false, "Invalid memory chunk detected (possible buffer overflow)\\n");
+72 
+73     return next;
+74 }
+.fi
+
+.PP
+References \fBis_valid()\fP, and \fBnext\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::allocator::BumpAllocator::allocate()\fP, and \fBMaxOS::memory::allocator::BumpAllocator::amount_used()\fP\&.
+.SS "\fBchunk_header_t\fP * ChunkHeader::prev_chunk ()"
+Safely gets the prev chunk\&. Will crash the program (not the kernel) if invalid chunk
+.PP
+\fBReturns\fP
+.RS 4
+The previous chunk node in the linked list or nullptr if this is the start node
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+PANIC here to make easier to debug, change to crash the prog isntead 
+.RE
+.PP
+
+.PP
+Definition at line \fB50\fP of file \fBbump\&.cpp\fP\&..PP
+.nf
+50                                         {
+51 
+52     // Make sure the chunk is not poiting to garbage
+53     if (!is_valid())
+54         ASSERT(false, "Invalid memory chunk detected (possible buffer overflow)\\n");
+55 
+56     return prev;
+57 }
+.fi
+
+.PP
+References \fBis_valid()\fP, and \fBprev\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::allocator::BumpAllocator::unallocate()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint8_t MaxOS::memory::allocator::ChunkHeader::allocated"
+
+.PP
+Whether this chunk is in use or can be allocated\&. 
+.PP
+Definition at line \fB32\fP of file \fBbump\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::allocator::BumpAllocator::allocate()\fP, and \fBMaxOS::memory::allocator::BumpAllocator::setup_region()\fP\&.
+.SS "uint16_t MaxOS::memory::allocator::ChunkHeader::canary"
+
+.PP
+Trip value to detect buffer overflows\&. 
+.PP
+Definition at line \fB27\fP of file \fBbump\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::allocator::BumpAllocator::allocate()\fP, \fBis_valid()\fP, and \fBMaxOS::memory::allocator::BumpAllocator::setup_region()\fP\&.
+.SS "\fBChunkHeader\fP* MaxOS::memory::allocator::ChunkHeader::next"
+
+.PP
+Pointer to the chunk after this one in the list\&. 
+.PP
+Definition at line \fB29\fP of file \fBbump\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::allocator::BumpAllocator::allocate()\fP, \fBnext_chunk()\fP, and \fBMaxOS::memory::allocator::BumpAllocator::setup_region()\fP\&.
+.SS "\fBChunkHeader\fP* MaxOS::memory::allocator::ChunkHeader::prev"
+
+.PP
+Pointer to the chunk before this one in the list\&. 
+.PP
+Definition at line \fB30\fP of file \fBbump\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::allocator::BumpAllocator::allocate()\fP, \fBprev_chunk()\fP, and \fBMaxOS::memory::allocator::BumpAllocator::setup_region()\fP\&.
+.SS "size_t MaxOS::memory::allocator::ChunkHeader::size"
+
+.PP
+The size of this span of memory (not including the MemoryChunk struct itself) 
+.PP
+Definition at line \fB33\fP of file \fBbump\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::memory::allocator::BumpAllocator::allocate()\fP, \fBMaxOS::memory::allocator::BumpAllocator::setup_region()\fP, and \fBMaxOS::memory::allocator::BumpAllocator::unallocate()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

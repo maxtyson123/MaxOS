@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['dir_5fentry_5ft_0',['dir_entry_t',['../fat32_8h.html#abfb5b0d8f0d8f55352e5a36ace46c5e6',1,'MaxOS::filesystem::format']]],
-  ['directory_5fentry_5ft_1',['directory_entry_t',['../ext2_8h.html#a9496e00db030aebaabf58ff08f83a61a',1,'MaxOS::filesystem::format::ext2']]]
+  ['free_5fchunk_5ft_0',['free_chunk_t',['../virtual_8h.html#a1784dc53ca0b9a38fa243ee638fab7d4',1,'MaxOS::memory']]]
 ];

@@ -42,7 +42,7 @@ Should either handle all Local APICs or none (only boot core right now, others a
 .PP
 
 .PP
-Definition at line \fB228\fP of file \fBapic\&.h\fP\&.
+Definition at line \fB240\fP of file \fBapic\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "AdvancedProgrammableInterruptController::AdvancedProgrammableInterruptController (\fBAdvancedConfigurationAndPowerInterface\fP * acpi)\fC [explicit]\fP"
@@ -57,30 +57,30 @@ Construct a new Advanced Programmable Interrupt Controller object and initialise
 .PP
 
 .PP
-Definition at line \fB415\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB462\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-416 : m_pic_master_command_port(0x20),
-417   m_pic_master_data_port(0x21),
-418   m_pic_slave_command_port(0xA0),
-419   m_pic_slave_data_port(0xA1)
-420 {
-421 
-422     // Register this APIC
-423     Logger::INFO() << "Setting up APIC\\n";
-424     InterruptManager::active_interrupt_manager()\->set_apic(this);
-425 
-426     // Init the Local APIC
-427     Logger::DEBUG() << "Initialising Local APIC\\n";
-428     m_local_apic = new LocalAPIC();
-429 
-430     // Disable the legacy mode PIC
-431     Logger::DEBUG() << "Disabling PIC\\n";
-432     disable_pic();
-433 
-434     // Init the IO APIC
-435     Logger::DEBUG() << "Initialising IO APIC\\n";
-436     m_io_apic = new IOAPIC(acpi);
-437 }
+463 : m_pic_master_command_port(0x20),
+464   m_pic_master_data_port(0x21),
+465   m_pic_slave_command_port(0xA0),
+466   m_pic_slave_data_port(0xA1)
+467 {
+468 
+469     // Register this APIC
+470     Logger::INFO() << "Setting up APIC\\n";
+471     InterruptManager::active_interrupt_manager()\->set_apic(this);
+472 
+473     // Init the Local APIC
+474     Logger::DEBUG() << "Initialising Local APIC\\n";
+475     m_local_apic = new LocalAPIC();
+476 
+477     // Disable the legacy mode PIC
+478     Logger::DEBUG() << "Disabling PIC\\n";
+479     disable_pic();
+480 
+481     // Init the IO APIC
+482     Logger::DEBUG() << "Initialising IO APIC\\n";
+483     m_io_apic = new IOAPIC(acpi);
+484 }
 .fi
 
 .PP
@@ -90,14 +90,14 @@ References \fBMaxOS::hardwarecommunication::InterruptManager::active_interrupt_m
 .PP
 Destroy the Advanced Programmable Interrupt Controller object and frees the Local APIC and IO APIC\&. 
 .PP
-Definition at line \fB442\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB489\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-442                                                                                   {
-443 
-444     // Free the memory
-445     delete m_local_apic;
-446     delete m_io_apic;
-447 }
+489                                                                                   {
+490 
+491     // Free the memory
+492     delete m_local_apic;
+493     delete m_io_apic;
+494 }
 .fi
 
 .SH "Member Function Documentation"
@@ -114,16 +114,16 @@ The io apic
 .PP
 
 .PP
-Definition at line \fB490\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB537\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-490                                                                {
-491 
-492     return m_io_apic;
-493 }
+537                                                                {
+538 
+539     return m_io_apic;
+540 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::system::CPU::find_cores()\fP\&.
+Referenced by \fBMaxOS::system::CPU::find_cores()\fP, and \fBMaxOS::hardwarecommunication::InterruptHandler::InterruptHandler()\fP\&.
 .SS "\fBLocalAPIC\fP * AdvancedProgrammableInterruptController::local_apic () const"
 
 .PP
@@ -136,16 +136,16 @@ The local apic
 .PP
 
 .PP
-Definition at line \fB480\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB527\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-480                                                                      {
-481 
-482     return m_local_apic;
-483 }
+527                                                                      {
+528 
+529     return m_local_apic;
+530 }
 .fi
 
 .PP
-Referenced by \fBMaxOS::drivers::clock::Clock::calibrate()\fP, and \fBMaxOS::system::CPU::CPU()\fP\&.
+Referenced by \fBMaxOS::hardwarecommunication::Clock::calibrate()\fP, \fBMaxOS::system::CPU::CPU()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
 
 .SH "Author"
 .PP 

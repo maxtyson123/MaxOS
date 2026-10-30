@@ -1,0 +1,161 @@
+\doxysection{Max\+OS\+::Log\+Record Class Reference}
+\hypertarget{classMaxOS_1_1LogRecord}{}\label{classMaxOS_1_1LogRecord}\index{MaxOS::LogRecord@{MaxOS::LogRecord}}
+
+
+A single logging event.  
+
+
+
+
+{\ttfamily \#include $<$logger.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1LogRecord_aff8c426b5909d2293cef931d4e31df86}{Log\+Record}} (\mbox{\hyperlink{classMaxOS_1_1Logger}{Logger}} \&logger, \mbox{\hyperlink{logger_8h_a26e76cbb3915e23f58416e56ab0860ae}{Log\+Level}} level)
+\item 
+\mbox{\hyperlink{classMaxOS_1_1LogRecord_ab3e15a5b786ebbcc0f46add0998ea98b}{\texorpdfstring{$\sim$}{\string~}\+Log\+Record}} ()
+\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{classMaxOS_1_1LogRecord}{Log\+Record}} \& \mbox{\hyperlink{classMaxOS_1_1LogRecord_a61df30fd0718594bca1354143966e1ef}{operator$<$$<$}} (const T \&value)
+\item 
+\mbox{\hyperlink{classMaxOS_1_1LogRecord}{Log\+Record}} \& \mbox{\hyperlink{classMaxOS_1_1LogRecord_a214941af49157f1d8ab9b273f483d37a}{operator$<$$<$}} (char c)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A single logging event. 
+
+Definition at line \mbox{\hyperlink{logger_8h_source_l00106}{106}} of file \mbox{\hyperlink{logger_8h_source}{logger.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classMaxOS_1_1LogRecord_aff8c426b5909d2293cef931d4e31df86}\label{classMaxOS_1_1LogRecord_aff8c426b5909d2293cef931d4e31df86} 
+\index{MaxOS::LogRecord@{MaxOS::LogRecord}!LogRecord@{LogRecord}}
+\index{LogRecord@{LogRecord}!MaxOS::LogRecord@{MaxOS::LogRecord}}
+\doxysubsubsection{\texorpdfstring{LogRecord()}{LogRecord()}}
+{\footnotesize\ttfamily Log\+Record\+::\+Log\+Record (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1Logger}{Logger}} \&}]{logger,  }\item[{\mbox{\hyperlink{logger_8h_a26e76cbb3915e23f58416e56ab0860ae}{Log\+Level}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Create a new log record, threadsafe
+
+
+\begin{DoxyParams}{Parameters}
+{\em logger} & The logger to use \\
+\hline
+{\em level} & The level of the log \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{logger_8cpp_source_l00299}{299}} of file \mbox{\hyperlink{logger_8cpp_source}{logger.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00300\ :\ m\_logger(logger)}
+\DoxyCodeLine{00301\ \{}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ logger\ to\ be\ free}}
+\DoxyCodeLine{00304\ \ \ \ \ Logger::s\_loggers\_lock.lock();}
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{keywordflow}{if}\ (level\ !=\ LogLevel::OUT)}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ m\_logger.\mbox{\hyperlink{classMaxOS_1_1Logger_abfa73d8f40cb4e6a17695346cebc8314}{set\_log\_level}}(level);}
+\DoxyCodeLine{00307\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{logger_8cpp_source_l00110}{Max\+OS\+::\+Logger\+::set\+\_\+log\+\_\+level()}}.
+
+\Hypertarget{classMaxOS_1_1LogRecord_ab3e15a5b786ebbcc0f46add0998ea98b}\label{classMaxOS_1_1LogRecord_ab3e15a5b786ebbcc0f46add0998ea98b} 
+\index{MaxOS::LogRecord@{MaxOS::LogRecord}!````~LogRecord@{\texorpdfstring{$\sim$}{\string~}LogRecord}}
+\index{````~LogRecord@{\texorpdfstring{$\sim$}{\string~}LogRecord}!MaxOS::LogRecord@{MaxOS::LogRecord}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}LogRecord()}{\string~LogRecord()}}
+{\footnotesize\ttfamily Log\+Record\+::\texorpdfstring{$\sim$}{\string~}\+Log\+Record (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Destroys the log record, freeing the threadsafe lock 
+
+Definition at line \mbox{\hyperlink{logger_8cpp_source_l00312}{312}} of file \mbox{\hyperlink{logger_8cpp_source}{logger.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \ \ \ \ Logger::s\_loggers\_lock.unlock();}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classMaxOS_1_1LogRecord_a214941af49157f1d8ab9b273f483d37a}\label{classMaxOS_1_1LogRecord_a214941af49157f1d8ab9b273f483d37a} 
+\index{MaxOS::LogRecord@{MaxOS::LogRecord}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!MaxOS::LogRecord@{MaxOS::LogRecord}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1LogRecord}{Log\+Record}} \& Max\+OS\+::\+Log\+Record\+::operator$<$$<$ (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Write a single character to the log
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The character to write \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The \doxylink{classMaxOS_1_1LogRecord}{Log\+Record} instance 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{logger_8h_source_l00133}{133}} of file \mbox{\hyperlink{logger_8h_source}{logger.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_logger.\mbox{\hyperlink{classMaxOS_1_1Logger_a8c9e978ec0d5df76f888bc5249616918}{write\_char}}(c);}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{logger_8cpp_source_l00158}{Max\+OS\+::\+Logger\+::write\+\_\+char()}}.
+
+\Hypertarget{classMaxOS_1_1LogRecord_a61df30fd0718594bca1354143966e1ef}\label{classMaxOS_1_1LogRecord_a61df30fd0718594bca1354143966e1ef} 
+\index{MaxOS::LogRecord@{MaxOS::LogRecord}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!MaxOS::LogRecord@{MaxOS::LogRecord}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{classMaxOS_1_1LogRecord}{Log\+Record}} \& Max\+OS\+::\+Log\+Record\+::operator$<$$<$ (\begin{DoxyParamCaption}\item[{const T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Write a variable to the log
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type of variable to write \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value of the variable to write \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The \doxylink{classMaxOS_1_1LogRecord}{Log\+Record} instance 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{logger_8h_source_l00122}{122}} of file \mbox{\hyperlink{logger_8h_source}{logger.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ m\_logger.write(value);}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/common/\mbox{\hyperlink{logger_8h}{logger.\+h}}\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/common/\mbox{\hyperlink{logger_8cpp}{logger.\+cpp}}\end{DoxyCompactItemize}

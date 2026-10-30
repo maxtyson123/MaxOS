@@ -1,0 +1,76 @@
+\doxysection{slab.\+h}
+\hypertarget{slab_8h_source}{}\label{slab_8h_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/memory/allocator/slab.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/memory/allocator/slab.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00001}00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00002}00002\ \textcolor{comment}{//\ Created\ by\ 98max\ on\ 8/07/2026.}}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00003}00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00005}00005\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_MEMORY\_ALLOCATOR\_SLAB\_H}}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00006}00006\ \textcolor{preprocessor}{\#define\ MAXOS\_MEMORY\_ALLOCATOR\_SLAB\_H}}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <cstddef>}}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00011}00011\ \textcolor{keyword}{namespace\ }MaxOS::memory::allocator\ \{}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00017}\mbox{\hyperlink{structMaxOS_1_1memory_1_1allocator_1_1SlabHeader}{00017}}\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structMaxOS_1_1memory_1_1allocator_1_1SlabHeader}{SlabHeader}}\ \{}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00018}00018\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1allocator_1_1SlabHeader}{SlabHeader}}*\ next;}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00019}00019\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ page;}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00021}00021\ \ \ \ \ \ \ \ \ uint32\_t\ used\_blocks;}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00022}00022\ \ \ \ \ \ \ \ \ uint32\_t\ total\_blocks;}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00024}00024\ \ \ \ \ \ \ \ \ uint64\_t\ block\_state[4];}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00026}00026\ \ \ \ \ \}\ \mbox{\hyperlink{structMaxOS_1_1memory_1_1allocator_1_1SlabHeader}{slab\_header\_t}};}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00032}\mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabCache}{00032}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabCache}{SlabCache}}\ \{}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00034}00034\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\_slab\_size;}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1allocator_1_1SlabHeader}{slab\_header\_t}}*\ m\_root\_slab\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1memory_1_1allocator_1_1SlabHeader}{slab\_header\_t}}*\ new\_slab();}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00042}00042\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabCache}{SlabCache}}(\textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabCache}{\string~SlabCache}}();}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ allocate\_slab();}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \ free\_slav(\textcolor{keywordtype}{void}*\ address);}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00050}00050\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00056}\mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabAllocator}{00056}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabAllocator}{SlabAllocator}}\ \{}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabCache}{SlabCache}}\ m\_caches[8];}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabCache}{SlabCache}}*\ get\_cache(\textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}*\ expand\_heap(\textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}*\ allocate\_extra\_space(\textcolor{keywordtype}{size\_t}\ requested\_size,\ \textcolor{keywordtype}{size\_t}\&\ actual\_size);}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabAllocator}{SlabAllocator}}();}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1allocator_1_1SlabAllocator}{\string~SlabAllocator}}();}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ setup\_region(uintptr\_t\ address,\ \textcolor{keywordtype}{size\_t}\ length);}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}*\ allocate(\textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \ unallocate(\textcolor{keywordtype}{void}*\ pointer);}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{size\_t}\ amount\_used();}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00077}00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{size\_t}\ align(\textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00079}00079\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00080}00080\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00081}00081\ \}}
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{slab_8h_source_l00083}00083\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAXOS\_MEMORY\_ALLOCATOR\_SLAB\_H}}
+
+\end{DoxyCode}

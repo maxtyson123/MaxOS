@@ -6,6 +6,7 @@ Defines structures and a handler for Undefined Behavior Sanitizer (UBSan) runtim
 
 
 {\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$libcommon/assert.\+h$>$}\newline
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -34,7 +35,7 @@ class \mbox{\hyperlink{classMaxOS_1_1runtime_1_1UBSanHandler}{Max\+OS\+::runtime
 \doxysubsubsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
-\#define \mbox{\hyperlink{ubsan_8h_a4dd3c18b7406fa01fd4d60cd4485183a}{ubsan\+\_\+aligned}}(value,  alignment)~!(value \& (alignment -\/ 1))
+\#define \mbox{\hyperlink{ubsan_8h_ad00c497d57e53ff391a678ca4f6b9e46}{UBSAN\+\_\+\+ALIGNED}}(value,  alignment)~((((uintptr\+\_\+t)(value)) \& ((alignment) -\/ 1)) == 0)
 \begin{DoxyCompactList}\small\item\em Check if a value is aligned to the given alignment. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
@@ -92,11 +93,11 @@ Definition in file \mbox{\hyperlink{ubsan_8h_source}{ubsan.\+h}}.
 
 
 \doxysubsection{Macro Definition Documentation}
-\Hypertarget{ubsan_8h_a4dd3c18b7406fa01fd4d60cd4485183a}\label{ubsan_8h_a4dd3c18b7406fa01fd4d60cd4485183a} 
-\index{ubsan.h@{ubsan.h}!ubsan\_aligned@{ubsan\_aligned}}
-\index{ubsan\_aligned@{ubsan\_aligned}!ubsan.h@{ubsan.h}}
-\doxysubsubsection{\texorpdfstring{ubsan\_aligned}{ubsan\_aligned}}
-{\footnotesize\ttfamily \#define ubsan\+\_\+aligned(\begin{DoxyParamCaption}\item[{}]{value,  }\item[{}]{alignment }\end{DoxyParamCaption})~!(value \& (alignment -\/ 1))}
+\Hypertarget{ubsan_8h_ad00c497d57e53ff391a678ca4f6b9e46}\label{ubsan_8h_ad00c497d57e53ff391a678ca4f6b9e46} 
+\index{ubsan.h@{ubsan.h}!UBSAN\_ALIGNED@{UBSAN\_ALIGNED}}
+\index{UBSAN\_ALIGNED@{UBSAN\_ALIGNED}!ubsan.h@{ubsan.h}}
+\doxysubsubsection{\texorpdfstring{UBSAN\_ALIGNED}{UBSAN\_ALIGNED}}
+{\footnotesize\ttfamily \#define UBSAN\+\_\+\+ALIGNED(\begin{DoxyParamCaption}\item[{}]{value,  }\item[{}]{alignment }\end{DoxyParamCaption})~((((uintptr\+\_\+t)(value)) \& ((alignment) -\/ 1)) == 0)}
 
 
 
@@ -104,7 +105,7 @@ Check if a value is aligned to the given alignment.
 
 
 
-Definition at line \mbox{\hyperlink{ubsan_8h_source_l00015}{15}} of file \mbox{\hyperlink{ubsan_8h_source}{ubsan.\+h}}.
+Definition at line \mbox{\hyperlink{ubsan_8h_source_l00017}{17}} of file \mbox{\hyperlink{ubsan_8h_source}{ubsan.\+h}}.
 
 
 
@@ -137,25 +138,25 @@ List of type check errors.
 
 
 
-Definition at line \mbox{\hyperlink{ubsan_8h_source_l00167}{167}} of file \mbox{\hyperlink{ubsan_8h_source}{ubsan.\+h}}.
+Definition at line \mbox{\hyperlink{ubsan_8h_source_l00169}{169}} of file \mbox{\hyperlink{ubsan_8h_source}{ubsan.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}load\ of"{}},}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}store\ to"{}},}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}reference\ binding\ to"{}},}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}member\ access\ within"{}},}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}member\ call\ on"{}},}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}constructor\ call\ on"{}},}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}downcast\ of"{}},}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}downcast\ of"{}},}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}upcast\ of"{}},}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}cast\ to\ virtual\ base\ of"{}},}
-\DoxyCodeLine{00178\ \ \ \ \ \};}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}load\ of"{}},}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}store\ to"{}},}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}reference\ binding\ to"{}},}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}member\ access\ within"{}},}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}member\ call\ on"{}},}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}constructor\ call\ on"{}},}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}downcast\ of"{}},}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}downcast\ of"{}},}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}upcast\ of"{}},}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}cast\ to\ virtual\ base\ of"{}},}
+\DoxyCodeLine{00180\ \ \ \ \ \};}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{ubsan_8cpp_source_l00037}{Max\+OS\+::runtime\+::\+UBSan\+Handler\+::print\+\_\+type\+\_\+mismatch()}}, and \mbox{\hyperlink{ubsan_8cpp_source_l00056}{Max\+OS\+::runtime\+::\+UBSan\+Handler\+::print\+\_\+type\+\_\+mismatch\+\_\+v1()}}.
+Referenced by \mbox{\hyperlink{ubsan_8cpp_source_l00037}{Max\+OS\+::runtime\+::\+UBSan\+Handler\+::print\+\_\+type\+\_\+mismatch()}}, and \mbox{\hyperlink{ubsan_8cpp_source_l00058}{Max\+OS\+::runtime\+::\+UBSan\+Handler\+::print\+\_\+type\+\_\+mismatch\+\_\+v1()}}.
 

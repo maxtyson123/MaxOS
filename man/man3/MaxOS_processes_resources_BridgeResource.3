@@ -1,0 +1,215 @@
+.TH "MaxOS::processes::resources::BridgeResource" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::resources::BridgeResource \- A generic wrapper for a Resource that exists on a userspace server which exposes its operations as Resource operations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <resource_bridge\&.h>\fP
+.PP
+Inherits Resource\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBridgeResource\fP (const string &name, size_t flags, \fBresource_type_t\fP type)"
+.br
+.ti -1c
+.RI "void \fBopen\fP (size_t flags) final"
+.br
+.RI "Opens the resource\&. "
+.ti -1c
+.RI "void \fBclose\fP (size_t flags) final"
+.br
+.RI "Closes the resource\&. "
+.ti -1c
+.RI "int \fBread\fP (void *buffer, size_t size, size_t flags) final"
+.br
+.RI "Reads data from the resource\&. "
+.ti -1c
+.RI "int \fBwrite\fP (const void *buffer, size_t size, size_t flags) final"
+.br
+.RI "write a certain amount of bytes to a resource "
+.ti -1c
+.RI "void \fBattach_wrapper\fP (\fBBridgeHandler\fP *wrapper)"
+.br
+.ti -1c
+.RI "bool \fBget_on_bridge\fP ()"
+.br
+.RI "Attempt to get a resource on a bridge endpoint that may not be registered yet\&. "
+.ti -1c
+.RI "void \fBcreate_on_bridge\fP ()"
+.br
+.RI "Passes the creation of a resource to the bridge\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A generic wrapper for a Resource that exists on a userspace server which exposes its operations as Resource operations\&. 
+.PP
+Definition at line \fB60\fP of file \fBresource_bridge\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "BridgeResource::BridgeResource (const string & name, size_t flags, \fBresource_type_t\fP type)"
+
+.PP
+Definition at line \fB189\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+190 : Resource(name, flags, type)
+191 {
+192 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void BridgeResource::attach_wrapper (\fBBridgeHandler\fP * wrapper)"
+
+.PP
+Definition at line \fB239\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+239                                                           {
+240 
+241     m_handler = wrapper;
+242     m_id = wrapper\->allocate_id();
+243 
+244 }
+.fi
+
+.SS "void BridgeResource::close (size_t flags)\fC [final]\fP"
+
+.PP
+Closes the resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIflags\fP Optional flags to pass (unused by default but resource type specific) 
+.RE
+.PP
+
+.PP
+Definition at line \fB210\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+210                                        {
+211      m_handler \-> send_to_bridge(m_id, ServiceResourceCommand::R_CLOSE, 0,0, flags);
+212 }
+.fi
+
+.SS "void BridgeResource::create_on_bridge ()"
+
+.PP
+Passes the creation of a resource to the bridge\&. 
+.PP
+Definition at line \fB262\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+262                                       {
+263 
+264     // Let the bridge construct the object on its end
+265     m_handler \-> send_to_bridge(m_id, ServiceResourceCommand::S_CREATE, name()\&.c_str(),name()\&.length() + 1, 0);
+266 
+267 }
+.fi
+
+.SS "bool BridgeResource::get_on_bridge ()"
+
+.PP
+Attempt to get a resource on a bridge endpoint that may not be registered yet\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if the resource can be fetched, False otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB251\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+251                                    {
+252 
+253    // Let the bridge get the object on its end
+254    return m_handler \-> send_to_bridge(m_id, ServiceResourceCommand::S_GET, name()\&.c_str(),name()\&.length() + 1, 0) > 0;
+255 
+256 
+257 }
+.fi
+
+.SS "void BridgeResource::open (size_t flags)\fC [final]\fP"
+
+.PP
+Opens the resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIflags\fP Optional flags to pass (unused by default but resource type specific) 
+.RE
+.PP
+
+.PP
+Definition at line \fB201\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+201                                       {
+202      m_handler \-> send_to_bridge(m_id, ServiceResourceCommand::R_OPEN, 0,0, flags);
+203 }
+.fi
+
+.SS "int BridgeResource::read (void * buffer, size_t size, size_t flags)\fC [final]\fP"
+
+.PP
+Reads data from the resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to read into 
+.br
+\fIsize\fP The number of bytes to read 
+.br
+\fIflags\fP The flags to pass to the reading
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully read or -1 on error 
+.RE
+.PP
+
+.PP
+Definition at line \fB223\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+223                                                                 {
+224     return m_handler \-> send_to_bridge(m_id, ServiceResourceCommand::R_READ, buffer, size, flags);
+225 }
+.fi
+
+.SS "int BridgeResource::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP"
+
+.PP
+write a certain amount of bytes to a resource 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to read from 
+.br
+\fIsize\fP How many bytes to write 
+.br
+\fIflags\fP Optional flags to pass (unused by default but resource type specific) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+How many bytes were successfully written 
+.RE
+.PP
+
+.PP
+Definition at line \fB235\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+235                                                                        {
+236     return m_handler \-> send_to_bridge(m_id, ServiceResourceCommand::R_WRITE, buffer, size, flags);
+237 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

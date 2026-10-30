@@ -1,0 +1,131 @@
+.TH "MaxOS::LogRecord" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::LogRecord \- A single logging event\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <logger\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLogRecord\fP (\fBLogger\fP &logger, \fBLogLevel\fP level)"
+.br
+.ti -1c
+.RI "\fB~LogRecord\fP ()"
+.br
+.ti -1c
+.RI "template<typename T > \fBLogRecord\fP & \fBoperator<<\fP (const T &value)"
+.br
+.ti -1c
+.RI "\fBLogRecord\fP & \fBoperator<<\fP (char c)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A single logging event\&. 
+.PP
+Definition at line \fB106\fP of file \fBlogger\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "LogRecord::LogRecord (\fBLogger\fP & logger, \fBLogLevel\fP level)\fC [explicit]\fP"
+Create a new log record, threadsafe
+.PP
+\fBParameters\fP
+.RS 4
+\fIlogger\fP The logger to use 
+.br
+\fIlevel\fP The level of the log 
+.RE
+.PP
+
+.PP
+Definition at line \fB299\fP of file \fBlogger\&.cpp\fP\&..PP
+.nf
+300 : m_logger(logger)
+301 {
+302 
+303     // Wait for the logger to be free
+304     Logger::s_loggers_lock\&.lock();
+305     if (level != LogLevel::OUT)
+306         m_logger\&.set_log_level(level);
+307 }
+.fi
+
+.PP
+References \fBMaxOS::Logger::set_log_level()\fP\&.
+.SS "LogRecord::~LogRecord ()"
+Destroys the log record, freeing the threadsafe lock 
+.PP
+Definition at line \fB312\fP of file \fBlogger\&.cpp\fP\&..PP
+.nf
+312                       {
+313 
+314     Logger::s_loggers_lock\&.unlock();
+315 
+316 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBLogRecord\fP & MaxOS::LogRecord::operator<< (char c)\fC [inline]\fP"
+Write a single character to the log
+.PP
+\fBParameters\fP
+.RS 4
+\fIc\fP The character to write 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The \fBLogRecord\fP instance 
+.RE
+.PP
+
+.PP
+Definition at line \fB133\fP of file \fBlogger\&.h\fP\&..PP
+.nf
+133                                             {
+134                 m_logger\&.write_char(c);
+135                 return *this;
+136             }
+.fi
+
+.PP
+References \fBMaxOS::Logger::write_char()\fP\&.
+.SS "template<typename T > \fBLogRecord\fP & MaxOS::LogRecord::operator<< (const T & value)\fC [inline]\fP"
+Write a variable to the log
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIT\fP The type of variable to write 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The value of the variable to write 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The \fBLogRecord\fP instance 
+.RE
+.PP
+
+.PP
+Definition at line \fB122\fP of file \fBlogger\&.h\fP\&..PP
+.nf
+122                                                                          {
+123                 m_logger\&.write(value);
+124                 return *this;
+125             }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

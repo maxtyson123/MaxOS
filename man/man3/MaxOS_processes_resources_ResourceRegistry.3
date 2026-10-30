@@ -1,0 +1,165 @@
+.TH "MaxOS::processes::resources::ResourceRegistry< Type >" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::resources::ResourceRegistry< Type > \- A resource registry for a specific resource type\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <resource\&.h>\fP
+.PP
+Inherits \fBMaxOS::processes::resources::BaseResourceRegistry\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBResourceRegistry\fP (\fBresource_type_t\fP \fBtype\fP)"
+.br
+.RI "Constructor for \fBResourceRegistry\fP of a specific type\&. "
+.ti -1c
+.RI "\fBResource\fP * \fBcreate_resource\fP (const string &name, size_t flags, uintptr_t data) override"
+.br
+.RI "Create a new resource of the specific type\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::processes::resources::BaseResourceRegistry\fP
+.in +1c
+.ti -1c
+.RI "\fBBaseResourceRegistry\fP (\fBresource_type_t\fP \fBtype\fP)"
+.br
+.RI "Constructs a new \fBBaseResourceRegistry\fP object and registers it globally\&. "
+.ti -1c
+.RI "\fB~BaseResourceRegistry\fP ()"
+.br
+.RI "Destructor for \fBBaseResourceRegistry\fP, removes it from the global list\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of resources this registry handles\&. "
+.ti -1c
+.RI "bool \fBregister_resource\fP (\fBResource\fP *resource)"
+.br
+.RI "Registers a resource in the registry\&. "
+.ti -1c
+.RI "void \fBclose_resource\fP (\fBResource\fP *resource, size_t flags)"
+.br
+.RI "Close the resource provided, if it exists in this registry\&. "
+.ti -1c
+.RI "virtual \fBResource\fP * \fBget_resource\fP (const string &name)"
+.br
+.RI "Gets a resource from the registry by name\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::processes::resources::BaseResourceRegistry\fP
+.in +1c
+.ti -1c
+.RI "common::Map< string, \fBResource\fP * > \fBm_resources\fP"
+.br
+.RI "The map of resource names to resource instances\&. "
+.ti -1c
+.RI "common::Map< string, uint64_t > \fBm_resource_uses\fP"
+.br
+.RI "The map of resource names to how many processes are using them\&. "
+.ti -1c
+.RI "common::Spinlock \fBm_lock\fP"
+.br
+.RI "The lock to make the registry threadsafe\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBm_type\fP"
+.br
+.RI "The resource type that this registry manages\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Type>
+.br
+class MaxOS::processes::resources::ResourceRegistry< Type >"A resource registry for a specific resource type\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The resource type that this registry manages 
+.RE
+.PP
+
+.PP
+Definition at line \fB61\fP of file \fBresource\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Type > \fBMaxOS::processes::resources::ResourceRegistry\fP< Type >::ResourceRegistry (\fBresource_type_t\fP type)\fC [explicit]\fP"
+
+.PP
+Constructor for \fBResourceRegistry\fP of a specific type\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The resource type that this registry manages 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The resource type enum value 
+.RE
+.PP
+
+.PP
+Definition at line \fB94\fP of file \fBresource\&.h\fP\&..PP
+.nf
+95             :BaseResourceRegistry(type) { }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Type > \fBResource\fP * \fBMaxOS::processes::resources::ResourceRegistry\fP< Type >::create_resource (const string & name, size_t flags, uintptr_t data)\fC [inline]\fP, \fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Create a new resource of the specific type\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource 
+.br
+\fIflags\fP The flags to open the resource with 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The created resource, or nullptr on failure 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::resources::BaseResourceRegistry\fP\&.
+.PP
+Reimplemented in \fBMaxOS::processes::resources::ThreadResourceRegistry\fP\&.
+.PP
+Definition at line \fB74\fP of file \fBresource\&.h\fP\&..PP
+.nf
+74                                                                                                  {
+75 
+76                 auto resource = new Type(name, flags, type());
+77 
+78                 // Creation failed
+79                 if(!register_resource(resource)) {
+80                     delete resource;
+81                     return nullptr;
+82                 }
+83 
+84                 return resource;
+85             }
+.fi
+
+.PP
+References \fBMaxOS::processes::resources::BaseResourceRegistry::register_resource()\fP, and \fBMaxOS::processes::resources::BaseResourceRegistry::type()\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::resources::ThreadResourceRegistry::create_resource()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

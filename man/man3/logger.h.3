@@ -7,11 +7,11 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <common/outputStream\&.h>\fP
+\fC#include <libcommon/outputStream\&.h>\fP
 .br
-\fC#include <common/colour\&.h>\fP
+\fC#include <libcommon/colour\&.h>\fP
 .br
-\fC#include <common/spinlock\&.h>\fP
+\fC#include <libcommon/spinlock\&.h>\fP
 .br
 
 .SS "Classes"
@@ -21,20 +21,16 @@
 .RI "class \fBMaxOS::Logger\fP"
 .br
 .RI "A class that handles logging messages to the console and files\&. "
-.in -1c
-.SS "Macros"
-
-.in +1c
 .ti -1c
-.RI "#define \fBASSERT\fP(condition,  format, \&.\&.\&.)   Logger::ASSERT(condition, format, ##__VA_ARGS__)"
+.RI "class \fBMaxOS::LogRecord\fP"
 .br
-.RI "If the specified condition is not met then the kernel will crash with the specified message\&. "
+.RI "A single logging event\&. "
 .in -1c
 .SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "enum class \fBMaxOS::LogLevel\fP { \fBERROR\fP, \fBWARNING\fP, \fBHEADER\fP, \fBINFO\fP, \fBTEST\fP, \fBDEBUG\fP }"
+.RI "enum class \fBMaxOS::LogLevel\fP { \fBOUT\fP, \fBERROR\fP, \fBWARNING\fP, \fBHEADER\fP, \fBINFO\fP, \fBTEST\fP, \fBDEBUG\fP }"
 .br
 .RI "Priority levels for logging messages\&. Different levels may be used to filter messages based on their importance depending on build type\&. "
 .in -1c
@@ -63,36 +59,17 @@ Defines a Logger class for logging messages with different severity levels to mu
 .PP
 \fBAuthor\fP
 .RS 4
-Max Tyson 
+Max Tyson
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+move somewhere else (maybe even commonlib), rename common/ to generated/ 
 .RE
 .PP
 
 .PP
 Definition in file \fBlogger\&.h\fP\&.
-.SH "Macro Definition Documentation"
-.PP 
-.SS "#define ASSERT(condition, format,  \&.\&.\&.)   Logger::ASSERT(condition, format, ##__VA_ARGS__)"
-
-.PP
-If the specified condition is not met then the kernel will crash with the specified message\&. This macro wraps Logger::ASSERT and supports printf-style formatting with variadic arguments\&.
-.PP
-\fBParameters\fP
-.RS 4
-\fIcondition\fP The condition to check\&. 
-.br
-\fIformat\fP The format string (like printf)\&. 
-.br
-\fI\&.\&.\&.\fP Additional arguments to format\&.
-.RE
-.PP
-\fBSee also\fP
-.RS 4
-Logger::ASSERT 
-.RE
-.PP
-
-.PP
-Definition at line \fB100\fP of file \fBlogger\&.h\fP\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum class \fBMaxOS::LogLevel\fP\fC [strong]\fP"
@@ -100,16 +77,17 @@ Definition at line \fB100\fP of file \fBlogger\&.h\fP\&.
 .PP
 Priority levels for logging messages\&. Different levels may be used to filter messages based on their importance depending on build type\&. 
 .PP
-Definition at line \fB23\fP of file \fBlogger\&.h\fP\&..PP
+Definition at line \fB25\fP of file \fBlogger\&.h\fP\&..PP
 .nf
-23                         {
-24         ERROR,
-25         WARNING,
-26         HEADER,
-27         INFO,
-28         TEST,
-29         DEBUG,
-30     };
+25                         {
+26         OUT,
+27         ERROR,
+28         WARNING,
+29         HEADER,
+30         INFO,
+31         TEST,
+32         DEBUG,
+33     };
 .fi
 
 .SH "Variable Documentation"
@@ -119,7 +97,7 @@ Definition at line \fB23\fP of file \fBlogger\&.h\fP\&..PP
 .PP
 The maximum log level for this build (messages above this level will not be logged) 
 .PP
-Definition at line \fB37\fP of file \fBlogger\&.h\fP\&.
+Definition at line \fB40\fP of file \fBlogger\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::Logger::write_char()\fP\&.
 .SS "constexpr uint8_t MaxOS::MAX_LOG_WRITERS = 5\fC [constexpr]\fP"
@@ -127,7 +105,7 @@ Referenced by \fBMaxOS::Logger::write_char()\fP\&.
 .PP
 The maximum number of log writers that can be added to the logger\&. 
 .PP
-Definition at line \fB33\fP of file \fBlogger\&.h\fP\&.
+Definition at line \fB36\fP of file \fBlogger\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::Logger::add_log_writer()\fP\&.
 .SH "Author"

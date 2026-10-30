@@ -1,0 +1,337 @@
+\doxysection{framebuffer.\+h}
+\hypertarget{framebuffer_8h_source}{}\label{framebuffer_8h_source}\index{/home/runner/work/MaxOS/MaxOS/kernel/include/console/framebuffer.h@{/home/runner/work/MaxOS/MaxOS/kernel/include/console/framebuffer.h}}
+\mbox{\hyperlink{framebuffer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00009}00009\ \textcolor{preprocessor}{\#ifndef\ MAXOS\_CONSOLE\_VESABOOTCONSOLE\_H}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00010}00010\ \textcolor{preprocessor}{\#define\ MAXOS\_CONSOLE\_VESABOOTCONSOLE\_H}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <libcommon/colour.h>}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <libcommon/mem.h>}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00017}00017\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{console_8h}{console/console.h}}>}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00018}00018\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logo_8h}{common/logo.h}}>}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00019}00019\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logo__kp_8h}{common/logo\_kp.h}}>}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00020}00020\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{graphicsContext_8h}{common/graphicsContext.h}}>}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00021}00021\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{cpu_8h}{system/cpu.h}}>}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00022}00022\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{memorymanagement_8h}{memory/memorymanagement.h}}>}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00025}00025\ \textcolor{keyword}{namespace\ }MaxOS::console\ \{}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00027}00027\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ uint8\_t\ AMIGA\_FONT[2048]\ =\ \ \{}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00028}00028\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00029}00029\ \ \ \ \ 0x7E,\ 0x81,\ 0xA5,\ 0x81,\ 0xBD,\ 0x99,\ 0x81,\ 0x7E,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00030}00030\ \ \ \ \ 0x7E,\ 0xFF,\ 0xDB,\ 0xFF,\ 0xC3,\ 0xE7,\ 0xFF,\ 0x7E,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00031}00031\ \ \ \ \ 0x6C,\ 0xFE,\ 0xFE,\ 0xFE,\ 0x7C,\ 0x38,\ 0x10,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00032}00032\ \ \ \ \ 0x10,\ 0x38,\ 0x7C,\ 0xFE,\ 0x7C,\ 0x38,\ 0x10,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00033}00033\ \ \ \ \ 0x38,\ 0x7C,\ 0x38,\ 0xFE,\ 0xFE,\ 0x92,\ 0x10,\ 0x7C,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00034}00034\ \ \ \ \ 0x00,\ 0x10,\ 0x38,\ 0x7C,\ 0xFE,\ 0x7C,\ 0x38,\ 0x7C,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00035}00035\ \ \ \ \ 0x00,\ 0x00,\ 0x18,\ 0x3C,\ 0x3C,\ 0x18,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00036}00036\ \ \ \ \ 0xFF,\ 0xFF,\ 0xE7,\ 0xC3,\ 0xC3,\ 0xE7,\ 0xFF,\ 0xFF,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00037}00037\ \ \ \ \ 0x00,\ 0x3C,\ 0x66,\ 0x42,\ 0x42,\ 0x66,\ 0x3C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00038}00038\ \ \ \ \ 0xFF,\ 0xC3,\ 0x99,\ 0xBD,\ 0xBD,\ 0x99,\ 0xC3,\ 0xFF,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00039}00039\ \ \ \ \ 0x0F,\ 0x07,\ 0x0F,\ 0x7D,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x78,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00040}00040\ \ \ \ \ 0x3C,\ 0x66,\ 0x66,\ 0x66,\ 0x3C,\ 0x18,\ 0x7E,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00041}00041\ \ \ \ \ 0x3F,\ 0x33,\ 0x3F,\ 0x30,\ 0x30,\ 0x70,\ 0xF0,\ 0xE0,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00042}00042\ \ \ \ \ 0x7F,\ 0x63,\ 0x7F,\ 0x63,\ 0x63,\ 0x67,\ 0xE6,\ 0xC0,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00043}00043\ \ \ \ \ 0x99,\ 0x5A,\ 0x3C,\ 0xE7,\ 0xE7,\ 0x3C,\ 0x5A,\ 0x99,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00044}00044\ \ \ \ \ 0x80,\ 0xE0,\ 0xF8,\ 0xFE,\ 0xF8,\ 0xE0,\ 0x80,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00045}00045\ \ \ \ \ 0x02,\ 0x0E,\ 0x3E,\ 0xFE,\ 0x3E,\ 0x0E,\ 0x02,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00046}00046\ \ \ \ \ 0x18,\ 0x3C,\ 0x7E,\ 0x18,\ 0x18,\ 0x7E,\ 0x3C,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00047}00047\ \ \ \ \ 0x66,\ 0x66,\ 0x66,\ 0x66,\ 0x66,\ 0x00,\ 0x66,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00048}00048\ \ \ \ \ 0x7F,\ 0xDB,\ 0xDB,\ 0x7B,\ 0x1B,\ 0x1B,\ 0x1B,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00049}00049\ \ \ \ \ 0x3E,\ 0x63,\ 0x38,\ 0x6C,\ 0x6C,\ 0x38,\ 0x86,\ 0xFC,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00050}00050\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x7E,\ 0x7E,\ 0x7E,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00051}00051\ \ \ \ \ 0x18,\ 0x3C,\ 0x7E,\ 0x18,\ 0x7E,\ 0x3C,\ 0x18,\ 0xFF,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00052}00052\ \ \ \ \ 0x18,\ 0x3C,\ 0x7E,\ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00053}00053\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x7E,\ 0x3C,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00054}00054\ \ \ \ \ 0x00,\ 0x18,\ 0x0C,\ 0xFE,\ 0x0C,\ 0x18,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00055}00055\ \ \ \ \ 0x00,\ 0x30,\ 0x60,\ 0xFE,\ 0x60,\ 0x30,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00056}00056\ \ \ \ \ 0x00,\ 0x00,\ 0xC0,\ 0xC0,\ 0xC0,\ 0xFE,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00057}00057\ \ \ \ \ 0x00,\ 0x24,\ 0x66,\ 0xFF,\ 0x66,\ 0x24,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00058}00058\ \ \ \ \ 0x00,\ 0x18,\ 0x3C,\ 0x7E,\ 0xFF,\ 0xFF,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00059}00059\ \ \ \ \ 0x00,\ 0xFF,\ 0xFF,\ 0x7E,\ 0x3C,\ 0x18,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00060}00060\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00061}00061\ \ \ \ \ 0x18,\ 0x3C,\ 0x3C,\ 0x18,\ 0x18,\ 0x00,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00062}00062\ \ \ \ \ 0x6C,\ 0x6C,\ 0x6C,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00063}00063\ \ \ \ \ 0x6C,\ 0x6C,\ 0xFE,\ 0x6C,\ 0xFE,\ 0x6C,\ 0x6C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00064}00064\ \ \ \ \ 0x18,\ 0x7E,\ 0xC0,\ 0x7C,\ 0x06,\ 0xFC,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00065}00065\ \ \ \ \ 0x00,\ 0xC6,\ 0xCC,\ 0x18,\ 0x30,\ 0x66,\ 0xC6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00066}00066\ \ \ \ \ 0x38,\ 0x6C,\ 0x38,\ 0x76,\ 0xDC,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00067}00067\ \ \ \ \ 0x30,\ 0x30,\ 0x60,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00068}00068\ \ \ \ \ 0x18,\ 0x30,\ 0x60,\ 0x60,\ 0x60,\ 0x30,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00069}00069\ \ \ \ \ 0x60,\ 0x30,\ 0x18,\ 0x18,\ 0x18,\ 0x30,\ 0x60,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00070}00070\ \ \ \ \ 0x00,\ 0x66,\ 0x3C,\ 0xFF,\ 0x3C,\ 0x66,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00071}00071\ \ \ \ \ 0x00,\ 0x18,\ 0x18,\ 0x7E,\ 0x18,\ 0x18,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00072}00072\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x18,\ 0x18,\ 0x30,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00073}00073\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x7E,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00074}00074\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x18,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00075}00075\ \ \ \ \ 0x06,\ 0x0C,\ 0x18,\ 0x30,\ 0x60,\ 0xC0,\ 0x80,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00076}00076\ \ \ \ \ 0x7C,\ 0xCE,\ 0xDE,\ 0xF6,\ 0xE6,\ 0xC6,\ 0x7C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00077}00077\ \ \ \ \ 0x30,\ 0x70,\ 0x30,\ 0x30,\ 0x30,\ 0x30,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00078}00078\ \ \ \ \ 0x78,\ 0xCC,\ 0x0C,\ 0x38,\ 0x60,\ 0xCC,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00079}00079\ \ \ \ \ 0x78,\ 0xCC,\ 0x0C,\ 0x38,\ 0x0C,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00080}00080\ \ \ \ \ 0x1C,\ 0x3C,\ 0x6C,\ 0xCC,\ 0xFE,\ 0x0C,\ 0x1E,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00081}00081\ \ \ \ \ 0xFC,\ 0xC0,\ 0xF8,\ 0x0C,\ 0x0C,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00082}00082\ \ \ \ \ 0x38,\ 0x60,\ 0xC0,\ 0xF8,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00083}00083\ \ \ \ \ 0xFC,\ 0xCC,\ 0x0C,\ 0x18,\ 0x30,\ 0x30,\ 0x30,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00084}00084\ \ \ \ \ 0x78,\ 0xCC,\ 0xCC,\ 0x78,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00085}00085\ \ \ \ \ 0x78,\ 0xCC,\ 0xCC,\ 0x7C,\ 0x0C,\ 0x18,\ 0x70,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00086}00086\ \ \ \ \ 0x00,\ 0x18,\ 0x18,\ 0x00,\ 0x00,\ 0x18,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00087}00087\ \ \ \ \ 0x00,\ 0x18,\ 0x18,\ 0x00,\ 0x00,\ 0x18,\ 0x18,\ 0x30,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00088}00088\ \ \ \ \ 0x18,\ 0x30,\ 0x60,\ 0xC0,\ 0x60,\ 0x30,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00089}00089\ \ \ \ \ 0x00,\ 0x00,\ 0x7E,\ 0x00,\ 0x7E,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00090}00090\ \ \ \ \ 0x60,\ 0x30,\ 0x18,\ 0x0C,\ 0x18,\ 0x30,\ 0x60,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00091}00091\ \ \ \ \ 0x3C,\ 0x66,\ 0x0C,\ 0x18,\ 0x18,\ 0x00,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00092}00092\ \ \ \ \ 0x7C,\ 0xC6,\ 0xDE,\ 0xDE,\ 0xDC,\ 0xC0,\ 0x7C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00093}00093\ \ \ \ \ 0x30,\ 0x78,\ 0xCC,\ 0xCC,\ 0xFC,\ 0xCC,\ 0xCC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00094}00094\ \ \ \ \ 0xFC,\ 0x66,\ 0x66,\ 0x7C,\ 0x66,\ 0x66,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00095}00095\ \ \ \ \ 0x3C,\ 0x66,\ 0xC0,\ 0xC0,\ 0xC0,\ 0x66,\ 0x3C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00096}00096\ \ \ \ \ 0xF8,\ 0x6C,\ 0x66,\ 0x66,\ 0x66,\ 0x6C,\ 0xF8,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00097}00097\ \ \ \ \ 0xFE,\ 0x62,\ 0x68,\ 0x78,\ 0x68,\ 0x62,\ 0xFE,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00098}00098\ \ \ \ \ 0xFE,\ 0x62,\ 0x68,\ 0x78,\ 0x68,\ 0x60,\ 0xF0,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00099}00099\ \ \ \ \ 0x3C,\ 0x66,\ 0xC0,\ 0xC0,\ 0xCE,\ 0x66,\ 0x3A,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00100}00100\ \ \ \ \ 0xCC,\ 0xCC,\ 0xCC,\ 0xFC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00101}00101\ \ \ \ \ 0x78,\ 0x30,\ 0x30,\ 0x30,\ 0x30,\ 0x30,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00102}00102\ \ \ \ \ 0x1E,\ 0x0C,\ 0x0C,\ 0x0C,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00103}00103\ \ \ \ \ 0xE6,\ 0x66,\ 0x6C,\ 0x78,\ 0x6C,\ 0x66,\ 0xE6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00104}00104\ \ \ \ \ 0xF0,\ 0x60,\ 0x60,\ 0x60,\ 0x62,\ 0x66,\ 0xFE,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00105}00105\ \ \ \ \ 0xC6,\ 0xEE,\ 0xFE,\ 0xFE,\ 0xD6,\ 0xC6,\ 0xC6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00106}00106\ \ \ \ \ 0xC6,\ 0xE6,\ 0xF6,\ 0xDE,\ 0xCE,\ 0xC6,\ 0xC6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00107}00107\ \ \ \ \ 0x38,\ 0x6C,\ 0xC6,\ 0xC6,\ 0xC6,\ 0x6C,\ 0x38,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00108}00108\ \ \ \ \ 0xFC,\ 0x66,\ 0x66,\ 0x7C,\ 0x60,\ 0x60,\ 0xF0,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00109}00109\ \ \ \ \ 0x7C,\ 0xC6,\ 0xC6,\ 0xC6,\ 0xD6,\ 0x7C,\ 0x0E,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00110}00110\ \ \ \ \ 0xFC,\ 0x66,\ 0x66,\ 0x7C,\ 0x6C,\ 0x66,\ 0xE6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00111}00111\ \ \ \ \ 0x7C,\ 0xC6,\ 0xE0,\ 0x78,\ 0x0E,\ 0xC6,\ 0x7C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00112}00112\ \ \ \ \ 0xFC,\ 0xB4,\ 0x30,\ 0x30,\ 0x30,\ 0x30,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00113}00113\ \ \ \ \ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00114}00114\ \ \ \ \ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x78,\ 0x30,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00115}00115\ \ \ \ \ 0xC6,\ 0xC6,\ 0xC6,\ 0xC6,\ 0xD6,\ 0xFE,\ 0x6C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00116}00116\ \ \ \ \ 0xC6,\ 0xC6,\ 0x6C,\ 0x38,\ 0x6C,\ 0xC6,\ 0xC6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00117}00117\ \ \ \ \ 0xCC,\ 0xCC,\ 0xCC,\ 0x78,\ 0x30,\ 0x30,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00118}00118\ \ \ \ \ 0xFE,\ 0xC6,\ 0x8C,\ 0x18,\ 0x32,\ 0x66,\ 0xFE,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00119}00119\ \ \ \ \ 0x78,\ 0x60,\ 0x60,\ 0x60,\ 0x60,\ 0x60,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00120}00120\ \ \ \ \ 0xC0,\ 0x60,\ 0x30,\ 0x18,\ 0x0C,\ 0x06,\ 0x02,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00121}00121\ \ \ \ \ 0x78,\ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00122}00122\ \ \ \ \ 0x10,\ 0x38,\ 0x6C,\ 0xC6,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00123}00123\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0xFF,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00124}00124\ \ \ \ \ 0x30,\ 0x30,\ 0x18,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00125}00125\ \ \ \ \ 0x00,\ 0x00,\ 0x78,\ 0x0C,\ 0x7C,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00126}00126\ \ \ \ \ 0xE0,\ 0x60,\ 0x60,\ 0x7C,\ 0x66,\ 0x66,\ 0xDC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00127}00127\ \ \ \ \ 0x00,\ 0x00,\ 0x78,\ 0xCC,\ 0xC0,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00128}00128\ \ \ \ \ 0x1C,\ 0x0C,\ 0x0C,\ 0x7C,\ 0xCC,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00129}00129\ \ \ \ \ 0x00,\ 0x00,\ 0x78,\ 0xCC,\ 0xFC,\ 0xC0,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00130}00130\ \ \ \ \ 0x38,\ 0x6C,\ 0x64,\ 0xF0,\ 0x60,\ 0x60,\ 0xF0,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00131}00131\ \ \ \ \ 0x00,\ 0x00,\ 0x76,\ 0xCC,\ 0xCC,\ 0x7C,\ 0x0C,\ 0xF8,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00132}00132\ \ \ \ \ 0xE0,\ 0x60,\ 0x6C,\ 0x76,\ 0x66,\ 0x66,\ 0xE6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00133}00133\ \ \ \ \ 0x30,\ 0x00,\ 0x70,\ 0x30,\ 0x30,\ 0x30,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00134}00134\ \ \ \ \ 0x0C,\ 0x00,\ 0x1C,\ 0x0C,\ 0x0C,\ 0xCC,\ 0xCC,\ 0x78,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00135}00135\ \ \ \ \ 0xE0,\ 0x60,\ 0x66,\ 0x6C,\ 0x78,\ 0x6C,\ 0xE6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00136}00136\ \ \ \ \ 0x70,\ 0x30,\ 0x30,\ 0x30,\ 0x30,\ 0x30,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00137}00137\ \ \ \ \ 0x00,\ 0x00,\ 0xCC,\ 0xFE,\ 0xFE,\ 0xD6,\ 0xD6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00138}00138\ \ \ \ \ 0x00,\ 0x00,\ 0xB8,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00139}00139\ \ \ \ \ 0x00,\ 0x00,\ 0x78,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00140}00140\ \ \ \ \ 0x00,\ 0x00,\ 0xDC,\ 0x66,\ 0x66,\ 0x7C,\ 0x60,\ 0xF0,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00141}00141\ \ \ \ \ 0x00,\ 0x00,\ 0x76,\ 0xCC,\ 0xCC,\ 0x7C,\ 0x0C,\ 0x1E,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00142}00142\ \ \ \ \ 0x00,\ 0x00,\ 0xDC,\ 0x76,\ 0x62,\ 0x60,\ 0xF0,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00143}00143\ \ \ \ \ 0x00,\ 0x00,\ 0x7C,\ 0xC0,\ 0x70,\ 0x1C,\ 0xF8,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00144}00144\ \ \ \ \ 0x10,\ 0x30,\ 0xFC,\ 0x30,\ 0x30,\ 0x34,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00145}00145\ \ \ \ \ 0x00,\ 0x00,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00146}00146\ \ \ \ \ 0x00,\ 0x00,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x78,\ 0x30,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00147}00147\ \ \ \ \ 0x00,\ 0x00,\ 0xC6,\ 0xC6,\ 0xD6,\ 0xFE,\ 0x6C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00148}00148\ \ \ \ \ 0x00,\ 0x00,\ 0xC6,\ 0x6C,\ 0x38,\ 0x6C,\ 0xC6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00149}00149\ \ \ \ \ 0x00,\ 0x00,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x7C,\ 0x0C,\ 0xF8,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00150}00150\ \ \ \ \ 0x00,\ 0x00,\ 0xFC,\ 0x98,\ 0x30,\ 0x64,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00151}00151\ \ \ \ \ 0x1C,\ 0x30,\ 0x30,\ 0xE0,\ 0x30,\ 0x30,\ 0x1C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00152}00152\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x00,\ 0x18,\ 0x18,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00153}00153\ \ \ \ \ 0xE0,\ 0x30,\ 0x30,\ 0x1C,\ 0x30,\ 0x30,\ 0xE0,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00154}00154\ \ \ \ \ 0x76,\ 0xDC,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00155}00155\ \ \ \ \ 0x00,\ 0x10,\ 0x38,\ 0x6C,\ 0xC6,\ 0xC6,\ 0xFE,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00156}00156\ \ \ \ \ 0x7C,\ 0xC6,\ 0xC0,\ 0xC6,\ 0x7C,\ 0x0C,\ 0x06,\ 0x7C,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00157}00157\ \ \ \ \ 0x00,\ 0xCC,\ 0x00,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00158}00158\ \ \ \ \ 0x1C,\ 0x00,\ 0x78,\ 0xCC,\ 0xFC,\ 0xC0,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00159}00159\ \ \ \ \ 0x7E,\ 0x81,\ 0x3C,\ 0x06,\ 0x3E,\ 0x66,\ 0x3B,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00160}00160\ \ \ \ \ 0xCC,\ 0x00,\ 0x78,\ 0x0C,\ 0x7C,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00161}00161\ \ \ \ \ 0xE0,\ 0x00,\ 0x78,\ 0x0C,\ 0x7C,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00162}00162\ \ \ \ \ 0x30,\ 0x30,\ 0x78,\ 0x0C,\ 0x7C,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00163}00163\ \ \ \ \ 0x00,\ 0x00,\ 0x7C,\ 0xC6,\ 0xC0,\ 0x78,\ 0x0C,\ 0x38,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00164}00164\ \ \ \ \ 0x7E,\ 0x81,\ 0x3C,\ 0x66,\ 0x7E,\ 0x60,\ 0x3C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00165}00165\ \ \ \ \ 0xCC,\ 0x00,\ 0x78,\ 0xCC,\ 0xFC,\ 0xC0,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00166}00166\ \ \ \ \ 0xE0,\ 0x00,\ 0x78,\ 0xCC,\ 0xFC,\ 0xC0,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00167}00167\ \ \ \ \ 0xCC,\ 0x00,\ 0x70,\ 0x30,\ 0x30,\ 0x30,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00168}00168\ \ \ \ \ 0x7C,\ 0x82,\ 0x38,\ 0x18,\ 0x18,\ 0x18,\ 0x3C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00169}00169\ \ \ \ \ 0xE0,\ 0x00,\ 0x70,\ 0x30,\ 0x30,\ 0x30,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00170}00170\ \ \ \ \ 0xC6,\ 0x10,\ 0x7C,\ 0xC6,\ 0xFE,\ 0xC6,\ 0xC6,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00171}00171\ \ \ \ \ 0x30,\ 0x30,\ 0x00,\ 0x78,\ 0xCC,\ 0xFC,\ 0xCC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00172}00172\ \ \ \ \ 0x1C,\ 0x00,\ 0xFC,\ 0x60,\ 0x78,\ 0x60,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00173}00173\ \ \ \ \ 0x00,\ 0x00,\ 0x7F,\ 0x0C,\ 0x7F,\ 0xCC,\ 0x7F,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00174}00174\ \ \ \ \ 0x3E,\ 0x6C,\ 0xCC,\ 0xFE,\ 0xCC,\ 0xCC,\ 0xCE,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00175}00175\ \ \ \ \ 0x78,\ 0x84,\ 0x00,\ 0x78,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00176}00176\ \ \ \ \ 0x00,\ 0xCC,\ 0x00,\ 0x78,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00177}00177\ \ \ \ \ 0x00,\ 0xE0,\ 0x00,\ 0x78,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00178}00178\ \ \ \ \ 0x78,\ 0x84,\ 0x00,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00179}00179\ \ \ \ \ 0x00,\ 0xE0,\ 0x00,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00180}00180\ \ \ \ \ 0x00,\ 0xCC,\ 0x00,\ 0xCC,\ 0xCC,\ 0x7C,\ 0x0C,\ 0xF8,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00181}00181\ \ \ \ \ 0xC3,\ 0x18,\ 0x3C,\ 0x66,\ 0x66,\ 0x3C,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00182}00182\ \ \ \ \ 0xCC,\ 0x00,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00183}00183\ \ \ \ \ 0x18,\ 0x18,\ 0x7E,\ 0xC0,\ 0xC0,\ 0x7E,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00184}00184\ \ \ \ \ 0x38,\ 0x6C,\ 0x64,\ 0xF0,\ 0x60,\ 0xE6,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00185}00185\ \ \ \ \ 0xCC,\ 0xCC,\ 0x78,\ 0x30,\ 0xFC,\ 0x30,\ 0xFC,\ 0x30,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00186}00186\ \ \ \ \ 0xF8,\ 0xCC,\ 0xCC,\ 0xFA,\ 0xC6,\ 0xCF,\ 0xC6,\ 0xC3,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00187}00187\ \ \ \ \ 0x0E,\ 0x1B,\ 0x18,\ 0x3C,\ 0x18,\ 0x18,\ 0xD8,\ 0x70,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00188}00188\ \ \ \ \ 0x1C,\ 0x00,\ 0x78,\ 0x0C,\ 0x7C,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00189}00189\ \ \ \ \ 0x38,\ 0x00,\ 0x70,\ 0x30,\ 0x30,\ 0x30,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00190}00190\ \ \ \ \ 0x00,\ 0x1C,\ 0x00,\ 0x78,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00191}00191\ \ \ \ \ 0x00,\ 0x1C,\ 0x00,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00192}00192\ \ \ \ \ 0x00,\ 0xF8,\ 0x00,\ 0xB8,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00193}00193\ \ \ \ \ 0xFC,\ 0x00,\ 0xCC,\ 0xEC,\ 0xFC,\ 0xDC,\ 0xCC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00194}00194\ \ \ \ \ 0x3C,\ 0x6C,\ 0x6C,\ 0x3E,\ 0x00,\ 0x7E,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00195}00195\ \ \ \ \ 0x38,\ 0x6C,\ 0x6C,\ 0x38,\ 0x00,\ 0x7C,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00196}00196\ \ \ \ \ 0x18,\ 0x00,\ 0x18,\ 0x18,\ 0x30,\ 0x66,\ 0x3C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00197}00197\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0xFC,\ 0xC0,\ 0xC0,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00198}00198\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0xFC,\ 0x0C,\ 0x0C,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00199}00199\ \ \ \ \ 0xC6,\ 0xCC,\ 0xD8,\ 0x36,\ 0x6B,\ 0xC2,\ 0x84,\ 0x0F,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00200}00200\ \ \ \ \ 0xC3,\ 0xC6,\ 0xCC,\ 0xDB,\ 0x37,\ 0x6D,\ 0xCF,\ 0x03,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00201}00201\ \ \ \ \ 0x18,\ 0x00,\ 0x18,\ 0x18,\ 0x3C,\ 0x3C,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00202}00202\ \ \ \ \ 0x00,\ 0x33,\ 0x66,\ 0xCC,\ 0x66,\ 0x33,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00203}00203\ \ \ \ \ 0x00,\ 0xCC,\ 0x66,\ 0x33,\ 0x66,\ 0xCC,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00204}00204\ \ \ \ \ 0x22,\ 0x88,\ 0x22,\ 0x88,\ 0x22,\ 0x88,\ 0x22,\ 0x88,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00205}00205\ \ \ \ \ 0x55,\ 0xAA,\ 0x55,\ 0xAA,\ 0x55,\ 0xAA,\ 0x55,\ 0xAA,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00206}00206\ \ \ \ \ 0xDB,\ 0xF6,\ 0xDB,\ 0x6F,\ 0xDB,\ 0x7E,\ 0xD7,\ 0xED,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00207}00207\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00208}00208\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0xF8,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00209}00209\ \ \ \ \ 0x18,\ 0x18,\ 0xF8,\ 0x18,\ 0xF8,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00210}00210\ \ \ \ \ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0xF6,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00211}00211\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0xFE,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00212}00212\ \ \ \ \ 0x00,\ 0x00,\ 0xF8,\ 0x18,\ 0xF8,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00213}00213\ \ \ \ \ 0x36,\ 0x36,\ 0xF6,\ 0x06,\ 0xF6,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00214}00214\ \ \ \ \ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00215}00215\ \ \ \ \ 0x00,\ 0x00,\ 0xFE,\ 0x06,\ 0xF6,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00216}00216\ \ \ \ \ 0x36,\ 0x36,\ 0xF6,\ 0x06,\ 0xFE,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00217}00217\ \ \ \ \ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0xFE,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00218}00218\ \ \ \ \ 0x18,\ 0x18,\ 0xF8,\ 0x18,\ 0xF8,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00219}00219\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0xF8,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00220}00220\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x1F,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00221}00221\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0xFF,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00222}00222\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0xFF,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00223}00223\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x1F,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00224}00224\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0xFF,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00225}00225\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0xFF,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00226}00226\ \ \ \ \ 0x18,\ 0x18,\ 0x1F,\ 0x18,\ 0x1F,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00227}00227\ \ \ \ \ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0x37,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00228}00228\ \ \ \ \ 0x36,\ 0x36,\ 0x37,\ 0x30,\ 0x3F,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00229}00229\ \ \ \ \ 0x00,\ 0x00,\ 0x3F,\ 0x30,\ 0x37,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00230}00230\ \ \ \ \ 0x36,\ 0x36,\ 0xF7,\ 0x00,\ 0xFF,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00231}00231\ \ \ \ \ 0x00,\ 0x00,\ 0xFF,\ 0x00,\ 0xF7,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00232}00232\ \ \ \ \ 0x36,\ 0x36,\ 0x37,\ 0x30,\ 0x37,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00233}00233\ \ \ \ \ 0x00,\ 0x00,\ 0xFF,\ 0x00,\ 0xFF,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00234}00234\ \ \ \ \ 0x36,\ 0x36,\ 0xF7,\ 0x00,\ 0xF7,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00235}00235\ \ \ \ \ 0x18,\ 0x18,\ 0xFF,\ 0x00,\ 0xFF,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00236}00236\ \ \ \ \ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0xFF,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00237}00237\ \ \ \ \ 0x00,\ 0x00,\ 0xFF,\ 0x00,\ 0xFF,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00238}00238\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0xFF,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00239}00239\ \ \ \ \ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0x3F,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00240}00240\ \ \ \ \ 0x18,\ 0x18,\ 0x1F,\ 0x18,\ 0x1F,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00241}00241\ \ \ \ \ 0x00,\ 0x00,\ 0x1F,\ 0x18,\ 0x1F,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00242}00242\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x3F,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00243}00243\ \ \ \ \ 0x36,\ 0x36,\ 0x36,\ 0x36,\ 0xFF,\ 0x36,\ 0x36,\ 0x36,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00244}00244\ \ \ \ \ 0x18,\ 0x18,\ 0xFF,\ 0x18,\ 0xFF,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00245}00245\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0xF8,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00246}00246\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x1F,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00247}00247\ \ \ \ \ 0xFF,\ 0xFF,\ 0xFF,\ 0xFF,\ 0xFF,\ 0xFF,\ 0xFF,\ 0xFF,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00248}00248\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0xFF,\ 0xFF,\ 0xFF,\ 0xFF,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00249}00249\ \ \ \ \ 0xF0,\ 0xF0,\ 0xF0,\ 0xF0,\ 0xF0,\ 0xF0,\ 0xF0,\ 0xF0,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00250}00250\ \ \ \ \ 0x0F,\ 0x0F,\ 0x0F,\ 0x0F,\ 0x0F,\ 0x0F,\ 0x0F,\ 0x0F,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00251}00251\ \ \ \ \ 0xFF,\ 0xFF,\ 0xFF,\ 0xFF,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00252}00252\ \ \ \ \ 0x00,\ 0x00,\ 0x76,\ 0xDC,\ 0xC8,\ 0xDC,\ 0x76,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00253}00253\ \ \ \ \ 0x00,\ 0x78,\ 0xCC,\ 0xF8,\ 0xCC,\ 0xF8,\ 0xC0,\ 0xC0,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00254}00254\ \ \ \ \ 0x00,\ 0xFC,\ 0xCC,\ 0xC0,\ 0xC0,\ 0xC0,\ 0xC0,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00255}00255\ \ \ \ \ 0x00,\ 0x00,\ 0xFE,\ 0x6C,\ 0x6C,\ 0x6C,\ 0x6C,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00256}00256\ \ \ \ \ 0xFC,\ 0xCC,\ 0x60,\ 0x30,\ 0x60,\ 0xCC,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00257}00257\ \ \ \ \ 0x00,\ 0x00,\ 0x7E,\ 0xD8,\ 0xD8,\ 0xD8,\ 0x70,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00258}00258\ \ \ \ \ 0x00,\ 0x66,\ 0x66,\ 0x66,\ 0x66,\ 0x7C,\ 0x60,\ 0xC0,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00259}00259\ \ \ \ \ 0x00,\ 0x76,\ 0xDC,\ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00260}00260\ \ \ \ \ 0xFC,\ 0x30,\ 0x78,\ 0xCC,\ 0xCC,\ 0x78,\ 0x30,\ 0xFC,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00261}00261\ \ \ \ \ 0x38,\ 0x6C,\ 0xC6,\ 0xFE,\ 0xC6,\ 0x6C,\ 0x38,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00262}00262\ \ \ \ \ 0x38,\ 0x6C,\ 0xC6,\ 0xC6,\ 0x6C,\ 0x6C,\ 0xEE,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00263}00263\ \ \ \ \ 0x1C,\ 0x30,\ 0x18,\ 0x7C,\ 0xCC,\ 0xCC,\ 0x78,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00264}00264\ \ \ \ \ 0x00,\ 0x00,\ 0x7E,\ 0xDB,\ 0xDB,\ 0x7E,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00265}00265\ \ \ \ \ 0x06,\ 0x0C,\ 0x7E,\ 0xDB,\ 0xDB,\ 0x7E,\ 0x60,\ 0xC0,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00266}00266\ \ \ \ \ 0x38,\ 0x60,\ 0xC0,\ 0xF8,\ 0xC0,\ 0x60,\ 0x38,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00267}00267\ \ \ \ \ 0x78,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0xCC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00268}00268\ \ \ \ \ 0x00,\ 0x7E,\ 0x00,\ 0x7E,\ 0x00,\ 0x7E,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00269}00269\ \ \ \ \ 0x18,\ 0x18,\ 0x7E,\ 0x18,\ 0x18,\ 0x00,\ 0x7E,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00270}00270\ \ \ \ \ 0x60,\ 0x30,\ 0x18,\ 0x30,\ 0x60,\ 0x00,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00271}00271\ \ \ \ \ 0x18,\ 0x30,\ 0x60,\ 0x30,\ 0x18,\ 0x00,\ 0xFC,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00272}00272\ \ \ \ \ 0x0E,\ 0x1B,\ 0x1B,\ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00273}00273\ \ \ \ \ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0x18,\ 0xD8,\ 0xD8,\ 0x70,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00274}00274\ \ \ \ \ 0x18,\ 0x18,\ 0x00,\ 0x7E,\ 0x00,\ 0x18,\ 0x18,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00275}00275\ \ \ \ \ 0x00,\ 0x76,\ 0xDC,\ 0x00,\ 0x76,\ 0xDC,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00276}00276\ \ \ \ \ 0x38,\ 0x6C,\ 0x6C,\ 0x38,\ 0x00,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00277}00277\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x18,\ 0x18,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00278}00278\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x18,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00279}00279\ \ \ \ \ 0x0F,\ 0x0C,\ 0x0C,\ 0x0C,\ 0xEC,\ 0x6C,\ 0x3C,\ 0x1C,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00280}00280\ \ \ \ \ 0x58,\ 0x6C,\ 0x6C,\ 0x6C,\ 0x6C,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00281}00281\ \ \ \ \ 0x70,\ 0x98,\ 0x30,\ 0x60,\ 0xF8,\ 0x00,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00282}00282\ \ \ \ \ 0x00,\ 0x00,\ 0x3C,\ 0x3C,\ 0x3C,\ 0x3C,\ 0x00,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00283}00283\ \ \ \ \ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00,\ 0x00}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00284}00284\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00285}00285\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00286}\mbox{\hyperlink{framebuffer_8h_a3d5ddd0e1b4968e9f7bc883432af983e}{00286}}\ \ \ \ \ \textcolor{keyword}{constexpr}\ uint8\_t\ \mbox{\hyperlink{framebuffer_8h_a3d5ddd0e1b4968e9f7bc883432af983e}{FONT\_PADDING}}\ =\ 3;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00287}\mbox{\hyperlink{framebuffer_8h_a805784c1b8b4c6ab842a52751eb5cd8a}{00287}}\ \ \ \ \ \textcolor{keyword}{constexpr}\ uint8\_t\ \mbox{\hyperlink{framebuffer_8h_a805784c1b8b4c6ab842a52751eb5cd8a}{FONT\_HEIGHT}}\ =\ 8\ +\ (2\ *\ \mbox{\hyperlink{framebuffer_8h_a3d5ddd0e1b4968e9f7bc883432af983e}{FONT\_PADDING}});\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00288}\mbox{\hyperlink{framebuffer_8h_ae9310256b60b24b56dbd2240a1672eb8}{00288}}\ \ \ \ \ \textcolor{keyword}{constexpr}\ uint8\_t\ \mbox{\hyperlink{framebuffer_8h_ae9310256b60b24b56dbd2240a1672eb8}{FONT\_WIDTH}}\ =\ 8;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00289}00289\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00290}00290\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00295}\mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole}{00295}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole}{FramebufferConsole}}\ :\ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1Console}{Console}}\ \{}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00296}00296\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00297}00297\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t*\ m\_video\_memory\_meta;}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00299}00299\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1console_1_1ConsoleArea}{ConsoleArea}}*\ m\_console\_area;}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00300}00300\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00301}00301\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ ansi\_code\_length\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ ansi\_code[8]\ =\ \textcolor{stringliteral}{"{}0000000"{}};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00303}00303\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00304}00304\ \ \ \ \ \ \ \ \ \ \ \ \ common::ConsoleColour\ m\_foreground\_color\ =\ common::ConsoleColour::Uninitialised;}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00305}00305\ \ \ \ \ \ \ \ \ \ \ \ \ common::ConsoleColour\ m\_background\_color\ =\ common::ConsoleColour::Uninitialised;}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00306}00306\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00307}00307\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{structmultiboot__tag__framebuffer}{multiboot\_tag\_framebuffer}}*\ s\_framebuffer\_info\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00308}00308\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ m\_framebuffer\_bpp;}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00309}00309\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ m\_framebuffer\_pitch;}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00310}00310\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t*\ m\_framebuffer\_address;}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00311}00311\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\_framebuffer\_size;}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00312}00312\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00313}00313\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ put\_pixel(uint32\_t\ x,\ uint32\_t\ y,\ uint32\_t\ col);}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00314}00314\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00315}00315\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00316}00316\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole}{FramebufferConsole}}(\mbox{\hyperlink{structmultiboot__tag__framebuffer}{multiboot\_tag\_framebuffer}}\ *framebuffer\_info);}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00317}00317\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole}{\string~FramebufferConsole}}();}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00318}00318\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00319}00319\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a93e34ea6fa2ee2ec65eac816fe4e1f57}{width}}()\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00320}00320\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a75055ceb3d7940cc924f135b70842ba9}{height}}()\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00321}00321\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00322}\mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_ad1c866edb4de5e5e3ed3bab6df8caaef}{00322}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1console_1_1ConsoleStream}{ConsoleStream}}*\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_ad1c866edb4de5e5e3ed3bab6df8caaef}{cout}};\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00323}00323\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a7cca87e0de8a2215cf151b3f8965c20e}{finish}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00324}00324\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00325}00325\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a4102ebd87406a68ffd269ce1a42848f8}{put\_character}}(uint16\_t\ x,\ uint16\_t\ y,\ \textcolor{keywordtype}{char})\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00326}00326\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a57e26452dfdf28659ea552d88829ed94}{set\_foreground\_color}}(uint16\_t\ x,\ uint16\_t\ y,\ common::ConsoleColour)\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00327}00327\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a3d7870c18118a2690230cd55f9699be3}{set\_background\_color}}(uint16\_t\ x,\ uint16\_t\ y,\ common::ConsoleColour)\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00328}00328\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00329}00329\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1Console_a3229266e76e289c6d610d3770312ab67}{scroll\_up}}(uint16\_t\ left,\ uint16\_t\ top,\ uint16\_t\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a93e34ea6fa2ee2ec65eac816fe4e1f57}{width}},\ uint16\_t\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a75055ceb3d7940cc924f135b70842ba9}{height}},\ common::ConsoleColour\ foreground,\ common::ConsoleColour\ background,\ \textcolor{keywordtype}{char}\ fill)\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00330}00330\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00331}00331\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_aad7a00061734c29667f009abbb133d44}{get\_character}}(uint16\_t\ x,\ uint16\_t\ y)\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00332}00332\ \ \ \ \ \ \ \ \ \ \ \ \ common::ConsoleColour\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a56995e2fcb8fe34bb79eae8cef7035b1}{get\_foreground\_color}}(uint16\_t\ x,\ uint16\_t\ y)\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00333}00333\ \ \ \ \ \ \ \ \ \ \ \ \ common::ConsoleColour\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a7b9418cf037dca7da5f33473c7c2199d}{get\_background\_color}}(uint16\_t\ x,\ uint16\_t\ y)\ \textcolor{keyword}{final};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00334}00334\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00335}00335\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_ac69570cebdbac84ba6c102ee745d9abd}{print\_logo}}(\textcolor{keywordtype}{bool}\ is\_panic\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00336}00336\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1console_1_1FramebufferConsole_a29eab91ef586f064057e1ceb1442d560}{update\_progress\_bar}}(uint8\_t\ percentage);}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00337}00337\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00338}00338\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00339}00339\ \}}
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00340}00340\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00341}00341\ }
+\DoxyCodeLine{\Hypertarget{framebuffer_8h_source_l00342}00342\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAXOS\_CONSOLE\_VESABOOTCONSOLE\_H}}
+
+\end{DoxyCode}

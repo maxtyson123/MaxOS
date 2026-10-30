@@ -13,6 +13,6 @@ var classMaxOS_1_1processes_1_1Process =
     [ "is_kernel", "classMaxOS_1_1processes_1_1Process.html#aad5eaf3ad4ca8c3ab5eb0e08d0fdad40", null ],
     [ "memory_manager", "classMaxOS_1_1processes_1_1Process.html#af8482adefd92ca758c67a98a197444ea", null ],
     [ "name", "classMaxOS_1_1processes_1_1Process.html#a56404d627bd310d8de08fba3d8d2792f", null ],
-    [ "resource_manager", "classMaxOS_1_1processes_1_1Process.html#a5a8df0bb667ad748c6a129b1da96ed7a", null ],
+    [ "resource_manager", "classMaxOS_1_1processes_1_1Process.html#a79b28cbc455d41e1e372fb8e1260cbbf", null ],
     [ "working_directory", "classMaxOS_1_1processes_1_1Process.html#aa1858c7751bb2937a9ad96ae5a71b781", null ]
 ];

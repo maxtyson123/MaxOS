@@ -1,0 +1,172 @@
+.TH "MaxOS::hardwarecommunication::ExceptionHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::ExceptionHandler \- Base class for handing CPU expection interrupts\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <interrupts\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
+.PP
+Inherited by \fBMaxOS::hardwarecommunication::DivideByZeroHandler\fP, \fBMaxOS::hardwarecommunication::GeneralProtectionHandler\fP, \fBMaxOS::hardwarecommunication::InvaildOpCodeHandler\fP, \fBMaxOS::hardwarecommunication::PageFaultHandler\fP, \fBMaxOS::runtime::BreakPointException\fP, and \fBMaxOS::runtime::TrapFlagExcpetion\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBExceptionHandler\fP (uint8_t interrupt_number)"
+.br
+.RI "Create a new base exception handler for an interrupt\&. "
+.ti -1c
+.RI "\fB~ExceptionHandler\fP ()"
+.br
+.ti -1c
+.RI "virtual string \fBget_message\fP (\fBsystem::cpu_status_t\fP *status)"
+.br
+.RI "Get an human readable error message explaining this exception\&. "
+.ti -1c
+.RI "virtual \fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status)"
+.br
+.RI "Handle the interrupt relating to this exception\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "virtual void \fBhandle_interrupt\fP ()"
+.br
+.RI "Handles an interrupt\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBInterruptHandler\fP (uint8_t interrupt_number, int64_t redirect=\-1, uint64_t redirect_index=0)"
+.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "virtual \fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_interrupt_number\fP"
+.br
+.RI "The interrupt number this handler handles\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Base class for handing CPU expection interrupts\&. 
+.PP
+Definition at line \fB61\fP of file \fBinterrupts\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ExceptionHandler::ExceptionHandler (uint8_t interrupt_number)"
+
+.PP
+Create a new base exception handler for an interrupt\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinterrupt_number\fP The interrupt this exception handles 
+.RE
+.PP
+
+.PP
+Definition at line \fB92\fP of file \fBinterrupts\&.cpp\fP\&..PP
+.nf
+93 : InterruptHandler(interrupt_number)
+94 {
+95 }
+.fi
+
+.SS "ExceptionHandler::~ExceptionHandler ()\fC [default]\fP"
+Default destructor for a \fBExceptionHandler\fP 
+.SH "Member Function Documentation"
+.PP 
+.SS "string ExceptionHandler::get_message (\fBsystem::cpu_status_t\fP * status)\fC [virtual]\fP"
+
+.PP
+Get an human readable error message explaining this exception\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The CPU state at time of exception 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The error message 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::hardwarecommunication::DivideByZeroHandler\fP, \fBMaxOS::hardwarecommunication::InvaildOpCodeHandler\fP, \fBMaxOS::hardwarecommunication::GeneralProtectionHandler\fP, and \fBMaxOS::hardwarecommunication::PageFaultHandler\fP\&.
+.PP
+Definition at line \fB108\fP of file \fBinterrupts\&.cpp\fP\&..PP
+.nf
+108                                                                {
+109 
+110     return "Unimplemented message for exception\\n";
+111 
+112 }
+.fi
+
+.PP
+Referenced by \fBhandle_interrupt()\fP\&.
+.SS "\fBcpu_status_t\fP * ExceptionHandler::handle_interrupt (\fBsystem::cpu_status_t\fP * status)\fC [virtual]\fP"
+
+.PP
+Handle the interrupt relating to this exception\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The CPU state at time of exception 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The new CPU state to move to or null if no recoverable state 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
+.PP
+Reimplemented in \fBMaxOS::runtime::TrapFlagExcpetion\fP, and \fBMaxOS::runtime::BreakPointException\fP\&.
+.PP
+Definition at line \fB120\fP of file \fBinterrupts\&.cpp\fP\&..PP
+.nf
+120                                                                      {
+121 
+122     // Get the message
+123     string msg = get_message(status);
+124 
+125     // Try to avoid the panic
+126     cpu_status_t* can_avoid = CPU::prepare_for_panic(status, msg);
+127     if (can_avoid != nullptr)
+128         return can_avoid;
+129 
+130     // Have to panic (must have occurred in kernel)
+131     CPU::PANIC(msg\&.c_str(), status);
+132 
+133     // Shouldn't return, fault if this happens
+134     return nullptr;
+135 
+136 }
+.fi
+
+.PP
+References \fBget_message()\fP, \fBMaxOS::system::CPU::PANIC()\fP, and \fBMaxOS::system::CPU::prepare_for_panic()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

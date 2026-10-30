@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['f1_0',['f1',['../keyboard_8h.html#a891861cdf457ecedb7e3a5fa56515ebcabd19836ddb62c11c55ab251ccaca5645',1,'MaxOS::drivers::peripherals']]]
+  ['global_0',['GLOBAL',['../physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c',1,'MaxOS::memory']]]
 ];

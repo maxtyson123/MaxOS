@@ -7,18 +7,18 @@
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00013}00013\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00014}00014\ \textcolor{keyword}{using\ namespace\ }MaxOS;}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00015}00015\ \textcolor{keyword}{using\ namespace\ }MaxOS::processes;}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00016}00016\ \textcolor{keyword}{using\ namespace\ }MaxOS::common;}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00017}00017\ \textcolor{keyword}{using\ namespace\ }MaxOS::memory;}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00018}00018\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00019}00019\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logger_8h}{common/logger.h}}>}}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00020}00020\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{scheduler_8h}{processes/scheduler.h}}>}}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00021}00021\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00029}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_aeffc34eeb24ef36a48c800cbdef5e0c6}{00029}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_aeffc34eeb24ef36a48c800cbdef5e0c6}{SharedMemory::SharedMemory}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ name,\ \textcolor{keywordtype}{size\_t}\ size,\ \mbox{\hyperlink{resource_8h_a9ac9ad12caad00b9d7eb53504318c263}{resource\_type\_t}}\ type)}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00030}00030\ :\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}(name,\ size,\ syscore::\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{ResourceType}}::\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{SHARED\_MEMORY}}),}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00031}00031\ \ \ m\_size(size)}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00032}00032\ \{}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00033}00033\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00034}00034\ \ \ \ \ m\_physical\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}})\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_area(0,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_a9bdf07b5c452b7f5cf65cc870667e8cd}{size}});}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00016}00016\ \textcolor{keyword}{using\ namespace\ }MaxOS::processes::resources;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00017}00017\ \textcolor{keyword}{using\ namespace\ }MaxOS::common;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00018}00018\ \textcolor{keyword}{using\ namespace\ }MaxOS::memory;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00020}00020\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{logger_8h}{common/logger.h}}>}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00021}00021\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{scheduler_8h}{processes/scheduler.h}}>}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00030}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_a9d8bd7dbbbc95a3bae84a6d49fd186cb}{00030}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_a9d8bd7dbbbc95a3bae84a6d49fd186cb}{SharedMemory::SharedMemory}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ name,\ \textcolor{keywordtype}{size\_t}\ size,\ \mbox{\hyperlink{resource_8h_a6c303bdba5e9a0b30a054af325374907}{resource\_type\_t}}\ type)}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00031}00031\ :\ \mbox{\hyperlink{resource_8h_a65aab2313d5066f5f1bd2096b08d4adf}{Resource}}(name,\ size,\ MaxOS::KPI::ResourceType::SHARED\_MEMORY),}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00032}00032\ \ \ m\_size(size)}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00033}00033\ \{}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00034}00034\ \ \ \ \ m\_physical\_address\ =\ (uintptr\_t)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>allocate\_area(0,\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_a9bdf07b5c452b7f5cf65cc870667e8cd}{size}});}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00035}00035\ \}}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00036}00036\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00037}00037\ SharedMemory::\string~SharedMemory()\ =\ \textcolor{keywordflow}{default};}
@@ -26,14 +26,14 @@
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00047}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_ab048b9e6fe8ac0ef112f1721c8c32f4e}{00047}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_ab048b9e6fe8ac0ef112f1721c8c32f4e}{SharedMemory::read}}(\textcolor{keywordtype}{void}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{size\_t}\ flags)\ \{}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00048}00048\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00049}00049\ \ \ \ \ \textcolor{comment}{//\ Process\ hasn't\ opened\ the\ resource}}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00050}00050\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{it}}\ =\ m\_mappings.\mbox{\hyperlink{classMaxOS_1_1common_1_1Map_a10698bb31fb97e95c3529256466f6214}{find}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>pid());}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{it}}\ ==\ m\_mappings.\mbox{\hyperlink{classMaxOS_1_1common_1_1Map_a4f3c03e90f4405f8b2841fd09268504d}{end}}())}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00050}00050\ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ m\_mappings.find(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>pid());}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00051}00051\ \ \ \ \ \textcolor{keywordflow}{if}(it\ ==\ m\_mappings.end())}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00052}00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00053}00053\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00054}00054\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{it}}-\/>second;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00054}00054\ \ \ \ \ \textcolor{keywordflow}{return}\ it-\/>second;}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00055}00055\ \}}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00056}00056\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00062}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_aed7cab96f6613552cb424d2af7c2b215}{00062}}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_aed7cab96f6613552cb424d2af7c2b215}{SharedMemory::physical\_address}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00062}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_aed7cab96f6613552cb424d2af7c2b215}{00062}}\ uintptr\_t\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_aed7cab96f6613552cb424d2af7c2b215}{SharedMemory::physical\_address}}()\textcolor{keyword}{\ const\ }\{}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00063}00063\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00064}00064\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_physical\_address;}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00065}00065\ \}}
@@ -46,23 +46,23 @@
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00082}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_af67de70cf4842e416acd0d8362de514e}{00082}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_af67de70cf4842e416acd0d8362de514e}{SharedMemory::open}}(\textcolor{keywordtype}{size\_t}\ flags)\ \{}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00083}00083\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00084}00084\ \ \ \ \ \textcolor{comment}{//\ Process\ has\ already\ opened\ this\ memory}}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00085}00085\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{it}}\ =\ m\_mappings.\mbox{\hyperlink{classMaxOS_1_1common_1_1Map_a10698bb31fb97e95c3529256466f6214}{find}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>pid());}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00086}00086\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{it}}\ !=\ m\_mappings.\mbox{\hyperlink{classMaxOS_1_1common_1_1Map_a4f3c03e90f4405f8b2841fd09268504d}{end}}())}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00085}00085\ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ m\_mappings.find(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>pid());}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00086}00086\ \ \ \ \ \textcolor{keywordflow}{if}(it\ !=\ m\_mappings.end())}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00087}00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00088}00088\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00089}00089\ \ \ \ \ \textcolor{keyword}{auto}\ virtual\_address\ =\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{uintptr\_t}})\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>memory\_manager-\/>vmm()-\/>load\_shared\_memory(m\_physical\_address,\ m\_size);}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00090}00090\ \ \ \ \ m\_mappings.\mbox{\hyperlink{classMaxOS_1_1common_1_1Map_a81607647ee83176c5cf53462f99583e0}{insert}}(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>pid(),\ virtual\_address);}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00089}00089\ \ \ \ \ \textcolor{keyword}{auto}\ virtual\_address\ =\ (uintptr\_t)\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_af8482adefd92ca758c67a98a197444ea}{memory\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1BumpMemoryManager_a9737268422f341f33ee6fde3ce7b70b5}{vmm}}()-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1VirtualMemoryManager_aeb6cda8549b46a97ef761d10a7e21b32}{load\_shared\_memory}}(m\_physical\_address,\ m\_size);}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00090}00090\ \ \ \ \ m\_mappings.insert(\mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_aa070d442d88c4e6adee1c57772c5be34}{GlobalScheduler::current\_process}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Process_a37c8fb7d8f9467dd6194ba0b6514e13e}{pid}}(),\ virtual\_address);}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00091}00091\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00092}00092\ \}}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00093}00093\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00099}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_ae812b7f2f89f9620d0ed2104ade89aa4}{00099}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMemory_ae812b7f2f89f9620d0ed2104ade89aa4}{SharedMemory::close}}(\textcolor{keywordtype}{size\_t}\ flags)\ \{}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00100}00100\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00101}00101\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>free\_area(m\_physical\_address,\ m\_size);}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00101}00101\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_ad0aaa5f1fb32a28d1d91cc5630d56dad}{free\_area}}(m\_physical\_address,\ m\_size);}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00102}00102\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00103}00103\ \}}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00104}00104\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00112}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a8b0e1d6f7972ed1caaae03f4ee4890d4}{00112}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a8b0e1d6f7972ed1caaae03f4ee4890d4}{SharedMessageEndpoint::SharedMessageEndpoint}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ name,\ \textcolor{keywordtype}{size\_t}\ size,\ \mbox{\hyperlink{resource_8h_a9ac9ad12caad00b9d7eb53504318c263}{resource\_type\_t}}\ type)}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00113}00113\ :\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1Resource}{Resource}}(name,\ size,\ type)}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00112}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_aaf38aab2371c49205fc40b11ee0c4bcc}{00112}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_aaf38aab2371c49205fc40b11ee0c4bcc}{SharedMessageEndpoint::SharedMessageEndpoint}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ name,\ \textcolor{keywordtype}{size\_t}\ size,\ \mbox{\hyperlink{resource_8h_a6c303bdba5e9a0b30a054af325374907}{resource\_type\_t}}\ type)}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00113}00113\ :\ \mbox{\hyperlink{resource_8h_a65aab2313d5066f5f1bd2096b08d4adf}{Resource}}(name,\ size,\ type)}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00114}00114\ \{}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00115}00115\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00116}00116\ \}}
@@ -70,35 +70,58 @@
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00121}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_ae2982bf11f12533a986d08477d4c8d65}{00121}}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_ae2982bf11f12533a986d08477d4c8d65}{SharedMessageEndpoint::\string~SharedMessageEndpoint}}()\ \{}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00122}00122\ }
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00123}00123\ \ \ \ \ \textcolor{comment}{//\ Free\ the\ messages}}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00124}00124\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{message}}\ :\ m\_queue)}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00125}00125\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{message}};}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00124}00124\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\&\ message\ :\ m\_queue)}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00125}00125\ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ message;}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00126}00126\ \}}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00127}00127\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00136}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a6baad0e7f448b66b3f811b4c0d8345e4}{00136}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a6baad0e7f448b66b3f811b4c0d8345e4}{SharedMessageEndpoint::read}}(\textcolor{keywordtype}{void}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{size\_t}\ flags)\ \{}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00137}00137\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00138}00138\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ a\ message}}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00139}00139\ \ \ \ \ \textcolor{keywordflow}{if}(m\_queue.empty())}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00140}00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1\ *\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{int}})resource\_error\_base\_t::SHOULD\_BLOCK;}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00141}00141\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00142}00142\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ message\ into\ the\ buffer}}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00143}00143\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{message}}\ =\ m\_queue.pop\_front();}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00144}00144\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{readable}}\ =\ size\ >\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{message}}-\/>capacity()\ ?\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{message}}-\/>capacity()\ :\ size;}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00145}00145\ \ \ \ \ \mbox{\hyperlink{memoryIO_8h_a5d860365491e432b125606a6f8e464bc}{memcpy}}(buffer,\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{message}}\ -\/>\ raw(),\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{readable}});}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00146}00146\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00147}00147\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{readable}};}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00148}00148\ \}}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00149}00149\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00158}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a42c842d145d71738706a6034ed881f9e}{00158}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a42c842d145d71738706a6034ed881f9e}{SharedMessageEndpoint::write}}(\textcolor{keywordtype}{void}\ \textcolor{keyword}{const}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{size\_t}\ flags)\ \{}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00159}00159\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00160}00160\ \ \ \ \ m\_message\_lock.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a27a03c3d6b4cdd677e7d16e59689e38e}{lock}}();}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00161}00161\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00162}00162\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ message}}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00163}00163\ \ \ \ \ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_message}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{classMaxOS_1_1common_1_1Buffer}{buffer\_t}}(size);}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00164}00164\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_message}}-\/>copy\_from(buffer,\ size);}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00165}00165\ \ \ \ \ m\_queue.push\_back(\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{new\_message}});}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00135}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_ac8a3516c7d883924b559a68a581efc2d}{00135}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_ac8a3516c7d883924b559a68a581efc2d}{SharedMessageEndpoint::send}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structMaxOS_1_1processes_1_1IPCIOVector}{ipc\_iovec\_t}}\ *vec,\ \textcolor{keywordtype}{size\_t}\ count)\ \{}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00137}00137\ \ \ \ \ m\_message\_lock.\mbox{\hyperlink{classMaxOS_1_1processes_1_1BlockingLock_a3fec6b869fbd73076b49eb2a0b3fae76}{lock}}();}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00139}00139\ \ \ \ \ \textcolor{comment}{//\ Parse\ the\ message\ parts}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00140}00140\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ size\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00141}00141\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ count;\ ++i)}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00142}00142\ \ \ \ \ \ \ \ \ size\ +=\ vec[i].length;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00144}00144\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ message}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00145}00145\ \ \ \ \ \textcolor{keyword}{auto}*\ new\_message\ =\ \textcolor{keyword}{new}\ buffer\_t(size);}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00146}00146\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ count;\ ++i)}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ new\_message-\/>copy\_from(vec[i].address,\ vec[i].length);}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00148}00148\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00149}00149\ \ \ \ \ \textcolor{comment}{//\ Send\ the\ message}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00150}00150\ \ \ \ \ m\_queue.push\_back(new\_message);}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00151}00151\ \ \ \ \ m\_message\_lock.\mbox{\hyperlink{classMaxOS_1_1processes_1_1BlockingLock_a974725bf2e5c5974dbe1f6c26afe4cd5}{unlock}}();}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00153}00153\ \}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00165}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a6baad0e7f448b66b3f811b4c0d8345e4}{00165}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a6baad0e7f448b66b3f811b4c0d8345e4}{SharedMessageEndpoint::read}}(\textcolor{keywordtype}{void}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{size\_t}\ flags)\ \{}
 \DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00166}00166\ }
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00167}00167\ \ \ \ \ m\_message\_lock.\mbox{\hyperlink{classMaxOS_1_1common_1_1Spinlock_a7c26334ccfa43ef932ef3c73e2c11492}{unlock}}();}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00168}00168\ \ \ \ \ \textcolor{keywordflow}{return}\ size;}
-\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00169}00169\ \}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00167}00167\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ a\ message}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00168}00168\ \ \ \ \ \textcolor{keywordflow}{while}(m\_queue.empty())\ \{}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00169}00169\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (flags)}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00172}00172\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Block}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00173}00173\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{GlobalScheduler::current\_thread}}()-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_a51beecba775ba0562eb48873aabd5397}{yield}}();}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00174}00174\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00175}00175\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00176}00176\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ message\ into\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00177}00177\ \ \ \ \ buffer\_t*\ message\ =\ m\_queue.pop\_front();}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00178}00178\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ readable\ =\ size\ >\ message-\/>capacity()\ ?\ message-\/>capacity()\ :\ size;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00179}00179\ \ \ \ \ memcpy(buffer,\ message\ -\/>\ raw(),\ readable);}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00181}00181\ \ \ \ \ \textcolor{comment}{//@todo\ free\ the\ message\ mem\ here\ now\ aswell?}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00182}00182\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00183}00183\ \ \ \ \ \textcolor{keywordflow}{return}\ readable;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00184}00184\ \}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00194}\mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a42c842d145d71738706a6034ed881f9e}{00194}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_a42c842d145d71738706a6034ed881f9e}{SharedMessageEndpoint::write}}(\textcolor{keywordtype}{void}\ \textcolor{keyword}{const}*\ buffer,\ \textcolor{keywordtype}{size\_t}\ size,\ \textcolor{keywordtype}{size\_t}\ flags)\ \{}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00196}00196\ \ \ \ \ \textcolor{comment}{//\ Send\ the\ buffer\ as\ the\ entire\ message}}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00197}00197\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1processes_1_1IPCIOVector}{ipc\_iovec\_t}}\ message\ =\ \{buffer,\ size\};}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00198}00198\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1SharedMessageEndpoint_ac8a3516c7d883924b559a68a581efc2d}{send}}(\&message,\ 1);}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00200}00200\ \ \ \ \ \textcolor{keywordflow}{return}\ size;}
+\DoxyCodeLine{\Hypertarget{ipc_8cpp_source_l00201}00201\ \}}
 
 \end{DoxyCode}

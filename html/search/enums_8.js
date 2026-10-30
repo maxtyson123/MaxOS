@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['loglevel_0',['LogLevel',['../logger_8h.html#a26e76cbb3915e23f58416e56ab0860ae',1,'MaxOS']]]
+  ['operatingmode_0',['OperatingMode',['../clock_8h.html#a4e84ff5c5969a5997a7275a8ad8506bf',1,'MaxOS::hardwarecommunication']]]
 ];

@@ -1,0 +1,362 @@
+.TH "MaxOS::console::TextModeConsole" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::console::TextModeConsole \- Driver for the text mode console, handles the printing of characters and strings to the screen using VGA\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <textmode\&.h>\fP
+.PP
+Inherits \fBMaxOS::console::Console\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "uint16_t \fBwidth\fP () final"
+.br
+.RI "Gets the width of the console\&. "
+.ti -1c
+.RI "uint16_t \fBheight\fP () final"
+.br
+.RI "Gets the height of the console\&. "
+.ti -1c
+.RI "void \fBput_character\fP (uint16_t x, uint16_t y, char c) final"
+.br
+.RI "Places a character at the specified location if it is in bounds\&. "
+.ti -1c
+.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, common::ConsoleColour) final"
+.br
+.RI "Sets the foreground color at the specified location\&. "
+.ti -1c
+.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, common::ConsoleColour) final"
+.br
+.RI "Sets the background color at the specified location\&. "
+.ti -1c
+.RI "char \fBget_character\fP (uint16_t x, uint16_t y) final"
+.br
+.RI "Gets the character at the specified location\&. "
+.ti -1c
+.RI "common::ConsoleColour \fBget_foreground_color\fP (uint16_t x, uint16_t y) final"
+.br
+.RI "Gets the foreground color at the specified location\&. "
+.ti -1c
+.RI "common::ConsoleColour \fBget_background_color\fP (uint16_t x, uint16_t y) final"
+.br
+.RI "Gets the background color at the specified location\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::console::Console\fP
+.in +1c
+.ti -1c
+.RI "virtual void \fBput_character\fP (uint16_t x, uint16_t y, char c, common::ConsoleColour foreground, common::ConsoleColour background)"
+.br
+.RI "Put a character on the console with a given foreground and background color\&. "
+.ti -1c
+.RI "virtual void \fBput_string\fP (uint16_t x, uint16_t y, string string, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black)"
+.br
+.RI "Put a string on the console\&. "
+.ti -1c
+.RI "virtual void \fBscroll_up\fP ()"
+.br
+.RI "Scroll the entire console up by 1 line\&. "
+.ti -1c
+.RI "virtual void \fBscroll_up\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black, char fill=' ')"
+.br
+.RI "Scroll an area of the console up by 1 line\&. "
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black, char fill=' ')"
+.br
+.RI "Clear an area of the console\&. "
+.ti -1c
+.RI "virtual void \fBinvert_colors\fP (uint16_t x, uint16_t y)"
+.br
+.RI "Invert the colors of a character on the console\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Driver for the text mode console, handles the printing of characters and strings to the screen using VGA\&. 
+.PP
+Definition at line \fB22\fP of file \fBtextmode\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "ConsoleColour TextModeConsole::get_background_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the background color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The background color at the specified location or black if the coordinates are out of bounds 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB144\fP of file \fBtextmode\&.cpp\fP\&..PP
+.nf
+144                                                                           {
+145 
+146     // Check bounds
+147     if (x >= width() || y >= height())
+148         return ConsoleColour::Black;
+149 
+150     // Calculate the offset
+151     int offset = (y * width() + x);
+152 
+153     // Return the background color at the offset, by masking the background color with the current background color (bits 12\-15)
+154     return (ConsoleColour) ((m_video_memory[offset] & 0xF000) >> 12);
+155 }
+.fi
+
+.PP
+References \fBheight()\fP, and \fBwidth()\fP\&.
+.SS "char TextModeConsole::get_character (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the character at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The character at the specified location or a space if the coordinates are out of bounds 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB104\fP of file \fBtextmode\&.cpp\fP\&..PP
+.nf
+104                                                           {
+105 
+106     // Check bounds
+107     if (x >= width() || y >= height())
+108         return ' ';
+109 
+110     // Calculate the offset
+111     int offset = (y * width() + x);
+112 
+113     // Return the character at the offset, mask away the colour information
+114     return (char) (m_video_memory[offset] & 0x00FF);
+115 }
+.fi
+
+.PP
+References \fBheight()\fP, and \fBwidth()\fP\&.
+.SS "ConsoleColour TextModeConsole::get_foreground_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the foreground color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The foreground color at the specified location or white if the coordinates are out of bounds 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB124\fP of file \fBtextmode\&.cpp\fP\&..PP
+.nf
+124                                                                           {
+125 
+126     // Check bounds
+127     if (x >= width() || y >= height())
+128         return ConsoleColour::White;
+129 
+130     // Calculate the offset
+131     int offset = (y * width() + x);
+132 
+133     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8\-11)
+134     return (ConsoleColour) ((m_video_memory[offset] & 0x0F00) >> 8);
+135 }
+.fi
+
+.PP
+References \fBheight()\fP, and \fBwidth()\fP\&.
+.SS "uint16_t TextModeConsole::height ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the height of the console\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The height of the console in characters 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB33\fP of file \fBtextmode\&.cpp\fP\&..PP
+.nf
+33                                  {
+34     return 25;
+35 }
+.fi
+
+.PP
+Referenced by \fBget_background_color()\fP, \fBget_character()\fP, \fBget_foreground_color()\fP, \fBput_character()\fP, \fBset_background_color()\fP, and \fBset_foreground_color()\fP\&.
+.SS "void TextModeConsole::put_character (uint16_t x, uint16_t y, char c)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Places a character at the specified location if it is in bounds\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.br
+\fIc\fP The character to place 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB44\fP of file \fBtextmode\&.cpp\fP\&..PP
+.nf
+44                                                                   {
+45 
+46     // Check bounds
+47     if (x >= width() || y >= height())
+48         return;
+49 
+50     // Calculate the offset
+51     int offset = (y * width() + x);
+52 
+53     // Set the character at the offset, mask away the colour information
+54     m_video_memory[offset] = (m_video_memory[offset] & 0xFF00) | (uint16_t) c;
+55 }
+.fi
+
+.PP
+References \fBheight()\fP, and \fBwidth()\fP\&.
+.SS "void TextModeConsole::set_background_color (uint16_t x, uint16_t y, common::ConsoleColour background)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Sets the background color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.br
+\fIbackground\fP The background color 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB84\fP of file \fBtextmode\&.cpp\fP\&..PP
+.nf
+84                                                                                                  {
+85 
+86     // Check bounds
+87     if (x >= width() || y >= height())
+88         return;
+89 
+90     // Calculate the offset
+91     int offset = (y * width() + x);
+92 
+93     // Set the background color at the offset, mask to get the backgroun bits
+94     m_video_memory[offset] = (m_video_memory[offset] & 0x0FFF) | ((uint16_t) background << 12);
+95 }
+.fi
+
+.PP
+References \fBheight()\fP, and \fBwidth()\fP\&.
+.SS "void TextModeConsole::set_foreground_color (uint16_t x, uint16_t y, common::ConsoleColour foreground)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Sets the foreground color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.br
+\fIforeground\fP The foreground color 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB64\fP of file \fBtextmode\&.cpp\fP\&..PP
+.nf
+64                                                                                                  {
+65 
+66     // Check bounds
+67     if (x >= width() || y >= height())
+68         return;
+69 
+70     // Calculate the offset
+71     int offset = (y * width() + x);
+72 
+73     // Set the foreground color at the offset, mask to get the foreground bits
+74     m_video_memory[offset] = (m_video_memory[offset] & 0xF0FF) | ((uint16_t) foreground << 8);
+75 }
+.fi
+
+.PP
+References \fBheight()\fP, and \fBwidth()\fP\&.
+.SS "uint16_t TextModeConsole::width ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the width of the console\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The width of the console in characters 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB24\fP of file \fBtextmode\&.cpp\fP\&..PP
+.nf
+24                                 {
+25     return 80;
+26 }
+.fi
+
+.PP
+Referenced by \fBget_background_color()\fP, \fBget_character()\fP, \fBget_foreground_color()\fP, \fBput_character()\fP, \fBset_background_color()\fP, and \fBset_foreground_color()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

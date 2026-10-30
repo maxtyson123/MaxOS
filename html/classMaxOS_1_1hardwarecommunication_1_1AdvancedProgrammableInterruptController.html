@@ -129,9 +129,9 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Handles both the Local APIC (boot core) and IO APIC. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000024">Todo:</a></b></dt><dd>Should either handle all Local APICs or none (only boot core right now, others accessed per core directly which is inconsistent) </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>Should either handle all Local APICs or none (only boot core right now, others accessed per core directly which is inconsistent) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="apic_8h_source.html#l00228">228</a> of file <a class="el" href="apic_8h_source.html">apic.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="apic_8h_source.html#l00240">240</a> of file <a class="el" href="apic_8h_source.html">apic.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab7fe24b8d23c2844131e98e52aced3df" name="ab7fe24b8d23c2844131e98e52aced3df"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab7fe24b8d23c2844131e98e52aced3df">&#9670;&#160;</a></span>AdvancedProgrammableInterruptController()</h2>
@@ -165,37 +165,37 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="apic_8cpp_source.html#l00415">415</a> of file <a class="el" href="apic_8cpp_source.html">apic.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  416</span>: m_pic_master_command_port(0x20),</div>
-<div class="line"><span class="lineno">  417</span>  m_pic_master_data_port(0x21),</div>
-<div class="line"><span class="lineno">  418</span>  m_pic_slave_command_port(0xA0),</div>
-<div class="line"><span class="lineno">  419</span>  m_pic_slave_data_port(0xA1)</div>
-<div class="line"><span class="lineno">  420</span>{</div>
-<div class="line"><span class="lineno">  421</span> </div>
-<div class="line"><span class="lineno">  422</span>    <span class="comment">// Register this APIC</span></div>
-<div class="line"><span class="lineno">  423</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a6fa276d92dbf0dd22dcab146f5c99da6">Logger::INFO</a>() &lt;&lt; <span class="stringliteral">&quot;Setting up APIC\n&quot;</span>;</div>
-<div class="line"><span class="lineno">  424</span>    <a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a3a44cbeaa1d7ed616942bb2ef08ec863">InterruptManager::active_interrupt_manager</a>()-&gt;<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a5373148b2ed1db2126a5ea6324553df3">set_apic</a>(<span class="keyword">this</span>);</div>
-<div class="line"><span class="lineno">  425</span> </div>
-<div class="line"><span class="lineno">  426</span>    <span class="comment">// Init the Local APIC</span></div>
-<div class="line"><span class="lineno">  427</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a1df434c9cd82457b6830c0500731a601">Logger::DEBUG</a>() &lt;&lt; <span class="stringliteral">&quot;Initialising Local APIC\n&quot;</span>;</div>
-<div class="line"><span class="lineno">  428</span>    m_local_apic = <span class="keyword">new</span> <a class="code hl_class" href="classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html">LocalAPIC</a>();</div>
-<div class="line"><span class="lineno">  429</span> </div>
-<div class="line"><span class="lineno">  430</span>    <span class="comment">// Disable the legacy mode PIC</span></div>
-<div class="line"><span class="lineno">  431</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a1df434c9cd82457b6830c0500731a601">Logger::DEBUG</a>() &lt;&lt; <span class="stringliteral">&quot;Disabling PIC\n&quot;</span>;</div>
-<div class="line"><span class="lineno">  432</span>    disable_pic();</div>
-<div class="line"><span class="lineno">  433</span> </div>
-<div class="line"><span class="lineno">  434</span>    <span class="comment">// Init the IO APIC</span></div>
-<div class="line"><span class="lineno">  435</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a1df434c9cd82457b6830c0500731a601">Logger::DEBUG</a>() &lt;&lt; <span class="stringliteral">&quot;Initialising IO APIC\n&quot;</span>;</div>
-<div class="line"><span class="lineno">  436</span>    m_io_apic = <span class="keyword">new</span> <a class="code hl_class" href="classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html">IOAPIC</a>(acpi);</div>
-<div class="line"><span class="lineno">  437</span>}</div>
-<div class="ttc" id="aclassMaxOS_1_1Logger_html_a1df434c9cd82457b6830c0500731a601"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a1df434c9cd82457b6830c0500731a601">MaxOS::Logger::DEBUG</a></div><div class="ttdeci">static Logger DEBUG()</div><div class="ttdoc">Gets active logger set to DEBUG level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00193">logger.cpp:193</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1Logger_html_a6fa276d92dbf0dd22dcab146f5c99da6"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a6fa276d92dbf0dd22dcab146f5c99da6">MaxOS::Logger::INFO</a></div><div class="ttdeci">static Logger INFO()</div><div class="ttdoc">Gets active logger set to info level.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00171">logger.cpp:171</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1IOAPIC_html"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html">MaxOS::hardwarecommunication::IOAPIC</a></div><div class="ttdoc">Handles the IO APIC in the system (one per system)</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00193">apic.h:193</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1InterruptManager_html_a3a44cbeaa1d7ed616942bb2ef08ec863"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a3a44cbeaa1d7ed616942bb2ef08ec863">MaxOS::hardwarecommunication::InterruptManager::active_interrupt_manager</a></div><div class="ttdeci">static InterruptManager * active_interrupt_manager()</div><div class="ttdoc">Gets the active interrupt manager.</div><div class="ttdef"><b>Definition</b> <a href="interrupts_8cpp_source.html#l00392">interrupts.cpp:392</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1InterruptManager_html_a5373148b2ed1db2126a5ea6324553df3"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a5373148b2ed1db2126a5ea6324553df3">MaxOS::hardwarecommunication::InterruptManager::set_apic</a></div><div class="ttdeci">void set_apic(AdvancedProgrammableInterruptController *apic)</div><div class="ttdoc">Sets the APIC.</div><div class="ttdef"><b>Definition</b> <a href="interrupts_8cpp_source.html#l00308">interrupts.cpp:308</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1LocalAPIC_html"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html">MaxOS::hardwarecommunication::LocalAPIC</a></div><div class="ttdoc">Handles the local APIC for the current core.</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00024">apic.h:24</a></div></div>
+<p class="definition">Definition at line <a class="el" href="apic_8cpp_source.html#l00462">462</a> of file <a class="el" href="apic_8cpp_source.html">apic.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  463</span>: m_pic_master_command_port(0x20),</div>
+<div class="line"><span class="lineno">  464</span>  m_pic_master_data_port(0x21),</div>
+<div class="line"><span class="lineno">  465</span>  m_pic_slave_command_port(0xA0),</div>
+<div class="line"><span class="lineno">  466</span>  m_pic_slave_data_port(0xA1)</div>
+<div class="line"><span class="lineno">  467</span>{</div>
+<div class="line"><span class="lineno">  468</span> </div>
+<div class="line"><span class="lineno">  469</span>    <span class="comment">// Register this APIC</span></div>
+<div class="line"><span class="lineno">  470</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a6bcb1b11271a35f8bff3d7e20fec2e4f">Logger::INFO</a>() &lt;&lt; <span class="stringliteral">&quot;Setting up APIC\n&quot;</span>;</div>
+<div class="line"><span class="lineno">  471</span>    <a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a3a44cbeaa1d7ed616942bb2ef08ec863">InterruptManager::active_interrupt_manager</a>()-&gt;<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a5373148b2ed1db2126a5ea6324553df3">set_apic</a>(<span class="keyword">this</span>);</div>
+<div class="line"><span class="lineno">  472</span> </div>
+<div class="line"><span class="lineno">  473</span>    <span class="comment">// Init the Local APIC</span></div>
+<div class="line"><span class="lineno">  474</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb">Logger::DEBUG</a>() &lt;&lt; <span class="stringliteral">&quot;Initialising Local APIC\n&quot;</span>;</div>
+<div class="line"><span class="lineno">  475</span>    m_local_apic = <span class="keyword">new</span> <a class="code hl_class" href="classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html">LocalAPIC</a>();</div>
+<div class="line"><span class="lineno">  476</span> </div>
+<div class="line"><span class="lineno">  477</span>    <span class="comment">// Disable the legacy mode PIC</span></div>
+<div class="line"><span class="lineno">  478</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb">Logger::DEBUG</a>() &lt;&lt; <span class="stringliteral">&quot;Disabling PIC\n&quot;</span>;</div>
+<div class="line"><span class="lineno">  479</span>    disable_pic();</div>
+<div class="line"><span class="lineno">  480</span> </div>
+<div class="line"><span class="lineno">  481</span>    <span class="comment">// Init the IO APIC</span></div>
+<div class="line"><span class="lineno">  482</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb">Logger::DEBUG</a>() &lt;&lt; <span class="stringliteral">&quot;Initialising IO APIC\n&quot;</span>;</div>
+<div class="line"><span class="lineno">  483</span>    m_io_apic = <span class="keyword">new</span> <a class="code hl_class" href="classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html">IOAPIC</a>(acpi);</div>
+<div class="line"><span class="lineno">  484</span>}</div>
+<div class="ttc" id="aclassMaxOS_1_1Logger_html_a44040e7f56db620657286c3dc2b230fb"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb">MaxOS::Logger::DEBUG</a></div><div class="ttdeci">static LogRecord DEBUG()</div><div class="ttdoc">Gets the active logger for debug logs.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00204">logger.cpp:204</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1Logger_html_a6bcb1b11271a35f8bff3d7e20fec2e4f"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a6bcb1b11271a35f8bff3d7e20fec2e4f">MaxOS::Logger::INFO</a></div><div class="ttdeci">static LogRecord INFO()</div><div class="ttdoc">Gets the active logger for info logs.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00195">logger.cpp:195</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1IOAPIC_html"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1IOAPIC.html">MaxOS::hardwarecommunication::IOAPIC</a></div><div class="ttdoc">Handles the IO APIC in the system (one per system)</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00205">apic.h:205</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1InterruptManager_html_a3a44cbeaa1d7ed616942bb2ef08ec863"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a3a44cbeaa1d7ed616942bb2ef08ec863">MaxOS::hardwarecommunication::InterruptManager::active_interrupt_manager</a></div><div class="ttdeci">static InterruptManager * active_interrupt_manager()</div><div class="ttdoc">Gets the active interrupt manager.</div><div class="ttdef"><b>Definition</b> <a href="interrupts_8cpp_source.html#l00442">interrupts.cpp:442</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1InterruptManager_html_a5373148b2ed1db2126a5ea6324553df3"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a5373148b2ed1db2126a5ea6324553df3">MaxOS::hardwarecommunication::InterruptManager::set_apic</a></div><div class="ttdeci">void set_apic(AdvancedProgrammableInterruptController *apic)</div><div class="ttdoc">Sets the APIC.</div><div class="ttdef"><b>Definition</b> <a href="interrupts_8cpp_source.html#l00408">interrupts.cpp:408</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1LocalAPIC_html"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html">MaxOS::hardwarecommunication::LocalAPIC</a></div><div class="ttdoc">Handles the local APIC for the current core.</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00034">apic.h:34</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="interrupts_8cpp_source.html#l00392">MaxOS::hardwarecommunication::InterruptManager::active_interrupt_manager()</a>, <a class="el" href="logger_8cpp_source.html#l00193">MaxOS::Logger::DEBUG()</a>, <a class="el" href="logger_8cpp_source.html#l00171">MaxOS::Logger::INFO()</a>, and <a class="el" href="interrupts_8cpp_source.html#l00308">MaxOS::hardwarecommunication::InterruptManager::set_apic()</a>.</p>
+<p class="reference">References <a class="el" href="interrupts_8cpp_source.html#l00442">MaxOS::hardwarecommunication::InterruptManager::active_interrupt_manager()</a>, <a class="el" href="logger_8cpp_source.html#l00204">MaxOS::Logger::DEBUG()</a>, <a class="el" href="logger_8cpp_source.html#l00195">MaxOS::Logger::INFO()</a>, and <a class="el" href="interrupts_8cpp_source.html#l00408">MaxOS::hardwarecommunication::InterruptManager::set_apic()</a>.</p>
 
 </div>
 </div>
@@ -216,13 +216,13 @@ Public Member Functions</h2></td></tr>
 
 <p>Destroy the Advanced Programmable Interrupt Controller object and frees the Local APIC and IO APIC. </p>
 
-<p class="definition">Definition at line <a class="el" href="apic_8cpp_source.html#l00442">442</a> of file <a class="el" href="apic_8cpp_source.html">apic.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  442</span>                                                                                  {</div>
-<div class="line"><span class="lineno">  443</span> </div>
-<div class="line"><span class="lineno">  444</span>    <span class="comment">// Free the memory</span></div>
-<div class="line"><span class="lineno">  445</span>    <span class="keyword">delete</span> m_local_apic;</div>
-<div class="line"><span class="lineno">  446</span>    <span class="keyword">delete</span> m_io_apic;</div>
-<div class="line"><span class="lineno">  447</span>}</div>
+<p class="definition">Definition at line <a class="el" href="apic_8cpp_source.html#l00489">489</a> of file <a class="el" href="apic_8cpp_source.html">apic.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  489</span>                                                                                  {</div>
+<div class="line"><span class="lineno">  490</span> </div>
+<div class="line"><span class="lineno">  491</span>    <span class="comment">// Free the memory</span></div>
+<div class="line"><span class="lineno">  492</span>    <span class="keyword">delete</span> m_local_apic;</div>
+<div class="line"><span class="lineno">  493</span>    <span class="keyword">delete</span> m_io_apic;</div>
+<div class="line"><span class="lineno">  494</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -245,13 +245,13 @@ Public Member Functions</h2></td></tr>
 <p>Get the io apic. </p>
 <dl class="section return"><dt>Returns</dt><dd>The io apic </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="apic_8cpp_source.html#l00490">490</a> of file <a class="el" href="apic_8cpp_source.html">apic.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  490</span>                                                               {</div>
-<div class="line"><span class="lineno">  491</span> </div>
-<div class="line"><span class="lineno">  492</span>    <span class="keywordflow">return</span> m_io_apic;</div>
-<div class="line"><span class="lineno">  493</span>}</div>
+<p class="definition">Definition at line <a class="el" href="apic_8cpp_source.html#l00537">537</a> of file <a class="el" href="apic_8cpp_source.html">apic.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  537</span>                                                               {</div>
+<div class="line"><span class="lineno">  538</span> </div>
+<div class="line"><span class="lineno">  539</span>    <span class="keywordflow">return</span> m_io_apic;</div>
+<div class="line"><span class="lineno">  540</span>}</div>
 </div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="cpu_8cpp_source.html#l00527">MaxOS::system::CPU::find_cores()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="cpu_8cpp_source.html#l00564">MaxOS::system::CPU::find_cores()</a>, and <a class="el" href="interrupts_8cpp_source.html#l00024">MaxOS::hardwarecommunication::InterruptHandler::InterruptHandler()</a>.</p>
 
 </div>
 </div>
@@ -273,13 +273,13 @@ Public Member Functions</h2></td></tr>
 <p>Get the local apic. </p>
 <dl class="section return"><dt>Returns</dt><dd>The local apic </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="apic_8cpp_source.html#l00480">480</a> of file <a class="el" href="apic_8cpp_source.html">apic.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  480</span>                                                                     {</div>
-<div class="line"><span class="lineno">  481</span> </div>
-<div class="line"><span class="lineno">  482</span>    <span class="keywordflow">return</span> m_local_apic;</div>
-<div class="line"><span class="lineno">  483</span>}</div>
+<p class="definition">Definition at line <a class="el" href="apic_8cpp_source.html#l00527">527</a> of file <a class="el" href="apic_8cpp_source.html">apic.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  527</span>                                                                     {</div>
+<div class="line"><span class="lineno">  528</span> </div>
+<div class="line"><span class="lineno">  529</span>    <span class="keywordflow">return</span> m_local_apic;</div>
+<div class="line"><span class="lineno">  530</span>}</div>
 </div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="clock_8cpp_source.html#l00144">MaxOS::drivers::clock::Clock::calibrate()</a>, and <a class="el" href="cpu_8cpp_source.html#l00252">MaxOS::system::CPU::CPU()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="clock_8cpp_source.html#l00118">MaxOS::hardwarecommunication::Clock::calibrate()</a>, <a class="el" href="cpu_8cpp_source.html#l00251">MaxOS::system::CPU::CPU()</a>, and <a class="el" href="cpu_8cpp_source.html#l00060">MaxOS::system::Core::wake_up()</a>.</p>
 
 </div>
 </div>

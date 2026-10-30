@@ -7,6 +7,12 @@ Implementation of a Thread and Process classes for managing system processes.
 
 {\ttfamily \#include $<$processes/process.\+h$>$}\newline
 {\ttfamily \#include $<$common/logger.\+h$>$}\newline
+{\ttfamily \#include $<$processes/scheduler.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{process_8cpp_ac684dc7750d6faa2cbfabe5ec5294c99}{save\+\_\+cpu\+\_\+state\+\_\+naked}} (volatile void \texorpdfstring{$\ast$}{*}location) \+\_\+\+\_\+attribute\+\_\+\+\_\+((naked))
+\begin{DoxyCompactList}\small\item\em Save the state of the CPU at the exit of this function. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -21,4 +27,116 @@ Max Tyson
 
 
 Definition in file \mbox{\hyperlink{process_8cpp_source}{process.\+cpp}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{process_8cpp_ac684dc7750d6faa2cbfabe5ec5294c99}\label{process_8cpp_ac684dc7750d6faa2cbfabe5ec5294c99} 
+\index{process.cpp@{process.cpp}!save\_cpu\_state\_naked@{save\_cpu\_state\_naked}}
+\index{save\_cpu\_state\_naked@{save\_cpu\_state\_naked}!process.cpp@{process.cpp}}
+\doxysubsubsection{\texorpdfstring{save\_cpu\_state\_naked()}{save\_cpu\_state\_naked()}}
+{\footnotesize\ttfamily void save\+\_\+cpu\+\_\+state\+\_\+naked (\begin{DoxyParamCaption}\item[{volatile void \texorpdfstring{$\ast$}{*}}]{location }\end{DoxyParamCaption})}
+
+
+
+Save the state of the CPU at the exit of this function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em location} & Where to save the state to \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{process_8cpp_source_l00153}{153}} of file \mbox{\hyperlink{process_8cpp_source}{process.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Save\ registers}}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%rax\(\backslash\)n"{}}}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%rbx\(\backslash\)n"{}}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%rcx\(\backslash\)n"{}}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%rdx\(\backslash\)n"{}}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%rbp\(\backslash\)n"{}}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%rsi\(\backslash\)n"{}}}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%rdi\(\backslash\)n"{}}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%r8\(\backslash\)n"{}}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%r9\(\backslash\)n"{}}}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%r10\(\backslash\)n"{}}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%r11\(\backslash\)n"{}}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%r12\(\backslash\)n"{}}}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%r13\(\backslash\)n"{}}}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%r14\(\backslash\)n"{}}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushq\ \%r15\(\backslash\)n"{}}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Store\ the\ save\ location}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \%rdi,\ \%rsi\(\backslash\)n"{}}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Save\ general\ registers}}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ \ 0(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x00(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ \ 8(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x08(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 16(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x10(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 24(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x18(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 32(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x20(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 40(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x28(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 48(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x30(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 56(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x38(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 64(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x40(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 72(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x48(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 80(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x50(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 88(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x58(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \ 96(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x60(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ 104(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x68(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ 112(\%rsp),\ \%rax\(\backslash\)n"{}}\ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x70(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Save\ the\ return\ address\ as\ the\ instruction\ pointer}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ 120(\%rsp),\ \%rax\(\backslash\)n"{}}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x88(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CS}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}xorq\ \%rax,\ \%rax\(\backslash\)n"{}}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movw\ \%cs,\ \%ax\(\backslash\)n"{}}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x90(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ RFLAGS}}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}pushfq\(\backslash\)n"{}}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%rax\(\backslash\)n"{}}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0x98(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ RSP}}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}leaq\ 120(\%rsp),\ \%rax\(\backslash\)n"{}}}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0xA0(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ SS}}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}xorq\ \%rax,\ \%rax\(\backslash\)n"{}}}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movw\ \%ss,\ \%ax\(\backslash\)n"{}}}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}movq\ \%rax,\ 0xA8(\%rsi)\(\backslash\)n"{}}}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Restore\ registers}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%r15\(\backslash\)n"{}}}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%r14\(\backslash\)n"{}}}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%r13\(\backslash\)n"{}}}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%r12\(\backslash\)n"{}}}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%r11\(\backslash\)n"{}}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%r10\(\backslash\)n"{}}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%r9\(\backslash\)n"{}}}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%r8\(\backslash\)n"{}}}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%rdi\(\backslash\)n"{}}}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%rsi\(\backslash\)n"{}}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%rbp\(\backslash\)n"{}}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%rdx\(\backslash\)n"{}}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%rcx\(\backslash\)n"{}}}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%rbx\(\backslash\)n"{}}}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}popq\ \%rax\(\backslash\)n"{}}}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}ret\(\backslash\)n"{}}}
+\DoxyCodeLine{00233\ \ \ \ \ );}
+\DoxyCodeLine{00234\ \}}
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{process_8cpp_source_l00240}{Max\+OS\+::processes\+::\+Thread\+::save\+\_\+cpu\+\_\+state()}}.
 

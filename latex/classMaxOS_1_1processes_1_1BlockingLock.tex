@@ -1,0 +1,211 @@
+\doxysection{Max\+OS\+::processes\+::Blocking\+Lock Class Reference}
+\hypertarget{classMaxOS_1_1processes_1_1BlockingLock}{}\label{classMaxOS_1_1processes_1_1BlockingLock}\index{MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}}
+
+
+Enables a resource to be used by only one instance at a time through a combination of spinning and queuing. When waiting enqueued, thread will sleep.  
+
+
+
+
+{\ttfamily \#include $<$block.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classMaxOS_1_1processes_1_1BlockingLock_a3fec6b869fbd73076b49eb2a0b3fae76}{lock}} ()
+\begin{DoxyCompactList}\small\item\em Lock the spinlock once it is available, sleeping until other processes are done with it. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1processes_1_1BlockingLock_a974725bf2e5c5974dbe1f6c26afe4cd5}{unlock}} ()
+\begin{DoxyCompactList}\small\item\em Unlock the spinlock. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1processes_1_1BlockingLock_a9b29279b6e3937039de90a28bc929fcb}{is\+\_\+locked}} () const
+\begin{DoxyCompactList}\small\item\em Check if the spinlock is locked. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1processes_1_1BlockingLock_a24c5d9622cba654d5fe9f0847dc69e6a}{acquire}} ()
+\begin{DoxyCompactList}\small\item\em Acquire the spinlock, spin until the lock is available and sleeping the thread until marked as available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1processes_1_1BlockingLock_a4788428e37a15a97720b44719e238c49}{release}} ()
+\begin{DoxyCompactList}\small\item\em Mark as unlocked, wake the next enqueued thread. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Enables a resource to be used by only one instance at a time through a combination of spinning and queuing. When waiting enqueued, thread will sleep. 
+
+\begin{DoxyNote}{Note}
+Repeated API that could be made a class that isn\textquotesingle{}t because lock types shouldn\textquotesingle{}t be interchangeable 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+Spinlock
+\end{DoxySeeAlso}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000016}{Todo}}]move to libcommon \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{block_8h_source_l00028}{28}} of file \mbox{\hyperlink{block_8h_source}{block.\+h}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classMaxOS_1_1processes_1_1BlockingLock_a24c5d9622cba654d5fe9f0847dc69e6a}\label{classMaxOS_1_1processes_1_1BlockingLock_a24c5d9622cba654d5fe9f0847dc69e6a} 
+\index{MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}!acquire@{acquire}}
+\index{acquire@{acquire}!MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}}
+\doxysubsubsection{\texorpdfstring{acquire()}{acquire()}}
+{\footnotesize\ttfamily void Blocking\+Lock\+::acquire (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Acquire the spinlock, spin until the lock is available and sleeping the thread until marked as available. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000040}{Todo}}]Move the yielding logic into process/thread code so that it can be reused 
+
+circular dependancy resolution \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{block_8cpp_source_l00049}{49}} of file \mbox{\hyperlink{block_8cpp_source}{block.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ get\ the\ lock}}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ (i\ <\ \mbox{\hyperlink{block_8h_ab457f0b39a8feb10a210698e53d0f286}{BLOCKING\_FAST\_TRY\_LIMIT}}\ ||\ must\_spin());\ ++i)}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\_\_atomic\_test\_and\_set(\&m\_locked,\ \_\_ATOMIC\_ACQUIRE))}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//\ Add\ to\ the\ queue}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{auto}\ thread\ =\ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ad70d085e581a761a809a575ad3626922}{GlobalScheduler::current\_thread}}();}
+\DoxyCodeLine{00058\ \ \ \ \ thread-\/>thread\_state\ =\ ThreadState::WAITING;}
+\DoxyCodeLine{00059\ \ \ \ \ m\_queue.push\_back(thread-\/>tid);}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{//\ Scheduler\ will\ awake\ when\ the\ process\ that\ holds\ this\ lock\ marks\ this\ thread\ as\ READY}}
+\DoxyCodeLine{00062\ \ \ \ \ thread-\/>yield();}
+\DoxyCodeLine{00063\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{block_8h_source_l00017}{Max\+OS\+::processes\+::\+BLOCKING\+\_\+\+FAST\+\_\+\+TRY\+\_\+\+LIMIT}}, and \mbox{\hyperlink{scheduler_8cpp_source_l00361}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::current\+\_\+thread()}}.
+
+
+
+Referenced by \mbox{\hyperlink{block_8cpp_source_l00023}{lock()}}.
+
+\Hypertarget{classMaxOS_1_1processes_1_1BlockingLock_a9b29279b6e3937039de90a28bc929fcb}\label{classMaxOS_1_1processes_1_1BlockingLock_a9b29279b6e3937039de90a28bc929fcb} 
+\index{MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}!is\_locked@{is\_locked}}
+\index{is\_locked@{is\_locked}!MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}}
+\doxysubsubsection{\texorpdfstring{is\_locked()}{is\_locked()}}
+{\footnotesize\ttfamily bool Blocking\+Lock\+::is\+\_\+locked (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Check if the spinlock is locked. 
+
+\begin{DoxyReturn}{Returns}
+True if the spinlock is locked, false otherwise 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{block_8cpp_source_l00039}{39}} of file \mbox{\hyperlink{block_8cpp_source}{block.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_locked;}
+\DoxyCodeLine{00041\ \}}
+
+\end{DoxyCode}
+\Hypertarget{classMaxOS_1_1processes_1_1BlockingLock_a3fec6b869fbd73076b49eb2a0b3fae76}\label{classMaxOS_1_1processes_1_1BlockingLock_a3fec6b869fbd73076b49eb2a0b3fae76} 
+\index{MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}!lock@{lock}}
+\index{lock@{lock}!MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}}
+\doxysubsubsection{\texorpdfstring{lock()}{lock()}}
+{\footnotesize\ttfamily void Blocking\+Lock\+::lock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Lock the spinlock once it is available, sleeping until other processes are done with it. 
+
+
+
+Definition at line \mbox{\hyperlink{block_8cpp_source_l00023}{23}} of file \mbox{\hyperlink{block_8cpp_source}{block.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1BlockingLock_a24c5d9622cba654d5fe9f0847dc69e6a}{acquire}}();}
+\DoxyCodeLine{00025\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{block_8cpp_source_l00049}{acquire()}}.
+
+
+
+Referenced by \mbox{\hyperlink{ipc_8cpp_source_l00135}{Max\+OS\+::processes\+::\+Shared\+Message\+Endpoint\+::send()}}.
+
+\Hypertarget{classMaxOS_1_1processes_1_1BlockingLock_a4788428e37a15a97720b44719e238c49}\label{classMaxOS_1_1processes_1_1BlockingLock_a4788428e37a15a97720b44719e238c49} 
+\index{MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}!release@{release}}
+\index{release@{release}!MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}}
+\doxysubsubsection{\texorpdfstring{release()}{release()}}
+{\footnotesize\ttfamily void Blocking\+Lock\+::release (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Mark as unlocked, wake the next enqueued thread. 
+
+
+
+Definition at line \mbox{\hyperlink{block_8cpp_source_l00068}{68}} of file \mbox{\hyperlink{block_8cpp_source}{block.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{//\ Next\ thread\ can\ be\ run}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordflow}{if}(!m\_queue.empty())}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1GlobalScheduler_ab3891508a6e69d835b30c5ee81ba8fb0}{GlobalScheduler::get\_thread}}(m\_queue.pop\_front())-\/>\mbox{\hyperlink{classMaxOS_1_1processes_1_1Thread_ab39b4c92abfd43fa2ca1fe276926553e}{thread\_state}}\ =\ ThreadState::READY;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \_\_atomic\_clear(\&m\_locked,\ \_\_ATOMIC\_RELEASE);}
+\DoxyCodeLine{00075\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{scheduler_8cpp_source_l00375}{Max\+OS\+::processes\+::\+Global\+Scheduler\+::get\+\_\+thread()}}, and \mbox{\hyperlink{process_8h_source_l00072}{Max\+OS\+::processes\+::\+Thread\+::thread\+\_\+state}}.
+
+
+
+Referenced by \mbox{\hyperlink{block_8cpp_source_l00030}{unlock()}}.
+
+\Hypertarget{classMaxOS_1_1processes_1_1BlockingLock_a974725bf2e5c5974dbe1f6c26afe4cd5}\label{classMaxOS_1_1processes_1_1BlockingLock_a974725bf2e5c5974dbe1f6c26afe4cd5} 
+\index{MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}!unlock@{unlock}}
+\index{unlock@{unlock}!MaxOS::processes::BlockingLock@{MaxOS::processes::BlockingLock}}
+\doxysubsubsection{\texorpdfstring{unlock()}{unlock()}}
+{\footnotesize\ttfamily void Blocking\+Lock\+::unlock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Unlock the spinlock. 
+
+
+
+Definition at line \mbox{\hyperlink{block_8cpp_source_l00030}{30}} of file \mbox{\hyperlink{block_8cpp_source}{block.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1processes_1_1BlockingLock_a4788428e37a15a97720b44719e238c49}{release}}();}
+\DoxyCodeLine{00032\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{block_8cpp_source_l00068}{release()}}.
+
+
+
+Referenced by \mbox{\hyperlink{ipc_8cpp_source_l00135}{Max\+OS\+::processes\+::\+Shared\+Message\+Endpoint\+::send()}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/processes/\mbox{\hyperlink{block_8h}{block.\+h}}\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/processes/block.\+cpp\end{DoxyCompactItemize}

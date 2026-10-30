@@ -1,0 +1,129 @@
+.TH "MaxOS::hardwarecommunication::PageFaultHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::hardwarecommunication::PageFaultHandler \- Handles a page fault exception\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <interrupts\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::ExceptionHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPageFaultHandler\fP ()"
+.br
+.RI "Create a new \fBPageFaultHandler\fP\&. "
+.ti -1c
+.RI "string \fBget_message\fP (\fBsystem::cpu_status_t\fP *status) final"
+.br
+.RI "Get an human readable error message explaining this exception\&.   "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::ExceptionHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBExceptionHandler\fP (uint8_t interrupt_number)"
+.br
+.RI "Create a new base exception handler for an interrupt\&. "
+.ti -1c
+.RI "\fB~ExceptionHandler\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status)"
+.br
+.RI "Handle the interrupt relating to this exception\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "virtual void \fBhandle_interrupt\fP ()"
+.br
+.RI "Handles an interrupt\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBInterruptHandler\fP (uint8_t interrupt_number, int64_t redirect=\-1, uint64_t redirect_index=0)"
+.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "virtual \fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_interrupt_number\fP"
+.br
+.RI "The interrupt number this handler handles\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles a page fault exception\&. 
+.PP
+Definition at line \fB115\fP of file \fBinterrupts\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "MaxOS::hardwarecommunication::PageFaultHandler::PageFaultHandler ()\fC [inline]\fP"
+
+.PP
+Create a new \fBPageFaultHandler\fP\&. 
+.PP
+Definition at line \fB119\fP of file \fBinterrupts\&.h\fP\&..PP
+.nf
+119 : ExceptionHandler(0x0E) { }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "string PageFaultHandler::get_message (\fBsystem::cpu_status_t\fP * status)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Get an human readable error message explaining this exception\&.   
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The CPU state at time of exception 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The error message   
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::hardwarecommunication::ExceptionHandler\fP\&.
+.PP
+Definition at line \fB176\fP of file \fBinterrupts\&.cpp\fP\&..PP
+.nf
+176                                                          {
+177 
+178     // Extract the information about the fault
+179     bool present = (status\->error_code & 0x1) != 0;
+180     bool write = (status\->error_code & 0x2) != 0;
+181     bool user_mode = (status\->error_code & 0x4) != 0;
+182     bool reserved_write = (status\->error_code & 0x8) != 0;
+183     bool instruction_fetch = (status\->error_code & 0x10) != 0;
+184     uint64_t faulting_address;
+185     asm volatile("movq %%cr2, %0" : "=r" (faulting_address));
+186 
+187     return StringBuilder() << "Page Fault: " << (user_mode ? "user" : "kernel")  << " code at 0x" << status\->rip << " tried to " << (write ? "write" : "read") << " address 0x" << faulting_address << " which is " << (present ? "" : "not") << " mapped and " << (reserved_write ? "" : "not") << " reserved\&. " << " (instruction fetch: " << (instruction_fetch ? "Yes" : "No") << ")\\n";
+188 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

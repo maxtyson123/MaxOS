@@ -1,0 +1,187 @@
+.TH "MaxOS::processes::resources::ThreadResourceRegistry" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::resources::ThreadResourceRegistry \- Manages the creation, retention and destruction of resources representing threads\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <scheduler_resources\&.h>\fP
+.PP
+Inherits \fBMaxOS::processes::resources::ResourceRegistry< ThreadResource >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBResource\fP * \fBget_resource\fP (const string &name) final"
+.br
+.RI "Gets a resource from the registry by name\&. "
+.ti -1c
+.RI "\fBResource\fP * \fBcreate_resource\fP (const string &name, size_t flags, uintptr_t data) final"
+.br
+.RI "td "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::processes::resources::ResourceRegistry< ThreadResource >\fP
+.in +1c
+.ti -1c
+.RI "\fBResourceRegistry\fP (\fBresource_type_t\fP type)"
+.br
+.RI "Constructor for \fBResourceRegistry\fP of a specific type\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::processes::resources::BaseResourceRegistry\fP
+.in +1c
+.ti -1c
+.RI "\fBBaseResourceRegistry\fP (\fBresource_type_t\fP \fBtype\fP)"
+.br
+.RI "Constructs a new \fBBaseResourceRegistry\fP object and registers it globally\&. "
+.ti -1c
+.RI "\fB~BaseResourceRegistry\fP ()"
+.br
+.RI "Destructor for \fBBaseResourceRegistry\fP, removes it from the global list\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of resources this registry handles\&. "
+.ti -1c
+.RI "bool \fBregister_resource\fP (\fBResource\fP *resource)"
+.br
+.RI "Registers a resource in the registry\&. "
+.ti -1c
+.RI "void \fBclose_resource\fP (\fBResource\fP *resource, size_t flags)"
+.br
+.RI "Close the resource provided, if it exists in this registry\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBMaxOS::processes::resources::BaseResourceRegistry\fP
+.in +1c
+.ti -1c
+.RI "common::Map< string, \fBResource\fP * > \fBm_resources\fP"
+.br
+.RI "The map of resource names to resource instances\&. "
+.ti -1c
+.RI "common::Map< string, uint64_t > \fBm_resource_uses\fP"
+.br
+.RI "The map of resource names to how many processes are using them\&. "
+.ti -1c
+.RI "common::Spinlock \fBm_lock\fP"
+.br
+.RI "The lock to make the registry threadsafe\&. "
+.ti -1c
+.RI "\fBresource_type_t\fP \fBm_type\fP"
+.br
+.RI "The resource type that this registry manages\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Manages the creation, retention and destruction of resources representing threads\&. 
+.PP
+Definition at line \fB79\fP of file \fBscheduler_resources\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ThreadResourceRegistry::ThreadResourceRegistry ()"
+
+.PP
+Definition at line \fB302\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+303 : ResourceRegistry<ThreadResource>(resource_type_t::THREAD)
+304 {
+305 
+306 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBResource\fP * ThreadResourceRegistry::create_resource (const string & name, size_t flags, uintptr_t data)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+td 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP td 
+.br
+\fIflags\fP td 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+td
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Implement opening threads 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::resources::ResourceRegistry< ThreadResource >\fP\&.
+.PP
+Definition at line \fB316\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+316                                                                                                   {
+317 
+318     return ResourceRegistry::create_resource(name, flags, data);
+319 }
+.fi
+
+.PP
+References \fBMaxOS::processes::resources::ResourceRegistry< Type >::create_resource()\fP\&.
+.SS "\fBResource\fP * ThreadResourceRegistry::get_resource (const string & name)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets a resource from the registry by name\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource to find 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The resource or nullptr if the resource was not found 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::processes::resources::BaseResourceRegistry\fP\&.
+.PP
+Definition at line \fB321\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+321                                                                  {
+322 
+323     // Resource already opened
+324     auto resource = BaseResourceRegistry::get_resource(name);
+325     if(resource != nullptr)
+326         return resource;
+327 
+328     // Get the thread
+329     uint64_t tid = name\&.to_int();
+330     auto thread = name == "this" ? GlobalScheduler::current_thread() : GlobalScheduler::get_thread(tid);
+331 
+332     // Self refrence may already be open
+333     resource = BaseResourceRegistry::get_resource(string(thread \-> tid));
+334     if(resource != nullptr)
+335         return resource;
+336 
+337     // Create the resource
+338     auto thread_resource = new ThreadResource(string(thread \-> tid), 0, resource_type_t::PROCESS);
+339     thread_resource\->thread = thread;
+340 
+341     register_resource(thread_resource);
+342     return thread_resource;
+343 }
+.fi
+
+.PP
+References \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::processes::GlobalScheduler::get_thread()\fP, and \fBMaxOS::processes::resources::BaseResourceRegistry::register_resource()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

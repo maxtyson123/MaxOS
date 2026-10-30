@@ -1,0 +1,184 @@
+.TH "MaxOS::memory::BumpMemoryManager" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::memory::BumpMemoryManager \- Basic doubly linked list bump memory manager\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <memorymanagement\&.h>\fP
+.PP
+Inherits \fBMaxOS::memory::allocator::BumpAllocator\fP\&.
+.PP
+Inherited by \fBMaxOS::memory::MemoryManager\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBumpMemoryManager\fP (\fBVirtualMemoryManager\fP *virtual_memory_manager=nullptr)"
+.br
+.RI "Constructs a new \fBBumpMemoryManager\fP\&. "
+.ti -1c
+.RI "\fB~BumpMemoryManager\fP ()"
+.br
+.ti -1c
+.RI "\fBVirtualMemoryManager\fP * \fBvmm\fP ()"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::memory::allocator::BumpAllocator\fP
+.in +1c
+.ti -1c
+.RI "\fBBumpAllocator\fP ()"
+.br
+.RI "Creates a new bump memory allocator\&. "
+.ti -1c
+.RI "virtual \fB~BumpAllocator\fP ()"
+.br
+.RI "Destructs a Bump memory allocator\&. "
+.ti -1c
+.RI "void \fBsetup_region\fP (uintptr_t address, size_t length) final"
+.br
+.RI "Setup a region to be bump memory managed, creates a free chunk represent the whole region\&. "
+.ti -1c
+.RI "void * \fBallocate\fP (size_t size) final"
+.br
+.RI "Allocates a block of memory\&. "
+.ti -1c
+.RI "void \fBunallocate\fP (void *pointer) final"
+.br
+.RI "Frees a block of memory\&. "
+.ti -1c
+.RI "size_t \fBamount_used\fP () final"
+.br
+.RI "Returns the amount of memory used\&. "
+.ti -1c
+.RI "size_t \fBalign\fP (size_t size) final"
+.br
+.RI "Aligns the size to the chunk alignment\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::memory::allocator::MemoryAllocator\fP
+.in +1c
+.ti -1c
+.RI "\fBMemoryAllocator\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~MemoryAllocator\fP ()"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBswitch_active_memory_manager\fP (\fBBumpMemoryManager\fP *manager)"
+.br
+.RI "Switches the active memory manager\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Basic doubly linked list bump memory manager\&. 
+.PP
+Definition at line \fB29\fP of file \fBmemorymanagement\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "BumpMemoryManager::BumpMemoryManager (\fBVirtualMemoryManager\fP * virtual_memory_manager = \fCnullptr\fP)"
+
+.PP
+Constructs a new \fBBumpMemoryManager\fP\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvirtual_memory_manager\fP The virtual memory region this allocator manages 
+.RE
+.PP
+
+.PP
+Definition at line \fB25\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+.nf
+26     : m_virtual_memory_manager(virtual_memory_manager)
+27 {
+28 
+29     // Create the VMM if not provided
+30     if(m_virtual_memory_manager == nullptr)
+31         m_virtual_memory_manager = new VirtualMemoryManager();
+32 
+33     // Set up the first chunk of memory
+34     auto address = (uintptr_t)m_virtual_memory_manager\->allocate(PAGE_SIZE, 0);
+35     setup_region(address, PAGE_SIZE);
+36 
+37 }
+.fi
+
+.PP
+References \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, and \fBMaxOS::memory::allocator::BumpAllocator::setup_region()\fP\&.
+.SS "BumpMemoryManager::~BumpMemoryManager ()"
+Destructs the \fBBumpMemoryManager\fP, freeing the VMM it manages 
+.PP
+Definition at line \fB42\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+.nf
+42                                       {
+43 
+44     // Free the VMM (if this is not the kernel memory manager)
+45     if(m_virtual_memory_manager != nullptr)
+46         delete m_virtual_memory_manager;
+47 
+48 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void BumpMemoryManager::switch_active_memory_manager (\fBBumpMemoryManager\fP * manager)\fC [static]\fP"
+
+.PP
+Switches the active memory manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImanager\fP The new memory manager 
+.RE
+.PP
+
+.PP
+Definition at line \fB83\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+.nf
+83                                                                                {
+84 
+85     // Make sure there is a manager
+86     if(manager == nullptr)
+87         return;
+88 
+89     // Switch the address space
+90     asm volatile("mov %0, %%cr3"::"r"((uint64_t) manager\->m_virtual_memory_manager\->pml4_root_address_physical()) : "memory");
+91 
+92 }
+.fi
+
+.PP
+References \fBMaxOS::memory::VirtualMemoryManager::pml4_root_address_physical()\fP\&.
+.SS "\fBVirtualMemoryManager\fP * BumpMemoryManager::vmm ()"
+Gets the active virtual memory manager
+.PP
+\fBReturns\fP
+.RS 4
+The active virtual memory manager 
+.RE
+.PP
+
+.PP
+Definition at line \fB72\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
+.nf
+72                                              {
+73 
+74     return m_virtual_memory_manager;
+75 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::processes::resources::BridgeHandler::BridgeHandler()\fP, \fBMaxOS::processes::SharedMemory::open()\fP, \fBMaxOS::processes::GlobalScheduler::prepare_initrd()\fP, \fBMaxOS::processes::Process::Process()\fP, and \fBMaxOS::processes::resources::BridgeHandler::send_to_bridge()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

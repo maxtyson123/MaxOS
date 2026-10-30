@@ -1,0 +1,211 @@
+.TH "MaxOS::processes::resources::BridgeHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::resources::BridgeHandler \- A handler to manage resource commands over shared memory\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <resource_bridge\&.h>\fP
+.PP
+Inherits \fBMaxOS::memory::allocator::BumpAllocator\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBridgeHandler\fP (string const &shared_name, \fBProcess\fP *owner_process)"
+.br
+.RI "Constructs a handler to manage resource commands over shared memory\&. "
+.ti -1c
+.RI "size_t \fBallocate_id\fP ()"
+.br
+.RI "Allocates an ID to identify a resource on the bridge\&. "
+.ti -1c
+.RI "int64_t \fBsend_to_bridge\fP (size_t id, KPI::ServiceResourceCommand command, const void *buffer, size_t size, size_t flags)"
+.br
+.RI "Send a command and its associated data to the endpoint associated with this resource\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::memory::allocator::BumpAllocator\fP
+.in +1c
+.ti -1c
+.RI "\fBBumpAllocator\fP ()"
+.br
+.RI "Creates a new bump memory allocator\&. "
+.ti -1c
+.RI "virtual \fB~BumpAllocator\fP ()"
+.br
+.RI "Destructs a Bump memory allocator\&. "
+.ti -1c
+.RI "void \fBsetup_region\fP (uintptr_t address, size_t length) final"
+.br
+.RI "Setup a region to be bump memory managed, creates a free chunk represent the whole region\&. "
+.ti -1c
+.RI "void * \fBallocate\fP (size_t size) final"
+.br
+.RI "Allocates a block of memory\&. "
+.ti -1c
+.RI "void \fBunallocate\fP (void *pointer) final"
+.br
+.RI "Frees a block of memory\&. "
+.ti -1c
+.RI "size_t \fBamount_used\fP () final"
+.br
+.RI "Returns the amount of memory used\&. "
+.ti -1c
+.RI "size_t \fBalign\fP (size_t size) final"
+.br
+.RI "Aligns the size to the chunk alignment\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::memory::allocator::MemoryAllocator\fP
+.in +1c
+.ti -1c
+.RI "\fBMemoryAllocator\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~MemoryAllocator\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A handler to manage resource commands over shared memory\&. 
+.PP
+Definition at line \fB32\fP of file \fBresource_bridge\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "BridgeHandler::BridgeHandler (string const & shared_name, \fBProcess\fP * owner_process)"
+
+.PP
+Constructs a handler to manage resource commands over shared memory\&. 
+.PP
+Definition at line \fB21\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+22 : m_owner_process(owner_process)
+23 {
+24 
+25     // Get the shared memory region
+26     auto shared_memory = (SharedMemory*)GlobalResourceRegistry::get_registry(resource_type_t::SHARED_MEMORY)\->get_resource(shared_name);
+27     ASSERT(shared_memory != nullptr, "Shared memory resource not found\\n");
+28 
+29     // Copy into the kernel
+30     ASSERT(shared_memory\->size() == SERVICE_SHARED_MEM_SIZE, "Shared memory resource size mismatch\\n");
+31     auto address = MemoryManager::s_kernel_memory_manager\->vmm()\->load_shared_memory(shared_memory\->physical_address(), SERVICE_SHARED_MEM_SIZE);
+32 
+33     // Setup the message region
+34     m_message_ring = (service_message_ring_t*)address;
+35 
+36     // Setup the data region
+37     m_data_region = (uintptr_t)address + MESSAGE_SIZE;
+38     setup_region(m_data_region, DATA_SIZE);
+39 }
+.fi
+
+.PP
+References \fBMaxOS::processes::resources::GlobalResourceRegistry::get_registry()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::memory::MemoryManager::s_kernel_memory_manager\fP, \fBMaxOS::memory::allocator::BumpAllocator::setup_region()\fP, and \fBMaxOS::memory::BumpMemoryManager::vmm()\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "size_t BridgeHandler::allocate_id ()"
+
+.PP
+Allocates an ID to identify a resource on the bridge\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The ID that the resource can use 
+.RE
+.PP
+
+.PP
+Definition at line \fB122\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+122                                   {
+123     return __atomic_fetch_add(&m_next_id, 1, __ATOMIC_RELAXED);
+124 }
+.fi
+
+.SS "int64_t BridgeHandler::send_to_bridge (size_t id, KPI::ServiceResourceCommand command, const void * buffer, size_t size, size_t flags)"
+
+.PP
+Send a command and its associated data to the endpoint associated with this resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIid\fP The id of the resource 
+.br
+\fIcommand\fP The command to execute 
+.br
+\fIbuffer\fP The data to pass along with the command 
+.br
+\fIsize\fP The size of the data buffer 
+.br
+\fIflags\fP Flags associated with the command
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Get slot data before freeing 
+.RE
+.PP
+
+.PP
+Definition at line \fB139\fP of file \fBresource_bridge\&.cpp\fP\&..PP
+.nf
+139                                                                                                                               {
+140 
+141     // Copy data into shared region
+142     bool is_read = command == ServiceResourceCommand::R_READ; // || command == BridgeResourceCommand::R_READ_ATTR;
+143     bool is_page_mapped = size >= MAX_COPY_SIZE;
+144     size_t offset = store_data(buffer, size, is_read);
+145 
+146     // Construct the message
+147     auto slot = aquire_slot();
+148     __atomic_store_n(&slot\->sending_pid,    GlobalScheduler::current_process()\->pid(),  __ATOMIC_RELAXED);
+149     __atomic_store_n(&slot\->resource_id,        id,                                         __ATOMIC_RELAXED);
+150     __atomic_store_n(&slot\->flags,              flags,                                      __ATOMIC_RELAXED);
+151     __atomic_store_n(&slot\->command,            (uint8_t)command,                           __ATOMIC_RELAXED);
+152     __atomic_store_n(&slot\->data_size,          size,                                       __ATOMIC_RELAXED);
+153     __atomic_store_n(&slot\->data_offset,        offset,                                     __ATOMIC_RELAXED);
+154     __atomic_store_n(&slot\->data_page_mapped,   is_page_mapped,                             __ATOMIC_RELAXED);
+155     __atomic_store_n(&slot\->response,       0,                                          __ATOMIC_RELAXED);
+156     __atomic_store_n(&slot\->state,              (uint8_t)ServiceMessageSlotState::REQUEST,  __ATOMIC_RELEASE);
+157 
+158     // Wait for a response
+159     while (__atomic_load_n(&slot\->state, __ATOMIC_ACQUIRE) == (uint8_t)ServiceMessageSlotState::REQUEST)
+160         GlobalScheduler::current_thread()\->yield();
+161 
+162     // Read request
+163     if (is_read && !is_page_mapped)
+164         memcpy((void*)buffer, (void*)m_data_region + offset, size);
+165 
+166     // Free resources
+167     if (size != 0) {
+168         if (is_page_mapped) {
+169             MemoryManager* caller = GlobalScheduler::current_process()\->memory_manager;
+170             MemoryManager::switch_active_memory_manager(m_owner_process\->memory_manager);
+171             m_owner_process\->memory_manager\->vmm()\->unload_range_from_process((void*)offset, size);
+172             MemoryManager::switch_active_memory_manager(caller);
+173         }
+174         else {
+175             m_lock\&.lock();
+176             unallocate((void*)m_data_region + offset);
+177             m_lock\&.unlock();
+178         }
+179     }
+180 
+181     // Get the response and then release the slot
+182     int64_t response = __atomic_load_n(&slot\->response, __ATOMIC_RELAXED);
+183     __atomic_store_n(&slot\->state, (uint8_t)ServiceMessageSlotState::FREE,__ATOMIC_RELEASE);
+184 
+185     return response;
+186 }
+.fi
+
+.PP
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Process::pid()\fP, \fBMaxOS::memory::allocator::BumpAllocator::unallocate()\fP, \fBMaxOS::memory::VirtualMemoryManager::unload_range_from_process()\fP, \fBMaxOS::memory::BumpMemoryManager::vmm()\fP, and \fBMaxOS::processes::Thread::yield()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

@@ -1,0 +1,298 @@
+.TH "MaxOS::processes::resources::ProcessResource" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::resources::ProcessResource \- A wrapper for a \fBProcess\fP which exposes \fBProcess\fP operations as Resource operations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <scheduler_resources\&.h>\fP
+.PP
+Inherits Resource\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBProcessResource\fP (const string &name, size_t flags, \fBresource_type_t\fP type)"
+.br
+.ti -1c
+.RI "void \fBclose\fP (size_t flags) final"
+.br
+.RI "Closes the process resource, killing the process and removing it from the scheduler\&. "
+.ti -1c
+.RI "int \fBread\fP (void *buffer, size_t size, size_t flags) final"
+.br
+.RI "Reads data from the process resource\&. "
+.ti -1c
+.RI "int \fBwrite\fP (const void *buffer, size_t size, size_t flags) final"
+.br
+.RI "Writes data to the process resource\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBProcess\fP * \fBprocess\fP"
+.br
+.RI "The process that this resource handles & exposes\&. "
+.ti -1c
+.RI "uint64_t \fBexit_code\fP"
+.br
+.RI "The exit code of the process once it has exited\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A wrapper for a \fBProcess\fP which exposes \fBProcess\fP operations as Resource operations\&. 
+
+
+.PP
+\fBSee also\fP
+.RS 4
+\fBProcess\fP 
+.PP
+\fBResource\fP
+.RE
+.PP
+\fBNote\fP
+.RS 4
+The process pointer will be freed by scheduler during \fBclose()\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB34\fP of file \fBscheduler_resources\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ProcessResource::ProcessResource (const string & name, size_t flags, \fBresource_type_t\fP type)"
+
+.PP
+Definition at line \fB20\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+21 : Resource(name, flags, type)
+22 {
+23 
+24 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void ProcessResource::close (size_t flags)\fC [final]\fP"
+
+.PP
+Closes the process resource, killing the process and removing it from the scheduler\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIflags\fP N/A 
+.RE
+.PP
+
+.PP
+Definition at line \fB31\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+31                                         {
+32 
+33     if(process)
+34         GlobalScheduler::remove_process(process);
+35 }
+.fi
+
+.PP
+References \fBprocess\fP, and \fBMaxOS::processes::GlobalScheduler::remove_process()\fP\&.
+.SS "int ProcessResource::read (void * buffer, size_t size, size_t flags)\fC [final]\fP"
+
+.PP
+Reads data from the process resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to read into 
+.br
+\fIsize\fP The number of bytes to read 
+.br
+\fIflags\fP The flags to pass to the reading
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully read or -1 on error 
+.RE
+.PP
+
+.PP
+Definition at line \fB46\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+46                                                                  {
+47 
+48     // Process not found (allow reading stats only to get exit code)
+49     if(!process && flags != (size_t)ProcessFlags::READ_STATS)
+50         return \-1;
+51 
+52     switch ((ProcessFlags)flags) {
+53 
+54         case ProcessFlags::READ_STATS: {
+55 
+56             // Check bounds
+57             if(size < sizeof(process_stats_t))
+58                 return \-1;
+59 
+60             // Get the info
+61             process_stats_t stats = {};
+62             if(process) {
+63                 stats\&.pid = process\->pid();
+64                 stats\&.parent_pid = 0; //TODO: store parent pid
+65                 stats\&.thread_count = process\->threads()\&.size();
+66                 stats\&.total_ticks = process\->total_ticks();
+67                 stats\&.memory_usage = 0; //process\->memory_manager\->memory_used(); TODO: boken?
+68                 stats\&.handle_count = process\->resource_manager\&.resources()\&.size();
+69             }
+70             stats\&.exit_code = exit_code;
+71 
+72             // Copy across
+73             memcpy(buffer, &stats, sizeof(process_stats_t));
+74             return sizeof(process_stats_t);
+75 
+76         }
+77 
+78         case ProcessFlags::READ_ENVIRONMENT: {
+79 
+80             // Check bounds
+81             if(size < sizeof(process_environment_t))
+82                 return \-1;
+83 
+84             // Get the info
+85             process_environment_t info;
+86             info\&.args = 0;
+87             info\&.arg_count = 0; //TODO: store
+88             info\&.env_vars = 0;  //TODO: implement
+89             info\&.env_var_count = 0;
+90             info\&.working_directory = (const char*)MemoryManager::malloc(process\->working_directory\&.length() + 1);
+91             info\&.executable_path = 0;// TODO: store
+92 
+93             // Copy the info
+94             // \&.\&. args
+95             // \&.\&. env vars
+96             memcpy((void*)info\&.working_directory, process\->working_directory\&.c_str(), process\->working_directory\&.length() + 1);
+97             // \&.\&. executable path
+98 
+99             // Copy across
+100             memcpy(buffer, &info, sizeof(process_environment_t));
+101             return sizeof(process_environment_t);
+102 
+103         }
+104 
+105 
+106         case ProcessFlags::READ_HANDLES: {
+107 
+108             // Check bounds
+109             size_t size_needed = sizeof(handle_info_t) * process\->resource_manager\&.resources()\&.size();
+110             if(size < size_needed)
+111                 return \-1;
+112 
+113             for(const auto& resource : process\->resource_manager\&.resources()) {
+114 
+115                 // Get the info
+116                 handle_info_t handle_info;
+117                 handle_info\&.handle = resource\&.first;
+118                 handle_info\&.type = resource\&.second\->type();
+119                 handle_info\&.name = (const char*)MemoryManager::malloc(resource\&.second\->name()\&.length() + 1);
+120                 memcpy((void*)handle_info\&.name, resource\&.second\->name()\&.c_str(), resource\&.second\->name()\&.length() + 1);
+121 
+122                 // Copy across
+123                 memcpy(buffer, &handle_info, sizeof(handle_info_t));
+124                 buffer = (void*)((uintptr_t)buffer + sizeof(handle_info_t));
+125             }
+126 
+127             return (int)size_needed;
+128 
+129         }
+130 
+131         default:
+132             return \-1;
+133     }
+134 }
+.fi
+
+.PP
+References \fBexit_code\fP, \fBMaxOS::memory::MemoryManager::malloc()\fP, \fBMaxOS::processes::Process::pid()\fP, \fBprocess\fP, \fBMaxOS::processes::Process::resource_manager\fP, \fBMaxOS::processes::resources::ResourceManager::resources()\fP, \fBMaxOS::processes::Process::threads()\fP, \fBMaxOS::processes::Process::total_ticks()\fP, and \fBMaxOS::processes::Process::working_directory\fP\&.
+.SS "int ProcessResource::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP"
+
+.PP
+Writes data to the process resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to write from 
+.br
+\fIsize\fP The number of bytes to write 
+.br
+\fIflags\fP The flags to pass to the writing
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully written or -1 on error 
+.RE
+.PP
+
+.PP
+Definition at line \fB145\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
+.nf
+145                                                                         {
+146 
+147     // Process not found
+148     if(!process)
+149         return \-1;
+150 
+151     switch ((ProcessFlags)flags) {
+152 
+153         case ProcessFlags::WRITE_CHANGE_DIRECTORY: {
+154 
+155             // Change the working directory
+156             string new_directory = string((const char*)buffer);
+157             process\->working_directory = new_directory;
+158             return size;
+159         }
+160 
+161         case ProcessFlags::WRITE_KILL: {
+162 
+163             // Kill the process
+164             exit_code = *((uint64_t*)buffer);
+165             GlobalScheduler::remove_process(process);
+166             process\->threads()[0]\->yield();
+167 
+168             return size;
+169         }
+170 
+171         default:
+172             return \-1;
+173     }
+174 }
+.fi
+
+.PP
+References \fBexit_code\fP, \fBprocess\fP, \fBMaxOS::processes::GlobalScheduler::remove_process()\fP, \fBMaxOS::processes::Process::threads()\fP, and \fBMaxOS::processes::Process::working_directory\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint64_t MaxOS::processes::resources::ProcessResource::exit_code"
+
+.PP
+The exit code of the process once it has exited\&. 
+.PP
+Definition at line \fB41\fP of file \fBscheduler_resources\&.h\fP\&.
+.PP
+Referenced by \fBread()\fP, and \fBwrite()\fP\&.
+.SS "\fBProcess\fP* MaxOS::processes::resources::ProcessResource::process"
+
+.PP
+The process that this resource handles & exposes\&. 
+.PP
+Definition at line \fB40\fP of file \fBscheduler_resources\&.h\fP\&.
+.PP
+Referenced by \fBclose()\fP, \fBread()\fP, and \fBwrite()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

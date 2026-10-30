@@ -103,6 +103,7 @@ $(document).ready(function(){initNavTree('interrupts_8h.html',''); initResizable
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">interrupts.h File Reference</div></div>
 </div><!--header-->
@@ -111,11 +112,11 @@ $(document).ready(function(){initNavTree('interrupts_8h.html',''); initResizable
 <p>Defines a InterruptManager and InterruptHandler for managing hardware and software interrupts.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
-<code>#include &lt;<a class="el" href="port_8h_source.html">hardwarecommunication/port.h</a>&gt;</code><br />
+<code>#include &lt;libcommon/port.h&gt;</code><br />
+<code>#include &lt;libcommon/inputStream.h&gt;</code><br />
+<code>#include &lt;libcommon/outputStream.h&gt;</code><br />
+<code>#include &lt;libcommon/map.h&gt;</code><br />
 <code>#include &lt;<a class="el" href="gdt_8h_source.html">system/gdt.h</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="inputStream_8h_source.html">common/inputStream.h</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="outputStream_8h_source.html">common/outputStream.h</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="map_8h_source.html">common/map.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="cpu_8h_source.html">system/cpu.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="apic_8h_source.html">hardwarecommunication/apic.h</a>&gt;</code><br />
 </div>
@@ -126,11 +127,32 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html">MaxOS::hardwarecommunication::InterruptHandler</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles a certain interrupt number.  <a href="classMaxOS_1_1hardwarecommunication_1_1InterruptHandler.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1ExceptionHandler.html">MaxOS::hardwarecommunication::ExceptionHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for handing CPU expection interrupts.  <a href="classMaxOS_1_1hardwarecommunication_1_1ExceptionHandler.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1DivideByZeroHandler.html">MaxOS::hardwarecommunication::DivideByZeroHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles an attempt to divide by 0.  <a href="classMaxOS_1_1hardwarecommunication_1_1DivideByZeroHandler.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1InvaildOpCodeHandler.html">MaxOS::hardwarecommunication::InvaildOpCodeHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles calling an invalid assembly instruction for the configuration running on this architecture.  <a href="classMaxOS_1_1hardwarecommunication_1_1InvaildOpCodeHandler.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1GeneralProtectionHandler.html">MaxOS::hardwarecommunication::GeneralProtectionHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles a general protection exception.  <a href="classMaxOS_1_1hardwarecommunication_1_1GeneralProtectionHandler.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1PageFaultHandler.html">MaxOS::hardwarecommunication::PageFaultHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles a page fault exception.  <a href="classMaxOS_1_1hardwarecommunication_1_1PageFaultHandler.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1CPUStopHandler.html">MaxOS::hardwarecommunication::CPUStopHandler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles a interrupt that tells a CPU core to stop running.  <a href="classMaxOS_1_1hardwarecommunication_1_1CPUStopHandler.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1hardwarecommunication_1_1IDTR.html">MaxOS::hardwarecommunication::IDTR</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A struct that holds the Interrupt Descriptor Table Register (<a class="el" href="structMaxOS_1_1hardwarecommunication_1_1IDTR.html" title="A struct that holds the Interrupt Descriptor Table Register (IDTR)">IDTR</a>)  <a href="structMaxOS_1_1hardwarecommunication_1_1IDTR.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor.html">MaxOS::hardwarecommunication::InterruptDescriptor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An entry in the Interrupt Descriptor Table (IDT)  <a href="structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1ExceptionHandlers.html">MaxOS::hardwarecommunication::ExceptionHandlers</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds and instantiates the CPU exception handlers.  <a href="classMaxOS_1_1hardwarecommunication_1_1ExceptionHandlers.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html">MaxOS::hardwarecommunication::InterruptManager</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles all interrupts and passes them to the correct handler.  <a href="classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#details">More...</a><br /></td></tr>
@@ -147,6 +169,16 @@ typedef struct PACKED <a class="el" href="structMaxOS_1_1hardwarecommunication_1
 <tr class="memdesc:a318bd93151a55a5a79e0d506b75bc677"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias for <a class="el" href="structMaxOS_1_1hardwarecommunication_1_1InterruptDescriptor.html" title="An entry in the Interrupt Descriptor Table (IDT)">InterruptDescriptor</a> struct. <br /></td></tr>
 <tr class="separator:a318bd93151a55a5a79e0d506b75bc677"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:aee823d3b3d8ddf76b0e131b67c4a3b49" id="r_aee823d3b3d8ddf76b0e131b67c4a3b49"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#aee823d3b3d8ddf76b0e131b67c4a3b49">MaxOS::hardwarecommunication::InterruptPrivilegeLevel</a> { <b>KERNEL_ONLY</b>
+, <b>RING_1</b>
+, <b>RING_2</b>
+, <b>USERSPACE</b>
+ }</td></tr>
+<tr class="memdesc:aee823d3b3d8ddf76b0e131b67c4a3b49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the CPU ring level that a interrupt is handler is executed in.  <a href="interrupts_8h.html#aee823d3b3d8ddf76b0e131b67c4a3b49">More...</a><br /></td></tr>
+<tr class="separator:aee823d3b3d8ddf76b0e131b67c4a3b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a42e9ab6346c6fdafff29023c4377e213" id="r_a42e9ab6346c6fdafff29023c4377e213"><td class="memItemLeft" align="right" valign="top">constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a42e9ab6346c6fdafff29023c4377e213">MaxOS::hardwarecommunication::HARDWARE_INTERRUPT_OFFSET</a> = 0x20</td></tr>
@@ -162,7 +194,40 @@ Variables</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Max Tyson </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
-</div><h2 class="groupheader">Variable Documentation</h2>
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="aee823d3b3d8ddf76b0e131b67c4a3b49" name="aee823d3b3d8ddf76b0e131b67c4a3b49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee823d3b3d8ddf76b0e131b67c4a3b49">&#9670;&#160;</a></span>InterruptPrivilegeLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="interrupts_8h.html#aee823d3b3d8ddf76b0e131b67c4a3b49">MaxOS::hardwarecommunication::InterruptPrivilegeLevel</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Represents the CPU ring level that a interrupt is handler is executed in. </p>
+
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00032">32</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   33</span>    {</div>
+<div class="line"><span class="lineno">   34</span>        KERNEL_ONLY,</div>
+<div class="line"><span class="lineno">   35</span>        RING_1,</div>
+<div class="line"><span class="lineno">   36</span>        RING_2,</div>
+<div class="line"><span class="lineno">   37</span>        USERSPACE</div>
+<div class="line"><span class="lineno">   38</span>    };</div>
+</div><!-- fragment -->
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
 <a id="a42e9ab6346c6fdafff29023c4377e213" name="a42e9ab6346c6fdafff29023c4377e213"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a42e9ab6346c6fdafff29023c4377e213">&#9670;&#160;</a></span>HARDWARE_INTERRUPT_OFFSET</h2>
 
@@ -185,9 +250,9 @@ Variables</h2></td></tr>
 
 <p>The offset in the IDT where interrupts from hardware start. </p>
 
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00074">74</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00169">169</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="interrupts_8cpp_source.html#l00284">MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()</a>, and <a class="el" href="interrupts_8cpp_source.html#l00090">MaxOS::hardwarecommunication::InterruptManager::InterruptManager()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="interrupts_8cpp_source.html#l00389">MaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()</a>, and <a class="el" href="interrupts_8cpp_source.html#l00205">MaxOS::hardwarecommunication::InterruptManager::InterruptManager()</a>.</p>
 
 </div>
 </div>
@@ -213,7 +278,7 @@ Variables</h2></td></tr>
 
 <p>The maximum number of interrupt handlers. </p>
 
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00075">75</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00170">170</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
 
 </div>
 </div>

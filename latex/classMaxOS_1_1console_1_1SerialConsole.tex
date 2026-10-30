@@ -1,0 +1,275 @@
+\doxysection{Max\+OS\+::console\+::Serial\+Console Class Reference}
+\hypertarget{classMaxOS_1_1console_1_1SerialConsole}{}\label{classMaxOS_1_1console_1_1SerialConsole}\index{MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}}
+
+
+A driver for the serial output.  
+
+
+
+
+{\ttfamily \#include $<$serial.\+h$>$}
+
+Inheritance diagram for Max\+OS\+::console\+::Serial\+Console\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMaxOS_1_1console_1_1SerialConsole}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_aee0fe7cd4a6f0eb81c22f2d7965c3150}{Serial\+Console}} ()
+\begin{DoxyCompactList}\small\item\em Constructs a new Serial \doxylink{classMaxOS_1_1console_1_1Console}{Console} object and initialises the serial port. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_ac9044542781fa68c9ee8ce65b6588e8e}{Serial\+Console}} (\mbox{\hyperlink{classMaxOS_1_1Logger}{Logger}} \texorpdfstring{$\ast$}{*}logger)
+\begin{DoxyCompactList}\small\item\em Constructs a new Serial \doxylink{classMaxOS_1_1console_1_1Console}{Console} object and initialises the serial port. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_a5c5630d60b1b9a3635a684cc82a289d2}{put\+\_\+character}} (char c)
+\begin{DoxyCompactList}\small\item\em Waits for the serial port to be ready, then writes a character to it. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_a264ce5c8e63dbe240606c635a0980f23}{write\+\_\+char}} (char c) final
+\begin{DoxyCompactList}\small\item\em Waits for the serial port to be ready, then writes a character to it. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_ab715780b2b1271b2fe5ec894d78b6832}{can\+\_\+read}} ()
+\begin{DoxyCompactList}\small\item\em Checks if data can be read from the serial port. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_a0161e6be368d0dc04e8bc23ebc9488cd}{read\+\_\+char}} ()
+\begin{DoxyCompactList}\small\item\em Read data from the serial port. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A driver for the serial output. 
+
+Definition at line \mbox{\hyperlink{serial_8h_source_l00025}{25}} of file \mbox{\hyperlink{serial_8h_source}{serial.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classMaxOS_1_1console_1_1SerialConsole_aee0fe7cd4a6f0eb81c22f2d7965c3150}\label{classMaxOS_1_1console_1_1SerialConsole_aee0fe7cd4a6f0eb81c22f2d7965c3150} 
+\index{MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}!SerialConsole@{SerialConsole}}
+\index{SerialConsole@{SerialConsole}!MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{SerialConsole()}{SerialConsole()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Serial\+Console\+::\+Serial\+Console (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructs a new Serial \doxylink{classMaxOS_1_1console_1_1Console}{Console} object and initialises the serial port. 
+
+
+
+Definition at line \mbox{\hyperlink{serial_8cpp_source_l00019}{19}} of file \mbox{\hyperlink{serial_8cpp_source}{serial.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00020\ :\ m\_data\_port(0x3F8),}
+\DoxyCodeLine{00021\ \ \ m\_interrupt\_enable\_port(0x3F9),}
+\DoxyCodeLine{00022\ \ \ m\_fifo\_control\_port(0x3FA),}
+\DoxyCodeLine{00023\ \ \ m\_line\_control\_port(0x3FB),}
+\DoxyCodeLine{00024\ \ \ m\_modem\_control\_port(0x3FC),}
+\DoxyCodeLine{00025\ \ \ m\_line\_status\_port(0x3FD)}
+\DoxyCodeLine{00026\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//\ Disable\ all\ interrupts}}
+\DoxyCodeLine{00028\ \ \ \ \ m\_interrupt\_enable\_port.write(0x00);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ Enable\ DLAB\ (set\ baud\ rate\ divisor)}}
+\DoxyCodeLine{00031\ \ \ \ \ m\_line\_control\_port.write(0x80);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{//\ Set\ divisor\ to\ 3}}
+\DoxyCodeLine{00034\ \ \ \ \ m\_data\_port.write(0x03);}
+\DoxyCodeLine{00035\ \ \ \ \ m\_interrupt\_enable\_port.write(0x00);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ 8\ bits,\ no\ parity,\ one\ stop\ bit}}
+\DoxyCodeLine{00038\ \ \ \ \ m\_line\_control\_port.write(0x03);}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ Enable\ FIFO,\ clear\ them,\ with\ 14-\/byte\ threshold}}
+\DoxyCodeLine{00041\ \ \ \ \ m\_fifo\_control\_port.write(0x07);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//\ IRQs\ enabled,\ RTS/DSR\ set}}
+\DoxyCodeLine{00044\ \ \ \ \ m\_modem\_control\_port.write(0x0B);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ Test\ serial\ chip}}
+\DoxyCodeLine{00047\ \ \ \ \ m\_modem\_control\_port.write(0x1E);}
+\DoxyCodeLine{00048\ \ \ \ \ m\_data\_port.write(0xAE);}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_data\_port.read()\ !=\ 0xAE)}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ Enable\ serial\ chip}}
+\DoxyCodeLine{00053\ \ \ \ \ m\_modem\_control\_port.write(0x0F);}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{//\ Enable\ interrupts}}
+\DoxyCodeLine{00056\ \ \ \ \ m\_interrupt\_enable\_port.write(0x01);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ Clear\ any\ prexisting\ state}}
+\DoxyCodeLine{00059\ \ \ \ \ m\_fifo\_control\_port.read();}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_ab715780b2b1271b2fe5ec894d78b6832}{can\_read}}())}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_a0161e6be368d0dc04e8bc23ebc9488cd}{read\_char}}();}
+\DoxyCodeLine{00062\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{serial_8cpp_source_l00108}{can\+\_\+read()}}, and \mbox{\hyperlink{serial_8cpp_source_l00117}{read\+\_\+char()}}.
+
+\Hypertarget{classMaxOS_1_1console_1_1SerialConsole_ac9044542781fa68c9ee8ce65b6588e8e}\label{classMaxOS_1_1console_1_1SerialConsole_ac9044542781fa68c9ee8ce65b6588e8e} 
+\index{MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}!SerialConsole@{SerialConsole}}
+\index{SerialConsole@{SerialConsole}!MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{SerialConsole()}{SerialConsole()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Serial\+Console\+::\+Serial\+Console (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1Logger}{Logger}} \texorpdfstring{$\ast$}{*}}]{logger }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructs a new Serial \doxylink{classMaxOS_1_1console_1_1Console}{Console} object and initialises the serial port. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em logger} & The logger which will use this serial console as a log writer \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{serial_8cpp_source_l00069}{69}} of file \mbox{\hyperlink{serial_8cpp_source}{serial.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00070\ :\ \mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_aee0fe7cd4a6f0eb81c22f2d7965c3150}{SerialConsole}}()}
+\DoxyCodeLine{00071\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ active\ serial\ console}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordflow}{if}\ (!DO\_DEBUGGING)}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ logger-\/>\mbox{\hyperlink{classMaxOS_1_1Logger_a678fdff0e20fc719317669dee1928947}{add\_log\_writer}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{00075\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{logger_8cpp_source_l00044}{Max\+OS\+::\+Logger\+::add\+\_\+log\+\_\+writer()}}, and \mbox{\hyperlink{gdbstub_8h_source_l00026}{Max\+OS\+::runtime\+::\+DO\+\_\+\+DEBUGGING}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classMaxOS_1_1console_1_1SerialConsole_ab715780b2b1271b2fe5ec894d78b6832}\label{classMaxOS_1_1console_1_1SerialConsole_ab715780b2b1271b2fe5ec894d78b6832} 
+\index{MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}!can\_read@{can\_read}}
+\index{can\_read@{can\_read}!MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{can\_read()}{can\_read()}}
+{\footnotesize\ttfamily bool Serial\+Console\+::can\+\_\+read (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Checks if data can be read from the serial port. 
+
+\begin{DoxyReturn}{Returns}
+True if data is ready to be read 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{serial_8cpp_source_l00108}{108}} of file \mbox{\hyperlink{serial_8cpp_source}{serial.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_line\_status\_port.read()\ \&\ 1;}
+\DoxyCodeLine{00110\ \}}
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{serial_8cpp_source_l00019}{Serial\+Console()}}.
+
+\Hypertarget{classMaxOS_1_1console_1_1SerialConsole_a5c5630d60b1b9a3635a684cc82a289d2}\label{classMaxOS_1_1console_1_1SerialConsole_a5c5630d60b1b9a3635a684cc82a289d2} 
+\index{MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}!put\_character@{put\_character}}
+\index{put\_character@{put\_character}!MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{put\_character()}{put\_character()}}
+{\footnotesize\ttfamily void Serial\+Console\+::put\+\_\+character (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+
+
+Waits for the serial port to be ready, then writes a character to it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The character to write \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{serial_8cpp_source_l00084}{84}} of file \mbox{\hyperlink{serial_8cpp_source}{serial.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ serial\ port\ to\ be\ ready}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordflow}{while}\ (0\ ==\ (m\_line\_status\_port.read()\ \&\ 0x20));}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ character}}
+\DoxyCodeLine{00090\ \ \ \ \ m\_data\_port.write(c);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \}}
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{serial_8cpp_source_l00099}{write\+\_\+char()}}.
+
+\Hypertarget{classMaxOS_1_1console_1_1SerialConsole_a0161e6be368d0dc04e8bc23ebc9488cd}\label{classMaxOS_1_1console_1_1SerialConsole_a0161e6be368d0dc04e8bc23ebc9488cd} 
+\index{MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}!read\_char@{read\_char}}
+\index{read\_char@{read\_char}!MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{read\_char()}{read\_char()}}
+{\footnotesize\ttfamily char Serial\+Console\+::read\+\_\+char (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Read data from the serial port. 
+
+\begin{DoxyReturn}{Returns}
+The data read 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{serial_8cpp_source_l00117}{117}} of file \mbox{\hyperlink{serial_8cpp_source}{serial.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_data\_port.read();}
+\DoxyCodeLine{00119\ \}}
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{serial_8cpp_source_l00019}{Serial\+Console()}}.
+
+\Hypertarget{classMaxOS_1_1console_1_1SerialConsole_a264ce5c8e63dbe240606c635a0980f23}\label{classMaxOS_1_1console_1_1SerialConsole_a264ce5c8e63dbe240606c635a0980f23} 
+\index{MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}!write\_char@{write\_char}}
+\index{write\_char@{write\_char}!MaxOS::console::SerialConsole@{MaxOS::console::SerialConsole}}
+\doxysubsubsection{\texorpdfstring{write\_char()}{write\_char()}}
+{\footnotesize\ttfamily void Serial\+Console\+::write\+\_\+char (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}}
+
+
+
+Waits for the serial port to be ready, then writes a character to it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The character to write \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{serial_8cpp_source_l00099}{99}} of file \mbox{\hyperlink{serial_8cpp_source}{serial.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1console_1_1SerialConsole_a5c5630d60b1b9a3635a684cc82a289d2}{put\_character}}(c);}
+\DoxyCodeLine{00101\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{serial_8cpp_source_l00084}{put\+\_\+character()}}.
+
+
+
+Referenced by \mbox{\hyperlink{gdbstub_8cpp_source_l00508}{Max\+OS\+::runtime\+::\+GDBServer\+::handle\+\_\+continue()}}, and \mbox{\hyperlink{gdbstub_8cpp_source_l00383}{Max\+OS\+::runtime\+::\+GDBServer\+::handle\+\_\+step\+\_\+instruction()}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/console/\mbox{\hyperlink{serial_8h}{serial.\+h}}\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/console/\mbox{\hyperlink{serial_8cpp}{serial.\+cpp}}\end{DoxyCompactItemize}

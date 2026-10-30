@@ -1,23 +1,11 @@
 var searchData=
 [
-  ['tcppayloadhandler_0',['TCPPayloadHandler',['../classMaxOS_1_1net_1_1TCPPayloadHandler.html#ab0d4adcb773b69c9fc0c8fda44bda742',1,'MaxOS::net::TCPPayloadHandler']]],
-  ['tcpsocket_1',['TCPSocket',['../classMaxOS_1_1net_1_1TCPSocket.html#a15fb6b35f11f3eecc0906f4c657f1439',1,'MaxOS::net::TCPSocket']]],
-  ['test_2',['test',['../classMaxOS_1_1Logger.html#a113ca95b36e657f30faf308597be9fcd',1,'MaxOS::Logger::TEST()'],['../classMaxOS_1_1tests_1_1Test.html#af52b9365eefa59bed926357d5efa17ce',1,'MaxOS::tests::Test::Test()']]],
-  ['test_5fkernel_3',['test_kernel',['../classMaxOS_1_1tests_1_1TestRunner.html#a115265ceabe8198a59e5b65aaeb3afb3',1,'MaxOS::tests::TestRunner']]],
-  ['text_4',['text',['../classMaxOS_1_1gui_1_1widgets_1_1Text.html#ae727336d64b5f4b90fbfe3d3613a3ea4',1,'MaxOS::gui::widgets::Text::Text()'],['../classMaxOS_1_1gui_1_1widgets_1_1InputBox.html#a5cb6a02902b3484d98248f894cec2d08',1,'MaxOS::gui::widgets::InputBox::text()']]],
-  ['thread_5',['Thread',['../classMaxOS_1_1processes_1_1Thread.html#a1287ab4dd0133b3e7065a177717cdf77',1,'MaxOS::processes::Thread']]],
-  ['thread_5famount_6',['thread_amount',['../classMaxOS_1_1processes_1_1Scheduler.html#a3ce2093679daf9acde62bbabc020728e',1,'MaxOS::processes::Scheduler']]],
-  ['threads_7',['threads',['../classMaxOS_1_1processes_1_1Process.html#a8595e1ab73f585be41005a6bbd88eb2f',1,'MaxOS::processes::Process']]],
-  ['ticks_8',['ticks',['../classMaxOS_1_1processes_1_1Scheduler.html#a349f28166719d94bd978439f24cd2448',1,'MaxOS::processes::Scheduler']]],
-  ['to_5fconsole_5fcolour_9',['to_console_colour',['../classMaxOS_1_1common_1_1Colour.html#a433579f913162aecf6a9524f2632cdb3',1,'MaxOS::common::Colour']]],
-  ['to_5fdm_5fregion_10',['to_dm_region',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a061e07bff657447294f4005f550d87ac',1,'MaxOS::memory::PhysicalMemoryManager']]],
-  ['to_5fhigher_5fregion_11',['to_higher_region',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a9a97c836d175ac4638ed79a186fa6020',1,'MaxOS::memory::PhysicalMemoryManager']]],
-  ['to_5fio_5fregion_12',['to_io_region',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a1ad616354df4569df849c6f1331cd4b4',1,'MaxOS::memory::PhysicalMemoryManager']]],
-  ['to_5flower_5fregion_13',['to_lower_region',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a92723ea076c394a848f7f95bca9a86b6',1,'MaxOS::memory::PhysicalMemoryManager']]],
-  ['to_5fvmm_5fflags_14',['to_vmm_flags',['../classMaxOS_1_1processes_1_1ELF64.html#a5c2da5276cc5a051e3f4928eebc37b37',1,'MaxOS::processes::ELF64']]],
-  ['top_5fdirectory_15',['top_directory',['../classMaxOS_1_1filesystem_1_1Path.html#aa265770be2535952a19871a4d8924218',1,'MaxOS::filesystem::Path']]],
-  ['total_5fticks_16',['total_ticks',['../classMaxOS_1_1processes_1_1Process.html#a42e63bc1dde8ba77b9a14456cf225f8f',1,'MaxOS::processes::Process']]],
-  ['transmissioncontrolprotocolhandler_17',['TransmissionControlProtocolHandler',['../classMaxOS_1_1net_1_1TransmissionControlProtocolHandler.html#a85a4ccbb96d87987c65da4a6d69fd123',1,'MaxOS::net::TransmissionControlProtocolHandler']]],
-  ['tss_5fpointer_18',['tss_pointer',['../classMaxOS_1_1processes_1_1Thread.html#a9baa5fdcd84593974738c3f62f050283',1,'MaxOS::processes::Thread']]],
-  ['type_19',['type',['../classMaxOS_1_1processes_1_1Resource.html#a87de16e1adbdafc3764341d85e0228b5',1,'MaxOS::processes::Resource::type()'],['../classMaxOS_1_1processes_1_1BaseResourceRegistry.html#a635fdfd3fac43ee968b530a4b076d89c',1,'MaxOS::processes::BaseResourceRegistry::type()'],['../classMaxOS_1_1tests_1_1Test.html#afdb798034cdd27f192c3dd0c4a4f335a',1,'MaxOS::tests::Test::type()']]]
+  ['unallocate_0',['unallocate',['../classMaxOS_1_1memory_1_1allocator_1_1MemoryAllocator.html#a90edfb9e98b4961e8b95bb5a8cdc10b5',1,'MaxOS::memory::allocator::MemoryAllocator::unallocate()'],['../classMaxOS_1_1memory_1_1allocator_1_1BumpAllocator.html#a16d74f9fa886cef7b453bcc41efb6dcb',1,'MaxOS::memory::allocator::BumpAllocator::unallocate()']]],
+  ['unload_5frange_5ffrom_5fprocess_1',['unload_range_from_process',['../classMaxOS_1_1memory_1_1VirtualMemoryManager.html#a4439fa240075cabd83f08df2e43da863',1,'MaxOS::memory::VirtualMemoryManager']]],
+  ['unlock_2',['unlock',['../classMaxOS_1_1processes_1_1BlockingLock.html#a974725bf2e5c5974dbe1f6c26afe4cd5',1,'MaxOS::processes::BlockingLock']]],
+  ['unmap_3',['unmap',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a47cc8d6c823f3c323f88e21437ba88ea',1,'MaxOS::memory::PhysicalMemoryManager::unmap(virtual_address_t *virtual_address)'],['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a0f453dd61a29a033887b3a531cf3910f',1,'MaxOS::memory::PhysicalMemoryManager::unmap(virtual_address_t *virtual_address, uint64_t *pml4_root)']]],
+  ['unmap_5farea_4',['unmap_area',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a0cc0fb25a8d67e16410a847c4fd59ea3',1,'MaxOS::memory::PhysicalMemoryManager']]],
+  ['unmap_5flower_5fkernel_5',['unmap_lower_kernel',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a08f214065a06234772cdd1737253131b',1,'MaxOS::memory::PhysicalMemoryManager']]],
+  ['unpoison_5fstack_6',['unpoison_stack',['../classMaxOS_1_1runtime_1_1KASanHandler.html#a11c56a03d25c08f6e75878a838b4af53',1,'MaxOS::runtime::KASanHandler']]],
+  ['update_5fprogress_5fbar_7',['update_progress_bar',['../classMaxOS_1_1console_1_1FramebufferConsole.html#a29eab91ef586f064057e1ceb1442d560',1,'MaxOS::console::FramebufferConsole']]]
 ];

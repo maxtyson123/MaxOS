@@ -9,6 +9,8 @@
 .PP
 \fC#include <cstdint>\fP
 .br
+\fC#include <libcommon/assert\&.h>\fP
+.br
 
 .SS "Classes"
 
@@ -62,7 +64,7 @@
 
 .in +1c
 .ti -1c
-.RI "#define \fBubsan_aligned\fP(value,  alignment)   !(value & (alignment \- 1))"
+.RI "#define \fBUBSAN_ALIGNED\fP(value,  alignment)   ((((uintptr_t)(value)) & ((alignment) \- 1)) == 0)"
 .br
 .RI "Check if a value is aligned to the given alignment\&. "
 .in -1c
@@ -139,12 +141,12 @@ Max Tyson
 Definition in file \fBubsan\&.h\fP\&.
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define ubsan_aligned(value, alignment)   !(value & (alignment \- 1))"
+.SS "#define UBSAN_ALIGNED(value, alignment)   ((((uintptr_t)(value)) & ((alignment) \- 1)) == 0)"
 
 .PP
 Check if a value is aligned to the given alignment\&. 
 .PP
-Definition at line \fB15\fP of file \fBubsan\&.h\fP\&.
+Definition at line \fB17\fP of file \fBubsan\&.h\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "const char* MaxOS::runtime::TYPE_CHECK_KINDS[]"
@@ -167,20 +169,20 @@ Definition at line \fB15\fP of file \fBubsan\&.h\fP\&.
 .PP
 List of type check errors\&. 
 .PP
-Definition at line \fB167\fP of file \fBubsan\&.h\fP\&..PP
+Definition at line \fB169\fP of file \fBubsan\&.h\fP\&..PP
 .nf
-167                                      {
-168             "load of",
-169             "store to",
-170             "reference binding to",
-171             "member access within",
-172             "member call on",
-173             "constructor call on",
-174             "downcast of",
-175             "downcast of",
-176             "upcast of",
-177             "cast to virtual base of",
-178     };
+169                                      {
+170             "load of",
+171             "store to",
+172             "reference binding to",
+173             "member access within",
+174             "member call on",
+175             "constructor call on",
+176             "downcast of",
+177             "downcast of",
+178             "upcast of",
+179             "cast to virtual base of",
+180     };
 .fi
 
 .PP

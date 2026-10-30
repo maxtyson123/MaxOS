@@ -5,9 +5,9 @@
 Defines Central Processing Unit (CPU) structures and functions for managing CPU state and features.  
 
 
-{\ttfamily \#include $<$cpuid.\+h$>$}\newline
 {\ttfamily \#include $<$cstddef$>$}\newline
 {\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$cpuid.\+h$>$}\newline
 {\ttfamily \#include $<$system/gdt.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/acpi.\+h$>$}\newline
 {\ttfamily \#include $<$hardwarecommunication/apic.\+h$>$}\newline
@@ -129,6 +129,8 @@ enum class \mbox{\hyperlink{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}{Max\+OS\+:
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
+constexpr size\+\_\+t \mbox{\hyperlink{cpu_8h_a0a75a77464a08cf41da0ce8d28d431ec}{Max\+OS\+::system\+::\+IO\+\_\+\+BITMAP\+\_\+\+SIZE}} = 8192
+\begin{DoxyCompactList}\small\item\em The size of the IO bitmap to track 65536 ports. \end{DoxyCompactList}\item 
 constexpr size\+\_\+t \mbox{\hyperlink{cpu_8h_a0cdb341b2d45114c2d033ec00bc3b356}{Max\+OS\+::system\+::\+BOOT\+\_\+\+STACK\+\_\+\+SIZE}} = 16384
 \begin{DoxyCompactList}\small\item\em The size of the stack allocated for booting a core (should align with the startup assembly code for the kernel) \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -164,43 +166,43 @@ CPU features indicated by the ECX register after calling CPUID with EAX = 1.
 \end{DoxySeeAlso}
 
 
-Definition at line \mbox{\hyperlink{cpu_8h_source_l00100}{100}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00103}{103}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ int32\_t\ \{}
-\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ SSE3\ =\ 1\ <<\ 0,}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ PCLMUL\ =\ 1\ <<\ 1,}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ DTES64\ =\ 1\ <<\ 2,}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ MONITOR\ =\ 1\ <<\ 3,}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ DS\_CPL\ =\ 1\ <<\ 4,}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ VMX\ =\ 1\ <<\ 5,}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ SMX\ =\ 1\ <<\ 6,}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ EST\ =\ 1\ <<\ 7,}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ TM2\ =\ 1\ <<\ 8,}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ SSSE3\ =\ 1\ <<\ 9,}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ CID\ =\ 1\ <<\ 10,}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ SDBG\ =\ 1\ <<\ 11,}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ FMA\ =\ 1\ <<\ 12,}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ CX16\ =\ 1\ <<\ 13,}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ XTPR\ =\ 1\ <<\ 14,}
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ PDCM\ =\ 1\ <<\ 15,}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ PCID\ =\ 1\ <<\ 17,}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ DCA\ =\ 1\ <<\ 18,}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ SSE4\_1\ =\ 1\ <<\ 19,}
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ SSE4\_2\ =\ 1\ <<\ 20,}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ X2APIC\ =\ 1\ <<\ 21,}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ MOVBE\ =\ 1\ <<\ 22,}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ POPCNT\ =\ 1\ <<\ 23,}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ TSC\ =\ 1\ <<\ 24,}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ AES\ =\ 1\ <<\ 25,}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ XSAVE\ =\ 1\ <<\ 26,}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ OSXSAVE\ =\ 1\ <<\ 27,}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ AVX\ =\ 1\ <<\ 28,}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ F16C\ =\ 1\ <<\ 29,}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ RDRAND\ =\ 1\ <<\ 30,}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ HYPERVISOR\ =\ 1\ <<\ 31,}
-\DoxyCodeLine{00132\ \ \ \ \ \};}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ int32\_t\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ SSE3\ =\ 1\ <<\ 0,}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ PCLMUL\ =\ 1\ <<\ 1,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ DTES64\ =\ 1\ <<\ 2,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ MONITOR\ =\ 1\ <<\ 3,}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ DS\_CPL\ =\ 1\ <<\ 4,}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ VMX\ =\ 1\ <<\ 5,}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ SMX\ =\ 1\ <<\ 6,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ EST\ =\ 1\ <<\ 7,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ TM2\ =\ 1\ <<\ 8,}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ SSSE3\ =\ 1\ <<\ 9,}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ CID\ =\ 1\ <<\ 10,}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ SDBG\ =\ 1\ <<\ 11,}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ FMA\ =\ 1\ <<\ 12,}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ CX16\ =\ 1\ <<\ 13,}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ XTPR\ =\ 1\ <<\ 14,}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ PDCM\ =\ 1\ <<\ 15,}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ PCID\ =\ 1\ <<\ 17,}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ DCA\ =\ 1\ <<\ 18,}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ SSE4\_1\ =\ 1\ <<\ 19,}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ SSE4\_2\ =\ 1\ <<\ 20,}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ X2APIC\ =\ 1\ <<\ 21,}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ MOVBE\ =\ 1\ <<\ 22,}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ POPCNT\ =\ 1\ <<\ 23,}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ TSC\ =\ 1\ <<\ 24,}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ AES\ =\ 1\ <<\ 25,}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ XSAVE\ =\ 1\ <<\ 26,}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ OSXSAVE\ =\ 1\ <<\ 27,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ AVX\ =\ 1\ <<\ 28,}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ F16C\ =\ 1\ <<\ 29,}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ RDRAND\ =\ 1\ <<\ 30,}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ HYPERVISOR\ =\ 1\ <<\ 31,}
+\DoxyCodeLine{00135\ \ \ \ \ \};}
 
 \end{DoxyCode}
 \Hypertarget{cpu_8h_aabd92958148e45d498450aaf57c8d6ab}\label{cpu_8h_aabd92958148e45d498450aaf57c8d6ab} 
@@ -218,42 +220,42 @@ CPU features indicated by the EDX register after calling CPUID with EAX = 1.
 \end{DoxySeeAlso}
 
 
-Definition at line \mbox{\hyperlink{cpu_8h_source_l00140}{140}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00143}{143}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ int32\_t\ \{}
-\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ FPU\ =\ 1\ <<\ 0,}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ VME\ =\ 1\ <<\ 1,}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ DE\ =\ 1\ <<\ 2,}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ PSE\ =\ 1\ <<\ 3,}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ TSC\ =\ 1\ <<\ 4,}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ MSR\ =\ 1\ <<\ 5,}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ PAE\ =\ 1\ <<\ 6,}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ MCE\ =\ 1\ <<\ 7,}
-\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ CX8\ =\ 1\ <<\ 8,}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ APIC\ =\ 1\ <<\ 9,}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ SEP\ =\ 1\ <<\ 11,}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ MTRR\ =\ 1\ <<\ 12,}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ PGE\ =\ 1\ <<\ 13,}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ MCA\ =\ 1\ <<\ 14,}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ CMOV\ =\ 1\ <<\ 15,}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ PAT\ =\ 1\ <<\ 16,}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ PSE36\ =\ 1\ <<\ 17,}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ PSN\ =\ 1\ <<\ 18,}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ CLFLUSH\ =\ 1\ <<\ 19,}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ DS\ =\ 1\ <<\ 21,}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ ACPI\ =\ 1\ <<\ 22,}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ MMX\ =\ 1\ <<\ 23,}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ FXSR\ =\ 1\ <<\ 24,}
-\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ SSE\ =\ 1\ <<\ 25,}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ SSE2\ =\ 1\ <<\ 26,}
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ SS\ =\ 1\ <<\ 27,}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ HTT\ =\ 1\ <<\ 28,}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ TM\ =\ 1\ <<\ 29,}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ IA64\ =\ 1\ <<\ 30,}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ PBE\ =\ 1\ <<\ 31}
-\DoxyCodeLine{00171\ \ \ \ \ \};}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :\ int32\_t\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ FPU\ =\ 1\ <<\ 0,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ VME\ =\ 1\ <<\ 1,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ DE\ =\ 1\ <<\ 2,}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ PSE\ =\ 1\ <<\ 3,}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ TSC\ =\ 1\ <<\ 4,}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ MSR\ =\ 1\ <<\ 5,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ PAE\ =\ 1\ <<\ 6,}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ MCE\ =\ 1\ <<\ 7,}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ CX8\ =\ 1\ <<\ 8,}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ APIC\ =\ 1\ <<\ 9,}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ SEP\ =\ 1\ <<\ 11,}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ MTRR\ =\ 1\ <<\ 12,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ PGE\ =\ 1\ <<\ 13,}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ MCA\ =\ 1\ <<\ 14,}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ CMOV\ =\ 1\ <<\ 15,}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ PAT\ =\ 1\ <<\ 16,}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ PSE36\ =\ 1\ <<\ 17,}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ PSN\ =\ 1\ <<\ 18,}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ CLFLUSH\ =\ 1\ <<\ 19,}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ DS\ =\ 1\ <<\ 21,}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ ACPI\ =\ 1\ <<\ 22,}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ MMX\ =\ 1\ <<\ 23,}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ FXSR\ =\ 1\ <<\ 24,}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ SSE\ =\ 1\ <<\ 25,}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ SSE2\ =\ 1\ <<\ 26,}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ SS\ =\ 1\ <<\ 27,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ HTT\ =\ 1\ <<\ 28,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ TM\ =\ 1\ <<\ 29,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ IA64\ =\ 1\ <<\ 30,}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ PBE\ =\ 1\ <<\ 31}
+\DoxyCodeLine{00174\ \ \ \ \ \};}
 
 \end{DoxyCode}
 
@@ -271,9 +273,27 @@ The size of the stack allocated for booting a core (should align with the startu
 
 
 
-Definition at line \mbox{\hyperlink{cpu_8h_source_l00205}{205}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00208}{208}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
 
 
 
-Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00110}{Max\+OS\+::system\+::\+Core\+::init\+\_\+tss()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00059}{Max\+OS\+::system\+::\+Core\+::wake\+\_\+up()}}.
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00036}{Max\+OS\+::system\+::\+Core\+::\+Core()}}, \mbox{\hyperlink{cpu_8cpp_source_l00108}{Max\+OS\+::system\+::\+Core\+::init\+\_\+tss()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00060}{Max\+OS\+::system\+::\+Core\+::wake\+\_\+up()}}.
+
+\Hypertarget{cpu_8h_a0a75a77464a08cf41da0ce8d28d431ec}\label{cpu_8h_a0a75a77464a08cf41da0ce8d28d431ec} 
+\index{cpu.h@{cpu.h}!IO\_BITMAP\_SIZE@{IO\_BITMAP\_SIZE}}
+\index{IO\_BITMAP\_SIZE@{IO\_BITMAP\_SIZE}!cpu.h@{cpu.h}}
+\doxysubsubsection{\texorpdfstring{IO\_BITMAP\_SIZE}{IO\_BITMAP\_SIZE}}
+{\footnotesize\ttfamily constexpr size\+\_\+t Max\+OS\+::system\+::\+IO\+\_\+\+BITMAP\+\_\+\+SIZE = 8192\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+The size of the IO bitmap to track 65536 ports. 
+
+
+
+Definition at line \mbox{\hyperlink{cpu_8h_source_l00067}{67}} of file \mbox{\hyperlink{cpu_8h_source}{cpu.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00108}{Max\+OS\+::system\+::\+Core\+::init\+\_\+tss()}}.
 

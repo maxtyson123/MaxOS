@@ -33,19 +33,27 @@ MaxOS::hardwarecommunication::LocalAPIC \- Handles the local APIC for the curren
 .br
 .RI "Acknowledge that the interrupt has been handled, allowing the PIC to process the next interrupt\&. "
 .ti -1c
+.RI "void \fBsend_icr\fP (uint32_t icr_low, uint32_t icr_high, bool use_shorthand) const"
+.br
+.RI "Send an Interrupt Command Register (ICR) to the local apic\&. "
+.ti -1c
 .RI "void \fBsend_init\fP (uint8_t apic_id, bool assert) const"
 .br
 .RI "send the init IPI to another apic "
 .ti -1c
 .RI "void \fBsend_startup\fP (uint8_t apic_id, uint8_t vector) const"
 .br
-.RI "send the start up IPI to another apic "
+.RI "Send the start up IPI to another apic\&. "
+.ti -1c
+.RI "void \fBsend_interrupt\fP (uint8_t apic_id, uint8_t vector, size_t flags) const"
+.br
+.RI "Send an interrupt to a specific core\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Handles the local APIC for the current core\&. 
 .PP
-Definition at line \fB24\fP of file \fBapic\&.h\fP\&.
+Definition at line \fB34\fP of file \fBapic\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "LocalAPIC::LocalAPIC ()"
@@ -104,7 +112,7 @@ Definition at line \fB21\fP of file \fBapic\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBASSERT\fP, \fBMaxOS::system::CPU::cpuid()\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::system::CPU::read_msr()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP, \fBMaxOS::Logger::WARNING()\fP, \fBwrite()\fP, \fBMaxOS::memory::WRITE\fP, and \fBMaxOS::system::CPU::write_msr()\fP\&.
+References \fBMaxOS::system::CPU::cpuid()\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map()\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::system::CPU::read_msr()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_io_region()\fP, \fBMaxOS::Logger::WARNING()\fP, \fBwrite()\fP, \fBMaxOS::memory::WRITE\fP, and \fBMaxOS::system::CPU::write_msr()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "uint32_t LocalAPIC::id () const"
@@ -167,7 +175,7 @@ Definition at line \fB76\fP of file \fBapic\&.cpp\fP\&..PP
 .PP
 References \fBMaxOS::system::CPU::read_msr()\fP\&.
 .PP
-Referenced by \fBid()\fP, \fBsend_init()\fP, and \fBsend_startup()\fP\&.
+Referenced by \fBid()\fP, and \fBsend_icr()\fP\&.
 .SS "void LocalAPIC::send_eoi () const"
 
 .PP
@@ -183,6 +191,58 @@ Definition at line \fB120\fP of file \fBapic\&.cpp\fP\&..PP
 
 .PP
 References \fBwrite()\fP\&.
+.PP
+Referenced by \fBMaxOS::hardwarecommunication::InterruptManager::handle_interrupt_request()\fP\&.
+.SS "void LocalAPIC::send_icr (uint32_t icr_low, uint32_t icr_high, bool use_shorthand) const"
+
+.PP
+Send an Interrupt Command Register (ICR) to the local apic\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIicr_low\fP Lower 32 bits of the ICR (vector, delivery mode, shorthand)\&. 
+.br
+\fIicr_high\fP Upper 32 bits of the ICR (destination APIC ID, if used)\&. 
+.br
+\fIuse_shorthand\fP True if a destination shorthand is encoded in icr_low (icr_high is ignored)\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB132\fP of file \fBapic\&.cpp\fP\&..PP
+.nf
+132                                                                                       {
+133 
+134     if (!m_x2apic) {
+135 
+136         // Select target core
+137         if (!use_shorthand)
+138             write(0x310, icr_high << 24);
+139 
+140         // Send the interrupt
+141         write(0x300, icr_low);
+142 
+143         // Wait for delivery
+144         while (read(0x300) & (1 << 12))
+145             asm volatile("pause");
+146 
+147     } else {
+148 
+149         // x2APIC: pack and write the full 64\-bit ICR
+150         uint64_t icr = icr_low;
+151         if (!use_shorthand)
+152             icr |= (uint64_t)icr_high << 32;
+153 
+154         CPU::write_msr(0x830, icr);
+155     }
+156 
+157 }
+.fi
+
+.PP
+References \fBread()\fP, \fBwrite()\fP, and \fBMaxOS::system::CPU::write_msr()\fP\&.
+.PP
+Referenced by \fBsend_init()\fP, \fBsend_interrupt()\fP, and \fBsend_startup()\fP\&.
 .SS "void LocalAPIC::send_init (uint8_t apic_id, bool assert) const"
 
 .PP
@@ -197,48 +257,86 @@ send the init IPI to another apic
 .PP
 
 .PP
-Definition at line \fB131\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB165\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-131                                                             {
-132 
-133     uint32_t icr_low = 0;
-134 
-135     // Delivery mode = INIT (101b at bits 8\-10)
-136     icr_low |= (0b101 << 8);
-137 
-138     // Level (bit 14): 1 = assert, 0 = de\-assert
-139     if (assert)
-140         icr_low |= (1 << 14);
-141 
-142     // Trigger mode: Level = 1
-143     icr_low |= (1 << 15);
-144 
-145     if (!m_x2apic) {
-146 
-147         // Select target core
-148         write(0x310, apic_id << 24);
-149 
-150         // Send INIT (Delivery mode = INIT, Level = 1)
-151         write(0x300, icr_low);
-152 
-153         // Wait for delivery
-154         while (read(0x300) & (1 << 12))
-155             asm volatile("pause");
-156 
-157     } else {
-158 
-159         // x2APIC
-160         CPU::write_msr(0x830, (uint64_t)apic_id << 32 | icr_low);
-161     }
-162 }
+165                                                             {
+166 
+167     uint32_t icr_low = 0;
+168     uint32_t icr_high = apic_id;
+169 
+170     // Set delivery mode to INIT
+171     icr_low |= (0b101 << 8);
+172 
+173     // Set assert if needed
+174     if (assert)
+175         icr_low |= (1 << 14);
+176 
+177     // Level triggered
+178     icr_low |= (1 << 15);
+179 
+180     // Send the init command
+181     send_icr(icr_low, icr_high, false);
+182 }
 .fi
 
 .PP
-References \fBread()\fP, \fBwrite()\fP, and \fBMaxOS::system::CPU::write_msr()\fP\&.
+References \fBsend_icr()\fP\&.
+.PP
+Referenced by \fBMaxOS::system::Core::wake_up()\fP\&.
+.SS "void LocalAPIC::send_interrupt (uint8_t apic_id, uint8_t vector, size_t flags) const"
+
+.PP
+Send an interrupt to a specific core\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIapic_id\fP The core to send to (ignored if specfied in flags) 
+.br
+\fIvector\fP The interrupt vector 
+.br
+\fIflags\fP Flags for how to send 
+.RE
+.PP
+
+.PP
+Definition at line \fB213\fP of file \fBapic\&.cpp\fP\&..PP
+.nf
+213                                                                                   {
+214 
+215     uint32_t icr_low = 0;
+216     uint32_t icr_high = 0;
+217 
+218     // Vector (bits 0–7)
+219     icr_low |= vector;
+220 
+221     // Destination
+222     bool use_shorthand = true;
+223     if (flags & SEND_ALL) {
+224         // All including self (11b)
+225         icr_low |= (0b11 << 18);
+226     } else if (flags & EXCLUDE_SELF) {
+227         // All excluding self (10b)
+228         icr_low |= (0b10 << 18);
+229     } else {
+230         // Specific core
+231         icr_high = ((uint32_t)apic_id) << 24;
+232         use_shorthand = false;
+233     }
+234 
+235     // Send the vector
+236     send_icr(icr_low, icr_high, use_shorthand);
+237 
+238 }
+.fi
+
+.PP
+References \fBsend_icr()\fP\&.
+.PP
+Referenced by \fBMaxOS::system::CPU::prepare_for_panic()\fP\&.
 .SS "void LocalAPIC::send_startup (uint8_t apic_id, uint8_t vector) const"
 
 .PP
-send the start up IPI to another apic 
+Send the start up IPI to another apic\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -249,34 +347,28 @@ send the start up IPI to another apic
 .PP
 
 .PP
-Definition at line \fB170\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB190\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-170                                                                   {
-171 
-172     if (!m_x2apic) {
-173 
-174         // Select target core
-175         write(0x310, apic_id << 24);
-176 
-177         // Send SIPI (Delivery mode = STARTUP)
-178         write(0x300, 0x4600 | vector);
-179 
-180         // Wait for delivery
-181         while (read(0x300) & (1 << 12))
-182             asm volatile("pause");
-183 
-184     } else {
-185 
-186         // x2APIC
-187         CPU::write_msr(0x831, (uint64_t)apic_id << 32 | 0x4600 | vector);
-188     }
-189 
-190 
-191 }
+190                                                                   {
+191 
+192     uint32_t icr_low = 0;
+193     uint32_t icr_high = apic_id;
+194 
+195     // Vector being sent
+196     icr_low |= vector;
+197 
+198     // Set delivery mode to STARTUP
+199     icr_low |= (0b110 << 8);
+200 
+201     // Send the startup command
+202     send_icr(icr_low, icr_high, false);
+203 }
 .fi
 
 .PP
-References \fBread()\fP, \fBwrite()\fP, and \fBMaxOS::system::CPU::write_msr()\fP\&.
+References \fBsend_icr()\fP\&.
+.PP
+Referenced by \fBMaxOS::system::Core::wake_up()\fP\&.
 .SS "void LocalAPIC::write (uint32_t reg, uint32_t value) const"
 
 .PP
@@ -309,7 +401,7 @@ Definition at line \fB91\fP of file \fBapic\&.cpp\fP\&..PP
 .PP
 References \fBMaxOS::system::CPU::write_msr()\fP\&.
 .PP
-Referenced by \fBLocalAPIC()\fP, \fBsend_eoi()\fP, \fBsend_init()\fP, \fBsend_startup()\fP, and \fBMaxOS::drivers::clock::Clock::setup_apic_clock()\fP\&.
+Referenced by \fBLocalAPIC()\fP, \fBsend_eoi()\fP, \fBsend_icr()\fP, and \fBMaxOS::hardwarecommunication::Clock::setup_apic_clock()\fP\&.
 
 .SH "Author"
 .PP 

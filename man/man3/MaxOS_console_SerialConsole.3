@@ -1,0 +1,224 @@
+.TH "MaxOS::console::SerialConsole" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::console::SerialConsole \- A driver for the serial output\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <serial\&.h>\fP
+.PP
+Inherits MaxOS::common::OutputStream\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSerialConsole\fP ()"
+.br
+.RI "Constructs a new Serial \fBConsole\fP object and initialises the serial port\&. "
+.ti -1c
+.RI "\fBSerialConsole\fP (\fBLogger\fP *logger)"
+.br
+.RI "Constructs a new Serial \fBConsole\fP object and initialises the serial port\&. "
+.ti -1c
+.RI "void \fBput_character\fP (char c)"
+.br
+.RI "Waits for the serial port to be ready, then writes a character to it\&. "
+.ti -1c
+.RI "void \fBwrite_char\fP (char c) final"
+.br
+.RI "Waits for the serial port to be ready, then writes a character to it\&. "
+.ti -1c
+.RI "bool \fBcan_read\fP ()"
+.br
+.RI "Checks if data can be read from the serial port\&. "
+.ti -1c
+.RI "char \fBread_char\fP ()"
+.br
+.RI "Read data from the serial port\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A driver for the serial output\&. 
+.PP
+Definition at line \fB25\fP of file \fBserial\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "SerialConsole::SerialConsole ()\fC [explicit]\fP"
+
+.PP
+Constructs a new Serial \fBConsole\fP object and initialises the serial port\&. 
+.PP
+Definition at line \fB19\fP of file \fBserial\&.cpp\fP\&..PP
+.nf
+20 : m_data_port(0x3F8),
+21   m_interrupt_enable_port(0x3F9),
+22   m_fifo_control_port(0x3FA),
+23   m_line_control_port(0x3FB),
+24   m_modem_control_port(0x3FC),
+25   m_line_status_port(0x3FD)
+26 {
+27     // Disable all interrupts
+28     m_interrupt_enable_port\&.write(0x00);
+29 
+30     // Enable DLAB (set baud rate divisor)
+31     m_line_control_port\&.write(0x80);
+32 
+33     // Set divisor to 3
+34     m_data_port\&.write(0x03);
+35     m_interrupt_enable_port\&.write(0x00);
+36 
+37     // 8 bits, no parity, one stop bit
+38     m_line_control_port\&.write(0x03);
+39 
+40     // Enable FIFO, clear them, with 14\-byte threshold
+41     m_fifo_control_port\&.write(0x07);
+42 
+43     // IRQs enabled, RTS/DSR set
+44     m_modem_control_port\&.write(0x0B);
+45 
+46     // Test serial chip
+47     m_modem_control_port\&.write(0x1E);
+48     m_data_port\&.write(0xAE);
+49     if (m_data_port\&.read() != 0xAE)
+50         return;
+51 
+52     // Enable serial chip
+53     m_modem_control_port\&.write(0x0F);
+54 
+55     // Enable interrupts
+56     m_interrupt_enable_port\&.write(0x01);
+57 
+58     // Clear any prexisting state
+59     m_fifo_control_port\&.read();
+60     while (can_read())
+61         read_char();
+62 }
+.fi
+
+.PP
+References \fBcan_read()\fP, and \fBread_char()\fP\&.
+.SS "SerialConsole::SerialConsole (\fBLogger\fP * logger)\fC [explicit]\fP"
+
+.PP
+Constructs a new Serial \fBConsole\fP object and initialises the serial port\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlogger\fP The logger which will use this serial console as a log writer 
+.RE
+.PP
+
+.PP
+Definition at line \fB69\fP of file \fBserial\&.cpp\fP\&..PP
+.nf
+70 : SerialConsole()
+71 {
+72     // Set the active serial console
+73     if (!DO_DEBUGGING)
+74         logger\->add_log_writer(this);
+75 }
+.fi
+
+.PP
+References \fBMaxOS::Logger::add_log_writer()\fP, and \fBMaxOS::runtime::DO_DEBUGGING\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "bool SerialConsole::can_read ()"
+
+.PP
+Checks if data can be read from the serial port\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if data is ready to be read 
+.RE
+.PP
+
+.PP
+Definition at line \fB108\fP of file \fBserial\&.cpp\fP\&..PP
+.nf
+108                              {
+109     return m_line_status_port\&.read() & 1;
+110 }
+.fi
+
+.PP
+Referenced by \fBSerialConsole()\fP\&.
+.SS "void SerialConsole::put_character (char c)"
+
+.PP
+Waits for the serial port to be ready, then writes a character to it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIc\fP The character to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB84\fP of file \fBserial\&.cpp\fP\&..PP
+.nf
+84                                         {
+85 
+86     // Wait for the serial port to be ready
+87     while (0 == (m_line_status_port\&.read() & 0x20));
+88 
+89     // Write the character
+90     m_data_port\&.write(c);
+91 
+92 }
+.fi
+
+.PP
+Referenced by \fBwrite_char()\fP\&.
+.SS "char SerialConsole::read_char ()"
+
+.PP
+Read data from the serial port\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The data read 
+.RE
+.PP
+
+.PP
+Definition at line \fB117\fP of file \fBserial\&.cpp\fP\&..PP
+.nf
+117                               {
+118     return m_data_port\&.read();
+119 }
+.fi
+
+.PP
+Referenced by \fBSerialConsole()\fP\&.
+.SS "void SerialConsole::write_char (char c)\fC [final]\fP"
+
+.PP
+Waits for the serial port to be ready, then writes a character to it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIc\fP The character to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB99\fP of file \fBserial\&.cpp\fP\&..PP
+.nf
+99                                      {
+100     put_character(c);
+101 }
+.fi
+
+.PP
+References \fBput_character()\fP\&.
+.PP
+Referenced by \fBMaxOS::runtime::GDBServer::handle_continue()\fP, and \fBMaxOS::runtime::GDBServer::handle_step_instruction()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

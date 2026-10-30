@@ -7,9 +7,9 @@
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <common/macros\&.h>\fP
+\fC#include <libcommon/macros\&.h>\fP
 .br
-\fC#include <hardwarecommunication/port\&.h>\fP
+\fC#include <libcommon/port\&.h>\fP
 .br
 \fC#include <hardwarecommunication/acpi\&.h>\fP
 .br
@@ -100,6 +100,10 @@
 
 .in +1c
 .ti -1c
+.RI "enum \fBMaxOS::hardwarecommunication::LAPICSendInterruptFlags\fP { \fBSEND_ALL\fP = (1 << 0), \fBEXCLUDE_SELF\fP = (1 << 1) }"
+.br
+.RI "Represents bitfield entries in the LAPIC flags\&. "
+.ti -1c
 .RI "enum class \fBMaxOS::hardwarecommunication::MADT_TYPE\fP { \fBPROCESSOR_APIC\fP, \fBIO_APIC\fP, \fBINTERRUPT_SOURCE_OVERRIDE\fP, \fBNMI_SOURCE\fP, \fBAPIC_NMIS\fP, \fBAPIC_ADDRESS_OVERRIDE\fP, \fBPROCESSOR_X2APIC\fP }"
 .br
 .RI "The types of MADT entries\&. "
@@ -154,16 +158,29 @@ use this
 .PP
 
 .PP
-Definition at line \fB146\fP of file \fBapic\&.h\fP\&..PP
+Definition at line \fB158\fP of file \fBapic\&.h\fP\&..PP
 .nf
-146                       {
-147         FIXED = 0,
-148         LOWEST_PRIORITY = 1,
-149         SMI = 2,
-150         NMI = 4,
-151         INIT = 5,
-152         EXTINT = 7,
-153     };
+158                       {
+159         FIXED = 0,
+160         LOWEST_PRIORITY = 1,
+161         SMI = 2,
+162         NMI = 4,
+163         INIT = 5,
+164         EXTINT = 7,
+165     };
+.fi
+
+.SS "enum \fBMaxOS::hardwarecommunication::LAPICSendInterruptFlags\fP"
+
+.PP
+Represents bitfield entries in the LAPIC flags\&. 
+.PP
+Definition at line \fB25\fP of file \fBapic\&.h\fP\&..PP
+.nf
+25                                  {
+26         SEND_ALL        = (1 << 0),
+27         EXCLUDE_SELF    = (1 << 1),
+28     };
 .fi
 
 .SS "enum class \fBMaxOS::hardwarecommunication::MADT_TYPE\fP\fC [strong]\fP"
@@ -171,17 +188,17 @@ Definition at line \fB146\fP of file \fBapic\&.h\fP\&..PP
 .PP
 The types of MADT entries\&. 
 .PP
-Definition at line \fB77\fP of file \fBapic\&.h\fP\&..PP
+Definition at line \fB89\fP of file \fBapic\&.h\fP\&..PP
 .nf
-77                          {
-78         PROCESSOR_APIC,
-79         IO_APIC,
-80         INTERRUPT_SOURCE_OVERRIDE,
-81         NMI_SOURCE,
-82         APIC_NMIS,
-83         APIC_ADDRESS_OVERRIDE,
-84         PROCESSOR_X2APIC,
-85     };
+89                          {
+90         PROCESSOR_APIC,
+91         IO_APIC,
+92         INTERRUPT_SOURCE_OVERRIDE,
+93         NMI_SOURCE,
+94         APIC_NMIS,
+95         APIC_ADDRESS_OVERRIDE,
+96         PROCESSOR_X2APIC,
+97     };
 .fi
 
 .SH "Author"

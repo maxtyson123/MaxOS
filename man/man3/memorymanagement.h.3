@@ -11,66 +11,28 @@
 .br
 \fC#include <cstdint>\fP
 .br
-\fC#include <system/multiboot\&.h>\fP
+\fC#include <libcommon/assert\&.h>\fP
 .br
 \fC#include <memory/virtual\&.h>\fP
+.br
+\fC#include <memory/allocator/allocator\&.h>\fP
+.br
+\fC#include <memory/allocator/bump\&.h>\fP
+.br
+\fC#include <system/multiboot\&.h>\fP
 .br
 
 .SS "Classes"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::memory::MemoryChunk\fP"
+.RI "class \fBMaxOS::memory::BumpMemoryManager\fP"
 .br
-.RI "A span of memory in the heap, can be allocated or free\&. Used as a node in a doubly linked list\&. "
+.RI "Basic doubly linked list bump memory manager\&. "
 .ti -1c
 .RI "class \fBMaxOS::memory::MemoryManager\fP"
 .br
 .RI "Handles memory allocation and deallocation\&. "
-.in -1c
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "\fBvoid\fP * \fBoperator new\fP (\fBsize_t\fP size)  \fBthrow\fP ()"
-.br
-.RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
-.ti -1c
-.RI "\fBvoid\fP * \fBoperator new[]\fP (\fBsize_t\fP size)  \fBthrow\fP ()"
-.br
-.RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
-.ti -1c
-.RI "\fBvoid\fP * \fBoperator new\fP (\fBsize_t\fP size, \fBvoid\fP *pointer)"
-.br
-.RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
-.ti -1c
-.RI "\fBvoid\fP * \fBoperator new[]\fP (\fBsize_t\fP size, \fBvoid\fP *pointer)"
-.br
-.RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBoperator delete\fP (\fBvoid\fP *pointer)"
-.br
-.RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBoperator delete[]\fP (\fBvoid\fP *pointer)"
-.br
-.RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBoperator delete\fP (\fBvoid\fP *pointer, \fBsize_t\fP size)"
-.br
-.RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
-.ti -1c
-.RI "\fBvoid\fP \fBoperator delete[]\fP (\fBvoid\fP *pointer, \fBsize_t\fP size)"
-.br
-.RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "constexpr size_t \fBMaxOS::memory::CHUNK_ALIGNMENT\fP = 0x10"
-.br
-.RI "How many bytes the chunks should be a multiple of (round up to this) "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -91,225 +53,6 @@ Max Tyson
 
 .PP
 Definition in file \fBmemorymanagement\&.h\fP\&.
-.SH "Function Documentation"
-.PP 
-.SS "\fBvoid\fP \fBoperator\fP \fBdelete\fP (\fBvoid\fP * pointer)"
-
-.PP
-Overloaded delete operator, frees memory using the KERNEL memory manager\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIpointer\fP The pointer to the memory to free 
-.RE
-.PP
-
-.PP
-Definition at line \fB379\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
-.nf
-379                                     {
-380 
-381     // Handle the memory freeing
-382     return MaxOS::memory::MemoryManager::kfree(pointer);
-383 }
-.fi
-
-.PP
-References \fBMaxOS::memory::MemoryManager::kfree()\fP\&.
-.SS "\fBvoid\fP \fBoperator\fP \fBdelete\fP (\fBvoid\fP * pointer, \fBsize_t\fP size)"
-
-.PP
-Overloaded delete operator, frees memory using the KERNEL memory manager\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIpointer\fP The pointer to the memory to free 
-.br
-\fIsize\fP The size of the memory to free - ignored in this implementation 
-.RE
-.PP
-
-.PP
-Definition at line \fB402\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
-.nf
-402                                             {
-403 
-404     // Handle the memory freeing
-405     return MaxOS::memory::MemoryManager::kfree(pointer);
-406 }
-.fi
-
-.PP
-References \fBMaxOS::memory::MemoryManager::kfree()\fP\&.
-.SS "\fBvoid\fP \fBoperator\fP \fBdelete\fP[] (\fBvoid\fP * pointer)"
-
-.PP
-Overloaded delete operator, frees memory using the KERNEL memory manager\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIpointer\fP The pointer to the memory to free 
-.RE
-.PP
-
-.PP
-Definition at line \fB390\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
-.nf
-390                                       {
-391 
-392     // Handle the memory freeing
-393     return MaxOS::memory::MemoryManager::kfree(pointer);
-394 }
-.fi
-
-.PP
-References \fBMaxOS::memory::MemoryManager::kfree()\fP\&.
-.SS "\fBvoid\fP \fBoperator\fP \fBdelete\fP[] (\fBvoid\fP * pointer, \fBsize_t\fP size)"
-
-.PP
-Overloaded delete operator, frees memory using the KERNEL memory manager\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIpointer\fP The pointer to the memory to free 
-.br
-\fIsize\fP The size of the memory to free - ignored in this implementation 
-.RE
-.PP
-
-.PP
-Definition at line \fB414\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
-.nf
-414                                                    {
-415 
-416     // Handle the memory freeing
-417     return MaxOS::memory::MemoryManager::kfree(pointer);
-418 }
-.fi
-
-.PP
-References \fBMaxOS::memory::MemoryManager::kfree()\fP\&.
-.SS "\fBvoid\fP * \fBoperator\fP \fBnew\fP (\fBsize_t\fP size)"
-
-.PP
-Overloaded new operator, allocates memory using the KERNEL memory manager\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIsize\fP The size of the memory to allocate 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The pointer to the allocated memory 
-.RE
-.PP
-
-.PP
-Definition at line \fB331\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
-.nf
-331                                         {
-332 
-333     // Handle the memory allocation
-334     return MaxOS::memory::MemoryManager::kmalloc(size);
-335 }
-.fi
-
-.PP
-References \fBMaxOS::memory::MemoryManager::kmalloc()\fP\&.
-.SS "\fBvoid\fP * \fBoperator\fP \fBnew\fP (\fBsize_t\fP size, \fBvoid\fP * pointer)"
-
-.PP
-Overloaded new operator, allocates memory using the KERNEL memory manager\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIpointer\fP The pointer to the memory to allocate 
-.br
-\fIsize\fP The size of the memory to free - ignored in this implementation 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The pointer to the memory 
-.RE
-.PP
-
-.PP
-Definition at line \fB356\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
-.nf
-356                                                {
-357 
-358     return pointer;
-359 }
-.fi
-
-.SS "\fBvoid\fP * \fBoperator\fP \fBnew\fP[] (\fBsize_t\fP size)"
-
-.PP
-Overloaded new operator, allocates memory using the KERNEL memory manager\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIsize\fP The size of the memory to allocate 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The pointer to the allocated memory 
-.RE
-.PP
-
-.PP
-Definition at line \fB343\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
-.nf
-343                                           {
-344 
-345     // Handle the memory allocation
-346     return MaxOS::memory::MemoryManager::kmalloc(size);
-347 }
-.fi
-
-.PP
-References \fBMaxOS::memory::MemoryManager::kmalloc()\fP\&.
-.SS "\fBvoid\fP * \fBoperator\fP \fBnew\fP[] (\fBsize_t\fP size, \fBvoid\fP * pointer)"
-
-.PP
-Overloaded new operator, allocates memory using the KERNEL memory manager\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIsize\fP The size of the memory to free - ignored in this implementation 
-.br
-\fIpointer\fP The pointer to the memory to allocate 
-.RE
-.PP
-\fBReturns\fP
-.RS 4
-The pointer to the memory 
-.RE
-.PP
-
-.PP
-Definition at line \fB368\fP of file \fBmemorymanagement\&.cpp\fP\&..PP
-.nf
-368                                                  {
-369 
-370 
-371     return pointer;
-372 }
-.fi
-
-.SH "Variable Documentation"
-.PP 
-.SS "constexpr size_t MaxOS::memory::CHUNK_ALIGNMENT = 0x10\fC [constexpr]\fP"
-
-.PP
-How many bytes the chunks should be a multiple of (round up to this) 
-.PP
-Definition at line \fB34\fP of file \fBmemorymanagement\&.h\fP\&.
-.PP
-Referenced by \fBMaxOS::memory::MemoryManager::align()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

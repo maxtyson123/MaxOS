@@ -1,0 +1,174 @@
+.TH "MaxOS::processes::BlockingLock" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::processes::BlockingLock \- Enables a resource to be used by only one instance at a time through a combination of spinning and queuing\&. When waiting enqueued, thread will sleep\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <block\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBlock\fP ()"
+.br
+.RI "Lock the spinlock once it is available, sleeping until other processes are done with it\&. "
+.ti -1c
+.RI "void \fBunlock\fP ()"
+.br
+.RI "Unlock the spinlock\&. "
+.ti -1c
+.RI "bool \fBis_locked\fP () const"
+.br
+.RI "Check if the spinlock is locked\&. "
+.ti -1c
+.RI "void \fBacquire\fP ()"
+.br
+.RI "Acquire the spinlock, spin until the lock is available and sleeping the thread until marked as available\&. "
+.ti -1c
+.RI "void \fBrelease\fP ()"
+.br
+.RI "Mark as unlocked, wake the next enqueued thread\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Enables a resource to be used by only one instance at a time through a combination of spinning and queuing\&. When waiting enqueued, thread will sleep\&. 
+
+
+.PP
+\fBNote\fP
+.RS 4
+Repeated API that could be made a class that isn't because lock types shouldn't be interchangeable 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+Spinlock
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+move to libcommon 
+.RE
+.PP
+
+.PP
+Definition at line \fB28\fP of file \fBblock\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void BlockingLock::acquire ()"
+
+.PP
+Acquire the spinlock, spin until the lock is available and sleeping the thread until marked as available\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Move the yielding logic into process/thread code so that it can be reused 
+.PP
+circular dependancy resolution 
+.RE
+.PP
+
+.PP
+Definition at line \fB49\fP of file \fBblock\&.cpp\fP\&..PP
+.nf
+49                            {
+50 
+51     // Try to get the lock
+52     for (int i = 0; (i < BLOCKING_FAST_TRY_LIMIT || must_spin()); ++i)
+53         if(!__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE))
+54             return;
+55 
+56     // Add to the queue
+57     auto thread = GlobalScheduler::current_thread();
+58     thread\->thread_state = ThreadState::WAITING;
+59     m_queue\&.push_back(thread\->tid);
+60 
+61     // Scheduler will awake when the process that holds this lock marks this thread as READY
+62     thread\->yield();
+63 }
+.fi
+
+.PP
+References \fBMaxOS::processes::BLOCKING_FAST_TRY_LIMIT\fP, and \fBMaxOS::processes::GlobalScheduler::current_thread()\fP\&.
+.PP
+Referenced by \fBlock()\fP\&.
+.SS "bool BlockingLock::is_locked () const"
+
+.PP
+Check if the spinlock is locked\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if the spinlock is locked, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB39\fP of file \fBblock\&.cpp\fP\&..PP
+.nf
+39                                    {
+40     return m_locked;
+41 }
+.fi
+
+.SS "void BlockingLock::lock ()"
+
+.PP
+Lock the spinlock once it is available, sleeping until other processes are done with it\&. 
+.PP
+Definition at line \fB23\fP of file \fBblock\&.cpp\fP\&..PP
+.nf
+23                         {
+24     acquire();
+25 }
+.fi
+
+.PP
+References \fBacquire()\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::SharedMessageEndpoint::send()\fP\&.
+.SS "void BlockingLock::release ()"
+
+.PP
+Mark as unlocked, wake the next enqueued thread\&. 
+.PP
+Definition at line \fB68\fP of file \fBblock\&.cpp\fP\&..PP
+.nf
+68                            {
+69 
+70     // Next thread can be run
+71     if(!m_queue\&.empty())
+72         GlobalScheduler::get_thread(m_queue\&.pop_front())\->thread_state = ThreadState::READY;
+73 
+74     __atomic_clear(&m_locked, __ATOMIC_RELEASE);
+75 }
+.fi
+
+.PP
+References \fBMaxOS::processes::GlobalScheduler::get_thread()\fP, and \fBMaxOS::processes::Thread::thread_state\fP\&.
+.PP
+Referenced by \fBunlock()\fP\&.
+.SS "void BlockingLock::unlock ()"
+
+.PP
+Unlock the spinlock\&. 
+.PP
+Definition at line \fB30\fP of file \fBblock\&.cpp\fP\&..PP
+.nf
+30                           {
+31     release();
+32 }
+.fi
+
+.PP
+References \fBrelease()\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::SharedMessageEndpoint::send()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

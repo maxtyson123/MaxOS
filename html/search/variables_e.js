@@ -1,16 +1,10 @@
 var searchData=
 [
-  ['name_0',['name',['../classMaxOS_1_1processes_1_1Process.html#a56404d627bd310d8de08fba3d8d2792f',1,'MaxOS::processes::Process::name'],['../structMaxOS_1_1runtime_1_1TypeDescriptor.html#a06d9b8fae7b2d08775ec4e72a539764d',1,'MaxOS::runtime::TypeDescriptor::name'],['../structMaxOS_1_1filesystem_1_1format_1_1DirectoryEntry.html#afbec73ee0e85a040880e1b20e43f5153',1,'MaxOS::filesystem::format::DirectoryEntry::name']]],
-  ['name1_1',['name1',['../structMaxOS_1_1filesystem_1_1format_1_1LongFileNameEntry.html#afa8b71c3d33eebbb8d6562791a84d736',1,'MaxOS::filesystem::format::LongFileNameEntry']]],
-  ['name2_2',['name2',['../structMaxOS_1_1filesystem_1_1format_1_1LongFileNameEntry.html#a027f801c832c2b5ac2adbff2b07f250d',1,'MaxOS::filesystem::format::LongFileNameEntry']]],
-  ['name3_3',['name3',['../structMaxOS_1_1filesystem_1_1format_1_1LongFileNameEntry.html#adf3120de167a379c1cbd306a35ac9fc4',1,'MaxOS::filesystem::format::LongFileNameEntry']]],
-  ['name_5findex_4',['name_index',['../structMaxOS_1_1processes_1_1ELFSectionHeader64.html#a37e543b0e357a0af737786e5e5648927',1,'MaxOS::processes::ELFSectionHeader64']]],
-  ['name_5flength_5',['name_length',['../structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1DirectoryEntry.html#a55f709b712d2e05d41a4fe384f49f14f',1,'MaxOS::filesystem::format::ext2::DirectoryEntry']]],
-  ['new_5ftext_6',['new_text',['../classMaxOS_1_1gui_1_1widgets_1_1InputBoxTextChangedEvent.html#a19a08e02782e609f1ddf26654b7049f1',1,'MaxOS::gui::widgets::InputBoxTextChangedEvent']]],
-  ['next_7',['next',['../structMaxOS_1_1memory_1_1MemoryChunk.html#a9b94dfe2f922882b76c7e592673a5a26',1,'MaxOS::memory::MemoryChunk::next'],['../structMaxOS_1_1system_1_1StackFrame.html#ac104c1f50f3d0ded0dc7ea7911418c89',1,'MaxOS::system::StackFrame::next'],['../structMaxOS_1_1memory_1_1VirtualMemoryRegion.html#ad413d0bc698f58b335e61665a18cff9f',1,'MaxOS::memory::VirtualMemoryRegion::next'],['../structMaxOS_1_1memory_1_1FreeChunk.html#af778aef094fc1dffa4cd9abbaf9892a8',1,'MaxOS::memory::FreeChunk::next']]],
-  ['next_5ffree_5fcluster_8',['next_free_cluster',['../structMaxOS_1_1filesystem_1_1format_1_1FSInfo.html#a9755f9a90ec9aefc5ce3bbe3fe5f9af6',1,'MaxOS::filesystem::format::FSInfo']]],
-  ['num_9',['num',['../structmultiboot__tag__elf__sections.html#ad31ac6e523f0a7d800c430ba4e5c40dc',1,'multiboot_tag_elf_sections']]],
-  ['num_5frecv_5fbuffers_10',['num_recv_buffers',['../structMaxOS_1_1drivers_1_1ethernet_1_1InitializationBlock.html#a6b19869b81d1d93107e6dbbc74784c9d',1,'MaxOS::drivers::ethernet::InitializationBlock']]],
-  ['num_5fsend_5fbuffers_11',['num_send_buffers',['../structMaxOS_1_1drivers_1_1ethernet_1_1InitializationBlock.html#a3ca863c19691cf8131d2859a18ef14fa',1,'MaxOS::drivers::ethernet::InitializationBlock']]],
-  ['number_5fpad_5flock_12',['number_pad_lock',['../classMaxOS_1_1drivers_1_1peripherals_1_1KeyboardState.html#a85d0597ebc3496da941adc73afe70430',1,'MaxOS::drivers::peripherals::KeyboardState']]]
+  ['obj_5fptr_0',['obj_ptr',['../structMaxOS_1_1runtime_1_1atexit__func__entry__t.html#aa9bfed6676699bfcf9922ba339cbe538',1,'MaxOS::runtime::atexit_func_entry_t']]],
+  ['oem_5fid_1',['OEM_id',['../structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html#affcf62bfa0e30fbd88f353fb3328715e',1,'MaxOS::hardwarecommunication::ACPISDTHeader']]],
+  ['oem_5frevision_2',['OEM_revision',['../structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html#a76c1355f3b0c2c38bf6befb7def20be0',1,'MaxOS::hardwarecommunication::ACPISDTHeader']]],
+  ['oem_5ftable_5fid_3',['OEM_table_id',['../structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html#a7a2946802d27cbac8eebbe7434c9ad31',1,'MaxOS::hardwarecommunication::ACPISDTHeader']]],
+  ['oemid_4',['OEMID',['../structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor.html#ad33e8d6e2d6812bda523007a131c40d4',1,'MaxOS::hardwarecommunication::RSDPDescriptor']]],
+  ['offset_5',['offset',['../structMaxOS_1_1processes_1_1ELFProgramHeader64.html#acc1f1b82c0707d64f7417ad0e8353938',1,'MaxOS::processes::ELFProgramHeader64::offset'],['../structMaxOS_1_1processes_1_1ELFSectionHeader64.html#a36bf128dbe2a6069325caee68f12239e',1,'MaxOS::processes::ELFSectionHeader64::offset'],['../structmultiboot__tag__apm.html#ae9d788171dfbf0f540c37aee20c96eb3',1,'multiboot_tag_apm::offset']]],
+  ['operating_5fmode_6',['operating_mode',['../structMaxOS_1_1hardwarecommunication_1_1PITCommand.html#a43fa5f52a6eca39fe62872bdf32ab769',1,'MaxOS::hardwarecommunication::PITCommand']]]
 ];

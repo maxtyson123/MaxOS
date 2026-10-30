@@ -29,7 +29,7 @@ void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_ad082ec1b5e7
 \doxysubsection{Detailed Description}
 Handles the IO APIC in the system (one per system) 
 
-Definition at line \mbox{\hyperlink{apic_8h_source_l00193}{193}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
+Definition at line \mbox{\hyperlink{apic_8h_source_l00205}{205}} of file \mbox{\hyperlink{apic_8h_source}{apic.\+h}}.
 
 
 
@@ -51,67 +51,67 @@ Construct a new IO APIC object. Maps the IO APIC registers and reads the \doxyli
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00198}{198}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00245}{245}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00199\ :\ m\_acpi(acpi)}
-\DoxyCodeLine{00200\ \{}
-\DoxyCodeLine{00201\ }
-\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ information\ about\ the\ IO\ APIC}}
-\DoxyCodeLine{00203\ \ \ \ \ m\_madt\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}}*)\ m\_acpi-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a8e9d8bd9fbb18e25419101be8d56aee2}{find}}(\textcolor{stringliteral}{"{}APIC"{}});}
-\DoxyCodeLine{00204\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}*\ io\_apic\_item\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a755e766f9ea8a3d90b9d9ffa8c4bec3e}{get\_madt\_item}}(MADT\_TYPE::IO\_APIC,\ 0);}
-\DoxyCodeLine{00205\ }
-\DoxyCodeLine{00206\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ IO\ APIC}}
-\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keyword}{auto}*\ io\_apic\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__IO__APIC}{MADT\_IO\_APIC}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1ad616354df4569df849c6f1331cd4b4}{PhysicalMemoryManager::to\_io\_region}}((uint64\_t)\ io\_apic\_item\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}));}
-\DoxyCodeLine{00208\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*)\ io\_apic\_item,\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ (io\_apic\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}})),\ PRESENT\ |\ WRITE);}
-\DoxyCodeLine{00209\ }
-\DoxyCodeLine{00210\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ IO\ APIC\ address\ to\ the\ higher\ half}}
-\DoxyCodeLine{00211\ \ \ \ \ m\_address\ =\ io\_apic-\/>io\_apic\_address;}
-\DoxyCodeLine{00212\ \ \ \ \ m\_address\_high\ =\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1ad616354df4569df849c6f1331cd4b4}{PhysicalMemoryManager::to\_io\_region}}(m\_address);}
-\DoxyCodeLine{00213\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}((\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{physical\_address\_t}}*)\ m\_address,\ (\mbox{\hyperlink{classMaxOS_1_1common_1_1Rectangle}{virtual\_address\_t}}*)\ m\_address\_high,\ PRESENT\ |\ WRITE);}
-\DoxyCodeLine{00214\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}IO\ APIC\ Address:\ phy=0x"{}}\ <<\ m\_address\ <<\ \textcolor{stringliteral}{"{},\ virt=0x"{}}\ <<\ m\_address\_high\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{00215\ }
-\DoxyCodeLine{00216\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ IO\ APIC\ version\ and\ max\ redirection\ entry}}
-\DoxyCodeLine{00217\ \ \ \ \ m\_version\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_aec2c3262b7e6ebf56328706c7a8c8cd2}{read}}(0x1);}
-\DoxyCodeLine{00218\ \ \ \ \ m\_max\_redirect\_entry\ =\ (uint8\_t)\ (m\_version\ >>\ 16);}
-\DoxyCodeLine{00219\ }
-\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{//\ Log\ the\ IO\ APIC\ information}}
-\DoxyCodeLine{00221\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}IO\ APIC\ Version:\ 0x"{}}\ <<\ (uint64\_t)\ (m\_version\ \&\ 0xFF)\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{00222\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}IO\ APIC\ Max\ Redirection\ Entry:\ 0x"{}}\ <<\ (uint64\_t)\ m\_max\_redirect\_entry\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{00223\ }
-\DoxyCodeLine{00224\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ source\ override\ item}}
-\DoxyCodeLine{00225\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}*\ source\_override\_item\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a755e766f9ea8a3d90b9d9ffa8c4bec3e}{get\_madt\_item}}(MADT\_TYPE::IO\_APIC,\ m\_override\_array\_size);}
-\DoxyCodeLine{00226\ \ \ \ \ uint32\_t\ total\_length\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}});}
-\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keywordflow}{while}\ (total\_length\ <\ m\_madt-\/>header.length\ \&\&\ m\_override\_array\_size\ <\ 0x10)\ \{\ \textcolor{comment}{//\ 0x10\ is\ the\ max\ items}}
-\DoxyCodeLine{00228\ }
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ total\_length\ +=\ source\_override\_item-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry_ac2b72337ca1b563e9f0af618ea6aac08}{length}};}
-\DoxyCodeLine{00230\ }
-\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ an\ override,\ populate\ the\ array}}
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (source\_override\_item\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ source\_override\_item-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry_a1f1291ec7e038308bcca72341c0d6d86}{type}}\ ==\ 2)\ \{}
-\DoxyCodeLine{00233\ }
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ override\ and\ populate\ the\ array}}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ \textcolor{keyword}{override}\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override}{Override}}*)\ (source\_override\_item\ +\ 1);}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7a966c37b284b11470c63189098a9b7f}{bus}}\ =\ \textcolor{keyword}{override}-\/>bus;}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a392523c46f36a7a67186bfbd29529fd5}{source}}\ =\ \textcolor{keyword}{override}-\/>source;}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a52096e997dedf8c3f6d928cb6b69f0c0}{global\_system\_interrupt}}\ =\ \textcolor{keyword}{override}-\/>global\_system\_interrupt;}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7b2854e157c0cf2293592d280dcffd67}{flags}}\ =\ \textcolor{keyword}{override}-\/>flags;}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array\_size++;}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00242\ }
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ item}}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ source\_override\_item\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a755e766f9ea8a3d90b9d9ffa8c4bec3e}{get\_madt\_item}}(MADT\_TYPE::IO\_APIC,\ m\_override\_array\_size);}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (source\_override\_item\ ==\ \textcolor{keyword}{nullptr})}
-\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00247\ \ \ \ \ \}}
+\DoxyCodeLine{00246\ :\ m\_acpi(acpi)}
+\DoxyCodeLine{00247\ \{}
 \DoxyCodeLine{00248\ }
-\DoxyCodeLine{00249\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a1df434c9cd82457b6830c0500731a601}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}IO\ APIC\ Source\ Overrides:\ 0x"{}}\ <<\ m\_override\_array\_size\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{00250\ \}}
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ information\ about\ the\ IO\ APIC}}
+\DoxyCodeLine{00250\ \ \ \ \ m\_madt\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}}*)\ m\_acpi-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedConfigurationAndPowerInterface_a8e9d8bd9fbb18e25419101be8d56aee2}{find}}(\textcolor{stringliteral}{"{}APIC"{}});}
+\DoxyCodeLine{00251\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}*\ io\_apic\_item\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a755e766f9ea8a3d90b9d9ffa8c4bec3e}{get\_madt\_item}}(MADT\_TYPE::IO\_APIC,\ 0);}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ IO\ APIC}}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keyword}{auto}*\ io\_apic\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT__IO__APIC}{MADT\_IO\_APIC}}*)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1ad616354df4569df849c6f1331cd4b4}{PhysicalMemoryManager::to\_io\_region}}((uint64\_t)\ io\_apic\_item\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}));}
+\DoxyCodeLine{00255\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}((\mbox{\hyperlink{physical_8h_a86d1744b2aea4590cf02ef32ff8acc63}{physical\_address\_t}}*)\ io\_apic\_item,\ (\mbox{\hyperlink{physical_8h_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}}*)\ (io\_apic\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}})),\ PRESENT\ |\ WRITE);}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ IO\ APIC\ address\ to\ the\ higher\ half}}
+\DoxyCodeLine{00258\ \ \ \ \ m\_address\ =\ io\_apic-\/>io\_apic\_address;}
+\DoxyCodeLine{00259\ \ \ \ \ m\_address\_high\ =\ (uint64\_t)\ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a1ad616354df4569df849c6f1331cd4b4}{PhysicalMemoryManager::to\_io\_region}}(m\_address);}
+\DoxyCodeLine{00260\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_aac616421554f724ac8810d5bff76c3f1}{PhysicalMemoryManager::s\_current\_manager}}-\/>\mbox{\hyperlink{classMaxOS_1_1memory_1_1PhysicalMemoryManager_a732ea9bd93397bbddd596bee127ac8f3}{map}}((\mbox{\hyperlink{physical_8h_a86d1744b2aea4590cf02ef32ff8acc63}{physical\_address\_t}}*)\ m\_address,\ (\mbox{\hyperlink{physical_8h_a1a4a2cf740017bbb681bbe110a18fdcb}{virtual\_address\_t}}*)\ m\_address\_high,\ PRESENT\ |\ WRITE);}
+\DoxyCodeLine{00261\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a44040e7f56db620657286c3dc2b230fb}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}IO\ APIC\ Address:\ phy=0x"{}}\ <<\ m\_address\ <<\ \textcolor{stringliteral}{"{},\ virt=0x"{}}\ <<\ m\_address\_high\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ IO\ APIC\ version\ and\ max\ redirection\ entry}}
+\DoxyCodeLine{00264\ \ \ \ \ m\_version\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_aec2c3262b7e6ebf56328706c7a8c8cd2}{read}}(0x1);}
+\DoxyCodeLine{00265\ \ \ \ \ m\_max\_redirect\_entry\ =\ (uint8\_t)\ (m\_version\ >>\ 16);}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{comment}{//\ Log\ the\ IO\ APIC\ information}}
+\DoxyCodeLine{00268\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a44040e7f56db620657286c3dc2b230fb}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}IO\ APIC\ Version:\ 0x"{}}\ <<\ (uint64\_t)\ (m\_version\ \&\ 0xFF)\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00269\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a44040e7f56db620657286c3dc2b230fb}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}IO\ APIC\ Max\ Redirection\ Entry:\ 0x"{}}\ <<\ (uint64\_t)\ m\_max\_redirect\_entry\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ source\ override\ item}}
+\DoxyCodeLine{00272\ \ \ \ \ \mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}*\ source\_override\_item\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a755e766f9ea8a3d90b9d9ffa8c4bec3e}{get\_madt\_item}}(MADT\_TYPE::IO\_APIC,\ m\_override\_array\_size);}
+\DoxyCodeLine{00273\ \ \ \ \ uint32\_t\ total\_length\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}});}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordflow}{while}\ (total\_length\ <\ m\_madt-\/>header.length\ \&\&\ m\_override\_array\_size\ <\ 0x10)\ \{\ \textcolor{comment}{//\ 0x10\ is\ the\ max\ items}}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ total\_length\ +=\ source\_override\_item-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry_ac2b72337ca1b563e9f0af618ea6aac08}{length}};}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ there\ is\ an\ override,\ populate\ the\ array}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (source\_override\_item\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ source\_override\_item-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry_a1f1291ec7e038308bcca72341c0d6d86}{type}}\ ==\ 2)\ \{}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ override\ and\ populate\ the\ array}}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}*\ \textcolor{keyword}{override}\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override}{Override}}*)\ (source\_override\_item\ +\ 1);}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7a966c37b284b11470c63189098a9b7f}{bus}}\ =\ \textcolor{keyword}{override}-\/>bus;}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a392523c46f36a7a67186bfbd29529fd5}{source}}\ =\ \textcolor{keyword}{override}-\/>source;}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a52096e997dedf8c3f6d928cb6b69f0c0}{global\_system\_interrupt}}\ =\ \textcolor{keyword}{override}-\/>global\_system\_interrupt;}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array[m\_override\_array\_size].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7b2854e157c0cf2293592d280dcffd67}{flags}}\ =\ \textcolor{keyword}{override}-\/>flags;}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ m\_override\_array\_size++;}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ next\ item}}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ source\_override\_item\ =\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a755e766f9ea8a3d90b9d9ffa8c4bec3e}{get\_madt\_item}}(MADT\_TYPE::IO\_APIC,\ m\_override\_array\_size);}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (source\_override\_item\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00294\ \ \ \ \ \}}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a44040e7f56db620657286c3dc2b230fb}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}IO\ APIC\ Source\ Overrides:\ 0x"{}}\ <<\ m\_override\_array\_size\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00297\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{apic_8h_source_l00182}{Max\+OS\+::hardwarecommunication\+::\+Override\+::bus}}, \mbox{\hyperlink{logger_8cpp_source_l00193}{Max\+OS\+::\+Logger\+::\+DEBUG()}}, \mbox{\hyperlink{acpi_8cpp_source_l00163}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}, \mbox{\hyperlink{apic_8h_source_l00185}{Max\+OS\+::hardwarecommunication\+::\+Override\+::flags}}, \mbox{\hyperlink{apic_8cpp_source_l00261}{get\+\_\+madt\+\_\+item()}}, \mbox{\hyperlink{apic_8h_source_l00184}{Max\+OS\+::hardwarecommunication\+::\+Override\+::global\+\_\+system\+\_\+interrupt}}, \mbox{\hyperlink{apic_8h_source_l00070}{Max\+OS\+::hardwarecommunication\+::\+MADTEntry\+::length}}, \mbox{\hyperlink{physical_8cpp_source_l00538}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map()}}, \mbox{\hyperlink{physical_8h_source_l00043}{Max\+OS\+::memory\+::\+PRESENT}}, \mbox{\hyperlink{apic_8cpp_source_l00297}{read()}}, \mbox{\hyperlink{physical_8h_source_l00185}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::s\+\_\+current\+\_\+manager}}, \mbox{\hyperlink{apic_8h_source_l00183}{Max\+OS\+::hardwarecommunication\+::\+Override\+::source}}, \mbox{\hyperlink{physical_8cpp_source_l00915}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+io\+\_\+region()}}, \mbox{\hyperlink{apic_8h_source_l00069}{Max\+OS\+::hardwarecommunication\+::\+MADTEntry\+::type}}, and \mbox{\hyperlink{physical_8h_source_l00044}{Max\+OS\+::memory\+::\+WRITE}}.
+References \mbox{\hyperlink{apic_8h_source_l00194}{Max\+OS\+::hardwarecommunication\+::\+Override\+::bus}}, \mbox{\hyperlink{logger_8cpp_source_l00204}{Max\+OS\+::\+Logger\+::\+DEBUG()}}, \mbox{\hyperlink{acpi_8cpp_source_l00163}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Configuration\+And\+Power\+Interface\+::find()}}, \mbox{\hyperlink{apic_8h_source_l00197}{Max\+OS\+::hardwarecommunication\+::\+Override\+::flags}}, \mbox{\hyperlink{apic_8cpp_source_l00308}{get\+\_\+madt\+\_\+item()}}, \mbox{\hyperlink{apic_8h_source_l00196}{Max\+OS\+::hardwarecommunication\+::\+Override\+::global\+\_\+system\+\_\+interrupt}}, \mbox{\hyperlink{apic_8h_source_l00082}{Max\+OS\+::hardwarecommunication\+::\+MADTEntry\+::length}}, \mbox{\hyperlink{physical_8cpp_source_l00535}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::map()}}, \mbox{\hyperlink{physical_8h_source_l00044}{Max\+OS\+::memory\+::\+PRESENT}}, \mbox{\hyperlink{apic_8cpp_source_l00344}{read()}}, \mbox{\hyperlink{physical_8h_source_l00183}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::s\+\_\+current\+\_\+manager}}, \mbox{\hyperlink{apic_8h_source_l00195}{Max\+OS\+::hardwarecommunication\+::\+Override\+::source}}, \mbox{\hyperlink{physical_8cpp_source_l00914}{Max\+OS\+::memory\+::\+Physical\+Memory\+Manager\+::to\+\_\+io\+\_\+region()}}, \mbox{\hyperlink{apic_8h_source_l00081}{Max\+OS\+::hardwarecommunication\+::\+MADTEntry\+::type}}, and \mbox{\hyperlink{physical_8h_source_l00045}{Max\+OS\+::memory\+::\+WRITE}}.
 
 
 
@@ -138,48 +138,48 @@ The item or null if not found
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00261}{261}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00308}{308}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00262\ }
-\DoxyCodeLine{00263\ \ \ \ \ \textcolor{comment}{//\ The\ item\ starts\ at\ the\ start\ of\ the\ MADT}}
-\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keyword}{auto}*\ item\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}*)\ ((uint64\_t)\ m\_madt\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}}));}
-\DoxyCodeLine{00265\ \ \ \ \ uint64\_t\ total\_length\ =\ 0;}
-\DoxyCodeLine{00266\ \ \ \ \ uint8\_t\ current\_index\ =\ 0;}
-\DoxyCodeLine{00267\ }
-\DoxyCodeLine{00268\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ items}}
-\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordflow}{while}\ (total\_length\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}})\ <\ m\_madt-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT_aa20ab7143332d812b330ff3efe404529}{header}}.\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader_a9b8a6a7e086a520cf52a4ea1cdc87670}{length}}\ \&\&\ current\_index\ <=\ index)\ \{}
-\DoxyCodeLine{00270\ }
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Correct\ type}}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (item-\/>type\ ==\ (uint8\_t)type)\ \{}
-\DoxyCodeLine{00273\ }
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Correct\ index\ means\ found}}
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\_index\ ==\ index)}
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ item;}
-\DoxyCodeLine{00277\ }
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Right\ type\ wrong\ index\ so\ move\ on}}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ current\_index++;}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00281\ }
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Increment\ the\ total\ length}}
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ total\_length\ +=\ item-\/>length;}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ item\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}*)\ ((uint64\_t)\ item\ +\ item-\/>length);}
-\DoxyCodeLine{00285\ \ \ \ \ \}}
-\DoxyCodeLine{00286\ }
-\DoxyCodeLine{00287\ \ \ \ \ \textcolor{comment}{//\ No\ item\ found}}
-\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00289\ \}}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{comment}{//\ The\ item\ starts\ at\ the\ start\ of\ the\ MADT}}
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keyword}{auto}*\ item\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}*)\ ((uint64\_t)\ m\_madt\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}}));}
+\DoxyCodeLine{00312\ \ \ \ \ uint64\_t\ total\_length\ =\ 0;}
+\DoxyCodeLine{00313\ \ \ \ \ uint8\_t\ current\_index\ =\ 0;}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ items}}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keywordflow}{while}\ (total\_length\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT}{MADT}})\ <\ m\_madt-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADT_aa20ab7143332d812b330ff3efe404529}{header}}.\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader_a9b8a6a7e086a520cf52a4ea1cdc87670}{length}}\ \&\&\ current\_index\ <=\ index)\ \{}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Correct\ type}}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (item-\/>type\ ==\ (uint8\_t)type)\ \{}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Correct\ index\ means\ found}}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\_index\ ==\ index)}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ item;}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Right\ type\ wrong\ index\ so\ move\ on}}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ current\_index++;}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Increment\ the\ total\ length}}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ total\_length\ +=\ item-\/>length;}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ item\ =\ (\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1MADTEntry}{MADTEntry}}*)\ ((uint64\_t)\ item\ +\ item-\/>length);}
+\DoxyCodeLine{00332\ \ \ \ \ \}}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{comment}{//\ No\ item\ found}}
+\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00336\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{apic_8h_source_l00056}{Max\+OS\+::hardwarecommunication\+::\+MADT\+::header}}, \mbox{\hyperlink{acpi_8h_source_l00061}{Max\+OS\+::hardwarecommunication\+::\+ACPISDTHeader\+::length}}, and \mbox{\hyperlink{apic_8h_source_l00070}{Max\+OS\+::hardwarecommunication\+::\+MADTEntry\+::length}}.
+References \mbox{\hyperlink{apic_8h_source_l00068}{Max\+OS\+::hardwarecommunication\+::\+MADT\+::header}}, \mbox{\hyperlink{acpi_8h_source_l00064}{Max\+OS\+::hardwarecommunication\+::\+ACPISDTHeader\+::length}}, and \mbox{\hyperlink{apic_8h_source_l00082}{Max\+OS\+::hardwarecommunication\+::\+MADTEntry\+::length}}.
 
 
 
-Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00527}{Max\+OS\+::system\+::\+CPU\+::find\+\_\+cores()}}, and \mbox{\hyperlink{apic_8cpp_source_l00198}{IOAPIC()}}.
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00564}{Max\+OS\+::system\+::\+CPU\+::find\+\_\+cores()}}, and \mbox{\hyperlink{apic_8cpp_source_l00245}{IOAPIC()}}.
 
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_aec2c3262b7e6ebf56328706c7a8c8cd2}\label{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_aec2c3262b7e6ebf56328706c7a8c8cd2} 
 \index{MaxOS::hardwarecommunication::IOAPIC@{MaxOS::hardwarecommunication::IOAPIC}!read@{read}}
@@ -201,23 +201,23 @@ The value at the register
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00297}{297}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00344}{344}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00298\ }
-\DoxyCodeLine{00299\ \ \ \ \ \textcolor{comment}{//\ Tell\ the\ APIC\ what\ register\ to\ read\ from}}
-\DoxyCodeLine{00300\ \ \ \ \ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ (m\_address\_high\ +\ 0x00)\ =\ reg;}
-\DoxyCodeLine{00301\ }
-\DoxyCodeLine{00302\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ value}}
-\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keywordflow}{return}\ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ (m\_address\_high\ +\ 0x10);}
-\DoxyCodeLine{00304\ \}}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00345\ }
+\DoxyCodeLine{00346\ \ \ \ \ \textcolor{comment}{//\ Tell\ the\ APIC\ what\ register\ to\ read\ from}}
+\DoxyCodeLine{00347\ \ \ \ \ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ (m\_address\_high\ +\ 0x00)\ =\ reg;}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ value}}
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{keywordflow}{return}\ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ (m\_address\_high\ +\ 0x10);}
+\DoxyCodeLine{00351\ \}}
 
 \end{DoxyCode}
 
 
-Referenced by \mbox{\hyperlink{apic_8cpp_source_l00198}{IOAPIC()}}.
+Referenced by \mbox{\hyperlink{apic_8cpp_source_l00245}{IOAPIC()}}.
 
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a4b794a1a0c15a6262dbd6075961b37c2}\label{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a4b794a1a0c15a6262dbd6075961b37c2} 
 \index{MaxOS::hardwarecommunication::IOAPIC@{MaxOS::hardwarecommunication::IOAPIC}!set\_redirect@{set\_redirect}}
@@ -236,42 +236,42 @@ Redirect a system interrupt to a different IRQ.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00365}{365}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00412}{412}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00366\ }
-\DoxyCodeLine{00367\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ redirection\ entry}}
-\DoxyCodeLine{00368\ \ \ \ \ \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry}{RedirectionEntry}}\ entry\ =\ \{\};}
-\DoxyCodeLine{00369\ \ \ \ \ entry.\mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_aa32d100a3e49b6c0f5b07d1566415dc2}{raw}}\ =\ redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a66e385615027b38ab772dfa150053ade}{flags}}\ |\ (redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a28f96793915501b0a202a4e34e9f1426}{interrupt}}\ \&\ 0xFF);}
-\DoxyCodeLine{00370\ \ \ \ \ entry.destination\ =\ redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_abae45c69e03fe32708e2e795526e34b8}{destination}};}
-\DoxyCodeLine{00371\ \ \ \ \ entry.mask\ =\ redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a74924917fd3f253b298c092e1b5fc719}{mask}};}
-\DoxyCodeLine{00372\ }
-\DoxyCodeLine{00373\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ a\ global\ system\ interrupt\ is\ used}}
-\DoxyCodeLine{00374\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ m\_override\_array\_size;\ i++)\ \{}
-\DoxyCodeLine{00375\ }
-\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_override\_array[i].source\ !=\ redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a76765f5aa84e5fb559be5ec37eb8d5d8}{type}})}
-\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{00378\ }
-\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ lower\ 4\ bits\ of\ the\ pin}}
-\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ entry.pin\_polarity\ =\ ((m\_override\_array[i].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7b2854e157c0cf2293592d280dcffd67}{flags}}\ \&\ 0b11)\ ==\ 2)\ ?\ 0b1\ :\ 0b0;}
-\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ entry.pin\_polarity\ =\ (((m\_override\_array[i].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7b2854e157c0cf2293592d280dcffd67}{flags}}\ >>\ 2)\ \&\ 0b11)\ ==\ 2)\ ?\ 0b1\ :\ 0b0;}
-\DoxyCodeLine{00382\ }
-\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ trigger\ mode}}
-\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ entry.trigger\_mode\ =\ (((m\_override\_array[i].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7b2854e157c0cf2293592d280dcffd67}{flags}}\ >>\ 2)\ \&\ 0b11)\ ==\ 2);}
-\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00386\ }
-\DoxyCodeLine{00387\ \ \ \ \ \}}
-\DoxyCodeLine{00388\ }
-\DoxyCodeLine{00389\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ redirect}}
-\DoxyCodeLine{00390\ \ \ \ \ write\_redirect(redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a2053b8d74b7cd332244eab0ea86aa656}{index}},\ \&entry);}
-\DoxyCodeLine{00391\ \}}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00413\ }
+\DoxyCodeLine{00414\ \ \ \ \ \textcolor{comment}{//\ Create\ the\ redirection\ entry}}
+\DoxyCodeLine{00415\ \ \ \ \ \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry}{RedirectionEntry}}\ entry\ =\ \{\};}
+\DoxyCodeLine{00416\ \ \ \ \ entry.\mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_aa32d100a3e49b6c0f5b07d1566415dc2}{raw}}\ =\ redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a66e385615027b38ab772dfa150053ade}{flags}}\ |\ (redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a28f96793915501b0a202a4e34e9f1426}{interrupt}}\ \&\ 0xFF);}
+\DoxyCodeLine{00417\ \ \ \ \ entry.destination\ =\ redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_abae45c69e03fe32708e2e795526e34b8}{destination}};}
+\DoxyCodeLine{00418\ \ \ \ \ entry.mask\ =\ redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a74924917fd3f253b298c092e1b5fc719}{mask}};}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ a\ global\ system\ interrupt\ is\ used}}
+\DoxyCodeLine{00421\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ m\_override\_array\_size;\ i++)\ \{}
+\DoxyCodeLine{00422\ }
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (m\_override\_array[i].source\ !=\ redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a76765f5aa84e5fb559be5ec37eb8d5d8}{type}})}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ lower\ 4\ bits\ of\ the\ pin}}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ entry.pin\_polarity\ =\ ((m\_override\_array[i].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7b2854e157c0cf2293592d280dcffd67}{flags}}\ \&\ 0b11)\ ==\ 2)\ ?\ 0b1\ :\ 0b0;}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ entry.pin\_polarity\ =\ (((m\_override\_array[i].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7b2854e157c0cf2293592d280dcffd67}{flags}}\ >>\ 2)\ \&\ 0b11)\ ==\ 2)\ ?\ 0b1\ :\ 0b0;}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ trigger\ mode}}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ entry.trigger\_mode\ =\ (((m\_override\_array[i].\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1Override_a7b2854e157c0cf2293592d280dcffd67}{flags}}\ >>\ 2)\ \&\ 0b11)\ ==\ 2);}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ \ \ \}}
+\DoxyCodeLine{00435\ }
+\DoxyCodeLine{00436\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ redirect}}
+\DoxyCodeLine{00437\ \ \ \ \ write\_redirect(redirect-\/>\mbox{\hyperlink{structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_a2053b8d74b7cd332244eab0ea86aa656}{index}},\ \&entry);}
+\DoxyCodeLine{00438\ \}}
 
 \end{DoxyCode}
 
 
-References \mbox{\hyperlink{apic_8h_source_l00167}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::destination}}, \mbox{\hyperlink{apic_8h_source_l00168}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::flags}}, \mbox{\hyperlink{apic_8h_source_l00185}{Max\+OS\+::hardwarecommunication\+::\+Override\+::flags}}, \mbox{\hyperlink{apic_8h_source_l00165}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::index}}, \mbox{\hyperlink{apic_8h_source_l00166}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::interrupt}}, \mbox{\hyperlink{apic_8h_source_l00169}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::mask}}, \mbox{\hyperlink{apic_8h_source_l00137}{Max\+OS\+::hardwarecommunication\+::\+Redirection\+Entry\+::raw}}, and \mbox{\hyperlink{apic_8h_source_l00164}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::type}}.
+References \mbox{\hyperlink{apic_8h_source_l00179}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::destination}}, \mbox{\hyperlink{apic_8h_source_l00180}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::flags}}, \mbox{\hyperlink{apic_8h_source_l00197}{Max\+OS\+::hardwarecommunication\+::\+Override\+::flags}}, \mbox{\hyperlink{apic_8h_source_l00177}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::index}}, \mbox{\hyperlink{apic_8h_source_l00178}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::interrupt}}, \mbox{\hyperlink{apic_8h_source_l00181}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::mask}}, \mbox{\hyperlink{apic_8h_source_l00149}{Max\+OS\+::hardwarecommunication\+::\+Redirection\+Entry\+::raw}}, and \mbox{\hyperlink{apic_8h_source_l00176}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Redirect\+::type}}.
 
 
 
@@ -296,20 +296,20 @@ Enables/\+Disables an interrupt redirect by masking it.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00399}{399}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00446}{446}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00400\ }
-\DoxyCodeLine{00401\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ current\ entry}}
-\DoxyCodeLine{00402\ \ \ \ \ \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry}{RedirectionEntry}}\ entry\ =\ \{\};}
-\DoxyCodeLine{00403\ \ \ \ \ read\_redirect(index,\ \&entry);}
-\DoxyCodeLine{00404\ }
-\DoxyCodeLine{00405\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ mask}}
-\DoxyCodeLine{00406\ \ \ \ \ entry.mask\ =\ mask;}
-\DoxyCodeLine{00407\ \ \ \ \ write\_redirect(index,\ \&entry);}
-\DoxyCodeLine{00408\ \}}
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00448\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ current\ entry}}
+\DoxyCodeLine{00449\ \ \ \ \ \mbox{\hyperlink{unionMaxOS_1_1hardwarecommunication_1_1RedirectionEntry}{RedirectionEntry}}\ entry\ =\ \{\};}
+\DoxyCodeLine{00450\ \ \ \ \ read\_redirect(index,\ \&entry);}
+\DoxyCodeLine{00451\ }
+\DoxyCodeLine{00452\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ mask}}
+\DoxyCodeLine{00453\ \ \ \ \ entry.mask\ =\ mask;}
+\DoxyCodeLine{00454\ \ \ \ \ write\_redirect(index,\ \&entry);}
+\DoxyCodeLine{00455\ \}}
 
 \end{DoxyCode}
 \Hypertarget{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a0f5338f88ec6ebd490e657d6a01ce7d3}\label{classMaxOS_1_1hardwarecommunication_1_1IOAPIC_a0f5338f88ec6ebd490e657d6a01ce7d3} 
@@ -331,18 +331,18 @@ write a value to an IO Apic register
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{apic_8cpp_source_l00312}{312}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
+Definition at line \mbox{\hyperlink{apic_8cpp_source_l00359}{359}} of file \mbox{\hyperlink{apic_8cpp_source}{apic.\+cpp}}.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00313\ }
-\DoxyCodeLine{00314\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ register}}
-\DoxyCodeLine{00315\ \ \ \ \ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ (m\_address\_high\ +\ 0x00)\ =\ reg;}
-\DoxyCodeLine{00316\ }
-\DoxyCodeLine{00317\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ value}}
-\DoxyCodeLine{00318\ \ \ \ \ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ (m\_address\_high\ +\ 0x10)\ =\ value;}
-\DoxyCodeLine{00319\ \}}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ register}}
+\DoxyCodeLine{00362\ \ \ \ \ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ (m\_address\_high\ +\ 0x00)\ =\ reg;}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \textcolor{comment}{//\ Write\ the\ value}}
+\DoxyCodeLine{00365\ \ \ \ \ *(\textcolor{keyword}{volatile}\ uint32\_t*)\ (m\_address\_high\ +\ 0x10)\ =\ value;}
+\DoxyCodeLine{00366\ \}}
 
 \end{DoxyCode}
 

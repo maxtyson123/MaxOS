@@ -1,15 +1,11 @@
 var searchData=
 [
-  ['baseaddressregister_0',['BaseAddressRegister',['../classMaxOS_1_1hardwarecommunication_1_1BaseAddressRegister.html',1,'MaxOS::hardwarecommunication']]],
-  ['baseresourceregistry_1',['BaseResourceRegistry',['../classMaxOS_1_1processes_1_1BaseResourceRegistry.html',1,'MaxOS::processes']]],
-  ['beforesendevent_2',['BeforeSendEvent',['../classMaxOS_1_1drivers_1_1ethernet_1_1BeforeSendEvent.html',1,'MaxOS::drivers::ethernet']]],
-  ['biosparameterblock32_3',['BiosParameterBlock32',['../structMaxOS_1_1filesystem_1_1format_1_1BiosParameterBlock32.html',1,'MaxOS::filesystem::format']]],
-  ['blockgroupdescriptor_4',['BlockGroupDescriptor',['../structMaxOS_1_1filesystem_1_1format_1_1ext2_1_1BlockGroupDescriptor.html',1,'MaxOS::filesystem::format::ext2']]],
-  ['blockinglock_5',['BlockingLock',['../classMaxOS_1_1common_1_1BlockingLock.html',1,'MaxOS::common']]],
-  ['buffer_6',['Buffer',['../classMaxOS_1_1common_1_1Buffer.html',1,'MaxOS::common']]],
-  ['bufferdescriptor_7',['BufferDescriptor',['../structMaxOS_1_1drivers_1_1ethernet_1_1BufferDescriptor.html',1,'MaxOS::drivers::ethernet']]],
-  ['button_8',['Button',['../classMaxOS_1_1gui_1_1widgets_1_1Button.html',1,'MaxOS::gui::widgets']]],
-  ['buttoneventhandler_9',['ButtonEventHandler',['../classMaxOS_1_1gui_1_1widgets_1_1ButtonEventHandler.html',1,'MaxOS::gui::widgets']]],
-  ['buttonpressedevent_10',['ButtonPressedEvent',['../classMaxOS_1_1gui_1_1widgets_1_1ButtonPressedEvent.html',1,'MaxOS::gui::widgets']]],
-  ['buttonreleasedevent_11',['ButtonReleasedEvent',['../classMaxOS_1_1gui_1_1widgets_1_1ButtonReleasedEvent.html',1,'MaxOS::gui::widgets']]]
+  ['baseresourceregistry_0',['BaseResourceRegistry',['../classMaxOS_1_1processes_1_1resources_1_1BaseResourceRegistry.html',1,'MaxOS::processes::resources']]],
+  ['blockinglock_1',['BlockingLock',['../classMaxOS_1_1processes_1_1BlockingLock.html',1,'MaxOS::processes']]],
+  ['breakpointexception_2',['BreakPointException',['../classMaxOS_1_1runtime_1_1BreakPointException.html',1,'MaxOS::runtime']]],
+  ['bridgehandler_3',['BridgeHandler',['../classMaxOS_1_1processes_1_1resources_1_1BridgeHandler.html',1,'MaxOS::processes::resources']]],
+  ['bridgeresource_4',['BridgeResource',['../classMaxOS_1_1processes_1_1resources_1_1BridgeResource.html',1,'MaxOS::processes::resources']]],
+  ['bridgeresourceregistry_5',['BridgeResourceRegistry',['../classMaxOS_1_1processes_1_1resources_1_1BridgeResourceRegistry.html',1,'MaxOS::processes::resources']]],
+  ['bumpallocator_6',['BumpAllocator',['../classMaxOS_1_1memory_1_1allocator_1_1BumpAllocator.html',1,'MaxOS::memory::allocator']]],
+  ['bumpmemorymanager_7',['BumpMemoryManager',['../classMaxOS_1_1memory_1_1BumpMemoryManager.html',1,'MaxOS::memory']]]
 ];

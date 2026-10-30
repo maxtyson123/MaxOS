@@ -1,0 +1,175 @@
+.TH "MaxOS::memory::allocator::MemoryAllocator" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::memory::allocator::MemoryAllocator \- Generic memory allocator type\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <allocator\&.h>\fP
+.PP
+Inherited by \fBMaxOS::memory::allocator::BumpAllocator\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMemoryAllocator\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~MemoryAllocator\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBsetup_region\fP (uintptr_t address, size_t length)"
+.br
+.RI "Setup a region to be bump memory managed\&. "
+.ti -1c
+.RI "virtual void * \fBallocate\fP (size_t size)"
+.br
+.RI "Allocates a block of memory\&. "
+.ti -1c
+.RI "virtual void \fBunallocate\fP (void *pointer)"
+.br
+.RI "Frees a block of memory\&. "
+.ti -1c
+.RI "virtual size_t \fBamount_used\fP ()"
+.br
+.RI "Returns the amount of memory used (btyes) "
+.ti -1c
+.RI "virtual size_t \fBalign\fP (size_t size)"
+.br
+.RI "Aligns the size to the chunk alignment\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Generic memory allocator type\&. 
+.PP
+Definition at line \fB23\fP of file \fBallocator\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "MemoryAllocator::MemoryAllocator ()\fC [default]\fP"
+Default constructor for a generic memory allocator 
+.SS "MemoryAllocator::~MemoryAllocator ()\fC [virtual]\fP, \fC [default]\fP"
+Default destructor for a generic memory allocator 
+.SH "Member Function Documentation"
+.PP 
+.SS "size_t MemoryAllocator::align (size_t size)\fC [virtual]\fP"
+
+.PP
+Aligns the size to the chunk alignment\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The size to align 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The aligned size 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::memory::allocator::BumpAllocator\fP\&.
+.PP
+Definition at line \fB84\fP of file \fBallocator\&.cpp\fP\&..PP
+.nf
+84                                          {
+85     return 0;
+86 }
+.fi
+
+.SS "void * MemoryAllocator::allocate (size_t size)\fC [virtual]\fP"
+
+.PP
+Allocates a block of memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The size of the block to allocate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A pointer to the block, or nullptr if no block is available 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::memory::allocator::BumpAllocator\fP\&.
+.PP
+Definition at line \fB57\fP of file \fBallocator\&.cpp\fP\&..PP
+.nf
+57                                            {
+58     return nullptr;
+59 }
+.fi
+
+.SS "size_t MemoryAllocator::amount_used ()\fC [virtual]\fP"
+
+.PP
+Returns the amount of memory used (btyes) 
+.PP
+\fBReturns\fP
+.RS 4
+The amount of memory used 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::memory::allocator::BumpAllocator\fP\&.
+.PP
+Definition at line \fB74\fP of file \fBallocator\&.cpp\fP\&..PP
+.nf
+74                                     {
+75     return 0;
+76 }
+.fi
+
+.SS "void MemoryAllocator::setup_region (uintptr_t address, size_t length)\fC [virtual]\fP"
+
+.PP
+Setup a region to be bump memory managed\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The start of the region 
+.br
+\fIlength\fP The length of the region 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::memory::allocator::BumpAllocator\fP\&.
+.PP
+Definition at line \fB48\fP of file \fBallocator\&.cpp\fP\&..PP
+.nf
+48                                                                    {
+49 }
+.fi
+
+.SS "void MemoryAllocator::unallocate (void * pointer)\fC [virtual]\fP"
+
+.PP
+Frees a block of memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP A pointer to the block to free 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::memory::allocator::BumpAllocator\fP\&.
+.PP
+Definition at line \fB66\fP of file \fBallocator\&.cpp\fP\&..PP
+.nf
+66                                               {
+67 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

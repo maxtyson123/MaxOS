@@ -1,10 +1,9 @@
 var resource_8h =
 [
-    [ "MaxOS::processes::Resource", "classMaxOS_1_1processes_1_1Resource.html", "classMaxOS_1_1processes_1_1Resource" ],
-    [ "MaxOS::processes::BaseResourceRegistry", "classMaxOS_1_1processes_1_1BaseResourceRegistry.html", "classMaxOS_1_1processes_1_1BaseResourceRegistry" ],
-    [ "MaxOS::processes::ResourceRegistry< Type >", "classMaxOS_1_1processes_1_1ResourceRegistry.html", "classMaxOS_1_1processes_1_1ResourceRegistry" ],
-    [ "MaxOS::processes::GlobalResourceRegistry", "classMaxOS_1_1processes_1_1GlobalResourceRegistry.html", "classMaxOS_1_1processes_1_1GlobalResourceRegistry" ],
-    [ "MaxOS::processes::ResourceManager", "classMaxOS_1_1processes_1_1ResourceManager.html", "classMaxOS_1_1processes_1_1ResourceManager" ],
-    [ "resource_error_base_t", "resource_8h.html#a55b3c9eaee65c86eef5f77a5055b8c88", null ],
-    [ "resource_type_t", "resource_8h.html#a9ac9ad12caad00b9d7eb53504318c263", null ]
+    [ "MaxOS::processes::resources::BaseResourceRegistry", "classMaxOS_1_1processes_1_1resources_1_1BaseResourceRegistry.html", "classMaxOS_1_1processes_1_1resources_1_1BaseResourceRegistry" ],
+    [ "MaxOS::processes::resources::ResourceRegistry< Type >", "classMaxOS_1_1processes_1_1resources_1_1ResourceRegistry.html", "classMaxOS_1_1processes_1_1resources_1_1ResourceRegistry" ],
+    [ "MaxOS::processes::resources::GlobalResourceRegistry", "classMaxOS_1_1processes_1_1resources_1_1GlobalResourceRegistry.html", "classMaxOS_1_1processes_1_1resources_1_1GlobalResourceRegistry" ],
+    [ "MaxOS::processes::resources::ResourceManager", "classMaxOS_1_1processes_1_1resources_1_1ResourceManager.html", "classMaxOS_1_1processes_1_1resources_1_1ResourceManager" ],
+    [ "Resource", "resource_8h.html#a65aab2313d5066f5f1bd2096b08d4adf", null ],
+    [ "resource_type_t", "resource_8h.html#a6c303bdba5e9a0b30a054af325374907", null ]
 ];

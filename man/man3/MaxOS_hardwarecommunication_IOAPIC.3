@@ -41,7 +41,7 @@ MaxOS::hardwarecommunication::IOAPIC \- Handles the IO APIC in the system (one p
 .PP 
 Handles the IO APIC in the system (one per system) 
 .PP
-Definition at line \fB193\fP of file \fBapic\&.h\fP\&.
+Definition at line \fB205\fP of file \fBapic\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "IOAPIC::IOAPIC (\fBAdvancedConfigurationAndPowerInterface\fP * acpi)\fC [explicit]\fP"
@@ -56,60 +56,60 @@ Construct a new IO APIC object\&. Maps the IO APIC registers and reads the \fBMA
 .PP
 
 .PP
-Definition at line \fB198\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB245\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-199 : m_acpi(acpi)
-200 {
-201 
-202     // Get the information about the IO APIC
-203     m_madt = (MADT*) m_acpi\->find("APIC");
-204     MADTEntry* io_apic_item = get_madt_item(MADT_TYPE::IO_APIC, 0);
-205 
-206     // Get the IO APIC
-207     auto* io_apic = (MADT_IO_APIC*) PhysicalMemoryManager::to_io_region((uint64_t) io_apic_item + sizeof(MADTEntry));
-208     PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) io_apic_item, (virtual_address_t*) (io_apic \- sizeof(MADTEntry)), PRESENT | WRITE);
-209 
-210     // Map the IO APIC address to the higher half
-211     m_address = io_apic\->io_apic_address;
-212     m_address_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_address);
-213     PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) m_address, (virtual_address_t*) m_address_high, PRESENT | WRITE);
-214     Logger::DEBUG() << "IO APIC Address: phy=0x" << m_address << ", virt=0x" << m_address_high << "\\n";
-215 
-216     // Get the IO APIC version and max redirection entry
-217     m_version = read(0x1);
-218     m_max_redirect_entry = (uint8_t) (m_version >> 16);
-219 
-220     // Log the IO APIC information
-221     Logger::DEBUG() << "IO APIC Version: 0x" << (uint64_t) (m_version & 0xFF) << "\\n";
-222     Logger::DEBUG() << "IO APIC Max Redirection Entry: 0x" << (uint64_t) m_max_redirect_entry << "\\n";
-223 
-224     // Get the source override item
-225     MADTEntry* source_override_item = get_madt_item(MADT_TYPE::IO_APIC, m_override_array_size);
-226     uint32_t total_length = sizeof(MADT);
-227     while (total_length < m_madt\->header\&.length && m_override_array_size < 0x10) { // 0x10 is the max items
-228 
-229         total_length += source_override_item\->length;
-230 
-231         // If there is an override, populate the array
-232         if (source_override_item != nullptr && source_override_item\->type == 2) {
-233 
-234             // Get the override and populate the array
-235             auto* override = (Override*) (source_override_item + 1);
-236             m_override_array[m_override_array_size]\&.bus = override\->bus;
-237             m_override_array[m_override_array_size]\&.source = override\->source;
-238             m_override_array[m_override_array_size]\&.global_system_interrupt = override\->global_system_interrupt;
-239             m_override_array[m_override_array_size]\&.flags = override\->flags;
-240             m_override_array_size++;
-241         }
-242 
-243         // Get the next item
-244         source_override_item = get_madt_item(MADT_TYPE::IO_APIC, m_override_array_size);
-245         if (source_override_item == nullptr)
-246             break;
-247     }
+246 : m_acpi(acpi)
+247 {
 248 
-249     Logger::DEBUG() << "IO APIC Source Overrides: 0x" << m_override_array_size << "\\n";
-250 }
+249     // Get the information about the IO APIC
+250     m_madt = (MADT*) m_acpi\->find("APIC");
+251     MADTEntry* io_apic_item = get_madt_item(MADT_TYPE::IO_APIC, 0);
+252 
+253     // Get the IO APIC
+254     auto* io_apic = (MADT_IO_APIC*) PhysicalMemoryManager::to_io_region((uint64_t) io_apic_item + sizeof(MADTEntry));
+255     PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) io_apic_item, (virtual_address_t*) (io_apic \- sizeof(MADTEntry)), PRESENT | WRITE);
+256 
+257     // Map the IO APIC address to the higher half
+258     m_address = io_apic\->io_apic_address;
+259     m_address_high = (uint64_t) PhysicalMemoryManager::to_io_region(m_address);
+260     PhysicalMemoryManager::s_current_manager\->map((physical_address_t*) m_address, (virtual_address_t*) m_address_high, PRESENT | WRITE);
+261     Logger::DEBUG() << "IO APIC Address: phy=0x" << m_address << ", virt=0x" << m_address_high << "\\n";
+262 
+263     // Get the IO APIC version and max redirection entry
+264     m_version = read(0x1);
+265     m_max_redirect_entry = (uint8_t) (m_version >> 16);
+266 
+267     // Log the IO APIC information
+268     Logger::DEBUG() << "IO APIC Version: 0x" << (uint64_t) (m_version & 0xFF) << "\\n";
+269     Logger::DEBUG() << "IO APIC Max Redirection Entry: 0x" << (uint64_t) m_max_redirect_entry << "\\n";
+270 
+271     // Get the source override item
+272     MADTEntry* source_override_item = get_madt_item(MADT_TYPE::IO_APIC, m_override_array_size);
+273     uint32_t total_length = sizeof(MADT);
+274     while (total_length < m_madt\->header\&.length && m_override_array_size < 0x10) { // 0x10 is the max items
+275 
+276         total_length += source_override_item\->length;
+277 
+278         // If there is an override, populate the array
+279         if (source_override_item != nullptr && source_override_item\->type == 2) {
+280 
+281             // Get the override and populate the array
+282             auto* override = (Override*) (source_override_item + 1);
+283             m_override_array[m_override_array_size]\&.bus = override\->bus;
+284             m_override_array[m_override_array_size]\&.source = override\->source;
+285             m_override_array[m_override_array_size]\&.global_system_interrupt = override\->global_system_interrupt;
+286             m_override_array[m_override_array_size]\&.flags = override\->flags;
+287             m_override_array_size++;
+288         }
+289 
+290         // Get the next item
+291         source_override_item = get_madt_item(MADT_TYPE::IO_APIC, m_override_array_size);
+292         if (source_override_item == nullptr)
+293             break;
+294     }
+295 
+296     Logger::DEBUG() << "IO APIC Source Overrides: 0x" << m_override_array_size << "\\n";
+297 }
 .fi
 
 .PP
@@ -135,37 +135,37 @@ The item or null if not found
 .PP
 
 .PP
-Definition at line \fB261\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB308\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-261                                                               {
-262 
-263     // The item starts at the start of the MADT
-264     auto* item = (MADTEntry*) ((uint64_t) m_madt + sizeof(MADT));
-265     uint64_t total_length = 0;
-266     uint8_t current_index = 0;
-267 
-268     // Loop through the items
-269     while (total_length + sizeof(MADT) < m_madt\->header\&.length && current_index <= index) {
-270 
-271         // Correct type
-272         if (item\->type == (uint8_t)type) {
-273 
-274             // Correct index means found
-275             if (current_index == index)
-276                 return item;
-277 
-278             // Right type wrong index so move on
-279             current_index++;
-280         }
-281 
-282         // Increment the total length
-283         total_length += item\->length;
-284         item = (MADTEntry*) ((uint64_t) item + item\->length);
-285     }
-286 
-287     // No item found
-288     return nullptr;
-289 }
+308                                                               {
+309 
+310     // The item starts at the start of the MADT
+311     auto* item = (MADTEntry*) ((uint64_t) m_madt + sizeof(MADT));
+312     uint64_t total_length = 0;
+313     uint8_t current_index = 0;
+314 
+315     // Loop through the items
+316     while (total_length + sizeof(MADT) < m_madt\->header\&.length && current_index <= index) {
+317 
+318         // Correct type
+319         if (item\->type == (uint8_t)type) {
+320 
+321             // Correct index means found
+322             if (current_index == index)
+323                 return item;
+324 
+325             // Right type wrong index so move on
+326             current_index++;
+327         }
+328 
+329         // Increment the total length
+330         total_length += item\->length;
+331         item = (MADTEntry*) ((uint64_t) item + item\->length);
+332     }
+333 
+334     // No item found
+335     return nullptr;
+336 }
 .fi
 
 .PP
@@ -189,16 +189,16 @@ The value at the register
 .PP
 
 .PP
-Definition at line \fB297\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB344\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-297                                         {
-298 
-299     // Tell the APIC what register to read from
-300     *(volatile uint32_t*) (m_address_high + 0x00) = reg;
-301 
-302     // Read the value
-303     return *(volatile uint32_t*) (m_address_high + 0x10);
-304 }
+344                                         {
+345 
+346     // Tell the APIC what register to read from
+347     *(volatile uint32_t*) (m_address_high + 0x00) = reg;
+348 
+349     // Read the value
+350     return *(volatile uint32_t*) (m_address_high + 0x10);
+351 }
 .fi
 
 .PP
@@ -215,35 +215,35 @@ Redirect a system interrupt to a different IRQ\&.
 .PP
 
 .PP
-Definition at line \fB365\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB412\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-365                                                         {
-366 
-367     // Create the redirection entry
-368     RedirectionEntry entry = {};
-369     entry\&.raw = redirect\->flags | (redirect\->interrupt & 0xFF);
-370     entry\&.destination = redirect\->destination;
-371     entry\&.mask = redirect\->mask;
-372 
-373     // Check if a global system interrupt is used
-374     for (uint8_t i = 0; i < m_override_array_size; i++) {
-375 
-376         if (m_override_array[i]\&.source != redirect\->type)
-377             continue;
-378 
-379         // Set the lower 4 bits of the pin
-380         entry\&.pin_polarity = ((m_override_array[i]\&.flags & 0b11) == 2) ? 0b1 : 0b0;
-381         entry\&.pin_polarity = (((m_override_array[i]\&.flags >> 2) & 0b11) == 2) ? 0b1 : 0b0;
-382 
-383         // Set the trigger mode
-384         entry\&.trigger_mode = (((m_override_array[i]\&.flags >> 2) & 0b11) == 2);
-385         break;
-386 
-387     }
-388 
-389     // Write the redirect
-390     write_redirect(redirect\->index, &entry);
-391 }
+412                                                         {
+413 
+414     // Create the redirection entry
+415     RedirectionEntry entry = {};
+416     entry\&.raw = redirect\->flags | (redirect\->interrupt & 0xFF);
+417     entry\&.destination = redirect\->destination;
+418     entry\&.mask = redirect\->mask;
+419 
+420     // Check if a global system interrupt is used
+421     for (uint8_t i = 0; i < m_override_array_size; i++) {
+422 
+423         if (m_override_array[i]\&.source != redirect\->type)
+424             continue;
+425 
+426         // Set the lower 4 bits of the pin
+427         entry\&.pin_polarity = ((m_override_array[i]\&.flags & 0b11) == 2) ? 0b1 : 0b0;
+428         entry\&.pin_polarity = (((m_override_array[i]\&.flags >> 2) & 0b11) == 2) ? 0b1 : 0b0;
+429 
+430         // Set the trigger mode
+431         entry\&.trigger_mode = (((m_override_array[i]\&.flags >> 2) & 0b11) == 2);
+432         break;
+433 
+434     }
+435 
+436     // Write the redirect
+437     write_redirect(redirect\->index, &entry);
+438 }
 .fi
 
 .PP
@@ -264,18 +264,18 @@ Enables/Disables an interrupt redirect by masking it\&.
 .PP
 
 .PP
-Definition at line \fB399\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB446\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-399                                                        {
-400 
-401     // Read the current entry
-402     RedirectionEntry entry = {};
-403     read_redirect(index, &entry);
-404 
-405     // Set the mask
-406     entry\&.mask = mask;
-407     write_redirect(index, &entry);
-408 }
+446                                                        {
+447 
+448     // Read the current entry
+449     RedirectionEntry entry = {};
+450     read_redirect(index, &entry);
+451 
+452     // Set the mask
+453     entry\&.mask = mask;
+454     write_redirect(index, &entry);
+455 }
 .fi
 
 .SS "void IOAPIC::write (uint32_t reg, uint32_t value) const"
@@ -292,16 +292,16 @@ write a value to an IO Apic register
 .PP
 
 .PP
-Definition at line \fB312\fP of file \fBapic\&.cpp\fP\&..PP
+Definition at line \fB359\fP of file \fBapic\&.cpp\fP\&..PP
 .nf
-312                                                      {
-313 
-314     // Write the register
-315     *(volatile uint32_t*) (m_address_high + 0x00) = reg;
-316 
-317     // Write the value
-318     *(volatile uint32_t*) (m_address_high + 0x10) = value;
-319 }
+359                                                      {
+360 
+361     // Write the register
+362     *(volatile uint32_t*) (m_address_high + 0x00) = reg;
+363 
+364     // Write the value
+365     *(volatile uint32_t*) (m_address_high + 0x10) = value;
+366 }
 .fi
 
 

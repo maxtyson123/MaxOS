@@ -1,0 +1,345 @@
+\doxysection{Max\+OS\+::hardwarecommunication\+::Clock Class Reference}
+\hypertarget{classMaxOS_1_1hardwarecommunication_1_1Clock}{}\label{classMaxOS_1_1hardwarecommunication_1_1Clock}\index{MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}}
+
+
+Driver for the APIC clock.  
+
+
+
+
+{\ttfamily \#include $<$clock.\+h$>$}
+
+Inheritance diagram for Max\+OS\+::hardwarecommunication\+::Clock\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classMaxOS_1_1hardwarecommunication_1_1Clock}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_a896520b1f80c97e68ed95f790d3053ec}{Clock}} (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{Advanced\+Programmable\+Interrupt\+Controller}} \texorpdfstring{$\ast$}{*}apic, uint16\+\_\+t time\+\_\+between\+\_\+events=10)
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{classMaxOS_1_1hardwarecommunication_1_1Clock}{Clock} class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_aed23e6f62c03a9f35056a62e97daad69}{delay}} (uint32\+\_\+t milliseconds) const
+\begin{DoxyCompactList}\small\item\em Delays the program for a specified number of milliseconds (rounded up to the nearest degree of accuracy -\/ ensured the delay is at least the specified number of milliseconds). This on the kernel level is a busy wait, for user level see the sleep function in the Thread class. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_afab69ba284bca41ae58a19b1821ad6c1}{calibrate}} (uint64\+\_\+t ms\+\_\+per\+\_\+tick=1)
+\begin{DoxyCompactList}\small\item\em Configures the APIC clock to fire an interrupt at a specified interval in milliseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_abaec8e35fd07b56591e8d334e50e4503}{setup\+\_\+apic\+\_\+clock}} (\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{Local\+APIC}} \texorpdfstring{$\ast$}{*}local\+\_\+apic) const
+\begin{DoxyCompactList}\small\item\em Sets up the APIC clock to fire interrupts at the desired rate. \end{DoxyCompactList}\item 
+common\+::time\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_a0fa3464d6ab6a9a79b3c1149301b3cba}{get\+\_\+time}} ()
+\begin{DoxyCompactList}\small\item\em Reads the current time from the APIC clock (in 24hr time) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Handler}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{system\+::cpu\+\_\+status\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a0fba9ac15e93e7bfbbb398e3036ea5cf}{handle\+\_\+interrupt}} (\mbox{\hyperlink{cpu_8h_a605489186b2c614af947b15ae8a77418}{system\+::cpu\+\_\+status\+\_\+t}} \texorpdfstring{$\ast$}{*}status)
+\begin{DoxyCompactList}\small\item\em Handles an interrupt and returns the status. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock}{Clock}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}{active\+\_\+clock}} ()
+\begin{DoxyCompactList}\small\item\em Gets the currently active clock. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_a45993e39f7068d55e10f4261b4759d58}{clock\+\_\+accuracy}} = 1
+\begin{DoxyCompactList}\small\item\em How accurate the clock is in microseconds (how often should an interrupt be raised) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Handler}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a79b1054c04bbcc2c72a6d6938212909c}{Interrupt\+Handler}} (uint8\+\_\+t interrupt\+\_\+number, int64\+\_\+t redirect=-\/1, uint64\+\_\+t redirect\+\_\+index=0)
+\begin{DoxyCompactList}\small\item\em Creates a new interrupt handler and registers it with the interrupt manager. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_a12b87c89015a61b702184070354e7876}{\texorpdfstring{$\sim$}{\string~}\+Interrupt\+Handler}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the interrupt handler and unregisters it from the interrupt manager. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{Max\+OS\+::hardwarecommunication\+::\+Interrupt\+Handler}}}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler_aac2ba4da525d342fc83fe344780c1850}{m\+\_\+interrupt\+\_\+number}}
+\begin{DoxyCompactList}\small\item\em The interrupt number this handler handles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Driver for the APIC clock. 
+
+Definition at line \mbox{\hyperlink{clock_8h_source_l00124}{124}} of file \mbox{\hyperlink{clock_8h_source}{clock.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1Clock_a896520b1f80c97e68ed95f790d3053ec}\label{classMaxOS_1_1hardwarecommunication_1_1Clock_a896520b1f80c97e68ed95f790d3053ec} 
+\index{MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}!Clock@{Clock}}
+\index{Clock@{Clock}!MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}}
+\doxysubsubsection{\texorpdfstring{Clock()}{Clock()}}
+{\footnotesize\ttfamily Clock\+::\+Clock (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController}{Advanced\+Programmable\+Interrupt\+Controller}} \texorpdfstring{$\ast$}{*}}]{apic,  }\item[{uint16\+\_\+t}]{time\+\_\+between\+\_\+events = {\ttfamily 10} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructor for the \doxylink{classMaxOS_1_1hardwarecommunication_1_1Clock}{Clock} class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em apic} & The apic controller for this core \\
+\hline
+{\em time\+\_\+between\+\_\+events} & The time between events in 10ths of a second \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{clock_8cpp_source_l00022}{22}} of file \mbox{\hyperlink{clock_8cpp_source}{clock.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00023\ :\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1InterruptHandler}{InterruptHandler}}(0x20),}
+\DoxyCodeLine{00024\ \ \ m\_apic(apic),}
+\DoxyCodeLine{00025\ \ \ m\_ticks\_between\_events(time\_between\_events)}
+\DoxyCodeLine{00026\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a6bcb1b11271a35f8bff3d7e20fec2e4f}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Setting\ up\ Clock\ \(\backslash\)n"{}};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ s\_active\_clock\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ stats\ from\ the\ clock}}
+\DoxyCodeLine{00032\ \ \ \ \ uint8\_t\ status\ =\ read\_hardware\_clock(0xB);}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{//\ Store\ the\ clock\ status}}
+\DoxyCodeLine{00035\ \ \ \ \ m\_24\_hour\_clock\ =\ status\ \&\ 0x02;}
+\DoxyCodeLine{00036\ \ \ \ \ m\_binary\ =\ status\ \&\ 0x04;}
+\DoxyCodeLine{00037\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{logger_8cpp_source_l00195}{Max\+OS\+::\+Logger\+::\+INFO()}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb}\label{classMaxOS_1_1hardwarecommunication_1_1Clock_af6e633c389f02276b3c76ee4ff2c65bb} 
+\index{MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}!active\_clock@{active\_clock}}
+\index{active\_clock@{active\_clock}!MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}}
+\doxysubsubsection{\texorpdfstring{active\_clock()}{active\_clock()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock}{Clock}} \texorpdfstring{$\ast$}{*} Clock\+::active\+\_\+clock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Gets the currently active clock. 
+
+\begin{DoxyReturn}{Returns}
+The clock being used by the kernel 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{clock_8cpp_source_l00182}{182}} of file \mbox{\hyperlink{clock_8cpp_source}{clock.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordflow}{return}\ s\_active\_clock;}
+\DoxyCodeLine{00184\ \}}
+
+\end{DoxyCode}
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00227}{Max\+OS\+::system\+::\+Core\+::init()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00060}{Max\+OS\+::system\+::\+Core\+::wake\+\_\+up()}}.
+
+\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1Clock_afab69ba284bca41ae58a19b1821ad6c1}\label{classMaxOS_1_1hardwarecommunication_1_1Clock_afab69ba284bca41ae58a19b1821ad6c1} 
+\index{MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}!calibrate@{calibrate}}
+\index{calibrate@{calibrate}!MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}}
+\doxysubsubsection{\texorpdfstring{calibrate()}{calibrate()}}
+{\footnotesize\ttfamily void Clock\+::calibrate (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{ms\+\_\+per\+\_\+tick = {\ttfamily 1} }\end{DoxyParamCaption})}
+
+
+
+Configures the APIC clock to fire an interrupt at a specified interval in milliseconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms\+\_\+per\+\_\+tick} & How many milliseconds per interrupt \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{clock_8cpp_source_l00118}{118}} of file \mbox{\hyperlink{clock_8cpp_source}{clock.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a6bcb1b11271a35f8bff3d7e20fec2e4f}{Logger::INFO}}()\ <<\ \textcolor{stringliteral}{"{}Calibrating\ Clock\ \(\backslash\)n"{}};}
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_a45993e39f7068d55e10f4261b4759d58}{clock\_accuracy}}\ =\ ms\_per\_tick;}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ ticks\ per\ ms}}
+\DoxyCodeLine{00124\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1PIT}{PIT}}\ pit(m\_apic);}
+\DoxyCodeLine{00125\ \ \ \ \ m\_pit\_ticks\_per\_ms\ =\ pit.ticks\_per\_ms();}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{//\ Calibrate\ the\ BSP\ apic\ to\ the\ desired\ time}}
+\DoxyCodeLine{00128\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_abaec8e35fd07b56591e8d334e50e4503}{setup\_apic\_clock}}(m\_apic-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_af632f7fe1f4a8d9716ec845628946eef}{local\_apic}}());}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \mbox{\hyperlink{classMaxOS_1_1Logger_a44040e7f56db620657286c3dc2b230fb}{Logger::DEBUG}}()\ <<\ \textcolor{stringliteral}{"{}Clock:\ Calibrated\ to\ "{}}\ <<\ ms\_per\_tick\ <<\ \textcolor{stringliteral}{"{}ms\ per\ kernel\ tick\(\backslash\)n"{}};}
+\DoxyCodeLine{00131\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{clock_8h_source_l00156}{clock\+\_\+accuracy}}, \mbox{\hyperlink{logger_8cpp_source_l00204}{Max\+OS\+::\+Logger\+::\+DEBUG()}}, \mbox{\hyperlink{logger_8cpp_source_l00195}{Max\+OS\+::\+Logger\+::\+INFO()}}, \mbox{\hyperlink{apic_8cpp_source_l00527}{Max\+OS\+::hardwarecommunication\+::\+Advanced\+Programmable\+Interrupt\+Controller\+::local\+\_\+apic()}}, and \mbox{\hyperlink{clock_8cpp_source_l00137}{setup\+\_\+apic\+\_\+clock()}}.
+
+
+
+Referenced by \mbox{\hyperlink{kernel_8cpp_source_l00061}{kernel\+\_\+main()}}.
+
+\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1Clock_aed23e6f62c03a9f35056a62e97daad69}\label{classMaxOS_1_1hardwarecommunication_1_1Clock_aed23e6f62c03a9f35056a62e97daad69} 
+\index{MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}!delay@{delay}}
+\index{delay@{delay}!MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}}
+\doxysubsubsection{\texorpdfstring{delay()}{delay()}}
+{\footnotesize\ttfamily void Clock\+::delay (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{milliseconds }\end{DoxyParamCaption}) const}
+
+
+
+Delays the program for a specified number of milliseconds (rounded up to the nearest degree of accuracy -\/ ensured the delay is at least the specified number of milliseconds). This on the kernel level is a busy wait, for user level see the sleep function in the Thread class. 
+
+\begin{DoxySeeAlso}{See also}
+Thread\+::sleep
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em milliseconds} & How many milliseconds to delay the program for. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{clock_8cpp_source_l00102}{102}} of file \mbox{\hyperlink{clock_8cpp_source}{clock.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{//\ Round\ the\ number\ of\ milliseconds\ UP\ to\ the\ nearest\ clock\ accuracy}}
+\DoxyCodeLine{00105\ \ \ \ \ uint64\_t\ rounded\_milliseconds\ =\ (milliseconds\ +\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_a45993e39f7068d55e10f4261b4759d58}{clock\_accuracy}}\ -\/\ 1)\ /\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_a45993e39f7068d55e10f4261b4759d58}{clock\_accuracy}};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{//\ Wait\ until\ the\ time\ has\ passed}}
+\DoxyCodeLine{00108\ \ \ \ \ uint64\_t\ ticks\_until\_delay\_is\_over\ =\ m\_ticks\ +\ rounded\_milliseconds;}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{while}\ (m\_ticks\ <\ ticks\_until\_delay\_is\_over)}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}nop"{}});}
+\DoxyCodeLine{00111\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{clock_8h_source_l00156}{clock\+\_\+accuracy}}.
+
+
+
+Referenced by \mbox{\hyperlink{cpu_8cpp_source_l00060}{Max\+OS\+::system\+::\+Core\+::wake\+\_\+up()}}.
+
+\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1Clock_a0fa3464d6ab6a9a79b3c1149301b3cba}\label{classMaxOS_1_1hardwarecommunication_1_1Clock_a0fa3464d6ab6a9a79b3c1149301b3cba} 
+\index{MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}!get\_time@{get\_time}}
+\index{get\_time@{get\_time}!MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}}
+\doxysubsubsection{\texorpdfstring{get\_time()}{get\_time()}}
+{\footnotesize\ttfamily common\+::time\+\_\+t Clock\+::get\+\_\+time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Reads the current time from the APIC clock (in 24hr time) 
+
+\begin{DoxyReturn}{Returns}
+The current time in a Time struct format 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{clock_8cpp_source_l00156}{156}} of file \mbox{\hyperlink{clock_8cpp_source}{clock.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ clock\ to\ be\ ready}}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordflow}{while}\ (read\_hardware\_clock(0xA)\ \&\ 0x80)}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keyword}{asm}\ \textcolor{keyword}{volatile}(\textcolor{stringliteral}{"{}nop"{}});}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{comment}{//\ Read\ the\ time\ from\ the\ clock}}
+\DoxyCodeLine{00163\ \ \ \ \ time\_t\ time\{\};}
+\DoxyCodeLine{00164\ \ \ \ \ time.year\ =\ binary\_representation(read\_hardware\_clock(0x9))\ +\ 2000;}
+\DoxyCodeLine{00165\ \ \ \ \ time.month\ =\ binary\_representation(read\_hardware\_clock(0x8));}
+\DoxyCodeLine{00166\ \ \ \ \ time.day\ =\ binary\_representation(read\_hardware\_clock(0x7));}
+\DoxyCodeLine{00167\ \ \ \ \ time.hour\ =\ binary\_representation(read\_hardware\_clock(0x4));}
+\DoxyCodeLine{00168\ \ \ \ \ time.minute\ =\ binary\_representation(read\_hardware\_clock(0x2));}
+\DoxyCodeLine{00169\ \ \ \ \ time.second\ =\ binary\_representation(read\_hardware\_clock(0x0));}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{comment}{//\ If\ the\ clock\ is\ using\ 12hr\ format\ and\ PM\ is\ set\ then\ add\ 12\ to\ the\ hour}}
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keywordflow}{if}\ (!m\_24\_hour\_clock\ \&\&\ (time.hour\ \&\ 0x80)\ !=\ 0)}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ time.hour\ =\ ((time.hour\ \&\ 0x7F)\ +\ 12)\ \%\ 24;}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keywordflow}{return}\ time;}
+\DoxyCodeLine{00176\ \}}
+
+\end{DoxyCode}
+\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1Clock_abaec8e35fd07b56591e8d334e50e4503}\label{classMaxOS_1_1hardwarecommunication_1_1Clock_abaec8e35fd07b56591e8d334e50e4503} 
+\index{MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}!setup\_apic\_clock@{setup\_apic\_clock}}
+\index{setup\_apic\_clock@{setup\_apic\_clock}!MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}}
+\doxysubsubsection{\texorpdfstring{setup\_apic\_clock()}{setup\_apic\_clock()}}
+{\footnotesize\ttfamily void Clock\+::setup\+\_\+apic\+\_\+clock (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC}{hardwarecommunication\+::\+Local\+APIC}} \texorpdfstring{$\ast$}{*}}]{local\+\_\+apic }\end{DoxyParamCaption}) const}
+
+
+
+Sets up the APIC clock to fire interrupts at the desired rate. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em local\+\_\+apic} & The local APIC to setup the clock on \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{clock_8cpp_source_l00137}{137}} of file \mbox{\hyperlink{clock_8cpp_source}{clock.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{comment}{//\ Configure\ the\ clock\ to\ periodic\ mode}}
+\DoxyCodeLine{00140\ \ \ \ \ uint32\_t\ lvt\ =\ 0x20\ |\ (1\ <<\ 17);}
+\DoxyCodeLine{00141\ \ \ \ \ local\_apic-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a58100a1d7ff3dac52a6abfb1d5686561}{write}}(0x320,\ lvt);}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ initial\ count}}
+\DoxyCodeLine{00144\ \ \ \ \ local\_apic-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a58100a1d7ff3dac52a6abfb1d5686561}{write}}(0x380,\ m\_pit\_ticks\_per\_ms\ *\ \mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1Clock_a45993e39f7068d55e10f4261b4759d58}{clock\_accuracy}});}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ interrupt\ mask\ for\ the\ clock}}
+\DoxyCodeLine{00147\ \ \ \ \ lvt\ \&=\ \string~(1\ <<\ 16);}
+\DoxyCodeLine{00148\ \ \ \ \ local\_apic-\/>\mbox{\hyperlink{classMaxOS_1_1hardwarecommunication_1_1LocalAPIC_a58100a1d7ff3dac52a6abfb1d5686561}{write}}(0x320,\ lvt);}
+\DoxyCodeLine{00149\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{clock_8h_source_l00156}{clock\+\_\+accuracy}}, and \mbox{\hyperlink{apic_8cpp_source_l00091}{Max\+OS\+::hardwarecommunication\+::\+Local\+APIC\+::write()}}.
+
+
+
+Referenced by \mbox{\hyperlink{clock_8cpp_source_l00118}{calibrate()}}, and \mbox{\hyperlink{cpu_8cpp_source_l00227}{Max\+OS\+::system\+::\+Core\+::init()}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classMaxOS_1_1hardwarecommunication_1_1Clock_a45993e39f7068d55e10f4261b4759d58}\label{classMaxOS_1_1hardwarecommunication_1_1Clock_a45993e39f7068d55e10f4261b4759d58} 
+\index{MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}!clock\_accuracy@{clock\_accuracy}}
+\index{clock\_accuracy@{clock\_accuracy}!MaxOS::hardwarecommunication::Clock@{MaxOS::hardwarecommunication::Clock}}
+\doxysubsubsection{\texorpdfstring{clock\_accuracy}{clock\_accuracy}}
+{\footnotesize\ttfamily uint64\+\_\+t Max\+OS\+::hardwarecommunication\+::\+Clock\+::clock\+\_\+accuracy = 1}
+
+
+
+How accurate the clock is in microseconds (how often should an interrupt be raised) 
+
+
+
+Definition at line \mbox{\hyperlink{clock_8h_source_l00156}{156}} of file \mbox{\hyperlink{clock_8h_source}{clock.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{clock_8cpp_source_l00118}{calibrate()}}, \mbox{\hyperlink{clock_8cpp_source_l00102}{delay()}}, and \mbox{\hyperlink{clock_8cpp_source_l00137}{setup\+\_\+apic\+\_\+clock()}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/include/hardwarecommunication/\mbox{\hyperlink{clock_8h}{clock.\+h}}\item 
+/home/runner/work/\+Max\+OS/\+Max\+OS/kernel/src/hardwarecommunication/\mbox{\hyperlink{clock_8cpp}{clock.\+cpp}}\end{DoxyCompactItemize}

@@ -10,59 +10,39 @@ MaxOS::processes::SharedMessageEndpoint \- A endpoint that allows processes to q
 .PP
 \fC#include <ipc\&.h>\fP
 .PP
-Inherits \fBMaxOS::processes::Resource\fP\&.
+Inherits resources::Resource\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBSharedMessageEndpoint\fP (\fBconst\fP \fBstring\fP &\fBname\fP, \fBsize_t\fP size, \fBresource_type_t\fP \fBtype\fP)"
+.RI "\fBSharedMessageEndpoint\fP (const string &name, size_t size, \fBresources::resource_type_t\fP type)"
 .br
 .RI "Creates a new shared message endpoint\&. "
 .ti -1c
-.RI "\fB~SharedMessageEndpoint\fP () \fBfinal\fP"
+.RI "\fB~SharedMessageEndpoint\fP () final"
 .br
 .RI "Destroys the shared message endpoint and frees all messages\&. "
 .ti -1c
-.RI "\fBint\fP \fBread\fP (\fBvoid\fP *buffer, \fBsize_t\fP size, \fBsize_t\fP flags) \fBfinal\fP"
+.RI "void \fBsend\fP (const \fBipc_iovec_t\fP *vec, size_t count)"
+.br
+.RI "Combines a multipart message and sends it to the endpoint\&. "
+.ti -1c
+.RI "int \fBread\fP (void *buffer, size_t size, size_t flags) final"
 .br
 .RI "Reads the first message from the endpoint or will yield until a message has been written\&. "
 .ti -1c
-.RI "\fBint\fP \fBwrite\fP (\fBconst\fP \fBvoid\fP *buffer, \fBsize_t\fP size, \fBsize_t\fP flags) \fBfinal\fP"
+.RI "int \fBwrite\fP (const void *buffer, size_t size, size_t flags) final"
 .br
 .RI "Handles writing to the message endpoint resource by writing the buffer as a message\&. "
-.in -1c
-
-Public Member Functions inherited from \fBMaxOS::processes::Resource\fP
-.in +1c
-.ti -1c
-.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBresource_type_t\fP \fBtype\fP)"
-.br
-.RI "Constructs a new \fBResource\fP object\&. "
-.ti -1c
-.RI "\fBstring\fP \fBname\fP ()"
-.br
-.RI "Gets the name of this resource\&. "
-.ti -1c
-.RI "\fBresource_type_t\fP \fBtype\fP ()"
-.br
-.RI "Gets the type of this resource\&. "
-.ti -1c
-.RI "virtual void \fBopen\fP (size_t flags)"
-.br
-.RI "Opens the resource\&. "
-.ti -1c
-.RI "virtual void \fBclose\fP (size_t flags)"
-.br
-.RI "Closes the resource\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 A endpoint that allows processes to queue messages on\&. 
 .PP
-Definition at line \fB54\fP of file \fBipc\&.h\fP\&.
+Definition at line \fB70\fP of file \fBipc\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "SharedMessageEndpoint::SharedMessageEndpoint (\fBconst\fP \fBstring\fP & name, \fBsize_t\fP size, \fBresource_type_t\fP type)"
+.SS "SharedMessageEndpoint::SharedMessageEndpoint (const string & name, size_t size, \fBresources::resource_type_t\fP type)"
 
 .PP
 Creates a new shared message endpoint\&. 
@@ -103,7 +83,7 @@ Definition at line \fB121\fP of file \fBipc\&.cpp\fP\&..PP
 
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBint\fP SharedMessageEndpoint::read (\fBvoid\fP * buffer, \fBsize_t\fP size, \fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
+.SS "int SharedMessageEndpoint::read (void * buffer, size_t size, size_t flags)\fC [final]\fP"
 
 .PP
 Reads the first message from the endpoint or will yield until a message has been written\&. 
@@ -114,38 +94,94 @@ Reads the first message from the endpoint or will yield until a message has been
 .br
 \fIsize\fP Max size of the message to be read 
 .br
-\fIflags\fP Unused 
+\fIflags\fP 0 to block, 1 for async 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-The amount of bytes read 
+The amount of bytes read (0 means no messages available for async)
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+int here to size_t in syscall - fix 
 .RE
 .PP
 
 .PP
-Reimplemented from \fBMaxOS::processes::Resource\fP\&.
-.PP
-Definition at line \fB136\fP of file \fBipc\&.cpp\fP\&..PP
+Definition at line \fB165\fP of file \fBipc\&.cpp\fP\&..PP
 .nf
-136                                                                        {
-137 
-138     // Wait for a message
-139     if(m_queue\&.empty())
-140         return \-1 * (int)resource_error_base_t::SHOULD_BLOCK;
-141 
-142     // Read the message into the buffer
-143     buffer_t* message = m_queue\&.pop_front();
-144     size_t readable = size > message\->capacity() ? message\->capacity() : size;
-145     memcpy(buffer, message \-> raw(), readable);
-146 
-147     return readable;
-148 }
+165                                                                        {
+166 
+167     // Wait for a message
+168     while(m_queue\&.empty()) {
+169         if (flags)
+170             return 0;
+171 
+172         // Block
+173         GlobalScheduler::current_thread()\->yield();
+174     }
+175 
+176     // Read the message into the buffer
+177     buffer_t* message = m_queue\&.pop_front();
+178     size_t readable = size > message\->capacity() ? message\->capacity() : size;
+179     memcpy(buffer, message \-> raw(), readable);
+180 
+181     //@todo free the message mem here now aswell?
+182 
+183     return readable;
+184 }
 .fi
 
 .PP
-References \fBmemcpy()\fP\&.
-.SS "\fBint\fP SharedMessageEndpoint::write (\fBconst\fP \fBvoid\fP * buffer, \fBsize_t\fP size, \fBsize_t\fP flags)\fC [final]\fP, \fC [virtual]\fP"
+References \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, and \fBMaxOS::processes::Thread::yield()\fP\&.
+.SS "void SharedMessageEndpoint::send (const \fBipc_iovec_t\fP * vec, size_t count)"
+
+.PP
+Combines a multipart message and sends it to the endpoint\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvec\fP The io vector containing the parts 
+.br
+\fIcount\fP How many entries the vector has
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+validate stuff 
+.RE
+.PP
+
+.PP
+Definition at line \fB135\fP of file \fBipc\&.cpp\fP\&..PP
+.nf
+135                                                                      {
+136 
+137     m_message_lock\&.lock();
+138 
+139     // Parse the message parts
+140     size_t size = 0;
+141     for (size_t i = 0; i < count; ++i)
+142         size += vec[i]\&.length;
+143 
+144     // Create the message
+145     auto* new_message = new buffer_t(size);
+146     for (size_t i = 0; i < count; ++i)
+147         new_message\->copy_from(vec[i]\&.address, vec[i]\&.length);
+148 
+149     // Send the message
+150     m_queue\&.push_back(new_message);
+151     m_message_lock\&.unlock();
+152 
+153 }
+.fi
+
+.PP
+References \fBMaxOS::processes::BlockingLock::lock()\fP, and \fBMaxOS::processes::BlockingLock::unlock()\fP\&.
+.PP
+Referenced by \fBwrite()\fP\&.
+.SS "int SharedMessageEndpoint::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP"
 
 .PP
 Handles writing to the message endpoint resource by writing the buffer as a message\&. 
@@ -166,26 +202,20 @@ The amount of bytes written
 .PP
 
 .PP
-Reimplemented from \fBMaxOS::processes::Resource\fP\&.
-.PP
-Definition at line \fB158\fP of file \fBipc\&.cpp\fP\&..PP
+Definition at line \fB194\fP of file \fBipc\&.cpp\fP\&..PP
 .nf
-158                                                                               {
-159 
-160     m_message_lock\&.lock();
-161 
-162     // Create the message
-163     auto* new_message = new buffer_t(size);
-164     new_message\->copy_from(buffer, size);
-165     m_queue\&.push_back(new_message);
-166 
-167     m_message_lock\&.unlock();
-168     return size;
-169 }
+194                                                                               {
+195 
+196     // Send the buffer as the entire message
+197     ipc_iovec_t message = {buffer, size};
+198     send(&message, 1);
+199 
+200     return size;
+201 }
 .fi
 
 .PP
-References \fBMaxOS::common::Spinlock::lock()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+References \fBsend()\fP\&.
 
 .SH "Author"
 .PP 

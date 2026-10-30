@@ -1,0 +1,758 @@
+.TH "MaxOS::console::FramebufferConsole" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::console::FramebufferConsole \- Handles the printing of characters and strings to the screen using a framebuffer\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <framebuffer\&.h>\fP
+.PP
+Inherits \fBMaxOS::console::Console\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFramebufferConsole\fP (\fBmultiboot_tag_framebuffer\fP *framebuffer_info)"
+.br
+.RI "Constructs a new VESA Boot \fBConsole\fP object, initializing the console area for text output\&. "
+.ti -1c
+.RI "uint16_t \fBwidth\fP () final"
+.br
+.RI "Gets the width of the console\&. "
+.ti -1c
+.RI "uint16_t \fBheight\fP () final"
+.br
+.RI "Gets the height of the console\&. "
+.ti -1c
+.RI "void \fBfinish\fP () const"
+.br
+.RI "Cleans up the boot console\&. "
+.ti -1c
+.RI "void \fBput_character\fP (uint16_t x, uint16_t y, char) final"
+.br
+.RI "Places a character at the specified location\&. "
+.ti -1c
+.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, common::ConsoleColour) final"
+.br
+.RI "Sets the foreground color at the specified location\&. "
+.ti -1c
+.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, common::ConsoleColour) final"
+.br
+.RI "Sets the background color at the specified location\&. "
+.ti -1c
+.RI "void \fBscroll_up\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, common::ConsoleColour foreground, common::ConsoleColour background, char fill) final"
+.br
+.RI "Scrolls the console up by 1 line\&. "
+.ti -1c
+.RI "char \fBget_character\fP (uint16_t x, uint16_t y) final"
+.br
+.RI "Gets the character at the specified location\&. "
+.ti -1c
+.RI "common::ConsoleColour \fBget_foreground_color\fP (uint16_t x, uint16_t y) final"
+.br
+.RI "Gets the foreground color at the specified location\&. "
+.ti -1c
+.RI "common::ConsoleColour \fBget_background_color\fP (uint16_t x, uint16_t y) final"
+.br
+.RI "Gets the background color at the specified location\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::console::Console\fP
+.in +1c
+.ti -1c
+.RI "virtual void \fBput_character\fP (uint16_t x, uint16_t y, char c, common::ConsoleColour foreground, common::ConsoleColour background)"
+.br
+.RI "Put a character on the console with a given foreground and background color\&. "
+.ti -1c
+.RI "virtual void \fBput_string\fP (uint16_t x, uint16_t y, string string, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black)"
+.br
+.RI "Put a string on the console\&. "
+.ti -1c
+.RI "virtual void \fBscroll_up\fP ()"
+.br
+.RI "Scroll the entire console up by 1 line\&. "
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black, char fill=' ')"
+.br
+.RI "Clear an area of the console\&. "
+.ti -1c
+.RI "virtual void \fBinvert_colors\fP (uint16_t x, uint16_t y)"
+.br
+.RI "Invert the colors of a character on the console\&. "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBprint_logo\fP (bool is_panic=false)"
+.br
+.RI "Prints the logo to the center of the screen\&. "
+.ti -1c
+.RI "static void \fBupdate_progress_bar\fP (uint8_t percentage)"
+.br
+.RI "Updates the progress bar\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBConsoleStream\fP * \fBcout\fP"
+.br
+.RI "The boot console output stream\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the printing of characters and strings to the screen using a framebuffer\&. 
+.PP
+Definition at line \fB295\fP of file \fBframebuffer\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "FramebufferConsole::FramebufferConsole (\fBmultiboot_tag_framebuffer\fP * framebuffer_info)\fC [explicit]\fP"
+
+.PP
+Constructs a new VESA Boot \fBConsole\fP object, initializing the console area for text output\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIframebuffer_info\fP The frame buffer to draw text onto 
+.RE
+.PP
+
+.PP
+Definition at line \fB25\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+26 {
+27 
+28     // Save the framebuffer info
+29     s_framebuffer_info  = framebuffer_info;
+30     m_framebuffer_bpp   = s_framebuffer_info\->common\&.framebuffer_bpp;
+31     m_framebuffer_pitch = s_framebuffer_info\->common\&.framebuffer_pitch;
+32     m_framebuffer_size  = s_framebuffer_info\->common\&.framebuffer_height * m_framebuffer_pitch;
+33     Logger::DEBUG() << "Framebuffer: bpp=" << m_framebuffer_bpp << ", pitch=" << m_framebuffer_pitch << ", size=" << m_framebuffer_size << "\\n";
+34 
+35     // Map the frame buffer into the higher half
+36     auto physical_address = (uint64_t) s_framebuffer_info\->common\&.framebuffer_addr;
+37     m_framebuffer_address = (uint64_t *) PhysicalMemoryManager::to_dm_region(physical_address);
+38     PhysicalMemoryManager::s_current_manager\->map_area((physical_address_t *) physical_address, m_framebuffer_address, m_framebuffer_size, WRITE | PRESENT);
+39 
+40     // Reserve the physical memory
+41     size_t pages = PhysicalMemoryManager::size_to_frames(m_framebuffer_size);
+42     PhysicalMemoryManager::s_current_manager\->reserve(s_framebuffer_info\->common\&.framebuffer_addr, pages, "Framebuffer");
+43 
+44     // Log info
+45     Logger::DEBUG() << "Framebuffer address: physical=0x" << (uint64_t) physical_address << ", virtual=0x" << (uint64_t) m_framebuffer_address << "\\n";
+46     Logger::DEBUG() << "Framebuffer mapped: 0x" << (uint64_t) m_framebuffer_address << " \- 0x" << (uint64_t) (m_framebuffer_address + m_framebuffer_size) << " (pages: " << pages << ")\\n";
+47 
+48     // Prepare the console
+49     m_video_memory_meta = (uint16_t*) MemoryManager::kmalloc(width() * height() * sizeof(uint16_t));
+50     FramebufferConsole::clear();
+51     print_logo();
+52 
+53     // Set up the output area
+54     m_console_area = new ConsoleArea(this, 0, 0, width() / 2 \- 25, height(), ConsoleColour::DarkGrey, ConsoleColour::Black);
+55     cout = new ConsoleStream(m_console_area);
+56 
+57     // Only log to the screen when debugging
+58 #ifndef NDEBUG
+59     Logger::active_logger()\->add_log_writer(cout);
+60     Logger::INFO() << "Console Stream set up \\n";
+61 #endif
+62 }
+.fi
+
+.PP
+References \fBMaxOS::Logger::active_logger()\fP, \fBMaxOS::Logger::add_log_writer()\fP, \fBMaxOS::console::Console::clear()\fP, \fBmultiboot_tag_framebuffer::common\fP, \fBcout\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_addr\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_bpp\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_height\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_pitch\fP, \fBheight()\fP, \fBMaxOS::Logger::INFO()\fP, \fBMaxOS::memory::MemoryManager::kmalloc()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map_area()\fP, \fBMaxOS::memory::PRESENT\fP, \fBprint_logo()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, \fBwidth()\fP, and \fBMaxOS::memory::WRITE\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void FramebufferConsole::finish () const"
+
+.PP
+Cleans up the boot console\&. 
+.PP
+Definition at line \fB379\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+379                                       {
+380 
+381     // Done
+382     Logger::HEADER() << "MaxOS Kernel Successfully Booted\\n" << ANSI_COLOURS[ANSIColour::Reset];
+383     cout\->set_cursor(0, 0);
+384     Logger::active_logger()\->disable_log_writer(cout);
+385 }
+.fi
+
+.PP
+References \fBMaxOS::Logger::active_logger()\fP, \fBcout\fP, \fBMaxOS::Logger::disable_log_writer()\fP, \fBMaxOS::Logger::HEADER()\fP, and \fBMaxOS::console::ConsoleStream::set_cursor()\fP\&.
+.PP
+Referenced by \fBkernel_main()\fP\&.
+.SS "ConsoleColour FramebufferConsole::get_background_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the background color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The background color at the specified location or black if the coordinates are out of bounds 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB259\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+259                                                                              {
+260 
+261     if(CPU::panic_lock\&.is_locked())
+262         return ConsoleColour::Red;
+263 
+264     // If the coordinates are out of bounds, return
+265     if(x >= width() || y >= height())
+266         return ConsoleColour::Black;
+267 
+268     // Calculate the offset
+269     int offset = (y * width() + x);
+270 
+271     // Return the background color at the offset, by masking the background color with the current background color (bits 12\-15)
+272     return (ConsoleColour) ((m_video_memory_meta[offset] & 0xF000) >> 12);
+273 }
+.fi
+
+.PP
+References \fBheight()\fP, \fBMaxOS::system::CPU::panic_lock\fP, and \fBwidth()\fP\&.
+.PP
+Referenced by \fBput_character()\fP, and \fBscroll_up()\fP\&.
+.SS "char FramebufferConsole::get_character (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the character at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The character at the specified location or a space if the coordinates are out of bounds 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB216\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+216                                                              {
+217 
+218     // If the coordinates are out of bounds, return
+219     if(x >= width() || y >= height())
+220         return ' ';
+221 
+222     // Calculate the offset
+223     int offset = (y * width() + x);
+224 
+225     // Return the character at the offset, by masking the character with the current character (last 8 bits)
+226     return (char) (m_video_memory_meta[offset] & 0x00FF);
+227 }
+.fi
+
+.PP
+References \fBheight()\fP, and \fBwidth()\fP\&.
+.SS "ConsoleColour FramebufferConsole::get_foreground_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the foreground color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The foreground color at the specified location or white if the coordinates are out of bounds 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB236\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+236                                                                              {
+237 
+238     if(CPU::panic_lock\&.is_locked())
+239         return ConsoleColour::White;
+240 
+241     // If the coordinates are out of bounds, return
+242     if(x >= width() || y >= height())
+243         return ConsoleColour::White;
+244 
+245     // Calculate the offset
+246     int offset = (y * width() + x);
+247 
+248     // Return the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8\-11)
+249     return (ConsoleColour) ((m_video_memory_meta[offset] & 0x0F00) >> 8);
+250 }
+.fi
+
+.PP
+References \fBheight()\fP, \fBMaxOS::system::CPU::panic_lock\fP, and \fBwidth()\fP\&.
+.PP
+Referenced by \fBput_character()\fP, and \fBscroll_up()\fP\&.
+.SS "uint16_t FramebufferConsole::height ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the height of the console\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The height of the console in characters 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB80\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+80                                     {
+81     return s_framebuffer_info\->common\&.framebuffer_height / FONT_HEIGHT;
+82 }
+.fi
+
+.PP
+References \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::console::FONT_HEIGHT\fP, and \fBmultiboot_tag_framebuffer_common::framebuffer_height\fP\&.
+.PP
+Referenced by \fBFramebufferConsole()\fP, \fBget_background_color()\fP, \fBget_character()\fP, \fBget_foreground_color()\fP, \fBput_character()\fP, \fBscroll_up()\fP, \fBset_background_color()\fP, and \fBset_foreground_color()\fP\&.
+.SS "void FramebufferConsole::print_logo (bool is_panic = \fCfalse\fP)\fC [static]\fP"
+
+.PP
+Prints the logo to the center of the screen\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIis_panic\fP Whether to print the kernel panic logo or the normal logo 
+.RE
+.PP
+
+.PP
+Definition at line \fB280\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+280                                                  {
+281 
+282     // Load the logo
+283     const char* logo = is_panic ? header_data_kp : header_data;
+284     auto address = PhysicalMemoryManager::to_dm_region(s_framebuffer_info\->common\&.framebuffer_addr);
+285     auto bpp = s_framebuffer_info\->common\&.framebuffer_bpp;
+286 
+287     // Find the center of the screen
+288     uint32_t screen_width = s_framebuffer_info\->common\&.framebuffer_width;
+289     uint32_t screen_height = s_framebuffer_info\->common\&.framebuffer_height;
+290     uint32_t center_x = screen_width / 2;
+291     uint32_t center_y = screen_height / 2 \- 80;
+292 
+293     // Fill the screen with the logo colour
+294     auto col = GraphicsContext::colour_to_int(Colour(is_panic ? ConsoleColour::Red : ConsoleColour::Black), bpp);
+295     memset(address, col, screen_width * screen_height * (bpp / 8));
+296 
+297     // Draw the logo
+298     for(uint32_t logo_y = 0; logo_y < LOGO_HEIGHT; ++logo_y) {
+299         for(uint32_t logo_x = 0; logo_x < LOGO_WIDTH; ++logo_x) {
+300 
+301             // Get the pixel from the logo
+302             uint8_t pixel[3] = { 0 };
+303             LOGO_HEADER_PIXEL(logo, pixel)
+304 
+305             // Draw the pixel
+306             auto col = GraphicsContext::colour_to_int(common::Colour(pixel[0], pixel[1], pixel[2]), bpp);
+307             put_pixel(center_x \- LOGO_WIDTH / 2 + logo_x, center_y \- LOGO_HEIGHT / 2 + logo_y, col);
+308         }
+309     }
+310 
+311     update_progress_bar(0);
+312 }
+.fi
+
+.PP
+References \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBmultiboot_tag_framebuffer::common\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_addr\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_bpp\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_height\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP, \fBLOGO_HEADER_PIXEL\fP, \fBLOGO_HEIGHT\fP, \fBLOGO_WIDTH\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, and \fBupdate_progress_bar()\fP\&.
+.PP
+Referenced by \fBFramebufferConsole()\fP, and \fBMaxOS::system::CPU::prepare_for_panic()\fP\&.
+.SS "void FramebufferConsole::put_character (uint16_t x, uint16_t y, char c)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Places a character at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.br
+\fIc\fP The character to place 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB91\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+91                                                                      {
+92 
+93     // Parse any ansi codes
+94     if(c == '\\033') {
+95 
+96         // Store the character
+97         ansi_code_length = 0;
+98         ansi_code[ansi_code_length++] = c;
+99 
+100         // Do not draw the escape character
+101         return;
+102     }
+103 
+104     if(ansi_code_length < 8) {
+105 
+106         // Add the character to the ANSI code
+107         ansi_code[ansi_code_length++] = c;
+108 
+109         // If the ANSI code is complete
+110         if(c == 'm') {
+111             ansi_code[ansi_code_length] = '\\0';
+112             ansi_code_length = \-1;
+113 
+114             if(strcmp("\\033[0m", ansi_code) == 0) {
+115                 m_foreground_color = ConsoleColour::Uninitialised;
+116                 m_background_color = ConsoleColour::Uninitialised;
+117                 return;
+118             }
+119 
+120             // Get the colour from the ANSI code
+121             const Colour colour(ansi_code);
+122 
+123             // Set the colour
+124             bool foreground = ansi_code[4] == '3';
+125             if(foreground)
+126                 m_foreground_color = colour\&.to_console_colour();
+127             else
+128                 m_background_color = colour\&.to_console_colour();
+129 
+130         }
+131 
+132         // Do not draw the escape character
+133         return;
+134     }
+135 
+136     // If the coordinates are out of bounds, return
+137     if(x >= width() || y >= height())
+138         return;
+139 
+140     // Set the character at the offset, by masking the character with the current character (last 8 bits)
+141     int offset = (y * width() + x);
+142     m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xFF00) | (uint16_t) c;
+143 
+144     // Convert the char into a string
+145     char s[] = " ";
+146     s[0] = c;
+147 
+148     // Get the colour as a number
+149     Colour foreground = m_foreground_color == ConsoleColour::Uninitialised ? Colour(get_foreground_color(x, y)) : Colour(m_foreground_color);
+150     Colour background = m_background_color == ConsoleColour::Uninitialised ? Colour(get_background_color(x, y)) : Colour(m_background_color);
+151     auto fg = GraphicsContext::colour_to_int(foreground, m_framebuffer_bpp);
+152     auto bg = GraphicsContext::colour_to_int(background, m_framebuffer_bpp);
+153 
+154     // Draw the text from top to bottom
+155     for(int y_bit_map_offset = 0; y_bit_map_offset < FONT_WIDTH; y_bit_map_offset++) {
+156         for(int x_bit_map_offset = 0; x_bit_map_offset < FONT_HEIGHT \- (2 * FONT_PADDING); ++x_bit_map_offset) {
+157 
+158             // Get the character
+159             uint8_t character = c;
+160 
+161             // Draw the pixel
+162             bool set = AMIGA_FONT[(uint16_t) character * 8 + y_bit_map_offset] & (128 >> (x_bit_map_offset % 8));
+163             put_pixel(x * 8 + x_bit_map_offset, y * FONT_HEIGHT + y_bit_map_offset, set ? fg : bg);
+164 
+165         }
+166     }
+167 }
+.fi
+
+.PP
+References \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBMaxOS::console::FONT_HEIGHT\fP, \fBMaxOS::console::FONT_PADDING\fP, \fBMaxOS::console::FONT_WIDTH\fP, \fBget_background_color()\fP, \fBget_foreground_color()\fP, \fBheight()\fP, and \fBwidth()\fP\&.
+.SS "void FramebufferConsole::scroll_up (uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground, common::ConsoleColour background, char fill)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Scrolls the console up by 1 line\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIleft\fP The left coordinate of the area to scroll 
+.br
+\fItop\fP The top coordinate of the area to scroll 
+.br
+\fIwidth\fP The width of the area to scroll 
+.br
+\fIheight\fP The height of the area to scroll 
+.br
+\fIforeground\fP The foreground color of the new line 
+.br
+\fIbackground\fP The background color of the new line 
+.br
+\fIfill\fP The character to fill the new line with 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB326\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+329                                                                            {
+330 
+331 
+332     // Get the framebuffer info
+333     uint64_t framebuffer_width = s_framebuffer_info\->common\&.framebuffer_width;
+334     uint64_t framebuffer_bpp = m_framebuffer_bpp; // in bits per pixel
+335     uint64_t bytes_per_pixel = framebuffer_bpp / 8;
+336     uint64_t framebuffer_pitch = framebuffer_width * bytes_per_pixel;
+337 
+338     uint16_t line_height = FONT_HEIGHT;
+339 
+340     // Region conversions
+341     uint16_t region_pixel_y = top * line_height;
+342     uint16_t region_pixel_height = height * line_height;
+343     uint16_t region_pixel_left = left * FONT_WIDTH;
+344     uint16_t region_pixel_width = width * FONT_WIDTH;
+345     size_t row_bytes = region_pixel_width * bytes_per_pixel;
+346 
+347     // Decide the colour of the pixel
+348     ConsoleColour to_set_foreground = get_foreground_color(left, top + height \- 1);
+349     ConsoleColour to_set_background = get_background_color(left, top + height \- 1);
+350     uint32_t fill_value = GraphicsContext::colour_to_int(Colour(to_set_background), m_framebuffer_bpp);
+351 
+352     // Scroll the region upward by one text line
+353     for(uint16_t row = 0; row < region_pixel_height \- line_height; row++) {
+354         uint8_t* src = (uint8_t*)m_framebuffer_address + (region_pixel_y + row + line_height) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
+355         uint8_t* dest = (uint8_t*)m_framebuffer_address + (region_pixel_y + row) * framebuffer_pitch + region_pixel_left * bytes_per_pixel;
+356         memmove(dest, src, row_bytes);
+357     }
+358 
+359     // Clear the last line of the region
+360     uint16_t clear_start_y = region_pixel_y + region_pixel_height \- line_height;
+361     for(uint16_t row = 0; row < line_height; row++) {
+362         auto row_add = (uint32_t*) ((uint8_t*)m_framebuffer_address + (clear_start_y + row) * framebuffer_pitch + region_pixel_left * 4);
+363         for(uint16_t col = 0; col < region_pixel_width; col++) {
+364             row_add[col] = fill_value;
+365         }
+366     }
+367 
+368     //Update any per\-pixel colour metadata
+369     uint16_t text_row = top + height \- 1;
+370     for(uint16_t x = left; x < left + width; x++) {
+371         set_foreground_color(x, text_row, to_set_foreground);
+372         set_background_color(x, text_row, to_set_background);
+373     }
+374 }
+.fi
+
+.PP
+References \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::console::FONT_HEIGHT\fP, \fBMaxOS::console::FONT_WIDTH\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP, \fBget_background_color()\fP, \fBget_foreground_color()\fP, \fBheight()\fP, \fBset_background_color()\fP, \fBset_foreground_color()\fP, and \fBwidth()\fP\&.
+.SS "void FramebufferConsole::set_background_color (uint16_t x, uint16_t y, common::ConsoleColour background)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Sets the background color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.br
+\fIbackground\fP The background color 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB196\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+196                                                                                                     {
+197 
+198     // If the coordinates are out of bounds, return
+199     if(x >= width() || y >= height())
+200         return;
+201 
+202     // Calculate the offset
+203     int offset = (y * width() + x);
+204 
+205     // Set the background color at the offset, by masking the background color with the current background color (bits 12\-15)
+206     m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0x0FFF) | ((uint16_t) background << 12);
+207 }
+.fi
+
+.PP
+References \fBheight()\fP, and \fBwidth()\fP\&.
+.PP
+Referenced by \fBscroll_up()\fP\&.
+.SS "void FramebufferConsole::set_foreground_color (uint16_t x, uint16_t y, common::ConsoleColour foreground)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Sets the foreground color at the specified location\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate 
+.br
+\fIy\fP The y coordinate 
+.br
+\fIforeground\fP The foreground color 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB176\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+176                                                                                                     {
+177 
+178     // If the coordinates are out of bounds, return
+179     if(x >= width() || y >= height())
+180         return;
+181 
+182     // Calculate the offset
+183     int offset = (y * width() + x);
+184 
+185     // Set the foreground color at the offset, by masking the foreground color with the current foreground color (bits 8\-11)
+186     m_video_memory_meta[offset] = (m_video_memory_meta[offset] & 0xF0FF) | ((uint16_t) foreground << 8);
+187 }
+.fi
+
+.PP
+References \fBheight()\fP, and \fBwidth()\fP\&.
+.PP
+Referenced by \fBscroll_up()\fP\&.
+.SS "void FramebufferConsole::update_progress_bar (uint8_t percentage)\fC [static]\fP"
+
+.PP
+Updates the progress bar\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpercentage\fP The percentage to update the progress bar to (0-100) 
+.RE
+.PP
+
+.PP
+Definition at line \fB392\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+392                                                                {
+393 
+394     // Not ready
+395     if(!s_framebuffer_info)
+396         return;
+397 
+398     // Check bounds
+399     if(percentage > 100)
+400         percentage = 100;
+401 
+402     uint8_t progress_height = 15;
+403     uint8_t progress_spacing = 20;
+404     uint8_t progress_width_cull = 40;
+405 
+406     // Find the center of the screen
+407     uint32_t right_x = (s_framebuffer_info\->common\&.framebuffer_width / 2) \- LOGO_WIDTH / 2;
+408     uint32_t bottom_y = (s_framebuffer_info\->common\&.framebuffer_height / 2 \- 80) \- LOGO_HEIGHT / 2;
+409 
+410     // Find the bounds
+411     uint32_t start_x = progress_width_cull;
+412     uint32_t start_y = LOGO_HEIGHT + progress_spacing;
+413     uint32_t end_x = LOGO_WIDTH \- progress_width_cull;
+414     uint32_t end_y = LOGO_HEIGHT + progress_height + progress_spacing;
+415 
+416     // Draw the progress bar
+417     for(uint32_t progress_y = start_y; progress_y < end_y; ++progress_y) {
+418         for(uint32_t progress_x = start_x; progress_x < end_x; ++progress_x) {
+419 
+420             // Check if drawing border
+421             bool is_border = (progress_y == start_y) || (progress_y == end_y \- 1) ||
+422                              (progress_x == start_x) || (progress_x == end_x \- 1);
+423 
+424             // Only draw the border if it is the first time drawing it
+425             is_border = is_border && percentage == 0;
+426 
+427             // If it is not within the percentage, skip it
+428             uint32_t logo_progress_width = LOGO_WIDTH * percentage / 100;
+429             if(progress_x > logo_progress_width && !is_border)
+430                 continue;
+431 
+432             // Draw the pixel
+433             auto col = GraphicsContext::colour_to_int(Colour(0xFF, 0xFF, 0xFF), s_framebuffer_info\->common\&.framebuffer_bpp);
+434             put_pixel(right_x + progress_x, bottom_y + progress_y, col);
+435 
+436         }
+437     }
+438 }
+.fi
+
+.PP
+References \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBmultiboot_tag_framebuffer::common\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_bpp\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_height\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP, \fBLOGO_HEIGHT\fP, and \fBLOGO_WIDTH\fP\&.
+.PP
+Referenced by \fBprint_logo()\fP, and \fBMaxOS::Logger::set_log_level()\fP\&.
+.SS "uint16_t FramebufferConsole::width ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Gets the width of the console\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The width of the console in characters 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::console::Console\fP\&.
+.PP
+Definition at line \fB71\fP of file \fBframebuffer\&.cpp\fP\&..PP
+.nf
+71                                    {
+72     return s_framebuffer_info\->common\&.framebuffer_width / FONT_WIDTH;       // 8 pixels per character
+73 }
+.fi
+
+.PP
+References \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::console::FONT_WIDTH\fP, and \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP\&.
+.PP
+Referenced by \fBFramebufferConsole()\fP, \fBget_background_color()\fP, \fBget_character()\fP, \fBget_foreground_color()\fP, \fBput_character()\fP, \fBscroll_up()\fP, \fBset_background_color()\fP, and \fBset_foreground_color()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBConsoleStream\fP* MaxOS::console::FramebufferConsole::cout"
+
+.PP
+The boot console output stream\&. 
+.PP
+Definition at line \fB322\fP of file \fBframebuffer\&.h\fP\&.
+.PP
+Referenced by \fBfinish()\fP, and \fBFramebufferConsole()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

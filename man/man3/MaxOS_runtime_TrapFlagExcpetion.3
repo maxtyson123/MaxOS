@@ -1,0 +1,146 @@
+.TH "MaxOS::runtime::TrapFlagExcpetion" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::runtime::TrapFlagExcpetion \- Exception handler for a hardware mem watch\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <gdbstub\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::ExceptionHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTrapFlagExcpetion\fP (\fBGDBServer\fP *server)"
+.br
+.RI "Registers a handler for the TrapFlagException (interrupt 0x1) "
+.ti -1c
+.RI "\fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status) override"
+.br
+.RI "Handles the interrupt 0x1 by clearing the trap flag and pausing the thread\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::ExceptionHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBExceptionHandler\fP (uint8_t interrupt_number)"
+.br
+.RI "Create a new base exception handler for an interrupt\&. "
+.ti -1c
+.RI "\fB~ExceptionHandler\fP ()"
+.br
+.ti -1c
+.RI "virtual string \fBget_message\fP (\fBsystem::cpu_status_t\fP *status)"
+.br
+.RI "Get an human readable error message explaining this exception\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "virtual void \fBhandle_interrupt\fP ()"
+.br
+.RI "Handles an interrupt\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBInterruptHandler\fP (uint8_t interrupt_number, int64_t redirect=\-1, uint64_t redirect_index=0)"
+.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "virtual \fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_interrupt_number\fP"
+.br
+.RI "The interrupt number this handler handles\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Exception handler for a hardware mem watch\&. 
+.PP
+Definition at line \fB37\fP of file \fBgdbstub\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "TrapFlagExcpetion::TrapFlagExcpetion (\fBGDBServer\fP * server)"
+
+.PP
+Registers a handler for the TrapFlagException (interrupt 0x1) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP The GDB stub that will handle the exception 
+.RE
+.PP
+
+.PP
+Definition at line \fB547\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+548 : ExceptionHandler(0x1),
+549   m_gdb_handler(server)
+550 {
+551 
+552 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBcpu_status_t\fP * TrapFlagExcpetion::handle_interrupt (\fBsystem::cpu_status_t\fP * status)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Handles the interrupt 0x1 by clearing the trap flag and pausing the thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP The registers at time of exception 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The state to return to 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::hardwarecommunication::ExceptionHandler\fP\&.
+.PP
+Definition at line \fB562\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+562                                                                        {
+563 
+564     // Clear flag
+565     status\->rflags &= ~(1 << 8);
+566     m_gdb_handler\->thread_regs = *status;
+567     m_gdb_handler\->attached_thread()\->thread_state = ThreadState::WAITING;
+568 
+569     // Notify the server that it stopped
+570     m_gdb_handler\->send_message("S05");
+571 
+572     // Dont execute further until instructed by GDB
+573     GlobalScheduler::current_thread()\->yield();
+574 
+575     // Copy the registers back as they may have been modified elsewhere
+576     *status = m_gdb_handler\->thread_regs;
+577     return status;
+578 }
+.fi
+
+.PP
+References \fBMaxOS::runtime::GDBServer::attached_thread()\fP, \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBMaxOS::runtime::GDBServer::send_message()\fP, \fBMaxOS::processes::Thread::thread_state\fP, and \fBMaxOS::processes::Thread::yield()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

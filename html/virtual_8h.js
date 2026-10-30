@@ -11,5 +11,7 @@ var virtual_8h =
     [ "VirtualFlags", "virtual_8h.html#a12ca8e10f17e52d8375319daaaf6f380", [
       [ "RESERVE", "virtual_8h.html#a12ca8e10f17e52d8375319daaaf6f380a9b2ec1c1148770ef7ebf973def754e7c", null ],
       [ "SHARED", "virtual_8h.html#a12ca8e10f17e52d8375319daaaf6f380a997819290df7a1861b890d56d9f7c973", null ]
-    ] ]
+    ] ],
+    [ "CHUNKS_PER_PAGE", "virtual_8h.html#adda157b1113c94c99f771858b8f600c0", null ],
+    [ "VMM_RESERVED", "virtual_8h.html#af53c65745b62d8c6c0c51c1aed223b5f", null ]
 ];

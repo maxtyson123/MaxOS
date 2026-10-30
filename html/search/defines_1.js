@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['buffer8192_0',['buffer8192',['../intel__i217_8cpp.html#aa3ab55cb1937ef26708a01f9a2870909',1,'intel_i217.cpp']]]
+  ['logo_5fheader_5fpixel_0',['LOGO_HEADER_PIXEL',['../logo_8h.html#a110a220384a7eb45fd382195d6081afb',1,'logo.h']]]
 ];

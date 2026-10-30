@@ -6,5 +6,5 @@ var classMaxOS_1_1processes_1_1ELF64 =
     [ "get_section_header", "classMaxOS_1_1processes_1_1ELF64.html#add8f22242d8065457d76fcdd2350d7a4", null ],
     [ "header", "classMaxOS_1_1processes_1_1ELF64.html#a51568ae69a0932094723ca3045472b91", null ],
     [ "is_valid", "classMaxOS_1_1processes_1_1ELF64.html#af016428ffefa07a491eec7ade744c871", null ],
-    [ "load", "classMaxOS_1_1processes_1_1ELF64.html#ab443619beef6efe646ef975e05f81154", null ]
+    [ "load_into_memory", "classMaxOS_1_1processes_1_1ELF64.html#af43b80a703cd7325d9b9514fe470705c", null ]
 ];

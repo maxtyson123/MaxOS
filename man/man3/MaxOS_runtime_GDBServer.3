@@ -1,0 +1,736 @@
+.TH "MaxOS::runtime::GDBServer" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::runtime::GDBServer \- Handler for running a GDB server over serial\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <gdbstub\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGDBServer\fP (\fBconsole::SerialConsole\fP *serial)"
+.br
+.RI "Constructs a handler for remote debugging using GDB, also sets up interrupt handlers for traps and breakpoints\&. "
+.ti -1c
+.RI "void \fBattach\fP (\fBprocesses::Thread\fP *thread)"
+.br
+.RI "Begin debugging a thread, will start paused\&. "
+.ti -1c
+.RI "string \fBget_checksum\fP (const string &payload)"
+.br
+.RI "Calculates the GDB checksum of a command\&. "
+.ti -1c
+.RI "bool \fBcheck_checksum\fP (const string &payload, const string &checksum)"
+.br
+.RI "Validates the checksum of a commnad\&. "
+.ti -1c
+.RI "string \fBbuild_message\fP (const string &payload)"
+.br
+.RI "Converts a message into the form GDB expects, including and ACK package\&. "
+.ti -1c
+.RI "void \fBsend_message\fP (const string &payload)"
+.br
+.RI "Converts a message to the required form and sends it over serial\&. "
+.ti -1c
+.RI "void \fBsend_empty\fP ()"
+.br
+.RI "Send an empty message to the GDB server\&. "
+.ti -1c
+.RI "void \fBsend_supported\fP (const string &peer_supported)"
+.br
+.RI "Sends the features that this GDB stub supports to the GDB server\&. "
+.ti -1c
+.RI "void \fBsend_registers\fP ()"
+.br
+.RI "Sends the registers of the thread to the GDB server\&. "
+.ti -1c
+.RI "void \fBsend_memory\fP (const string &message)"
+.br
+.RI "Send a chunk of memory to the GDB server\&. "
+.ti -1c
+.RI "void \fBsend_memory\fP (void *address, size_t length)"
+.br
+.RI "Send a chunk of memory to the GDB server\&. "
+.ti -1c
+.RI "void \fBsend_breakpoint_reached\fP ()"
+.br
+.ti -1c
+.RI "void \fBhandle_step_instruction\fP ()"
+.br
+.RI "Set the trap flag and allow the thread to run\&. "
+.ti -1c
+.RI "void \fBhandle_set_breakpoint\fP (const string &message)"
+.br
+.RI "Set a software break point by replacing the instruction with a INT3\&. "
+.ti -1c
+.RI "void \fBhandle_set_breakpoint\fP (void *address)"
+.br
+.RI "Set a software break point by replacing the instruction with a INT3\&. "
+.ti -1c
+.RI "void \fBhandle_remove_breakpoint\fP (const string &message)"
+.br
+.RI "Remove a software break point, and replace the original opcode\&. "
+.ti -1c
+.RI "void \fBhandle_remove_breakpoint\fP (void *address)"
+.br
+.RI "Remove a software break point, and replace the original opcode\&. "
+.ti -1c
+.RI "void \fBhandle_continue\fP ()"
+.br
+.RI "Continues the exeuction of the thread, acknowledges the request and allows the thread to run\&. "
+.ti -1c
+.RI "void \fBhandle_detach\fP ()"
+.br
+.RI "Detaches the thread from the GDB, removing all breakpoints and allowing it to be scheduled as usual\&. "
+.ti -1c
+.RI "\fBprocesses::Thread\fP * \fBattached_thread\fP ()"
+.br
+.RI "Get the attached thread\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "virtual \fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status)"
+.br
+.RI "Handles an interrupt and returns the status\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBsystem::cpu_status_t\fP \fBthread_regs\fP"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBInterruptHandler\fP (uint8_t interrupt_number, int64_t redirect=\-1, uint64_t redirect_index=0)"
+.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "virtual \fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_interrupt_number\fP"
+.br
+.RI "The interrupt number this handler handles\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handler for running a GDB server over serial\&. 
+.PP
+Definition at line \fB71\fP of file \fBgdbstub\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "GDBServer::GDBServer (\fBconsole::SerialConsole\fP * serial)"
+
+.PP
+Constructs a handler for remote debugging using GDB, also sets up interrupt handlers for traps and breakpoints\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIserial\fP The serial port where GDB will listen/send packets on
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+GDB owns the interrupt here, should move to a serial API 
+.RE
+.PP
+
+.PP
+Definition at line \fB28\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+29 : InterruptHandler(0x24, 4, 0x18),
+30   m_serial(serial),
+31   m_trap_flag_handler(this),
+32   m_break_point_handler(this)
+33 {
+34 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void GDBServer::attach (\fBprocesses::Thread\fP * thread)"
+
+.PP
+Begin debugging a thread, will start paused\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthread\fP The thread to debug 
+.RE
+.PP
+
+.PP
+Definition at line \fB43\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+43                                      {
+44 
+45     // Pause the thread
+46     thread\->thread_state = ThreadState::WAITING;
+47 
+48     // Read the thread info
+49     m_attached_thread = thread;
+50     thread_regs = (const cpu_status_t&)m_attached_thread\->execution_state;
+51 
+52 }
+.fi
+
+.PP
+References \fBMaxOS::processes::Thread::execution_state\fP, and \fBMaxOS::processes::Thread::thread_state\fP\&.
+.SS "\fBThread\fP * GDBServer::attached_thread ()"
+
+.PP
+Get the attached thread\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The attached thread 
+.RE
+.PP
+
+.PP
+Definition at line \fB536\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+536                                    {
+537 
+538     return m_attached_thread;
+539 
+540 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::runtime::TrapFlagExcpetion::handle_interrupt()\fP, and \fBMaxOS::runtime::BreakPointException::handle_interrupt()\fP\&.
+.SS "string GDBServer::build_message (const string & payload)"
+
+.PP
+Converts a message into the form GDB expects, including and ACK package\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpayload\fP The message to convert 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The message plus its checksum and the related indicators 
+.RE
+.PP
+
+.PP
+Definition at line \fB258\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+258                                                      {
+259     return "+$"s + payload + "#" + get_checksum(payload);
+260 }
+.fi
+
+.PP
+References \fBget_checksum()\fP\&.
+.PP
+Referenced by \fBsend_message()\fP\&.
+.SS "bool GDBServer::check_checksum (const string & payload, const string & checksum)"
+
+.PP
+Validates the checksum of a commnad\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpayload\fP The command to validate 
+.br
+\fIchecksum\fP The expected checksum 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if valid, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB248\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+248                                                                             {
+249     return get_checksum(payload)\&.to_lower() == checksum;
+250 }
+.fi
+
+.PP
+References \fBget_checksum()\fP\&.
+.SS "string GDBServer::get_checksum (const string & payload)"
+
+.PP
+Calculates the GDB checksum of a command\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpayload\fP The command to get the checksum of 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The checksum string, always 2 chars wide 
+.RE
+.PP
+
+.PP
+Definition at line \fB222\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+222                                                     {
+223 
+224     // Sum each character
+225     uint8_t checksum = 0;
+226     for (int i = 0; i < payload\&.length(); ++i)
+227         checksum += (uint8_t)payload[i];
+228 
+229     // Take first 8 bits
+230     checksum &= 0xFF;
+231 
+232     // Convert to hex
+233     string hex = string((uint64_t)checksum);
+234     if (hex\&.length() == 1)
+235         hex = "0"s + hex;
+236 
+237     return hex;
+238 
+239 }
+.fi
+
+.PP
+Referenced by \fBbuild_message()\fP, and \fBcheck_checksum()\fP\&.
+.SS "void GDBServer::handle_continue ()"
+
+.PP
+Continues the exeuction of the thread, acknowledges the request and allows the thread to run\&. 
+.PP
+Definition at line \fB508\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+508                                 {
+509 
+510     // Acknowledge
+511     m_serial\->write_char('+');
+512 
+513     // Let the thread be scheduled
+514     m_attached_thread\->thread_state = ThreadState::READY;
+515 }
+.fi
+
+.PP
+References \fBMaxOS::processes::Thread::thread_state\fP, and \fBMaxOS::console::SerialConsole::write_char()\fP\&.
+.SS "void GDBServer::handle_detach ()"
+
+.PP
+Detaches the thread from the GDB, removing all breakpoints and allowing it to be scheduled as usual\&. 
+.PP
+Definition at line \fB520\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+520                               {
+521 
+522     // Remove all breakpoints
+523     for (const auto& bp : m_breakpoints)
+524         handle_remove_breakpoint(bp\&.first);
+525 
+526     // Allow program to continue rest of execution
+527     m_attached_thread\->thread_state = ThreadState::READY;
+528 
+529 }
+.fi
+
+.PP
+References \fBhandle_remove_breakpoint()\fP, and \fBMaxOS::processes::Thread::thread_state\fP\&.
+.SS "void GDBServer::handle_remove_breakpoint (const string & message)"
+
+.PP
+Remove a software break point, and replace the original opcode\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImessage\fP The GDB command requesting the breakpoint removal 
+.RE
+.PP
+
+.PP
+Definition at line \fB457\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+457                                                               {
+458 
+459     // Parse
+460     Vector<String> parts = message\&.substring(2,message\&.length( ) \- 2)\&.split(",");
+461     string address_str = parts[1]\&.to_upper();
+462 
+463     handle_remove_breakpoint((void*)address_str\&.hex_to_uint64());
+464 
+465 }
+.fi
+
+.PP
+References \fBhandle_remove_breakpoint()\fP\&.
+.PP
+Referenced by \fBhandle_detach()\fP, and \fBhandle_remove_breakpoint()\fP\&.
+.SS "void GDBServer::handle_remove_breakpoint (void * address)"
+
+.PP
+Remove a software break point, and replace the original opcode\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address to break on 
+.RE
+.PP
+
+.PP
+Definition at line \fB472\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+472                                                       {
+473 
+474     // Invaild address
+475     if (address < (void*)0x1000) {
+476         send_message("OK");
+477         return;
+478     }
+479 
+480     // Doesnt exist
+481     auto breakpoint = m_breakpoints\&.find(address);
+482     if (breakpoint == m_breakpoints\&.end()) {
+483         send_message("OK");
+484         return;
+485     }
+486 
+487     // Switch into the processes' address space
+488     MemoryManager* old = GlobalScheduler::current_process()\->memory_manager;
+489     MemoryManager::switch_active_memory_manager(GlobalScheduler::get_process(m_attached_thread\->parent_pid)\->memory_manager);
+490 
+491     // Replace with old byte
+492     CPU::disable_write_protect();
+493     *(uint8_t*)address = breakpoint\->second;
+494     CPU::enable_write_protect();
+495 
+496     // Remove reference
+497     m_breakpoints\&.erase(breakpoint);
+498 
+499     // Restore executing process's address space
+500     MemoryManager::switch_active_memory_manager(old);
+501     send_message("OK");
+502 
+503 }
+.fi
+
+.PP
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBsend_message()\fP\&.
+.SS "void GDBServer::handle_set_breakpoint (const string & message)"
+
+.PP
+Set a software break point by replacing the instruction with a INT3\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImessage\fP The GDB command requesting the breakpoint 
+.RE
+.PP
+
+.PP
+Definition at line \fB405\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+405                                                            {
+406 
+407     // Parse
+408     Vector<String> parts = message\&.substring(2,message\&.length( ) \- 2)\&.split(",");
+409     string address_str = parts[1]\&.to_upper();
+410 
+411     handle_set_breakpoint((void*)address_str\&.hex_to_uint64());
+412 
+413 }
+.fi
+
+.PP
+References \fBhandle_set_breakpoint()\fP\&.
+.PP
+Referenced by \fBhandle_set_breakpoint()\fP\&.
+.SS "void GDBServer::handle_set_breakpoint (void * address)"
+
+.PP
+Set a software break point by replacing the instruction with a INT3\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address to break on 
+.RE
+.PP
+
+.PP
+Definition at line \fB420\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+420                                                    {
+421 
+422     // Invaild address
+423     if (address < (void*)0x1000) {
+424         send_message("OK");
+425         return;
+426     }
+427 
+428     // Already set or invalid address
+429     if (m_breakpoints\&.find(address) != m_breakpoints\&.end()) {
+430         send_message("OK");
+431         return;
+432     }
+433 
+434     // Switch into the processes' address space
+435     MemoryManager* old = GlobalScheduler::current_process()\->memory_manager;
+436     MemoryManager::switch_active_memory_manager(GlobalScheduler::get_process(m_attached_thread\->parent_pid)\->memory_manager);
+437 
+438     // Store old byte
+439     uint8_t old_byte = *(uint8_t*)address;
+440     m_breakpoints\&.insert(address, old_byte);
+441 
+442     // Replace with breakpoint (INT3)
+443     CPU::disable_write_protect();
+444     *(uint8_t*)address = 0xCC;
+445     CPU::enable_write_protect();
+446 
+447     // Restore executing process's address space
+448     MemoryManager::switch_active_memory_manager(old);
+449     send_message("OK");
+450 }
+.fi
+
+.PP
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBsend_message()\fP\&.
+.SS "void GDBServer::handle_step_instruction ()"
+
+.PP
+Set the trap flag and allow the thread to run\&. 
+.PP
+Definition at line \fB383\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+383                                         {
+384 
+385     // Acknowledge
+386     m_serial\->write_char('+');
+387 
+388     // Enable trap flag for the thread and allow it to run
+389     thread_regs\&.rflags |= (1 << 8);
+390     m_attached_thread\->thread_state = ThreadState::READY;
+391 
+392     // Make sure change is mirrored if not in kernel
+393     if (thread_regs\&.rip == m_attached_thread\->execution_state\&.rip)
+394         m_attached_thread\->execution_state\&.rflags |= (1 << 8);
+395 
+396     // wait for the step to occur and be caught by the exception handler
+397     // \&.\&.\&.
+398 }
+.fi
+
+.PP
+References \fBMaxOS::processes::Thread::execution_state\fP, \fBMaxOS::processes::Thread::thread_state\fP, and \fBMaxOS::console::SerialConsole::write_char()\fP\&.
+.SS "void GDBServer::send_empty ()"
+
+.PP
+Send an empty message to the GDB server\&. 
+.PP
+Definition at line \fB275\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+275                            {
+276     send_message("");
+277 }
+.fi
+
+.PP
+References \fBsend_message()\fP\&.
+.SS "void GDBServer::send_memory (const string & message)"
+
+.PP
+Send a chunk of memory to the GDB server\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImessage\fP The GDB command requesting the chunk 
+.RE
+.PP
+
+.PP
+Definition at line \fB343\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+343                                                  {
+344 
+345     // Parse
+346     Vector<String> parts = message\&.substring(1,message\&.length( ) \- 1)\&.split(",");
+347     string address_str = parts[0]\&.to_upper();
+348     string length_str = parts[1]\&.to_upper();
+349 
+350     send_memory((void*)address_str\&.hex_to_uint64(), length_str\&.hex_to_uint64());
+351 }
+.fi
+
+.PP
+References \fBsend_memory()\fP\&.
+.PP
+Referenced by \fBsend_memory()\fP\&.
+.SS "void GDBServer::send_memory (void * address, size_t length)"
+
+.PP
+Send a chunk of memory to the GDB server\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The start address of the chunk 
+.br
+\fIlength\fP How large the chunk is (in bytes) 
+.RE
+.PP
+
+.PP
+Definition at line \fB359\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+359                                                         {
+360 
+361     // Cant read
+362     if (address < (void*)0x1000) {
+363         send_message("E01");
+364         return;
+365     }
+366 
+367     // Switch into the processes' address space
+368     MemoryManager* old = GlobalScheduler::current_process()\->memory_manager;
+369     MemoryManager::switch_active_memory_manager(GlobalScheduler::get_process(m_attached_thread\->parent_pid)\->memory_manager);
+370 
+371     // Send data
+372     String payload(address, length);
+373     send_message(payload\&.to_lower());
+374 
+375     // Restore executing process's address space
+376     MemoryManager::switch_active_memory_manager(old);
+377 
+378 }
+.fi
+
+.PP
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBsend_message()\fP\&.
+.SS "void GDBServer::send_message (const string & payload)"
+
+.PP
+Converts a message to the required form and sends it over serial\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpayload\fP The message to send 
+.RE
+.PP
+
+.PP
+Definition at line \fB267\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+267                                                   {
+268     string message = build_message(payload\&.c_str());
+269     m_serial\->write(message);
+270 }
+.fi
+
+.PP
+References \fBbuild_message()\fP\&.
+.PP
+Referenced by \fBMaxOS::runtime::TrapFlagExcpetion::handle_interrupt()\fP, \fBMaxOS::runtime::BreakPointException::handle_interrupt()\fP, \fBhandle_remove_breakpoint()\fP, \fBhandle_set_breakpoint()\fP, \fBsend_empty()\fP, \fBsend_memory()\fP, \fBsend_registers()\fP, and \fBsend_supported()\fP\&.
+.SS "void GDBServer::send_registers ()"
+
+.PP
+Sends the registers of the thread to the GDB server\&. 
+.PP
+Definition at line \fB300\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+300                                {
+301 
+302     string payload = "";
+303 
+304     // General Purpose Registers
+305     payload += format_register(thread_regs\&.rax, 8);
+306     payload += format_register(thread_regs\&.rbx, 8);
+307     payload += format_register(thread_regs\&.rcx, 8);
+308     payload += format_register(thread_regs\&.rdx, 8);
+309     payload += format_register(thread_regs\&.rsi, 8);
+310     payload += format_register(thread_regs\&.rdi, 8);
+311     payload += format_register(thread_regs\&.rbp, 8);
+312     payload += format_register(thread_regs\&.rsp, 8);
+313 
+314     // Secondary General Purpose Registers
+315     payload += format_register(thread_regs\&.r8, 8);
+316     payload += format_register(thread_regs\&.r9, 8);
+317     payload += format_register(thread_regs\&.r10, 8);
+318     payload += format_register(thread_regs\&.r11, 8);
+319     payload += format_register(thread_regs\&.r12, 8);
+320     payload += format_register(thread_regs\&.r13, 8);
+321     payload += format_register(thread_regs\&.r14, 8);
+322     payload += format_register(thread_regs\&.r15, 8);
+323 
+324     // Instruction Pointer
+325     payload += format_register(thread_regs\&.rip, 8);
+326 
+327     // Flags / Segments
+328     payload += format_register(thread_regs\&.rflags, 4);
+329     payload += format_register(thread_regs\&.cs, 4);
+330     payload += format_register(thread_regs\&.ss, 4);
+331 
+332     // Remaining
+333     payload += "x"s * (8 * 4);
+334 
+335     send_message(payload);
+336 }
+.fi
+
+.PP
+References \fBsend_message()\fP\&.
+.SS "void GDBServer::send_supported (const string & peer_supported)"
+
+.PP
+Sends the features that this GDB stub supports to the GDB server\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpeer_supported\fP The features that the server has indicated that it supports 
+.RE
+.PP
+
+.PP
+Definition at line \fB284\fP of file \fBgdbstub\&.cpp\fP\&..PP
+.nf
+284                                                            {
+285 
+286     string out = "PacketSize=4000;qXfer:features:read+;";
+287 
+288     // Must support hardware breakpoints
+289     Vector<string> features = peer_supported\&.split("+;");
+290     for (const auto& feature : features)
+291         if (feature == "hwbreak")
+292             out += "hwbreak+;";
+293 
+294     send_message(out);
+295 }
+.fi
+
+.PP
+References \fBsend_message()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBsystem::cpu_status_t\fP MaxOS::runtime::GDBServer::thread_regs"
+
+.PP
+Definition at line \fB119\fP of file \fBgdbstub\&.h\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.

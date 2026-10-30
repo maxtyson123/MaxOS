@@ -1,46 +1,46 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/resource.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/resources/resource.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/processes/resource.h \- Defines classes for managing process resources such as files and devices\&.  
+/home/runner/work/MaxOS/MaxOS/kernel/include/processes/resources/resource.h \- Defines classes for managing process resources such as files and devices\&.  
 
 .SH SYNOPSIS
 .br
 .PP
 \fC#include <cstddef>\fP
 .br
-\fC#include <common/map\&.h>\fP
+\fC#include <libcommon/map\&.h>\fP
 .br
-\fC#include <common/vector\&.h>\fP
+\fC#include <libcommon/vector\&.h>\fP
 .br
-\fC#include <common/string\&.h>\fP
+\fC#include <libcommon/string\&.h>\fP
+.br
+\fC#include <libcommon/mem\&.h>\fP
+.br
+\fC#include <libkpi/syscalls\&.h>\fP
+.br
+\fC#include <libkpi/resource\&.h>\fP
 .br
 \fC#include <common/logger\&.h>\fP
-.br
-\fC#include <syscalls\&.h>\fP
 .br
 
 .SS "Classes"
 
 .in +1c
 .ti -1c
-.RI "class \fBMaxOS::processes::Resource\fP"
-.br
-.RI "Represents a generic resource that can be opened, closed, read from and written to\&. "
-.ti -1c
-.RI "class \fBMaxOS::processes::BaseResourceRegistry\fP"
+.RI "class \fBMaxOS::processes::resources::BaseResourceRegistry\fP"
 .br
 .RI "Manages the creation, retention and destruction of resources of a certain type\&. Should be subclassed for each resource type\&. "
 .ti -1c
-.RI "class \fBMaxOS::processes::ResourceRegistry< Type >\fP"
+.RI "class \fBMaxOS::processes::resources::ResourceRegistry< Type >\fP"
 .br
 .RI "A resource registry for a specific resource type\&. "
 .ti -1c
-.RI "class \fBMaxOS::processes::GlobalResourceRegistry\fP"
+.RI "class \fBMaxOS::processes::resources::GlobalResourceRegistry\fP"
 .br
 .RI "Manages all the resource registries for each resource type\&. "
 .ti -1c
-.RI "class \fBMaxOS::processes::ResourceManager\fP"
+.RI "class \fBMaxOS::processes::resources::ResourceManager\fP"
 .br
 .RI "Manages the open resources for a process\&. "
 .in -1c
@@ -48,13 +48,13 @@
 
 .in +1c
 .ti -1c
-.RI "typedef ::syscore::ResourceType \fBMaxOS::processes::resource_type_t\fP"
+.RI "typedef KPI::ResourceType \fBMaxOS::processes::resources::resource_type_t\fP"
 .br
 .RI "Alias to make the libsyscore ResourceType accessible here\&. "
 .ti -1c
-.RI "typedef ::syscore::ResourceErrorBase \fBMaxOS::processes::resource_error_base_t\fP"
+.RI "typedef KPI::Resource \fBMaxOS::processes::resources::Resource\fP"
 .br
-.RI "Alias to make the libsyscore ResourceErrorBase accessible here\&. "
+.RI "Alias to make the libsyscore Resource accessible here\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -77,18 +77,18 @@ Max Tyson
 Definition in file \fBresource\&.h\fP\&.
 .SH "Typedef Documentation"
 .PP 
-.SS "typedef ::syscore::ResourceErrorBase \fBMaxOS::processes::resource_error_base_t\fP"
+.SS "typedef KPI::Resource \fBMaxOS::processes::resources::Resource\fP"
 
 .PP
-Alias to make the libsyscore ResourceErrorBase accessible here\&. 
+Alias to make the libsyscore Resource accessible here\&. 
 .PP
-Definition at line \fB23\fP of file \fBresource\&.h\fP\&.
-.SS "typedef ::syscore::ResourceType \fBMaxOS::processes::resource_type_t\fP"
+Definition at line \fB26\fP of file \fBresource\&.h\fP\&.
+.SS "typedef KPI::ResourceType \fBMaxOS::processes::resources::resource_type_t\fP"
 
 .PP
 Alias to make the libsyscore ResourceType accessible here\&. 
 .PP
-Definition at line \fB22\fP of file \fBresource\&.h\fP\&.
+Definition at line \fB25\fP of file \fBresource\&.h\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for Max OS from the source code\&.

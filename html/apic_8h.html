@@ -110,8 +110,8 @@ $(document).ready(function(){initNavTree('apic_8h.html',''); initResizable(); })
 
 <p>Defines classes and structures for handling the Advanced Programmable Interrupt Controller (APIC) in a multiprocessor system.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;common/macros.h&gt;</code><br />
-<code>#include &lt;<a class="el" href="port_8h_source.html">hardwarecommunication/port.h</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;libcommon/macros.h&gt;</code><br />
+<code>#include &lt;libcommon/port.h&gt;</code><br />
 <code>#include &lt;<a class="el" href="acpi_8h_source.html">hardwarecommunication/acpi.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="physical_8h_source.html">memory/physical.h</a>&gt;</code><br />
 </div>
@@ -185,6 +185,11 @@ typedef struct PACKED <a class="el" href="structMaxOS_1_1hardwarecommunication_1
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:ae752e1b8be7b45196bea1f10dde0d1da" id="r_ae752e1b8be7b45196bea1f10dde0d1da"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="apic_8h.html#ae752e1b8be7b45196bea1f10dde0d1da">MaxOS::hardwarecommunication::LAPICSendInterruptFlags</a> { <b>SEND_ALL</b> = (1 &lt;&lt; 0)
+, <b>EXCLUDE_SELF</b> = (1 &lt;&lt; 1)
+ }</td></tr>
+<tr class="memdesc:ae752e1b8be7b45196bea1f10dde0d1da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents bitfield entries in the LAPIC flags.  <a href="apic_8h.html#ae752e1b8be7b45196bea1f10dde0d1da">More...</a><br /></td></tr>
+<tr class="separator:ae752e1b8be7b45196bea1f10dde0d1da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61a67b8f6beb43e8dbf2ed85e52292b0" id="r_a61a67b8f6beb43e8dbf2ed85e52292b0"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="apic_8h.html#a61a67b8f6beb43e8dbf2ed85e52292b0">MaxOS::hardwarecommunication::MADT_TYPE</a> { <br />
 &#160;&#160;<b>PROCESSOR_APIC</b>
 , <b>IO_APIC</b>
@@ -231,7 +236,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Alias for MADT_IO_APIC struct. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000022">Todo:</a></b></dt><dd>Rename for consistency </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>Rename for consistency </dd></dl>
 
 </div>
 </div>
@@ -249,17 +254,39 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 
 <p>How the interrupt should be delivered (can it override others etc). Set fixed/lowest priority for normal interrupts. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000023">Todo:</a></b></dt><dd>use this </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>use this </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="apic_8h_source.html#l00146">146</a> of file <a class="el" href="apic_8h_source.html">apic.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  146</span>                      {</div>
-<div class="line"><span class="lineno">  147</span>        FIXED = 0,</div>
-<div class="line"><span class="lineno">  148</span>        LOWEST_PRIORITY = 1,</div>
-<div class="line"><span class="lineno">  149</span>        SMI = 2,</div>
-<div class="line"><span class="lineno">  150</span>        NMI = 4,</div>
-<div class="line"><span class="lineno">  151</span>        INIT = 5,</div>
-<div class="line"><span class="lineno">  152</span>        EXTINT = 7,</div>
-<div class="line"><span class="lineno">  153</span>    };</div>
+<p class="definition">Definition at line <a class="el" href="apic_8h_source.html#l00158">158</a> of file <a class="el" href="apic_8h_source.html">apic.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  158</span>                      {</div>
+<div class="line"><span class="lineno">  159</span>        FIXED = 0,</div>
+<div class="line"><span class="lineno">  160</span>        LOWEST_PRIORITY = 1,</div>
+<div class="line"><span class="lineno">  161</span>        SMI = 2,</div>
+<div class="line"><span class="lineno">  162</span>        NMI = 4,</div>
+<div class="line"><span class="lineno">  163</span>        INIT = 5,</div>
+<div class="line"><span class="lineno">  164</span>        EXTINT = 7,</div>
+<div class="line"><span class="lineno">  165</span>    };</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ae752e1b8be7b45196bea1f10dde0d1da" name="ae752e1b8be7b45196bea1f10dde0d1da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae752e1b8be7b45196bea1f10dde0d1da">&#9670;&#160;</a></span>LAPICSendInterruptFlags</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="apic_8h.html#ae752e1b8be7b45196bea1f10dde0d1da">MaxOS::hardwarecommunication::LAPICSendInterruptFlags</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Represents bitfield entries in the LAPIC flags. </p>
+
+<p class="definition">Definition at line <a class="el" href="apic_8h_source.html#l00025">25</a> of file <a class="el" href="apic_8h_source.html">apic.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   25</span>                                 {</div>
+<div class="line"><span class="lineno">   26</span>        SEND_ALL        = (1 &lt;&lt; 0),</div>
+<div class="line"><span class="lineno">   27</span>        EXCLUDE_SELF    = (1 &lt;&lt; 1),</div>
+<div class="line"><span class="lineno">   28</span>    };</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -285,16 +312,16 @@ Enumerations</h2></td></tr>
 
 <p>The types of MADT entries. </p>
 
-<p class="definition">Definition at line <a class="el" href="apic_8h_source.html#l00077">77</a> of file <a class="el" href="apic_8h_source.html">apic.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   77</span>                         {</div>
-<div class="line"><span class="lineno">   78</span>        PROCESSOR_APIC,</div>
-<div class="line"><span class="lineno">   79</span>        IO_APIC,</div>
-<div class="line"><span class="lineno">   80</span>        INTERRUPT_SOURCE_OVERRIDE,</div>
-<div class="line"><span class="lineno">   81</span>        NMI_SOURCE,</div>
-<div class="line"><span class="lineno">   82</span>        APIC_NMIS,</div>
-<div class="line"><span class="lineno">   83</span>        APIC_ADDRESS_OVERRIDE,</div>
-<div class="line"><span class="lineno">   84</span>        PROCESSOR_X2APIC,</div>
-<div class="line"><span class="lineno">   85</span>    };</div>
+<p class="definition">Definition at line <a class="el" href="apic_8h_source.html#l00089">89</a> of file <a class="el" href="apic_8h_source.html">apic.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   89</span>                         {</div>
+<div class="line"><span class="lineno">   90</span>        PROCESSOR_APIC,</div>
+<div class="line"><span class="lineno">   91</span>        IO_APIC,</div>
+<div class="line"><span class="lineno">   92</span>        INTERRUPT_SOURCE_OVERRIDE,</div>
+<div class="line"><span class="lineno">   93</span>        NMI_SOURCE,</div>
+<div class="line"><span class="lineno">   94</span>        APIC_NMIS,</div>
+<div class="line"><span class="lineno">   95</span>        APIC_ADDRESS_OVERRIDE,</div>
+<div class="line"><span class="lineno">   96</span>        PROCESSOR_X2APIC,</div>
+<div class="line"><span class="lineno">   97</span>    };</div>
 </div><!-- fragment -->
 </div>
 </div>

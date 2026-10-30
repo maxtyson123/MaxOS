@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['x_0',['x',['../classMaxOS_1_1drivers_1_1peripherals_1_1MouseMoveEvent.html#a3763aa621a1fd415101ca9c7f8335a75',1,'MaxOS::drivers::peripherals::MouseMoveEvent']]],
-  ['xsave_5fenabled_1',['xsave_enabled',['../classMaxOS_1_1system_1_1Core.html#ad14e156086c63771dc81f742a4fbe317',1,'MaxOS::system::Core']]],
-  ['xsdt_5faddress_2',['xsdt_address',['../structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2.html#a4e5baaf2bea49f02c2c077ab024e18bb',1,'MaxOS::hardwarecommunication::RSDPDescriptor2']]]
+  ['zero_0',['zero',['../structmultiboot__mmap__entry.html#a1e8db52da1ca1c6f5e2e96baec2c9256',1,'multiboot_mmap_entry']]]
 ];

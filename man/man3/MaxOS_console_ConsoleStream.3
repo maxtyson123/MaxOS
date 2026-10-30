@@ -1,0 +1,174 @@
+.TH "MaxOS::console::ConsoleStream" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::console::ConsoleStream \- A stream that can be used to write to a console\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <console\&.h>\fP
+.PP
+Inherits MaxOS::common::OutputStream\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBConsoleStream\fP (\fBConsole\fP *)"
+.br
+.RI "Construct a new \fBConsole\fP Stream object\&. "
+.ti -1c
+.RI "void \fBwrite_char\fP (char c) override"
+.br
+.RI "write a character to the console stream "
+.ti -1c
+.RI "void \fBset_cursor\fP (uint16_t x, uint16_t y)"
+.br
+.RI "Set the m_position of the cursor\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A stream that can be used to write to a console\&. 
+.PP
+Definition at line \fB92\fP of file \fBconsole\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ConsoleStream::ConsoleStream (\fBConsole\fP * console)\fC [explicit]\fP"
+
+.PP
+Construct a new \fBConsole\fP Stream object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIconsole\fP The console to create the stream on 
+.RE
+.PP
+
+.PP
+Definition at line \fB423\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+424         : m_console(console) {
+425 
+426 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void ConsoleStream::set_cursor (uint16_t x, uint16_t y)"
+
+.PP
+Set the m_position of the cursor\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The x coordinate of the cursor 
+.br
+\fIy\fP The y coordinate of the cursor 
+.RE
+.PP
+
+.PP
+Definition at line \fB509\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+509                                                      {
+510 
+511     // Set the x and y coordinates
+512     m_cursor_x = x;
+513     m_cursor_y = y;
+514 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::console::FramebufferConsole::finish()\fP\&.
+.SS "void ConsoleStream::write_char (char c)\fC [override]\fP"
+
+.PP
+write a character to the console stream 
+.PP
+\fBParameters\fP
+.RS 4
+\fIc\fP The character to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB435\fP of file \fBconsole\&.cpp\fP\&..PP
+.nf
+435                                      {
+436 
+437     uint16_t spaces = 0;
+438 
+439     // If the character placement is more than the width of the console go on a new line
+440     if(m_cursor_x >= m_console\->width() && c != '\\n') {
+441         line_feed();
+442         write("             ");
+443     }
+444 
+445     // Check if the character is an ANSI escape code
+446     if(c == '\\033') is_ansi = true;
+447 
+448     // Handle the character
+449     switch(c) {
+450         // New line
+451         case '\\n':
+452             // Go to the next line, if it is more than what the console can fit then scroll
+453             if(++m_cursor_y >= m_console\->height()) {
+454                 m_console\->scroll_up();
+455 
+456                 // Ensure there is space at the bottom to write
+457                 m_cursor_y = m_console\->height() \- 1;
+458             }
+459 
+460             // don't break here, we want to go to the next case because of the \\r
+461             [[fallthrough]];
+462 
+463             // Carriage return
+464         case '\\r':
+465             m_cursor_x = 0;
+466             break;
+467 
+468             // End of string
+469         case '\\0':
+470             break;
+471 
+472             // Backspace
+473         case '\\b':
+474             m_cursor_x\-\-;
+475             break;
+476 
+477             // Tab
+478         case '\\t':
+479 
+480             // Pad with spaces until a tab is reached
+481             spaces = 8 \- (m_cursor_x % 8);
+482             for(uint16_t i = 0; i < spaces; i++)
+483                 write_char(' ');        //TODO: Recursive, dont
+484             break;
+485 
+486         default:
+487             // Put the character on the console
+488             m_console\->put_character(m_cursor_x, m_cursor_y, c);
+489 
+490             // Increment the x coordinate (ANSI aren't rendered)
+491             if(!is_ansi)
+492                 m_cursor_x++;
+493 
+494             break;
+495 
+496     }
+497 
+498     // Check if the ANSI code is complete
+499     if(c == 'm') is_ansi = false;
+500 
+501 }
+.fi
+
+.PP
+References \fBMaxOS::console::Console::height()\fP, \fBMaxOS::console::Console::put_character()\fP, \fBMaxOS::console::Console::scroll_up()\fP, \fBMaxOS::console::Console::width()\fP, and \fBwrite_char()\fP\&.
+.PP
+Referenced by \fBwrite_char()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Max OS from the source code\&.
