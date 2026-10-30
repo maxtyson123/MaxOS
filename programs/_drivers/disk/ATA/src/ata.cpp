@@ -165,8 +165,6 @@ void AdvancedTechnologyAttachment::write(uint32_t sector, uint8_t* data_buffer, 
 		yield();
 		status = m_command_port.read();
 	}
-
-	flush();
 }
 
 /**

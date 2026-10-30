@@ -60,8 +60,8 @@ void VirtualFileSystem::mount_filesystem(FileSystem* filesystem) {
 	if (filesystems.find(filesystem) != filesystems.end())
 		return;
 
-	// Get the mount point for the filesystem
-	string mount_point = "/" + filesystems.size();
+	// Get the mount point for the filesystem (@todo proper tracking)
+    string mount_point = string("/") + string((int) m_next_mount_number++);
 
 	// Add the filesystem to the map
 	filesystems.insert(filesystem, mount_point);

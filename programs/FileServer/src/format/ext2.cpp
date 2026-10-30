@@ -60,6 +60,10 @@ Ext2Volume::Ext2Volume(Disk* disk, lba_t partition_offset)
 	for(uint32_t i = 0; i < sectors_to_read; ++i)
 		disk->read(bgdt_lba + i, &bg_buffer, 512);
 
+    // Cache the groups
+    bgdt_cache = new uint8_t[sectors_to_read * 512];
+    memcpy(bgdt_cache, bg_buffer.raw(), sectors_to_read * 512);
+
 	// Store the block groups
 	for(uint32_t i = 0; i < total_block_groups; ++i) {
 		block_groups[i] = new block_group_descriptor_t;
@@ -326,13 +330,25 @@ void Ext2Volume::write_back_block_groups() const {
 
 	// Copy the block groups into the buffer
 	buffer_t bg_buffer(sectors_to_write * 512);
+    bg_buffer.clear();
 	for(uint32_t i = 0; i < total_block_groups; ++i)
 		bg_buffer.copy_from(block_groups[i], sizeof(block_group_descriptor_t));
 
 	// Write the buffer to disk
-	bg_buffer.set_offset(0);
-	for(uint32_t i = 0; i < sectors_to_write; ++i)
-		disk->write(bgdt_lba + i, &bg_buffer, 512);
+	for(uint32_t i = 0; i < sectors_to_write; ++i) {
+
+	    // Group didnt change
+	    if(bgdt_cache && memcmp(bgdt_cache + i * 512, bg_buffer.raw() + i * 512, 512) == 0)
+	        continue;
+
+	    // Write to disk
+	    bg_buffer.set_offset(i * 512);
+	    disk->write(bgdt_lba + i, &bg_buffer, 512);
+
+	    // Write to cache
+	    if(bgdt_cache)
+	        memcpy(bgdt_cache + i * 512, bg_buffer.raw() + i * 512, 512);
+    }
 }
 
 /**
@@ -685,7 +701,7 @@ size_t InodeHandler::grow(size_t amount, bool flush) {
 	if(flush)
 		save();
 
-	return size() + amount;
+	return size();
 }
 
 /**
@@ -764,14 +780,15 @@ void Ext2File::write(buffer_t* data, size_t amount) {
 	size_t written = 0;
 	while(written < amount) {
 
-		// Read the block
 		uint32_t block = m_inode.block_cache[current_block++];
-		m_volume->read_block(block, &buffer);
 
-		// Where in this block to start writing
-		size_t buffer_start = (current_block - 1 == block_start) ? block_offset : 0;
-		size_t writable = (amount - written < block_size - buffer_start) ? (amount - written) : (block_size -
-		                                                                                         buffer_start);
+	    // Where in this block to start writing
+	    size_t buffer_start = (current_block - 1 == block_start) ? block_offset : 0;
+	    size_t writable = (amount - written < block_size - buffer_start) ? (amount - written) : (block_size - buffer_start);
+
+	    // Only read the old contents back when part of the block is kept
+	    if (buffer_start != 0 || writable != block_size)
+		    m_volume->read_block(block, &buffer);
 
 		// Update the block
 		buffer.copy_from(data, writable, buffer_start, written);

@@ -34,6 +34,8 @@ namespace FileServer::vfs {
 
 		private:
 			MaxOS::common::Map<FileSystem*, string> filesystems;
+	        size_t m_next_mount_number = 0;
+
 			inline static VirtualFileSystem* s_current_file_system = nullptr;
 
 			MaxOS::common::Map<string, Directory*>	m_directory_cache;

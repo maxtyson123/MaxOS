@@ -456,6 +456,11 @@ cpu_status_t* Scheduler::schedule(cpu_status_t* cpu_state) {
 	m_ticks++;
 	current_thread->ticks++;
 
+    // The idle thread has no time slice to protect
+    Process* running_process = current_process();
+    if (running_process && running_process->is_kernel)
+        return schedule_next(cpu_state);
+
 	// Thread hasn't used its time slot yet
 	if(current_thread->ticks % TICKS_PER_EVENT)
 		return cpu_state;

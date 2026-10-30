@@ -344,6 +344,7 @@ namespace FileServer::format::ext2 {
 
 			superblock_t superblock;                            ///< The superblock of the ext2 filesystem
 			block_group_descriptor_t** block_groups;            ///< The block group descriptors
+	        uint8_t* bgdt_cache = nullptr;                      ///< The block group descriptor table last read/written
 
 			size_t block_size;                                  ///< How large each block is (in bytes)
 			uint32_t block_group_descriptor_table_block;        ///< Where the block group descriptor table starts
