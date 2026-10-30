@@ -471,6 +471,7 @@ void CPU::PANIC(char const* message, cpu_status_t* status) {
 	Process* process = GlobalScheduler::current_process();
 
 	// Print using the backend
+    Logger::Out()   << "\n";
 	Logger::ERROR() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n";
 	Logger::ERROR() << "Kernel Panic: " << message;
 	Logger::ERROR() << "On Core: " << (panic_core ? panic_core->id : 0) << "\n";
@@ -528,9 +529,10 @@ cpu_status_t* CPU::prepare_for_panic(cpu_status_t* status, const string& msg) {
 
 		// If the faulting address is in lower half just kill the process and move on
 		if (status && !memory::PhysicalMemoryManager::in_higher_region(status->rip)) {
-			Logger::ERROR() << "CPU Panicked (i " << (int)status->interrupt_number << ") in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
-			Logger::ERROR() << msg;
-			panic_lock.unlock();
+		    Logger::Out() << "\n";
+            Logger::ERROR() << msg;
+            Logger::ERROR() << "CPU Panicked (i " << (int)status->interrupt_number << ") in process " << process->name.c_str() << " at 0x" << status->rip << " - killing process\n";
+            panic_lock.unlock();
 			return GlobalScheduler::force_remove_process(process);
 		}
 

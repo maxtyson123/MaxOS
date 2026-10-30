@@ -8,7 +8,8 @@
 #include <libdriver/server/drivermanager_client.h>
 #include <libdriver/server/drivermanager_types.h>
 #include <libdriver/driver.h>
-
+#include <libdriver/server/disk_client.h>
+#include <partition/msdos.h>
 
 namespace FileServer::filesystem {
 

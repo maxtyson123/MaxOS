@@ -46,22 +46,26 @@ void MSDOSPartition::mount_partitions(Disk* disk) {
 		if (entry.type == 0)
 			continue;
 
+		klog("MSDOSPartition - found:");
+
 		// Create a file system for the partition
 		switch ((PartitionType) entry.type) {
 			case PartitionType::EMPTY:
-				klog("Empty partition\n");
+				klog("%h empty partition\n");
 				break;
 
 			case PartitionType::FAT32:
 				vfs->mount_filesystem(new Fat32FileSystem(disk, entry.start_LBA));
+				klog("%h fat32 partition\n");
 				break;
 
 			case PartitionType::LINUX_EXT2:
 				vfs->mount_filesystem(new ext2::Ext2FileSystem(disk, entry.start_LBA));
+				klog("%h ext2 partition\n");
 				break;
 
 			default:
-				klog("Unknown or unimplemented partition type: 0x%x\n", (uint64_t) entry.type );
+				klog("%h unknown or unimplemented partition type: 0x%x\n", (uint64_t) entry.type );
 		}
 	}
 }

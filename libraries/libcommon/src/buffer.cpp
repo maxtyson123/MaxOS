@@ -133,6 +133,15 @@ void Buffer::set_offset(size_t offset) {
 }
 
 /**
+ * @brief The offset that the next buffer operation will start at
+ *
+ * @return The current offset
+ */
+size_t Buffer::offset() const {
+    return m_offset;
+}
+
+/**
  * @brief Safely writes a byte to the buffer at the current offset
  *
  * @param byte The byte to write
@@ -195,7 +204,7 @@ uint8_t Buffer::read(size_t offset) {
 void Buffer::copy_from(const Buffer* buffer) {
 
 	// Copy the buffer
-	ASSERT(buffer->capacity() <= capacity(), "Copy exceeds buffer capacity");
+	ASSERT(buffer->capacity() <= capacity(), "Copy exceeds buffer capacity (length=%d offset=%d capacity=%d)", (int)buffer->capacity(), (int)m_offset, (int)m_capacity);
 	copy_from(buffer->raw(), buffer->capacity());
 
 }
@@ -209,7 +218,7 @@ void Buffer::copy_from(const Buffer* buffer) {
 void Buffer::copy_from(const Buffer* buffer, size_t length) {
 
 	// Copy the buffer
-	ASSERT(length <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	ASSERT(length <= buffer->capacity(), "Copy exceeds external buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)m_offset, (int)buffer->capacity());
 	copy_from(buffer->raw(), length);
 
 }
@@ -223,7 +232,7 @@ void Buffer::copy_from(const Buffer* buffer, size_t length) {
 void Buffer::copy_from(const Buffer* buffer, size_t length, size_t offset) {
 
 	// Copy the buffer
-	ASSERT(length <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	ASSERT(length <= buffer->capacity(), "Copy exceeds external buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)offset, (int)buffer->capacity());
 	copy_from(buffer->raw(), length, offset);
 
 }
@@ -239,7 +248,7 @@ void Buffer::copy_from(const Buffer* buffer, size_t length, size_t offset) {
 void Buffer::copy_from(const Buffer* buffer, size_t length, size_t offset, size_t offset_other) {
 
 	// Copy the buffer
-	ASSERT(length + offset_other <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	ASSERT(length + offset_other <= buffer->capacity(), "Copy exceeds external buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)offset, (int)buffer->capacity());
 	copy_from(buffer->raw() + offset_other, length, offset);
 
 }
@@ -253,7 +262,7 @@ void Buffer::copy_from(const Buffer* buffer, size_t length, size_t offset, size_
 void Buffer::copy_from(void const* source, size_t length) {
 
 	// Copy the bytes
-	ASSERT(length + m_offset <= m_capacity, "Copy exceeds buffer capacity");
+    ASSERT(length + m_offset <= m_capacity, "Copy exceeds buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)m_offset, (int)m_capacity);
 	memcpy(m_bytes + m_offset, source, length);
 	set_offset(m_offset + length);
 }
@@ -268,7 +277,7 @@ void Buffer::copy_from(void const* source, size_t length) {
 void Buffer::copy_from(void const* source, size_t length, size_t offset) {
 
 	// Copy the bytes
-	ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
+	ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)m_offset, (int)m_capacity);
 	memcpy(m_bytes + offset + m_offset, source, length);
 	set_offset(m_offset + length);
 
@@ -282,7 +291,7 @@ void Buffer::copy_from(void const* source, size_t length, size_t offset) {
 void Buffer::copy_to(Buffer* buffer) {
 
 	// Copy the buffer
-	ASSERT(capacity() <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	ASSERT(capacity() <= buffer->capacity(), "Copy exceeds external buffer capacity (length=%d offset=%d capacity=%d)", (int)buffer->capacity(), (int)m_offset, (int)m_capacity);
 	copy_to(buffer->raw(), capacity());
 
 }
@@ -296,7 +305,7 @@ void Buffer::copy_to(Buffer* buffer) {
 void Buffer::copy_to(Buffer* buffer, size_t length) {
 
 	// Copy the buffer
-	ASSERT(length <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	ASSERT(length <= buffer->capacity(), "Copy exceeds external buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)m_offset, (int)buffer->capacity());
 	copy_to(buffer->raw(), length);
 
 }
@@ -311,7 +320,7 @@ void Buffer::copy_to(Buffer* buffer, size_t length) {
 void Buffer::copy_to(Buffer* buffer, size_t length, size_t offset) {
 
 	// Copy the bytes
-	ASSERT((length + offset) <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	ASSERT((length + offset) <= buffer->capacity(), "Copy exceeds external buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)offset, (int)buffer->capacity());
 	copy_to(buffer->raw(), length, offset);
 
 }
@@ -327,7 +336,7 @@ void Buffer::copy_to(Buffer* buffer, size_t length, size_t offset) {
 void Buffer::copy_to(Buffer* buffer, size_t length, size_t offset, size_t offset_other) {
 
 	// Copy the bytes
-	ASSERT((length + offset) <= buffer->capacity(), "Copy exceeds external buffer capacity");
+	ASSERT((length + offset) <= buffer->capacity(), "Copy exceeds external buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)offset, (int)buffer->capacity());
 	copy_to(buffer->raw() + offset_other, length, offset);
 
 }
@@ -342,7 +351,7 @@ void Buffer::copy_to(Buffer* buffer, size_t length, size_t offset, size_t offset
 void Buffer::copy_to(void* destination, size_t length) {
 
 	// Copy the bytes
-	ASSERT(length + m_offset <= (m_capacity), "Copy exceeds buffer capacity");
+	ASSERT(length + m_offset <= (m_capacity), "Copy exceeds buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)m_offset, (int)m_capacity);
 	memcpy(destination, m_bytes + m_offset, length);
 	set_offset(m_offset + length);
 
@@ -358,7 +367,7 @@ void Buffer::copy_to(void* destination, size_t length) {
 void Buffer::copy_to(void* destination, size_t length, size_t offset) {
 
 	// Copy the bytes
-	ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity");
+	ASSERT((length + offset + m_offset) <= m_capacity, "Copy exceeds buffer capacity (length=%d offset=%d capacity=%d)", (int)length, (int)m_offset, (int)m_capacity);
 	memcpy(destination, m_bytes + offset + m_offset, length);
 	set_offset(m_offset + length);
 

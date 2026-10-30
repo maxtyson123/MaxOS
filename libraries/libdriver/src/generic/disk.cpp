@@ -27,8 +27,16 @@ Disk::~Disk() = default;
  */
 void Disk::read(uint32_t sector, buffer_t* data_buffer, size_t amount) {
 
-	size_t length = (data_buffer->capacity() > amount) ? amount : data_buffer->capacity();
-	read(sector, data_buffer->raw(), length);
+    // Only read as much as the buffer can still hold
+    size_t remaining = data_buffer->capacity() > data_buffer->offset() ? data_buffer->capacity() - data_buffer->offset() : 0;
+    size_t length = (amount > 512) ? 512 : amount;
+    if (length > remaining)
+        length = remaining;
+
+    // Read the sector, then place it at the buffer's current offset
+    uint8_t sector_data[512] = {};
+    read(sector, sector_data, length);
+    data_buffer->copy_from(sector_data, length);
 
 }
 
@@ -41,6 +49,9 @@ void Disk::read(uint32_t sector, buffer_t* data_buffer, size_t amount) {
  */
 void Disk::read(uint32_t sector, uint8_t* data_buffer, size_t amount) {
 
+    disk_sector_t result = read_sector(sector);
+    memcpy(data_buffer, result.data, amount > 512 ? 512 : amount);
+
 }
 
 /**
@@ -51,8 +62,16 @@ void Disk::read(uint32_t sector, uint8_t* data_buffer, size_t amount) {
  */
 void Disk::write(uint32_t sector, buffer_t* data, size_t amount) {
 
-	size_t length = (data->capacity() > 512) ? 512 : data->capacity();
-	write(sector, data->raw(), length);
+    // Only write what the buffer actually holds from its current offset
+    size_t remaining = data->capacity() > data->offset() ? data->capacity() - data->offset() : 0;
+    size_t length = (amount > 512) ? 512 : amount;
+    if (length > remaining)
+        length = remaining;
+
+    // Take the data from the buffer's current offset
+    uint8_t sector_data[512] = {};
+    data->copy_to(sector_data, length);
+    write(sector, sector_data, length);
 
 }
 
@@ -64,6 +83,27 @@ void Disk::write(uint32_t sector, buffer_t* data, size_t amount) {
  * @param count The amount of data to write
  */
 void Disk::write(uint32_t sector, uint8_t* data, size_t count) {
+
+    disk_sector_t out = {};
+    memcpy(out.data, data, count > 512 ? 512 : count);
+    write_sector(sector, out);
+
+}
+
+/**
+ * @brief Read one whole sector by value. The ATA driver (which overrides read) answers the RPC through this.
+ */
+disk_sector_t Disk::read_sector(uint32_t sector) {
+
+    disk_sector_t result = {};
+    read(sector, result.data, 512);
+    return result;
+}
+
+int Disk::write_sector(uint32_t sector, disk_sector_t data) {
+
+    write(sector, data.data, 512);
+    return 0;
 }
 
 /**

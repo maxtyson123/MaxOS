@@ -12,6 +12,7 @@ source $SCRIPTDIR/MaxOS.sh
 # TODO: make boot part 100mb instead
 
 IMAGE="../MaxOS.img"
+IMAGE_SIZE_GIB=2
 
 # If the disk image already exists no need to setup
 if [ -f "$IMAGE" ]; then
@@ -28,46 +29,89 @@ fi
 ON_FAIL="rm -f $IMAGE"
 
 #Create a 2GB image
-qemu-img create "$IMAGE" 2G  || fail "Could not create image"
+qemu-img create "$IMAGE" "${IMAGE_SIZE_GIB}G" || fail "Could not create image"
 
 #Partion & Mount the image
+FDISK_HEADS=255
+FDISK_SECTORS=63
+SECTORS_PER_CYLINDER=$((FDISK_HEADS * FDISK_SECTORS))
+FDISK_SECTOR_SIZE=512
+FDISK_CYLINDERS=$((IMAGE_SIZE_GIB * 1024 * 1024 * 1024 / FDISK_SECTOR_SIZE / SECTORS_PER_CYLINDER))
+
+PART1_START_CYL=1
+PART1_END_CYL=130
+PART2_START_CYL=131
+PART2_END_CYL=243
+
+case "$FILESYSTEM_TYPE" in
+    FAT)  TYPE_CODE="0B" ;;
+    EXT2) TYPE_CODE="83" ;;
+    *)    fail "Unsupported filesystem type: $FILESYSTEM_TYPE" ;;
+esac
+
 dev=""
 msg "Partitioning image"
+
 if [ "$IS_MACOS" -eq 1 ]; then
-   dev_arr=($(hdiutil attach -nomount ../MaxOS.img))
-   dev=${dev_arr[0]}
-   sudo diskutil partitionDisk $dev MBRFormat "MS-DOS FAT32" "BOOT" 1G "MS-DOS FAT32" "DATA" R
-    sudo diskutil unmountDisk $dev
-else
+    # Attach image without mounting its partitions
+    dev_arr=($(hdiutil attach -nomount "$IMAGE")) || fail "Could not attach image"
+    dev=${dev_arr[0]}
 
-    if [ "$FILESYSTEM_TYPE" = "FAT" ]; then
-      TYPE_CODE="b"  # FAT32
-    else
-      TYPE_CODE="83" # EXT2
-    fi
+    # Reserve 1 MiB after the MBR for GRUB
+    PART1_START_SECTOR=2048
+    PART1_SIZE_SECTORS=$((PART1_END_CYL * SECTORS_PER_CYLINDER - PART1_START_SECTOR))
 
-  fdisk "$IMAGE" -u=cylinders << EOF
-  o
-  n
-  p
-  1
-  1
-  130
-  t
-  $TYPE_CODE
-  a
-  1
-  n
-  p
-  2
-  131
-  243
-  t
-  2
-  $TYPE_CODE
-  w
+    PART2_START_SECTOR=$(((PART2_START_CYL - 1) * SECTORS_PER_CYLINDER))
+    PART2_SIZE_SECTORS=$(((PART2_END_CYL - PART2_START_CYL + 1) * SECTORS_PER_CYLINDER))
+
+    sudo fdisk -c "$FDISK_CYLINDERS" -h "$FDISK_HEADS" -s "$FDISK_SECTORS" -e "$dev" <<EOF || fail "Could not partition image"
+y
+reinit
+edit 1
+$TYPE_CODE
+n
+$PART1_START_SECTOR
+$PART1_SIZE_SECTORS
+edit 2
+$TYPE_CODE
+n
+$PART2_START_SECTOR
+$PART2_SIZE_SECTORS
+flag 1
+write
+y
+quit
 EOF
-  dev=$(sudo losetup --find --show --partscan "$IMAGE")
+
+    # Reattach to refresh the partition devices
+    hdiutil detach "$dev" >/dev/null || fail "Could not detach image"
+    dev_arr=($(hdiutil attach -nomount "$IMAGE")) || fail "Could not reattach image"
+    dev=${dev_arr[0]}
+
+else
+    fdisk -H "$FDISK_HEADS" -S "$FDISK_SECTORS" -u=cylinders "$IMAGE" <<EOF || fail "Could not partition image"
+o
+n
+p
+1
+$PART1_START_CYL
+$PART1_END_CYL
+t
+$TYPE_CODE
+a
+1
+n
+p
+2
+$PART2_START_CYL
+$PART2_END_CYL
+t
+2
+$TYPE_CODE
+w
+EOF
+
+    dev=$(sudo losetup --find --show --partscan "$IMAGE") || fail "Could not attach loop device"
 fi
 
 # Get the partions
@@ -105,19 +149,24 @@ create_fs_part() {
   msg "Creating filesystem for partition $number"
 
   if [ "$FILESYSTEM_TYPE" = "FAT" ]; then
-    if [ "$IS_MACOS" -eq 1 ]; then
-        sudo mount_msdos -m 0777 -M 0777 "$part" "$mount_point" || fail "Could not mount partition $number"
-    else
-      mkfs.vfat -F 32 "$part" || fail "Could not create FAT32 filesystem"
-      mount "$part" "$mount_point" 2>/dev/null || fail "Could not mount image to mount point"
-    fi
+      if [ "$IS_MACOS" -eq 1 ]; then
+          sudo newfs_msdos -F 32 "/dev/r${part#/dev/}" || fail "Could not create FAT32 filesystem"
+          sudo mount_msdos -m 0777 -M 0777 "$part" "$mount_point" || fail "Could not mount partition $number"
+      else
+          mkfs.vfat -F 32 "$part" || fail "Could not create FAT32 filesystem"
+          mount "$part" "$mount_point" 2>/dev/null || fail "Could not mount image to mount point"
+      fi
   else
     # Format the image
     MKFS="mkfs.ext2"
+    FORMAT_PART="$part"
+
     if [ "$IS_MACOS" -eq 1 ]; then
       MKFS="/opt/homebrew/opt/e2fsprogs/sbin/$MKFS"
+      FORMAT_PART="/dev/r${part#/dev/}"
     fi
-    sudo "$MKFS" "$part" 2>/dev/null || fail "Could not create EXT2 filesystem"
+
+    sudo "$MKFS" -F "$FORMAT_PART" || fail "Could not create EXT2 filesystem on $FORMAT_PART"
 
     if [ "$IS_MACOS" -eq 1 ]; then
 
@@ -190,7 +239,14 @@ if [ "$IS_MACOS" -eq 1 ]; then
     cp -X "$GRUB_LOCAL_DIR"/*.mod "$GRUB_DEST/" || fail "Could not copy grub modules to image"
     chmod -R u+w "$GRUB_DEST"
 
+    CORE_SIZE=$(stat -f%z "$CORE_IMG") || fail "Could not determine core.img size"
+    EMBED_SIZE=$(((PART1_START_SECTOR - 1) * FDISK_SECTOR_SIZE))
+
+    msg "GRUB core image: ${CORE_SIZE} bytes; embedding space: ${EMBED_SIZE} bytes"
+    [ "$CORE_SIZE" -le "$EMBED_SIZE" ] || fail "GRUB core image exceeds available embedding space"
+
     rm -f $CORE_IMG
+
 
     msg "grub manually installed to disk image"
     sync

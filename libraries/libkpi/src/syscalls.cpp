@@ -99,6 +99,14 @@ namespace MaxOS::KPI{
 						message[index++] = str[i];
 					break;
 				}
+
+			    case 'h': {
+			        // "%h" must reach the kernel untouched so it can print the message without the log header
+			        message[index++] = '%';
+			        if (index < sizeof(message) - 1)
+			            message[index++] = 'h';
+			        break;
+			    }
 			}
 
 		}

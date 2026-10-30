@@ -38,7 +38,9 @@ void driver_ready(mstring id) {
 	// Mark the driver as ready
 	device->driver_ready = true;
 	fire_on_driver_ready(device->id);
-    klog("Driver ready: %s\n", device->id_info().device_name.c_str());
+
+    auto info = device->id_info();
+    klog("Driver ready: %d %s\n", (int)device->id, info.device_name.length() ? info.device_name.c_str() : "(unnamed device)");
 }
 
 

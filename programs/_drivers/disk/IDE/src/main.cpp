@@ -22,6 +22,7 @@ extern "C" void _start(int argc, char* argv[])
 	// Fetch the device id
 	if (argc <= 1)
 		return;
+
 	string id = argv[1];
 
 	// Initialise the device

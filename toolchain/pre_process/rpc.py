@@ -634,7 +634,7 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             "}",
             "",
             f"void {class_name}Server::start(mstring id) {{",
-            "    mstring server_name = id;",
+            '    mstring server_name = (mstring)"driver_" + id;',
             "    rpc_server_loop(server_name.c_str());",
             "}",
             ""
@@ -680,6 +680,7 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
         # Client: class (TODO: build constructor with pattern
         cli_cpp_lines.append(f"{class_name}Client::{class_name}Client(mstring id) {{")
         cli_cpp_lines.append(f'   m_id = (mstring)"driver_" + id;')
+        cli_cpp_lines.append(f'   rpc_wait_for_server(m_id.c_str());')
         cli_cpp_lines.append("}")
         cli_cpp_lines.append("")
         cli_cpp_lines.append(f"{class_name}Client::~{class_name}Client() = default;")
@@ -956,7 +957,7 @@ def generate_server_source(service: RpcService, output_path: Path, include_prefi
                 lines.append(f"        _args.{push_fn}({arg.name});")
             else:
                 lines.append(f"        _args.push_blob(&{arg.name}, sizeof({arg.type_cpp}));")
-        lines.append(f'        rpc_call(ep.c_str(), "{event.name}", &_args, nullptr, 0);')
+        lines.append(f'        rpc_call(ep.c_str(), "{event.name}", &_args, nullptr, (size_t)RPCMEssageFlags::ONE_WAY);')
         lines.append( "    }")
         lines.append( "}")
         lines.append( "")

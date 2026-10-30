@@ -61,6 +61,13 @@ namespace MaxOS::hardwarecommunication {
 
 	};
 
+    class DivideByZeroHandler : public ExceptionHandler {
+        public:
+            DivideByZeroHandler() : ExceptionHandler(0x00) {	}
+
+            string get_message(system::cpu_status_t* status) final;
+    };
+
 	class InvaildOpCodeHandler : public ExceptionHandler {
 		public:
 			InvaildOpCodeHandler() : ExceptionHandler(0x06) {	}
@@ -129,12 +136,13 @@ namespace MaxOS::hardwarecommunication {
 		private:
 
 			// Exception handles
-			InvaildOpCodeHandler m_opce_handler;
-			GeneralProtectionHandler m_gpe_handler;
-			PageFaultHandler m_page_fault_handler;
-			CPUStopHandler m_cpu_stop_handler;
+            DivideByZeroHandler m_db0_handler;
+            InvaildOpCodeHandler m_opce_handler;
+            GeneralProtectionHandler m_gpe_handler;
+            PageFaultHandler m_page_fault_handler;
+            CPUStopHandler m_cpu_stop_handler;
 
-		public:
+        public:
 			ExceptionHandlers();
 			~ExceptionHandlers();
 

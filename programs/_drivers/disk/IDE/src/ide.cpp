@@ -119,55 +119,7 @@ void IntegratedDriveElectronicsController::setup_ata(uint16_t command_base, uint
 	int id = register_device(hardware_mapping, device_identification);
 
 	// Start driver (@todo assumes ata is also in intrid)
-	const char** args =  new const char*[1];
-	args[0] = string(id).c_str();
+    string id_str = string(id);
+    const char* args[1] = { id_str.c_str() };
 	exec_file("ATADriver", "/0/boot/initrd/ATADriver.elf", args, 1);
 }
-
-
-//
-// /**
-//  * @brief Initialise the IDE controller by identifying the devices
-//  */
-// void IntegratedDriveElectronicsController::initialise() {
-//
-// 	// Loop through the devices and identify them
-// 	for (auto &device: devices) {
-//
-// 		// Check if the device is present
-// 		auto ata_device = device.first;
-// 		if (ata_device == nullptr)
-// 			continue;
-//
-// 		// Identify the device
-// 		bool exists = ata_device->identify();
-//
-// 		// Remove the device if it does not exist
-// 		if (!exists) {
-// 			devices.erase(ata_device);
-// 			delete ata_device;
-// 			continue;
-// 		}
-// 	}
-//
-// 	// Log the init done
-// 	Logger::DEBUG() << "IDE Controller: Initialised " << devices.size() << " devices\n";
-// }
-//
-// /**
-//  * @brief Activate the IDE controller by mounting the devices to the virtual file system
-//  */
-// void IntegratedDriveElectronicsController::activate() {
-//
-// 	// Loop through the devices and load the partitions
-// 	for (auto &device: devices) {
-//
-// 		// Ensure there is a device and that it is the master
-// 		if (device.first == nullptr || !device.second)
-// 			continue;
-//
-// 		// Mount the device
-// 		MSDOSPartition::mount_partitions(device.first);
-//
-// 	}
-// }

@@ -66,7 +66,7 @@ namespace FileServer::format::ext2 {
 		uint16_t superblock_group;              ///< If there is a backup superblock, which group it is stored in
 		uint32_t optional_features;             ///< Features that are not required for read/write support but can help performance (see OptionalFeatures)
 		uint32_t required_features;             ///< Features that must be present for read/write support (see RequiredFeatures)
-		uint16_t read_only_features;            ///< Features that are only required in read-only mode (see ReadOnlyFeatures)
+		uint32_t read_only_features;            ///< Features that are only required in read-only mode (see ReadOnlyFeatures)
 		uint8_t filesystem_id[16];              ///< A unique identifier for the filesystem
 		uint8_t volume_name[16];                ///< The volume name (is null-terminated)
 		uint8_t last_mount_path[64];            ///< The path where the filesystem was last mounted (is null-terminated)
@@ -78,7 +78,7 @@ namespace FileServer::format::ext2 {
 		uint32_t journal_inode;                 ///< The inode number of the journal file
 		uint32_t journal_device;                ///< The device number of the journal file
 		uint32_t orphan_inodes_start;           ///< The start of the list of inodes without a directory entry that need to be deleted
-		uint8_t free[276];                      ///< Reserved for future expansion
+		uint8_t free[788];                      ///< Reserved for future expansion
 
 	} superblock_t;
 

@@ -13,6 +13,8 @@
 
 
 #else
+#include "libkpi/syscalls.h"
+#include "libkpi/ipc/messages.h"
 #include <libkpi/syscalls.h>
 #include <libkpi/processes/process.h>
 #define ASSERT(condition, format, ...) user_assert_handler(condition, format, ##__VA_ARGS__)
@@ -24,6 +26,7 @@ inline void user_assert_handler(bool condition, const char* format, ...) {
     va_list parameters;
     va_start(parameters, format);
 
+    MaxOS::KPI::klog("%h\n");
 	MaxOS::KPI::klog("ASSERT FAILED: %s\n", MaxOS::String::formatted(format, parameters).c_str());
 	MaxOS::KPI::processes::exit(1);
 }

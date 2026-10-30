@@ -116,6 +116,13 @@ cpu_status_t* ExceptionHandler::handle_interrupt(cpu_status_t *status) {
 
 }
 
+
+string DivideByZeroHandler::get_message(cpu_status_t *status) {
+
+    return  StringBuilder() << "Division by 0 executed at 0x" << status->rip << "\n";
+
+}
+
 string InvaildOpCodeHandler::get_message(cpu_status_t *status) {
 
 	return  StringBuilder() << "Invaild opcode executed at 0x" << status->rip << "\n";

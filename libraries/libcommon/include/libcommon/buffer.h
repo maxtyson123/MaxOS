@@ -43,6 +43,7 @@ namespace MaxOS::common {
 
 			bool update_offset = true; ///< Should operations write/read/copy update the offset in the buffer?
 			void set_offset(size_t offset);
+	        [[nodiscard]] size_t offset() const;
 
 			[[nodiscard]] size_t capacity() const;
 			void resize(size_t size);
