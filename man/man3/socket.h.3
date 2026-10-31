@@ -1,0 +1,753 @@
+.TH "libraries/libc/include/sys/socket.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/include/sys/socket.h \- Provides networking sockets\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libc_common\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBSocketAddress\fP"
+.br
+.RI "Defines the socket address which is used in the bind(), connect(), getpeername(), getsockname(), recvfrom(), and sendto() functions\&. "
+.ti -1c
+.RI "struct \fBSocketAddressStorage\fP"
+.br
+.RI "Generic socket address storage\&. "
+.ti -1c
+.RI "struct \fBMessageHeader\fP"
+.br
+.RI "Message header for sendmsg() and recvmsg()\&. "
+.ti -1c
+.RI "struct \fBAncillaryMessageHeader\fP"
+.br
+.RI "Header for ancillary message data\&. "
+.ti -1c
+.RI "struct \fBLinger\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fB_SS_MAXSIZE\fP   128"
+.br
+.ti -1c
+.RI "#define \fB_SS_ALIGNSIZE\fP   (sizeof(max_align_t))"
+.br
+.ti -1c
+.RI "#define \fB_SS_PAD1SIZE\fP   (_SS_ALIGNSIZE \- sizeof(\fBsa_family_t\fP))"
+.br
+.ti -1c
+.RI "#define \fB_SS_PAD2SIZE\fP   (_SS_MAXSIZE \- (sizeof(\fBsa_family_t\fP) + _SS_PAD1SIZE + _SS_ALIGNSIZE))"
+.br
+.ti -1c
+.RI "#define \fBSCM_RIGHTS\fP   1"
+.br
+.RI "Indicates that the data array contains the access rights to be sent or received\&. "
+.ti -1c
+.RI "#define \fBCMSG_ALIGN\fP(length)   (((length) + sizeof(size_t) \- 1) & ~(sizeof(size_t) \- 1))"
+.br
+.RI "Align a length to the CMSG spec\&. "
+.ti -1c
+.RI "#define \fBCMSG_DATA\fP(cmsg)   ((unsigned char *)(cmsg) + \fBCMSG_ALIGN\fP(sizeof(struct \fBcmsghdr\fP)))"
+.br
+.RI "Pointer to the data array associated with the cmsghdr structure\&. "
+.ti -1c
+.RI "#define \fBCMSG_NXTHDR\fP(mhdr,  cmsg)"
+.br
+.RI "Get the next header of a cmsg\&. "
+.ti -1c
+.RI "#define \fBCMSG_FIRSTHDR\fP(mhdr)"
+.br
+.RI "The first cmsg header from a message\&. "
+.ti -1c
+.RI "#define \fBCMSG_SPACE\fP(length)   (\fBCMSG_ALIGN\fP(sizeof(struct \fBcmsghdr\fP)) + \fBCMSG_ALIGN\fP(length))"
+.br
+.RI "The space required by an ancillary data object of the specified length and its cmsghdr structure (aligned) "
+.ti -1c
+.RI "#define \fBCMSG_LEN\fP(length)   (\fBCMSG_ALIGN\fP(sizeof(struct \fBcmsghdr\fP)) + (length))"
+.br
+.RI "The value to store in cmsg_len\&. "
+.ti -1c
+.RI "#define \fBSOCK_DGRAM\fP   0"
+.br
+.RI "Datagram socket\&. "
+.ti -1c
+.RI "#define \fBSOCK_RAW\fP   1"
+.br
+.RI "Raw Protocol Interface\&. "
+.ti -1c
+.RI "#define \fBSOCK_SEQPACKET\fP   2"
+.br
+.RI "Sequenced-packet socket\&. "
+.ti -1c
+.RI "#define \fBSOCK_STREAM\fP   3"
+.br
+.RI "Byte-stream socket\&. "
+.ti -1c
+.RI "#define \fBSOCK_NONBLOCK\fP   0"
+.br
+.RI "Create a socket file descriptor with the O_NONBLOCK flag atomically set on the new open file description\&. "
+.ti -1c
+.RI "#define \fBSOCK_CLOEXEC\fP   1"
+.br
+.RI "Create a socket file descriptor with the FD_CLOEXEC flag atomically set on that file descriptor\&. "
+.ti -1c
+.RI "#define \fBSOCK_CLOFORK\fP   2"
+.br
+.RI "Create a socket file descriptor with the FD_CLOFORK flag atomically set on that file descriptor\&. "
+.ti -1c
+.RI "#define \fBSOL_SOCKET\fP   1"
+.br
+.RI "Options are to be accessed at socket level, not protocol level\&. "
+.ti -1c
+.RI "#define \fBSO_ACCEPTCONN\fP   1"
+.br
+.RI "Socket is accepting connections\&. "
+.ti -1c
+.RI "#define \fBSO_BROADCAST\fP   2"
+.br
+.RI "Transmission of broadcast messages is supported\&. "
+.ti -1c
+.RI "#define \fBSO_DEBUG\fP   3"
+.br
+.RI "Debugging information is being recorded\&. "
+.ti -1c
+.RI "#define \fBSO_DOMAIN\fP   4"
+.br
+.RI "Socket domain\&. "
+.ti -1c
+.RI "#define \fBSO_DONTROUTE\fP   5"
+.br
+.RI "Bypass normal routing\&. "
+.ti -1c
+.RI "#define \fBSO_ERROR\fP   6"
+.br
+.RI "Socket error status\&. "
+.ti -1c
+.RI "#define \fBSO_KEEPALIVE\fP   7"
+.br
+.RI "Connections are kept alive with periodic messages\&. "
+.ti -1c
+.RI "#define \fBSO_LINGER\fP   8"
+.br
+.RI "Socket lingers on close\&. "
+.ti -1c
+.RI "#define \fBSO_OOBINLINE\fP   9"
+.br
+.RI "Out-of-band data is transmitted in line\&. "
+.ti -1c
+.RI "#define \fBSO_PROTOCOL\fP   10"
+.br
+.RI "Socket protocol\&. "
+.ti -1c
+.RI "#define \fBSO_RCVBUF\fP   11"
+.br
+.RI "Receive buffer size\&. "
+.ti -1c
+.RI "#define \fBSO_RCVLOWAT\fP   12"
+.br
+.RI "Receive 'low water mark'\&. "
+.ti -1c
+.RI "#define \fBSO_RCVTIMEO\fP   13"
+.br
+.RI "Receive timeout\&. "
+.ti -1c
+.RI "#define \fBSO_REUSEADDR\fP   14"
+.br
+.RI "Reuse of local addresses is supported\&. "
+.ti -1c
+.RI "#define \fBSO_SNDBUF\fP   15"
+.br
+.RI "Send buffer size\&. "
+.ti -1c
+.RI "#define \fBSO_SNDLOWAT\fP   16"
+.br
+.RI "Send 'low water mark'\&. "
+.ti -1c
+.RI "#define \fBSO_SNDTIMEO\fP   17"
+.br
+.RI "Send timeout\&. "
+.ti -1c
+.RI "#define \fBSO_TYPE\fP   18"
+.br
+.RI "Socket type\&. "
+.ti -1c
+.RI "#define \fBSOMAXCONN\fP   128"
+.br
+.RI "The maximum backlog queue length\&. "
+.ti -1c
+.RI "#define \fBMSG_CMSG_CLOEXEC\fP   0"
+.br
+.RI "Atomically set the FD_CLOEXEC flag on any file descriptors created via SCM_RIGHTS during recvmsg() "
+.ti -1c
+.RI "#define \fBMSG_CMSG_CLOFORK\fP   1"
+.br
+.RI "Atomically set the FD_CLOFORK flag on any file descriptors created via SCM_RIGHTS during recvmsg() "
+.ti -1c
+.RI "#define \fBMSG_CTRUNC\fP   2"
+.br
+.RI "Control data truncated\&. "
+.ti -1c
+.RI "#define \fBMSG_DONTROUTE\fP   3"
+.br
+.RI "Send without using routing tables\&. "
+.ti -1c
+.RI "#define \fBMSG_EOR\fP   4"
+.br
+.RI "Terminates a record (if supported by the protocol) "
+.ti -1c
+.RI "#define \fBMSG_OOB\fP   5"
+.br
+.RI "Out-of-band data\&. "
+.ti -1c
+.RI "#define \fBMSG_NOSIGNAL\fP   6"
+.br
+.RI "No SIGPIPE generated when an attempt to send is made on a stream-oriented socket that is no longer connected\&. "
+.ti -1c
+.RI "#define \fBMSG_PEEK\fP   7"
+.br
+.RI "Leave received data in queue\&. "
+.ti -1c
+.RI "#define \fBMSG_TRUNC\fP   8"
+.br
+.RI "Normal data truncated\&. "
+.ti -1c
+.RI "#define \fBMSG_WAITALL\fP   9"
+.br
+.RI "Attempt to fill the read buffer\&. "
+.ti -1c
+.RI "#define \fBAF_UNSPEC\fP   0"
+.br
+.RI "Unspecified\&. "
+.ti -1c
+.RI "#define \fBAF_INET\fP   1"
+.br
+.RI "Internet domain sockets for use with IPv4 addresses\&. "
+.ti -1c
+.RI "#define \fBAF_INET6\fP   2"
+.br
+.RI "Internet domain sockets for use with IPv6 addresses\&. "
+.ti -1c
+.RI "#define \fBAF_UNIX\fP   3"
+.br
+.RI "UNIX domain sockets\&. "
+.ti -1c
+.RI "#define \fBSHUT_RD\fP   0"
+.br
+.RI "Disables further receive operations\&. "
+.ti -1c
+.RI "#define \fBSHUT_RDWR\fP   1"
+.br
+.RI "Disables further send and receive operations\&. "
+.ti -1c
+.RI "#define \fBSHUT_WR\fP   2"
+.br
+.RI "Disables further send operations\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef int_least32_t \fBsocklen_t\fP"
+.br
+.ti -1c
+.RI "typedef unsigned int \fBsa_family_t\fP"
+.br
+.RI "Represents a sockets address or protocol family\&. "
+.ti -1c
+.RI "typedef struct \fBSocketAddress\fP \fBsockaddr\fP"
+.br
+.RI "Public alias for \fBSocketAddress\fP\&. "
+.ti -1c
+.RI "typedef struct \fBSocketAddressStorage\fP \fBsockaddr_storage\fP"
+.br
+.RI "Public alias for \fBSocketAddressStorage\fP\&. "
+.ti -1c
+.RI "typedef struct \fBMessageHeader\fP \fBmsghdr\fP"
+.br
+.RI "Public alias for \fBMessageHeader\fP\&. "
+.ti -1c
+.RI "typedef struct \fBAncillaryMessageHeader\fP \fBcmsghdr\fP"
+.br
+.RI "Public alias for \fBAncillaryMessageHeader\fP\&. "
+.ti -1c
+.RI "typedef struct \fBLinger\fP \fBlinger\fP"
+.br
+.RI "Public alias for \fBLinger\fP\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBaccept\fP (int, struct \fBsockaddr\fP *restrict, socklen_t *restrict)"
+.br
+.ti -1c
+.RI "int \fBaccept4\fP (int, struct \fBsockaddr\fP *restrict, socklen_t *restrict, int)"
+.br
+.ti -1c
+.RI "int \fBbind\fP (int, const struct \fBsockaddr\fP *, socklen_t)"
+.br
+.ti -1c
+.RI "int \fBconnect\fP (int, const struct \fBsockaddr\fP *, socklen_t)"
+.br
+.ti -1c
+.RI "int \fBgetpeername\fP (int, struct \fBsockaddr\fP *restrict, socklen_t *restrict)"
+.br
+.ti -1c
+.RI "int \fBgetsockname\fP (int, struct \fBsockaddr\fP *restrict, socklen_t *restrict)"
+.br
+.ti -1c
+.RI "int \fBgetsockopt\fP (int, int, int, void *restrict, socklen_t *restrict)"
+.br
+.ti -1c
+.RI "int \fBlisten\fP (int, int)"
+.br
+.ti -1c
+.RI "ssize_t \fBrecv\fP (int, void *, size_t, int)"
+.br
+.ti -1c
+.RI "ssize_t \fBrecvfrom\fP (int, void *restrict, size_t, int, struct \fBsockaddr\fP *restrict, socklen_t *restrict)"
+.br
+.ti -1c
+.RI "ssize_t \fBrecvmsg\fP (int, struct \fBmsghdr\fP *, int)"
+.br
+.ti -1c
+.RI "ssize_t \fBsend\fP (int, const void *, size_t, int)"
+.br
+.ti -1c
+.RI "ssize_t \fBsendmsg\fP (int, const struct \fBmsghdr\fP *, int)"
+.br
+.ti -1c
+.RI "ssize_t \fBsendto\fP (int, const void *, size_t, int, const struct \fBsockaddr\fP *, socklen_t)"
+.br
+.ti -1c
+.RI "int \fBsetsockopt\fP (int, int, int, const void *, socklen_t)"
+.br
+.ti -1c
+.RI "int \fBshutdown\fP (int, int)"
+.br
+.ti -1c
+.RI "int \fBsockatmark\fP (int)"
+.br
+.ti -1c
+.RI "int \fBsocket\fP (int, int, int)"
+.br
+.ti -1c
+.RI "int \fBsocketpair\fP (int, int, int, int[2])"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Provides networking sockets\&. 
+
+
+.PP
+\fBSee also\fP
+.RS 4
+https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/sys_socket.h.html
+.RE
+.PP
+\fBDate\fP
+.RS 4
+29 October 2026 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBsocket\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define _SS_ALIGNSIZE   (sizeof(max_align_t))"
+
+.PP
+Definition at line \fB53\fP of file \fBsocket\&.h\fP\&.
+.SS "#define _SS_MAXSIZE   128"
+
+.PP
+Definition at line \fB52\fP of file \fBsocket\&.h\fP\&.
+.SS "#define _SS_PAD1SIZE   (_SS_ALIGNSIZE \- sizeof(\fBsa_family_t\fP))"
+
+.PP
+Definition at line \fB54\fP of file \fBsocket\&.h\fP\&.
+.SS "#define _SS_PAD2SIZE   (_SS_MAXSIZE \- (sizeof(\fBsa_family_t\fP) + _SS_PAD1SIZE + _SS_ALIGNSIZE))"
+
+.PP
+Definition at line \fB55\fP of file \fBsocket\&.h\fP\&.
+.SS "#define AF_INET   1"
+
+.PP
+Internet domain sockets for use with IPv4 addresses\&. 
+.PP
+Definition at line \fB203\fP of file \fBsocket\&.h\fP\&.
+.SS "#define AF_INET6   2"
+
+.PP
+Internet domain sockets for use with IPv6 addresses\&. 
+.PP
+Definition at line \fB204\fP of file \fBsocket\&.h\fP\&.
+.SS "#define AF_UNIX   3"
+
+.PP
+UNIX domain sockets\&. 
+.PP
+Definition at line \fB205\fP of file \fBsocket\&.h\fP\&.
+.SS "#define AF_UNSPEC   0"
+
+.PP
+Unspecified\&. 
+.PP
+Definition at line \fB202\fP of file \fBsocket\&.h\fP\&.
+.SS "#define CMSG_ALIGN(length)   (((length) + sizeof(size_t) \- 1) & ~(sizeof(size_t) \- 1))"
+
+.PP
+Align a length to the CMSG spec\&. 
+.PP
+Definition at line \fB111\fP of file \fBsocket\&.h\fP\&.
+.SS "#define CMSG_DATA(cmsg)   ((unsigned char *)(cmsg) + \fBCMSG_ALIGN\fP(sizeof(struct \fBcmsghdr\fP)))"
+
+.PP
+Pointer to the data array associated with the cmsghdr structure\&. 
+.PP
+Definition at line \fB114\fP of file \fBsocket\&.h\fP\&.
+.SS "#define CMSG_FIRSTHDR(mhdr)"
+\fBValue:\fP.PP
+.nf
+    (((mhdr)\->msg_control != NULL && \\
+      (mhdr)\->msg_controllen >= sizeof(struct cmsghdr)) \\
+        ? (struct cmsghdr *)(mhdr)\->msg_control \\
+        : (struct cmsghdr *)0)
+.fi
+
+.PP
+The first cmsg header from a message\&. 
+.PP
+Definition at line \fB132\fP of file \fBsocket\&.h\fP\&..PP
+.nf
+136         : (struct cmsghdr *)0)
+.fi
+
+.SS "#define CMSG_LEN(length)   (\fBCMSG_ALIGN\fP(sizeof(struct \fBcmsghdr\fP)) + (length))"
+
+.PP
+The value to store in cmsg_len\&. 
+.PP
+Definition at line \fB142\fP of file \fBsocket\&.h\fP\&.
+.SS "#define CMSG_NXTHDR(mhdr, cmsg)"
+\fBValue:\fP.PP
+.nf
+    ((cmsg) == NULL \\
+        ? CMSG_FIRSTHDR(mhdr) \\
+        : ((mhdr)\->msg_control == NULL || \\
+           (cmsg)\->cmsg_len < CMSG_LEN(0) || \\
+           (unsigned char *)(cmsg) + \\
+               CMSG_ALIGN((cmsg)\->cmsg_len) + \\
+               CMSG_ALIGN(sizeof(struct cmsghdr)) > \\
+               (unsigned char *)(mhdr)\->msg_control + \\
+               (mhdr)\->msg_controllen \\
+            ? (struct cmsghdr *)0 \\
+            : (struct cmsghdr *)((unsigned char *)(cmsg) + \\
+                                 CMSG_ALIGN((cmsg)\->cmsg_len)))
+.fi
+
+.PP
+Get the next header of a cmsg\&. 
+.PP
+Definition at line \fB117\fP of file \fBsocket\&.h\fP\&..PP
+.nf
+120         : ((mhdr)\->msg_control == NULL || \\
+121            (cmsg)\->cmsg_len < CMSG_LEN(0) || \\
+122            (unsigned char *)(cmsg) + \\
+123                CMSG_ALIGN((cmsg)\->cmsg_len) + \\
+124                CMSG_ALIGN(sizeof(struct cmsghdr)) > \\
+125                (unsigned char *)(mhdr)\->msg_control + \\
+126                (mhdr)\->msg_controllen \\
+127             ? (struct cmsghdr *)0 \\
+128             : (struct cmsghdr *)((unsigned char *)(cmsg) + \\
+129                                  CMSG_ALIGN((cmsg)\->cmsg_len)))
+.fi
+
+.SS "#define CMSG_SPACE(length)   (\fBCMSG_ALIGN\fP(sizeof(struct \fBcmsghdr\fP)) + \fBCMSG_ALIGN\fP(length))"
+
+.PP
+The space required by an ancillary data object of the specified length and its cmsghdr structure (aligned) 
+.PP
+Definition at line \fB139\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_CMSG_CLOEXEC   0"
+
+.PP
+Atomically set the FD_CLOEXEC flag on any file descriptors created via SCM_RIGHTS during recvmsg() 
+.PP
+Definition at line \fB191\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_CMSG_CLOFORK   1"
+
+.PP
+Atomically set the FD_CLOFORK flag on any file descriptors created via SCM_RIGHTS during recvmsg() 
+.PP
+Definition at line \fB192\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_CTRUNC   2"
+
+.PP
+Control data truncated\&. 
+.PP
+Definition at line \fB193\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_DONTROUTE   3"
+
+.PP
+Send without using routing tables\&. 
+.PP
+Definition at line \fB194\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_EOR   4"
+
+.PP
+Terminates a record (if supported by the protocol) 
+.PP
+Definition at line \fB195\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_NOSIGNAL   6"
+
+.PP
+No SIGPIPE generated when an attempt to send is made on a stream-oriented socket that is no longer connected\&. 
+.PP
+Definition at line \fB197\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_OOB   5"
+
+.PP
+Out-of-band data\&. 
+.PP
+Definition at line \fB196\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_PEEK   7"
+
+.PP
+Leave received data in queue\&. 
+.PP
+Definition at line \fB198\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_TRUNC   8"
+
+.PP
+Normal data truncated\&. 
+.PP
+Definition at line \fB199\fP of file \fBsocket\&.h\fP\&.
+.SS "#define MSG_WAITALL   9"
+
+.PP
+Attempt to fill the read buffer\&. 
+.PP
+Definition at line \fB200\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SCM_RIGHTS   1"
+
+.PP
+Indicates that the data array contains the access rights to be sent or received\&. 
+.PP
+Definition at line \fB108\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SHUT_RD   0"
+
+.PP
+Disables further receive operations\&. 
+.PP
+Definition at line \fB207\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SHUT_RDWR   1"
+
+.PP
+Disables further send and receive operations\&. 
+.PP
+Definition at line \fB208\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SHUT_WR   2"
+
+.PP
+Disables further send operations\&. 
+.PP
+Definition at line \fB209\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_ACCEPTCONN   1"
+
+.PP
+Socket is accepting connections\&. 
+.PP
+Definition at line \fB169\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_BROADCAST   2"
+
+.PP
+Transmission of broadcast messages is supported\&. 
+.PP
+Definition at line \fB170\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_DEBUG   3"
+
+.PP
+Debugging information is being recorded\&. 
+.PP
+Definition at line \fB171\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_DOMAIN   4"
+
+.PP
+Socket domain\&. 
+.PP
+Definition at line \fB172\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_DONTROUTE   5"
+
+.PP
+Bypass normal routing\&. 
+.PP
+Definition at line \fB173\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_ERROR   6"
+
+.PP
+Socket error status\&. 
+.PP
+Definition at line \fB174\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_KEEPALIVE   7"
+
+.PP
+Connections are kept alive with periodic messages\&. 
+.PP
+Definition at line \fB175\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_LINGER   8"
+
+.PP
+Socket lingers on close\&. 
+.PP
+Definition at line \fB176\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_OOBINLINE   9"
+
+.PP
+Out-of-band data is transmitted in line\&. 
+.PP
+Definition at line \fB177\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_PROTOCOL   10"
+
+.PP
+Socket protocol\&. 
+.PP
+Definition at line \fB178\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_RCVBUF   11"
+
+.PP
+Receive buffer size\&. 
+.PP
+Definition at line \fB179\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_RCVLOWAT   12"
+
+.PP
+Receive 'low water mark'\&. 
+.PP
+Definition at line \fB180\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_RCVTIMEO   13"
+
+.PP
+Receive timeout\&. 
+.PP
+Definition at line \fB181\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_REUSEADDR   14"
+
+.PP
+Reuse of local addresses is supported\&. 
+.PP
+Definition at line \fB182\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_SNDBUF   15"
+
+.PP
+Send buffer size\&. 
+.PP
+Definition at line \fB183\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_SNDLOWAT   16"
+
+.PP
+Send 'low water mark'\&. 
+.PP
+Definition at line \fB184\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_SNDTIMEO   17"
+
+.PP
+Send timeout\&. 
+.PP
+Definition at line \fB185\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SO_TYPE   18"
+
+.PP
+Socket type\&. 
+.PP
+Definition at line \fB186\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SOCK_CLOEXEC   1"
+
+.PP
+Create a socket file descriptor with the FD_CLOEXEC flag atomically set on that file descriptor\&. 
+.PP
+Definition at line \fB164\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SOCK_CLOFORK   2"
+
+.PP
+Create a socket file descriptor with the FD_CLOFORK flag atomically set on that file descriptor\&. 
+.PP
+Definition at line \fB165\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SOCK_DGRAM   0"
+
+.PP
+Datagram socket\&. 
+.PP
+Definition at line \fB158\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SOCK_NONBLOCK   0"
+
+.PP
+Create a socket file descriptor with the O_NONBLOCK flag atomically set on the new open file description\&. 
+.PP
+Definition at line \fB163\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SOCK_RAW   1"
+
+.PP
+Raw Protocol Interface\&. 
+.PP
+Definition at line \fB159\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SOCK_SEQPACKET   2"
+
+.PP
+Sequenced-packet socket\&. 
+.PP
+Definition at line \fB160\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SOCK_STREAM   3"
+
+.PP
+Byte-stream socket\&. 
+.PP
+Definition at line \fB161\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SOL_SOCKET   1"
+
+.PP
+Options are to be accessed at socket level, not protocol level\&. 
+.PP
+Definition at line \fB167\fP of file \fBsocket\&.h\fP\&.
+.SS "#define SOMAXCONN   128"
+
+.PP
+The maximum backlog queue length\&. 
+.PP
+Definition at line \fB189\fP of file \fBsocket\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "\fBsa_family_t\fP"
+
+.PP
+Represents a sockets address or protocol family\&. 
+.PP
+Definition at line \fB30\fP of file \fBsocket\&.h\fP\&.
+.SS "typedef int_least32_t socklen_t"
+
+.PP
+Definition at line \fB24\fP of file \fBsocket\&.h\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

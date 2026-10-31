@@ -1,0 +1,166 @@
+.TH "LibDriver::generic::KeyboardInterpreter" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LibDriver::generic::KeyboardInterpreter \- Interprets the scan codes from the keyboard\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <keyboard\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::InputStreamEventHandler< uint8_t >\fP\&.
+.PP
+Inherited by \fBLibDriver::generic::KeyboardInterpreterEN_US\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKeyboardInterpreter\fP ()"
+.br
+.RI "Construct a new \fBKeyboard\fP Interpreter object\&. "
+.ti -1c
+.RI "void \fBon_key_read\fP (bool, const \fBKeyboardState\fP &, \fBKeyCode\fP)"
+.br
+.RI "Handle the key event\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler< uint8_t >\fP
+.in +1c
+.ti -1c
+.RI "\fBInputStreamEventHandler\fP ()"
+.br
+.RI "_______________________________________________TEMPLATES_________________________________________________________________/// "
+.ti -1c
+.RI "\fB~InputStreamEventHandler\fP ()"
+.br
+.RI "Destroys the \fBInputStreamProcessor\fP and disconnects it from all streams\&. "
+.ti -1c
+.RI "virtual void \fBon_stream_read\fP (uint8_t)"
+.br
+.RI "Called when data is read from a stream (overridden by subclasses) "
+.ti -1c
+.RI "virtual void \fBon_end_of_stream\fP (\fBGenericInputStream\fP< uint8_t > *)"
+.br
+.RI "Called when a stream has finished\&. Removes the stream from the array of streams\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBKeyboardState\fP \fBm_keyboard_state\fP"
+.br
+.RI "The current state of what special keys are pressed on the keyboard\&. "
+.ti -1c
+.RI "bool \fBm_next_is_first_extended_code\fP = false"
+.br
+.RI "If true, the next code should be interpreted as an extended code (set when receiving 0xE0) "
+.ti -1c
+.RI "uint8_t \fBm_extended_scan_code_bytes\fP = 0"
+.br
+.RI "How many bytes are left to read for the current extended scan code\&. "
+.ti -1c
+.RI "uint16_t \fBm_extended_code_buffer\fP = 0"
+.br
+.RI "The storage for scan codes that take more than one byte\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::InputStreamEventHandler< uint8_t >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< uint8_t > * > \fBm_generic_input_streams\fP"
+.br
+.RI "List of streams being observed by this handler\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Interprets the scan codes from the keyboard\&. 
+.PP
+Definition at line \fB224\fP of file \fBkeyboard\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "KeyboardInterpreter::KeyboardInterpreter ()"
+
+.PP
+Construct a new \fBKeyboard\fP Interpreter object\&. 
+.PP
+Definition at line \fB128\fP of file \fBkeyboard\&.cpp\fP\&..PP
+.nf
+129 : InputStreamEventHandler<uint8_t>()
+130 {
+131 
+132 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void KeyboardInterpreter::on_key_read (bool released, const \fBKeyboardState\fP & state, \fBKeyCode\fP key_code)"
+
+.PP
+Handle the key event\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIreleased\fP True if the key was released, false if it was pressed 
+.br
+\fIstate\fP The state of the keyboard 
+.br
+\fIkey_code\fP The key code of the key 
+.RE
+.PP
+
+.PP
+Definition at line \fB143\fP of file \fBkeyboard\&.cpp\fP\&..PP
+.nf
+143                                                                                                  {
+144 
+145     // Pass the key event to the handlers
+146     if (released)
+147         raise_event(new KeyUpEvent(key_code, state));
+148     else
+149         raise_event(new KeyDownEvent(key_code, state));
+150 
+151 }
+.fi
+
+.PP
+Referenced by \fBLibDriver::generic::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint16_t LibDriver::generic::KeyboardInterpreter::m_extended_code_buffer = 0\fC [protected]\fP"
+
+.PP
+The storage for scan codes that take more than one byte\&. 
+.PP
+Definition at line \fB231\fP of file \fBkeyboard\&.h\fP\&.
+.PP
+Referenced by \fBLibDriver::generic::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
+.SS "uint8_t LibDriver::generic::KeyboardInterpreter::m_extended_scan_code_bytes = 0\fC [protected]\fP"
+
+.PP
+How many bytes are left to read for the current extended scan code\&. 
+.PP
+Definition at line \fB230\fP of file \fBkeyboard\&.h\fP\&.
+.PP
+Referenced by \fBLibDriver::generic::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
+.SS "\fBKeyboardState\fP LibDriver::generic::KeyboardInterpreter::m_keyboard_state\fC [protected]\fP"
+
+.PP
+The current state of what special keys are pressed on the keyboard\&. 
+.PP
+Definition at line \fB227\fP of file \fBkeyboard\&.h\fP\&.
+.PP
+Referenced by \fBLibDriver::generic::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
+.SS "bool LibDriver::generic::KeyboardInterpreter::m_next_is_first_extended_code = false\fC [protected]\fP"
+
+.PP
+If true, the next code should be interpreted as an extended code (set when receiving 0xE0) 
+.PP
+Definition at line \fB229\fP of file \fBkeyboard\&.h\fP\&.
+.PP
+Referenced by \fBLibDriver::generic::KeyboardInterpreterEN_US::on_stream_read()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

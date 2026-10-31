@@ -1,0 +1,25 @@
+var structFileServer_1_1format_1_1ext2_1_1Inode =
+[
+    [ "block_pointers", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a0bbd66adbb62b8336dee45413936ea8d", null ],
+    [ "creation_time", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a8dbbec29744bef78ca6842c2c4918a0b", null ],
+    [ "deletion_time", "structFileServer_1_1format_1_1ext2_1_1Inode.html#aba1af9373bcbe2c96bd5400ad744b415", null ],
+    [ "extended_attribute", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a63c6021a32e82ee1392b06f649270a69", null ],
+    [ "flags", "structFileServer_1_1format_1_1ext2_1_1Inode.html#ab32544b04225ff40356304478b4b688b", null ],
+    [ "generation", "structFileServer_1_1format_1_1ext2_1_1Inode.html#ab5d76929abffa029b6cafbb23ca5ce3a", null ],
+    [ "group_id", "structFileServer_1_1format_1_1ext2_1_1Inode.html#adf73a2ff6c8cd41c06e866e50d22c1da", null ],
+    [ "hard_links", "structFileServer_1_1format_1_1ext2_1_1Inode.html#abcb42d0f646033dfa9b819accb95c348", null ],
+    [ "l1_indirect", "structFileServer_1_1format_1_1ext2_1_1Inode.html#abc1ebaeb951c431c53fabff47ad38b75", null ],
+    [ "l2_indirect", "structFileServer_1_1format_1_1ext2_1_1Inode.html#ab4683d9f5b3651a41b2ade331ec9af0a", null ],
+    [ "l3_indirect", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a999d9abddcf36ad986e916a95e958e28", null ],
+    [ "last_access_time", "structFileServer_1_1format_1_1ext2_1_1Inode.html#af656cc73ab71feab54b96ede8af98d34", null ],
+    [ "last_modification_time", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a9ee0e9b7d6d1d49557473df89ca3e544", null ],
+    [ "os_1", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a2a2520a92947ad9f6ddc7d15dfab3f04", null ],
+    [ "os_2", "structFileServer_1_1format_1_1ext2_1_1Inode.html#aaef9b30b2d27d97713ee9d0cae7e129e", null ],
+    [ "permissions", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a2b9d2153e44750c7d90b089358c7abbb", null ],
+    [ "sectors_used", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a49918dfd5b684b0f4c8bedbac7a1bb05", null ],
+    [ "size_lower", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a364e894514d9e09e175e2693386f0a6c", null ],
+    [ "size_upper", "structFileServer_1_1format_1_1ext2_1_1Inode.html#aaa9b26558d2befde57ceec1ad4d19f36", null ],
+    [ "type", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a9beca9a01da4062ebb7d8773557e3837", null ],
+    [ "type_permissions", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a1806cbf9730040d891c7e3ad7dc17b06", null ],
+    [ "user_id", "structFileServer_1_1format_1_1ext2_1_1Inode.html#a090d7ba0ca3757b0c17a9d85692a2473", null ]
+];

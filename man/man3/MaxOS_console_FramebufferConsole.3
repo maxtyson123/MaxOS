@@ -1,4 +1,4 @@
-.TH "MaxOS::console::FramebufferConsole" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::console::FramebufferConsole" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,15 +35,15 @@ Inherits \fBMaxOS::console::Console\fP\&.
 .br
 .RI "Places a character at the specified location\&. "
 .ti -1c
-.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, common::ConsoleColour) final"
+.RI "void \fBset_foreground_color\fP (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP) final"
 .br
 .RI "Sets the foreground color at the specified location\&. "
 .ti -1c
-.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, common::ConsoleColour) final"
+.RI "void \fBset_background_color\fP (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP) final"
 .br
 .RI "Sets the background color at the specified location\&. "
 .ti -1c
-.RI "void \fBscroll_up\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, common::ConsoleColour foreground, common::ConsoleColour background, char fill) final"
+.RI "void \fBscroll_up\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, \fBcommon::ConsoleColour\fP foreground, \fBcommon::ConsoleColour\fP background, char fill) final"
 .br
 .RI "Scrolls the console up by 1 line\&. "
 .ti -1c
@@ -51,11 +51,11 @@ Inherits \fBMaxOS::console::Console\fP\&.
 .br
 .RI "Gets the character at the specified location\&. "
 .ti -1c
-.RI "common::ConsoleColour \fBget_foreground_color\fP (uint16_t x, uint16_t y) final"
+.RI "\fBcommon::ConsoleColour\fP \fBget_foreground_color\fP (uint16_t x, uint16_t y) final"
 .br
 .RI "Gets the foreground color at the specified location\&. "
 .ti -1c
-.RI "common::ConsoleColour \fBget_background_color\fP (uint16_t x, uint16_t y) final"
+.RI "\fBcommon::ConsoleColour\fP \fBget_background_color\fP (uint16_t x, uint16_t y) final"
 .br
 .RI "Gets the background color at the specified location\&. "
 .in -1c
@@ -63,11 +63,11 @@ Inherits \fBMaxOS::console::Console\fP\&.
 Public Member Functions inherited from \fBMaxOS::console::Console\fP
 .in +1c
 .ti -1c
-.RI "virtual void \fBput_character\fP (uint16_t x, uint16_t y, char c, common::ConsoleColour foreground, common::ConsoleColour background)"
+.RI "virtual void \fBput_character\fP (uint16_t x, uint16_t y, char c, \fBcommon::ConsoleColour\fP foreground, \fBcommon::ConsoleColour\fP background)"
 .br
 .RI "Put a character on the console with a given foreground and background color\&. "
 .ti -1c
-.RI "virtual void \fBput_string\fP (uint16_t x, uint16_t y, string string, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black)"
+.RI "virtual void \fBput_string\fP (uint16_t x, uint16_t y, \fBstring\fP \fBstring\fP, \fBcommon::ConsoleColour\fP foreground=common::ConsoleColour::LightGrey, \fBcommon::ConsoleColour\fP background=common::ConsoleColour::Black)"
 .br
 .RI "Put a string on the console\&. "
 .ti -1c
@@ -78,7 +78,7 @@ Public Member Functions inherited from \fBMaxOS::console::Console\fP
 .RI "virtual void \fBclear\fP ()"
 .br
 .ti -1c
-.RI "virtual void \fBclear\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, common::ConsoleColour foreground=common::ConsoleColour::LightGrey, common::ConsoleColour background=common::ConsoleColour::Black, char fill=' ')"
+.RI "virtual void \fBclear\fP (uint16_t left, uint16_t top, uint16_t \fBwidth\fP, uint16_t \fBheight\fP, \fBcommon::ConsoleColour\fP foreground=common::ConsoleColour::LightGrey, \fBcommon::ConsoleColour\fP background=common::ConsoleColour::Black, char fill=' ')"
 .br
 .RI "Clear an area of the console\&. "
 .ti -1c
@@ -187,10 +187,10 @@ Definition at line \fB379\fP of file \fBframebuffer\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::Logger::active_logger()\fP, \fBcout\fP, \fBMaxOS::Logger::disable_log_writer()\fP, \fBMaxOS::Logger::HEADER()\fP, and \fBMaxOS::console::ConsoleStream::set_cursor()\fP\&.
+References \fBMaxOS::Logger::active_logger()\fP, \fBMaxOS::common::ANSI_COLOURS\fP, \fBcout\fP, \fBMaxOS::Logger::disable_log_writer()\fP, \fBMaxOS::Logger::HEADER()\fP, and \fBMaxOS::console::ConsoleStream::set_cursor()\fP\&.
 .PP
 Referenced by \fBkernel_main()\fP\&.
-.SS "ConsoleColour FramebufferConsole::get_background_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBConsoleColour\fP FramebufferConsole::get_background_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Gets the background color at the specified location\&. 
@@ -273,7 +273,7 @@ Definition at line \fB216\fP of file \fBframebuffer\&.cpp\fP\&..PP
 
 .PP
 References \fBheight()\fP, and \fBwidth()\fP\&.
-.SS "ConsoleColour FramebufferConsole::get_foreground_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBConsoleColour\fP FramebufferConsole::get_foreground_color (uint16_t x, uint16_t y)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Gets the foreground color at the specified location\&. 
@@ -339,7 +339,7 @@ Definition at line \fB80\fP of file \fBframebuffer\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::console::FONT_HEIGHT\fP, and \fBmultiboot_tag_framebuffer_common::framebuffer_height\fP\&.
+References \fBmultiboot_tag_framebuffer::common\fP, and \fBmultiboot_tag_framebuffer_common::framebuffer_height\fP\&.
 .PP
 Referenced by \fBFramebufferConsole()\fP, \fBget_background_color()\fP, \fBget_character()\fP, \fBget_foreground_color()\fP, \fBput_character()\fP, \fBscroll_up()\fP, \fBset_background_color()\fP, and \fBset_foreground_color()\fP\&.
 .SS "void FramebufferConsole::print_logo (bool is_panic = \fCfalse\fP)\fC [static]\fP"
@@ -495,8 +495,8 @@ Definition at line \fB91\fP of file \fBframebuffer\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBMaxOS::console::FONT_HEIGHT\fP, \fBMaxOS::console::FONT_PADDING\fP, \fBMaxOS::console::FONT_WIDTH\fP, \fBget_background_color()\fP, \fBget_foreground_color()\fP, \fBheight()\fP, and \fBwidth()\fP\&.
-.SS "void FramebufferConsole::scroll_up (uint16_t left, uint16_t top, uint16_t width, uint16_t height, common::ConsoleColour foreground, common::ConsoleColour background, char fill)\fC [final]\fP, \fC [virtual]\fP"
+References \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBget_background_color()\fP, \fBget_foreground_color()\fP, \fBheight()\fP, \fBstrcmp()\fP, \fBMaxOS::common::Colour::to_console_colour()\fP, and \fBwidth()\fP\&.
+.SS "void FramebufferConsole::scroll_up (uint16_t left, uint16_t top, uint16_t width, uint16_t height, \fBcommon::ConsoleColour\fP foreground, \fBcommon::ConsoleColour\fP background, char fill)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Scrolls the console up by 1 line\&. 
@@ -573,8 +573,8 @@ Definition at line \fB326\fP of file \fBframebuffer\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::console::FONT_HEIGHT\fP, \fBMaxOS::console::FONT_WIDTH\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP, \fBget_background_color()\fP, \fBget_foreground_color()\fP, \fBheight()\fP, \fBset_background_color()\fP, \fBset_foreground_color()\fP, and \fBwidth()\fP\&.
-.SS "void FramebufferConsole::set_background_color (uint16_t x, uint16_t y, common::ConsoleColour background)\fC [final]\fP, \fC [virtual]\fP"
+References \fBMaxOS::common::GraphicsContext::colour_to_int()\fP, \fBmultiboot_tag_framebuffer::common\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP, \fBget_background_color()\fP, \fBget_foreground_color()\fP, \fBheight()\fP, \fBset_background_color()\fP, \fBset_foreground_color()\fP, and \fBwidth()\fP\&.
+.SS "void FramebufferConsole::set_background_color (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP background)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Sets the background color at the specified location\&. 
@@ -612,7 +612,7 @@ Definition at line \fB196\fP of file \fBframebuffer\&.cpp\fP\&..PP
 References \fBheight()\fP, and \fBwidth()\fP\&.
 .PP
 Referenced by \fBscroll_up()\fP\&.
-.SS "void FramebufferConsole::set_foreground_color (uint16_t x, uint16_t y, common::ConsoleColour foreground)\fC [final]\fP, \fC [virtual]\fP"
+.SS "void FramebufferConsole::set_foreground_color (uint16_t x, uint16_t y, \fBcommon::ConsoleColour\fP foreground)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Sets the foreground color at the specified location\&. 
@@ -739,7 +739,7 @@ Definition at line \fB71\fP of file \fBframebuffer\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::console::FONT_WIDTH\fP, and \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP\&.
+References \fBmultiboot_tag_framebuffer::common\fP, and \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP\&.
 .PP
 Referenced by \fBFramebufferConsole()\fP, \fBget_background_color()\fP, \fBget_character()\fP, \fBget_foreground_color()\fP, \fBput_character()\fP, \fBscroll_up()\fP, \fBset_background_color()\fP, and \fBset_foreground_color()\fP\&.
 .SH "Member Data Documentation"
@@ -755,4 +755,4 @@ Referenced by \fBfinish()\fP, and \fBFramebufferConsole()\fP\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

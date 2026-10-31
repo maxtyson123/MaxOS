@@ -1,70 +1,95 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/resources/resource.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "libraries/libkpi/include/libkpi/resource.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/processes/resources/resource.h \- Defines classes for managing process resources such as files and devices\&.  
+libraries/libkpi/include/libkpi/resource.h \- Defines types of resources and also a ResourceServer to allow for a userspace process to provide resources to other processes\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <cstddef>\fP
+\fC#include <libcommon/string\&.h>\fP
 .br
 \fC#include <libcommon/map\&.h>\fP
 .br
-\fC#include <libcommon/vector\&.h>\fP
-.br
-\fC#include <libcommon/string\&.h>\fP
-.br
 \fC#include <libcommon/mem\&.h>\fP
-.br
-\fC#include <libkpi/syscalls\&.h>\fP
-.br
-\fC#include <libkpi/resource\&.h>\fP
-.br
-\fC#include <common/logger\&.h>\fP
 .br
 
 .SS "Classes"
 
 .in +1c
 .ti -1c
-.RI "class \fBMaxOS::processes::resources::BaseResourceRegistry\fP"
+.RI "class \fBMaxOS::KPI::Resource\fP"
 .br
-.RI "Manages the creation, retention and destruction of resources of a certain type\&. Should be subclassed for each resource type\&. "
+.RI "Represents a generic resource that can be opened, closed, read from and written to\&. "
 .ti -1c
-.RI "class \fBMaxOS::processes::resources::ResourceRegistry< Type >\fP"
+.RI "struct \fBMaxOS::KPI::ServiceResourceMessage\fP"
 .br
-.RI "A resource registry for a specific resource type\&. "
+.RI "Header for a function call on a resource managed by a userspace service\&. "
 .ti -1c
-.RI "class \fBMaxOS::processes::resources::GlobalResourceRegistry\fP"
+.RI "struct \fBMaxOS::KPI::ServiceMessageRing\fP"
 .br
-.RI "Manages all the resource registries for each resource type\&. "
 .ti -1c
-.RI "class \fBMaxOS::processes::resources::ResourceManager\fP"
+.RI "class \fBMaxOS::KPI::ResourceServer\fP"
 .br
-.RI "Manages the open resources for a process\&. "
+.RI "Manages resources and allows for this process to provide resources to other processes\&. "
 .in -1c
 .SS "Typedefs"
 
 .in +1c
 .ti -1c
-.RI "typedef KPI::ResourceType \fBMaxOS::processes::resources::resource_type_t\fP"
+.RI "typedef struct \fBMaxOS::KPI::ServiceResourceMessage\fP \fBMaxOS::KPI::service_resource_message_t\fP"
 .br
-.RI "Alias to make the libsyscore ResourceType accessible here\&. "
 .ti -1c
-.RI "typedef KPI::Resource \fBMaxOS::processes::resources::Resource\fP"
+.RI "typedef struct \fBMaxOS::KPI::ServiceMessageRing\fP \fBMaxOS::KPI::service_message_ring_t\fP"
 .br
-.RI "Alias to make the libsyscore Resource accessible here\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::KPI::ResourceType\fP { \fBMESSAGE_ENDPOINT\fP, \fBSHARED_MEMORY\fP, \fBFILESYSTEM\fP, \fBPROCESS\fP, \fBTHREAD\fP, \fB_END\fP }"
+.br
+.RI "The type of resource\&. "
+.ti -1c
+.RI "enum class \fBServiceResourceCommand\fP : uint8_t { \fBS_CREATE\fP, \fBS_GET\fP, \fBR_OPEN\fP, \fBR_CLOSE\fP, \fBR_WRITE\fP, \fBR_READ\fP }"
+.br
+.ti -1c
+.RI "enum class \fBServiceMessageSlotState\fP : uint8_t { \fBFREE\fP, \fBREQUEST\fP, \fBRESPONSE\fP }"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr size_t \fBMaxOS::KPI::MESSAGE_SLOTS\fP = 0x100"
+.br
+.RI "How manny message slots are\&. "
+.ti -1c
+.RI "constexpr size_t \fBMaxOS::KPI::MAX_COPY_SIZE\fP = 0x1000"
+.br
+.RI "How large can be copied in to the shared memory\&. "
+.ti -1c
+.RI "constexpr size_t \fBMaxOS::KPI::DATA_SIZE\fP = \fBMAX_COPY_SIZE\fP * \fBMESSAGE_SLOTS\fP"
+.br
+.RI "How much space to allocate for the data region\&. "
+.ti -1c
+.RI "constexpr size_t \fBMaxOS::KPI::MESSAGE_SIZE\fP = sizeof(\fBservice_message_ring_t\fP)"
+.br
+.RI "How much space to allocate for the message region\&. "
+.ti -1c
+.RI "constexpr size_t \fBMaxOS::KPI::SERVICE_SHARED_MEM_SIZE\fP = \fBMESSAGE_SIZE\fP + \fBDATA_SIZE\fP"
+.br
+.RI "Total space required for the shared memory\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Defines classes for managing process resources such as files and devices\&. 
+Defines types of resources and also a ResourceServer to allow for a userspace process to provide resources to other processes\&. 
 
 
 .PP
 \fBDate\fP
 .RS 4
-26th August 2025 
+21 January 2026 
 .RE
 .PP
 \fBAuthor\fP
@@ -75,20 +100,95 @@ Max Tyson
 
 .PP
 Definition in file \fBresource\&.h\fP\&.
-.SH "Typedef Documentation"
+.SH "Enumeration Type Documentation"
 .PP 
-.SS "typedef KPI::Resource \fBMaxOS::processes::resources::Resource\fP"
+.SS "enum class \fBMaxOS::KPI::ResourceType\fP\fC [strong]\fP"
 
 .PP
-Alias to make the libsyscore Resource accessible here\&. 
+The type of resource\&. 
 .PP
-Definition at line \fB26\fP of file \fBresource\&.h\fP\&.
-.SS "typedef KPI::ResourceType \fBMaxOS::processes::resources::resource_type_t\fP"
+Definition at line \fB21\fP of file \fBresource\&.h\fP\&..PP
+.nf
+21                            {
+22         MESSAGE_ENDPOINT,
+23         SHARED_MEMORY,
+24         FILESYSTEM,
+25         PROCESS,
+26         THREAD,
+27 
+28         _END,
+29     };
+.fi
+
+.SS "enum class MaxOS::KPI::ServiceMessageSlotState : uint8_t\fC [strong]\fP"
 
 .PP
-Alias to make the libsyscore ResourceType accessible here\&. 
+Definition at line \fB71\fP of file \fBresource\&.h\fP\&..PP
+.nf
+71                                        : uint8_t {
+72         FREE,
+73         REQUEST,
+74         RESPONSE,
+75     };
+.fi
+
+.SS "enum class MaxOS::KPI::ServiceResourceCommand : uint8_t\fC [strong]\fP"
+
 .PP
-Definition at line \fB25\fP of file \fBresource\&.h\fP\&.
+Definition at line \fB61\fP of file \fBresource\&.h\fP\&..PP
+.nf
+61                                       : uint8_t {
+62         S_CREATE,
+63         S_GET,
+64         R_OPEN,
+65         R_CLOSE,
+66         R_WRITE,
+67         R_READ,
+68     };
+.fi
+
+.SH "Variable Documentation"
+.PP 
+.SS "constexpr size_t MaxOS::KPI::DATA_SIZE = MAX_COPY_SIZE * MESSAGE_SLOTS\fC [constexpr]\fP"
+
+.PP
+How much space to allocate for the data region\&. 
+.PP
+Definition at line \fB101\fP of file \fBresource\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::resources::BridgeHandler::BridgeHandler()\fP\&.
+.SS "constexpr size_t MaxOS::KPI::MAX_COPY_SIZE = 0x1000\fC [constexpr]\fP"
+
+.PP
+How large can be copied in to the shared memory\&. 
+.PP
+Definition at line \fB100\fP of file \fBresource\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::resources::BridgeHandler::send_to_bridge()\fP\&.
+.SS "constexpr size_t MaxOS::KPI::MESSAGE_SIZE = sizeof(service_message_ring_t)\fC [constexpr]\fP"
+
+.PP
+How much space to allocate for the message region\&. 
+.PP
+Definition at line \fB112\fP of file \fBresource\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::resources::BridgeHandler::BridgeHandler()\fP\&.
+.SS "constexpr size_t MaxOS::KPI::MESSAGE_SLOTS = 0x100\fC [constexpr]\fP"
+
+.PP
+How manny message slots are\&. 
+.PP
+Definition at line \fB99\fP of file \fBresource\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::ResourceServer::advance_queue()\fP, \fBMaxOS::KPI::ResourceServer::dequeue_front()\fP, and \fBMaxOS::KPI::ResourceServer::peek_front()\fP\&.
+.SS "constexpr size_t MaxOS::KPI::SERVICE_SHARED_MEM_SIZE = MESSAGE_SIZE + DATA_SIZE\fC [constexpr]\fP"
+
+.PP
+Total space required for the shared memory\&. 
+.PP
+Definition at line \fB113\fP of file \fBresource\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::resources::BridgeHandler::BridgeHandler()\fP\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -1,0 +1,1212 @@
+.TH "libraries/libc/include/signal.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/include/signal.h \- Defines functions to handle async events in a proc\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libc_common\&.h>\fP
+.br
+\fC#include <platform\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "union \fBsigval\fP"
+.br
+.RI "A payload to pass along with a signal\&. "
+.ti -1c
+.RI "struct \fBsigevent\fP"
+.br
+.RI "Define how to notify the process when an event is fired\&. "
+.ti -1c
+.RI "struct \fB_siginfo\fP"
+.br
+.RI "Defines the cause and origin of a signal\&. "
+.ti -1c
+.RI "struct \fBsigaction\fP"
+.br
+.RI "Define what happens when receiving a specific signal\&. "
+.ti -1c
+.RI "struct \fB_stack\fP"
+.br
+.RI "Provides information about a stack\&. "
+.ti -1c
+.RI "struct \fB_ucontext\fP"
+.br
+.RI "Defines the information needed to resume to a userspace context\&. "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBSIG_DFL\fP   1"
+.br
+.RI "Request default signal handling\&. "
+.ti -1c
+.RI "#define \fBSIG_ERR\fP   2"
+.br
+.RI "Call to signal() resulted in an error\&. "
+.ti -1c
+.RI "#define \fBSIG_IGN\fP   3"
+.br
+.RI "Ignore the signal\&. "
+.ti -1c
+.RI "#define \fBSIGEV_NONE\fP"
+.br
+.RI "Dont notify the process\&. "
+.ti -1c
+.RI "#define \fBSIGEV_SIGNAL\fP"
+.br
+.RI "Queue a signal with a value\&. "
+.ti -1c
+.RI "#define \fBSIGEV_THREAD\fP"
+.br
+.RI "Spin up a thread and call a function\&. "
+.ti -1c
+.RI "#define \fB_NSIG\fP   64"
+.br
+.RI "How many signals this LibC supports\&. "
+.ti -1c
+.RI "#define \fBSIGRTMIN\fP   32"
+.br
+.RI "Lowest possible signal value (0-31 are reserved) "
+.ti -1c
+.RI "#define \fBSIGRTMAX\fP   (\fB_NSIG\fP \- 1)"
+.br
+.RI "Highest possible signal value\&. "
+.ti -1c
+.RI "#define \fBSIG2STR_MAX\fP   32"
+.br
+.RI "The size of the buffer required to hold a string returned by sig2str() "
+.ti -1c
+.RI "#define \fBSIGHUP\fP   1"
+.br
+.RI "Hangup\&. "
+.ti -1c
+.RI "#define \fBSIGINT\fP   2"
+.br
+.RI "Terminal interrupt\&. "
+.ti -1c
+.RI "#define \fBSIGQUIT\fP   3"
+.br
+.RI "Terminal quit\&. "
+.ti -1c
+.RI "#define \fBSIGILL\fP   4"
+.br
+.RI "Illegal instruction\&. "
+.ti -1c
+.RI "#define \fBSIGTRAP\fP   5"
+.br
+.RI "Trace/breakpoint trap\&. "
+.ti -1c
+.RI "#define \fBSIGABRT\fP   6"
+.br
+.RI "Abort\&. "
+.ti -1c
+.RI "#define \fBSIGBUS\fP   7"
+.br
+.RI "Bus error\&. "
+.ti -1c
+.RI "#define \fBSIGFPE\fP   8"
+.br
+.RI "Erroneous arithmetic operation\&. "
+.ti -1c
+.RI "#define \fBSIGKILL\fP   9"
+.br
+.RI "Kill (cannot be caught or ignored) "
+.ti -1c
+.RI "#define \fBSIGUSR1\fP   10"
+.br
+.RI "User-defined signal 1\&. "
+.ti -1c
+.RI "#define \fBSIGSEGV\fP   11"
+.br
+.RI "Invalid memory reference\&. "
+.ti -1c
+.RI "#define \fBSIGUSR2\fP   12"
+.br
+.RI "User-defined signal 2\&. "
+.ti -1c
+.RI "#define \fBSIGPIPE\fP   13"
+.br
+.RI "Write on pipe with no reader\&. "
+.ti -1c
+.RI "#define \fBSIGALRM\fP   14"
+.br
+.RI "Alarm clock\&. "
+.ti -1c
+.RI "#define \fBSIGTERM\fP   15"
+.br
+.RI "Termination signal\&. "
+.ti -1c
+.RI "#define \fBSIGCHLD\fP   17"
+.br
+.RI "Child stopped or terminated\&. "
+.ti -1c
+.RI "#define \fBSIGCONT\fP   18"
+.br
+.RI "Continue if stopped\&. "
+.ti -1c
+.RI "#define \fBSIGSTOP\fP   19"
+.br
+.RI "Stop executing (cannot be caught or ignored) "
+.ti -1c
+.RI "#define \fBSIGTSTP\fP   20"
+.br
+.RI "Terminal stop\&. "
+.ti -1c
+.RI "#define \fBSIGTTIN\fP   21"
+.br
+.RI "Background read from terminal\&. "
+.ti -1c
+.RI "#define \fBSIGTTOU\fP   22"
+.br
+.RI "Background write to terminal\&. "
+.ti -1c
+.RI "#define \fBSIGURG\fP   23"
+.br
+.RI "Urgent condition on socket\&. "
+.ti -1c
+.RI "#define \fBSIGXCPU\fP   24"
+.br
+.RI "CPU time limit exceeded\&. "
+.ti -1c
+.RI "#define \fBSIGXFSZ\fP   25"
+.br
+.RI "File size limit exceeded\&. "
+.ti -1c
+.RI "#define \fBSIGVTALRM\fP   26"
+.br
+.RI "Virtual timer expired\&. "
+.ti -1c
+.RI "#define \fBSIGPROF\fP   27"
+.br
+.RI "Profiling timer expired\&. "
+.ti -1c
+.RI "#define \fBSIGWINCH\fP   28"
+.br
+.RI "Window size change\&. "
+.ti -1c
+.RI "#define \fBSIGSYS\fP   31"
+.br
+.RI "Bad system call\&. "
+.ti -1c
+.RI "#define \fBSIG_BLOCK\fP   1"
+.br
+.RI "Add the signals to the block mask\&. "
+.ti -1c
+.RI "#define \fBSIG_UNBLOCK\fP   2"
+.br
+.RI "Remove the signals from the block mask\&. "
+.ti -1c
+.RI "#define \fBSIG_SETMASK\fP   3"
+.br
+.RI "Replace the entire mask\&. "
+.ti -1c
+.RI "#define \fBSA_NOCLDSTOP\fP   (1 << 0)"
+.br
+.RI "Do not generate SIGCHLD when children stop/continue\&. "
+.ti -1c
+.RI "#define \fBSA_ONSTACK\fP   (1 << 1)"
+.br
+.RI "Causes signal delivery to occur on an alternate stack\&. "
+.ti -1c
+.RI "#define \fBSA_RESETHAND\fP   (1 << 2)"
+.br
+.RI "Resets the signal’s handling behavior to the default action before the signal handler begins execution\&. "
+.ti -1c
+.RI "#define \fBSA_RESTART\fP   (1 << 3)"
+.br
+.RI "Automatically restart interrupted system calls\&. "
+.ti -1c
+.RI "#define \fBSA_SIGINFO\fP   (1 << 4)"
+.br
+.RI "Deliver extended signal information to the handler\&. "
+.ti -1c
+.RI "#define \fBSA_NOCLDWAIT\fP   (1 << 5)"
+.br
+.RI "Prevent creation of child processes that have exited but are still waiting for their exit code to be read\&. "
+.ti -1c
+.RI "#define \fBSA_NODEFER\fP   (1 << 6)"
+.br
+.RI "Do not block the signal while its handler runs\&. "
+.ti -1c
+.RI "#define \fBSS_ONSTACK\fP   (1 << 0)"
+.br
+.RI "Handler is executing on the alternate signal stack\&. "
+.ti -1c
+.RI "#define \fBSS_DISABLE\fP   (1 << 1)"
+.br
+.RI "Disable the alternate signal stack\&. "
+.ti -1c
+.RI "#define \fBMINSIGSTKSZ\fP   2048"
+.br
+.RI "Minimum required size for a signal handler stack\&. "
+.ti -1c
+.RI "#define \fBSIGSTKSZ\fP   8192"
+.br
+.RI "Default size for the alternate signal stack\&. "
+.ti -1c
+.RI "#define \fBILL_ILLOPC\fP   1"
+.br
+.RI "Illegal opcode\&. "
+.ti -1c
+.RI "#define \fBILL_ILLOPN\fP   2"
+.br
+.RI "Illegal operand\&. "
+.ti -1c
+.RI "#define \fBILL_ILLADR\fP   3"
+.br
+.RI "Illegal addressing mode\&. "
+.ti -1c
+.RI "#define \fBILL_ILLTRP\fP   4"
+.br
+.RI "Illegal trap\&. "
+.ti -1c
+.RI "#define \fBILL_PRVOPC\fP   5"
+.br
+.RI "Privileged opcode\&. "
+.ti -1c
+.RI "#define \fBILL_PRVREG\fP   6"
+.br
+.RI "Privileged register\&. "
+.ti -1c
+.RI "#define \fBILL_COPROC\fP   7"
+.br
+.RI "Coprocessor error\&. "
+.ti -1c
+.RI "#define \fBILL_BADSTK\fP   8"
+.br
+.RI "Internal stack error\&. "
+.ti -1c
+.RI "#define \fBFPE_INTDIV\fP   1"
+.br
+.RI "Integer div by zero\&. "
+.ti -1c
+.RI "#define \fBFPE_INTOVF\fP   2"
+.br
+.RI "Integer overflow\&. "
+.ti -1c
+.RI "#define \fBFPE_FLTDIV\fP   3"
+.br
+.RI "Float div by zero\&. "
+.ti -1c
+.RI "#define \fBFPE_FLTOVF\fP   4"
+.br
+.RI "Float overflow\&. "
+.ti -1c
+.RI "#define \fBFPE_FLTUND\fP   5"
+.br
+.RI "Float underflow\&. "
+.ti -1c
+.RI "#define \fBFPE_FLTRES\fP   6"
+.br
+.RI "Float inexact result\&. "
+.ti -1c
+.RI "#define \fBFPE_FLTINV\fP   7"
+.br
+.RI "Invalid float operation\&. "
+.ti -1c
+.RI "#define \fBFPE_FLTSUB\fP   8"
+.br
+.RI "Subscript out of range\&. "
+.ti -1c
+.RI "#define \fBSEGV_MAPERR\fP   1"
+.br
+.RI "Address not mapped\&. "
+.ti -1c
+.RI "#define \fBSEGV_ACCERR\fP   2"
+.br
+.RI "Invalid access permissions\&. "
+.ti -1c
+.RI "#define \fBBUS_ADRALN\fP   1"
+.br
+.RI "Invalid address alignment\&. "
+.ti -1c
+.RI "#define \fBBUS_ADRERR\fP   2"
+.br
+.RI "Nonexistent physical address\&. "
+.ti -1c
+.RI "#define \fBBUS_OBJERR\fP   3"
+.br
+.RI "Object-specific hardware error\&. "
+.ti -1c
+.RI "#define \fBTRAP_BRKPT\fP   1"
+.br
+.RI "Process breakpoint\&. "
+.ti -1c
+.RI "#define \fBTRAP_TRACE\fP   2"
+.br
+.RI "Process trace trap\&. "
+.ti -1c
+.RI "#define \fBCLD_EXITED\fP   1"
+.br
+.RI "Child exited normally\&. "
+.ti -1c
+.RI "#define \fBCLD_KILLED\fP   2"
+.br
+.RI "Child killed\&. "
+.ti -1c
+.RI "#define \fBCLD_DUMPED\fP   3"
+.br
+.RI "Child terminated and dumped core\&. "
+.ti -1c
+.RI "#define \fBCLD_TRAPPED\fP   4"
+.br
+.RI "Traced child trapped\&. "
+.ti -1c
+.RI "#define \fBCLD_STOPPED\fP   5"
+.br
+.RI "Child stopped\&. "
+.ti -1c
+.RI "#define \fBCLD_CONTINUED\fP   6"
+.br
+.RI "Stopped child continued\&. "
+.ti -1c
+.RI "#define \fBSI_USER\fP   1"
+.br
+.RI "Sent by \fBkill()\fP "
+.ti -1c
+.RI "#define \fBSI_QUEUE\fP   2"
+.br
+.RI "Sent by sigqueue() "
+.ti -1c
+.RI "#define \fBSI_TIMER\fP   3"
+.br
+.RI "Timer expiration\&. "
+.ti -1c
+.RI "#define \fBSI_ASYNCIO\fP   4"
+.br
+.RI "Async I/O completion\&. "
+.ti -1c
+.RI "#define \fBSI_MESGQ\fP   5"
+.br
+.RI "Message queue arrival\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef int \fBsig_atomic_t\fP"
+.br
+.ti -1c
+.RI "typedef unsigned long \fBsigset_t\fP"
+.br
+.ti -1c
+.RI "typedef void(* \fBsighandler_t\fP) (int)"
+.br
+.ti -1c
+.RI "typedef void(* \fBsigev_notify_function_t\fP) (union \fBsigval\fP)"
+.br
+.ti -1c
+.RI "typedef struct \fB_siginfo\fP \fBsiginfo_t\fP"
+.br
+.ti -1c
+.RI "typedef void(* \fBsigaction_handler_t\fP) (int, \fBsiginfo_t\fP *, void *)"
+.br
+.ti -1c
+.RI "typedef struct \fB_platform_mcontext\fP \fBmcontext_t\fP"
+.br
+.RI "Platform specific representation of the CPU context state (registers) "
+.ti -1c
+.RI "typedef struct \fB_stack\fP \fBstack_t\fP"
+.br
+.RI "Public alais of \fB_stack\fP\&. "
+.ti -1c
+.RI "typedef struct \fB_ucontext\fP \fBucontext_t\fP"
+.br
+.RI "Public alais of \fB_siginfo\fP\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBkill\fP (\fBpid_t\fP, int)"
+.br
+.RI "Send a sig to a process\&. "
+.ti -1c
+.RI "int \fBkillpg\fP (\fBpid_t\fP, int)"
+.br
+.RI "Send a sig to a process group\&. "
+.ti -1c
+.RI "int \fBpthread_kill\fP (\fBpthread_t\fP, int)"
+.br
+.RI "Send a sig to a thread\&. "
+.ti -1c
+.RI "int \fBraise\fP (int)"
+.br
+.RI "Send a sig to the executing process\&. "
+.ti -1c
+.RI "int \fBsigqueue\fP (\fBpid_t\fP, int, union \fBsigval\fP)"
+.br
+.ti -1c
+.RI "sighandler_t \fBsignal\fP (int signum, sighandler_t handler)"
+.br
+.ti -1c
+.RI "int \fBsigaction\fP (int, const struct \fBsigaction\fP *restrict, struct \fBsigaction\fP *restrict)"
+.br
+.ti -1c
+.RI "int \fBsigprocmask\fP (int, const sigset_t *restrict, sigset_t *restrict)"
+.br
+.ti -1c
+.RI "int \fBpthread_sigmask\fP (int, const sigset_t *restrict, sigset_t *restrict)"
+.br
+.ti -1c
+.RI "int \fBsigemptyset\fP (sigset_t *)"
+.br
+.ti -1c
+.RI "int \fBsigfillset\fP (sigset_t *)"
+.br
+.ti -1c
+.RI "int \fBsigaddset\fP (sigset_t *, int)"
+.br
+.ti -1c
+.RI "int \fBsigdelset\fP (sigset_t *, int)"
+.br
+.ti -1c
+.RI "int \fBsigismember\fP (const sigset_t *, int)"
+.br
+.ti -1c
+.RI "int \fBsigpending\fP (sigset_t *)"
+.br
+.ti -1c
+.RI "int \fBsigsuspend\fP (const sigset_t *)"
+.br
+.ti -1c
+.RI "int \fBsigwait\fP (const sigset_t *restrict, int *restrict)"
+.br
+.ti -1c
+.RI "int \fBsigwaitinfo\fP (const sigset_t *restrict, \fBsiginfo_t\fP *restrict)"
+.br
+.ti -1c
+.RI "int \fBsigtimedwait\fP (const sigset_t *restrict, \fBsiginfo_t\fP *restrict, const struct \fBtimespec\fP *restrict)"
+.br
+.ti -1c
+.RI "int \fBsigaltstack\fP (const \fBstack_t\fP *restrict, \fBstack_t\fP *restrict)"
+.br
+.ti -1c
+.RI "void \fBpsignal\fP (int, const char *)"
+.br
+.ti -1c
+.RI "void \fBpsiginfo\fP (const \fBsiginfo_t\fP *, const char *)"
+.br
+.ti -1c
+.RI "int \fBsig2str\fP (int, char *)"
+.br
+.ti -1c
+.RI "int \fBstr2sig\fP (const char *restrict, int *restrict)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines functions to handle async events in a proc\&. 
+
+
+.PP
+\fBSee also\fP
+.RS 4
+https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/signal.h.html
+.RE
+.PP
+\fBDate\fP
+.RS 4
+16 December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBsignal\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define _NSIG   64"
+
+.PP
+How many signals this LibC supports\&. 
+.PP
+Definition at line \fB65\fP of file \fBsignal\&.h\fP\&.
+.SS "#define BUS_ADRALN   1"
+
+.PP
+Invalid address alignment\&. 
+.PP
+Definition at line \fB217\fP of file \fBsignal\&.h\fP\&.
+.SS "#define BUS_ADRERR   2"
+
+.PP
+Nonexistent physical address\&. 
+.PP
+Definition at line \fB218\fP of file \fBsignal\&.h\fP\&.
+.SS "#define BUS_OBJERR   3"
+
+.PP
+Object-specific hardware error\&. 
+.PP
+Definition at line \fB219\fP of file \fBsignal\&.h\fP\&.
+.SS "#define CLD_CONTINUED   6"
+
+.PP
+Stopped child continued\&. 
+.PP
+Definition at line \fB231\fP of file \fBsignal\&.h\fP\&.
+.SS "#define CLD_DUMPED   3"
+
+.PP
+Child terminated and dumped core\&. 
+.PP
+Definition at line \fB228\fP of file \fBsignal\&.h\fP\&.
+.SS "#define CLD_EXITED   1"
+
+.PP
+Child exited normally\&. 
+.PP
+Definition at line \fB226\fP of file \fBsignal\&.h\fP\&.
+.SS "#define CLD_KILLED   2"
+
+.PP
+Child killed\&. 
+.PP
+Definition at line \fB227\fP of file \fBsignal\&.h\fP\&.
+.SS "#define CLD_STOPPED   5"
+
+.PP
+Child stopped\&. 
+.PP
+Definition at line \fB230\fP of file \fBsignal\&.h\fP\&.
+.SS "#define CLD_TRAPPED   4"
+
+.PP
+Traced child trapped\&. 
+.PP
+Definition at line \fB229\fP of file \fBsignal\&.h\fP\&.
+.SS "#define FPE_FLTDIV   3"
+
+.PP
+Float div by zero\&. 
+.PP
+Definition at line \fB205\fP of file \fBsignal\&.h\fP\&.
+.SS "#define FPE_FLTINV   7"
+
+.PP
+Invalid float operation\&. 
+.PP
+Definition at line \fB209\fP of file \fBsignal\&.h\fP\&.
+.SS "#define FPE_FLTOVF   4"
+
+.PP
+Float overflow\&. 
+.PP
+Definition at line \fB206\fP of file \fBsignal\&.h\fP\&.
+.SS "#define FPE_FLTRES   6"
+
+.PP
+Float inexact result\&. 
+.PP
+Definition at line \fB208\fP of file \fBsignal\&.h\fP\&.
+.SS "#define FPE_FLTSUB   8"
+
+.PP
+Subscript out of range\&. 
+.PP
+Definition at line \fB210\fP of file \fBsignal\&.h\fP\&.
+.SS "#define FPE_FLTUND   5"
+
+.PP
+Float underflow\&. 
+.PP
+Definition at line \fB207\fP of file \fBsignal\&.h\fP\&.
+.SS "#define FPE_INTDIV   1"
+
+.PP
+Integer div by zero\&. 
+.PP
+Definition at line \fB203\fP of file \fBsignal\&.h\fP\&.
+.SS "#define FPE_INTOVF   2"
+
+.PP
+Integer overflow\&. 
+.PP
+Definition at line \fB204\fP of file \fBsignal\&.h\fP\&.
+.SS "#define ILL_BADSTK   8"
+
+.PP
+Internal stack error\&. 
+.PP
+Definition at line \fB200\fP of file \fBsignal\&.h\fP\&.
+.SS "#define ILL_COPROC   7"
+
+.PP
+Coprocessor error\&. 
+.PP
+Definition at line \fB199\fP of file \fBsignal\&.h\fP\&.
+.SS "#define ILL_ILLADR   3"
+
+.PP
+Illegal addressing mode\&. 
+.PP
+Definition at line \fB195\fP of file \fBsignal\&.h\fP\&.
+.SS "#define ILL_ILLOPC   1"
+
+.PP
+Illegal opcode\&. 
+.PP
+Definition at line \fB193\fP of file \fBsignal\&.h\fP\&.
+.SS "#define ILL_ILLOPN   2"
+
+.PP
+Illegal operand\&. 
+.PP
+Definition at line \fB194\fP of file \fBsignal\&.h\fP\&.
+.SS "#define ILL_ILLTRP   4"
+
+.PP
+Illegal trap\&. 
+.PP
+Definition at line \fB196\fP of file \fBsignal\&.h\fP\&.
+.SS "#define ILL_PRVOPC   5"
+
+.PP
+Privileged opcode\&. 
+.PP
+Definition at line \fB197\fP of file \fBsignal\&.h\fP\&.
+.SS "#define ILL_PRVREG   6"
+
+.PP
+Privileged register\&. 
+.PP
+Definition at line \fB198\fP of file \fBsignal\&.h\fP\&.
+.SS "#define MINSIGSTKSZ   2048"
+
+.PP
+Minimum required size for a signal handler stack\&. 
+.PP
+Definition at line \fB155\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SA_NOCLDSTOP   (1 << 0)"
+
+.PP
+Do not generate SIGCHLD when children stop/continue\&. 
+.PP
+Definition at line \fB144\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SA_NOCLDWAIT   (1 << 5)"
+
+.PP
+Prevent creation of child processes that have exited but are still waiting for their exit code to be read\&. 
+.PP
+Definition at line \fB149\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SA_NODEFER   (1 << 6)"
+
+.PP
+Do not block the signal while its handler runs\&. 
+.PP
+Definition at line \fB150\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SA_ONSTACK   (1 << 1)"
+
+.PP
+Causes signal delivery to occur on an alternate stack\&. 
+.PP
+Definition at line \fB145\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SA_RESETHAND   (1 << 2)"
+
+.PP
+Resets the signal’s handling behavior to the default action before the signal handler begins execution\&. 
+.PP
+Definition at line \fB146\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SA_RESTART   (1 << 3)"
+
+.PP
+Automatically restart interrupted system calls\&. 
+.PP
+Definition at line \fB147\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SA_SIGINFO   (1 << 4)"
+
+.PP
+Deliver extended signal information to the handler\&. 
+.PP
+Definition at line \fB148\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SEGV_ACCERR   2"
+
+.PP
+Invalid access permissions\&. 
+.PP
+Definition at line \fB214\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SEGV_MAPERR   1"
+
+.PP
+Address not mapped\&. 
+.PP
+Definition at line \fB213\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SI_ASYNCIO   4"
+
+.PP
+Async I/O completion\&. 
+.PP
+Definition at line \fB237\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SI_MESGQ   5"
+
+.PP
+Message queue arrival\&. 
+.PP
+Definition at line \fB238\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SI_QUEUE   2"
+
+.PP
+Sent by sigqueue() 
+.PP
+Definition at line \fB235\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SI_TIMER   3"
+
+.PP
+Timer expiration\&. 
+.PP
+Definition at line \fB236\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SI_USER   1"
+
+.PP
+Sent by \fBkill()\fP 
+.PP
+Definition at line \fB234\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIG2STR_MAX   32"
+
+.PP
+The size of the buffer required to hold a string returned by sig2str() 
+.PP
+Definition at line \fB68\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIG_BLOCK   1"
+
+.PP
+Add the signals to the block mask\&. 
+.PP
+Definition at line \fB140\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIG_DFL   1"
+
+.PP
+Request default signal handling\&. 
+.PP
+Definition at line \fB21\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIG_ERR   2"
+
+.PP
+Call to signal() resulted in an error\&. 
+.PP
+Definition at line \fB22\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIG_IGN   3"
+
+.PP
+Ignore the signal\&. 
+.PP
+Definition at line \fB23\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIG_SETMASK   3"
+
+.PP
+Replace the entire mask\&. 
+.PP
+Definition at line \fB142\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIG_UNBLOCK   2"
+
+.PP
+Remove the signals from the block mask\&. 
+.PP
+Definition at line \fB141\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGABRT   6"
+
+.PP
+Abort\&. 
+.PP
+Definition at line \fB75\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGALRM   14"
+
+.PP
+Alarm clock\&. 
+.PP
+Definition at line \fB83\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGBUS   7"
+
+.PP
+Bus error\&. 
+.PP
+Definition at line \fB76\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGCHLD   17"
+
+.PP
+Child stopped or terminated\&. 
+.PP
+Definition at line \fB86\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGCONT   18"
+
+.PP
+Continue if stopped\&. 
+.PP
+Definition at line \fB87\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGEV_NONE"
+
+.PP
+Dont notify the process\&. 
+.PP
+Definition at line \fB61\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGEV_SIGNAL"
+
+.PP
+Queue a signal with a value\&. 
+.PP
+Definition at line \fB62\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGEV_THREAD"
+
+.PP
+Spin up a thread and call a function\&. 
+.PP
+Definition at line \fB63\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGFPE   8"
+
+.PP
+Erroneous arithmetic operation\&. 
+.PP
+Definition at line \fB77\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGHUP   1"
+
+.PP
+Hangup\&. 
+.PP
+Definition at line \fB70\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGILL   4"
+
+.PP
+Illegal instruction\&. 
+.PP
+Definition at line \fB73\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGINT   2"
+
+.PP
+Terminal interrupt\&. 
+.PP
+Definition at line \fB71\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGKILL   9"
+
+.PP
+Kill (cannot be caught or ignored) 
+.PP
+Definition at line \fB78\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGPIPE   13"
+
+.PP
+Write on pipe with no reader\&. 
+.PP
+Definition at line \fB82\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGPROF   27"
+
+.PP
+Profiling timer expired\&. 
+.PP
+Definition at line \fB97\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGQUIT   3"
+
+.PP
+Terminal quit\&. 
+.PP
+Definition at line \fB72\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGRTMAX   (\fB_NSIG\fP \- 1)"
+
+.PP
+Highest possible signal value\&. 
+.PP
+Definition at line \fB67\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGRTMIN   32"
+
+.PP
+Lowest possible signal value (0-31 are reserved) 
+.PP
+Definition at line \fB66\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGSEGV   11"
+
+.PP
+Invalid memory reference\&. 
+.PP
+Definition at line \fB80\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGSTKSZ   8192"
+
+.PP
+Default size for the alternate signal stack\&. 
+.PP
+Definition at line \fB156\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGSTOP   19"
+
+.PP
+Stop executing (cannot be caught or ignored) 
+.PP
+Definition at line \fB88\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGSYS   31"
+
+.PP
+Bad system call\&. 
+.PP
+Definition at line \fB99\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGTERM   15"
+
+.PP
+Termination signal\&. 
+.PP
+Definition at line \fB84\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGTRAP   5"
+
+.PP
+Trace/breakpoint trap\&. 
+.PP
+Definition at line \fB74\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGTSTP   20"
+
+.PP
+Terminal stop\&. 
+.PP
+Definition at line \fB89\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGTTIN   21"
+
+.PP
+Background read from terminal\&. 
+.PP
+Definition at line \fB90\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGTTOU   22"
+
+.PP
+Background write to terminal\&. 
+.PP
+Definition at line \fB91\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGURG   23"
+
+.PP
+Urgent condition on socket\&. 
+.PP
+Definition at line \fB93\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGUSR1   10"
+
+.PP
+User-defined signal 1\&. 
+.PP
+Definition at line \fB79\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGUSR2   12"
+
+.PP
+User-defined signal 2\&. 
+.PP
+Definition at line \fB81\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGVTALRM   26"
+
+.PP
+Virtual timer expired\&. 
+.PP
+Definition at line \fB96\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGWINCH   28"
+
+.PP
+Window size change\&. 
+.PP
+Definition at line \fB98\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGXCPU   24"
+
+.PP
+CPU time limit exceeded\&. 
+.PP
+Definition at line \fB94\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SIGXFSZ   25"
+
+.PP
+File size limit exceeded\&. 
+.PP
+Definition at line \fB95\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SS_DISABLE   (1 << 1)"
+
+.PP
+Disable the alternate signal stack\&. 
+.PP
+Definition at line \fB153\fP of file \fBsignal\&.h\fP\&.
+.SS "#define SS_ONSTACK   (1 << 0)"
+
+.PP
+Handler is executing on the alternate signal stack\&. 
+.PP
+Definition at line \fB152\fP of file \fBsignal\&.h\fP\&.
+.SS "#define TRAP_BRKPT   1"
+
+.PP
+Process breakpoint\&. 
+.PP
+Definition at line \fB222\fP of file \fBsignal\&.h\fP\&.
+.SS "#define TRAP_TRACE   2"
+
+.PP
+Process trace trap\&. 
+.PP
+Definition at line \fB223\fP of file \fBsignal\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef struct \fB_platform_mcontext\fP \fBmcontext_t\fP"
+
+.PP
+Platform specific representation of the CPU context state (registers) 
+.PP
+Definition at line \fB159\fP of file \fBsignal\&.h\fP\&.
+.SS "typedef int sig_atomic_t"
+
+.PP
+Definition at line \fB25\fP of file \fBsignal\&.h\fP\&.
+.SS "typedef void(* sigaction_handler_t) (int, \fBsiginfo_t\fP *, void *)"
+
+.PP
+Definition at line \fB121\fP of file \fBsignal\&.h\fP\&.
+.SS "typedef void(* sigev_notify_function_t) (union \fBsigval\fP)"
+
+.PP
+Definition at line \fB45\fP of file \fBsignal\&.h\fP\&.
+.SS "typedef void(* sighandler_t) (int)"
+
+.PP
+Definition at line \fB33\fP of file \fBsignal\&.h\fP\&.
+.SS "typedef unsigned long sigset_t"
+
+.PP
+Definition at line \fB26\fP of file \fBsignal\&.h\fP\&.
+.SS "\fBucontext_t\fP"
+
+.PP
+Public alais of \fB_siginfo\fP\&. Public alais of \fB_ucontext\fP\&. 
+.SH "Function Documentation"
+.PP 
+.SS "int kill (\fBpid_t\fP pid, int sig)"
+
+.PP
+Send a sig to a process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The process (or process group if negative) to send the sig to 
+.br
+\fIsig\fP The sig to send 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 on success, or -1 with an errno 
+.RE
+.PP
+
+.PP
+Definition at line \fB21\fP of file \fBsignal\&.c\fP\&..PP
+.nf
+22 {
+23 
+24     // Ensure a valid sig
+25     if(sig < 0 || sig >= _NSIG)
+26         RETURN_ERR(EINVAL);
+27 
+28     // Send the kill sig (platform specific)
+29     return _platform_kill(pid,sig);
+30 }
+.fi
+
+.PP
+References \fB_NSIG\fP, \fB_platform_kill()\fP, and \fBEINVAL\fP\&.
+.PP
+Referenced by \fBkillpg()\fP, and \fBraise()\fP\&.
+.SS "int killpg (\fBpid_t\fP pgid, int sig)"
+
+.PP
+Send a sig to a process group\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpgid\fP The process group to send the sig to 
+.br
+\fIsig\fP The sig to send 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 on success, or -1 with an errno 
+.RE
+.PP
+
+.PP
+Definition at line \fB39\fP of file \fBsignal\&.c\fP\&..PP
+.nf
+40 {
+41 
+42     // IDs must be positive as platform expects negatives to represent a group which fails under \-(\-pgid)
+43     if (pgid < 0)
+44         RETURN_ERR(EINVAL);
+45 
+46     // Send the kill sig and make it a group (platform specific)
+47     return kill(\-pgid,sig);
+48 
+49 }
+.fi
+
+.PP
+References \fBEINVAL\fP, and \fBkill()\fP\&.
+.SS "int pthread_kill (\fBpthread_t\fP thread, int sig)"
+
+.PP
+Send a sig to a thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthread\fP The destination thread to send the sig to 
+.br
+\fIsig\fP The sig to send 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 on success, or -1 with an errno 
+.RE
+.PP
+
+.PP
+Definition at line \fB58\fP of file \fBsignal\&.c\fP\&..PP
+.nf
+58                                            {
+59 
+60     // TODO: POSIX pthreads support
+61     return \-1;
+62 
+63 }
+.fi
+
+.SS "int raise (int sig)"
+
+.PP
+Send a sig to the executing process\&. 
+.PP
+\fBReturns\fP
+.RS 4
+0 on success, or -1 with an errno 
+.RE
+.PP
+
+.PP
+Definition at line \fB70\fP of file \fBsignal\&.c\fP\&..PP
+.nf
+70                   {
+71 
+72     // Ensure a valid sig
+73     if(sig < 0 || sig >= _NSIG)
+74         RETURN_ERR(EINVAL);
+75 
+76     return kill(_platform_getpid(), sig);
+77 
+78 }
+.fi
+
+.PP
+References \fB_NSIG\fP, \fB_platform_getpid()\fP, \fBEINVAL\fP, and \fBkill()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

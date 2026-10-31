@@ -1,74 +1,168 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "libraries/libkpi/include/libkpi/processes/process.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/processes/process.h \- Defines Process and Thread classes for managing processes and their execution contexts\&.  
+libraries/libkpi/include/libkpi/processes/process.h \- Defines the abstraction for process management functions and structures\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <libcommon/vector\&.h>\fP
+\fC#include <cstdint>\fP
 .br
-\fC#include <libcommon/string\&.h>\fP
+\fC#include <cstddef>\fP
 .br
-\fC#include <system/cpu\&.h>\fP
+\fC#include <libcommon/mem\&.h>\fP
 .br
-\fC#include <memory/virtual\&.h>\fP
-.br
-\fC#include <memory/memorymanagement\&.h>\fP
-.br
-\fC#include <processes/elf\&.h>\fP
-.br
-\fC#include <processes/resources/resource\&.h>\fP
-.br
-\fC#include <hardwarecommunication/interrupts\&.h>\fP
+\fC#include <libkpi/syscalls\&.h>\fP
 .br
 
 .SS "Classes"
 
 .in +1c
 .ti -1c
-.RI "class \fBMaxOS::processes::Thread\fP"
+.RI "struct \fBMaxOS::KPI::processes::ExecuteCommand\fP"
 .br
-.RI "The execution context of a sub-process thread\&. "
 .ti -1c
-.RI "class \fBMaxOS::processes::Process\fP"
+.RI "struct \fBMaxOS::KPI::processes::ProcessStats\fP"
 .br
-.RI "A process that can be scheduled by the \fBScheduler\fP, wraps & manages threads as well as its own address space and resources\&. "
+.RI "Structure containing various statistics about a process\&. "
+.ti -1c
+.RI "struct \fBMaxOS::KPI::processes::ProcessEnvironment\fP"
+.br
+.ti -1c
+.RI "struct \fBMaxOS::KPI::processes::handle_info\fP"
+.br
 .in -1c
 .SS "Typedefs"
 
 .in +1c
 .ti -1c
-.RI "typedef enum \fBMaxOS::processes::ThreadState\fP \fBMaxOS::processes::thread_state_t\fP"
+.RI "typedef struct \fBMaxOS::KPI::processes::ExecuteCommand\fP \fBMaxOS::KPI::processes::execute_command_t\fP"
 .br
-.RI "Alias for ThreadState enum\&. "
+.ti -1c
+.RI "typedef struct \fBMaxOS::KPI::processes::ProcessStats\fP \fBMaxOS::KPI::processes::process_stats_t\fP"
+.br
+.RI "Alias for struct \fBProcessStats\fP\&. "
+.ti -1c
+.RI "typedef struct \fBMaxOS::KPI::processes::ProcessEnvironment\fP \fBMaxOS::KPI::processes::process_environment_t\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBMaxOS::KPI::processes::handle_info\fP \fBMaxOS::KPI::processes::handle_info_t\fP"
+.br
 .in -1c
 .SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "enum class \fBMaxOS::processes::ThreadState\fP { \fBNEW\fP, \fBRUNNING\fP, \fBREADY\fP, \fBSLEEPING\fP, \fBWAITING\fP, \fBSTOPPED\fP }"
+.RI "enum class \fBProcessFlags\fP { \fBREAD_STATS\fP, \fBREAD_ENVIRONMENT\fP, \fBREAD_HANDLES\fP, \fBWRITE_CHANGE_DIRECTORY\fP, \fBWRITE_KILL\fP }"
 .br
-.RI "The different operational states a thread can be in\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::exec_file\fP (const char *name, const char *path, bool wait_for_completion=false)"
+.br
+.RI "Executes a file as a new process\&. "
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::exec_file\fP (const char *name, const char *path, const char **args, size_t arg_amount, bool wait_for_completion=false)"
+.br
+.RI "Executes a file as a new process\&. "
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::get_process\fP (uint64_t \fBpid\fP)"
+.br
+.RI "Gets a handle to a process by its PID\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::close_process_handle\fP (uint64_t handle)"
+.br
+.RI "Closes a process handle\&. Will not terminate the process itself\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::kill_process_handle\fP (uint64_t handle, uint64_t exit_code, bool close_handle=true)"
+.br
+.RI "Kills a process by its handle\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::kill_process\fP (uint64_t \fBpid\fP, uint64_t exit_code)"
+.br
+.RI "Kills a process by its PID\&. "
+.ti -1c
+.RI "\fBprocess_stats_t\fP \fBMaxOS::KPI::processes::get_process_stats_handle\fP (uint64_t handle)"
+.br
+.RI "Gets the statistics of a process by its handle\&. "
+.ti -1c
+.RI "\fBprocess_stats_t\fP \fBMaxOS::KPI::processes::get_process_stats\fP (uint64_t \fBpid\fP)"
+.br
+.RI "Gets the statistics of a process by its PID\&. "
+.ti -1c
+.RI "\fBprocess_environment_t\fP \fBMaxOS::KPI::processes::get_process_environment_handle\fP (uint64_t handle)"
+.br
+.RI "Gets the environment of a process by its handle\&. "
+.ti -1c
+.RI "\fBprocess_environment_t\fP \fBMaxOS::KPI::processes::get_process_environment\fP (uint64_t \fBpid\fP)"
+.br
+.RI "Gets the environment of a process by its PID\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::change_working_directory_handle\fP (uint64_t handle, const char *path)"
+.br
+.RI "Changes the working directory of a process\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::change_working_directory_pid\fP (uint64_t \fBpid\fP, const char *path)"
+.br
+.RI "Changes the working directory of a process by its PID\&. "
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::get_current_process\fP ()"
+.br
+.RI "Gets a handle to the current process\&. "
+.ti -1c
+.RI "\fBprocess_stats_t\fP \fBMaxOS::KPI::processes::get_current_process_stats\fP ()"
+.br
+.RI "Gets the statistics of the current process\&. "
+.ti -1c
+.RI "\fBprocess_environment_t\fP \fBMaxOS::KPI::processes::get_current_process_environment\fP ()"
+.br
+.RI "Gets the environment of the current process\&. "
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::pid\fP ()"
+.br
+.RI "Gets the PID of the current process\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::exit\fP (uint64_t exit_code)"
+.br
+.RI "Exits the current process\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::change_working_directory\fP (const char *path)"
+.br
+.RI "Changes the working directory of the current process\&. "
 .in -1c
 .SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "constexpr size_t \fBMaxOS::processes::STACK_SIZE\fP = 0x10000"
+.RI "uint64_t \fBMaxOS::KPI::processes::m_current_process_handle\fP = 0"
 .br
-.RI "The size of the stack for each thread (4KB) "
+.ti -1c
+.RI "\fBprocess_stats_t\fP \fBMaxOS::KPI::processes::m_current_process_stats\fP = {}"
+.br
+.ti -1c
+.RI "\fBprocess_environment_t\fP \fBMaxOS::KPI::processes::m_current_process_environment\fP = {}"
+.br
+.ti -1c
+.RI "char * \fBMaxOS::KPI::processes::m_working_dir_cache\fP = nullptr"
+.br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Defines Process and Thread classes for managing processes and their execution contexts\&. 
+Defines the abstraction for process management functions and structures\&. 
 
 
 .PP
+\fBNote\fP
+.RS 4
+PID means Process ID, not to be confused with handles\&.
+.RE
+.PP
 \fBDate\fP
 .RS 4
-25th February 2025 
+2nd December 2025 
 .RE
 .PP
 \fBAuthor\fP
@@ -79,35 +173,620 @@ Max Tyson
 
 .PP
 Definition in file \fBprocess\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "\fBMaxOS::KPI::processes::process_stats_t\fP"
+
+.PP
+Alias for struct ProcessStats\&. 
+.PP
+\fBNote\fP
+.RS 4
+PID 0 here means process is not running as PID 0 is reserved for the system idle process and thus no point in user processes needing to access it\&. 
+.RE
+.PP
+
 .SH "Enumeration Type Documentation"
 .PP 
-.SS "enum class \fBMaxOS::processes::ThreadState\fP\fC [strong]\fP"
+.SS "enum class MaxOS::KPI::processes::ProcessFlags\fC [strong]\fP"
 
 .PP
-The different operational states a thread can be in\&. 
-.PP
-Definition at line \fB32\fP of file \fBprocess\&.h\fP\&..PP
+Definition at line \fB72\fP of file \fBprocess\&.h\fP\&..PP
 .nf
-32                                    {
-33         NEW,
-34         RUNNING,
-35         READY,
-36         SLEEPING,
-37         WAITING,
-38         STOPPED
-39     } thread_state_t;
+72                             {
+73         READ_STATS,
+74         READ_ENVIRONMENT,
+75         READ_HANDLES,
+76 
+77         WRITE_CHANGE_DIRECTORY,
+78         WRITE_KILL
+79     };
 .fi
 
-.SH "Variable Documentation"
+.SH "Function Documentation"
 .PP 
-.SS "constexpr size_t MaxOS::processes::STACK_SIZE = 0x10000\fC [constexpr]\fP"
+.SS "void MaxOS::KPI::processes::change_working_directory (const char * path)"
 
 .PP
-The size of the stack for each thread (4KB) 
+Changes the working directory of the current process\&. 
 .PP
-Definition at line \fB42\fP of file \fBprocess\&.h\fP\&.
+\fBParameters\fP
+.RS 4
+\fIpath\fP The new working directory path 
+.RE
 .PP
-Referenced by \fBMaxOS::processes::Thread::Thread()\fP\&.
+
+.PP
+Definition at line \fB290\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+290                                                          {
+291 
+292     change_working_directory_handle(get_current_process(), path);
+293 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::change_working_directory_handle()\fP, and \fBMaxOS::KPI::processes::get_current_process()\fP\&.
+.SS "void MaxOS::KPI::processes::change_working_directory_handle (uint64_t handle, const char * path)"
+
+.PP
+Changes the working directory of a process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The PID of the process 
+.br
+\fIpath\fP The new working directory path 
+.RE
+.PP
+
+.PP
+Definition at line \fB206\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+206                                                                                  {
+207 
+208     resource_write(handle, path, strlen(path) + 1, (size_t)ProcessFlags::WRITE_CHANGE_DIRECTORY);
+209 
+210 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_write()\fP, and \fBstrlen()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::change_working_directory()\fP, and \fBMaxOS::KPI::processes::change_working_directory_pid()\fP\&.
+.SS "void MaxOS::KPI::processes::change_working_directory_pid (uint64_t pid, const char * path)"
+
+.PP
+Changes the working directory of a process by its PID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The PID of the process 
+.br
+\fIpath\fP The new working directory path 
+.RE
+.PP
+
+.PP
+Definition at line \fB218\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+218                                                                            {
+219 
+220     uint64_t handle = get_process(pid);
+221     change_working_directory_handle(handle, path);
+222     close_process_handle(handle);
+223 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::change_working_directory_handle()\fP, \fBMaxOS::KPI::processes::close_process_handle()\fP, \fBMaxOS::KPI::processes::get_process()\fP, and \fBMaxOS::KPI::processes::pid()\fP\&.
+.SS "void MaxOS::KPI::processes::close_process_handle (uint64_t handle)"
+
+.PP
+Closes a process handle\&. Will not terminate the process itself\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle to close 
+.RE
+.PP
+
+.PP
+Definition at line \fB111\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+111                                                     {
+112     resource_close(handle, 0);
+113 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_close()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::change_working_directory_pid()\fP, \fBMaxOS::KPI::processes::exec_file()\fP, \fBMaxOS::KPI::processes::get_process_environment()\fP, \fBMaxOS::KPI::processes::get_process_stats()\fP, and \fBMaxOS::KPI::processes::kill_process_handle()\fP\&.
+.SS "uint64_t MaxOS::KPI::processes::exec_file (const char * name, const char * path, bool wait_for_completion = \fCfalse\fP)"
+
+.PP
+Executes a file as a new process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the process 
+.br
+\fIpath\fP The path to the executable file 
+.br
+\fIwait_for_completion\fP True to wait for the process to exit, false to return immediately 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The process ID of the new process, or the exit code if wait_for_completion is true 
+.RE
+.PP
+
+.PP
+Definition at line \fB25\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+25                                                                                           {
+26 
+27     return exec_file(name, path, nullptr, 0, wait_for_completion);
+28 
+29 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::exec_file()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::exec_file()\fP\&.
+.SS "uint64_t MaxOS::KPI::processes::exec_file (const char * name, const char * path, const char ** args, size_t arg_amount, bool wait_for_completion = \fCfalse\fP)"
+
+.PP
+Executes a file as a new process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the process 
+.br
+\fIpath\fP The path to the executable file 
+.br
+\fIargs\fP The arguments to pass to the executable 
+.br
+\fIarg_amount\fP The number of arguments 
+.br
+\fIwait_for_completion\fP True to wait for the process to exit, false to return immediately 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The process ID of the new process, or the exit code if wait_for_completion is true
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+What if someone exec_file but not_wait and then never close the handle, will resource leak - should auto close when process ends? 
+.RE
+.PP
+
+.PP
+Definition at line \fB43\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+43                                                                                                                                 {
+44 
+45     // Add the path as the first argument
+46     const char** full_args =  new const char*[arg_amount + 1];
+47     full_args[0] = path;
+48     for (size_t i = 0; i < arg_amount; i++)
+49         full_args[i + 1] = args[i];
+50 
+51     // Open the file
+52     auto handle = LibFS::open_file(path);
+53     if (!handle)
+54         return 0;
+55 
+56     // Load the ELF blob
+57     size_t size = LibFS::file_size(handle);
+58     auto buffer = new uint8_t[size];
+59     LibFS::file_read(handle, buffer, size);
+60 
+61     // Create the process
+62     execute_command_t command = {
+63         \&.args = full_args,
+64         \&.args_count = arg_amount + 1,
+65         \&.file_data = buffer,
+66         \&.file_data_size = size,
+67     };
+68     uint64_t result = resource_create(ResourceType::PROCESS, name, 0, &command);
+69 
+70     // Clean up
+71     delete[] full_args;
+72     delete[] buffer;
+73     LibFS::close_file(handle);
+74 
+75     // Wait for completion if requested @todo move this the scheduler resource create place so that it can be blocked properly
+76     if (wait_for_completion && result > 0){
+77 
+78         process_stats_t stats = get_process_stats_handle(result);
+79 
+80         // If the process is killed it wont have a PID
+81         while(stats\&.pid != 0) {
+82             yield();
+83             stats = get_process_stats_handle(result);
+84         }
+85 
+86         close_process_handle(result);
+87         return stats\&.exit_code;
+88     }
+89 
+90     return result;
+91 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_process_handle()\fP, \fBMaxOS::KPI::processes::get_process_stats_handle()\fP, and \fBMaxOS::KPI::resource_create()\fP\&.
+.SS "void MaxOS::KPI::processes::exit (uint64_t exit_code)"
+
+.PP
+Exits the current process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIexit_code\fP The exit code to return to the parent process 
+.RE
+.PP
+
+.PP
+Definition at line \fB280\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+280                                        {
+281 
+282     kill_process_handle(get_current_process(), exit_code);
+283 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_current_process()\fP, and \fBMaxOS::KPI::processes::kill_process_handle()\fP\&.
+.SS "uint64_t MaxOS::KPI::processes::get_current_process ()"
+
+.PP
+Gets a handle to the current process\&. 
+.PP
+\fBReturns\fP
+.RS 4
+A handle to the current process 
+.RE
+.PP
+
+.PP
+Definition at line \fB231\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+231                                         {
+232 
+233     if (m_current_process_handle == 0)
+234         m_current_process_handle = resource_open(ResourceType::PROCESS, "this", 0);
+235 
+236     return m_current_process_handle;
+237 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_open()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::change_working_directory()\fP, \fBMaxOS::KPI::processes::exit()\fP, \fBMaxOS::KPI::processes::get_current_process_environment()\fP, and \fBMaxOS::KPI::processes::get_current_process_stats()\fP\&.
+.SS "\fBprocess_environment_t\fP MaxOS::KPI::processes::get_current_process_environment ()"
+
+.PP
+Gets the environment of the current process\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The environment of the current process 
+.RE
+.PP
+
+.PP
+Definition at line \fB255\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+255                                                                  {
+256 
+257     m_current_process_environment = get_process_environment_handle(get_current_process());
+258     return m_current_process_environment;
+259 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_current_process()\fP, and \fBMaxOS::KPI::processes::get_process_environment_handle()\fP\&.
+.SS "\fBprocess_stats_t\fP MaxOS::KPI::processes::get_current_process_stats ()"
+
+.PP
+Gets the statistics of the current process\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The statistics of the current process 
+.RE
+.PP
+
+.PP
+Definition at line \fB244\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+244                                                      {
+245 
+246     m_current_process_stats = get_process_stats_handle(get_current_process());
+247     return m_current_process_stats;
+248 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_current_process()\fP, and \fBMaxOS::KPI::processes::get_process_stats_handle()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::pid()\fP\&.
+.SS "uint64_t MaxOS::KPI::processes::get_process (uint64_t pid)"
+
+.PP
+Gets a handle to a process by its PID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The PID of the process 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A handle to the process 
+.RE
+.PP
+
+.PP
+Definition at line \fB99\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+99                                             {
+100 
+101     char pid_str[21];
+102     //int to str
+103     return resource_open(ResourceType::PROCESS, pid_str, 0);
+104 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_open()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::change_working_directory_pid()\fP, \fBMaxOS::KPI::processes::get_process_environment()\fP, \fBMaxOS::KPI::processes::get_process_stats()\fP, and \fBMaxOS::KPI::processes::kill_process()\fP\&.
+.SS "\fBprocess_environment_t\fP MaxOS::KPI::processes::get_process_environment (uint64_t pid)"
+
+.PP
+Gets the environment of a process by its PID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The PID of the process 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The environment of the process 
+.RE
+.PP
+
+.PP
+Definition at line \fB191\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+191                                                                      {
+192 
+193     uint64_t handle = get_process(pid);
+194     process_environment_t env = get_process_environment_handle(handle);
+195     close_process_handle(handle);
+196     return env;
+197 
+198 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_process_handle()\fP, \fBMaxOS::KPI::processes::get_process()\fP, \fBMaxOS::KPI::processes::get_process_environment_handle()\fP, and \fBMaxOS::KPI::processes::pid()\fP\&.
+.SS "\fBprocess_environment_t\fP MaxOS::KPI::processes::get_process_environment_handle (uint64_t handle)"
+
+.PP
+Gets the environment of a process by its handle\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle of the process 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The environment of the process 
+.RE
+.PP
+
+.PP
+Definition at line \fB177\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+177                                                                                {
+178 
+179     process_environment_t env;
+180     resource_read(handle, &env, sizeof(process_environment_t), (size_t)ProcessFlags::READ_ENVIRONMENT);
+181     return env;
+182 
+183 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_read()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::get_current_process_environment()\fP, and \fBMaxOS::KPI::processes::get_process_environment()\fP\&.
+.SS "\fBprocess_stats_t\fP MaxOS::KPI::processes::get_process_stats (uint64_t pid)"
+
+.PP
+Gets the statistics of a process by its PID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The PID of the process 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The statistics of the process 
+.RE
+.PP
+
+.PP
+Definition at line \fB162\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+162                                                          {
+163 
+164     uint64_t handle = get_process(pid);
+165     process_stats_t stats = get_process_stats_handle(handle);
+166     close_process_handle(handle);
+167     return stats;
+168 
+169 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_process_handle()\fP, \fBMaxOS::KPI::processes::get_process()\fP, \fBMaxOS::KPI::processes::get_process_stats_handle()\fP, and \fBMaxOS::KPI::processes::pid()\fP\&.
+.SS "\fBprocess_stats_t\fP MaxOS::KPI::processes::get_process_stats_handle (uint64_t handle)"
+
+.PP
+Gets the statistics of a process by its handle\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle of the process 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The statistics of the process 
+.RE
+.PP
+
+.PP
+Definition at line \fB149\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+149                                                                    {
+150 
+151     process_stats_t stats;
+152     resource_read(handle, &stats, sizeof(process_stats_t), (size_t)ProcessFlags::READ_STATS);
+153     return stats;
+154 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_read()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::exec_file()\fP, \fBMaxOS::KPI::processes::get_current_process_stats()\fP, and \fBMaxOS::KPI::processes::get_process_stats()\fP\&.
+.SS "void MaxOS::KPI::processes::kill_process (uint64_t pid, uint64_t exit_code)"
+
+.PP
+Kills a process by its PID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The PID of the process to kill 
+.br
+\fIexit_code\fP The exit code to return to the parent process 
+.br
+\fIclose_handle\fP True to close the handle after killing the process (default: true) 
+.RE
+.PP
+
+.PP
+Definition at line \fB137\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+137                                                              {
+138 
+139     kill_process_handle(get_process(pid), exit_code);
+140 
+141 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_process()\fP, \fBMaxOS::KPI::processes::kill_process_handle()\fP, and \fBMaxOS::KPI::processes::pid()\fP\&.
+.SS "void MaxOS::KPI::processes::kill_process_handle (uint64_t handle, uint64_t exit_code, bool close_handle = \fCtrue\fP)"
+
+.PP
+Kills a process by its handle\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle of the process to kill 
+.br
+\fIexit_code\fP The exit code to return to the parent process 
+.br
+\fIclose_handle\fP True to close the handle after killing the process (default: true) 
+.RE
+.PP
+
+.PP
+Definition at line \fB122\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+122                                                                                           {
+123 
+124     resource_write(handle, &exit_code, sizeof(exit_code), (size_t)ProcessFlags::WRITE_KILL);
+125 
+126     if (close_handle)
+127         close_process_handle(handle);
+128 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_process_handle()\fP, and \fBMaxOS::KPI::resource_write()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::exit()\fP, and \fBMaxOS::KPI::processes::kill_process()\fP\&.
+.SS "uint64_t MaxOS::KPI::processes::pid ()"
+
+.PP
+Gets the PID of the current process\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The PID of the current process 
+.RE
+.PP
+
+.PP
+Definition at line \fB266\fP of file \fBprocess\&.cpp\fP\&..PP
+.nf
+266                         {
+267 
+268     // Haven't got current process stats yet, get them
+269     if (m_current_process_stats\&.pid == 0)
+270         get_current_process_stats();
+271 
+272     return m_current_process_stats\&.pid;
+273 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_current_process_stats()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::change_working_directory_pid()\fP, \fBMaxOS::KPI::processes::get_process_environment()\fP, \fBMaxOS::KPI::processes::get_process_stats()\fP, \fBMaxOS::processes::resources::ProcessResourceRegistry::get_resource()\fP, \fBMaxOS::KPI::processes::kill_process()\fP, and \fBMaxOS::KPI::ipc::rpc_call()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "process_environment_t MaxOS::KPI::processes::m_current_process_environment = {}\fC [inline]\fP"
+
+.PP
+Definition at line \fB110\fP of file \fBprocess\&.h\fP\&..PP
+.nf
+110 {};
+.fi
+
+.SS "uint64_t MaxOS::KPI::processes::m_current_process_handle = 0\fC [inline]\fP"
+
+.PP
+Definition at line \fB104\fP of file \fBprocess\&.h\fP\&.
+.SS "process_stats_t MaxOS::KPI::processes::m_current_process_stats = {}\fC [inline]\fP"
+
+.PP
+Definition at line \fB107\fP of file \fBprocess\&.h\fP\&..PP
+.nf
+107 {};
+.fi
+
+.SS "char* MaxOS::KPI::processes::m_working_dir_cache = nullptr\fC [inline]\fP"
+
+.PP
+Definition at line \fB115\fP of file \fBprocess\&.h\fP\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

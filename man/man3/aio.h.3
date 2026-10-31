@@ -1,0 +1,160 @@
+.TH "libraries/libc/include/aio.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/include/aio.h \- Defines functions to handle asynchronous input and output\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <sys/types\&.h>\fP
+.br
+\fC#include <time\&.h>\fP
+.br
+\fC#include <signal\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBaiocb\fP"
+.br
+.RI "Defines an async I/O control block, the parameters that control an I/O operation\&. "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBAIO_ALLDONE\fP   0"
+.br
+.RI "None of the requested operations could cancel as they are all complete\&. "
+.ti -1c
+.RI "#define \fBAIO_CANCELED\fP   1"
+.br
+.RI "All the requested operations canceled successfully\&. "
+.ti -1c
+.RI "#define \fBAIO_NOTCANCELED\fP   2"
+.br
+.RI "Some of the requested operations couldn't cancel as they are in progress\&. "
+.ti -1c
+.RI "#define \fBLIO_NOP\fP   0"
+.br
+.RI "This list item has no operation and can be skipped\&. "
+.ti -1c
+.RI "#define \fBLIO_WRITE\fP   1"
+.br
+.RI "This list item is a write operation\&. "
+.ti -1c
+.RI "#define \fBLIO_READ\fP   2"
+.br
+.RI "This list item is a read operation\&. "
+.ti -1c
+.RI "#define \fBLIO_WAIT\fP   0"
+.br
+.RI "Return once all operations are completed\&. "
+.ti -1c
+.RI "#define \fBLIO_NOWAIT\fP   1"
+.br
+.RI "Return once all operations are queued\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBaio_cancel\fP (int, struct \fBaiocb\fP *)"
+.br
+.ti -1c
+.RI "int \fBaio_error\fP (const struct \fBaiocb\fP *)"
+.br
+.ti -1c
+.RI "int \fBaio_fsync\fP (int, struct \fBaiocb\fP *)"
+.br
+.ti -1c
+.RI "int \fBaio_read\fP (struct \fBaiocb\fP *)"
+.br
+.ti -1c
+.RI "ssize_t \fBaio_return\fP (struct \fBaiocb\fP *)"
+.br
+.ti -1c
+.RI "int \fBaio_suspend\fP (const struct \fBaiocb\fP *const [], int, const struct \fBtimespec\fP *)"
+.br
+.ti -1c
+.RI "int \fBaio_write\fP (struct \fBaiocb\fP *)"
+.br
+.ti -1c
+.RI "int \fBlio_listio\fP (int, struct \fBaiocb\fP *restrict const [restrict], int, struct \fBsigevent\fP *restrict)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines functions to handle asynchronous input and output\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+28 December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBaio\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define AIO_ALLDONE   0"
+
+.PP
+None of the requested operations could cancel as they are all complete\&. 
+.PP
+Definition at line \fB34\fP of file \fBaio\&.h\fP\&.
+.SS "#define AIO_CANCELED   1"
+
+.PP
+All the requested operations canceled successfully\&. 
+.PP
+Definition at line \fB35\fP of file \fBaio\&.h\fP\&.
+.SS "#define AIO_NOTCANCELED   2"
+
+.PP
+Some of the requested operations couldn't cancel as they are in progress\&. 
+.PP
+Definition at line \fB36\fP of file \fBaio\&.h\fP\&.
+.SS "#define LIO_NOP   0"
+
+.PP
+This list item has no operation and can be skipped\&. 
+.PP
+Definition at line \fB38\fP of file \fBaio\&.h\fP\&.
+.SS "#define LIO_NOWAIT   1"
+
+.PP
+Return once all operations are queued\&. 
+.PP
+Definition at line \fB43\fP of file \fBaio\&.h\fP\&.
+.SS "#define LIO_READ   2"
+
+.PP
+This list item is a read operation\&. 
+.PP
+Definition at line \fB40\fP of file \fBaio\&.h\fP\&.
+.SS "#define LIO_WAIT   0"
+
+.PP
+Return once all operations are completed\&. 
+.PP
+Definition at line \fB42\fP of file \fBaio\&.h\fP\&.
+.SS "#define LIO_WRITE   1"
+
+.PP
+This list item is a write operation\&. 
+.PP
+Definition at line \fB39\fP of file \fBaio\&.h\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

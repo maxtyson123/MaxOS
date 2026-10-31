@@ -1,0 +1,71 @@
+.TH "IDEDriver::IntegratedDriveElectronicsController" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+IDEDriver::IntegratedDriveElectronicsController \- Driver for the IDE controller, handles the creation and management of the IDE devices\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ide\&.h>\fP
+.PP
+Inherits \fBLibDriver::Driver\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBIntegratedDriveElectronicsController\fP (\fBLibDriver::device_identification_t\fP &device_id, \fBLibDriver::HardwareCommunication::hardware_mapping_t\fP &hmap)"
+.br
+.RI "Construct a new Integrated Drive Electronics Controller object\&. "
+.in -1c
+
+Public Member Functions inherited from \fBLibDriver::Driver\fP
+.in +1c
+.ti -1c
+.RI "virtual uint32_t \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Driver for the IDE controller, handles the creation and management of the IDE devices\&. 
+.PP
+Definition at line \fB26\fP of file \fBide\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "IntegratedDriveElectronicsController::IntegratedDriveElectronicsController (\fBLibDriver::device_identification_t\fP & device_id, \fBLibDriver::HardwareCommunication::hardware_mapping_t\fP & hmap)\fC [explicit]\fP"
+
+.PP
+Construct a new Integrated Drive Electronics Controller object\&. 
+.PP
+Definition at line \fB23\fP of file \fBide\&.cpp\fP\&..PP
+.nf
+24 {
+25 
+26     // Detect the mode of the IDE
+27     m_primary_is_legacy = ((device_id\&.class_info\&.interface & 0x01) == 0);
+28     m_secondary_is_legacy = ((device_id\&.class_info\&.interface & 0x04) == 0);
+29     klog("IDE running in %s/%s mode\\n", m_primary_is_legacy ? "legacy" : "native", m_secondary_is_legacy ? "legacy" : "native");
+30 
+31     // Set up the ports
+32     uint16_t primary_command_port = m_primary_is_legacy  ? LEGACY_PRIMARY_COMMAND_BASE : hmap\&.ranges[0]\&.address_base;
+33     uint16_t primary_control_port = m_primary_is_legacy  ? LEGACY_PRIMARY_CONTROL_BASE : hmap\&.ranges[1]\&.address_base;
+34     uint16_t secondary_command_port = m_secondary_is_legacy  ? LEGACY_SECONDARY_COMMAND_BASE : hmap\&.ranges[2]\&.address_base;
+35     uint16_t secondary_control_port = m_secondary_is_legacy  ? LEGACY_SECONDARY_CONTROL_BASE : hmap\&.ranges[3]\&.address_base;
+36 
+37     // Identify the ATA devices
+38     setup_ata(primary_command_port, primary_control_port, true);
+39     setup_ata(primary_command_port, primary_control_port, false);
+40     setup_ata(secondary_command_port, secondary_control_port, true);
+41     setup_ata(secondary_command_port, secondary_control_port, false);
+42 
+43 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::klog()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

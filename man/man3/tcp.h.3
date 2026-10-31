@@ -1,0 +1,184 @@
+.TH "programs/net/tcp.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+programs/net/tcp.h \- Defines the Transmission Control Protocol (TCP) structures and classes for handling TCP sockets and payloads\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <cstdint>\fP
+.br
+\fC#include <net/ipv4\&.h>\fP
+.br
+\fC#include <memory/memorymanagement\&.h>\fP
+.br
+\fC#include <mem\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBMaxOS::net::TCPHeader\fP"
+.br
+.RI "The header of a TCP packet\&. "
+.ti -1c
+.RI "struct \fBMaxOS::net::TCPPseudoHeader\fP"
+.br
+.RI "The pseudo header used for TCP checksum calculation\&. "
+.ti -1c
+.RI "class \fBMaxOS::net::DataReceivedEvent\fP"
+.br
+.RI "Event for when data is received on a TCP socket\&. "
+.ti -1c
+.RI "class \fBMaxOS::net::ConnectedEvent\fP"
+.br
+.RI "Event for when a TCP socket is connected\&. "
+.ti -1c
+.RI "class \fBMaxOS::net::DisconnectedEvent\fP"
+.br
+.RI "Event for when a TCP socket is disconnected\&. "
+.ti -1c
+.RI "class \fBMaxOS::net::TCPPayloadHandler\fP"
+.br
+.RI "Handler for TCP payloads\&. "
+.ti -1c
+.RI "class \fBMaxOS::net::TCPSocket\fP"
+.br
+.RI "A TCP socket\&. Allows for sending and receiving data over TCP at a port\&. "
+.ti -1c
+.RI "class \fBMaxOS::net::TransmissionControlProtocolHandler\fP"
+.br
+.RI "Handles TCP packets and manages TCP sockets\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef uint16_t \fBMaxOS::net::TransmissionControlProtocolPort\fP"
+.br
+.RI "TCP port\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::net::TCPHeader\fP \fBMaxOS::net::tcp_header_t\fP"
+.br
+.RI "Alias for \fBTCPHeader\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBMaxOS::net::TCPPseudoHeader\fP \fBMaxOS::net::tcp_pseudo_header_t\fP"
+.br
+.RI "Alias for \fBTCPPseudoHeader\fP struct\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBMaxOS::net::TCPSocketState\fP { \fBCLOSED\fP, \fBLISTEN\fP, \fBSYN_SENT\fP, \fBSYN_RECEIVED\fP, \fBESTABLISHED\fP, \fBFIN_WAIT1\fP, \fBFIN_WAIT2\fP, \fBCLOSING\fP, \fBTIME_WAIT\fP, \fBCLOSE_WAIT\fP, \fBLAST_ACK\fP }"
+.br
+.RI "The state of a TCP socket\&. "
+.ti -1c
+.RI "enum class \fBMaxOS::net::TCPFlag\fP { \fBFIN\fP = 1, \fBSYN\fP = 2, \fBRST\fP = 4, \fBPSH\fP = 8, \fBACK\fP = 16, \fBURG\fP = 32, \fBECE\fP = 64, \fBCWR\fP = 128, \fBNS\fP = 256 }"
+.br
+.RI "The flags in a TCP header\&. "
+.ti -1c
+.RI "enum class \fBMaxOS::net::TCPPayloadHandlerEvents\fP { \fBCONNECTED\fP, \fBDISCONNECTED\fP, \fBDATA_RECEIVED\fP }"
+.br
+.RI "Events for the TCPPayloadHandler\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines the Transmission Control Protocol (TCP) structures and classes for handling TCP sockets and payloads\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+12th September 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBtcp\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef uint16_t \fBMaxOS::net::TransmissionControlProtocolPort\fP"
+
+.PP
+TCP port\&. 
+.PP
+\fBTodo\fP
+.RS 4
+: Make TCPPort class and do tcp_port_t 
+.RE
+.PP
+
+.PP
+Definition at line \fB20\fP of file \fBtcp\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBMaxOS::net::TCPFlag\fP\fC [strong]\fP"
+
+.PP
+The flags in a TCP header\&. 
+.PP
+Definition at line \fB47\fP of file \fBtcp\&.h\fP\&..PP
+.nf
+47                        {
+48         FIN = 1,
+49         SYN = 2,
+50         RST = 4,
+51         PSH = 8,
+52         ACK = 16,
+53         URG = 32,
+54         ECE = 64,
+55         CWR = 128,
+56         NS = 256
+57     };
+.fi
+
+.SS "enum class \fBMaxOS::net::TCPPayloadHandlerEvents\fP\fC [strong]\fP"
+
+.PP
+Events for the TCPPayloadHandler\&. 
+.PP
+Definition at line \fB114\fP of file \fBtcp\&.h\fP\&..PP
+.nf
+114                                        {
+115         CONNECTED,
+116         DISCONNECTED,
+117         DATA_RECEIVED
+118     };
+.fi
+
+.SS "enum class \fBMaxOS::net::TCPSocketState\fP\fC [strong]\fP"
+
+.PP
+The state of a TCP socket\&. 
+.PP
+Definition at line \fB26\fP of file \fBtcp\&.h\fP\&..PP
+.nf
+26                               {
+27         CLOSED,
+28         LISTEN,
+29         SYN_SENT,
+30         SYN_RECEIVED,
+31 
+32         ESTABLISHED,
+33 
+34         FIN_WAIT1,
+35         FIN_WAIT2,
+36         CLOSING,
+37         TIME_WAIT,
+38 
+39         CLOSE_WAIT,
+40         LAST_ACK
+41     };
+.fi
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

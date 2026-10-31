@@ -1,30 +1,4 @@
 var searchData=
 [
-  ['deactivate_0',['deactivate',['../classMaxOS_1_1hardwarecommunication_1_1InterruptManager.html#a16abb95327d677ebbe5a9c1ce21db6d2',1,'MaxOS::hardwarecommunication::InterruptManager::deactivate()'],['../classMaxOS_1_1processes_1_1GlobalScheduler.html#ac32ed71ca0571c1cf2125b3360549757',1,'MaxOS::processes::GlobalScheduler::deactivate()'],['../classMaxOS_1_1processes_1_1Scheduler.html#af4792bed046b34d0010412e336ec2970',1,'MaxOS::processes::Scheduler::deactivate()']]],
-  ['debug_1',['DEBUG',['../classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb',1,'MaxOS::Logger']]],
-  ['debug_5ftarget_2',['DEBUG_TARGET',['../gdbstub_8h.html#acde4335c26d0da98483fe1b1116d3b06',1,'MaxOS::runtime']]],
-  ['delay_3',['delay',['../classMaxOS_1_1hardwarecommunication_1_1Clock.html#aed23e6f62c03a9f35056a62e97daad69',1,'MaxOS::hardwarecommunication::Clock']]],
-  ['delivery_5fmode_4',['delivery_mode',['../structMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_1_1PACKED.html#a56f6546f56e8a3562004570ebc4591a3',1,'MaxOS::hardwarecommunication::RedirectionEntry::PACKED']]],
-  ['delivery_5fstatus_5',['delivery_status',['../structMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_1_1PACKED.html#ad1c83dd80426e5d49ba921a6fb459ce0',1,'MaxOS::hardwarecommunication::RedirectionEntry::PACKED']]],
-  ['deliverymode_6',['DeliveryMode',['../apic_8h.html#ae5961c617d1c9a84a7e86fbec0f59f44',1,'MaxOS::hardwarecommunication']]],
-  ['deprecated_20list_7',['Deprecated List',['../deprecated.html',1,'']]],
-  ['depth_8',['depth',['../structmultiboot__header__tag__framebuffer.html#a0d19797e8a049353c2ba98e04df089bc',1,'multiboot_header_tag_framebuffer']]],
-  ['descr_5fsize_9',['descr_size',['../structmultiboot__tag__efi__mmap.html#ae8b6f5a34f5da7fe1e6c95fd29db7bf2',1,'multiboot_tag_efi_mmap']]],
-  ['descr_5fvers_10',['descr_vers',['../structmultiboot__tag__efi__mmap.html#a97de90a9746c8897c27dc6776a99700b',1,'multiboot_tag_efi_mmap']]],
-  ['descriptorflags_11',['DescriptorFlags',['../gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0',1,'MaxOS::system']]],
-  ['destination_12',['destination',['../structMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_1_1PACKED.html#a8f8b7e2e8a1091a0cb97a45ae8f174e1',1,'MaxOS::hardwarecommunication::RedirectionEntry::PACKED::destination'],['../structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect.html#abae45c69e03fe32708e2e795526e34b8',1,'MaxOS::hardwarecommunication::InterruptRedirect::destination']]],
-  ['destination_5fmode_13',['destination_mode',['../structMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_1_1PACKED.html#a3f54488e9f736f09542dcd15222a225c',1,'MaxOS::hardwarecommunication::RedirectionEntry::PACKED']]],
-  ['destructor_5ffunc_14',['destructor_func',['../structMaxOS_1_1runtime_1_1atexit__func__entry__t.html#afa16f5c3ca6c8970fabe6aafd3040c28',1,'MaxOS::runtime::atexit_func_entry_t']]],
-  ['dhcpack_15',['dhcpack',['../structmultiboot__tag__network.html#aade2dff510f8e32b462ec1037437d28c',1,'multiboot_tag_network']]],
-  ['dirty_16',['dirty',['../structMaxOS_1_1memory_1_1PageTableEntry.html#a94ca03604d59c7837944095d47e9a270',1,'MaxOS::memory::PageTableEntry::dirty'],['../physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba4f6db44a6458f735868d173d7cbdac05',1,'MaxOS::memory::DIRTY']]],
-  ['disable_5flog_5fwriter_17',['disable_log_writer',['../classMaxOS_1_1Logger.html#a47af75515f1f7cb42966de07bef4d5bb',1,'MaxOS::Logger']]],
-  ['disable_5fport_18',['disable_port',['../classMaxOS_1_1processes_1_1Thread.html#a8f7fe62958248b6bd01bbacf385d6476',1,'MaxOS::processes::Thread']]],
-  ['dividebyzerohandler_19',['dividebyzerohandler',['../classMaxOS_1_1hardwarecommunication_1_1DivideByZeroHandler.html',1,'MaxOS::hardwarecommunication::DivideByZeroHandler'],['../classMaxOS_1_1hardwarecommunication_1_1DivideByZeroHandler.html#a603c91782fa27f09b8bf164ee235f227',1,'MaxOS::hardwarecommunication::DivideByZeroHandler::DivideByZeroHandler()']]],
-  ['do_5fdebugging_20',['DO_DEBUGGING',['../gdbstub_8h.html#a8e41198b66ab93168408901dd1020804',1,'MaxOS::runtime']]],
-  ['draw_5fcircle_21',['draw_circle',['../classMaxOS_1_1common_1_1GraphicsContext.html#ac5793fecbae79ca06ca4c3ceaaeb4326',1,'MaxOS::common::GraphicsContext::draw_circle(uint32_t x0, uint32_t y0, uint32_t radius, uint32_t colour)'],['../classMaxOS_1_1common_1_1GraphicsContext.html#af5ea58cb853928bb05fd352c69d3cee2',1,'MaxOS::common::GraphicsContext::draw_circle(uint32_t x0, uint32_t y0, uint32_t radius, const Colour &amp;colour)']]],
-  ['draw_5fline_22',['draw_line',['../classMaxOS_1_1common_1_1GraphicsContext.html#a8a9aed366402eb107c211ce53864072e',1,'MaxOS::common::GraphicsContext::draw_line(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, uint32_t colour)'],['../classMaxOS_1_1common_1_1GraphicsContext.html#adc928028afac2fab8125f9b22a95b6fe',1,'MaxOS::common::GraphicsContext::draw_line(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, const Colour &amp;colour)']]],
-  ['draw_5frectangle_23',['draw_rectangle',['../classMaxOS_1_1common_1_1GraphicsContext.html#a19f52d371f3e15ff75a61545bdbbb152',1,'MaxOS::common::GraphicsContext::draw_rectangle(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, const Colour &amp;colour)'],['../classMaxOS_1_1common_1_1GraphicsContext.html#a6af3555c97b0ec0646d150126b1ea9b4',1,'MaxOS::common::GraphicsContext::draw_rectangle(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, uint32_t colour)']]],
-  ['dseg_24',['dseg',['../structmultiboot__tag__apm.html#a0f8ff7cd97ae788d8afcd7dee881367a',1,'multiboot_tag_apm']]],
-  ['dseg_5flen_25',['dseg_len',['../structmultiboot__tag__apm.html#a8d82e38b5d8b110027acc7c21b4a853d',1,'multiboot_tag_apm']]],
-  ['dso_5fhandle_26',['dso_handle',['../structMaxOS_1_1runtime_1_1atexit__func__entry__t.html#a4b9b65b56491ab136e73ae9bcf317d2c',1,'MaxOS::runtime::atexit_func_entry_t']]]
+  ['5_20weapons_20policy_0',['5. Weapons Policy',['../md_docs_2CODE__OF__CONDUCT.html#autotoc_md5',1,'']]]
 ];

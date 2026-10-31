@@ -1,63 +1,79 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/include/system/syscalls.h" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "libraries/libkpi/include/libkpi/syscalls.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/include/system/syscalls.h \- Defines the SyscallManager class for handling system calls from userspace applications\&.  
+libraries/libkpi/include/libkpi/syscalls.h \- Defines the syscalls that can be made to the kernel from user space\&.  
 
 .SH SYNOPSIS
 .br
 .PP
 \fC#include <cstdint>\fP
 .br
-\fC#include <libkpi/syscalls\&.h>\fP
+\fC#include <cstddef>\fP
 .br
-\fC#include <libcommon/vector\&.h>\fP
-.br
-\fC#include <libcommon/colour\&.h>\fP
-.br
-\fC#include <hardwarecommunication/interrupts\&.h>\fP
-.br
-\fC#include <memory/memorymanagement\&.h>\fP
-.br
-\fC#include <processes/scheduler\&.h>\fP
-.br
-\fC#include <processes/block\&.h>\fP
-.br
-\fC#include <processes/resources/resource_bridge\&.h>\fP
+\fC#include <libkpi/resource\&.h>\fP
 .br
 
-.SS "Classes"
+.SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "struct \fBMaxOS::system::SyscallArguments\fP"
+.RI "enum class \fBSyscallType\fP { \fBKLOG\fP, \fBALLOCATE_MEMORY\fP, \fBFREE_MEMORY\fP, \fBRESOURCE_CREATE\fP, \fBRESOURCE_OPEN\fP, \fBRESOURCE_CLOSE\fP, \fBRESOURCE_WRITE\fP, \fBRESOURCE_READ\fP, \fBRESOURCE_REGISTRY_CREATE\fP }"
 .br
-.RI "The arguments passed to a syscall (simplified representation of values in registers) "
-.ti -1c
-.RI "class \fBMaxOS::system::SyscallManager\fP"
-.br
-.RI "Provides an API for userspace applications to interact with the kernel\&. "
 .in -1c
-.SS "Typedefs"
+.SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "typedef struct \fBMaxOS::system::SyscallArguments\fP \fBMaxOS::system::syscall_args_t\fP"
+.RI "void * \fBMaxOS::KPI::make_syscall\fP (SyscallType type, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5)"
 .br
-.RI "Alias for \fBSyscallArguments\fP struct\&. "
+.RI "Make a syscall\&. "
 .ti -1c
-.RI "typedef \fBsyscall_args_t\fP *(* \fBMaxOS::system::syscall_func_t\fP) (\fBsyscall_args_t\fP *args)"
+.RI "void \fBMaxOS::KPI::klog\fP (char const *format,\&.\&.\&.)"
 .br
+.RI "Log a message to the kernel log\&. "
+.ti -1c
+.RI "void * \fBMaxOS::KPI::allocate_memory\fP (size_t size)"
+.br
+.RI "Allocate memory\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::free_memory\fP (void *address)"
+.br
+.RI "Free allocated memory\&. "
+.ti -1c
+.RI "bool \fBMaxOS::KPI::resource_create\fP (\fBResourceType\fP type, const char *name, size_t flags, uintptr_t data)"
+.br
+.RI "Create a resource\&. "
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::resource_open\fP (\fBResourceType\fP type, const char *name, size_t flags)"
+.br
+.RI "Open an existing resource\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::resource_close\fP (uint64_t handle, size_t flags)"
+.br
+.RI "Close a resource\&. "
+.ti -1c
+.RI "size_t \fBMaxOS::KPI::resource_write\fP (uint64_t handle, const void *buffer, size_t size, size_t flags)"
+.br
+.RI "write a certain amount of bytes to a resource "
+.ti -1c
+.RI "size_t \fBMaxOS::KPI::resource_read\fP (uint64_t handle, void *buffer, size_t size, size_t flags)"
+.br
+.RI "read a certain amount of bytes from a resource "
+.ti -1c
+.RI "bool \fBMaxOS::KPI::resource_registry_create\fP (char *name, size_t resource_id)"
+.br
+.RI "Create a new resource registry bridge to a resource server\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Defines the SyscallManager class for handling system calls from userspace applications\&. 
+Defines the syscalls that can be made to the kernel from user space\&. 
 
 
 .PP
 \fBDate\fP
 .RS 4
-27th October 2022 
+31st August 2025 
 .RE
 .PP
 \fBAuthor\fP
@@ -68,19 +84,423 @@ Max Tyson
 
 .PP
 Definition in file \fBsyscalls\&.h\fP\&.
-.SH "Typedef Documentation"
+.SH "Enumeration Type Documentation"
 .PP 
-.SS "typedef syscall_args_t *(* MaxOS::system::syscall_func_t) (syscall_args_t *args)"
+.SS "enum class MaxOS::KPI::SyscallType\fC [strong]\fP"
 
 .PP
-\fBTodo\fP
+Definition at line \fB20\fP of file \fBsyscalls\&.h\fP\&..PP
+.nf
+20                           {
+21         KLOG,
+22 
+23         ALLOCATE_MEMORY,
+24         FREE_MEMORY,
+25 
+26         RESOURCE_CREATE,
+27         RESOURCE_OPEN,
+28         RESOURCE_CLOSE,
+29         RESOURCE_WRITE,
+30         RESOURCE_READ,
+31 
+32         RESOURCE_REGISTRY_CREATE,
+33     };
+.fi
+
+.SH "Function Documentation"
+.PP 
+.SS "void * MaxOS::KPI::allocate_memory (size_t size)"
+
+.PP
+Allocate memory\&. 
+.PP
+\fBParameters\fP
 .RS 4
-Could use a class based response but a single class might want multiple handlers e\&.g\&. fs 
+\fIsize\fP The size of memory to allocate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Pointer to the allocated memory 
 .RE
 .PP
 
 .PP
-Definition at line \fB51\fP of file \fBsyscalls\&.h\fP\&.
+Definition at line \fB128\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+128                                       {
+129         return make_syscall(SyscallType::ALLOCATE_MEMORY, size, 0, 0, 0, 0, 0);
+130     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::allocate_memory()\fP, and \fBMaxOS::KPI::make_syscall()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::allocate_memory()\fP, and \fBDriverManager::core::PCIController::PCIController()\fP\&.
+.SS "void MaxOS::KPI::free_memory (void * address)"
+
+.PP
+Free allocated memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIaddress\fP The address of the memory to free 
+.RE
+.PP
+
+.PP
+Definition at line \fB137\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+137                                    {
+138         make_syscall(SyscallType::FREE_MEMORY, (uint64_t)address, 0, 0, 0, 0, 0);
+139     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::free_memory()\fP, and \fBMaxOS::KPI::make_syscall()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::free_memory()\fP\&.
+.SS "void MaxOS::KPI::klog (char const * format,  \&.\&.\&.)"
+
+.PP
+Log a message to the kernel log\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImessage\fP The message to log 
+.RE
+.PP
+
+.PP
+Definition at line \fB54\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+54                                       {
+55 
+56         // Create a message buffer so that not having a syscall for each character
+57         char message[1024];
+58         va_list parameters;
+59         va_start(parameters, format);
+60 
+61         // Format the string
+62         size_t index = 0;
+63         for (; *format != '\\0' && index < sizeof(message) \- 1; format++) {
+64 
+65             // If it is not a %, copy the character
+66             if (*format != '%') {
+67                 message[index++] = *format;
+68                 continue;
+69             }
+70 
+71             // Move to the next character
+72             format++;
+73             switch (*format) {
+74                 case 'd': {
+75                     // Print a decimal
+76                     int number = va_arg (parameters, int);
+77                     char* num_str = itoa(10, number);
+78 
+79                     // Append the number string
+80                     for (size_t i = 0; num_str[i] != '\\0' && index < sizeof(message) \- 1; i++)
+81                         message[index++] = num_str[i];
+82                     break;
+83                 }
+84                 case 'x': {
+85                     // Print a hex
+86                     uint64_t number = va_arg (parameters, uint64_t);
+87                     char* num_str = htoa(number);
+88 
+89                     // Append the number string
+90                     for (size_t i = 0; num_str[i] != '\\0' && index < sizeof(message) \- 1; i++)
+91                         message[index++] = num_str[i];
+92                     break;
+93                 }
+94                 case 's': {
+95                     // Print a string
+96                     char* str = va_arg (parameters, char*);
+97 
+98                     for (size_t i = 0; str[i] != '\\0' && index < sizeof(message) \- 1; i++)
+99                         message[index++] = str[i];
+100                     break;
+101                 }
+102 
+103                 case 'h': {
+104                     // "%h" must reach the kernel untouched so it can print the message without the log header
+105                     message[index++] = '%';
+106                     if (index < sizeof(message) \- 1)
+107                         message[index++] = 'h';
+108                     break;
+109                 }
+110             }
+111 
+112         }
+113 
+114         // Close
+115         message[index] = '\\0';
+116         va_end(parameters);
+117 
+118         // Print the formatted string
+119         make_syscall(SyscallType::KLOG, (uint64_t)message, 0, 0, 0, 0, 0);
+120     }
+.fi
+
+.PP
+References \fBhtoa()\fP, \fBitoa()\fP, \fBMaxOS::KPI::klog()\fP, and \fBMaxOS::KPI::make_syscall()\fP\&.
+.PP
+Referenced by \fBDriverManager::core::PCIController::enumerate_devices()\fP, \fBIDEDriver::IntegratedDriveElectronicsController::IntegratedDriveElectronicsController()\fP, \fBMaxOS::KPI::klog()\fP, \fBFileServer::partition::MSDOSPartition::mount_partitions()\fP, \fBMaxOS::KPI::ResourceServer::process_message()\fP, and \fBMaxOS::KPI::ipc::rpc_call()\fP\&.
+.SS "void * MaxOS::KPI::make_syscall (SyscallType type, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5)"
+
+.PP
+Make a syscall\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The type of syscall 
+.br
+\fIarg0\fP The first argument 
+.br
+\fIarg1\fP The second argument 
+.br
+\fIarg2\fP The third argumentmain 
+.br
+\fIarg3\fP The fourth argument 
+.br
+\fIarg4\fP The fifth argument 
+.br
+\fIarg5\fP The sixth argument 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The result of the syscall 
+.RE
+.PP
+
+.PP
+Definition at line \fB22\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+22                                                                                                                                   {
+23 
+24         void* result;
+25         asm volatile(
+26                 "mov %[a0], %%rdi\\n\\t"   // arg0 \-> rdi
+27                 "mov %[a1], %%rsi\\n\\t"   // arg1 \-> rsi
+28                 "mov %[a2], %%rdx\\n\\t"   // arg2 \-> rdx
+29                 "mov %[a3], %%r10\\n\\t"   // arg3 \-> r10
+30                 "mov %[a4], %%r8\\n\\t"    // arg4 \-> r8
+31                 "mov %[a5], %%r9\\n\\t"    // arg5 \-> r9
+32                 "mov %[num], %%rax\\n\\t"  // syscall number \-> rax
+33                 "int $0x80\\n\\t"
+34                 : "=a"(result)
+35                 : [num] "r"((uint64_t)type),
+36                 [a0] "r"(arg0),
+37                 [a1] "r"(arg1),
+38                 [a2] "r"(arg2),
+39                 [a3] "r"(arg3),
+40                 [a4] "r"(arg4),
+41                 [a5] "r"(arg5)
+42                 : "rdi", "rsi", "rdx", "r10", "r8", "r9", "memory"
+43         );
+44 
+45         return result;
+46 
+47     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::make_syscall()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::allocate_memory()\fP, \fBMaxOS::KPI::free_memory()\fP, \fBMaxOS::KPI::klog()\fP, \fBMaxOS::KPI::make_syscall()\fP, \fBMaxOS::KPI::resource_close()\fP, \fBMaxOS::KPI::resource_create()\fP, \fBMaxOS::KPI::resource_open()\fP, \fBMaxOS::KPI::resource_read()\fP, \fBMaxOS::KPI::resource_registry_create()\fP, and \fBMaxOS::KPI::resource_write()\fP\&.
+.SS "void MaxOS::KPI::resource_close (uint64_t handle, size_t flags)"
+
+.PP
+Close a resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle number of the resource 
+.br
+\fIflags\fP Flags to pass to the closing 
+.RE
+.PP
+
+.PP
+Definition at line \fB171\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+171                                                       {
+172         make_syscall(SyscallType::RESOURCE_CLOSE, handle, flags, 0, 0, 0, 0);
+173     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::make_syscall()\fP, and \fBMaxOS::KPI::resource_close()\fP\&.
+.PP
+Referenced by \fBLibFS::close_directory()\fP, \fBMaxOS::KPI::processes::close_process_handle()\fP, \fBMaxOS::KPI::processes::close_thread_handle()\fP, and \fBMaxOS::KPI::resource_close()\fP\&.
+.SS "bool MaxOS::KPI::resource_create (\fBResourceType\fP type, const char * name, size_t flags, uintptr_t data)"
+
+.PP
+Create a resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The type of resource 
+.br
+\fIname\fP The name of the resource 
+.br
+\fIflags\fP Optional flags to pass (unused by default but resource type specific) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The handle id of the resource or 0 if failed 
+.RE
+.PP
+
+.PP
+Definition at line \fB149\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+149                                                                                            {
+150         return (bool)make_syscall(SyscallType::RESOURCE_CREATE, (uint64_t)type, (uint64_t)name, flags, data, 0, 0);
+151     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::make_syscall()\fP, and \fBMaxOS::KPI::resource_create()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::exec_file()\fP, and \fBMaxOS::KPI::resource_create()\fP\&.
+.SS "uint64_t MaxOS::KPI::resource_open (\fBResourceType\fP type, const char * name, size_t flags)"
+
+.PP
+Open an existing resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The type of resource 
+.br
+\fIname\fP The name of the resource 
+.br
+\fIflags\fP Optional flags to pass 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The handle id of the resource or 0 if failed 
+.RE
+.PP
+
+.PP
+Definition at line \fB161\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+161                                                                              {
+162         return (uint64_t)make_syscall(SyscallType::RESOURCE_OPEN, (uint64_t)type, (uint64_t)name, flags, 0, 0, 0);
+163     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::make_syscall()\fP, and \fBMaxOS::KPI::resource_open()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::get_current_process()\fP, \fBMaxOS::KPI::processes::get_current_thread()\fP, \fBMaxOS::KPI::processes::get_process()\fP, \fBMaxOS::KPI::processes::get_thread()\fP, \fBLibFS::open_directory()\fP, and \fBMaxOS::KPI::resource_open()\fP\&.
+.SS "size_t MaxOS::KPI::resource_read (uint64_t handle, void * buffer, size_t size, size_t flags)"
+
+.PP
+read a certain amount of bytes from a resource 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle number of the resource 
+.br
+\fIbuffer\fP The buffer to read into 
+.br
+\fIsize\fP The number of bytes to read 
+.br
+\fIflags\fP The flags to pass to the reading 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully read 
+.RE
+.PP
+
+.PP
+Definition at line \fB198\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+198                                                                                   {
+199 
+200         return (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_READ, handle, (uint64_t)buffer, size, flags, 0, 0);
+201     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::make_syscall()\fP, and \fBMaxOS::KPI::resource_read()\fP\&.
+.PP
+Referenced by \fBLibFS::directory_entries()\fP, \fBLibFS::directory_entries_size()\fP, \fBMaxOS::KPI::processes::get_process_environment_handle()\fP, \fBMaxOS::KPI::processes::get_process_stats_handle()\fP, \fBMaxOS::KPI::processes::get_thread_stats_handle()\fP, and \fBMaxOS::KPI::resource_read()\fP\&.
+.SS "bool MaxOS::KPI::resource_registry_create (char * name, size_t resource_id)"
+
+.PP
+Create a new resource registry bridge to a resource server\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the shared memory region for kernel I/O 
+.br
+\fIresource_id\fP The id of the resource this server provides 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if it could be created, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB210\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+210                                                                   {
+211 
+212         return (bool)make_syscall(SyscallType::RESOURCE_REGISTRY_CREATE, name, resource_id,0,0,0,0);
+213 
+214     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::make_syscall()\fP, and \fBMaxOS::KPI::resource_registry_create()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::resource_registry_create()\fP\&.
+.SS "size_t MaxOS::KPI::resource_write (uint64_t handle, const void * buffer, size_t size, size_t flags)"
+
+.PP
+write a certain amount of bytes to a resource 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle number of the resource 
+.br
+\fIbuffer\fP The buffer to read from 
+.br
+\fIsize\fP The number of bytes to write 
+.br
+\fIflags\fP The flags to pass to the writing 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully written 
+.RE
+.PP
+
+.PP
+Definition at line \fB184\fP of file \fBsyscalls\&.cpp\fP\&..PP
+.nf
+184                                                                                          {
+185 
+186         return (int)(uintptr_t)make_syscall(SyscallType::RESOURCE_WRITE, handle, (uint64_t)buffer, size, flags, 0, 0);
+187     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::make_syscall()\fP, and \fBMaxOS::KPI::resource_write()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::change_working_directory_handle()\fP, \fBMaxOS::KPI::processes::kill_process_handle()\fP, \fBMaxOS::KPI::processes::kill_thread_handle()\fP, \fBLibFS::new_directory()\fP, \fBLibFS::new_file()\fP, \fBLibFS::remove_directory()\fP, \fBLibFS::remove_file()\fP, \fBLibFS::rename_directory()\fP, \fBMaxOS::KPI::resource_write()\fP, \fBMaxOS::KPI::processes::sleep()\fP, \fBMaxOS::KPI::processes::thread_disable_port_io_handle()\fP, \fBMaxOS::KPI::processes::thread_enable_port_io_handle()\fP, \fBMaxOS::KPI::processes::thread_exit()\fP, and \fBMaxOS::KPI::processes::thread_sleep_handle()\fP\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

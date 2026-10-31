@@ -1,4 +1,4 @@
-.TH "MaxOS::memory::PhysicalMemoryManager" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::memory::PhysicalMemoryManager" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -250,7 +250,7 @@ Definition at line \fB31\fP of file \fBphysical\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fB_kernel_end\fP, \fB_kernel_physical_end\fP, \fB_kernel_size\fP, \fBmultiboot_mmap_entry::addr\fP, \fBalign_up_to_page()\fP, \fBMaxOS::system::CPU::check_nx()\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBmultiboot_tag_mmap::entries\fP, \fBmultiboot_tag_mmap::entry_size\fP, \fBMaxOS::memory::HIGHER_HALF_DIRECT_MAP\fP, \fBMaxOS::Logger::INFO()\fP, \fBmultiboot_mmap_entry::len\fP, \fBmap()\fP, \fBmemory_used()\fP, \fBMaxOS::system::Multiboot::mmap()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::PRESENT\fP, \fBreserve_kernel_regions()\fP, \fBMaxOS::memory::ROW_BITS\fP, \fBs_current_manager\fP, \fBmultiboot_tag_mmap::size\fP, \fBunmap_lower_kernel()\fP, and \fBMaxOS::memory::WRITE\fP\&.
+References \fB_kernel_end\fP, \fB_kernel_physical_end\fP, \fB_kernel_size\fP, \fBmultiboot_mmap_entry::addr\fP, \fBalign_up_to_page()\fP, \fBMaxOS::system::CPU::check_nx()\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBmultiboot_tag_mmap::entries\fP, \fBmultiboot_tag_mmap::entry_size\fP, \fBMaxOS::memory::HIGHER_HALF_DIRECT_MAP\fP, \fBMaxOS::Logger::INFO()\fP, \fBmultiboot_mmap_entry::len\fP, \fBmap()\fP, \fBmemory_used()\fP, \fBMaxOS::system::Multiboot::mmap()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::PRESENT\fP, \fBreserve_kernel_regions()\fP, \fBMaxOS::memory::ROW_BITS\fP, \fBs_current_manager\fP, \fBmultiboot_tag_mmap::size\fP, \fBMaxOS::common::Spinlock::unlock()\fP, \fBunmap_lower_kernel()\fP, and \fBMaxOS::memory::WRITE\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "size_t PhysicalMemoryManager::align_direct_to_page (size_t size)\fC [static]\fP"
@@ -434,7 +434,7 @@ Definition at line \fB270\fP of file \fBphysical\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, and \fBsize_to_frames()\fP\&.
+References \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, \fBsize_to_frames()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .SS "void * PhysicalMemoryManager::allocate_frame ()"
 
 .PP
@@ -508,7 +508,7 @@ Definition at line \fB188\fP of file \fBphysical\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBmultiboot_mmap_entry::addr\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, and \fBto_dm_region()\fP\&.
+References \fBmultiboot_mmap_entry::addr\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, \fBto_dm_region()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .PP
 Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, and \fBmap()\fP\&.
 .SS "void PhysicalMemoryManager::change_page_flags (\fBvirtual_address_t\fP * virtual_address, size_t flags, uint64_t * pml4_root)"
@@ -637,7 +637,7 @@ Definition at line \fB341\fP of file \fBphysical\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, and \fBsize_to_frames()\fP\&.
+References \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, \fBsize_to_frames()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::SharedMemory::close()\fP\&.
 .SS "void PhysicalMemoryManager::free_frame (void * address)"
@@ -668,7 +668,7 @@ Definition at line \fB250\fP of file \fBphysical\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::memory::PAGE_SIZE\fP, and \fBMaxOS::memory::ROW_BITS\fP\&.
+References \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .PP
 Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, and \fBMaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()\fP\&.
 .SS "void * PhysicalMemoryManager::from_dm_region (uintptr_t virtual_address)\fC [static]\fP"
@@ -1005,7 +1005,7 @@ Definition at line \fB549\fP of file \fBphysical\&.cpp\fP\&..PP
 .PP
 References \fBmap()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, and \fBsize_to_frames()\fP\&.
 .PP
-Referenced by \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP\&.
+Referenced by \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
 .SS "uint64_t PhysicalMemoryManager::memory_size () const"
 
 .PP
@@ -1097,7 +1097,7 @@ Definition at line \fB774\fP of file \fBphysical\&.cpp\fP\&..PP
 .PP
 References \fBMaxOS::memory::PAGE_SIZE\fP, and \fBreserve()\fP\&.
 .PP
-Referenced by \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBreserve()\fP, and \fBreserve_kernel_regions()\fP\&.
+Referenced by \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBreserve()\fP, \fBreserve_kernel_regions()\fP, and \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP\&.
 .SS "void PhysicalMemoryManager::reserve (uint64_t address, size_t size, const char * type = \fC'Unknown'\fP)"
 
 .PP
@@ -1151,7 +1151,7 @@ Definition at line \fB786\fP of file \fBphysical\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBalign_direct_to_page()\fP, \fBalign_up_to_page()\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, and \fBMaxOS::memory::ROW_BITS\fP\&.
+References \fBalign_direct_to_page()\fP, \fBalign_up_to_page()\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::memory::PAGE_SIZE\fP, \fBMaxOS::memory::ROW_BITS\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .SS "void PhysicalMemoryManager::reserve_kernel_regions (\fBsystem::Multiboot\fP * multiboot)"
 
 .PP
@@ -1248,7 +1248,7 @@ Definition at line \fB144\fP of file \fBphysical\&.cpp\fP\&..PP
 .PP
 References \fBalign_to_page()\fP, and \fBMaxOS::memory::PAGE_SIZE\fP\&.
 .PP
-Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBallocate_area()\fP, \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBfree_area()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBmap_area()\fP, \fBmap_area()\fP, \fBMaxOS::memory::VirtualMemoryManager::unload_range_from_process()\fP, \fBunmap_area()\fP, and \fBMaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()\fP\&.
+Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBallocate_area()\fP, \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBfree_area()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBmap_area()\fP, \fBmap_area()\fP, \fBMaxOS::memory::VirtualMemoryManager::unload_range_from_process()\fP, \fBunmap_area()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP, and \fBMaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()\fP\&.
 .SS "void * PhysicalMemoryManager::to_dm_region (uintptr_t physical_address)\fC [static]\fP"
 
 .PP
@@ -1281,7 +1281,7 @@ Definition at line \fB929\fP of file \fBphysical\&.cpp\fP\&..PP
 .PP
 References \fBMaxOS::memory::HIGHER_HALF_DIRECT_MAP\fP, and \fBMaxOS::memory::HIGHER_HALF_OFFSET\fP\&.
 .PP
-Referenced by \fBallocate_frame()\fP, \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBMaxOS::processes::GlobalScheduler::load_multiboot_elfs()\fP, \fBMaxOS::processes::GlobalScheduler::prepare_initrd()\fP, \fBMaxOS::console::FramebufferConsole::print_logo()\fP, and \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP\&.
+Referenced by \fBallocate_frame()\fP, \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBMaxOS::processes::GlobalScheduler::load_multiboot_elfs()\fP, \fBMaxOS::processes::GlobalScheduler::prepare_initrd()\fP, \fBMaxOS::console::FramebufferConsole::print_logo()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP, and \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP\&.
 .SS "void * PhysicalMemoryManager::to_higher_region (uintptr_t physical_address)\fC [static]\fP"
 
 .PP
@@ -1500,8 +1500,8 @@ Make private with getter, maybe make mapping static?
 .PP
 Definition at line \fB183\fP of file \fBphysical\&.h\fP\&.
 .PP
-Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::processes::SharedMemory::close()\fP, \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBMaxOS::system::CPU::init_cores()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_range_from_process()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBPhysicalMemoryManager()\fP, \fBMaxOS::processes::SharedMemory::SharedMemory()\fP, \fBMaxOS::memory::VirtualMemoryManager::unload_range_from_process()\fP, \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP, \fBMaxOS::processes::Process::~Process()\fP, and \fBMaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()\fP\&.
+Referenced by \fBMaxOS::memory::VirtualMemoryManager::allocate()\fP, \fBMaxOS::processes::SharedMemory::close()\fP, \fBMaxOS::console::FramebufferConsole::FramebufferConsole()\fP, \fBMaxOS::system::CPU::init_cores()\fP, \fBMaxOS::hardwarecommunication::IOAPIC::IOAPIC()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_range_from_process()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()\fP, \fBPhysicalMemoryManager()\fP, \fBMaxOS::processes::SharedMemory::SharedMemory()\fP, \fBMaxOS::memory::VirtualMemoryManager::unload_range_from_process()\fP, \fBMaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()\fP, \fBMaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()\fP, \fBMaxOS::processes::Process::~Process()\fP, and \fBMaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()\fP\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

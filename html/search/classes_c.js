@@ -1,13 +1,10 @@
 var searchData=
 [
-  ['packed_0',['PACKED',['../structMaxOS_1_1hardwarecommunication_1_1RedirectionEntry_1_1PACKED.html',1,'MaxOS::hardwarecommunication::RedirectionEntry']]],
-  ['pagefaulthandler_1',['PageFaultHandler',['../classMaxOS_1_1hardwarecommunication_1_1PageFaultHandler.html',1,'MaxOS::hardwarecommunication']]],
-  ['pagemaplevel_2',['PageMapLevel',['../structMaxOS_1_1memory_1_1PageMapLevel.html',1,'MaxOS::memory']]],
-  ['pagetableentry_3',['PageTableEntry',['../structMaxOS_1_1memory_1_1PageTableEntry.html',1,'MaxOS::memory']]],
-  ['physicalmemorymanager_4',['PhysicalMemoryManager',['../classMaxOS_1_1memory_1_1PhysicalMemoryManager.html',1,'MaxOS::memory']]],
-  ['pit_5',['PIT',['../classMaxOS_1_1hardwarecommunication_1_1PIT.html',1,'MaxOS::hardwarecommunication']]],
-  ['pitcommand_6',['PITCommand',['../structMaxOS_1_1hardwarecommunication_1_1PITCommand.html',1,'MaxOS::hardwarecommunication']]],
-  ['process_7',['Process',['../classMaxOS_1_1processes_1_1Process.html',1,'MaxOS::processes']]],
-  ['processresource_8',['ProcessResource',['../classMaxOS_1_1processes_1_1resources_1_1ProcessResource.html',1,'MaxOS::processes::resources']]],
-  ['processresourceregistry_9',['ProcessResourceRegistry',['../classMaxOS_1_1processes_1_1resources_1_1ProcessResourceRegistry.html',1,'MaxOS::processes::resources']]]
+  ['lconv_0',['lconv',['../structlconv.html',1,'']]],
+  ['linger_1',['linger',['../structlinger.html',1,'linger'],['../structLinger.html',1,'Linger']]],
+  ['localapic_2',['LocalAPIC',['../classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html',1,'MaxOS::hardwarecommunication']]],
+  ['locationonlyinfo_3',['LocationOnlyInfo',['../structMaxOS_1_1runtime_1_1LocationOnlyInfo.html',1,'MaxOS::runtime']]],
+  ['logger_4',['Logger',['../classMaxOS_1_1Logger.html',1,'MaxOS']]],
+  ['logrecord_5',['LogRecord',['../classMaxOS_1_1LogRecord.html',1,'MaxOS']]],
+  ['longfilenameentry_6',['LongFileNameEntry',['../structFileServer_1_1format_1_1LongFileNameEntry.html',1,'FileServer::format']]]
 ];

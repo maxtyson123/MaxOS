@@ -1,0 +1,26 @@
+var libraries_2libkpi_2include_2libkpi_2processes_2process_8h =
+[
+    [ "MaxOS::KPI::processes::ExecuteCommand", "structMaxOS_1_1KPI_1_1processes_1_1ExecuteCommand.html", null ],
+    [ "MaxOS::KPI::processes::ProcessStats", "structMaxOS_1_1KPI_1_1processes_1_1ProcessStats.html", null ],
+    [ "MaxOS::KPI::processes::ProcessEnvironment", "structMaxOS_1_1KPI_1_1processes_1_1ProcessEnvironment.html", null ],
+    [ "MaxOS::KPI::processes::handle_info", "structMaxOS_1_1KPI_1_1processes_1_1handle__info.html", null ],
+    [ "process_stats_t", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a6402c90d295dd50a955febbe2d351b7f", null ],
+    [ "change_working_directory", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a1a1cfca5b853cd245e8d4834b11c4493", null ],
+    [ "change_working_directory_handle", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a75ac1d6639a4f0245588300e815e5513", null ],
+    [ "change_working_directory_pid", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#aa8814c865f1daf9a305d424e19f52ad9", null ],
+    [ "close_process_handle", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a8e2e0e790d68161d198d0d846337bb95", null ],
+    [ "exec_file", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a05d7624f808f02de35c48259d5b2aff3", null ],
+    [ "exec_file", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a75d7c81119bf649031c3a71a5eaba15f", null ],
+    [ "exit", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a892abf87c87538353b855aba9775f141", null ],
+    [ "get_current_process", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a36e68b6fc79bfe94d5568fd36c8aed82", null ],
+    [ "get_current_process_environment", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a17f7c4369067480ac6735b70d12b9da3", null ],
+    [ "get_current_process_stats", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a1ce1143f2e41e32772a2f717e4e87bae", null ],
+    [ "get_process", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#ae94035c9f61baddbd19848e714f90cdd", null ],
+    [ "get_process_environment", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a31e23c7b54a478023291c7d1089e4a34", null ],
+    [ "get_process_environment_handle", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a452106043de78c7f7f75d6ae33af3200", null ],
+    [ "get_process_stats", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a7f95a9a530512d34d9471db017fc42d9", null ],
+    [ "get_process_stats_handle", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#acd0c29c530fac3e691fdb426532da29a", null ],
+    [ "kill_process", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a3f5e048d92941b15107f10cf1f03cc4a", null ],
+    [ "kill_process_handle", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#aac5865864c7890b35f6d20ec434b12e2", null ],
+    [ "pid", "libraries_2libkpi_2include_2libkpi_2processes_2process_8h.html#a00d60bb80147a7babd1bfa367bbe2525", null ]
+];

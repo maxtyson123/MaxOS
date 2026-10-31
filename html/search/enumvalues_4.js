@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['huge_5fpage_0',['HUGE_PAGE',['../physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84ebaec6f6414b8e9cfdb592e7778c29d4a02',1,'MaxOS::memory']]]
+  ['global_0',['GLOBAL',['../physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba3bc0a26e83cbe6110949292e924a968c',1,'MaxOS::memory']]]
 ];

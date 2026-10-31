@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::resources::BridgeHandler" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::resources::BridgeHandler" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,7 +15,7 @@ Inherits \fBMaxOS::memory::allocator::BumpAllocator\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBBridgeHandler\fP (string const &shared_name, \fBProcess\fP *owner_process)"
+.RI "\fBBridgeHandler\fP (\fBstring\fP const &shared_name, \fBProcess\fP *owner_process)"
 .br
 .RI "Constructs a handler to manage resource commands over shared memory\&. "
 .ti -1c
@@ -76,7 +76,7 @@ A handler to manage resource commands over shared memory\&.
 Definition at line \fB32\fP of file \fBresource_bridge\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "BridgeHandler::BridgeHandler (string const & shared_name, \fBProcess\fP * owner_process)"
+.SS "BridgeHandler::BridgeHandler (\fBstring\fP const & shared_name, \fBProcess\fP * owner_process)"
 
 .PP
 Constructs a handler to manage resource commands over shared memory\&. 
@@ -104,7 +104,7 @@ Definition at line \fB21\fP of file \fBresource_bridge\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::resources::GlobalResourceRegistry::get_registry()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::memory::MemoryManager::s_kernel_memory_manager\fP, \fBMaxOS::memory::allocator::BumpAllocator::setup_region()\fP, and \fBMaxOS::memory::BumpMemoryManager::vmm()\fP\&.
+References \fBMaxOS::KPI::DATA_SIZE\fP, \fBMaxOS::processes::resources::GlobalResourceRegistry::get_registry()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::KPI::MESSAGE_SIZE\fP, \fBMaxOS::memory::MemoryManager::s_kernel_memory_manager\fP, \fBMaxOS::KPI::SERVICE_SHARED_MEM_SIZE\fP, \fBMaxOS::memory::allocator::BumpAllocator::setup_region()\fP, and \fBMaxOS::memory::BumpMemoryManager::vmm()\fP\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "size_t BridgeHandler::allocate_id ()"
@@ -204,8 +204,8 @@ Definition at line \fB139\fP of file \fBresource_bridge\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Process::pid()\fP, \fBMaxOS::memory::allocator::BumpAllocator::unallocate()\fP, \fBMaxOS::memory::VirtualMemoryManager::unload_range_from_process()\fP, \fBMaxOS::memory::BumpMemoryManager::vmm()\fP, and \fBMaxOS::processes::Thread::yield()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::KPI::MAX_COPY_SIZE\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Process::pid()\fP, \fBMaxOS::memory::allocator::BumpAllocator::unallocate()\fP, \fBMaxOS::memory::VirtualMemoryManager::unload_range_from_process()\fP, \fBMaxOS::common::Spinlock::unlock()\fP, \fBMaxOS::memory::BumpMemoryManager::vmm()\fP, and \fBMaxOS::processes::Thread::yield()\fP\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

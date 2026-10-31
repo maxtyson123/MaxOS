@@ -1,0 +1,662 @@
+.TH "libraries/libc/include/fcntl.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/include/fcntl.h \- Provides support for file control operations, opening and changing files\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libc_common\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBf_owner_ex\fP"
+.br
+.RI "Internal representation for the owner used by F_GETOWN_EX and F_SETOWN_EX\&. "
+.ti -1c
+.RI "struct \fBflock\fP"
+.br
+.RI "Internal representation for a file lock\&. "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBF_DUPFD\fP   0"
+.br
+.RI "Duplicate file descriptor\&. "
+.ti -1c
+.RI "#define \fBF_DUPFD_CLOEXEC\fP   1"
+.br
+.RI "Duplicate file descriptor with the close-on-exec flag FD_CLOEXEC set\&. "
+.ti -1c
+.RI "#define \fBF_DUPFD_CLOFORK\fP   2"
+.br
+.RI "Duplicate file descriptor with the close-on-fork flag FD_CLOFORK set\&. "
+.ti -1c
+.RI "#define \fBF_GETFD\fP   3"
+.br
+.RI "Get file descriptor flags\&. "
+.ti -1c
+.RI "#define \fBF_SETFD\fP   4"
+.br
+.RI "Set file descriptor flags\&. "
+.ti -1c
+.RI "#define \fBF_GETFL\fP   5"
+.br
+.RI "Get file status flags and file access modes\&. "
+.ti -1c
+.RI "#define \fBF_SETFL\fP   6"
+.br
+.RI "Set file status flags\&. "
+.ti -1c
+.RI "#define \fBF_GETLK\fP   7"
+.br
+.RI "Get information about file locks\&. "
+.ti -1c
+.RI "#define \fBF_SETLK\fP   8"
+.br
+.RI "Set a process-owned file lock\&. "
+.ti -1c
+.RI "#define \fBF_SETLKW\fP   9"
+.br
+.RI "Set a process-owned file lock; wait if blocked\&. "
+.ti -1c
+.RI "#define \fBF_OFD_GETLK\fP   10"
+.br
+.RI "Get information about file locks\&. "
+.ti -1c
+.RI "#define \fBF_OFD_SETLK\fP   11"
+.br
+.RI "Set an OFD-owned file lock\&. "
+.ti -1c
+.RI "#define \fBF_OFD_SETLKW\fP   12"
+.br
+.RI "Set an OFD-owned file lock; wait if blocked\&. "
+.ti -1c
+.RI "#define \fBF_GETOWN\fP   13"
+.br
+.RI "Get process or process group ID to receive SIGURG signals, via int type\&. "
+.ti -1c
+.RI "#define \fBF_GETOWN_EX\fP   14"
+.br
+.RI "Get process or process group ID to receive SIGURG signals, via pid_t type\&. "
+.ti -1c
+.RI "#define \fBF_SETOWN\fP   15"
+.br
+.RI "Set process or process group ID to receive SIGURG signals, via int type\&. "
+.ti -1c
+.RI "#define \fBF_SETOWN_EX\fP   16"
+.br
+.RI "Set process or process group ID to receive SIGURG signals, via pid_t type\&. "
+.ti -1c
+.RI "#define \fBFD_CLOEXEC\fP   1"
+.br
+.RI "Close the file descriptor upon execution of an exec family function and in the new process image created by posix_spawn() or posix_spawnp() "
+.ti -1c
+.RI "#define \fBFD_CLOFORK\fP   2"
+.br
+.RI "Close the file descriptor in any child process created from a process that has the file descriptor open; that is, the child shall not inherit the file descriptor\&. "
+.ti -1c
+.RI "#define \fBF_RDLCK\fP   0"
+.br
+.RI "Shared or read lock\&. "
+.ti -1c
+.RI "#define \fBF_UNLCK\fP   1"
+.br
+.RI "Unlock\&. "
+.ti -1c
+.RI "#define \fBF_WRLCK\fP   2"
+.br
+.RI "Exclusive or write lock\&. "
+.ti -1c
+.RI "#define \fBF_OWNER_PID\fP   1"
+.br
+.RI "The pid member of \fBf_owner_ex\fP holds a process ID\&. "
+.ti -1c
+.RI "#define \fBF_OWNER_PGRP\fP   2"
+.br
+.RI "The pid member of \fBf_owner_ex\fP holds a process group ID\&. "
+.ti -1c
+.RI "#define \fBO_CLOEXEC\fP   (1 << 0)"
+.br
+.RI "Atomically set the FD_CLOEXEC flag on the new file descriptor\&. "
+.ti -1c
+.RI "#define \fBO_CLOFORK\fP   (1 << 1)"
+.br
+.RI "Atomically set the FD_CLOFORK flag on the new file descriptor\&. "
+.ti -1c
+.RI "#define \fBO_CREAT\fP   (1 << 2)"
+.br
+.RI "Create file if it does not exist\&. "
+.ti -1c
+.RI "#define \fBO_DIRECTORY\fP   (1 << 3)"
+.br
+.RI "Fail if file is a non-directory file\&. "
+.ti -1c
+.RI "#define \fBO_EXCL\fP   (1 << 4)"
+.br
+.RI "Exclusive use flag\&. "
+.ti -1c
+.RI "#define \fBO_NOCTTY\fP   (1 << 5)"
+.br
+.RI "Do not assign controlling terminal\&. "
+.ti -1c
+.RI "#define \fBO_NOFOLLOW\fP   (1 << 6)"
+.br
+.RI "Do not follow symbolic links\&. "
+.ti -1c
+.RI "#define \fBO_TRUNC\fP   (1 << 7)"
+.br
+.RI "Truncate flag\&. "
+.ti -1c
+.RI "#define \fBO_TTY_INIT\fP   (1 << 8)"
+.br
+.RI "Set the termios structure terminal parameters to a state that provides conforming behavior (can be zero, so need not be bitwise-distinct) "
+.ti -1c
+.RI "#define \fBO_APPEND\fP   (1 << 0)"
+.br
+.RI "Set append mode\&. "
+.ti -1c
+.RI "#define \fBO_DSYNC\fP   (1 << 1)"
+.br
+.RI "Write according to synchronized I/O data integrity completion\&. "
+.ti -1c
+.RI "#define \fBO_NONBLOCK\fP   (1 << 2)"
+.br
+.RI "Non-blocking mode\&. "
+.ti -1c
+.RI "#define \fBO_RSYNC\fP   \fBO_SYNC\fP"
+.br
+.RI "Synchronized read I/O operations\&. "
+.ti -1c
+.RI "#define \fBO_SYNC\fP   (1 << 3)"
+.br
+.RI "Write according to synchronized I/O file integrity completion\&. "
+.ti -1c
+.RI "#define \fBO_ACCMODE\fP   ((1 << 4) | \fBO_SEARCH\fP)"
+.br
+.RI "Mask for file access modes\&. "
+.ti -1c
+.RI "#define \fBO_EXEC\fP   (1 << 5)"
+.br
+.RI "Open for execute only (non-directory files), result is unspecified if applied to a directory\&. "
+.ti -1c
+.RI "#define \fBO_RDONLY\fP   (1 << 6)"
+.br
+.RI "Open for reading only\&. "
+.ti -1c
+.RI "#define \fBO_RDWR\fP   (1 << 7)"
+.br
+.RI "Open for reading and writing\&. "
+.ti -1c
+.RI "#define \fBO_SEARCH\fP   (1 << 8)"
+.br
+.RI "Open directory for search only, result is unspecified if applied to a non-directory file\&. "
+.ti -1c
+.RI "#define \fBO_WRONLY\fP   (1 << 9)"
+.br
+.RI "Open for writing only\&. "
+.ti -1c
+.RI "#define \fBAT_FDCWD\fP   0"
+.br
+.RI "Use the current working directory to determine the target of relative file paths\&. "
+.ti -1c
+.RI "#define \fBAT_EACCESS\fP   1"
+.br
+.RI "faccessat(): Check access using effective user and group ID "
+.ti -1c
+.RI "#define \fBAT_SYMLINK_NOFOLLOW\fP   2"
+.br
+.RI "fstatat(), fchmodat(), fchownat(), utimensat(): Do not follow symbolic links "
+.ti -1c
+.RI "#define \fBAT_SYMLINK_FOLLOW\fP   2"
+.br
+.RI "linkat(): Follow symbolic link "
+.ti -1c
+.RI "#define \fBAT_REMOVEDIR\fP   3"
+.br
+.RI "unlinkat(): Remove directory instead of file "
+.ti -1c
+.RI "#define \fBPOSIX_FADV_DONTNEED\fP   0"
+.br
+.RI "The application expects that it will not access the specified data in the near future\&. "
+.ti -1c
+.RI "#define \fBPOSIX_FADV_NOREUSE\fP   1"
+.br
+.RI "The application expects to access the specified data once and then not reuse it thereafter\&. "
+.ti -1c
+.RI "#define \fBPOSIX_FADV_NORMAL\fP   2"
+.br
+.RI "The application has no advice to give on its behavior with respect to the specified data, the default if no advice is given for an open file\&. "
+.ti -1c
+.RI "#define \fBPOSIX_FADV_RANDOM\fP   3"
+.br
+.RI "The application expects to access the specified data in a random order\&. "
+.ti -1c
+.RI "#define \fBPOSIX_FADV_SEQUENTIAL\fP   4"
+.br
+.RI "The application expects to access the specified data sequentially from lower offsets to higher offsets\&. "
+.ti -1c
+.RI "#define \fBPOSIX_FADV_WILLNEED\fP   5"
+.br
+.RI "The application expects to access the specified data in the near future\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct \fBf_owner_ex\fP \fBf_owner_ex\fP"
+.br
+.RI "Public alias for \fBf_owner_ex\fP\&. "
+.ti -1c
+.RI "typedef struct \fBflock\fP \fBflock_t\fP"
+.br
+.RI "Public alias for flock\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBcreat\fP (const char *, \fBmode_t\fP)"
+.br
+.ti -1c
+.RI "int \fBfcntl\fP (int, int,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "int \fBopen\fP (const char *, int,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "int \fBopenat\fP (int, const char *, int,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "int \fBposix_fadvise\fP (int, \fBoff_t\fP, \fBoff_t\fP, int)"
+.br
+.ti -1c
+.RI "int \fBposix_fallocate\fP (int, \fBoff_t\fP, \fBoff_t\fP)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Provides support for file control operations, opening and changing files\&. 
+
+Standard input and output\&.
+.PP
+\fBSee also\fP
+.RS 4
+https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/fcntl.h.html
+.RE
+.PP
+\fBDate\fP
+.RS 4
+29 October 2026 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/stdio.h.html
+.RE
+.PP
+\fBDate\fP
+.RS 4
+29 October 2026 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBfcntl\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define AT_EACCESS   1"
+
+.PP
+faccessat(): Check access using effective user and group ID 
+.PP
+Definition at line \fB115\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define AT_FDCWD   0"
+
+.PP
+Use the current working directory to determine the target of relative file paths\&. 
+.PP
+Definition at line \fB114\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define AT_REMOVEDIR   3"
+
+.PP
+unlinkat(): Remove directory instead of file 
+.PP
+Definition at line \fB118\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define AT_SYMLINK_FOLLOW   2"
+
+.PP
+linkat(): Follow symbolic link 
+.PP
+Definition at line \fB117\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define AT_SYMLINK_NOFOLLOW   2"
+
+.PP
+fstatat(), fchmodat(), fchownat(), utimensat(): Do not follow symbolic links 
+.PP
+Definition at line \fB116\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_DUPFD   0"
+
+.PP
+Duplicate file descriptor\&. 
+.PP
+Definition at line \fB53\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_DUPFD_CLOEXEC   1"
+
+.PP
+Duplicate file descriptor with the close-on-exec flag FD_CLOEXEC set\&. 
+.PP
+Definition at line \fB54\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_DUPFD_CLOFORK   2"
+
+.PP
+Duplicate file descriptor with the close-on-fork flag FD_CLOFORK set\&. 
+.PP
+Definition at line \fB55\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_GETFD   3"
+
+.PP
+Get file descriptor flags\&. 
+.PP
+Definition at line \fB56\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_GETFL   5"
+
+.PP
+Get file status flags and file access modes\&. 
+.PP
+Definition at line \fB58\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_GETLK   7"
+
+.PP
+Get information about file locks\&. 
+.PP
+Definition at line \fB60\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_GETOWN   13"
+
+.PP
+Get process or process group ID to receive SIGURG signals, via int type\&. 
+.PP
+Definition at line \fB66\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_GETOWN_EX   14"
+
+.PP
+Get process or process group ID to receive SIGURG signals, via pid_t type\&. 
+.PP
+Definition at line \fB67\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_OFD_GETLK   10"
+
+.PP
+Get information about file locks\&. 
+.PP
+Definition at line \fB63\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_OFD_SETLK   11"
+
+.PP
+Set an OFD-owned file lock\&. 
+.PP
+Definition at line \fB64\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_OFD_SETLKW   12"
+
+.PP
+Set an OFD-owned file lock; wait if blocked\&. 
+.PP
+Definition at line \fB65\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_OWNER_PGRP   2"
+
+.PP
+The pid member of \fBf_owner_ex\fP holds a process group ID\&. 
+.PP
+Definition at line \fB82\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_OWNER_PID   1"
+
+.PP
+The pid member of \fBf_owner_ex\fP holds a process ID\&. 
+.PP
+Definition at line \fB81\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_RDLCK   0"
+
+.PP
+Shared or read lock\&. 
+.PP
+Definition at line \fB76\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_SETFD   4"
+
+.PP
+Set file descriptor flags\&. 
+.PP
+Definition at line \fB57\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_SETFL   6"
+
+.PP
+Set file status flags\&. 
+.PP
+Definition at line \fB59\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_SETLK   8"
+
+.PP
+Set a process-owned file lock\&. 
+.PP
+Definition at line \fB61\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_SETLKW   9"
+
+.PP
+Set a process-owned file lock; wait if blocked\&. 
+.PP
+Definition at line \fB62\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_SETOWN   15"
+
+.PP
+Set process or process group ID to receive SIGURG signals, via int type\&. 
+.PP
+Definition at line \fB68\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_SETOWN_EX   16"
+
+.PP
+Set process or process group ID to receive SIGURG signals, via pid_t type\&. 
+.PP
+Definition at line \fB69\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_UNLCK   1"
+
+.PP
+Unlock\&. 
+.PP
+Definition at line \fB77\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define F_WRLCK   2"
+
+.PP
+Exclusive or write lock\&. 
+.PP
+Definition at line \fB78\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define FD_CLOEXEC   1"
+
+.PP
+Close the file descriptor upon execution of an exec family function and in the new process image created by posix_spawn() or posix_spawnp() 
+.PP
+Definition at line \fB72\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define FD_CLOFORK   2"
+
+.PP
+Close the file descriptor in any child process created from a process that has the file descriptor open; that is, the child shall not inherit the file descriptor\&. 
+.PP
+Definition at line \fB73\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_ACCMODE   ((1 << 4) | \fBO_SEARCH\fP)"
+
+.PP
+Mask for file access modes\&. 
+.PP
+Definition at line \fB103\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_APPEND   (1 << 0)"
+
+.PP
+Set append mode\&. 
+.PP
+Definition at line \fB96\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_CLOEXEC   (1 << 0)"
+
+.PP
+Atomically set the FD_CLOEXEC flag on the new file descriptor\&. 
+.PP
+Definition at line \fB85\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_CLOFORK   (1 << 1)"
+
+.PP
+Atomically set the FD_CLOFORK flag on the new file descriptor\&. 
+.PP
+Definition at line \fB86\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_CREAT   (1 << 2)"
+
+.PP
+Create file if it does not exist\&. 
+.PP
+Definition at line \fB87\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_DIRECTORY   (1 << 3)"
+
+.PP
+Fail if file is a non-directory file\&. 
+.PP
+Definition at line \fB88\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_DSYNC   (1 << 1)"
+
+.PP
+Write according to synchronized I/O data integrity completion\&. 
+.PP
+Definition at line \fB97\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_EXCL   (1 << 4)"
+
+.PP
+Exclusive use flag\&. 
+.PP
+Definition at line \fB89\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_EXEC   (1 << 5)"
+
+.PP
+Open for execute only (non-directory files), result is unspecified if applied to a directory\&. 
+.PP
+Definition at line \fB106\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_NOCTTY   (1 << 5)"
+
+.PP
+Do not assign controlling terminal\&. 
+.PP
+Definition at line \fB90\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_NOFOLLOW   (1 << 6)"
+
+.PP
+Do not follow symbolic links\&. 
+.PP
+Definition at line \fB91\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_NONBLOCK   (1 << 2)"
+
+.PP
+Non-blocking mode\&. 
+.PP
+Definition at line \fB98\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_RDONLY   (1 << 6)"
+
+.PP
+Open for reading only\&. 
+.PP
+Definition at line \fB107\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_RDWR   (1 << 7)"
+
+.PP
+Open for reading and writing\&. 
+.PP
+Definition at line \fB108\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_RSYNC   \fBO_SYNC\fP"
+
+.PP
+Synchronized read I/O operations\&. 
+.PP
+Definition at line \fB99\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_SEARCH   (1 << 8)"
+
+.PP
+Open directory for search only, result is unspecified if applied to a non-directory file\&. 
+.PP
+Definition at line \fB109\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_SYNC   (1 << 3)"
+
+.PP
+Write according to synchronized I/O file integrity completion\&. 
+.PP
+Definition at line \fB100\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_TRUNC   (1 << 7)"
+
+.PP
+Truncate flag\&. 
+.PP
+Definition at line \fB92\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_TTY_INIT   (1 << 8)"
+
+.PP
+Set the termios structure terminal parameters to a state that provides conforming behavior (can be zero, so need not be bitwise-distinct) 
+.PP
+Definition at line \fB93\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define O_WRONLY   (1 << 9)"
+
+.PP
+Open for writing only\&. 
+.PP
+Definition at line \fB110\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define POSIX_FADV_DONTNEED   0"
+
+.PP
+The application expects that it will not access the specified data in the near future\&. 
+.PP
+Definition at line \fB121\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define POSIX_FADV_NOREUSE   1"
+
+.PP
+The application expects to access the specified data once and then not reuse it thereafter\&. 
+.PP
+Definition at line \fB122\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define POSIX_FADV_NORMAL   2"
+
+.PP
+The application has no advice to give on its behavior with respect to the specified data, the default if no advice is given for an open file\&. 
+.PP
+Definition at line \fB123\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define POSIX_FADV_RANDOM   3"
+
+.PP
+The application expects to access the specified data in a random order\&. 
+.PP
+Definition at line \fB124\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define POSIX_FADV_SEQUENTIAL   4"
+
+.PP
+The application expects to access the specified data sequentially from lower offsets to higher offsets\&. 
+.PP
+Definition at line \fB125\fP of file \fBfcntl\&.h\fP\&.
+.SS "#define POSIX_FADV_WILLNEED   5"
+
+.PP
+The application expects to access the specified data in the near future\&. 
+.PP
+Definition at line \fB126\fP of file \fBfcntl\&.h\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

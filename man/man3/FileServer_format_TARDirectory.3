@@ -1,0 +1,190 @@
+.TH "FileServer::format::TARDirectory" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::format::TARDirectory \- Handles the directory operations on the TAR filesystem wrapper\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tar\&.h>\fP
+.PP
+Inherits \fBFileServer::filesystem::Directory\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTARDirectory\fP (\fBTARVolume\fP *volume, const string &path)"
+.br
+.ti -1c
+.RI "void \fBread_from_disk\fP () final"
+.br
+.RI "read the directory from the disk "
+.in -1c
+
+Public Member Functions inherited from \fBFileServer::filesystem::Directory\fP
+.in +1c
+.ti -1c
+.RI "virtual \fB~Directory\fP ()"
+.br
+.RI "Destructor for \fBDirectory\fP, frees all files and subdirectories\&. "
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBFile\fP * > \fBfiles\fP ()"
+.br
+.RI "Get the files in the directory\&. "
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBDirectory\fP * > \fBsubdirectories\fP ()"
+.br
+.RI "Get the subdirectories in the directory\&. "
+.ti -1c
+.RI "\fBFile\fP * \fBopen_file\fP (const string &\fBname\fP)"
+.br
+.RI "Open a file in the directory\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBopen_subdirectory\fP (const string &\fBname\fP)"
+.br
+.RI "Open a directory in the directory\&. "
+.ti -1c
+.RI "virtual \fBFile\fP * \fBcreate_file\fP (const string &\fBname\fP)"
+.br
+.RI "Create a file in the directory\&. "
+.ti -1c
+.RI "virtual void \fBremove_file\fP (const string &\fBname\fP)"
+.br
+.RI "Delete a file in the directory\&. "
+.ti -1c
+.RI "void \fBrename_file\fP (\fBFile\fP *file, const string &new_name)"
+.br
+.RI "Rename a file in the directory\&. "
+.ti -1c
+.RI "virtual void \fBrename_file\fP (const string &old_name, const string &new_name)"
+.br
+.RI "Rename a file in the directory\&. "
+.ti -1c
+.RI "void \fBrename_subdirectory\fP (\fBDirectory\fP *directory, const string &new_name)"
+.br
+.RI "Rename a subdirectory in the directory\&. "
+.ti -1c
+.RI "virtual void \fBrename_subdirectory\fP (const string &old_name, const string &new_name)"
+.br
+.RI "Rename a subdirectory in the directory\&. "
+.ti -1c
+.RI "virtual \fBDirectory\fP * \fBcreate_subdirectory\fP (const string &\fBname\fP)"
+.br
+.RI "Create a directory in the directory\&. "
+.ti -1c
+.RI "virtual void \fBremove_subdirectory\fP (const string &\fBname\fP)"
+.br
+.RI "Try to remove a directory in the directory\&. "
+.ti -1c
+.RI "string \fBname\fP ()"
+.br
+.RI "Get the name of the directory\&. "
+.ti -1c
+.RI "size_t \fBsize\fP ()"
+.br
+.RI "Get the size of the directory\&. "
+.ti -1c
+.RI "void \fBdebug_contents\fP (uint64_t depth=50)"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBFileServer::filesystem::Directory\fP
+.in +1c
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBFile\fP * > \fBm_files\fP"
+.br
+.RI "The files in this directory\&. "
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBDirectory\fP * > \fBm_subdirectories\fP"
+.br
+.RI "The subdirectories in this directory\&. "
+.ti -1c
+.RI "string \fBm_name\fP"
+.br
+.RI "The name of this directory\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the directory operations on the TAR filesystem wrapper\&. 
+.PP
+Definition at line \fB80\fP of file \fBtar\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "TARDirectory::TARDirectory (\fBTARVolume\fP * volume, const string & path)"
+
+.PP
+Definition at line \fB94\fP of file \fBtar\&.cpp\fP\&..PP
+.nf
+95 : m_volume(volume)
+96 {
+97     if (name == "/")
+98         m_name = name;
+99     else {
+100         m_parent = Path::parent_directory(name);
+101         m_name   = Path::file_name(name);           // Assume no trailing slash @todo enforce
+102     }
+103 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void TARDirectory::read_from_disk ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+read the directory from the disk 
+.PP
+Reimplemented from \fBFileServer::filesystem::Directory\fP\&.
+.PP
+Definition at line \fB107\fP of file \fBtar\&.cpp\fP\&..PP
+.nf
+107                                   {
+108 
+109     //@todo this is called a lot, maybe dont? i think bc of cache
+110 
+111     m_files\&.clear();
+112     m_subdirectories\&.clear();
+113 
+114     const string this_path = m_parent\&.empty() ? m_name : m_parent + "/" + m_name;
+115     Map<string, bool> seen_dirs;
+116 
+117     for (const auto& header : m_volume\->headers()) {
+118         const string& path = "/"s + header\->filename;
+119 
+120         // Only care about storing files in this directory
+121         if (!Path::is_child_of(path, this_path))
+122             continue;
+123 
+124         // Remainder after this directory
+125         string rest = path\&.substring(this_path\&.length(), path\&.length() \- this_path\&.length());
+126 
+127         // File
+128         if (!rest\&.contains('/')) {
+129             m_files\&.push_back(new TARFile(m_volume, header));
+130             continue;
+131         }
+132 
+133         // Make sure this subdirectory hasn't already been stored
+134         string subdir = rest\&.substring(0, rest\&.find('/'));
+135         auto found = seen_dirs\&.find(subdir);
+136         if (found != seen_dirs\&.end() && found\->second)
+137             continue;
+138 
+139         // Store the subdir
+140         seen_dirs\&.insert(subdir, true);
+141         auto dir = new TARDirectory(m_volume, path);
+142         m_subdirectories\&.push_back(dir);
+143 
+144     }
+145 }
+.fi
+
+.PP
+References \fBMaxOS::common::Map< Key, Value >::end()\fP, \fBMaxOS::common::Map< Key, Value >::find()\fP, \fBMaxOS::common::Map< Key, Value >::insert()\fP, \fBLibFS::Path::is_child_of()\fP, \fBFileServer::filesystem::Directory::m_files\fP, \fBFileServer::filesystem::Directory::m_name\fP, \fBFileServer::filesystem::Directory::m_subdirectories\fP, and \fBMaxOS::common::Pair< First, Second >::second\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

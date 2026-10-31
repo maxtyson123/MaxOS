@@ -1,0 +1,250 @@
+.TH "FileServer::vfs::DirectoryResource" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::vfs::DirectoryResource \- A wrapper for a Directory which exposes Directory operations as Resource operations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vfsresource\&.h>\fP
+.PP
+Inherits \fBMaxOS::KPI::Resource\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDirectoryResource\fP (const string &\fBname\fP, size_t flags, \fBMaxOS::KPI::ResourceType\fP \fBtype\fP)"
+.br
+.RI "Construct a new Directory Resource object\&. "
+.ti -1c
+.RI "int \fBread\fP (void *buffer, size_t size, size_t flags) final"
+.br
+.RI "read from a directory resource "
+.ti -1c
+.RI "int \fBwrite\fP (const void *buffer, size_t size, size_t flags) final"
+.br
+.RI "write to a directory resource "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::KPI::Resource\fP
+.in +1c
+.ti -1c
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBResourceType\fP \fBtype\fP)"
+.br
+.RI "Constructs a new \fBResource\fP object\&. "
+.ti -1c
+.RI "\fBstring\fP \fBname\fP ()"
+.br
+.RI "Gets the name of this resource\&. "
+.ti -1c
+.RI "\fBResourceType\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of this resource\&. "
+.ti -1c
+.RI "virtual void \fBopen\fP (size_t flags)"
+.br
+.RI "Opens the resource\&. "
+.ti -1c
+.RI "virtual void \fBclose\fP (size_t flags)"
+.br
+.RI "Closes the resource\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBfilesystem::Directory\fP * \fBdirectory\fP"
+.br
+.RI "The directory that this resource handles & exposes\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A wrapper for a Directory which exposes Directory operations as Resource operations\&. 
+.PP
+Definition at line \fB47\fP of file \fBvfsresource\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "DirectoryResource::DirectoryResource (const string & name, size_t flags, \fBMaxOS::KPI::ResourceType\fP type)"
+
+.PP
+Construct a new Directory Resource object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource 
+.br
+\fIflags\fP The flags for the resource when opened 
+.br
+\fItype\fP The type of the resource 
+.RE
+.PP
+
+.PP
+Definition at line \fB147\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+148 : Resource(name, flags, type),
+149   directory(nullptr)
+150 {
+151 
+152 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "int DirectoryResource::read (void * buffer, size_t size, size_t flags)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+read from a directory resource 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to read into 
+.br
+\fIsize\fP The number of bytes to read 
+.br
+\fIflags\fP The flags to pass to the reading 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully read or -1 on error 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
+.PP
+Definition at line \fB243\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+243                                                                    {
+244 
+245     // Directory not found
+246     if(!directory)
+247         return \-1;
+248 
+249     switch ((DirectoryFlags)flags){
+250         case DirectoryFlags::READ_ENTRIES:{
+251             write_entries(buffer, size);
+252             break;
+253         }
+254 
+255         case DirectoryFlags::READ_ENTRIES_SIZE:{
+256             return entries_size();
+257         }
+258 
+259         default:
+260             return \-1;
+261     }
+262 
+263     return size;
+264 
+265 }
+.fi
+
+.PP
+References \fBdirectory\fP\&.
+.SS "int DirectoryResource::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+write to a directory resource 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to write from 
+.br
+\fIsize\fP The number of bytes to write 
+.br
+\fIflags\fP The flags to pass to the writing 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully written or -1 on error 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
+.PP
+Definition at line \fB275\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+275                                                                           {
+276 
+277     // Directory not found
+278     if(!directory)
+279         return \-1;
+280 
+281     switch ((DirectoryFlags)flags){
+282 
+283         case DirectoryFlags::WRITE_NAME : {
+284 
+285             // Open the parent
+286             auto parent_directory = VirtualFileSystem::current_file_system()\->open_directory(Path::parent_directory(name()));
+287 
+288             // Rename
+289             string new_name = string((uint8_t*)buffer, size);
+290             parent_directory\->rename_subdirectory(directory, new_name);
+291 
+292             // Update name references
+293             new_name = Path::join_path(Path::parent_directory(name()), new_name);
+294             VirtualFileSystem::current_file_system()\->update_cache(name(), new_name);
+295             // rename_resource(); \- will also need to rename entries below this
+296 
+297             break;
+298         }
+299 
+300         case DirectoryFlags::WRITE_NEW_FILE:{
+301 
+302             string new_name = string((uint8_t*)buffer, size);
+303             directory\->create_file(new_name);
+304 
+305             break;
+306         }
+307 
+308 
+309         case DirectoryFlags::WRITE_NEW_DIR:{
+310 
+311             string new_name = string((uint8_t*)buffer, size);
+312             directory\->create_subdirectory(new_name);
+313             break;
+314         }
+315 
+316         case DirectoryFlags::WRITE_REMOVE_FILE:{
+317 
+318             string new_name = string((uint8_t*)buffer, size);
+319             directory\->remove_file(new_name);
+320             break;
+321         }
+322         case DirectoryFlags::WRITE_REMOVE_DIR:{
+323 
+324             string new_name = string((uint8_t*)buffer, size);
+325             directory\->remove_subdirectory(new_name);
+326             break;
+327         }
+328 
+329         default:
+330             return \-1;
+331     }
+332 
+333     return size;
+334 }
+.fi
+
+.PP
+References \fBFileServer::filesystem::Directory::create_file()\fP, \fBFileServer::filesystem::Directory::create_subdirectory()\fP, \fBFileServer::vfs::VirtualFileSystem::current_file_system()\fP, \fBdirectory\fP, \fBLibFS::Path::join_path()\fP, \fBMaxOS::KPI::Resource::name()\fP, \fBFileServer::vfs::VirtualFileSystem::open_directory()\fP, \fBLibFS::Path::parent_directory()\fP, \fBFileServer::filesystem::Directory::remove_file()\fP, \fBFileServer::filesystem::Directory::remove_subdirectory()\fP, and \fBFileServer::vfs::VirtualFileSystem::update_cache()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBfilesystem::Directory\fP* FileServer::vfs::DirectoryResource::directory"
+
+.PP
+The directory that this resource handles & exposes\&. 
+.PP
+Definition at line \fB59\fP of file \fBvfsresource\&.h\fP\&.
+.PP
+Referenced by \fBread()\fP, and \fBwrite()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

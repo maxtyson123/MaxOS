@@ -1,0 +1,27 @@
+var classFileServer_1_1format_1_1ext2_1_1Ext2Volume =
+[
+    [ "Ext2Volume", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a1f74bdca794cdde70666977e52ec623e", null ],
+    [ "allocate_block", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#ae2440f7c00021606ee91f68983abf206", null ],
+    [ "allocate_blocks", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#acf68810ccb0f9cdb2b9491c077710205", null ],
+    [ "bytes_to_blocks", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#af9769f68d14aa0c2c44b9313c151eafc", null ],
+    [ "create_inode", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a657c2f9cd60960648f1e1cec6d95a144", null ],
+    [ "free_blocks", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#afee2108a1f09f919a3cafff60f3bc5dd", null ],
+    [ "free_inode", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a4acd208a882871ef4ce89ab5e297e31c", null ],
+    [ "read_block", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#ae4dc8f1dc35d79da9a4a577cf66792f3", null ],
+    [ "read_inode", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a3ea16aa4dc886e18b353c1f4a3076100", null ],
+    [ "write_block", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a767863d034839b5f77efbca2e6eb905d", null ],
+    [ "write_inode", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#acd1055b2e0fc33cfd7b3ded4dd20c432", null ],
+    [ "bgdt_cache", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a5713d229eae4a076c81b89757f7525c8", null ],
+    [ "block_group_descriptor_table_block", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a7449d8bee78628b516f38629118f5a63", null ],
+    [ "block_group_descriptor_table_size", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a78c7deee7fdbf200a794de122a1c889b", null ],
+    [ "block_groups", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a1dbd74aad2f0dde5b4a8ab7a87131e2e", null ],
+    [ "block_size", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a5fd8fed82d57975461903b882a053232", null ],
+    [ "disk", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a34c92579945873940d17d0b3842ec072", null ],
+    [ "ext2_lock", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a5c1e3e17379559b0e3f40e9bda211568", null ],
+    [ "inodes_per_block", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a8a8abfd244a06a9182482d37c5a17a32", null ],
+    [ "partition_offset", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#aff792c29d01352d92332a19004377a1d", null ],
+    [ "pointers_per_block", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#aa07d57685e2d9a1222b9f32da1eaa9b1", null ],
+    [ "sectors_per_block", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#ab820aea10f388ccc8b6c8b4757d1b665", null ],
+    [ "superblock", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a0afe62d908f8f19fe6b8d886ad0a7213", null ],
+    [ "total_block_groups", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html#a7f9d52d026d143862f2608432d8ccb2f", null ]
+];

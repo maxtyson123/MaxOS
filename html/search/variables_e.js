@@ -1,10 +1,20 @@
 var searchData=
 [
-  ['obj_5fptr_0',['obj_ptr',['../structMaxOS_1_1runtime_1_1atexit__func__entry__t.html#aa9bfed6676699bfcf9922ba339cbe538',1,'MaxOS::runtime::atexit_func_entry_t']]],
-  ['oem_5fid_1',['OEM_id',['../structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html#affcf62bfa0e30fbd88f353fb3328715e',1,'MaxOS::hardwarecommunication::ACPISDTHeader']]],
-  ['oem_5frevision_2',['OEM_revision',['../structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html#a76c1355f3b0c2c38bf6befb7def20be0',1,'MaxOS::hardwarecommunication::ACPISDTHeader']]],
-  ['oem_5ftable_5fid_3',['OEM_table_id',['../structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html#a7a2946802d27cbac8eebbe7434c9ad31',1,'MaxOS::hardwarecommunication::ACPISDTHeader']]],
-  ['oemid_4',['OEMID',['../structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor.html#ad33e8d6e2d6812bda523007a131c40d4',1,'MaxOS::hardwarecommunication::RSDPDescriptor']]],
-  ['offset_5',['offset',['../structMaxOS_1_1processes_1_1ELFProgramHeader64.html#acc1f1b82c0707d64f7417ad0e8353938',1,'MaxOS::processes::ELFProgramHeader64::offset'],['../structMaxOS_1_1processes_1_1ELFSectionHeader64.html#a36bf128dbe2a6069325caee68f12239e',1,'MaxOS::processes::ELFSectionHeader64::offset'],['../structmultiboot__tag__apm.html#ae9d788171dfbf0f540c37aee20c96eb3',1,'multiboot_tag_apm::offset']]],
-  ['operating_5fmode_6',['operating_mode',['../structMaxOS_1_1hardwarecommunication_1_1PITCommand.html#a43fa5f52a6eca39fe62872bdf32ab769',1,'MaxOS::hardwarecommunication::PITCommand']]]
+  ['n_5fcs_5fprecedes_0',['n_cs_precedes',['../structlconv.html#ad118b68a229527f7e96538ac875169ad',1,'lconv']]],
+  ['n_5fsep_5fby_5fspace_1',['n_sep_by_space',['../structlconv.html#ab7ac20ce034900155183b32fc3c6d9a3',1,'lconv']]],
+  ['n_5fsign_5fposn_2',['n_sign_posn',['../structlconv.html#ae0bbe6f545952daef5a8cbdd054a184e',1,'lconv']]],
+  ['name_3',['name',['../classMaxOS_1_1processes_1_1Process.html#a56404d627bd310d8de08fba3d8d2792f',1,'MaxOS::processes::Process::name'],['../structMaxOS_1_1runtime_1_1TypeDescriptor.html#a06d9b8fae7b2d08775ec4e72a539764d',1,'MaxOS::runtime::TypeDescriptor::name'],['../structFileServer_1_1format_1_1DirectoryEntry.html#ad47ec84046fc62e0e0cb682dd1a34890',1,'FileServer::format::DirectoryEntry::name']]],
+  ['name1_4',['name1',['../structFileServer_1_1format_1_1LongFileNameEntry.html#a6db4abab66db223a1b338f2e548b138b',1,'FileServer::format::LongFileNameEntry']]],
+  ['name2_5',['name2',['../structFileServer_1_1format_1_1LongFileNameEntry.html#a77427d3b42f3aabb22050eb294404feb',1,'FileServer::format::LongFileNameEntry']]],
+  ['name3_6',['name3',['../structFileServer_1_1format_1_1LongFileNameEntry.html#af4536539693867eb4bf5ca9936422a25',1,'FileServer::format::LongFileNameEntry']]],
+  ['name_5findex_7',['name_index',['../structMaxOS_1_1processes_1_1ELFSectionHeader64.html#a37e543b0e357a0af737786e5e5648927',1,'MaxOS::processes::ELFSectionHeader64']]],
+  ['name_5flength_8',['name_length',['../structFileServer_1_1format_1_1ext2_1_1DirectoryEntry.html#ad93677ec4eee87651332bcf7622c5333',1,'FileServer::format::ext2::DirectoryEntry']]],
+  ['negative_5fsign_9',['negative_sign',['../structlconv.html#a40dbb1b1d7fdf4926145138f5d8f6f5f',1,'lconv']]],
+  ['new_5ftext_10',['new_text',['../classMaxOS_1_1gui_1_1widgets_1_1InputBoxTextChangedEvent.html#a19a08e02782e609f1ddf26654b7049f1',1,'MaxOS::gui::widgets::InputBoxTextChangedEvent']]],
+  ['next_11',['next',['../structMaxOS_1_1memory_1_1allocator_1_1ChunkHeader.html#a0cc023ea1e299074c516c31087eb4641',1,'MaxOS::memory::allocator::ChunkHeader::next'],['../structMaxOS_1_1memory_1_1FreeChunk.html#af778aef094fc1dffa4cd9abbaf9892a8',1,'MaxOS::memory::FreeChunk::next'],['../structMaxOS_1_1memory_1_1VirtualMemoryRegion.html#ad413d0bc698f58b335e61665a18cff9f',1,'MaxOS::memory::VirtualMemoryRegion::next'],['../structMaxOS_1_1system_1_1StackFrame.html#ac104c1f50f3d0ded0dc7ea7911418c89',1,'MaxOS::system::StackFrame::next']]],
+  ['next_5ffree_5fcluster_12',['next_free_cluster',['../structFileServer_1_1format_1_1FSInfo.html#aba9e523095360c58a2a28a8ece6d2d20',1,'FileServer::format::FSInfo']]],
+  ['num_13',['num',['../structmultiboot__tag__elf__sections.html#ad31ac6e523f0a7d800c430ba4e5c40dc',1,'multiboot_tag_elf_sections']]],
+  ['num_5frecv_5fbuffers_14',['num_recv_buffers',['../structMaxOS_1_1drivers_1_1ethernet_1_1InitializationBlock.html#a6b19869b81d1d93107e6dbbc74784c9d',1,'MaxOS::drivers::ethernet::InitializationBlock']]],
+  ['num_5fsend_5fbuffers_15',['num_send_buffers',['../structMaxOS_1_1drivers_1_1ethernet_1_1InitializationBlock.html#a3ca863c19691cf8131d2859a18ef14fa',1,'MaxOS::drivers::ethernet::InitializationBlock']]],
+  ['number_5fpad_5flock_16',['number_pad_lock',['../classLibDriver_1_1generic_1_1KeyboardState.html#a611d80687da74eccd98b387ccc6eead6',1,'LibDriver::generic::KeyboardState']]]
 ];

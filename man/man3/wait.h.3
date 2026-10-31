@@ -1,0 +1,296 @@
+.TH "libraries/libc/include/sys/wait.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/include/sys/wait.h \- Defines fundamental functions that arent related to I/O, strings or maths\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libc_common\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+\fC#include <signal\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBWCONTINUED\fP   (1 << 0)"
+.br
+.RI "Report continued children\&. "
+.ti -1c
+.RI "#define \fBWNOHANG\fP   (1 << 1)"
+.br
+.RI "If no child has changed state, return immediately\&. "
+.ti -1c
+.RI "#define \fBWUNTRACED\fP   (1 << 2)"
+.br
+.RI "Report stopped children (that arent being traced) "
+.ti -1c
+.RI "#define \fBWEXITED\fP   (1 << 0)"
+.br
+.RI "Report children that exited normally\&. "
+.ti -1c
+.RI "#define \fBWNOWAIT\fP   (1 << 1)"
+.br
+.RI "Peek the child status\&. "
+.ti -1c
+.RI "#define \fBWSTOPPED\fP   (1 << 2)"
+.br
+.RI "Report children that were stopped\&. "
+.ti -1c
+.RI "#define \fB__WSTATUS_SIGNAL_BITS\fP   7"
+.br
+.RI "How many bits allocated for the sumbol\&. "
+.ti -1c
+.RI "#define \fB__WSTATUS_SIGNAL_MASK\fP   ((1u << \fB__WSTATUS_SIGNAL_BITS\fP) \- 1)"
+.br
+.RI "Masks the low bites to get the signal\&. "
+.ti -1c
+.RI "#define \fB__WSTATUS_COREDUMP_BIT\fP   \fB__WSTATUS_SIGNAL_BITS\fP"
+.br
+.RI "Bit index for the core dump\&. "
+.ti -1c
+.RI "#define \fB__WSTATUS_LOW_MASK\fP   ((1u << 8) \- 1)"
+.br
+.RI "Masks the whole low bite\&. "
+.ti -1c
+.RI "#define \fB__WSTATUS_HIGH_SHIFT\fP   (\fB__WSTATUS_SIGNAL_BITS\fP + 1)"
+.br
+.RI "Bit shift to get the high byte\&. "
+.ti -1c
+.RI "#define \fB__WSTATUS_HIGH_MASK\fP   0xFF"
+.br
+.RI "Masks the high bite (exit code) "
+.ti -1c
+.RI "#define \fB__WSTATUS_STOP_MASK\fP   (\fB__WSTATUS_LOW_MASK\fP & ~\fB__WSTATUS_SIGNAL_MASK\fP)"
+.br
+.RI "Stopped is all low bits except core\&. "
+.ti -1c
+.RI "#define \fBWIFEXITED\fP(status)   (((status) & \fB__WSTATUS_SIGNAL_MASK\fP) == 0)"
+.br
+.RI "Process exited normally (can use WEXITSTATUS) "
+.ti -1c
+.RI "#define \fBWIFSIGNALED\fP(status)   (((status) & \fB__WSTATUS_SIGNAL_MASK\fP) != 0 && !\fBWIFSTOPPED\fP(status))"
+.br
+.RI "Terminated by a signal (can use) "
+.ti -1c
+.RI "#define \fBWIFSTOPPED\fP(status)   (((status) & \fB__WSTATUS_LOW_MASK\fP) == \fB__WSTATUS_STOP_MASK\fP)"
+.br
+.RI "Process didnt handle a stop signal\&. "
+.ti -1c
+.RI "#define \fBWIFCONTINUE\fP(status)"
+.br
+.RI "Process was stopped but now continued/*#end#*/\&. "
+.ti -1c
+.RI "#define \fBWEXITSTATUS\fP   (((status) >> \fB__WSTATUS_HIGH_SHIFT\fP) & \fB__WSTATUS_HIGH_MASK\fP)"
+.br
+.RI "Get the status bits from the returned status\&. "
+.ti -1c
+.RI "#define \fBWTERMSIG\fP   ((status) & \fB__WSTATUS_SIGNAL_BITS\fP)"
+.br
+.RI "Get the signal that terminated the process\&. "
+.ti -1c
+.RI "#define \fBWSTOPSIG\fP   (((status) & \fB__WSTATUS_LOW_MASK\fP) == \fB__WSTATUS_STOP_MASK\fP)"
+.br
+.RI "Get the signal that stopped the process\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef enum \fB_IDType\fP \fBidtype_t\fP"
+.br
+.RI "Public alais of _IDType\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fB_IDType\fP { \fBP_ALL\fP, \fBP_PGID\fP, \fBP_PID\fP }"
+.br
+.RI "Internal representation of how an ID should be interpreted for an waitid() call\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBpid_t\fP \fBwait\fP (int *)"
+.br
+.ti -1c
+.RI "int \fBwaitid\fP (\fBidtype_t\fP, \fBid_t\fP, \fBsiginfo_t\fP *, int)"
+.br
+.ti -1c
+.RI "\fBpid_t\fP \fBwaitpid\fP (\fBpid_t\fP, int *, int)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines fundamental functions that arent related to I/O, strings or maths\&. 
+
+
+.PP
+\fBSee also\fP
+.RS 4
+https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_wait.h.html
+.RE
+.PP
+\fBDate\fP
+.RS 4
+16 December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+status layout is linux specific, fix 
+.RE
+.PP
+
+.PP
+Definition in file \fBwait\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define __WSTATUS_COREDUMP_BIT   \fB__WSTATUS_SIGNAL_BITS\fP"
+
+.PP
+Bit index for the core dump\&. 
+.PP
+Definition at line \fB35\fP of file \fBwait\&.h\fP\&.
+.SS "#define __WSTATUS_HIGH_MASK   0xFF"
+
+.PP
+Masks the high bite (exit code) 
+.PP
+Definition at line \fB38\fP of file \fBwait\&.h\fP\&.
+.SS "#define __WSTATUS_HIGH_SHIFT   (\fB__WSTATUS_SIGNAL_BITS\fP + 1)"
+
+.PP
+Bit shift to get the high byte\&. 
+.PP
+Definition at line \fB37\fP of file \fBwait\&.h\fP\&.
+.SS "#define __WSTATUS_LOW_MASK   ((1u << 8) \- 1)"
+
+.PP
+Masks the whole low bite\&. 
+.PP
+Definition at line \fB36\fP of file \fBwait\&.h\fP\&.
+.SS "#define __WSTATUS_SIGNAL_BITS   7"
+
+.PP
+How many bits allocated for the sumbol\&. 
+.PP
+Definition at line \fB33\fP of file \fBwait\&.h\fP\&.
+.SS "#define __WSTATUS_SIGNAL_MASK   ((1u << \fB__WSTATUS_SIGNAL_BITS\fP) \- 1)"
+
+.PP
+Masks the low bites to get the signal\&. 
+.PP
+Definition at line \fB34\fP of file \fBwait\&.h\fP\&.
+.SS "#define __WSTATUS_STOP_MASK   (\fB__WSTATUS_LOW_MASK\fP & ~\fB__WSTATUS_SIGNAL_MASK\fP)"
+
+.PP
+Stopped is all low bits except core\&. 
+.PP
+Definition at line \fB39\fP of file \fBwait\&.h\fP\&.
+.SS "#define WCONTINUED   (1 << 0)"
+
+.PP
+Report continued children\&. 
+.PP
+Definition at line \fB23\fP of file \fBwait\&.h\fP\&.
+.SS "#define WEXITED   (1 << 0)"
+
+.PP
+Report children that exited normally\&. 
+.PP
+Definition at line \fB28\fP of file \fBwait\&.h\fP\&.
+.SS "#define WEXITSTATUS   (((status) >> \fB__WSTATUS_HIGH_SHIFT\fP) & \fB__WSTATUS_HIGH_MASK\fP)"
+
+.PP
+Get the status bits from the returned status\&. 
+.PP
+Definition at line \fB49\fP of file \fBwait\&.h\fP\&.
+.SS "#define WIFCONTINUE(status)"
+\fBValue:\fP.PP
+.nf
+                                 (((status) & __WSTATUS_LOW_MASK) == __WSTATUS_LOW_MASK && \\
+                                 ((status) >> __WSTATUS_HIGH_SHIFT) == __WSTATUS_HIGH_MASK)
+.fi
+
+.PP
+Process was stopped but now continued/*#end#*/\&. 
+.PP
+Definition at line \fB47\fP of file \fBwait\&.h\fP\&.
+.SS "#define WIFEXITED(status)   (((status) & \fB__WSTATUS_SIGNAL_MASK\fP) == 0)"
+
+.PP
+Process exited normally (can use WEXITSTATUS) 
+.PP
+Definition at line \fB42\fP of file \fBwait\&.h\fP\&.
+.SS "#define WIFSIGNALED(status)   (((status) & \fB__WSTATUS_SIGNAL_MASK\fP) != 0 && !\fBWIFSTOPPED\fP(status))"
+
+.PP
+Terminated by a signal (can use) 
+.PP
+Definition at line \fB43\fP of file \fBwait\&.h\fP\&.
+.SS "#define WIFSTOPPED(status)   (((status) & \fB__WSTATUS_LOW_MASK\fP) == \fB__WSTATUS_STOP_MASK\fP)"
+
+.PP
+Process didnt handle a stop signal\&. 
+.PP
+Definition at line \fB44\fP of file \fBwait\&.h\fP\&.
+.SS "#define WNOHANG   (1 << 1)"
+
+.PP
+If no child has changed state, return immediately\&. 
+.PP
+Definition at line \fB24\fP of file \fBwait\&.h\fP\&.
+.SS "#define WNOWAIT   (1 << 1)"
+
+.PP
+Peek the child status\&. 
+.PP
+Definition at line \fB29\fP of file \fBwait\&.h\fP\&.
+.SS "#define WSTOPPED   (1 << 2)"
+
+.PP
+Report children that were stopped\&. 
+.PP
+Definition at line \fB30\fP of file \fBwait\&.h\fP\&.
+.SS "#define WSTOPSIG   (((status) & \fB__WSTATUS_LOW_MASK\fP) == \fB__WSTATUS_STOP_MASK\fP)"
+
+.PP
+Get the signal that stopped the process\&. 
+.PP
+Definition at line \fB51\fP of file \fBwait\&.h\fP\&.
+.SS "#define WTERMSIG   ((status) & \fB__WSTATUS_SIGNAL_BITS\fP)"
+
+.PP
+Get the signal that terminated the process\&. 
+.PP
+Definition at line \fB50\fP of file \fBwait\&.h\fP\&.
+.SS "#define WUNTRACED   (1 << 2)"
+
+.PP
+Report stopped children (that arent being traced) 
+.PP
+Definition at line \fB25\fP of file \fBwait\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fB_IDType\fP"
+
+.PP
+Internal representation of how an ID should be interpreted for an waitid() call\&. 
+.PP
+Definition at line \fB60\fP of file \fBwait\&.h\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

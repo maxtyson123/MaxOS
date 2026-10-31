@@ -1,0 +1,542 @@
+.TH "LibFS" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LibFS
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBEntryInformation\fP"
+.br
+.ti -1c
+.RI "class \fBPath\fP"
+.br
+.RI "Handles file & directory paths\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct \fBLibFS::EntryInformation\fP \fBentry_information_t\fP"
+.br
+.ti -1c
+.RI "using \fBiterate_entry_callback_t\fP = bool(*)(const \fBentry_information_t\fP *entry, const char *name)"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBDirectoryFlags\fP { \fBREAD_ENTRIES\fP, \fBREAD_ENTRIES_SIZE\fP, \fBWRITE_NAME\fP, \fBWRITE_NEW_FILE\fP, \fBWRITE_NEW_DIR\fP, \fBWRITE_REMOVE_FILE\fP, \fBWRITE_REMOVE_DIR\fP }"
+.br
+.ti -1c
+.RI "enum class \fBFileFlags\fP { \fBDEFAULT\fP, \fBREAD_SIZE\fP, \fBREAD_OFFSET\fP, \fBWRITE_SEEK_SET\fP, \fBWRITE_SEEK_CUR\fP, \fBWRITE_SEEK_END\fP, \fBWRITE_NAME\fP }"
+.br
+.ti -1c
+.RI "enum class \fBSeekType\fP { \fBSET\fP, \fBCURRENT\fP, \fBEND\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "uint64_t \fBopen_directory\fP (const char *path)"
+.br
+.RI "Opens a directory from a path (must end in /) "
+.ti -1c
+.RI "void \fBrename_directory\fP (uint64_t handle, const char *name)"
+.br
+.RI "Rename the directory\&. "
+.ti -1c
+.RI "void \fBclose_directory\fP (uint64_t handle)"
+.br
+.RI "Closes an open directory\&. "
+.ti -1c
+.RI "size_t \fBdirectory_entries_size\fP (uint64_t handle)"
+.br
+.RI "Gets the size required to hold the list of directory entries\&. "
+.ti -1c
+.RI "void \fBdirectory_entries\fP (uint64_t handle, void *buffer, size_t size)"
+.br
+.RI "Reads the contents of a directory (as a list of entry_information_t) "
+.ti -1c
+.RI "void \fBnew_file\fP (uint64_t handle, const char *name)"
+.br
+.RI "Creates a new file in the directory\&. "
+.ti -1c
+.RI "void \fBnew_directory\fP (uint64_t handle, const char *name)"
+.br
+.RI "Creates a new subdirectory in the directory\&. "
+.ti -1c
+.RI "void \fBremove_file\fP (uint64_t handle, const char *name)"
+.br
+.RI "Removes a file from the directory\&. "
+.ti -1c
+.RI "void \fBremove_directory\fP (uint64_t handle, const char *name)"
+.br
+.RI "Removes a subdirectory from the directory\&. "
+.ti -1c
+.RI "void \fBiterate_entries\fP (const void *buffer, size_t size, iterate_entry_callback_t cb)"
+.br
+.RI "Iterate over directory entries and call a callback function to handle\&. "
+.ti -1c
+.RI "uint64_t \fBopen_file\fP (const char *path)"
+.br
+.ti -1c
+.RI "void \fBclose_file\fP (uint64_t handle)"
+.br
+.ti -1c
+.RI "size_t \fBfile_size\fP (uint64_t handle)"
+.br
+.ti -1c
+.RI "size_t \fBfile_offset\fP (uint64_t handle)"
+.br
+.ti -1c
+.RI "size_t \fBfile_read\fP (uint64_t handle, void *buffer, size_t size)"
+.br
+.ti -1c
+.RI "size_t \fBfile_write\fP (uint64_t handle, void *buffer, size_t size)"
+.br
+.ti -1c
+.RI "void \fBrename_file\fP (uint64_t handle, const char *name)"
+.br
+.ti -1c
+.RI "void \fBseek_file\fP (uint64_t handle, size_t position, SeekType seek_type)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBTodo\fP
+.RS 4
+Moving files 
+.RE
+.PP
+
+.SH "Typedef Documentation"
+.PP 
+.SS "using LibFS::iterate_entry_callback_t = typedef bool (*)(const \fBentry_information_t\fP* entry, const char* name)"
+
+.PP
+Definition at line \fB47\fP of file \fBdirectory\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class LibFS::DirectoryFlags\fC [strong]\fP"
+
+.PP
+Definition at line \fB16\fP of file \fBdirectory\&.h\fP\&..PP
+.nf
+16                               {
+17         READ_ENTRIES,
+18         READ_ENTRIES_SIZE,
+19         WRITE_NAME,
+20         WRITE_NEW_FILE,
+21         WRITE_NEW_DIR,
+22         WRITE_REMOVE_FILE,
+23         WRITE_REMOVE_DIR
+24     };
+.fi
+
+.SS "enum class LibFS::FileFlags\fC [strong]\fP"
+
+.PP
+Definition at line \fB15\fP of file \fBfile\&.h\fP\&..PP
+.nf
+15                          {
+16         DEFAULT,
+17         READ_SIZE,
+18         READ_OFFSET,
+19         WRITE_SEEK_SET,
+20         WRITE_SEEK_CUR,
+21         WRITE_SEEK_END,
+22         WRITE_NAME,
+23     };
+.fi
+
+.SS "enum class LibFS::SeekType\fC [strong]\fP"
+
+.PP
+Definition at line \fB25\fP of file \fBfile\&.h\fP\&..PP
+.nf
+25                         {
+26         SET,
+27         CURRENT,
+28         END
+29     };
+.fi
+
+.SH "Function Documentation"
+.PP 
+.SS "void LibFS::close_directory (uint64_t handle)"
+
+.PP
+Closes an open directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The directory open 
+.RE
+.PP
+
+.PP
+Definition at line \fB38\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+38                                           {
+39         resource_close(handle, 0);
+40     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_close()\fP\&.
+.SS "void LibFS::close_file (uint64_t handle)"
+
+.PP
+Definition at line \fB20\fP of file \fBfile\&.cpp\fP\&..PP
+.nf
+20                                      {
+21         resource_close(handle, 0);
+22     }
+.fi
+
+.SS "void LibFS::directory_entries (uint64_t handle, void * buffer, size_t size)"
+
+.PP
+Reads the contents of a directory (as a list of entry_information_t) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The directory to read 
+.br
+\fIbuffer\fP Where to read the list 
+.br
+\fIsize\fP How big is the buffer 
+.RE
+.PP
+
+.PP
+Definition at line \fB59\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+59                                                                        {
+60 
+61         resource_read(handle, buffer, size, (size_t) DirectoryFlags::READ_ENTRIES);
+62     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_read()\fP\&.
+.SS "size_t LibFS::directory_entries_size (uint64_t handle)"
+
+.PP
+Gets the size required to hold the list of directory entries\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The directory to list 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The size of the total entries 
+.RE
+.PP
+
+.PP
+Definition at line \fB48\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+48                                                    {
+49         return resource_read(handle, nullptr, 0, (size_t) DirectoryFlags::READ_ENTRIES_SIZE);
+50     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_read()\fP\&.
+.SS "size_t LibFS::file_offset (uint64_t handle)"
+
+.PP
+Definition at line \fB28\fP of file \fBfile\&.cpp\fP\&..PP
+.nf
+28                                         {
+29         return resource_read(handle, nullptr, 0, (size_t) FileFlags::READ_OFFSET);
+30     }
+.fi
+
+.SS "size_t LibFS::file_read (uint64_t handle, void * buffer, size_t size)"
+
+.PP
+Definition at line \fB32\fP of file \fBfile\&.cpp\fP\&..PP
+.nf
+32                                                                  {
+33         return resource_read(handle, buffer, size, (size_t) FileFlags::DEFAULT);
+34     }
+.fi
+
+.SS "size_t LibFS::file_size (uint64_t handle)"
+
+.PP
+Definition at line \fB24\fP of file \fBfile\&.cpp\fP\&..PP
+.nf
+24                                       {
+25         return resource_read(handle, nullptr, 0, (size_t) FileFlags::READ_SIZE);
+26     }
+.fi
+
+.SS "size_t LibFS::file_write (uint64_t handle, void * buffer, size_t size)"
+
+.PP
+Definition at line \fB36\fP of file \fBfile\&.cpp\fP\&..PP
+.nf
+36                                                                   {
+37         return resource_write(handle, buffer, size, (size_t) FileFlags::DEFAULT);
+38     }
+.fi
+
+.SS "void LibFS::iterate_entries (const void * buffer, size_t size, iterate_entry_callback_t cb)"
+
+.PP
+Iterate over directory entries and call a callback function to handle\&. 
+.PP
+\fBNote\fP
+.RS 4
+Will stop iterating if the callback returns false
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP Pointer to entries 
+.br
+\fIsize\fP Size of buffer in bytes 
+.br
+\fIcb\fP Callback invoked for each entry 
+.RE
+.PP
+
+.PP
+Definition at line \fB117\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+117                                                                                        {
+118 
+119         // Iterate each entry
+120         size_t offset = 0;
+121         while (offset + sizeof(entry_information_t) <= size) {
+122 
+123             // Get the entry
+124             auto* entry = (const entry_information_t*)(buffer + offset);
+125 
+126             // Check bounds
+127             if (entry\->entry_length < sizeof(entry_information_t) || offset + entry\->entry_length > size)
+128                 break;
+129 
+130             // Invoke callback
+131             const char* name = entry\->name;
+132             if (!cb(entry, name))
+133                 break;
+134 
+135             // Move the next entry
+136             offset += entry\->entry_length;
+137         }
+138     }
+.fi
+
+.SS "void LibFS::new_directory (uint64_t handle, const char * name)"
+
+.PP
+Creates a new subdirectory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The directory to create the subdirectory in 
+.br
+\fIname\fP The name of the new directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB81\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+81                                                           {
+82 
+83         resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_NEW_DIR);
+84     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_write()\fP, and \fBstrlen()\fP\&.
+.SS "void LibFS::new_file (uint64_t handle, const char * name)"
+
+.PP
+Creates a new file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The directory to create the file in 
+.br
+\fIname\fP The name of the new file 
+.RE
+.PP
+
+.PP
+Definition at line \fB70\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+70                                                      {
+71 
+72         resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_NEW_FILE);
+73     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_write()\fP, and \fBstrlen()\fP\&.
+.SS "uint64_t LibFS::open_directory (const char * path)"
+
+.PP
+Opens a directory from a path (must end in /) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to the directory 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The handle of the opened directory or 0 if it failed 
+.RE
+.PP
+
+.PP
+Definition at line \fB19\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+19                                               {
+20         return resource_open(ResourceType::FILESYSTEM, path, 0);
+21     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_open()\fP\&.
+.SS "uint64_t LibFS::open_file (const char * path)"
+
+.PP
+Definition at line \fB12\fP of file \fBfile\&.cpp\fP\&..PP
+.nf
+12                                          {
+13 
+14         uint64_t handle = resource_open(ResourceType::FILESYSTEM, path, 0);
+15         if (!handle)
+16             klog("LibFS: cant open file '%s'\\n", path);
+17         return handle;
+18     }
+.fi
+
+.SS "void LibFS::remove_directory (uint64_t handle, const char * name)"
+
+.PP
+Removes a subdirectory from the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The directory to remove the subdirectory from 
+.br
+\fIname\fP The name of the subdirectory to remove 
+.RE
+.PP
+
+.PP
+Definition at line \fB103\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+103                                                              {
+104 
+105         resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_DIR);
+106     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_write()\fP, and \fBstrlen()\fP\&.
+.SS "void LibFS::remove_file (uint64_t handle, const char * name)"
+
+.PP
+Removes a file from the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The directory to remove the file from 
+.br
+\fIname\fP The name of the file to remove 
+.RE
+.PP
+
+.PP
+Definition at line \fB92\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+92                                                         {
+93 
+94         resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_REMOVE_FILE);
+95     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_write()\fP, and \fBstrlen()\fP\&.
+.SS "void LibFS::rename_directory (uint64_t handle, const char * name)"
+
+.PP
+Rename the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The directory to rename 
+.br
+\fIname\fP What to rename the directory to 
+.RE
+.PP
+
+.PP
+Definition at line \fB29\fP of file \fBdirectory\&.cpp\fP\&..PP
+.nf
+29                                                              {
+30         resource_write(handle, name, strlen(name), (size_t) DirectoryFlags::WRITE_NAME);
+31     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_write()\fP, and \fBstrlen()\fP\&.
+.SS "void LibFS::rename_file (uint64_t handle, const char * name)"
+
+.PP
+Definition at line \fB40\fP of file \fBfile\&.cpp\fP\&..PP
+.nf
+40                                                         {
+41 
+42         resource_write(handle, name, strlen(name), (size_t) FileFlags::WRITE_NAME);
+43     }
+.fi
+
+.SS "void LibFS::seek_file (uint64_t handle, size_t position, SeekType seek_type)"
+
+.PP
+Definition at line \fB45\fP of file \fBfile\&.cpp\fP\&..PP
+.nf
+45                                                                          {
+46 
+47         switch(seek_type) {
+48 
+49             case SeekType::SET:
+50                 resource_write(handle, nullptr, position, (size_t) FileFlags::WRITE_SEEK_SET);
+51                 break;
+52 
+53             case SeekType::CURRENT:
+54                 resource_write(handle, nullptr, position, (size_t) FileFlags::WRITE_SEEK_CUR);
+55                 break;
+56 
+57             case SeekType::END:
+58                 resource_write(handle, nullptr, position, (size_t) FileFlags::WRITE_SEEK_END);
+59                 break;
+60 
+61         }
+62     }
+.fi
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

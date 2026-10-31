@@ -1,26 +1,5 @@
 var searchData=
 [
-  ['balance_0',['balance',['../classMaxOS_1_1processes_1_1GlobalScheduler.html#ad5da3a5d5310edcb9afae94db4852794',1,'MaxOS::processes::GlobalScheduler']]],
-  ['base_1',['base',['../structMaxOS_1_1hardwarecommunication_1_1IDTR.html#a88e525ddc48ae13204f4cebfca2df9e0',1,'MaxOS::hardwarecommunication::IDTR']]],
-  ['base_5ftype_2',['base_type',['../structMaxOS_1_1runtime_1_1OverflowInfo.html#a6c00e023b1627319862468cbd6731efc',1,'MaxOS::runtime::OverflowInfo']]],
-  ['baseresourceregistry_3',['baseresourceregistry',['../classMaxOS_1_1processes_1_1resources_1_1BaseResourceRegistry.html',1,'MaxOS::processes::resources::BaseResourceRegistry'],['../classMaxOS_1_1processes_1_1resources_1_1BaseResourceRegistry.html#ad568ef43e2b5567459600934d11a3076',1,'MaxOS::processes::resources::BaseResourceRegistry::BaseResourceRegistry()']]],
-  ['basic_5fmeminfo_4',['basic_meminfo',['../classMaxOS_1_1system_1_1Multiboot.html#a3e3713de30a2ed730e52b41a1c610a96',1,'MaxOS::system::Multiboot']]],
-  ['bcd_5fmode_5',['bcd_mode',['../structMaxOS_1_1hardwarecommunication_1_1PITCommand.html#a7e1767d8e9379363c96fe7de2dbd0ed6',1,'MaxOS::hardwarecommunication::PITCommand']]],
-  ['bcdmode_6',['BCDMode',['../clock_8h.html#a439f05852473409f118dc1ffd913d6b2',1,'MaxOS::hardwarecommunication']]],
-  ['biosdev_7',['biosdev',['../structmultiboot__tag__bootdev.html#a2bcf5d32579dc281148607d937ca099b',1,'multiboot_tag_bootdev']]],
-  ['block_2eh_8',['block.h',['../block_8h.html',1,'']]],
-  ['blocking_5ffast_5ftry_5flimit_9',['BLOCKING_FAST_TRY_LIMIT',['../block_8h.html#ab457f0b39a8feb10a210698e53d0f286',1,'MaxOS::processes']]],
-  ['blockinglock_10',['BlockingLock',['../classMaxOS_1_1processes_1_1BlockingLock.html',1,'MaxOS::processes']]],
-  ['blue_11',['blue',['../structmultiboot__color.html#a6f8d17b0f35ff4cbf9c51dcbc3ea7d01',1,'multiboot_color']]],
-  ['boot_5fstack_5fsize_12',['BOOT_STACK_SIZE',['../cpu_8h.html#a0cdb341b2d45114c2d033ec00bc3b356',1,'MaxOS::system']]],
-  ['bootloader_5fname_13',['bootloader_name',['../classMaxOS_1_1system_1_1Multiboot.html#a5c511bac5f032acec15f6c1d14b89fc1',1,'MaxOS::system::Multiboot']]],
-  ['breakpointexception_14',['breakpointexception',['../classMaxOS_1_1runtime_1_1BreakPointException.html#a20811541af2f667345cb11003401fe16',1,'MaxOS::runtime::BreakPointException::BreakPointException()'],['../classMaxOS_1_1runtime_1_1BreakPointException.html',1,'MaxOS::runtime::BreakPointException']]],
-  ['bridgehandler_15',['bridgehandler',['../classMaxOS_1_1processes_1_1resources_1_1BridgeHandler.html#a3f7fe99ed545ccf34b91688404fbb5bf',1,'MaxOS::processes::resources::BridgeHandler::BridgeHandler()'],['../classMaxOS_1_1processes_1_1resources_1_1BridgeHandler.html',1,'MaxOS::processes::resources::BridgeHandler']]],
-  ['bridgeresource_16',['BridgeResource',['../classMaxOS_1_1processes_1_1resources_1_1BridgeResource.html',1,'MaxOS::processes::resources']]],
-  ['bridgeresourceregistry_17',['BridgeResourceRegistry',['../classMaxOS_1_1processes_1_1resources_1_1BridgeResourceRegistry.html',1,'MaxOS::processes::resources']]],
-  ['bss_5fend_5faddr_18',['bss_end_addr',['../structmultiboot__header__tag__address.html#ac3de23d94c391584665ba64757451a37',1,'multiboot_header_tag_address']]],
-  ['build_5fmessage_19',['build_message',['../classMaxOS_1_1runtime_1_1GDBServer.html#a55fb0e278083a45332081d4df0341425',1,'MaxOS::runtime::GDBServer']]],
-  ['bumpallocator_20',['bumpallocator',['../classMaxOS_1_1memory_1_1allocator_1_1BumpAllocator.html',1,'MaxOS::memory::allocator::BumpAllocator'],['../classMaxOS_1_1memory_1_1allocator_1_1BumpAllocator.html#ac4eddd6aa1030286e595a40d492b747a',1,'MaxOS::memory::allocator::BumpAllocator::BumpAllocator()']]],
-  ['bumpmemorymanager_21',['bumpmemorymanager',['../classMaxOS_1_1memory_1_1BumpMemoryManager.html',1,'MaxOS::memory::BumpMemoryManager'],['../classMaxOS_1_1memory_1_1BumpMemoryManager.html#a244faa9a09bf185d154200d4e768c6a9',1,'MaxOS::memory::BumpMemoryManager::BumpMemoryManager()']]],
-  ['bus_22',['bus',['../structMaxOS_1_1hardwarecommunication_1_1Override.html#a7a966c37b284b11470c63189098a9b7f',1,'MaxOS::hardwarecommunication::Override']]]
+  ['3_20expected_20behavior_0',['3. Expected Behavior',['../md_docs_2CODE__OF__CONDUCT.html#autotoc_md3',1,'']]],
+  ['32_20file_20system_1',['Fat 32 File System',['../md_docs_2Notes.html#autotoc_md36',1,'']]]
 ];

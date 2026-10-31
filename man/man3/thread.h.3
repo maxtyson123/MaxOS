@@ -1,0 +1,698 @@
+.TH "libraries/libkpi/include/libkpi/processes/thread.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libkpi/include/libkpi/processes/thread.h \- Defines the abstraction for thread management functions and structures\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <cstdint>\fP
+.br
+\fC#include <cstddef>\fP
+.br
+\fC#include <libkpi/syscalls\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBMaxOS::KPI::processes::ThreadStats\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct \fBMaxOS::KPI::processes::ThreadStats\fP \fBMaxOS::KPI::processes::thread_stats_t\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBThreadFlags\fP { \fBREAD_STATS\fP, \fBWRITE_SLEEP_TIME\fP, \fBWRITE_KILL\fP, \fBWRITE_YIELD\fP, \fBWRITE_ENABLE_PORT_IO\fP, \fBWRITE_DISABLE_PORT_IO\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::spawn_thread\fP (uint64_t process_handle, void(*entry_point)(void *), void *args, size_t arg_amount)"
+.br
+.RI "Spawns a new thread in the specified process\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::yield\fP ()"
+.br
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::get_thread\fP (uint64_t \fBtid\fP)"
+.br
+.RI "Gets a handle to a thread by its thread ID\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::close_thread_handle\fP (uint64_t handle)"
+.br
+.RI "Closes a thread handle\&. Will not terminate the thread itself\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::kill_thread_handle\fP (uint64_t handle, uint64_t exit_code, bool close_handle=true)"
+.br
+.RI "Kills a thread by its handle\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::kill_thread\fP (uint64_t \fBtid\fP, uint64_t exit_code)"
+.br
+.RI "Kills a thread by its thread ID\&. "
+.ti -1c
+.RI "\fBthread_stats_t\fP \fBMaxOS::KPI::processes::get_thread_stats_handle\fP (uint64_t thread_handle)"
+.br
+.RI "Gets the statistics of a thread by its handle\&. "
+.ti -1c
+.RI "\fBthread_stats_t\fP \fBMaxOS::KPI::processes::get_thread_stats\fP (uint64_t \fBtid\fP)"
+.br
+.RI "Gets the statistics of a thread by its thread ID\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::thread_sleep_handle\fP (uint64_t thread_handle, uint64_t sleep_time_ms)"
+.br
+.RI "Sets a thread to sleep for a specified amount of time by its handle\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::thread_sleep\fP (uint64_t \fBtid\fP, uint64_t sleep_time_ms)"
+.br
+.RI "Sets a thread to sleep for a specified amount of time by its thread ID\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::thread_enable_port_io_handle\fP (uint64_t handle, uint64_t port)"
+.br
+.RI "Enable a port's I/O (asm inb/outb) for a thread\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::thread_enable_port_io\fP (uint64_t \fBtid\fP, uint64_t port)"
+.br
+.RI "Enable a port's I/O (asm inb/outb) for a thread\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::thread_disable_port_io_handle\fP (uint64_t handle, uint64_t port)"
+.br
+.RI "Disable a port's I/O (asm inb/outb) for a thread\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::thread_disable_port_io\fP (uint64_t \fBtid\fP, uint64_t port)"
+.br
+.RI "Disable a port's I/O (asm inb/outb) for a thread\&. "
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::get_current_thread\fP ()"
+.br
+.RI "Gets a handle to the current thread\&. "
+.ti -1c
+.RI "\fBthread_stats_t\fP \fBMaxOS::KPI::processes::get_current_thread_stats\fP ()"
+.br
+.RI "Gets the statistics of the current thread\&. "
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::tid\fP ()"
+.br
+.RI "Gets the thread ID of the current thread\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::thread_exit\fP (uint64_t exit_code)"
+.br
+.RI "Exits the current thread\&. "
+.ti -1c
+.RI "void \fBMaxOS::KPI::processes::sleep\fP (uint64_t sleep_time_ms)"
+.br
+.RI "Sets the current thread to sleep for a specified amount of time\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "uint64_t \fBMaxOS::KPI::processes::m_current_thread_handle\fP = 0"
+.br
+.ti -1c
+.RI "\fBthread_stats_t\fP \fBMaxOS::KPI::processes::m_current_thread_stats\fP = {}"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines the abstraction for thread management functions and structures\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+2nd December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBthread\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class MaxOS::KPI::processes::ThreadFlags\fC [strong]\fP"
+
+.PP
+Definition at line \fB32\fP of file \fBthread\&.h\fP\&..PP
+.nf
+32                            {
+33         READ_STATS,
+34 
+35         WRITE_SLEEP_TIME,
+36         WRITE_KILL,
+37         WRITE_YIELD,
+38         WRITE_ENABLE_PORT_IO,   //@TODO secure this
+39         WRITE_DISABLE_PORT_IO,  //@TODO secure this
+40     };
+.fi
+
+.SH "Function Documentation"
+.PP 
+.SS "void MaxOS::KPI::processes::close_thread_handle (uint64_t handle)"
+
+.PP
+Closes a thread handle\&. Will not terminate the thread itself\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle to close 
+.RE
+.PP
+
+.PP
+Definition at line \fB53\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+53                                                            {
+54 
+55     resource_close(handle, 0);
+56 
+57 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_thread_handle()\fP, and \fBMaxOS::KPI::resource_close()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::close_thread_handle()\fP, \fBMaxOS::KPI::processes::get_thread_stats()\fP, \fBMaxOS::KPI::processes::kill_thread_handle()\fP, \fBMaxOS::KPI::processes::thread_disable_port_io()\fP, \fBMaxOS::KPI::processes::thread_enable_port_io()\fP, and \fBMaxOS::KPI::processes::thread_sleep()\fP\&.
+.SS "uint64_t MaxOS::KPI::processes::get_current_thread ()"
+
+.PP
+Gets a handle to the current thread\&. 
+.PP
+\fBReturns\fP
+.RS 4
+A handle to the current thread 
+.RE
+.PP
+
+.PP
+Definition at line \fB192\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+192                                        {
+193 
+194     if (m_current_thread_handle == 0)
+195         m_current_thread_handle = resource_open(ResourceType::THREAD, "this", 0);
+196 
+197     return m_current_thread_handle;
+198 
+199 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_open()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::get_current_thread_stats()\fP, \fBMaxOS::KPI::processes::sleep()\fP, and \fBMaxOS::KPI::processes::thread_exit()\fP\&.
+.SS "\fBthread_stats_t\fP MaxOS::KPI::processes::get_current_thread_stats ()"
+
+.PP
+Gets the statistics of the current thread\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The statistics of the current thread 
+.RE
+.PP
+
+.PP
+Definition at line \fB206\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+206                                                            {
+207 
+208     if (m_current_thread_stats\&.tid == 0)
+209         m_current_thread_stats = get_thread_stats_handle(get_current_thread());
+210 
+211     return m_current_thread_stats;
+212 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_current_thread()\fP, \fBMaxOS::KPI::processes::get_current_thread_stats()\fP, and \fBMaxOS::KPI::processes::get_thread_stats_handle()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::get_current_thread_stats()\fP, and \fBMaxOS::KPI::processes::tid()\fP\&.
+.SS "uint64_t MaxOS::KPI::processes::get_thread (uint64_t tid)"
+
+.PP
+Gets a handle to a thread by its thread ID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItid\fP The thread ID of the thread to retrieve 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The handle of the thread 
+.RE
+.PP
+
+.PP
+Definition at line \fB40\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+40                                                    {
+41 
+42     char tid_str[21];
+43     //int to str
+44     return resource_open(ResourceType::THREAD, tid_str, 0);
+45 
+46 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_thread()\fP, and \fBMaxOS::KPI::resource_open()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::get_thread()\fP, \fBMaxOS::KPI::processes::get_thread_stats()\fP, \fBMaxOS::KPI::processes::kill_thread()\fP, \fBMaxOS::KPI::processes::thread_disable_port_io()\fP, \fBMaxOS::KPI::processes::thread_enable_port_io()\fP, and \fBMaxOS::KPI::processes::thread_sleep()\fP\&.
+.SS "\fBthread_stats_t\fP MaxOS::KPI::processes::get_thread_stats (uint64_t tid)"
+
+.PP
+Gets the statistics of a thread by its thread ID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItid\fP The thread ID of the thread 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The statistics of the thread 
+.RE
+.PP
+
+.PP
+Definition at line \fB105\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+105                                                                {
+106 
+107     uint64_t handle = get_thread(tid);
+108     thread_stats_t stats = get_thread_stats_handle(handle);
+109     close_thread_handle(handle);
+110     return stats;
+111 
+112 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_thread_handle()\fP, \fBMaxOS::KPI::processes::get_thread()\fP, \fBMaxOS::KPI::processes::get_thread_stats()\fP, \fBMaxOS::KPI::processes::get_thread_stats_handle()\fP, and \fBMaxOS::KPI::processes::tid()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::get_thread_stats()\fP\&.
+.SS "\fBthread_stats_t\fP MaxOS::KPI::processes::get_thread_stats_handle (uint64_t thread_handle)"
+
+.PP
+Gets the statistics of a thread by its handle\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthread_handle\fP The handle of the thread 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The statistics of the thread 
+.RE
+.PP
+
+.PP
+Definition at line \fB91\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+91                                                                                 {
+92 
+93     thread_stats_t stats;
+94     resource_read(thread_handle, &stats, sizeof(thread_stats_t), (size_t)ThreadFlags::READ_STATS);
+95     return stats;
+96 
+97 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_thread_stats_handle()\fP, and \fBMaxOS::KPI::resource_read()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::get_current_thread_stats()\fP, \fBMaxOS::KPI::processes::get_thread_stats()\fP, and \fBMaxOS::KPI::processes::get_thread_stats_handle()\fP\&.
+.SS "void MaxOS::KPI::processes::kill_thread (uint64_t tid, uint64_t exit_code)"
+
+.PP
+Kills a thread by its thread ID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItid\fP The thread ID of the thread to kill 
+.br
+\fIexit_code\fP The exit code to return to the owning process 
+.RE
+.PP
+
+.PP
+Definition at line \fB81\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+81                                                                     {
+82     kill_thread_handle(get_thread(tid), exit_code);
+83 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_thread()\fP, \fBMaxOS::KPI::processes::kill_thread()\fP, \fBMaxOS::KPI::processes::kill_thread_handle()\fP, and \fBMaxOS::KPI::processes::tid()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::kill_thread()\fP\&.
+.SS "void MaxOS::KPI::processes::kill_thread_handle (uint64_t handle, uint64_t exit, bool close_handle = \fCtrue\fP)"
+
+.PP
+Kills a thread by its handle\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIhandle\fP The handle of the thread to kill 
+.br
+\fIexit_code\fP The exit code to return to the owning process 
+.br
+\fIclose_handle\fP True to close the handle after killing the thread (default: true) 
+.RE
+.PP
+
+.PP
+Definition at line \fB66\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+66                                                                                             {
+67 
+68     resource_write(handle, &exit, sizeof(exit), (size_t)ThreadFlags::WRITE_KILL);
+69 
+70     if (close_handle)
+71         close_thread_handle(handle);
+72 
+73 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_thread_handle()\fP, \fBMaxOS::KPI::processes::kill_thread_handle()\fP, and \fBMaxOS::KPI::resource_write()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::kill_thread()\fP, and \fBMaxOS::KPI::processes::kill_thread_handle()\fP\&.
+.SS "void MaxOS::KPI::processes::sleep (uint64_t sleep_time_ms)"
+
+.PP
+Sets the current thread to sleep for a specified amount of time\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsleep_time_ms\fP The amount of time to sleep in milliseconds 
+.RE
+.PP
+
+.PP
+Definition at line \fB245\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+245                                                     {
+246 
+247     resource_write(get_current_thread(), &sleep_time_ms, sizeof(sleep_time_ms), (size_t)ThreadFlags::WRITE_SLEEP_TIME);
+248 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_current_thread()\fP, \fBMaxOS::KPI::resource_write()\fP, and \fBMaxOS::KPI::processes::sleep()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::sleep()\fP\&.
+.SS "uint64_t MaxOS::KPI::processes::spawn_thread (uint64_t process_handle, void(*)(void *) entry_point, void * args, size_t arg_amount)"
+
+.PP
+Spawns a new thread in the specified process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIprocess_handle\fP The process that will own the new thread 
+.br
+\fIentry_point\fP Where in the process the thread will start executing 
+.br
+\fIargs\fP The arguments to pass to the thread entry point 
+.br
+\fIarg_amount\fP The number of arguments being passed 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The handle of the newly created thread
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Implement 
+.RE
+.PP
+
+.PP
+Definition at line \fB25\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+25                                                                                                                             {
+26 
+27 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::spawn_thread()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::spawn_thread()\fP\&.
+.SS "void MaxOS::KPI::processes::thread_disable_port_io (uint64_t tid, uint64_t port)"
+
+.PP
+Disable a port's I/O (asm inb/outb) for a thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItid\fP The thread ID of the thread 
+.br
+\fIport\fP The port to enable 
+.RE
+.PP
+
+.PP
+Definition at line \fB180\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+180                                                                   {
+181     uint64_t handle = get_thread(tid);
+182     thread_enable_port_io_handle(handle, port);
+183     close_thread_handle(handle);
+184 
+185 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_thread_handle()\fP, \fBMaxOS::KPI::processes::get_thread()\fP, \fBMaxOS::KPI::processes::thread_enable_port_io_handle()\fP, and \fBMaxOS::KPI::processes::tid()\fP\&.
+.SS "void MaxOS::KPI::processes::thread_disable_port_io_handle (uint64_t thread_handle, uint64_t port)"
+
+.PP
+Disable a port's I/O (asm inb/outb) for a thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthread_handle\fP The opened thread handle to enable port I/O on 
+.br
+\fIport\fP The port to enable 
+.RE
+.PP
+
+.PP
+Definition at line \fB170\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+170                                                                                    {
+171     resource_write(thread_handle, &port, sizeof(port), (size_t)ThreadFlags::WRITE_DISABLE_PORT_IO);
+172 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_write()\fP\&.
+.SS "void MaxOS::KPI::processes::thread_enable_port_io (uint64_t tid, uint64_t port)"
+
+.PP
+Enable a port's I/O (asm inb/outb) for a thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItid\fP The thread ID of the thread 
+.br
+\fIport\fP The port to enable 
+.RE
+.PP
+
+.PP
+Definition at line \fB156\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+156                                                                  {
+157     uint64_t handle = get_thread(tid);
+158     thread_enable_port_io_handle(handle, port);
+159     close_thread_handle(handle);
+160 
+161 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_thread_handle()\fP, \fBMaxOS::KPI::processes::get_thread()\fP, \fBMaxOS::KPI::processes::thread_enable_port_io_handle()\fP, and \fBMaxOS::KPI::processes::tid()\fP\&.
+.SS "void MaxOS::KPI::processes::thread_enable_port_io_handle (uint64_t thread_handle, uint64_t port)"
+
+.PP
+Enable a port's I/O (asm inb/outb) for a thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthread_handle\fP The opened thread handle to enable port I/O on 
+.br
+\fIport\fP The port to enable 
+.RE
+.PP
+
+.PP
+Definition at line \fB146\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+146                                                                                   {
+147     resource_write(thread_handle, &port, sizeof(port), (size_t)ThreadFlags::WRITE_ENABLE_PORT_IO);
+148 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_write()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::thread_disable_port_io()\fP, and \fBMaxOS::KPI::processes::thread_enable_port_io()\fP\&.
+.SS "void MaxOS::KPI::processes::thread_exit (uint64_t exit_code)"
+
+.PP
+Exits the current thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIexit_code\fP The exit code to return to the owning process 
+.RE
+.PP
+
+.PP
+Definition at line \fB234\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+234                                                       {
+235 
+236     resource_write(get_current_thread(), &exit_code, sizeof(exit_code), (size_t)ThreadFlags::WRITE_KILL);
+237 
+238 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_current_thread()\fP, \fBMaxOS::KPI::resource_write()\fP, and \fBMaxOS::KPI::processes::thread_exit()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::thread_exit()\fP\&.
+.SS "void MaxOS::KPI::processes::thread_sleep (uint64_t tid, uint64_t sleep_time_ms)"
+
+.PP
+Sets a thread to sleep for a specified amount of time by its thread ID\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItid\fP The thread ID of the thread 
+.br
+\fIsleep_time_ms\fP The amount of time to sleep in milliseconds 
+.RE
+.PP
+
+.PP
+Definition at line \fB132\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+132                                                                  {
+133 
+134     uint64_t handle = get_thread(tid);
+135     thread_sleep_handle(handle, sleep_time_ms);
+136     close_thread_handle(handle);
+137 
+138 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::close_thread_handle()\fP, \fBMaxOS::KPI::processes::get_thread()\fP, \fBMaxOS::KPI::processes::thread_sleep_handle()\fP, and \fBMaxOS::KPI::processes::tid()\fP\&.
+.SS "void MaxOS::KPI::processes::thread_sleep_handle (uint64_t thread_handle, uint64_t sleep_time_ms)"
+
+.PP
+Sets a thread to sleep for a specified amount of time by its handle\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthread_handle\fP The handle of the thread 
+.br
+\fIsleep_time_ms\fP The amount of time to sleep in milliseconds 
+.RE
+.PP
+
+.PP
+Definition at line \fB120\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+120                                                                                           {
+121 
+122     resource_write(thread_handle, &sleep_time_ms, sizeof(sleep_time_ms), (size_t)ThreadFlags::WRITE_SLEEP_TIME);
+123 
+124 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::resource_write()\fP, and \fBMaxOS::KPI::processes::thread_sleep_handle()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::processes::thread_sleep()\fP, and \fBMaxOS::KPI::processes::thread_sleep_handle()\fP\&.
+.SS "uint64_t MaxOS::KPI::processes::tid ()"
+
+.PP
+Gets the thread ID of the current thread\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The thread ID of the current thread 
+.RE
+.PP
+
+.PP
+Definition at line \fB219\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+219                                 {
+220 
+221     // Ensure current thread stats are loaded
+222     if (m_current_thread_stats\&.tid == 0)
+223         get_current_thread_stats();
+224 
+225     return m_current_thread_stats\&.tid;
+226 
+227 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::processes::get_current_thread_stats()\fP, and \fBMaxOS::KPI::processes::tid()\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::resources::ThreadResourceRegistry::get_resource()\fP, \fBMaxOS::KPI::processes::get_thread_stats()\fP, \fBMaxOS::KPI::processes::kill_thread()\fP, \fBMaxOS::KPI::processes::thread_disable_port_io()\fP, \fBMaxOS::KPI::processes::thread_enable_port_io()\fP, \fBMaxOS::KPI::processes::thread_sleep()\fP, and \fBMaxOS::KPI::processes::tid()\fP\&.
+.SS "void MaxOS::KPI::processes::yield ()"
+
+.PP
+Definition at line \fB29\fP of file \fBthread\&.cpp\fP\&..PP
+.nf
+29                       {
+30 
+31     resource_write(get_current_thread(), 0,0, (size_t)ThreadFlags::WRITE_YIELD);
+32 }
+.fi
+
+.SH "Variable Documentation"
+.PP 
+.SS "uint64_t MaxOS::KPI::processes::m_current_thread_handle = 0\fC [inline]\fP"
+
+.PP
+Definition at line \fB67\fP of file \fBthread\&.h\fP\&.
+.SS "thread_stats_t MaxOS::KPI::processes::m_current_thread_stats = {}\fC [inline]\fP"
+
+.PP
+Definition at line \fB70\fP of file \fBthread\&.h\fP\&..PP
+.nf
+70 {};
+.fi
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

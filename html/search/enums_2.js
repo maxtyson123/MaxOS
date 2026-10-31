@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['channel_0',['Channel',['../clock_8h.html#aad2ff069bce1ac4aae5dee8ad49a0f78',1,'MaxOS::hardwarecommunication']]],
-  ['cpu_5ffeature_5fecx_1',['CPU_FEATURE_ECX',['../cpu_8h.html#a955509bd4aa295b6038a6812bf689200',1,'MaxOS::system']]],
-  ['cpu_5ffeature_5fedx_2',['CPU_FEATURE_EDX',['../cpu_8h.html#aabd92958148e45d498450aaf57c8d6ab',1,'MaxOS::system']]]
+  ['bartype_0',['BARType',['../pci_8h.html#a5cea07f12ca59cd9b0edf8a5dad0af20',1,'DriverManager::core']]],
+  ['bcdmode_1',['BCDMode',['../clock_8h.html#a439f05852473409f118dc1ffd913d6b2',1,'MaxOS::hardwarecommunication']]],
+  ['buttonevents_2',['ButtonEvents',['../button_8h.html#a637a82b4930318869efa61a112afae5a',1,'MaxOS::gui::widgets']]]
 ];

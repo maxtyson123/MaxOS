@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Max OS: MaxOS::processes::BlockingLock Class Reference</title>
+<title>MaxOS: MaxOS::processes::BlockingLock Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,7 +36,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Max OS<span id="projectnumber">&#160;0.3</span>
+   <div id="projectname">MaxOS<span id="projectnumber">&#160;0.3</span>
    </div>
   </td>
  </tr>
@@ -134,7 +134,7 @@ Public Member Functions</h2></td></tr>
 <div class="textblock"><p>Enables a resource to be used by only one instance at a time through a combination of spinning and queuing. When waiting enqueued, thread will sleep. </p>
 <dl class="section note"><dt>Note</dt><dd>Repeated API that could be made a class that isn't because lock types shouldn't be interchangeable </dd></dl>
 <dl class="section see"><dt>See also</dt><dd>Spinlock</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000016">Todo:</a></b></dt><dd>move to libcommon </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000040">Todo:</a></b></dt><dd>move to libcommon </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="block_8h_source.html#l00028">28</a> of file <a class="el" href="block_8h_source.html">block.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
@@ -154,7 +154,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Acquire the spinlock, spin until the lock is available and sleeping the thread until marked as available. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000040">Todo:</a></b></dt><dd><p class="startdd">Move the yielding logic into process/thread code so that it can be reused </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000064">Todo:</a></b></dt><dd><p class="startdd">Move the yielding logic into process/thread code so that it can be reused </p>
 <p class="enddd">circular dependancy resolution </p>
 </dd></dl>
 
@@ -169,15 +169,16 @@ Public Member Functions</h2></td></tr>
 <div class="line"><span class="lineno">   56</span>    <span class="comment">// Add to the queue</span></div>
 <div class="line"><span class="lineno">   57</span>    <span class="keyword">auto</span> thread = <a class="code hl_function" href="classMaxOS_1_1processes_1_1GlobalScheduler.html#ad70d085e581a761a809a575ad3626922">GlobalScheduler::current_thread</a>();</div>
 <div class="line"><span class="lineno">   58</span>    thread-&gt;thread_state = ThreadState::WAITING;</div>
-<div class="line"><span class="lineno">   59</span>    m_queue.push_back(thread-&gt;tid);</div>
+<div class="line"><span class="lineno">   59</span>    m_queue.<a class="code hl_function" href="classMaxOS_1_1common_1_1Vector.html#ac753563317978358eb995f9eea7c1558">push_back</a>(thread-&gt;tid);</div>
 <div class="line"><span class="lineno">   60</span> </div>
 <div class="line"><span class="lineno">   61</span>    <span class="comment">// Scheduler will awake when the process that holds this lock marks this thread as READY</span></div>
 <div class="line"><span class="lineno">   62</span>    thread-&gt;yield();</div>
 <div class="line"><span class="lineno">   63</span>}</div>
 <div class="ttc" id="ablock_8h_html_ab457f0b39a8feb10a210698e53d0f286"><div class="ttname"><a href="block_8h.html#ab457f0b39a8feb10a210698e53d0f286">MaxOS::processes::BLOCKING_FAST_TRY_LIMIT</a></div><div class="ttdeci">constexpr uint8_t BLOCKING_FAST_TRY_LIMIT</div><div class="ttdoc">How many attempts to acquire the lock should fail before queueing.</div><div class="ttdef"><b>Definition</b> <a href="block_8h_source.html#l00017">block.h:17</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1Vector_html_ac753563317978358eb995f9eea7c1558"><div class="ttname"><a href="classMaxOS_1_1common_1_1Vector.html#ac753563317978358eb995f9eea7c1558">MaxOS::common::Vector::push_back</a></div><div class="ttdeci">iterator push_back(Type)</div><div class="ttdoc">Adds an element to the end of the vector and returns the iterator of the element.</div><div class="ttdef"><b>Definition</b> <a href="vector_8h_source.html#l00352">vector.h:352</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1processes_1_1GlobalScheduler_html_ad70d085e581a761a809a575ad3626922"><div class="ttname"><a href="classMaxOS_1_1processes_1_1GlobalScheduler.html#ad70d085e581a761a809a575ad3626922">MaxOS::processes::GlobalScheduler::current_thread</a></div><div class="ttdeci">static Thread * current_thread()</div><div class="ttdoc">Gets the thread on the currently executing core.</div><div class="ttdef"><b>Definition</b> <a href="scheduler_8cpp_source.html#l00361">scheduler.cpp:361</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="block_8h_source.html#l00017">MaxOS::processes::BLOCKING_FAST_TRY_LIMIT</a>, and <a class="el" href="scheduler_8cpp_source.html#l00361">MaxOS::processes::GlobalScheduler::current_thread()</a>.</p>
+<p class="reference">References <a class="el" href="block_8h_source.html#l00017">MaxOS::processes::BLOCKING_FAST_TRY_LIMIT</a>, <a class="el" href="scheduler_8cpp_source.html#l00361">MaxOS::processes::GlobalScheduler::current_thread()</a>, and <a class="el" href="vector_8h_source.html#l00352">MaxOS::common::Vector&lt; Type &gt;::push_back()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="block_8cpp_source.html#l00023">lock()</a>.</p>
 
@@ -258,15 +259,17 @@ Public Member Functions</h2></td></tr>
 <div class="fragment"><div class="line"><span class="lineno">   68</span>                           {</div>
 <div class="line"><span class="lineno">   69</span> </div>
 <div class="line"><span class="lineno">   70</span>    <span class="comment">// Next thread can be run</span></div>
-<div class="line"><span class="lineno">   71</span>    <span class="keywordflow">if</span>(!m_queue.empty())</div>
-<div class="line"><span class="lineno">   72</span>        <a class="code hl_function" href="classMaxOS_1_1processes_1_1GlobalScheduler.html#ab3891508a6e69d835b30c5ee81ba8fb0">GlobalScheduler::get_thread</a>(m_queue.pop_front())-&gt;<a class="code hl_variable" href="classMaxOS_1_1processes_1_1Thread.html#ab39b4c92abfd43fa2ca1fe276926553e">thread_state</a> = ThreadState::READY;</div>
+<div class="line"><span class="lineno">   71</span>    <span class="keywordflow">if</span>(!m_queue.<a class="code hl_function" href="classMaxOS_1_1common_1_1Vector.html#aef2b06a5bf621c75a4e1eb2415644eaf">empty</a>())</div>
+<div class="line"><span class="lineno">   72</span>        <a class="code hl_function" href="classMaxOS_1_1processes_1_1GlobalScheduler.html#ab3891508a6e69d835b30c5ee81ba8fb0">GlobalScheduler::get_thread</a>(m_queue.<a class="code hl_function" href="classMaxOS_1_1common_1_1Vector.html#adab7bb39f620d6352df38bbbdb8bfb52">pop_front</a>())-&gt;<a class="code hl_variable" href="classMaxOS_1_1processes_1_1Thread.html#ab39b4c92abfd43fa2ca1fe276926553e">thread_state</a> = ThreadState::READY;</div>
 <div class="line"><span class="lineno">   73</span> </div>
 <div class="line"><span class="lineno">   74</span>    __atomic_clear(&amp;m_locked, __ATOMIC_RELEASE);</div>
 <div class="line"><span class="lineno">   75</span>}</div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1Vector_html_adab7bb39f620d6352df38bbbdb8bfb52"><div class="ttname"><a href="classMaxOS_1_1common_1_1Vector.html#adab7bb39f620d6352df38bbbdb8bfb52">MaxOS::common::Vector::pop_front</a></div><div class="ttdeci">Type pop_front()</div><div class="ttdoc">Removes the m_first_memory_chunk element from the Vector.</div><div class="ttdef"><b>Definition</b> <a href="vector_8h_source.html#l00409">vector.h:409</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1Vector_html_aef2b06a5bf621c75a4e1eb2415644eaf"><div class="ttname"><a href="classMaxOS_1_1common_1_1Vector.html#aef2b06a5bf621c75a4e1eb2415644eaf">MaxOS::common::Vector::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdoc">Checks if the Vector is empty.</div><div class="ttdef"><b>Definition</b> <a href="vector_8h_source.html#l00340">vector.h:340</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1processes_1_1GlobalScheduler_html_ab3891508a6e69d835b30c5ee81ba8fb0"><div class="ttname"><a href="classMaxOS_1_1processes_1_1GlobalScheduler.html#ab3891508a6e69d835b30c5ee81ba8fb0">MaxOS::processes::GlobalScheduler::get_thread</a></div><div class="ttdeci">static Thread * get_thread(uint64_t tid)</div><div class="ttdoc">Gets a thread on the currently executing core by its TID.</div><div class="ttdef"><b>Definition</b> <a href="scheduler_8cpp_source.html#l00375">scheduler.cpp:375</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1processes_1_1Thread_html_ab39b4c92abfd43fa2ca1fe276926553e"><div class="ttname"><a href="classMaxOS_1_1processes_1_1Thread.html#ab39b4c92abfd43fa2ca1fe276926553e">MaxOS::processes::Thread::thread_state</a></div><div class="ttdeci">volatile thread_state_t thread_state</div><div class="ttdoc">The current state of the thread.</div><div class="ttdef"><b>Definition</b> <a href="process_8h_source.html#l00072">process.h:72</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1processes_1_1Thread_html_ab39b4c92abfd43fa2ca1fe276926553e"><div class="ttname"><a href="classMaxOS_1_1processes_1_1Thread.html#ab39b4c92abfd43fa2ca1fe276926553e">MaxOS::processes::Thread::thread_state</a></div><div class="ttdeci">volatile thread_state_t thread_state</div><div class="ttdoc">The current state of the thread.</div><div class="ttdef"><b>Definition</b> <a href="kernel_2include_2processes_2process_8h_source.html#l00072">process.h:72</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="scheduler_8cpp_source.html#l00375">MaxOS::processes::GlobalScheduler::get_thread()</a>, and <a class="el" href="process_8h_source.html#l00072">MaxOS::processes::Thread::thread_state</a>.</p>
+<p class="reference">References <a class="el" href="vector_8h_source.html#l00340">MaxOS::common::Vector&lt; Type &gt;::empty()</a>, <a class="el" href="scheduler_8cpp_source.html#l00375">MaxOS::processes::GlobalScheduler::get_thread()</a>, <a class="el" href="vector_8h_source.html#l00409">MaxOS::common::Vector&lt; Type &gt;::pop_front()</a>, and <a class="el" href="kernel_2include_2processes_2process_8h_source.html#l00072">MaxOS::processes::Thread::thread_state</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="block_8cpp_source.html#l00030">unlock()</a>.</p>
 
@@ -302,8 +305,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/MaxOS/MaxOS/kernel/include/processes/<a class="el" href="block_8h_source.html">block.h</a></li>
-<li>/home/runner/work/MaxOS/MaxOS/kernel/src/processes/<a class="el" href="block_8cpp_source.html">block.cpp</a></li>
+<li>kernel/include/processes/<a class="el" href="block_8h_source.html">block.h</a></li>
+<li>kernel/src/processes/<a class="el" href="block_8cpp_source.html">block.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

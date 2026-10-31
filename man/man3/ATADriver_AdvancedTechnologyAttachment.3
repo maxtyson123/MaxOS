@@ -1,0 +1,301 @@
+.TH "ATADriver::AdvancedTechnologyAttachment" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ATADriver::AdvancedTechnologyAttachment \- Driver for the ATA controller, handles the reading and writing of data to the hard drive\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ata\&.h>\fP
+.PP
+Inherits \fBLibDriver::generic::Disk\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBAdvancedTechnologyAttachment\fP (\fBLibDriver::device_identification_t\fP &device_id, \fBLibDriver::HardwareCommunication::hardware_mapping_t\fP &hmap)"
+.br
+.RI "Constructor for the \fBAdvancedTechnologyAttachment\fP class\&. "
+.ti -1c
+.RI "void \fBread\fP (uint32_t sector, uint8_t *data_buffer, size_t amount) final"
+.br
+.RI "read a sector from the ATA device "
+.ti -1c
+.RI "void \fBwrite\fP (uint32_t sector, uint8_t *data, size_t count) final"
+.br
+.RI "write to a sector on the ATA device "
+.ti -1c
+.RI "void \fBflush\fP () final"
+.br
+.RI "Flush the cache of the ATA device\&. "
+.in -1c
+
+Public Member Functions inherited from \fBLibDriver::generic::Disk\fP
+.in +1c
+.ti -1c
+.RI "void \fBread\fP (uint32_t sector, \fBMaxOS::common::buffer_t\fP *data_buffer, size_t amount=512)"
+.br
+.RI "read data from the disk into a buffer (max capacity 512 bytes) "
+.ti -1c
+.RI "void \fBwrite\fP (uint32_t sector, \fBMaxOS::common::buffer_t\fP *data, size_t amount=512)"
+.br
+.RI "write data to the disk from a buffer (max capacity 512 bytes) "
+.ti -1c
+.RI "virtual \fBdisk_sector_t\fP \fBread_sector\fP (uint32_t sector)"
+.br
+.RI "Read one whole sector by value\&. The ATA driver (which overrides read) answers the RPC through this\&. "
+.ti -1c
+.RI "virtual int \fBwrite_sector\fP (uint32_t sector, \fBdisk_sector_t\fP data)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBLibDriver::Driver\fP
+.in +1c
+.ti -1c
+.RI "virtual uint32_t \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Driver for the ATA controller, handles the reading and writing of data to the hard drive\&. 
+.PP
+Definition at line \fB28\fP of file \fBata\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "AdvancedTechnologyAttachment::AdvancedTechnologyAttachment (\fBLibDriver::device_identification_t\fP & device_id, \fBLibDriver::HardwareCommunication::hardware_mapping_t\fP & hmap)"
+
+.PP
+Constructor for the \fBAdvancedTechnologyAttachment\fP class\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIport_base\fP The base port for the ATA device 
+.br
+\fImaster\fP True if the device is master, false if slave 
+.RE
+.PP
+
+.PP
+Definition at line \fB25\fP of file \fBata\&.cpp\fP\&..PP
+.nf
+26 : m_data_port(hmap\&.ranges[0]\&.address_base),
+27   m_error_port(hmap\&.ranges[0]\&.address_base + 1),
+28   m_sector_count_port(hmap\&.ranges[0]\&.address_base + 2),
+29   m_LBA_low_port(hmap\&.ranges[0]\&.address_base + 3),
+30   m_LBA_mid_port(hmap\&.ranges[0]\&.address_base + 4),
+31   m_LBA_high_Port(hmap\&.ranges[0]\&.address_base + 5),
+32   m_device_port(hmap\&.ranges[0]\&.address_base + 6),
+33   m_command_port(hmap\&.ranges[0]\&.address_base + 7),
+34   m_control_port(hmap\&.ranges[1]\&.address_base),
+35   m_is_master(device_id\&.class_info\&.interface)
+36 {
+37 
+38     // Clear the ports
+39     m_sector_count_port\&.write(0);
+40     m_LBA_low_port\&.write(0);
+41     m_LBA_mid_port\&.write(0);
+42     m_LBA_high_Port\&.write(0);
+43 
+44 }
+.fi
+
+.PP
+References \fBMaxOS::common::Port8Bit::write()\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void AdvancedTechnologyAttachment::flush ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Flush the cache of the ATA device\&. 
+.PP
+Reimplemented from \fBLibDriver::generic::Disk\fP\&.
+.PP
+Definition at line \fB173\fP of file \fBata\&.cpp\fP\&..PP
+.nf
+173                                          {
+174 
+175     // Select the device (master or slave)
+176     m_device_port\&.write(m_is_master ? 0xE0 : 0xF0);
+177 
+178     // Send the flush command
+179     m_command_port\&.write(0xE7);
+180 
+181     // Make sure the device is there
+182     uint8_t status = m_command_port\&.read();
+183     if (status == 0x00)
+184         return;
+185 
+186     // Wait for the device to be ready or for an error to occur
+187     while (((status & 0x80) == 0x80) && ((status & 0x01) != 0x01))
+188         status = m_command_port\&.read();
+189 
+190     // Check for an error
+191     if (status & 0x01)
+192         return;
+193 
+194     // \&.\&.\&. \- @todo wtf this mean
+195 }
+.fi
+
+.PP
+References \fBMaxOS::common::Port8Bit::read()\fP, and \fBMaxOS::common::Port8Bit::write()\fP\&.
+.SS "void AdvancedTechnologyAttachment::read (uint32_t sector, uint8_t * data_buffer, size_t amount)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+read a sector from the ATA device 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsector\fP The sector to read 
+.br
+\fIdata_buffer\fP The data to read into 
+.br
+\fIamount\fP The amount of bytes to read from that sector 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBLibDriver::generic::Disk\fP\&.
+.PP
+Definition at line \fB56\fP of file \fBata\&.cpp\fP\&..PP
+.nf
+56                                                                                             {
+57 
+58     // Don't allow reading more than a sector
+59     if (sector & 0xF0000000 || amount > m_bytes_per_sector)
+60         return;
+61 
+62     // Select the device (master or slave)
+63     m_device_port\&.write((m_is_master ? 0xE0 : 0xF0) | ((sector & 0x0F000000) >> 24));
+64 
+65     // Device is busy
+66     while ((m_command_port\&.read() & 0x80) != 0)
+67         yield();
+68 
+69     // Reset the device
+70     m_error_port\&.write(0);
+71     m_sector_count_port\&.write(1);
+72 
+73     // Split the sector into the ports
+74     m_LBA_low_port\&.write(sector & 0x000000FF);
+75     m_LBA_mid_port\&.write((sector & 0x0000FF00) >> 8);
+76     m_LBA_high_Port\&.write((sector & 0x00FF0000) >> 16);
+77 
+78     // Tell the device to prepare for reading
+79     m_command_port\&.write(0x20);
+80 
+81     // Make sure the device is there
+82     uint8_t status = m_command_port\&.read();
+83     if (status == 0x00)
+84         return;
+85 
+86     // Wait for the device to be ready or for an error to occur @todo Userspace block here
+87     while (((status & 0x80) == 0x80) && ((status & 0x01) != 0x01))
+88         status = m_command_port\&.read();
+89 
+90     //Check for any errors
+91     if (status & 0x01)
+92         return;
+93 
+94     for (size_t i = 0; i < amount; i += 2) {
+95 
+96         // Read from the disk (2 bytes) and store the first byte
+97         uint16_t read_data = m_data_port\&.read();
+98         data_buffer[i] = read_data & 0x00FF;
+99 
+100         // Place the second byte in the array if there is one
+101         if (i + 1 < amount)
+102             data_buffer[i+1] = (read_data >> 8) & 0x00FF;
+103     }
+104 
+105     // Read the remaining bytes as a full sector has to be read
+106     for (uint16_t i = amount + (amount % 2); i < m_bytes_per_sector; i += 2)
+107         m_data_port\&.read();
+108 }
+.fi
+
+.PP
+References \fBMaxOS::common::Port8Bit::read()\fP, \fBMaxOS::common::Port16Bit::read()\fP, and \fBMaxOS::common::Port8Bit::write()\fP\&.
+.SS "void AdvancedTechnologyAttachment::write (uint32_t sector, uint8_t * data_buffer, size_t amount)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+write to a sector on the ATA device 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsector\fP The sector to write to 
+.br
+\fIdata\fP The data to write 
+.br
+\fIcount\fP The amount of data to write to that sector 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBLibDriver::generic::Disk\fP\&.
+.PP
+Definition at line \fB117\fP of file \fBata\&.cpp\fP\&..PP
+.nf
+117                                                                                              {
+118 
+119     // Don't allow writing more than a sector
+120     if (sector > 0x0FFFFFFF || amount > m_bytes_per_sector)
+121         return;
+122 
+123     // Select the device (master or slave)
+124     m_device_port\&.write(m_is_master ? 0xE0 : 0xF0 | ((sector & 0x0F000000) >> 24));
+125 
+126     // Device is busy @todo YIELD
+127     while ((m_command_port\&.read() & 0x80) != 0);
+128 
+129     // Reset the device
+130     m_error_port\&.write(0);
+131     m_sector_count_port\&.write(1);
+132 
+133     // Split the sector into the ports
+134     m_LBA_low_port\&.write(sector & 0x000000FF);
+135     m_LBA_mid_port\&.write((sector & 0x0000FF00) >> 8);
+136     m_LBA_high_Port\&.write((sector & 0x00FF0000) >> 16);
+137 
+138     // Send the write command
+139     m_command_port\&.write(0x30);
+140 
+141     // Wait for the device be ready writing @todo YIELD
+142     uint8_t status = m_command_port\&.read();
+143     while ((status & 0x80) != 0 || (status & 0x08) == 0)
+144         status = m_command_port\&.read();
+145 
+146     // Write the data to the device
+147     for (size_t i = 0; i < m_bytes_per_sector; i += 2) {
+148 
+149         uint16_t write_data = data_buffer[i];
+150 
+151         // Place the next byte in the array if there is one
+152         if (i + 1 < amount)
+153             write_data |= (uint16_t) data_buffer[i + 1] << 8;
+154 
+155         m_data_port\&.write(write_data);
+156     }
+157 
+158     // Write the remaining bytes as a full sector has to be written
+159     for (size_t i = amount + (amount % 2); i < m_bytes_per_sector; i += 2)
+160         m_data_port\&.write(0x0000);
+161 
+162     // Wait for the device to finish writing
+163     status = m_command_port\&.read();
+164     while ((status & 0x80) != 0 || (status & 0x08) != 0) {
+165         yield();
+166         status = m_command_port\&.read();
+167     }
+168 }
+.fi
+
+.PP
+References \fBMaxOS::common::Port8Bit::read()\fP, \fBMaxOS::common::Port16Bit::write()\fP, and \fBMaxOS::common::Port8Bit::write()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

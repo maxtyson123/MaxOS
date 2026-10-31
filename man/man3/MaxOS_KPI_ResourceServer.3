@@ -1,0 +1,464 @@
+.TH "MaxOS::KPI::ResourceServer" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::KPI::ResourceServer \- Manages resources and allows for this process to provide resources to other processes\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <resource\&.h>\fP
+.PP
+Inherited by \fBFileServer::vfs::VFSResourceServer\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBResourceServer\fP (\fBstring\fP server_name, size_t resource_id)"
+.br
+.ti -1c
+.RI "bool \fBqueue_empty\fP ()"
+.br
+.RI "Check if there are any messages waiting to be handled in the message ring buffer\&. "
+.ti -1c
+.RI "\fBservice_resource_message_t\fP * \fBpeek_front\fP ()"
+.br
+.RI "Get the message at the front of the queue\&. "
+.ti -1c
+.RI "\fBservice_resource_message_t\fP * \fBdequeue_front\fP ()"
+.br
+.RI "Consume the message at the front of the queue\&. "
+.ti -1c
+.RI "void \fBadvance_queue\fP ()"
+.br
+.RI "Move the start of the queue to the next item\&. "
+.ti -1c
+.RI "void \fBsend_response\fP (\fBservice_resource_message_t\fP *message, int64_t response)"
+.br
+.ti -1c
+.RI "\fBservice_resource_message_t\fP * \fBcurrent_processed_message\fP ()"
+.br
+.RI "Get a reference to the message currently being processed by the resource server\&. "
+.ti -1c
+.RI "void \fBprocess_message\fP (\fBservice_resource_message_t\fP *message)"
+.br
+.RI "Extract the data from a message and pass it to the relevant resource function\&. "
+.ti -1c
+.RI "bool \fBprocess_next\fP ()"
+.br
+.ti -1c
+.RI "void \fBloop\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBResource\fP * \fBget_resource\fP (const \fBstring\fP &name)"
+.br
+.ti -1c
+.RI "virtual \fBResource\fP * \fBcreate_resource\fP (const \fBstring\fP &name, size_t flags, uintptr_t data)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Manages resources and allows for this process to provide resources to other processes\&. 
+
+
+.PP
+\fBWarning\fP
+.RS 4
+Single threaded, do not call resource server functions concurrently 
+.RE
+.PP
+
+.PP
+Definition at line \fB121\fP of file \fBresource\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ResourceServer::ResourceServer (\fBstring\fP server_name, size_t resource_id)"
+
+.PP
+Definition at line \fB103\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+104 : m_server_name(server_name)
+105 {
+106 
+107     // Create the shared memory
+108     string shared_name = (m_server_name + "_resource_server");
+109     m_shared_region = create_shared_memory(shared_name\&.c_str(), SERVICE_SHARED_MEM_SIZE);
+110     if (!m_shared_region) {
+111         klog("ResourceServer: FAILED to create shared memory '%s' (%d bytes)\\n", shared_name\&.c_str(), (int)SERVICE_SHARED_MEM_SIZE);
+112         return;
+113     }
+114 
+115     // Clear any garbage data
+116     memset(m_shared_region, 0, SERVICE_SHARED_MEM_SIZE);
+117 
+118     // Load the regions
+119     m_message_ring = (service_message_ring_t*)m_shared_region;
+120     m_data_region  = (void*)m_shared_region + MESSAGE_SIZE;
+121 
+122     // Register the server
+123     resource_registry_create(shared_name\&.c_str(), resource_id);
+124 
+125 }
+.fi
+
+.SS "ResourceServer::~ResourceServer ()"
+
+.PP
+Definition at line \fB127\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+127                                 {
+128 
+129     // If the region was created destroy it
+130     if (m_shared_region)
+131         delete m_shared_region;
+132 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void ResourceServer::advance_queue ()"
+
+.PP
+Move the start of the queue to the next item\&. 
+.PP
+Definition at line \fB202\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+202                                    {
+203 
+204     // Get the queue indexes
+205     size_t tail = __atomic_load_n(&m_message_ring\->tail, __ATOMIC_RELAXED);
+206     size_t head = __atomic_load_n(&m_message_ring\->head, __ATOMIC_ACQUIRE);
+207 
+208     // Advance tail
+209     size_t next = (tail + 1) % MESSAGE_SLOTS;
+210     __atomic_store_n(&m_message_ring\->tail, next, __ATOMIC_RELEASE);
+211 
+212 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::MESSAGE_SLOTS\fP\&.
+.SS "\fBResource\fP * ResourceServer::create_resource (const \fBstring\fP & name, size_t flags, uintptr_t data)\fC [virtual]\fP"
+
+.PP
+Definition at line \fB373\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+373                                                                                            {
+374     return nullptr;
+375 }
+.fi
+
+.SS "\fBservice_resource_message_t\fP * ResourceServer::current_processed_message ()"
+
+.PP
+Get a reference to the message currently being processed by the resource server\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The message or nullptr if the server is not currently processing a message\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB230\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+230                                                                        {
+231 
+232     return m_current_processed_message;
+233 
+234 }
+.fi
+
+.SS "\fBservice_resource_message_t\fP * ResourceServer::dequeue_front ()"
+
+.PP
+Consume the message at the front of the queue\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The first message on the queue or nullptr if the queue is empty 
+.RE
+.PP
+
+.PP
+Definition at line \fB185\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+185                                                           {
+186 
+187     // Get current message
+188     service_resource_message_t* msg = peek_front();
+189     if (!msg)
+190         return nullptr;
+191 
+192     // Advance tail
+193     size_t tail = __atomic_load_n(&m_message_ring\->tail, __ATOMIC_RELAXED);
+194     __atomic_store_n(&m_message_ring\->tail, (tail + 1) % MESSAGE_SLOTS, __ATOMIC_RELEASE);
+195 
+196     return msg;
+197 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::MESSAGE_SLOTS\fP, and \fBpeek_front()\fP\&.
+.SS "\fBResource\fP * ResourceServer::get_resource (const \fBstring\fP & name)\fC [virtual]\fP"
+
+.PP
+Definition at line \fB368\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+368                                                          {
+369 
+370     return nullptr;
+371 }
+.fi
+
+.SS "void ResourceServer::loop ()"
+
+.PP
+Definition at line \fB354\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+354                           {
+355 
+356     while (true) {
+357 
+358         // Nothing to process
+359         if (queue_empty()) {
+360             yield();
+361             continue;
+362         }
+363 
+364         process_next();
+365     }
+366 }
+.fi
+
+.SS "\fBservice_resource_message_t\fP * ResourceServer::peek_front ()"
+
+.PP
+Get the message at the front of the queue\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The first message on the queue or nullptr if the queue is empty 
+.RE
+.PP
+
+.PP
+Definition at line \fB157\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+157                                                        {
+158 
+159     // Get the queue indexes
+160     size_t tail = __atomic_load_n(&m_message_ring\->tail, __ATOMIC_RELAXED);
+161     size_t head = __atomic_load_n(&m_message_ring\->head, __ATOMIC_ACQUIRE);
+162     ASSERT(head < MESSAGE_SLOTS && tail < MESSAGE_SLOTS, "Invalid queue indexes for resource server\\n");
+163 
+164     // Queue empty
+165     if (tail == head)
+166         return nullptr;
+167 
+168     // Get the slot at the start
+169     service_resource_message_t* slot = &m_message_ring\->ring_buffer[tail];
+170 
+171     // Ensure the slot is ready (ie is not in the middle of being written to)
+172     auto state = (ServiceMessageSlotState)__atomic_load_n(&slot\->state, __ATOMIC_ACQUIRE);
+173     if (state != ServiceMessageSlotState::REQUEST)
+174         return nullptr;
+175 
+176     // Now safe
+177     return slot;
+178 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::MESSAGE_SLOTS\fP\&.
+.PP
+Referenced by \fBdequeue_front()\fP\&.
+.SS "void ResourceServer::process_message (\fBservice_resource_message_t\fP * message)"
+
+.PP
+Extract the data from a message and pass it to the relevant resource function\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fImessage\fP The message to process
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Create resource can now take a blob, handle that 
+.RE
+.PP
+
+.PP
+Definition at line \fB243\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+243                                                                         {
+244 
+245     m_current_processed_message = message;
+246 
+247     // Parse the message
+248     auto data = message\->data_page_mapped ? (void*)message\->data_offset : m_data_region + message\->data_offset;
+249     auto command = (ServiceResourceCommand)message \-> command;
+250 
+251     auto resource_it = m_resource_map\&.find(message\->resource_id);
+252     Resource* resource = (resource_it != m_resource_map\&.end()) ? resource_it\->second : nullptr;
+253 
+254     // Ensure the resource exists
+255     bool should_exist = !(command == ServiceResourceCommand::S_CREATE || command== ServiceResourceCommand::S_GET);
+256     if (!resource && should_exist) {
+257         send_response(message, \-1);
+258         klog("rs err: resource doesnt exist when it should\\n");
+259         return;
+260     }
+261 
+262     // Handle the command
+263     int64_t response = \-1;
+264     switch (command) {
+265 
+266         case ServiceResourceCommand::S_CREATE: {
+267 
+268             // Try to create the resource
+269             resource = create_resource((char*)data, message\->flags, 0);
+270             if (!resource)
+271                 break;
+272 
+273             // Store the resource
+274             m_resource_map\&.insert(message\->resource_id, resource);
+275             response = true;
+276             break;
+277         }
+278 
+279         case ServiceResourceCommand::S_GET: {
+280 
+281             // Try to create the resource
+282             resource = get_resource((char*)data);
+283             if (!resource)
+284                 break;
+285 
+286             // Store the resource
+287             m_resource_map\&.insert(message\->resource_id, resource);
+288             response = true;
+289             break;
+290         }
+291 
+292         case ServiceResourceCommand::R_OPEN: {
+293 
+294             // Delegate
+295             resource\->open(message\->flags);
+296             response = true;
+297             break;
+298 
+299         }
+300 
+301         case ServiceResourceCommand::R_CLOSE: {
+302 
+303             // Delegate
+304             resource\->close(message\->flags);
+305             m_resource_map\&.erase(message\->resource_id);
+306             response = true;
+307             delete resource;
+308             break;
+309 
+310         }
+311 
+312         case ServiceResourceCommand::R_WRITE: {
+313 
+314             // Delegate
+315             response = resource\->write(data, message\->data_size, message\->flags);
+316             break;
+317 
+318         }
+319 
+320         case ServiceResourceCommand::R_READ: {
+321 
+322             // Delegate
+323             response = resource\->read(data, message\->data_size, message\->flags);
+324             break;
+325 
+326         }
+327 
+328         default:
+329             klog("rs err: resource command unkown\\n");
+330             break;
+331     }
+332 
+333     // Done handling
+334     send_response(message, response);
+335 }
+.fi
+
+.PP
+References \fBMaxOS::KPI::Resource::close()\fP, \fBMaxOS::KPI::klog()\fP, \fBMaxOS::KPI::Resource::open()\fP, \fBMaxOS::KPI::Resource::read()\fP, and \fBMaxOS::KPI::Resource::write()\fP\&.
+.SS "bool ResourceServer::process_next ()"
+
+.PP
+Definition at line \fB337\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+337                                   {
+338 
+339     // Nothing to process
+340     if (queue_empty())
+341         return false;
+342 
+343     // Try to get the message that has been waiting the longest
+344     auto message = peek_front();
+345     if (!message)
+346         return false;
+347 
+348     // Handle the message
+349     process_message(message);
+350     advance_queue();
+351     return true;
+352 }
+.fi
+
+.SS "bool ResourceServer::queue_empty ()"
+
+.PP
+Check if there are any messages waiting to be handled in the message ring buffer\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if there are no messages, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB139\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+139                                  {
+140 
+141     if (!m_message_ring)
+142         return true;
+143 
+144     // Get the queue indexes
+145     size_t head = __atomic_load_n(&m_message_ring\->head, __ATOMIC_ACQUIRE);
+146     size_t tail = __atomic_load_n(&m_message_ring\->tail, __ATOMIC_ACQUIRE);
+147 
+148     return head == tail;
+149 
+150 }
+.fi
+
+.SS "void ResourceServer::send_response (\fBservice_resource_message_t\fP * message, int64_t response)"
+
+.PP
+Definition at line \fB214\fP of file \fBresource\&.cpp\fP\&..PP
+.nf
+214                                                                                         {
+215 
+216     // Atomically update the message
+217     __atomic_store_n(&message\->response, response,__ATOMIC_RELEASE);
+218     __atomic_store_n(&message\->state, (uint8_t)ServiceMessageSlotState::RESPONSE,__ATOMIC_RELEASE);
+219 
+220     // No longer processing a message
+221     m_current_processed_message = nullptr;
+222 
+223 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

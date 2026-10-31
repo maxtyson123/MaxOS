@@ -1,0 +1,253 @@
+.TH "MaxOS::common::JSONNode" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::JSONNode
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherited by \fBMaxOS::common::JSONObject\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBJSONNode\fP (\fBstring\fP key, void *value, JSONNodeType type)"
+.br
+.ti -1c
+.RI "\fBoperator int64_t\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator bool\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator string\fP ()"
+.br
+.ti -1c
+.RI "\fBJSONNode\fP & \fBoperator[]\fP (int index)"
+.br
+.ti -1c
+.RI "\fBJSONNode\fP & \fBoperator[]\fP (\fBstring\fP key)"
+.br
+.ti -1c
+.RI "virtual \fBstring\fP \fBto_string\fP (int level=0)"
+.br
+.ti -1c
+.RI "size_t \fBarray_size\fP ()"
+.br
+.ti -1c
+.RI "bool \fBis_null\fP ()"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBJSONNode\fP \fBNullNode\fP = \fBJSONNode\fP('', nullptr, UNKNOWN)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB28\fP of file \fBjson\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "JSONNode::JSONNode (\fBstring\fP key, void * value, JSONNodeType type)"
+
+.PP
+Definition at line \fB12\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+13     : m_key(key),
+14       m_value(value),
+15       m_type(type) {
+16 }
+.fi
+
+.SS "JSONNode::~JSONNode ()"
+
+.PP
+Definition at line \fB18\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+18                     {
+19 
+20     // Null node
+21     if (m_value == nullptr)
+22         return;
+23 
+24     switch (m_type) {
+25         case STRING:
+26             delete (string*)m_value;
+27             break;
+28 
+29         case ARRAY: {
+30 
+31             // Delete all the child nodes
+32             auto* vector = (Vector<JSONNode*>*)m_value;
+33             for (uint32_t i = 0; i < vector\->size(); i++)
+34                 delete (*vector)[i];
+35 
+36             // Delete the vector
+37             delete vector;
+38             break;
+39         }
+40 
+41         case OBJECT:
+42             // Cast to JSONObject and let its destructor handle the Map
+43             if (m_value != (void*)this)
+44                 delete (JSONObject*)m_value;
+45             break;
+46 
+47         default:
+48             break;
+49     }
+50 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "size_t JSONNode::array_size ()"
+
+.PP
+Definition at line \fB139\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+139                             {
+140 
+141     if (m_type == ARRAY)
+142         return ((Vector<JSONNode*>*)(m_value))\->size();
+143 
+144     return 0;
+145 
+146 }
+.fi
+
+.SS "bool JSONNode::is_null ()"
+
+.PP
+Definition at line \fB148\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+148                        {
+149     return m_type == UNKNOWN;
+150 }
+.fi
+
+.SS "JSONNode::operator bool ()"
+
+.PP
+Definition at line \fB67\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+67                         {
+68     if (m_type == BOOL)
+69         return (bool)(uint64_t)m_value;
+70 
+71     return false;
+72 }
+.fi
+
+.SS "JSONNode::operator int64_t ()"
+
+.PP
+Definition at line \fB60\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+60                            {
+61     if (m_type == NUMBER)
+62         return (int64_t)(uint64_t)m_value;
+63 
+64     return 0;
+65 }
+.fi
+
+.SS "\fBJSONNode\fP & JSONNode::operator[] (int index)"
+
+.PP
+Definition at line \fB74\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+74                                         {
+75 
+76     if (m_type == ARRAY)
+77         return *(*(Vector<JSONNode*>*)(m_value))[index];
+78 
+79     return NullNode;
+80 
+81 }
+.fi
+
+.SS "\fBJSONNode\fP & JSONNode::operator[] (\fBstring\fP key)"
+
+.PP
+Definition at line \fB83\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+83                                          {
+84 
+85     if (m_type == OBJECT)
+86         return (*(JSONObject*)m_value)[key];
+87 
+88     return NullNode;
+89 }
+.fi
+
+.SS "\fBstring\fP JSONNode::to_string (int level = \fC0\fP)\fC [virtual]\fP"
+Add each node to the output
+.PP
+Definition at line \fB91\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+91                                     {
+92 
+93     // Get the indent at two spaces per level
+94     string indent = "  "s * level;
+95 
+96     switch (m_type) {
+97 
+98         case STRING:
+99             return "\\""s + *(string*)m_value + "\\"";
+100 
+101         case NUMBER:
+102             return string((int)(uint64_t)m_value);
+103 
+104         case BOOL:
+105             return ((bool)(uint64_t)m_value) ? "true" : "false";
+106 
+107         case ARRAY: {
+108 
+109             // Get the vector
+110             Vector<JSONNode*>* vector = (Vector<JSONNode*>*)m_value;
+111             if (vector\->size() == 0)
+112                 return "[]";
+113 
+115             string out = "[\\n";
+116             for (uint32_t i = 0; i < vector\->size(); i++) {
+117                 out += indent + "  " + (*vector)[i]\->to_string(level + 1);
+118 
+119                 // Move to the next node
+120                 if (i < vector\->size() \- 1)
+121                     out += ",";
+122                 out += "\\n";
+123             }
+124 
+125             // Close the array
+126             out += indent + "]";
+127             return out;
+128         }
+129 
+130         case OBJECT:
+131             return ((JSONObject*)this)\->to_string(level);
+132 
+133         case UNKNOWN: default:
+134             return "null";
+135     }
+136 
+137 }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::size()\fP, and \fBto_string()\fP\&.
+.PP
+Referenced by \fBto_string()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBJSONNode\fP JSONNode::NullNode = \fBJSONNode\fP('', nullptr, UNKNOWN)\fC [static]\fP"
+
+.PP
+Definition at line \fB38\fP of file \fBjson\&.h\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

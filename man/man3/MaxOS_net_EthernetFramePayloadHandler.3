@@ -1,0 +1,176 @@
+.TH "MaxOS::net::EthernetFramePayloadHandler" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::net::EthernetFramePayloadHandler \- Handles a specific type of Ethernet Frame payload\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ethernetframe\&.h>\fP
+.PP
+Inherited by \fBMaxOS::net::AddressResolutionProtocol\fP, and \fBMaxOS::net::InternetProtocolHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEthernetFramePayloadHandler\fP (\fBEthernetFrameHandler\fP *\fBframe_handler\fP, uint16_t \fBhandled_type\fP)"
+.br
+.RI "Construct a new Ether Frame Payload Handler object\&. "
+.ti -1c
+.RI "\fB~EthernetFramePayloadHandler\fP ()"
+.br
+.RI "Destroy the EtherFrameHandler:: EtherFrameHandler object, Removes it from the handler list\&. "
+.ti -1c
+.RI "virtual bool \fBhandle_ethernetframe_payload\fP (uint8_t *ethernetframe_payload, uint32_t size)"
+.br
+.RI "Handle the received ethernet frame payload\&. "
+.ti -1c
+.RI "void \fBsend\fP (uint64_t destination, uint8_t *data, uint32_t size)"
+.br
+.RI "send an packet via the backend driver "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBEthernetFrameHandler\fP * \fBframe_handler\fP"
+.br
+.RI "The Ethernet frame handler this payload handler is connected to\&. "
+.ti -1c
+.RI "uint16_t \fBhandled_type\fP"
+.br
+.RI "The Ethernet frame type this handler handles\&. "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBEthernetFrameHandler\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles a specific type of Ethernet Frame payload\&. 
+.PP
+Definition at line \fB57\fP of file \fBethernetframe\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "EthernetFramePayloadHandler::EthernetFramePayloadHandler (\fBEthernetFrameHandler\fP * frame_handler, uint16_t handled_type)"
+
+.PP
+Construct a new Ether Frame Payload Handler object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIframe_handler\fP the handler for the ethernet frame 
+.br
+\fIhandled_type\fP the type of the protocol, which will be handled by this handler 
+.RE
+.PP
+
+.PP
+Definition at line \fB24\fP of file \fBethernetframe\&.cpp\fP\&..PP
+.nf
+24                                                                                                                    {
+25 
+26     this\->handled_type = handled_type;
+27     this\->frame_handler = frame_handler;
+28     frame_handler\->connect_handler(this);
+29 
+30 
+31 }
+.fi
+
+.PP
+References \fBMaxOS::net::EthernetFrameHandler::connect_handler()\fP, \fBframe_handler\fP, and \fBhandled_type\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "bool EthernetFramePayloadHandler::handle_ethernetframe_payload (uint8_t * ethernetframe_payload, uint32_t size)\fC [virtual]\fP"
+
+.PP
+Handle the received ethernet frame payload\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIethernetframe_payload\fP the payload of the ethernet frame 
+.br
+\fIsize\fP the size of the payload
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the data is to be sent back, false otherwise 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::net::AddressResolutionProtocol\fP, and \fBMaxOS::net::InternetProtocolHandler\fP\&.
+.PP
+Definition at line \fB48\fP of file \fBethernetframe\&.cpp\fP\&..PP
+.nf
+48                                                                                                             {
+49 
+50     //By default, don't handle it, will be handled in the override
+51     return false;
+52 
+53 }
+.fi
+
+.SS "void EthernetFramePayloadHandler::send (uint64_t destination, uint8_t * data, uint32_t size)"
+
+.PP
+send an packet via the backend driver 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdestination\fP the destination MAC address 
+.br
+\fIdata\fP the data to send 
+.br
+\fIsize\fP the size of the payload 
+.RE
+.PP
+
+.PP
+Definition at line \fB62\fP of file \fBethernetframe\&.cpp\fP\&..PP
+.nf
+62                                                                                          {
+63 
+64     frame_handler\->send_ethernet_frame(destination, handled_type, data, size);
+65 }
+.fi
+
+.PP
+References \fBframe_handler\fP, \fBhandled_type\fP, and \fBMaxOS::net::EthernetFrameHandler::send_ethernet_frame()\fP\&.
+.PP
+Referenced by \fBMaxOS::net::AddressResolutionProtocol::request_mac_address()\fP\&.
+.SH "Friends And Related Symbol Documentation"
+.PP 
+.SS "friend class \fBEthernetFrameHandler\fP\fC [friend]\fP"
+
+.PP
+Definition at line \fB58\fP of file \fBethernetframe\&.h\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBEthernetFrameHandler\fP* MaxOS::net::EthernetFramePayloadHandler::frame_handler\fC [protected]\fP"
+
+.PP
+The Ethernet frame handler this payload handler is connected to\&. 
+.PP
+Definition at line \fB61\fP of file \fBethernetframe\&.h\fP\&.
+.PP
+Referenced by \fBEthernetFramePayloadHandler()\fP, \fBMaxOS::net::InternetProtocolHandler::get_media_access_control_address()\fP, \fBMaxOS::net::AddressResolutionProtocol::request_mac_address()\fP, \fBsend()\fP, and \fBMaxOS::net::InternetProtocolHandler::send_internet_protocol_packet()\fP\&.
+.SS "uint16_t MaxOS::net::EthernetFramePayloadHandler::handled_type\fC [protected]\fP"
+
+.PP
+The Ethernet frame type this handler handles\&. 
+.PP
+Definition at line \fB62\fP of file \fBethernetframe\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::net::EthernetFrameHandler::connect_handler()\fP, \fBEthernetFramePayloadHandler()\fP, \fBsend()\fP, and \fBMaxOS::net::InternetProtocolHandler::send_internet_protocol_packet()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

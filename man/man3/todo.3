@@ -1,4 +1,4 @@
-.TH "todo" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "todo" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,17 +7,104 @@ todo \- Todo List
 
 .IP "\fBFile \fBallocator\&.h\fP \fP" 1c
 Maybe have a allocation result instead of req,actual size  
+.IP "\fBFile \fBdesktop\&.cpp\fP \fP" 1c
+Make a border class 
+.PP
+.PP
+Draw a proper mouse cursor 
+.PP
+.PP
+Draw a background image  
+.IP "\fBFile \fBdisk\&.cpp\fP \fP" 1c
+split > 512 into multiple calls / error  
+.IP "\fBMember \fBDriverManager::core::BaseAddressRegister::size\fP \fP" 1c
+Document Size of the address space  
+.IP "\fBClass \fBDriverManager::core::PCIDeviceDescriptor\fP \fP" 1c
+Not really needed anymore  
+.IP "\fBMember \fBenviron\fP \fP" 1c
+this isnt platform specific  
+.IP "\fBFile \fBerrno\&.h\fP \fP" 1c
+Linux port / remove specifics  
+.IP "\fBFile \fBethernetframe\&.h\fP \fP" 1c
+Make big endian helper functions and clairty (ie be_uint16_t etc)z  
+.IP "\fBFile \fBfat32\&.h\fP \fP" 1c
+BUG: Subdirectory seems to write to the disk this end but tools like fatcat complain the that the EOC isn't written (cluster 3037) 
+.PP
+.PP
+Implment: create/delete/rename files & directories  
+.IP "\fBMember \fBFileServer::format::ext2::block_group_descriptor_t\fP \fP" 1c
+Support updating directory_count when creating/deleting directories  
+.IP "\fBMember \fBFileServer::format::ext2::CreatorOS\fP \fP" 1c
+Add MaxOS  
+.IP "\fBMember \fBFileServer::format::ext2::EntryType\fP \fP" 1c
+Support more  
+.IP "\fBClass \fBFileServer::format::ext2::Ext2Volume\fP \fP" 1c
+Free blocks  
+.IP "\fBMember \fBFileServer::format::ext2::Ext2Volume::ext2_lock\fP \fP" 1c
+: remove public?)  
+.IP "\fBMember \fBFileServer::format::ext2::Ext2Volume::Ext2Volume\fP (\fBLibDriver::generic::Disk\fP *disk, lba_t partition_offset)\fP" 1c
+Should lock per file and not expose volume lock  
+.IP "\fBMember \fBFileServer::format::ext2::InodeHandler::grow\fP (size_t amount, bool flush=true)\fP" 1c
+Should this return \fBsize()\fP instead?  
+.IP "\fBMember \fBFileServer::format::ext2::InodePermissionsDefaults\fP \fP" 1c
+Document these values  
+.IP "\fBMember \fBFileServer::format::ext2::linux_os_2_t\fP \fP" 1c
+HURD, MASIX  
+.IP "\fBMember \fBFileServer::format::Fat32File::write\fP (\fBMaxOS::common::buffer_t\fP *data, size_t amount) final\fP" 1c
+When in userspace: save timestamps  
+.IP "\fBMember \fBFileServer::format::Fat32Volume::next_cluster\fP (uint32_t cluster) const\fP" 1c
+The auto entry = uint32_t* '&' is weird, fix it  
+.IP "\fBMember \fBFileServer::format::Fat32Volume::set_next_cluster\fP (uint32_t cluster, uint32_t next_cluster) const\fP" 1c
+when in userspace: For performance cache fat entirely, cache file data, cache cluster chains  
+.IP "\fBClass \fBFileServer::partition::MSDOSPartition\fP \fP" 1c
+Abstract some of this into a base class and use it for GPT and other partition tables  
+.IP "\fBMember \fBFileServer::vfs::FileResource::write\fP (const void *buffer, size_t size, size_t flags) final\fP" 1c
+May want to fix the out of sync of renaming a resource  
+.IP "\fBClass \fBFileServer::vfs::VirtualFileSystem\fP \fP" 1c
+mulithread safe cache  
+.IP "\fBFile \fBfont\&.cpp\fP \fP" 1c
+Replace with a proper font format  
 .IP "\fBFile \fBframebuffer\&.cpp\fP \fP" 1c
 less messy static calls to progress bar and logos  
 .IP "\fBFile \fBgdbstub\&.h\fP \fP" 1c
 almost zero validation going on 
 .IP "\fBFile \fBgraphicsContext\&.h\fP \fP" 1c
 Move to drivers/video?  
+.IP "\fBFile \fBinputStream\&.h\fP \fP" 1c
+Move tempalte implmentations to a cpp file  
 .IP "\fBFile \fBipc\&.cpp\fP \fP" 1c
 Import scheduler is a circular dependency, need to fix 
 .PP
 .PP
 Shouldnt have to specify type in resource constructor  
+.IP "\fBMember \fBIPV6_JOIN_GROUP\fP \fP" 1c
+platform specidic)  
+.IP "\fBMember \fBIPV6_LEAVE_GROUP\fP \fP" 1c
+platform specidic)  
+.IP "\fBMember \fBIPV6_MULTICAST_HOPS\fP \fP" 1c
+platform specidic)  
+.IP "\fBMember \fBIPV6_MULTICAST_IF\fP \fP" 1c
+platform specidic)  
+.IP "\fBMember \fBIPV6_MULTICAST_LOOP\fP \fP" 1c
+platform specidic)  
+.IP "\fBMember \fBIPV6_UNICAST_HOPS\fP \fP" 1c
+platform specidic)  
+.IP "\fBMember \fBIPV6_V6ONLY\fP \fP" 1c
+platform specidic)  
+.IP "\fBClass \fBLibDriver::generic::KeyboardInterpreterEN_US\fP \fP" 1c
+Find a good place to place this  
+.IP "\fBMember \fBLibDriver::generic::KeyboardInterpreterEN_US::on_stream_read\fP (uint8_t scan_code)\fP" 1c
+Probably a better way to do this (investigate when adding more keyboard layouts) 
+.PP
+Probably a better way to do this (investigate when adding more keyboard layouts)  
+.IP "\fBClass \fBLibDriver::generic::KeyboardState\fP \fP" 1c
+Add functions like is_shift_pressed() and similar  
+.IP "\fBMember \fBLibDriver::generic::MediaAccessControlAddress\fP \fP" 1c
+make a MacAddress class and use mac_t  
+.IP "\fBNamespace \fBLibFS\fP \fP" 1c
+Moving files  
+.IP "\fBMember \fBLibFS::Path::file_name\fP (const \fBMaxOS::string\fP &path)\fP" 1c
+reverse loop is quicker  
 .IP "\fBFile \fBlogger\&.h\fP \fP" 1c
 move somewhere else (maybe even commonlib), rename common/ to generated/  
 .IP "\fBFile \fBlogo\&.h\fP \fP" 1c
@@ -26,6 +113,18 @@ remove common directory, make this generated
 make const  
 .IP "\fBMember \fBMaxOS::common::GraphicsContext::put_pixel\fP (uint32_t x, uint32_t y, uint32_t colour)\fP" 1c
 make them uint32_t  
+.IP "\fBMember \fBMaxOS::drivers::ethernet::AMD_AM79C973::activate\fP () final\fP" 1c
+Re-implement this class  
+.IP "\fBMember \fBMaxOS::drivers::ethernet::AMD_AM79C973::AMD_AM79C973\fP (hardwarecommunication::PCIDeviceDescriptor *dev)\fP" 1c
+move all this to initilise()  
+.IP "\fBMember \fBMaxOS::drivers::ethernet::BufferDescriptor::flags2\fP \fP" 1c
+enum this)  
+.IP "\fBClass \fBMaxOS::gui::Desktop\fP \fP" 1c
+It is not a good idea to hardcode the mouse into the desktop as a tablet or touch screen device won't have a mouse cursor  
+.IP "\fBMember \fBMaxOS::gui::Desktop::colour\fP \fP" 1c
+: replace with image, make priv)  
+.IP "\fBMember \fBMaxOS::gui::Widget::resize\fP (int32_t width, int32_t height)\fP" 1c
+Fix the invalidation so it only redraws the areas that need to be redrawn (right and bottom are always fully redrawn currently)  
 .IP "\fBClass \fBMaxOS::hardwarecommunication::AdvancedProgrammableInterruptController\fP \fP" 1c
 Should either handle all Local APICs or none (only boot core right now, others accessed per core directly which is inconsistent)  
 .IP "\fBMember \fBMaxOS::hardwarecommunication::DeliveryMode\fP \fP" 1c
@@ -41,6 +140,30 @@ Have a single stub so that we don't need to have 256 different functions for eac
 Exception handlers  
 .IP "\fBMember \fBMaxOS::hardwarecommunication::madt_io_apic_t\fP \fP" 1c
 Rename for consistency  
+.IP "\fBClass \fBMaxOS::KPI::ipc::ArgList\fP \fP" 1c
+Allow for payloads larger than MAX_PAYLOAD_SIZE  
+.IP "\fBMember \fBMaxOS::KPI::ipc::ArgList::serialise\fP (uint8_t *buffer, size_t size)\fP" 1c
+validation  
+.IP "\fBMember \fBMaxOS::KPI::ipc::rpc_call\fP (const char *server, const char *function, \fBArgList\fP *args, \fBArgList\fP *return_values, size_t flags)\fP" 1c
+: not multi-thread safe for m_response_endpoint 
+.PP
+.PP
+: unique endpoint name 
+.PP
+.PP
+: header  
+.IP "\fBMember \fBMaxOS::KPI::ipc::rpc_server_loop\fP (uint64_t endpoint)\fP" 1c
+Implement loading from shared mem  
+.IP "\fBMember \fBMaxOS::KPI::ipc::rpc_server_loop\fP (const char *server)\fP" 1c
+Implement loading from shared mem  
+.IP "\fBMember \fBMaxOS::KPI::ipc::rpc_server_process_next\fP (uint64_t endpoint, bool block)\fP" 1c
+validation  
+.IP "\fBMember \fBMaxOS::KPI::processes::exec_file\fP (const char *name, const char *path, const char **args, size_t arg_amount, bool wait_for_completion=false)\fP" 1c
+What if someone exec_file but not_wait and then never close the handle, will resource leak - should auto close when process ends?  
+.IP "\fBMember \fBMaxOS::KPI::processes::spawn_thread\fP (uint64_t process_handle, void(*entry_point)(void *), void *args, size_t arg_amount)\fP" 1c
+Implement  
+.IP "\fBMember \fBMaxOS::KPI::ResourceServer::process_message\fP (service_resource_message_t *message)\fP" 1c
+Create resource can now take a blob, handle that  
 .IP "\fBMember \fBMaxOS::memory::allocator::ChunkHeader::next_chunk\fP ()\fP" 1c
 PANIC here to make easier to debug, change to crash the prog isntead  
 .IP "\fBMember \fBMaxOS::memory::allocator::ChunkHeader::prev_chunk\fP ()\fP" 1c
@@ -64,6 +187,37 @@ maybe move from void* to uint8* ??
 .PP
 .PP
 take flags for mapping (ro)  
+.IP "\fBMember \fBMaxOS::net::AddressResolutionProtocol::resolve\fP (InternetProtocolAddress address) final\fP" 1c
+Should have a timeout in case the address cannot be resolved and avoid infinite loops  
+.IP "\fBMember \fBMaxOS::net::EthernetFrameHandler::data_received\fP (uint8_t *data, uint32_t size) override\fP" 1c
+Future debugging me: the override is not being called in derived classes  
+.IP "\fBMember \fBMaxOS::net::InternetControlMessageProtocol::handle_internet_protocol_payload\fP (\fBnet::InternetProtocolAddress\fP src_ip_be, \fBnet::InternetProtocolAddress\fP dst_ip_be, uint8_t *payload_data, uint32_t size) final\fP" 1c
+Reply to ping requests 
+.PP
+.PP
+Implement the rest of the ICMP messages  
+.IP "\fBMember \fBMaxOS::net::InternetProtocolAddress\fP \fP" 1c
+: Make IPv4Address class and do ip_t  
+.IP "\fBMember \fBMaxOS::net::InternetProtocolHandler::handle_ethernetframe_payload\fP (uint8_t *ethernetframe_payload, uint32_t size) override\fP" 1c
+Set the identifier when sending packets back  
+.IP "\fBMember \fBMaxOS::net::IPV4Header::flags_and_offset\fP \fP" 1c
+: bitfield struct?  
+.IP "\fBMember \fBMaxOS::net::IPV4Header::protocol\fP \fP" 1c
+: enum  
+.IP "\fBMember \fBMaxOS::net::IPV4Header::type_of_service\fP \fP" 1c
+: enum  
+.IP "\fBMember \fBMaxOS::net::SubnetMask\fP \fP" 1c
+: Make SubnetMask class and do subnetmask_t  
+.IP "\fBMember \fBMaxOS::net::TCPHeader::options\fP \fP" 1c
+: make this a struct  
+.IP "\fBMember \fBMaxOS::net::TransmissionControlProtocolHandler::connect\fP (const string &address)\fP" 1c
+Implement string parsing for address  
+.IP "\fBMember \fBMaxOS::net::TransmissionControlProtocolPort\fP \fP" 1c
+: Make TCPPort class and do tcp_port_t  
+.IP "\fBMember \fBMaxOS::net::UserDatagramProtocolHandler::connect\fP (const string &address)\fP" 1c
+Implement string parsing to extract IP and port  
+.IP "\fBMember \fBMaxOS::net::UserDatagramProtocolPort\fP \fP" 1c
+: Make UDPPort class and do udp_port_t (or generic port that can be used for TCP and UDP)  
 .IP "\fBClass \fBMaxOS::processes::BlockingLock\fP \fP" 1c
 move to libcommon  
 .IP "\fBMember \fBMaxOS::processes::BlockingLock::acquire\fP ()\fP" 1c
@@ -105,6 +259,8 @@ make random at runtime)
 GDB owns the interrupt here, should move to a serial API  
 .IP "\fBClass \fBMaxOS::runtime::KASanHandler\fP \fP" 1c
 finish when cbf  
+.IP "\fBClass \fBMaxOS::String\fP \fP" 1c
+test as @TODO test as 
 .IP "\fBMember \fBMaxOS::system::Core::wake_up\fP (\fBCPU\fP *cpu)\fP" 1c
 Should handle core fails and not delay once we are in c++  
 .IP "\fBMember \fBMaxOS::system::CPU::find_cores\fP () const\fP" 1c
@@ -117,7 +273,22 @@ Very c style, should be made class based that automatically registers
 resource type system 
 .IP "\fBStruct \fBmultiboot_tag_framebuffer\fP \fP" 1c
 should use this to setup graphix context pallet?  
+.IP "\fBFile \fBpath\&.cpp\fP \fP" 1c
+assumes no trailing slash on directories 
+.PP
+.PP
+assumes all files have an extension  
+.IP "\fBFile \fBrpc\&.cpp\fP \fP" 1c
+may need to optimise for less syscalls per RPC round trip  
+.IP "\fBFile \fBrpc\&.h\fP \fP" 1c
+: C api  
+.IP "\fBFile \fBstat\&.h\fP \fP" 1c
+S_IFIFO etc are linux specific, move to platform (same for S_TYPEISMQ)  
+.IP "\fBFile \fBtar\&.h\fP \fP" 1c
+Either warn read only or make it writeable by updating the archive  
 .IP "\fBFile \fBvirtual\&.cpp\fP \fP" 1c
-VMM regions are right next to the userspace allocated blocks THIS IS BAD 
+VMM regions are right next to the userspace allocated blocks THIS IS BAD  
+.IP "\fBFile \fBwait\&.h\fP \fP" 1c
+status layout is linux specific, fix 
 .PP
 

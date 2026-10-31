@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::resources::ProcessResource" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::resources::ProcessResource" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,12 +10,12 @@ MaxOS::processes::resources::ProcessResource \- A wrapper for a \fBProcess\fP wh
 .PP
 \fC#include <scheduler_resources\&.h>\fP
 .PP
-Inherits Resource\&.
+Inherits \fBMaxOS::KPI::Resource\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBProcessResource\fP (const string &name, size_t flags, \fBresource_type_t\fP type)"
+.RI "\fBProcessResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBresource_type_t\fP \fBtype\fP)"
 .br
 .ti -1c
 .RI "void \fBclose\fP (size_t flags) final"
@@ -29,6 +29,26 @@ Inherits Resource\&.
 .RI "int \fBwrite\fP (const void *buffer, size_t size, size_t flags) final"
 .br
 .RI "Writes data to the process resource\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::KPI::Resource\fP
+.in +1c
+.ti -1c
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBResourceType\fP \fBtype\fP)"
+.br
+.RI "Constructs a new \fBResource\fP object\&. "
+.ti -1c
+.RI "\fBstring\fP \fBname\fP ()"
+.br
+.RI "Gets the name of this resource\&. "
+.ti -1c
+.RI "\fBResourceType\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of this resource\&. "
+.ti -1c
+.RI "virtual void \fBopen\fP (size_t flags)"
+.br
+.RI "Opens the resource\&. "
 .in -1c
 .SS "Public Attributes"
 
@@ -65,7 +85,7 @@ The process pointer will be freed by scheduler during \fBclose()\fP
 Definition at line \fB34\fP of file \fBscheduler_resources\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "ProcessResource::ProcessResource (const string & name, size_t flags, \fBresource_type_t\fP type)"
+.SS "ProcessResource::ProcessResource (const \fBstring\fP & name, size_t flags, \fBresource_type_t\fP type)"
 
 .PP
 Definition at line \fB20\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
@@ -78,7 +98,7 @@ Definition at line \fB20\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 
 .SH "Member Function Documentation"
 .PP 
-.SS "void ProcessResource::close (size_t flags)\fC [final]\fP"
+.SS "void ProcessResource::close (size_t flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Closes the process resource, killing the process and removing it from the scheduler\&. 
@@ -89,6 +109,8 @@ Closes the process resource, killing the process and removing it from the schedu
 .RE
 .PP
 
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
 .PP
 Definition at line \fB31\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 .nf
@@ -101,7 +123,7 @@ Definition at line \fB31\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 
 .PP
 References \fBprocess\fP, and \fBMaxOS::processes::GlobalScheduler::remove_process()\fP\&.
-.SS "int ProcessResource::read (void * buffer, size_t size, size_t flags)\fC [final]\fP"
+.SS "int ProcessResource::read (void * buffer, size_t size, size_t flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Reads data from the process resource\&. 
@@ -121,6 +143,8 @@ The number of bytes successfully read or -1 on error
 .RE
 .PP
 
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
 .PP
 Definition at line \fB46\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 .nf
@@ -217,7 +241,7 @@ Definition at line \fB46\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 
 .PP
 References \fBexit_code\fP, \fBMaxOS::memory::MemoryManager::malloc()\fP, \fBMaxOS::processes::Process::pid()\fP, \fBprocess\fP, \fBMaxOS::processes::Process::resource_manager\fP, \fBMaxOS::processes::resources::ResourceManager::resources()\fP, \fBMaxOS::processes::Process::threads()\fP, \fBMaxOS::processes::Process::total_ticks()\fP, and \fBMaxOS::processes::Process::working_directory\fP\&.
-.SS "int ProcessResource::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP"
+.SS "int ProcessResource::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Writes data to the process resource\&. 
@@ -237,6 +261,8 @@ The number of bytes successfully written or -1 on error
 .RE
 .PP
 
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
 .PP
 Definition at line \fB145\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 .nf
@@ -295,4 +321,4 @@ Referenced by \fBclose()\fP, \fBread()\fP, and \fBwrite()\fP\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

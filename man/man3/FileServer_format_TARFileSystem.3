@@ -1,0 +1,74 @@
+.TH "FileServer::format::TARFileSystem" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::format::TARFileSystem \- Wraps a TAR archive as a filesystem\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tar\&.h>\fP
+.PP
+Inherits \fBFileServer::filesystem::FileSystem\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTARFileSystem\fP (void *address)"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBFileServer::filesystem::FileSystem\fP
+.in +1c
+.ti -1c
+.RI "virtual \fB~FileSystem\fP ()"
+.br
+.RI "Destructor for \fBFileSystem\fP, frees the root directory (Which in turn frees all files and subdirectories) "
+.ti -1c
+.RI "\fBDirectory\fP * \fBroot_directory\fP ()"
+.br
+.RI "Get the directory at '/'\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBget_directory\fP (const string &path)"
+.br
+.RI "Get the directory at a given path\&. "
+.ti -1c
+.RI "bool \fBexists\fP (const string &path)"
+.br
+.RI "Check if a path exists on the filesystem\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBFileServer::filesystem::FileSystem\fP
+.in +1c
+.ti -1c
+.RI "\fBDirectory\fP * \fBm_root_directory\fP = nullptr"
+.br
+.RI "The fist directory in the file system (not be confused with the system root) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Wraps a TAR archive as a filesystem\&. 
+.PP
+Definition at line \fB97\fP of file \fBtar\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "TARFileSystem::TARFileSystem (void * address)"
+
+.PP
+Definition at line \fB147\fP of file \fBtar\&.cpp\fP\&..PP
+.nf
+148 : m_volume((uint64_t*)address)
+149 {
+150     m_root_directory = new TARDirectory(&m_volume, "/");
+151     m_root_directory\->read_from_disk();
+152 
+153 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

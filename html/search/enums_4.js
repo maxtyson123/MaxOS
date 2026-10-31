@@ -1,12 +1,7 @@
 var searchData=
 [
-  ['elfclass_0',['ELFClass',['../elf_8h.html#af75820d94614aadd083f4b34ede3c6de',1,'MaxOS::processes']]],
-  ['elfdata_1',['ELFData',['../elf_8h.html#aa1ab258f98bbc202abb1ded2c90fd79a',1,'MaxOS::processes']]],
-  ['elfidentification_2',['ELFIdentification',['../elf_8h.html#a93bce999d55435c1cefce4c0fbed2229',1,'MaxOS::processes']]],
-  ['elfmachine_3',['ELFMachine',['../elf_8h.html#a68156e7f3c9e428a1bf81cac33cf53ae',1,'MaxOS::processes']]],
-  ['elfprogramflags_4',['ELFProgramFlags',['../elf_8h.html#a905456c16b7f6955cda5bd32cc77efa2',1,'MaxOS::processes']]],
-  ['elfprogramtype_5',['ELFProgramType',['../elf_8h.html#a83adeee8bf15896cdc5e5e422b502367',1,'MaxOS::processes']]],
-  ['elfsectiontype_6',['ELFSectionType',['../elf_8h.html#a6f9ae701d0dd29e5c4d8d567ce812845',1,'MaxOS::processes']]],
-  ['elftype_7',['ELFType',['../elf_8h.html#a5ef699c81be4883849e492207cebf722',1,'MaxOS::processes']]],
-  ['elfversion_8',['ELFVersion',['../elf_8h.html#acd12ef8df8d99f540800283fd134c483',1,'MaxOS::processes']]]
+  ['deliverymode_0',['DeliveryMode',['../apic_8h.html#ae5961c617d1c9a84a7e86fbec0f59f44',1,'MaxOS::hardwarecommunication']]],
+  ['descriptorflags_1',['DescriptorFlags',['../gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0',1,'MaxOS::system']]],
+  ['directoryentryattributes_2',['DirectoryEntryAttributes',['../fat32_8h.html#ab609f6d417375ea21c80f2622a5361f5',1,'FileServer::format']]],
+  ['directoryentrytype_3',['DirectoryEntryType',['../fat32_8h.html#a830bef5dd3d9b8971f4910c73f2d91a6',1,'FileServer::format']]]
 ];

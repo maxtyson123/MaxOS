@@ -1,0 +1,217 @@
+.TH "FileServer::vfs::VFSResourceServer" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::vfs::VFSResourceServer \- A resource server for both Files & Directories\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vfsresource\&.h>\fP
+.PP
+Inherits \fBMaxOS::KPI::ResourceServer\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVFSResourceServer\fP (\fBVirtualFileSystem\fP *vfs)"
+.br
+.RI "Construct a new VFS Resource Registry object\&. "
+.ti -1c
+.RI "\fBResource\fP * \fBget_resource\fP (const string &name) final"
+.br
+.ti -1c
+.RI "\fBResource\fP * \fBcreate_resource\fP (const string &name, size_t flags, uintptr_t data) final"
+.br
+.ti -1c
+.RI "void \fBchange_working_dir\fP (uint64_t pid, string dir)"
+.br
+.RI "Change the directory in which a process's file operations are relative to\&. "
+.ti -1c
+.RI "string \fBprocess_relative_path\fP (uint64_t pid, const string &relative_path)"
+.br
+.RI "Get the path from root relative to the processes working directory\&. If the process has not set its working directory it will be assumed root\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::KPI::ResourceServer\fP
+.in +1c
+.ti -1c
+.RI "\fBResourceServer\fP (\fBstring\fP server_name, size_t resource_id)"
+.br
+.ti -1c
+.RI "bool \fBqueue_empty\fP ()"
+.br
+.RI "Check if there are any messages waiting to be handled in the message ring buffer\&. "
+.ti -1c
+.RI "\fBservice_resource_message_t\fP * \fBpeek_front\fP ()"
+.br
+.RI "Get the message at the front of the queue\&. "
+.ti -1c
+.RI "\fBservice_resource_message_t\fP * \fBdequeue_front\fP ()"
+.br
+.RI "Consume the message at the front of the queue\&. "
+.ti -1c
+.RI "void \fBadvance_queue\fP ()"
+.br
+.RI "Move the start of the queue to the next item\&. "
+.ti -1c
+.RI "void \fBsend_response\fP (\fBservice_resource_message_t\fP *message, int64_t response)"
+.br
+.ti -1c
+.RI "\fBservice_resource_message_t\fP * \fBcurrent_processed_message\fP ()"
+.br
+.RI "Get a reference to the message currently being processed by the resource server\&. "
+.ti -1c
+.RI "void \fBprocess_message\fP (\fBservice_resource_message_t\fP *message)"
+.br
+.RI "Extract the data from a message and pass it to the relevant resource function\&. "
+.ti -1c
+.RI "bool \fBprocess_next\fP ()"
+.br
+.ti -1c
+.RI "void \fBloop\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A resource server for both Files & Directories\&. 
+.PP
+Definition at line \fB70\fP of file \fBvfsresource\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "VFSResourceServer::VFSResourceServer (\fBVirtualFileSystem\fP * vfs)\fC [explicit]\fP"
+
+.PP
+Construct a new VFS Resource Registry object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvfs\fP The virtual file system to use 
+.RE
+.PP
+
+.PP
+Definition at line \fB341\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+342 : ResourceServer("vfs", (size_t)ResourceType::FILESYSTEM),
+343   m_vfs(vfs)
+344 {
+345 
+346 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void VFSResourceServer::change_working_dir (uint64_t pid, string dir)"
+
+.PP
+Change the directory in which a process's file operations are relative to\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The process of which the working directory needs to change 
+.br
+\fIdir\fP The working directory for the process 
+.RE
+.PP
+
+.PP
+Definition at line \fB422\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+422                                                                    {
+423 
+424     // Insert also updates
+425     m_working_directories\&.insert(pid, process_relative_path(pid, dir));
+426 
+427 }
+.fi
+
+.PP
+References \fBMaxOS::common::Map< Key, Value >::insert()\fP, and \fBprocess_relative_path()\fP\&.
+.SS "\fBResource\fP * VFSResourceServer::create_resource (const string & name, size_t flags, uintptr_t data)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Reimplemented from \fBMaxOS::KPI::ResourceServer\fP\&.
+.PP
+Definition at line \fB404\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+404                                                                                              {
+405 
+406     // Get the path from root
+407     string path = process_relative_path(current_processed_message()\->sending_pid, name);
+408 
+409     // Open the resource
+410     if(Path::is_file(path))
+411         return open_as_resource(path, m_vfs\->create_file(path));
+412 
+413     return open_as_resource(path, m_vfs\->create_directory(path));
+414 }
+.fi
+
+.SS "\fBResource\fP * VFSResourceServer::get_resource (const string & name)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Reimplemented from \fBMaxOS::KPI::ResourceServer\fP\&.
+.PP
+Definition at line \fB391\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+391                                                             {
+392 
+393     // Get the path from root
+394     string path = process_relative_path(current_processed_message()\->sending_pid, name);
+395 
+396     // Open the resource
+397     if(Path::is_file(path))
+398         return open_as_resource(path, m_vfs\->open_file(path));
+399 
+400 
+401     return open_as_resource(path, m_vfs\->open_directory(path));
+402 }
+.fi
+
+.SS "string VFSResourceServer::process_relative_path (uint64_t pid, const string & relative_path)"
+
+.PP
+Get the path from root relative to the processes working directory\&. If the process has not set its working directory it will be assumed root\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The process to use the working directory for 
+.br
+\fIrelative_path\fP The path to compute relative to the process\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The process working directory + the path\&. If the path is already from root it will be returned the same 
+.RE
+.PP
+
+.PP
+Definition at line \fB436\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+436                                                                                          {
+437 
+438     // Simplify the path
+439     string path = Path::absolute_path(relative_path);
+440     string working_path = "/";
+441 
+442     // Try get the working directory
+443     auto working_directory = m_working_directories\&.find(pid);
+444     if (working_directory != m_working_directories\&.end())
+445         working_path = working_directory\->second;
+446 
+447     // Combine
+448     return Path::join_path(working_path, path);
+449 }
+.fi
+
+.PP
+References \fBLibFS::Path::absolute_path()\fP, \fBMaxOS::common::Map< Key, Value >::end()\fP, \fBMaxOS::common::Map< Key, Value >::find()\fP, \fBLibFS::Path::join_path()\fP, and \fBMaxOS::common::Pair< First, Second >::second\fP\&.
+.PP
+Referenced by \fBchange_working_dir()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

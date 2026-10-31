@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::SharedMemory" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::SharedMemory" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,12 +10,12 @@ MaxOS::processes::SharedMemory \- A block memory that is mapped into multiple pr
 .PP
 \fC#include <ipc\&.h>\fP
 .PP
-Inherits resources::Resource\&.
+Inherits \fBMaxOS::KPI::Resource\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBSharedMemory\fP (const string &name, size_t \fBsize\fP, \fBresources::resource_type_t\fP type)"
+.RI "\fBSharedMemory\fP (const \fBstring\fP &\fBname\fP, size_t \fBsize\fP, \fBresources::resource_type_t\fP \fBtype\fP)"
 .br
 .RI "Creates a new shared memory block\&. "
 .ti -1c
@@ -39,6 +39,26 @@ Inherits resources::Resource\&.
 .br
 .RI "Gets the size of the shared memory block\&. "
 .in -1c
+
+Public Member Functions inherited from \fBMaxOS::KPI::Resource\fP
+.in +1c
+.ti -1c
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBResourceType\fP \fBtype\fP)"
+.br
+.RI "Constructs a new \fBResource\fP object\&. "
+.ti -1c
+.RI "\fBstring\fP \fBname\fP ()"
+.br
+.RI "Gets the name of this resource\&. "
+.ti -1c
+.RI "\fBResourceType\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of this resource\&. "
+.ti -1c
+.RI "virtual int \fBwrite\fP (const void *buffer, size_t size, size_t flags)"
+.br
+.RI "write a certain amount of bytes to a resource "
+.in -1c
 .SH "Detailed Description"
 .PP 
 A block memory that is mapped into multiple processes\&. 
@@ -46,7 +66,7 @@ A block memory that is mapped into multiple processes\&.
 Definition at line \fB45\fP of file \fBipc\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "SharedMemory::SharedMemory (const string & name, size_t size, \fBresources::resource_type_t\fP type)"
+.SS "SharedMemory::SharedMemory (const \fBstring\fP & name, size_t size, \fBresources::resource_type_t\fP type)"
 
 .PP
 Creates a new shared memory block\&. 
@@ -75,7 +95,7 @@ Definition at line \fB30\fP of file \fBipc\&.cpp\fP\&..PP
 References \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, and \fBsize()\fP\&.
 .SH "Member Function Documentation"
 .PP 
-.SS "void SharedMemory::close (size_t flags)\fC [final]\fP"
+.SS "void SharedMemory::close (size_t flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Frees the page containing the shared memory\&. 
@@ -86,6 +106,8 @@ Frees the page containing the shared memory\&.
 .RE
 .PP
 
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
 .PP
 Definition at line \fB99\fP of file \fBipc\&.cpp\fP\&..PP
 .nf
@@ -98,7 +120,7 @@ Definition at line \fB99\fP of file \fBipc\&.cpp\fP\&..PP
 
 .PP
 References \fBMaxOS::memory::PhysicalMemoryManager::free_area()\fP, and \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP\&.
-.SS "void SharedMemory::open (size_t flags)\fC [final]\fP"
+.SS "void SharedMemory::open (size_t flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Map the shared memory into the address space of the owning process\&. 
@@ -109,6 +131,8 @@ Map the shared memory into the address space of the owning process\&.
 .RE
 .PP
 
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
 .PP
 Definition at line \fB82\fP of file \fBipc\&.cpp\fP\&..PP
 .nf
@@ -126,7 +150,7 @@ Definition at line \fB82\fP of file \fBipc\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Process::pid()\fP, and \fBMaxOS::memory::BumpMemoryManager::vmm()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::common::Map< Key, Value >::end()\fP, \fBMaxOS::common::Map< Key, Value >::find()\fP, \fBMaxOS::common::Map< Key, Value >::insert()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Process::pid()\fP, and \fBMaxOS::memory::BumpMemoryManager::vmm()\fP\&.
 .SS "uintptr_t SharedMemory::physical_address () const"
 
 .PP
@@ -147,7 +171,7 @@ Definition at line \fB62\fP of file \fBipc\&.cpp\fP\&..PP
 65 }
 .fi
 
-.SS "int SharedMemory::read (void * buffer, size_t size, size_t flags)\fC [final]\fP"
+.SS "int SharedMemory::read (void * buffer, size_t size, size_t flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Get the address that the current process has this shared memory mapped to\&. 
@@ -168,6 +192,8 @@ The virtual address in the current process's address space or 0 if not found
 .PP
 
 .PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
+.PP
 Definition at line \fB47\fP of file \fBipc\&.cpp\fP\&..PP
 .nf
 47                                                               {
@@ -182,7 +208,7 @@ Definition at line \fB47\fP of file \fBipc\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::GlobalScheduler::current_process()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::common::Map< Key, Value >::end()\fP, \fBMaxOS::common::Map< Key, Value >::find()\fP, and \fBMaxOS::common::Pair< First, Second >::second\fP\&.
 .SS "size_t SharedMemory::size () const"
 
 .PP
@@ -208,4 +234,4 @@ Referenced by \fBSharedMemory()\fP\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

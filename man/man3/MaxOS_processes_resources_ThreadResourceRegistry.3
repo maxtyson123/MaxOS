@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::resources::ThreadResourceRegistry" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::resources::ThreadResourceRegistry" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,11 +15,11 @@ Inherits \fBMaxOS::processes::resources::ResourceRegistry< ThreadResource >\fP\&
 
 .in +1c
 .ti -1c
-.RI "\fBResource\fP * \fBget_resource\fP (const string &name) final"
+.RI "\fBResource\fP * \fBget_resource\fP (const \fBstring\fP &name) final"
 .br
 .RI "Gets a resource from the registry by name\&. "
 .ti -1c
-.RI "\fBResource\fP * \fBcreate_resource\fP (const string &name, size_t flags, uintptr_t data) final"
+.RI "\fBResource\fP * \fBcreate_resource\fP (const \fBstring\fP &name, size_t flags, uintptr_t data) final"
 .br
 .RI "td "
 .in -1c
@@ -61,15 +61,15 @@ Public Member Functions inherited from \fBMaxOS::processes::resources::BaseResou
 Protected Attributes inherited from \fBMaxOS::processes::resources::BaseResourceRegistry\fP
 .in +1c
 .ti -1c
-.RI "common::Map< string, \fBResource\fP * > \fBm_resources\fP"
+.RI "\fBcommon::Map\fP< \fBstring\fP, \fBResource\fP * > \fBm_resources\fP"
 .br
 .RI "The map of resource names to resource instances\&. "
 .ti -1c
-.RI "common::Map< string, uint64_t > \fBm_resource_uses\fP"
+.RI "\fBcommon::Map\fP< \fBstring\fP, uint64_t > \fBm_resource_uses\fP"
 .br
 .RI "The map of resource names to how many processes are using them\&. "
 .ti -1c
-.RI "common::Spinlock \fBm_lock\fP"
+.RI "\fBcommon::Spinlock\fP \fBm_lock\fP"
 .br
 .RI "The lock to make the registry threadsafe\&. "
 .ti -1c
@@ -97,7 +97,7 @@ Definition at line \fB302\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 
 .SH "Member Function Documentation"
 .PP 
-.SS "\fBResource\fP * ThreadResourceRegistry::create_resource (const string & name, size_t flags, uintptr_t data)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBResource\fP * ThreadResourceRegistry::create_resource (const \fBstring\fP & name, size_t flags, uintptr_t data)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 td 
@@ -133,7 +133,7 @@ Definition at line \fB316\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 
 .PP
 References \fBMaxOS::processes::resources::ResourceRegistry< Type >::create_resource()\fP\&.
-.SS "\fBResource\fP * ThreadResourceRegistry::get_resource (const string & name)\fC [final]\fP, \fC [virtual]\fP"
+.SS "\fBResource\fP * ThreadResourceRegistry::get_resource (const \fBstring\fP & name)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Gets a resource from the registry by name\&. 
@@ -180,8 +180,8 @@ Definition at line \fB321\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::processes::GlobalScheduler::get_thread()\fP, and \fBMaxOS::processes::resources::BaseResourceRegistry::register_resource()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_thread()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::processes::GlobalScheduler::get_thread()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::register_resource()\fP, and \fBMaxOS::KPI::processes::tid()\fP\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

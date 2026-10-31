@@ -1,0 +1,1017 @@
+.TH "MaxOS::common::Vector< Type >" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::Vector< Type > \- Dynamically stores an array of elements\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vector\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef Type * \fBiterator\fP"
+.br
+.RI "The iterator type for the \fBVector\fP\&. "
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVector\fP ()"
+.br
+.RI "______________________________________Implementation__________________________________________________ "
+.ti -1c
+.RI "\fBVector\fP (int \fBsize\fP, Type element)"
+.br
+.RI "Constructor for \fBVector\fP\&. "
+.ti -1c
+.RI "\fBVector\fP (const \fBVector\fP< Type > &other)"
+.br
+.RI "Copy constructor for \fBVector\fP\&. "
+.ti -1c
+.RI "\fBVector\fP (\fBVector\fP< Type > &&other)"
+.br
+.RI "Move constructor for \fBVector\fP\&. "
+.ti -1c
+.RI "\fBVector\fP (std::initializer_list< Type > list)"
+.br
+.RI "Initialiser list constructor\&. "
+.ti -1c
+.RI "\fB~Vector\fP ()"
+.br
+.RI "Destructor for \fBVector\fP, de-allocates the array\&. "
+.ti -1c
+.RI "Type & \fBoperator[]\fP (uint32_t index) const"
+.br
+.RI "Overloads the [] operator to return the element at the index\&. "
+.ti -1c
+.RI "\fBVector\fP< Type > & \fBoperator=\fP (const \fBVector\fP< Type > &other)"
+.br
+.RI "Assignment by copy, data is copied into a new buffer stored in this vector\&. "
+.ti -1c
+.RI "\fBVector\fP< Type > & \fBoperator=\fP (\fBVector\fP< Type > &&other)"
+.br
+.RI "Assignment by move, data is moved into the buffer stored in this vector and the other vector is cleared\&. "
+.ti -1c
+.RI "bool \fBempty\fP () const"
+.br
+.RI "Checks if the \fBVector\fP is empty\&. "
+.ti -1c
+.RI "uint32_t \fBsize\fP () const"
+.br
+.RI "Returns the number of elements in the \fBVector\fP\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBbegin\fP () const"
+.br
+.RI "Returns the first element of the \fBVector\fP\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBend\fP () const"
+.br
+.RI "Returns the last element of the \fBVector\fP\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBfind\fP (Type) const"
+.br
+.RI "Finds an element in the \fBVector\fP and returns the iterator of the element\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBpush_back\fP (Type)"
+.br
+.RI "Adds an element to the end of the vector and returns the iterator of the element\&. "
+.ti -1c
+.RI "Type \fBpop_back\fP ()"
+.br
+.RI "Removes the last element from the \fBVector\fP\&. "
+.ti -1c
+.RI "\fBiterator\fP \fBpush_front\fP (Type)"
+.br
+.RI "Adds an element to the front of the \fBVector\fP and returns the iterator of the element\&. "
+.ti -1c
+.RI "Type \fBpop_front\fP ()"
+.br
+.RI "Removes the m_first_memory_chunk element from the \fBVector\fP\&. "
+.ti -1c
+.RI "void \fBerase\fP (Type)"
+.br
+.RI "Removes all elements from the \fBVector\fP that are equal to the element\&. "
+.ti -1c
+.RI "void \fBerase\fP (typename \fBVector\fP< Type >\fB::iterator\fP position)"
+.br
+.RI "Removes the element at the m_position\&. "
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.RI "Removes all elements from the \fBVector\fP\&. "
+.ti -1c
+.RI "void \fBreserve\fP (size_t amount)"
+.br
+.RI "Reserves space in the \fBVector\fP for a certain amount of elements\&. "
+.ti -1c
+.RI "void \fBincrease_size\fP ()"
+.br
+.RI "Increases the size of the \fBVector\fP by doubling the capacity\&. "
+.ti -1c
+.RI "void \fBiterate\fP (\fBVectorIterationHandler\fP< Type > *)"
+.br
+.RI "Iterates over the \fBVector\fP and calls the OnRead function of the handler for each element\&. "
+.ti -1c
+.RI "void \fBiterate\fP (void callback(Type &))"
+.br
+.RI "Iterates over the \fBVector\fP and calls the callback function for each element\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "Type * \fBm_elements\fP"
+.br
+.RI "The array of elements\&. "
+.ti -1c
+.RI "uint32_t \fBm_size\fP { 0 }"
+.br
+.RI "How many elements are currently stored\&. "
+.ti -1c
+.RI "uint32_t \fBm_capacity\fP { 1 }"
+.br
+.RI "How many elements can be stored without resizing\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Type>
+.br
+class MaxOS::common::Vector< Type >"Dynamically stores an array of elements\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB40\fP of file \fBvector\&.h\fP\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<class Type > typedef Type* \fBMaxOS::common::Vector\fP< Type >::iterator"
+
+.PP
+The iterator type for the \fBVector\fP\&. 
+.PP
+Definition at line \fB47\fP of file \fBvector\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Type > \fBMaxOS::common::Vector\fP< Type >::Vector ()"
+
+.PP
+______________________________________Implementation__________________________________________________ Constructor for \fBVector\fP
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB90\fP of file \fBvector\&.h\fP\&..PP
+.nf
+90                                               {
+91 
+92         // Allocate space for the array
+93         m_elements = new Type[m_capacity];
+94 
+95     }
+.fi
+
+.SS "template<class Type > \fBMaxOS::common::Vector\fP< Type >::Vector (int size, Type element)"
+
+.PP
+Constructor for \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP Size of the \fBVector\fP 
+.br
+\fIelement\fP Element to fill the \fBVector\fP with 
+.RE
+.PP
+
+.PP
+Definition at line \fB104\fP of file \fBvector\&.h\fP\&..PP
+.nf
+104                                                                     {
+105 
+106         // Allocate space for the array
+107         m_elements = new Type[size];
+108         m_capacity = size > 0 ? size : 1;
+109         m_size = 0;
+110 
+111         // Push all the elements to the Vector
+112         for(int i = 0; i < size; ++i)
+113             push_back(element);
+114     }
+.fi
+
+.SS "template<class Type > \fBMaxOS::common::Vector\fP< Type >::Vector (const \fBVector\fP< Type > & other)"
+
+.PP
+Copy constructor for \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data to be stored 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The vector to copy from 
+.RE
+.PP
+
+.PP
+Definition at line \fB122\fP of file \fBvector\&.h\fP\&..PP
+.nf
+123             : m_size(other\&.m_size),
+124             m_capacity(other\&.m_capacity) {
+125         // Copy each element into a new array
+126         m_elements = new Type[m_capacity];
+127         for(uint32_t i = 0; i < m_size; ++i)
+128             m_elements[i] = other\&.m_elements[i];
+129     }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::m_capacity\fP, \fBMaxOS::common::Vector< Type >::m_elements\fP, and \fBMaxOS::common::Vector< Type >::m_size\fP\&.
+.SS "template<class Type > \fBMaxOS::common::Vector\fP< Type >::Vector (\fBVector\fP< Type > && other)"
+
+.PP
+Move constructor for \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data to be stored 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The vector to copy from 
+.RE
+.PP
+
+.PP
+Definition at line \fB137\fP of file \fBvector\&.h\fP\&..PP
+.nf
+138             : m_elements(other\&.m_elements),
+139             m_size(other\&.m_size),
+140             m_capacity(other\&.m_capacity) {
+141 
+142         // Clear the other Vector
+143         other\&.m_elements = nullptr;
+144         other\&.m_size = 0;
+145         other\&.m_capacity = 0;
+146 
+147     }
+.fi
+
+.SS "template<class Type > \fBMaxOS::common::Vector\fP< Type >::Vector (std::initializer_list< Type > list)"
+
+.PP
+Initialiser list constructor\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlist\fP The list of elements 
+.RE
+.PP
+
+.PP
+Definition at line \fB154\fP of file \fBvector\&.h\fP\&..PP
+.nf
+154                                                                             {
+155 
+156         // Allocate space for the list
+157         m_size = list\&.size();
+158         m_capacity = m_size > 0 ? m_size : 1;
+159         m_elements = new Type[m_capacity];
+160 
+161         // Copy the elements
+162         for (int i = 0; i < m_size; ++i)
+163             m_elements[i] = list\&.begin()[i];
+164     }
+.fi
+
+.SS "template<class Type > \fBMaxOS::common::Vector\fP< Type >::~\fBVector\fP ()"
+
+.PP
+Destructor for \fBVector\fP, de-allocates the array\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type data stored in the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB171\fP of file \fBvector\&.h\fP\&..PP
+.nf
+171                                                {
+172 
+173         // De\-allocate the array
+174         delete[] m_elements;
+175 
+176     }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Type > \fBVector\fP< Type >\fB::iterator\fP \fBMaxOS::common::Vector\fP< Type >::begin () const"
+
+.PP
+Returns the first element of the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The first element of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB302\fP of file \fBvector\&.h\fP\&..PP
+.nf
+302                                                                                  {
+303         return &m_elements[0];
+304     }
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Map< Key, Value >::begin()\fP\&.
+.SS "template<class Type > void \fBMaxOS::common::Vector\fP< Type >::clear ()"
+
+.PP
+Removes all elements from the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB480\fP of file \fBvector\&.h\fP\&..PP
+.nf
+480                                                   {
+481         m_size = 0;
+482     }
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Map< Key, Value >::clear()\fP, and \fBFileServer::format::ext2::Ext2Directory::read_from_disk()\fP\&.
+.SS "template<class Type > bool \fBMaxOS::common::Vector\fP< Type >::empty () const"
+
+.PP
+Checks if the \fBVector\fP is empty\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the \fBVector\fP is empty, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB340\fP of file \fBvector\&.h\fP\&..PP
+.nf
+340                                                         {
+341         return begin() == end();
+342     }
+.fi
+
+.PP
+Referenced by \fBLibFS::Path::absolute_path()\fP, \fBMaxOS::common::Map< Key, Value >::empty()\fP, \fBFileServer::format::ext2::Ext2Volume::free_blocks()\fP, and \fBMaxOS::processes::BlockingLock::release()\fP\&.
+.SS "template<class Type > \fBVector\fP< Type >\fB::iterator\fP \fBMaxOS::common::Vector\fP< Type >::end () const"
+
+.PP
+Returns the last element of the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The last element of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB312\fP of file \fBvector\&.h\fP\&..PP
+.nf
+312                                                                                {
+313         return &m_elements[0] + m_size;
+314     }
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Map< Key, Value >::end()\fP, and \fBMaxOS::gui::Desktop::internal_invalidate()\fP\&.
+.SS "template<class Type > void \fBMaxOS::common::Vector\fP< Type >::erase (Type element)"
+
+.PP
+Removes all elements from the \fBVector\fP that are equal to the element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIelement\fP The element to remove 
+.RE
+.PP
+
+.PP
+Definition at line \fB434\fP of file \fBvector\&.h\fP\&..PP
+.nf
+434                                                               {
+435 
+436         // Search for the element
+437         int hits = 0;
+438         for(iterator i = begin(); i != end(); ++i) {
+439             // If it is the element we are looking for
+440             if(*i == element) {
+441                 ++hits;
+442             } else {
+443 
+444                 // If there are hits move the element to the left
+445                 if(hits > 0)
+446                     *(i \- hits) = *i;
+447             }
+448 
+449         }
+450 
+451         // Decrease the size of the Vector
+452         m_size \-= hits;
+453     }
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Map< Key, Value >::erase()\fP, and \fBMaxOS::common::Map< Key, Value >::erase()\fP\&.
+.SS "template<class Type > void \fBMaxOS::common::Vector\fP< Type >::erase (typename \fBVector\fP< Type >\fB::iterator\fP position)"
+
+.PP
+Removes the element at the m_position\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIposition\fP The m_position of the element to remove 
+.RE
+.PP
+
+.PP
+Definition at line \fB461\fP of file \fBvector\&.h\fP\&..PP
+.nf
+461                                                                                         {
+462 
+463         // If the m_position is not in the Vector
+464         if(position < begin() || position >= end())
+465             return;
+466 
+467         // Move all elements one index to the left
+468         for(++position; position != end(); ++position)
+469             *(position \- 1) = *position;
+470 
+471         // Decrease the size of the Vector
+472         \-\-m_size;
+473     }
+.fi
+
+.SS "template<class Type > \fBVector\fP< Type >\fB::iterator\fP \fBMaxOS::common::Vector\fP< Type >::find (Type element) const"
+
+.PP
+Finds an element in the \fBVector\fP and returns the iterator of the element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIelement\fP The element to find 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The iterator of the element or the end of the \fBVector\fP if the element is not found 
+.RE
+.PP
+
+.PP
+Definition at line \fB323\fP of file \fBvector\&.h\fP\&..PP
+.nf
+323                                                                                             {
+324 
+325         // Find the element
+326         for(iterator i = begin(); i != end(); ++i)
+327             if(*i == element)
+328                 return i;
+329 
+330         // The element must not be in the Vector
+331         return end();
+332     }
+.fi
+
+.SS "template<class Type > void \fBMaxOS::common::Vector\fP< Type >::increase_size ()"
+
+.PP
+Increases the size of the \fBVector\fP by doubling the capacity\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB183\fP of file \fBvector\&.h\fP\&..PP
+.nf
+183                                                           {
+184         reserve(m_capacity * 2);
+185     }
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Map< Key, Value >::increase_size()\fP\&.
+.SS "template<class Type > void \fBMaxOS::common::Vector\fP< Type >::iterate (\fBVectorIterationHandler\fP< Type > * vector_iteration_handler)"
+
+.PP
+Iterates over the \fBVector\fP and calls the OnRead function of the handler for each element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIvector_iteration_handler\fP The handler 
+.RE
+.PP
+
+.PP
+Definition at line \fB490\fP of file \fBvector\&.h\fP\&..PP
+.nf
+490                                                                                                           {
+491 
+492         // Call the OnRead function of the handler for each element
+493         for(auto& element : m_elements)
+494             vector_iteration_handler\->on_read(element);
+495 
+496         // Call the OnEndOfStream function of the handler
+497         vector_iteration_handler\->on_end_of_stream();
+498     }
+.fi
+
+.PP
+References \fBMaxOS::common::VectorIterationHandler< Type >::on_end_of_stream()\fP, and \fBMaxOS::common::VectorIterationHandler< Type >::on_read()\fP\&.
+.SS "template<class Type > void \fBMaxOS::common::Vector\fP< Type >::iterate (void  callbackType &)"
+
+.PP
+Iterates over the \fBVector\fP and calls the callback function for each element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIcallback\fP The callback function 
+.RE
+.PP
+
+.PP
+Definition at line \fB507\fP of file \fBvector\&.h\fP\&..PP
+.nf
+507                                                                         {
+508 
+509         // Call the callback function for each element
+510         for(auto& element : m_elements)
+511             callback(element);
+512     }
+.fi
+
+.SS "template<class Type > \fBVector\fP< Type > & \fBMaxOS::common::Vector\fP< Type >::operator= (const \fBVector\fP< Type > & other)"
+
+.PP
+Assignment by copy, data is copied into a new buffer stored in this vector\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The vector to copy from 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+This vector, with the copied elements 
+.RE
+.PP
+
+.PP
+Definition at line \fB240\fP of file \fBvector\&.h\fP\&..PP
+.nf
+240                                                                                          {
+241 
+242         // Setting to itself?
+243         if(this == &other)
+244             return *this;
+245 
+246         // Create a new buffer to store the elements
+247         delete[] m_elements;
+248         m_elements = new Type[other\&.m_capacity];
+249 
+250         // Copy data
+251         m_size = other\&.m_size;
+252         m_capacity = other\&.m_capacity;
+253         for(uint32_t i = 0; i < m_size; ++i)
+254             m_elements[i] = other\&.m_elements[i];
+255 
+256         return *this;
+257     }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::m_capacity\fP, \fBMaxOS::common::Vector< Type >::m_elements\fP, and \fBMaxOS::common::Vector< Type >::m_size\fP\&.
+.SS "template<class Type > \fBVector\fP< Type > & \fBMaxOS::common::Vector\fP< Type >::operator= (\fBVector\fP< Type > && other)"
+
+.PP
+Assignment by move, data is moved into the buffer stored in this vector and the other vector is cleared\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The vector to copy from 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+This vector, with the copied elements 
+.RE
+.PP
+
+.PP
+Definition at line \fB266\fP of file \fBvector\&.h\fP\&..PP
+.nf
+266                                                                                     {
+267 
+268         // Moving to itself?
+269         if(this == &other)
+270             return *this;
+271 
+272         // Move into this vector
+273         delete[] m_elements;
+274         m_elements = other\&.m_elements;
+275         m_size = other\&.m_size;
+276         m_capacity = other\&.m_capacity;
+277 
+278         // Remove from other vector
+279         other\&.m_elements = nullptr;
+280         other\&.m_size = 0;
+281         other\&.m_capacity = 0;
+282 
+283         return *this;
+284     }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::m_elements\fP\&.
+.SS "template<class Type > Type & \fBMaxOS::common::Vector\fP< Type >::operator[] (uint32_t index) const"
+
+.PP
+Overloads the [] operator to return the element at the index\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the element 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the element at the index or the end of the \fBVector\fP if the index is out of bounds 
+.RE
+.PP
+
+.PP
+Definition at line \fB222\fP of file \fBvector\&.h\fP\&..PP
+.nf
+222                                                                              {
+223 
+224         // If the index is in the Vector
+225         if(index < m_size)
+226             return m_elements[index];
+227 
+228         // Return the last element of the Vector
+229         return m_elements[m_size \- 1];
+230 
+231     }
+.fi
+
+.SS "template<class Type > Type \fBMaxOS::common::Vector\fP< Type >::pop_back ()"
+
+.PP
+Removes the last element from the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The element that was removed 
+.RE
+.PP
+
+.PP
+Definition at line \fB369\fP of file \fBvector\&.h\fP\&..PP
+.nf
+369                                                      {
+370 
+371         // Remove the last element from the Vector
+372         if(m_size > 0)
+373             \-\-m_size;
+374 
+375         return m_elements[m_size];
+376     }
+.fi
+
+.PP
+Referenced by \fBLibFS::Path::absolute_path()\fP, and \fBMaxOS::common::Map< Key, Value >::pop_back()\fP\&.
+.SS "template<class Type > Type \fBMaxOS::common::Vector\fP< Type >::pop_front ()"
+
+.PP
+Removes the m_first_memory_chunk element from the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The element that was removed, or a default constructed element if the \fBVector\fP is empty 
+.RE
+.PP
+
+.PP
+Definition at line \fB409\fP of file \fBvector\&.h\fP\&..PP
+.nf
+409                                                       {
+410 
+411         // Make sure the Vector is not empty
+412         if(m_size == 0)
+413             return Type();
+414 
+415         // Store the element to return
+416 
+417         Type element = m_elements[0];
+418 
+419         // Move all elements one index to the left
+420         for(uint32_t i = 0; i < m_size \- 1; ++i)
+421             m_elements[i] = m_elements[i + 1];
+422 
+423         // Decrease the size of the Vector
+424         \-\-m_size;
+425         return element;
+426     }
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Map< Key, Value >::pop_front()\fP, and \fBMaxOS::processes::BlockingLock::release()\fP\&.
+.SS "template<class Type > \fBVector\fP< Type >\fB::iterator\fP \fBMaxOS::common::Vector\fP< Type >::push_back (Type element)"
+
+.PP
+Adds an element to the end of the vector and returns the iterator of the element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIelement\fP The element to add 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The iterator of the element, if the \fBVector\fP is full it returns the end of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB352\fP of file \fBvector\&.h\fP\&..PP
+.nf
+352                                                                                            {
+353 
+354         // Check if we need to allocate more space for the array
+355         if(m_size == m_capacity)
+356             increase_size();
+357 
+358         // Add the element to the Vector and return the iterator of the element
+359         m_elements[m_size++] = element;
+360         return end() \- 1;
+361     }
+.fi
+
+.PP
+Referenced by \fBLibFS::Path::absolute_path()\fP, \fBMaxOS::processes::BlockingLock::acquire()\fP, \fBFileServer::vfs::VirtualFileSystem::delete_directory()\fP, \fBFileServer::format::ext2::InodeHandler::InodeHandler()\fP, \fBMaxOS::common::Map< Key, Value >::insert()\fP, \fBMaxOS::gui::Desktop::internal_invalidate()\fP, \fBMaxOS::common::Map< Key, Value >::operator[]()\fP, \fBMaxOS::common::Map< Key, Value >::push_back()\fP, \fBMaxOS::String::split()\fP, \fBMaxOS::common::Rectangle< Type >::subtract()\fP, and \fBMaxOS::processes::resources::ResourceManager::~ResourceManager()\fP\&.
+.SS "template<class Type > \fBVector\fP< Type >\fB::iterator\fP \fBMaxOS::common::Vector\fP< Type >::push_front (Type element)"
+
+.PP
+Adds an element to the front of the \fBVector\fP and returns the iterator of the element\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIelement\fP The element to add 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The iterator of the element, if the \fBVector\fP is full it returns the end of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB385\fP of file \fBvector\&.h\fP\&..PP
+.nf
+385                                                                                             {
+386 
+387         // Check if we need to allocate more space for the array
+388         if(m_size == m_capacity)
+389             increase_size();
+390 
+391         // Move all elements one index to the right
+392         for(iterator i = end(); i > begin(); \-\-i)
+393             *i = *(i \- 1);
+394 
+395         // Add the element to the front of the Vector
+396         m_elements[0] = element;
+397         ++m_size;
+398 
+399         // Return the iterator of the element
+400         return begin();
+401     }
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Map< Key, Value >::push_front()\fP\&.
+.SS "template<class Type > void \fBMaxOS::common::Vector\fP< Type >::reserve (size_t amount)"
+
+.PP
+Reserves space in the \fBVector\fP for a certain amount of elements\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIamount\fP The amount of elements to reserve space for 
+.RE
+.PP
+
+.PP
+Definition at line \fB193\fP of file \fBvector\&.h\fP\&..PP
+.nf
+193                                                                  {
+194 
+195 
+196         // Increase the capacity of the Vector
+197         if(m_capacity < amount)
+198             m_capacity = amount;
+199 
+200         // Allocate more space for the array
+201         Type* new_elements = new Type[amount];
+202 
+203         // Copy the elements to the new array
+204         for(uint32_t i = 0; i < m_size; ++i)
+205             new_elements[i] = m_elements[i];
+206 
+207         // De\-allocate the old array
+208         delete[] m_elements;
+209 
+210         // Set the new array
+211         m_elements = new_elements;
+212     }
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Map< Key, Value >::reserve()\fP\&.
+.SS "template<class Type > uint32_t \fBMaxOS::common::Vector\fP< Type >::size () const"
+
+.PP
+Returns the number of elements in the \fBVector\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP Type of the \fBVector\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The size of the \fBVector\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB292\fP of file \fBvector\&.h\fP\&..PP
+.nf
+292                                                            {
+293         return m_size;
+294     }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::delete_directory()\fP, \fBMaxOS::common::Map< Key, Value >::size()\fP, and \fBMaxOS::common::JSONNode::to_string()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class Type > uint32_t \fBMaxOS::common::Vector\fP< Type >::m_capacity { 1 }\fC [protected]\fP"
+
+.PP
+How many elements can be stored without resizing\&. 
+.PP
+Definition at line \fB44\fP of file \fBvector\&.h\fP\&..PP
+.nf
+44 { 1 };          
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Vector< Type >::operator=()\fP, and \fBMaxOS::common::Vector< Type >::Vector()\fP\&.
+.SS "template<class Type > Type* \fBMaxOS::common::Vector\fP< Type >::m_elements\fC [protected]\fP"
+
+.PP
+The array of elements\&. 
+.PP
+Definition at line \fB42\fP of file \fBvector\&.h\fP\&.
+.PP
+Referenced by \fBMaxOS::common::Vector< Type >::operator=()\fP, \fBMaxOS::common::Vector< Type >::operator=()\fP, and \fBMaxOS::common::Vector< Type >::Vector()\fP\&.
+.SS "template<class Type > uint32_t \fBMaxOS::common::Vector\fP< Type >::m_size { 0 }\fC [protected]\fP"
+
+.PP
+How many elements are currently stored\&. 
+.PP
+Definition at line \fB43\fP of file \fBvector\&.h\fP\&..PP
+.nf
+43 { 0 };              
+.fi
+
+.PP
+Referenced by \fBMaxOS::common::Vector< Type >::operator=()\fP, and \fBMaxOS::common::Vector< Type >::Vector()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

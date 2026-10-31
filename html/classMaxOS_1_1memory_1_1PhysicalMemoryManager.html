@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Max OS: MaxOS::memory::PhysicalMemoryManager Class Reference</title>
+<title>MaxOS: MaxOS::memory::PhysicalMemoryManager Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,7 +36,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Max OS<span id="projectnumber">&#160;0.3</span>
+   <div id="projectname">MaxOS<span id="projectnumber">&#160;0.3</span>
    </div>
   </td>
  </tr>
@@ -236,7 +236,7 @@ Static Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Manages the physical memory of the system such as what pages are allocated/free and mapping of virtual to physical addresses. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd>Global paging so dont have map in every process </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000037">Todo:</a></b></dt><dd>Global paging so dont have map in every process </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00107">107</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -286,7 +286,7 @@ Static Public Attributes</h2></td></tr>
 <div class="line"><span class="lineno">   42</span> </div>
 <div class="line"><span class="lineno">   43</span>    <span class="comment">// Set up the current manager</span></div>
 <div class="line"><span class="lineno">   44</span>    <a class="code hl_function" href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a08f214065a06234772cdd1737253131b">unmap_lower_kernel</a>();</div>
-<div class="line"><span class="lineno">   45</span>    m_lock.unlock();</div>
+<div class="line"><span class="lineno">   45</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">unlock</a>();</div>
 <div class="line"><span class="lineno">   46</span>    <a class="code hl_variable" href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#aac616421554f724ac8810d5bff76c3f1">s_current_manager</a> = <span class="keyword">this</span>;</div>
 <div class="line"><span class="lineno">   47</span>    m_nx_allowed = <a class="code hl_function" href="classMaxOS_1_1system_1_1CPU.html#afbbc3348fa73228ef924e54a5dffcd5e">CPU::check_nx</a>();</div>
 <div class="line"><span class="lineno">   48</span> </div>
@@ -323,6 +323,7 @@ Static Public Attributes</h2></td></tr>
 <div class="line"><span class="lineno">   79</span>}</div>
 <div class="ttc" id="aclassMaxOS_1_1Logger_html_a44040e7f56db620657286c3dc2b230fb"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb">MaxOS::Logger::DEBUG</a></div><div class="ttdeci">static LogRecord DEBUG()</div><div class="ttdoc">Gets the active logger for debug logs.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00204">logger.cpp:204</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1Logger_html_a6bcb1b11271a35f8bff3d7e20fec2e4f"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a6bcb1b11271a35f8bff3d7e20fec2e4f">MaxOS::Logger::INFO</a></div><div class="ttdeci">static LogRecord INFO()</div><div class="ttdoc">Gets the active logger for info logs.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00195">logger.cpp:195</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1Spinlock_html_a7c26334ccfa43ef932ef3c73e2c11492"><div class="ttname"><a href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">MaxOS::common::Spinlock::unlock</a></div><div class="ttdeci">void unlock()</div><div class="ttdoc">Unlock the spinlock.</div><div class="ttdef"><b>Definition</b> <a href="spinlock_8cpp_source.html#l00028">spinlock.cpp:28</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1memory_1_1PhysicalMemoryManager_html_a08f214065a06234772cdd1737253131b"><div class="ttname"><a href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a08f214065a06234772cdd1737253131b">MaxOS::memory::PhysicalMemoryManager::unmap_lower_kernel</a></div><div class="ttdeci">static void unmap_lower_kernel()</div><div class="ttdoc">Unmaps the kernel physical memory from the lower half that was set up during the kernel boot.</div><div class="ttdef"><b>Definition</b> <a href="physical_8cpp_source.html#l00969">physical.cpp:969</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1memory_1_1PhysicalMemoryManager_html_a732ea9bd93397bbddd596bee127ac8f3"><div class="ttname"><a href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a732ea9bd93397bbddd596bee127ac8f3">MaxOS::memory::PhysicalMemoryManager::map</a></div><div class="ttdeci">virtual_address_t * map(virtual_address_t *virtual_address, size_t flags)</div><div class="ttdoc">Allocates a physical address to a virtual address.</div><div class="ttdef"><b>Definition</b> <a href="physical_8cpp_source.html#l00535">physical.cpp:535</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1memory_1_1PhysicalMemoryManager_html_aac616421554f724ac8810d5bff76c3f1"><div class="ttname"><a href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#aac616421554f724ac8810d5bff76c3f1">MaxOS::memory::PhysicalMemoryManager::s_current_manager</a></div><div class="ttdeci">static PhysicalMemoryManager * s_current_manager</div><div class="ttdoc">The current physical memory manager in use.</div><div class="ttdef"><b>Definition</b> <a href="physical_8h_source.html#l00183">physical.h:183</a></div></div>
@@ -350,7 +351,7 @@ Static Public Attributes</h2></td></tr>
 <div class="ttc" id="astructmultiboot__tag__mmap_html_a20c4427afce786340b01ded5ed0532a2"><div class="ttname"><a href="structmultiboot__tag__mmap.html#a20c4427afce786340b01ded5ed0532a2">multiboot_tag_mmap::entries</a></div><div class="ttdeci">struct multiboot_mmap_entry entries[0]</div><div class="ttdoc">The memory map entries.</div><div class="ttdef"><b>Definition</b> <a href="multiboot_8h_source.html#l00293">multiboot.h:293</a></div></div>
 <div class="ttc" id="astructmultiboot__tag__mmap_html_aa5532c68672471f9da8ba18a8a16857d"><div class="ttname"><a href="structmultiboot__tag__mmap.html#aa5532c68672471f9da8ba18a8a16857d">multiboot_tag_mmap::entry_size</a></div><div class="ttdeci">multiboot_uint32_t entry_size</div><div class="ttdoc">The size of each entry.</div><div class="ttdef"><b>Definition</b> <a href="multiboot_8h_source.html#l00291">multiboot.h:291</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="physical_8cpp.html#a963a9b86d21e2b5cfdeb947f25826c13">_kernel_end</a>, <a class="el" href="physical_8cpp.html#a5d533ddf4ea36ed94c6a20a7281cb89f">_kernel_physical_end</a>, <a class="el" href="physical_8cpp.html#aea8f7989c93a7869e750d1bbf6c3cf10">_kernel_size</a>, <a class="el" href="multiboot_8h_source.html#l00223">multiboot_mmap_entry::addr</a>, <a class="el" href="physical_8cpp_source.html#l00167">align_up_to_page()</a>, <a class="el" href="cpu_8cpp_source.html#l00642">MaxOS::system::CPU::check_nx()</a>, <a class="el" href="logger_8cpp_source.html#l00204">MaxOS::Logger::DEBUG()</a>, <a class="el" href="multiboot_8h_source.html#l00293">multiboot_tag_mmap::entries</a>, <a class="el" href="multiboot_8h_source.html#l00291">multiboot_tag_mmap::entry_size</a>, <a class="el" href="physical_8h_source.html#l00099">MaxOS::memory::HIGHER_HALF_DIRECT_MAP</a>, <a class="el" href="logger_8cpp_source.html#l00195">MaxOS::Logger::INFO()</a>, <a class="el" href="multiboot_8h_source.html#l00224">multiboot_mmap_entry::len</a>, <a class="el" href="physical_8cpp_source.html#l00535">map()</a>, <a class="el" href="physical_8cpp_source.html#l00753">memory_used()</a>, <a class="el" href="multiboot_8cpp_source.html#l00129">MaxOS::system::Multiboot::mmap()</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00044">MaxOS::memory::PRESENT</a>, <a class="el" href="physical_8cpp_source.html#l00089">reserve_kernel_regions()</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, <a class="el" href="physical_8h_source.html#l00183">s_current_manager</a>, <a class="el" href="multiboot_8h_source.html#l00290">multiboot_tag_mmap::size</a>, <a class="el" href="physical_8cpp_source.html#l00969">unmap_lower_kernel()</a>, and <a class="el" href="physical_8h_source.html#l00045">MaxOS::memory::WRITE</a>.</p>
+<p class="reference">References <a class="el" href="physical_8cpp.html#a963a9b86d21e2b5cfdeb947f25826c13">_kernel_end</a>, <a class="el" href="physical_8cpp.html#a5d533ddf4ea36ed94c6a20a7281cb89f">_kernel_physical_end</a>, <a class="el" href="physical_8cpp.html#aea8f7989c93a7869e750d1bbf6c3cf10">_kernel_size</a>, <a class="el" href="multiboot_8h_source.html#l00223">multiboot_mmap_entry::addr</a>, <a class="el" href="physical_8cpp_source.html#l00167">align_up_to_page()</a>, <a class="el" href="cpu_8cpp_source.html#l00642">MaxOS::system::CPU::check_nx()</a>, <a class="el" href="logger_8cpp_source.html#l00204">MaxOS::Logger::DEBUG()</a>, <a class="el" href="multiboot_8h_source.html#l00293">multiboot_tag_mmap::entries</a>, <a class="el" href="multiboot_8h_source.html#l00291">multiboot_tag_mmap::entry_size</a>, <a class="el" href="physical_8h_source.html#l00099">MaxOS::memory::HIGHER_HALF_DIRECT_MAP</a>, <a class="el" href="logger_8cpp_source.html#l00195">MaxOS::Logger::INFO()</a>, <a class="el" href="multiboot_8h_source.html#l00224">multiboot_mmap_entry::len</a>, <a class="el" href="physical_8cpp_source.html#l00535">map()</a>, <a class="el" href="physical_8cpp_source.html#l00753">memory_used()</a>, <a class="el" href="multiboot_8cpp_source.html#l00129">MaxOS::system::Multiboot::mmap()</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00044">MaxOS::memory::PRESENT</a>, <a class="el" href="physical_8cpp_source.html#l00089">reserve_kernel_regions()</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, <a class="el" href="physical_8h_source.html#l00183">s_current_manager</a>, <a class="el" href="multiboot_8h_source.html#l00290">multiboot_tag_mmap::size</a>, <a class="el" href="spinlock_8cpp_source.html#l00028">MaxOS::common::Spinlock::unlock()</a>, <a class="el" href="physical_8cpp_source.html#l00969">unmap_lower_kernel()</a>, and <a class="el" href="physical_8h_source.html#l00045">MaxOS::memory::WRITE</a>.</p>
 
 </div>
 </div>
@@ -526,7 +527,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allocate an area of physical memory (ie reserve it) </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000032">Todo:</a></b></dt><dd>freeing</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000056">Todo:</a></b></dt><dd>freeing</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">start_address</td><td>The start of the block </td></tr>
@@ -539,7 +540,7 @@ Static Public Attributes</h2></td></tr>
 <p class="definition">Definition at line <a class="el" href="physical_8cpp_source.html#l00270">270</a> of file <a class="el" href="physical_8cpp_source.html">physical.cpp</a>.</p>
 <div class="fragment"><div class="line"><span class="lineno">  270</span>                                                                              {</div>
 <div class="line"><span class="lineno">  271</span> </div>
-<div class="line"><span class="lineno">  272</span>    m_lock.lock();</div>
+<div class="line"><span class="lineno">  272</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a27a03c3d6b4cdd677e7d16e59689e38e">lock</a>();</div>
 <div class="line"><span class="lineno">  273</span> </div>
 <div class="line"><span class="lineno">  274</span>    <span class="comment">// Store the information about the frames needed to be allocated for this size</span></div>
 <div class="line"><span class="lineno">  275</span>    <span class="keywordtype">size_t</span> frame_count = <a class="code hl_function" href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#ad09e22d0fe86e952a3eb92718fcd3c32">size_to_frames</a>(size);</div>
@@ -590,20 +591,21 @@ Static Public Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  320</span>            }</div>
 <div class="line"><span class="lineno">  321</span> </div>
 <div class="line"><span class="lineno">  322</span>            <span class="comment">// Return start of the block of adjacent frames</span></div>
-<div class="line"><span class="lineno">  323</span>            m_lock.unlock();</div>
+<div class="line"><span class="lineno">  323</span>            m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">unlock</a>();</div>
 <div class="line"><span class="lineno">  324</span>            <span class="keywordflow">return</span> (<span class="keywordtype">void</span>*) (start_address + (start_row * <a class="code hl_variable" href="physical_8h.html#aade198fd5ec1031a23cd63fc2709f00c">ROW_BITS</a> + start_column) * PAGE_SIZE);</div>
 <div class="line"><span class="lineno">  325</span> </div>
 <div class="line"><span class="lineno">  326</span>        }</div>
 <div class="line"><span class="lineno">  327</span>    }</div>
 <div class="line"><span class="lineno">  328</span> </div>
 <div class="line"><span class="lineno">  329</span>    <span class="comment">// Not enough free frames adjacent to each other</span></div>
-<div class="line"><span class="lineno">  330</span>    m_lock.unlock();</div>
+<div class="line"><span class="lineno">  330</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">unlock</a>();</div>
 <div class="line"><span class="lineno">  331</span>    ASSERT(<span class="keyword">false</span>, <span class="stringliteral">&quot;Cannot allocate that much memory\n&quot;</span>);</div>
 <div class="line"><span class="lineno">  332</span>    <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><span class="lineno">  333</span>}</div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1Spinlock_html_a27a03c3d6b4cdd677e7d16e59689e38e"><div class="ttname"><a href="classMaxOS_1_1common_1_1Spinlock.html#a27a03c3d6b4cdd677e7d16e59689e38e">MaxOS::common::Spinlock::lock</a></div><div class="ttdeci">void lock()</div><div class="ttdoc">Lock the spinlock once it is available.</div><div class="ttdef"><b>Definition</b> <a href="spinlock_8cpp_source.html#l00021">spinlock.cpp:21</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1memory_1_1PhysicalMemoryManager_html_ad09e22d0fe86e952a3eb92718fcd3c32"><div class="ttname"><a href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#ad09e22d0fe86e952a3eb92718fcd3c32">MaxOS::memory::PhysicalMemoryManager::size_to_frames</a></div><div class="ttdeci">static size_t size_to_frames(size_t size)</div><div class="ttdoc">Converts a size to the number of frames.</div><div class="ttdef"><b>Definition</b> <a href="physical_8cpp_source.html#l00144">physical.cpp:144</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, and <a class="el" href="physical_8cpp_source.html#l00144">size_to_frames()</a>.</p>
+<p class="reference">References <a class="el" href="spinlock_8cpp_source.html#l00021">MaxOS::common::Spinlock::lock()</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, <a class="el" href="physical_8cpp_source.html#l00144">size_to_frames()</a>, and <a class="el" href="spinlock_8cpp_source.html#l00028">MaxOS::common::Spinlock::unlock()</a>.</p>
 
 </div>
 </div>
@@ -629,7 +631,7 @@ Static Public Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="lineno">  188</span>                                            {</div>
 <div class="line"><span class="lineno">  189</span> </div>
 <div class="line"><span class="lineno">  190</span>    <span class="comment">// Wait for the lock</span></div>
-<div class="line"><span class="lineno">  191</span>    m_lock.lock();</div>
+<div class="line"><span class="lineno">  191</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a27a03c3d6b4cdd677e7d16e59689e38e">lock</a>();</div>
 <div class="line"><span class="lineno">  192</span> </div>
 <div class="line"><span class="lineno">  193</span>    <span class="comment">// If not initialised, cant use the bitmap or higher half mapped physical memory so use leftover kernel memory already</span></div>
 <div class="line"><span class="lineno">  194</span>    <span class="comment">// mapped in loader.s</span></div>
@@ -639,7 +641,7 @@ Static Public Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  198</span>        <span class="keywordtype">void</span>* address = (<span class="keywordtype">void</span>*) ((uintptr_t) m_mmap-&gt;<a class="code hl_variable" href="structmultiboot__mmap__entry.html#a3f76a637264b83e30967bcd808ff403c">addr</a> + (m_setup_frames * <a class="code hl_variable" href="physical_8h.html#acbb7ce85d6b04d80fa29a7292d4bc3ed">PAGE_SIZE</a>));</div>
 <div class="line"><span class="lineno">  199</span>        m_setup_frames++;</div>
 <div class="line"><span class="lineno">  200</span> </div>
-<div class="line"><span class="lineno">  201</span>        m_lock.unlock();</div>
+<div class="line"><span class="lineno">  201</span>        m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">unlock</a>();</div>
 <div class="line"><span class="lineno">  202</span>        <span class="keywordflow">return</span> address;</div>
 <div class="line"><span class="lineno">  203</span>    }</div>
 <div class="line"><span class="lineno">  204</span> </div>
@@ -663,7 +665,7 @@ Static Public Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  222</span>            m_used_frames++;</div>
 <div class="line"><span class="lineno">  223</span> </div>
 <div class="line"><span class="lineno">  224</span>            <span class="comment">// Thread safe</span></div>
-<div class="line"><span class="lineno">  225</span>            m_lock.unlock();</div>
+<div class="line"><span class="lineno">  225</span>            m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">unlock</a>();</div>
 <div class="line"><span class="lineno">  226</span> </div>
 <div class="line"><span class="lineno">  227</span>            <span class="comment">// Calculate the address</span></div>
 <div class="line"><span class="lineno">  228</span>            uint64_t frame_address = (row * <a class="code hl_variable" href="physical_8h.html#aade198fd5ec1031a23cd63fc2709f00c">ROW_BITS</a>) + column;</div>
@@ -679,12 +681,12 @@ Static Public Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  238</span> </div>
 <div class="line"><span class="lineno">  239</span>    <span class="comment">// Error frame not found</span></div>
 <div class="line"><span class="lineno">  240</span>    ASSERT(<span class="keyword">false</span>, <span class="stringliteral">&quot;Frame not found\n&quot;</span>);</div>
-<div class="line"><span class="lineno">  241</span>    m_lock.unlock();</div>
+<div class="line"><span class="lineno">  241</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">unlock</a>();</div>
 <div class="line"><span class="lineno">  242</span>    <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><span class="lineno">  243</span>}</div>
 <div class="ttc" id="aclassMaxOS_1_1memory_1_1PhysicalMemoryManager_html_a061e07bff657447294f4005f550d87ac"><div class="ttname"><a href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a061e07bff657447294f4005f550d87ac">MaxOS::memory::PhysicalMemoryManager::to_dm_region</a></div><div class="ttdeci">static void * to_dm_region(uintptr_t physical_address)</div><div class="ttdoc">Converts a physical address to a direct map region address if it is in the lower region using the hig...</div><div class="ttdef"><b>Definition</b> <a href="physical_8cpp_source.html#l00929">physical.cpp:929</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="multiboot_8h_source.html#l00223">multiboot_mmap_entry::addr</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, and <a class="el" href="physical_8cpp_source.html#l00929">to_dm_region()</a>.</p>
+<p class="reference">References <a class="el" href="multiboot_8h_source.html#l00223">multiboot_mmap_entry::addr</a>, <a class="el" href="spinlock_8cpp_source.html#l00021">MaxOS::common::Spinlock::lock()</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, <a class="el" href="physical_8cpp_source.html#l00929">to_dm_region()</a>, and <a class="el" href="spinlock_8cpp_source.html#l00028">MaxOS::common::Spinlock::unlock()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="virtual_8cpp_source.html#l00142">MaxOS::memory::VirtualMemoryManager::allocate()</a>, and <a class="el" href="physical_8cpp_source.html#l00535">map()</a>.</p>
 
@@ -887,17 +889,17 @@ Static Public Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  349</span>        <span class="keywordflow">return</span>;</div>
 <div class="line"><span class="lineno">  350</span> </div>
 <div class="line"><span class="lineno">  351</span>    <span class="comment">// Wait until other threads have finished other memory operations</span></div>
-<div class="line"><span class="lineno">  352</span>    m_lock.lock();</div>
+<div class="line"><span class="lineno">  352</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a27a03c3d6b4cdd677e7d16e59689e38e">lock</a>();</div>
 <div class="line"><span class="lineno">  353</span> </div>
 <div class="line"><span class="lineno">  354</span>    <span class="comment">// Mark the frames as not used</span></div>
 <div class="line"><span class="lineno">  355</span>    m_used_frames -= frame_count;</div>
 <div class="line"><span class="lineno">  356</span>    <span class="keywordflow">for</span>(uint32_t i = 0; i &lt; frame_count; ++i)</div>
 <div class="line"><span class="lineno">  357</span>        m_bit_map[(frame_address + i) / <a class="code hl_variable" href="physical_8h.html#aade198fd5ec1031a23cd63fc2709f00c">ROW_BITS</a>] &amp;= ~(1ULL &lt;&lt; ((frame_address + i) % ROW_BITS));</div>
 <div class="line"><span class="lineno">  358</span> </div>
-<div class="line"><span class="lineno">  359</span>    m_lock.unlock();</div>
+<div class="line"><span class="lineno">  359</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">unlock</a>();</div>
 <div class="line"><span class="lineno">  360</span>}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, and <a class="el" href="physical_8cpp_source.html#l00144">size_to_frames()</a>.</p>
+<p class="reference">References <a class="el" href="spinlock_8cpp_source.html#l00021">MaxOS::common::Spinlock::lock()</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, <a class="el" href="physical_8cpp_source.html#l00144">size_to_frames()</a>, and <a class="el" href="spinlock_8cpp_source.html#l00028">MaxOS::common::Spinlock::unlock()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="ipc_8cpp_source.html#l00099">MaxOS::processes::SharedMemory::close()</a>.</p>
 
@@ -930,17 +932,17 @@ Static Public Attributes</h2></td></tr>
 <p class="definition">Definition at line <a class="el" href="physical_8cpp_source.html#l00250">250</a> of file <a class="el" href="physical_8cpp_source.html">physical.cpp</a>.</p>
 <div class="fragment"><div class="line"><span class="lineno">  250</span>                                                    {</div>
 <div class="line"><span class="lineno">  251</span> </div>
-<div class="line"><span class="lineno">  252</span>    m_lock.lock();</div>
+<div class="line"><span class="lineno">  252</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a27a03c3d6b4cdd677e7d16e59689e38e">lock</a>();</div>
 <div class="line"><span class="lineno">  253</span> </div>
 <div class="line"><span class="lineno">  254</span>    <span class="comment">// Mark the frame as not used</span></div>
 <div class="line"><span class="lineno">  255</span>    m_used_frames--;</div>
 <div class="line"><span class="lineno">  256</span>    uint64_t frame_address = (uint64_t) address / PAGE_SIZE;</div>
 <div class="line"><span class="lineno">  257</span>    m_bit_map[frame_address / <a class="code hl_variable" href="physical_8h.html#aade198fd5ec1031a23cd63fc2709f00c">ROW_BITS</a>] &amp;= ~(1ULL &lt;&lt; (frame_address % <a class="code hl_variable" href="physical_8h.html#aade198fd5ec1031a23cd63fc2709f00c">ROW_BITS</a>));</div>
 <div class="line"><span class="lineno">  258</span> </div>
-<div class="line"><span class="lineno">  259</span>    m_lock.unlock();</div>
+<div class="line"><span class="lineno">  259</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">unlock</a>();</div>
 <div class="line"><span class="lineno">  260</span>}</div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, and <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>.</p>
+<p class="reference">References <a class="el" href="spinlock_8cpp_source.html#l00021">MaxOS::common::Spinlock::lock()</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, and <a class="el" href="spinlock_8cpp_source.html#l00028">MaxOS::common::Spinlock::unlock()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="virtual_8cpp_source.html#l00142">MaxOS::memory::VirtualMemoryManager::allocate()</a>, and <a class="el" href="virtual_8cpp_source.html#l00071">MaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()</a>.</p>
 
@@ -1030,7 +1032,7 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The physical address or nullptr if it does not exist</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000034">Todo:</a></b></dt><dd>make static version </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000058">Todo:</a></b></dt><dd>make static version </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="physical_8cpp_source.html#l00828">828</a> of file <a class="el" href="physical_8cpp_source.html">physical.cpp</a>.</p>
 <div class="fragment"><div class="line"><span class="lineno">  828</span>                                                                                                                       {</div>
@@ -1493,7 +1495,7 @@ Static Public Attributes</h2></td></tr>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="physical_8cpp_source.html#l00535">map()</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, and <a class="el" href="physical_8cpp_source.html#l00144">size_to_frames()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>, and <a class="el" href="vesa_8cpp_source.html#l00024">MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()</a>.</p>
 
 </div>
 </div>
@@ -1551,7 +1553,7 @@ Static Public Attributes</h2></td></tr>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00031">PhysicalMemoryManager()</a>, and <a class="el" href="process_8cpp_source.html#l00338">MaxOS::processes::Process::~Process()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00031">PhysicalMemoryManager()</a>, and <a class="el" href="kernel_2src_2processes_2process_8cpp_source.html#l00338">MaxOS::processes::Process::~Process()</a>.</p>
 
 </div>
 </div>
@@ -1616,7 +1618,7 @@ Static Public Attributes</h2></td></tr>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, and <a class="el" href="physical_8cpp_source.html#l00774">reserve()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>, <a class="el" href="apic_8cpp_source.html#l00021">MaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()</a>, <a class="el" href="physical_8cpp_source.html#l00774">reserve()</a>, and <a class="el" href="physical_8cpp_source.html#l00089">reserve_kernel_regions()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>, <a class="el" href="apic_8cpp_source.html#l00021">MaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()</a>, <a class="el" href="physical_8cpp_source.html#l00774">reserve()</a>, <a class="el" href="physical_8cpp_source.html#l00089">reserve_kernel_regions()</a>, and <a class="el" href="vesa_8cpp_source.html#l00024">MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()</a>.</p>
 
 </div>
 </div>
@@ -1671,7 +1673,7 @@ Static Public Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  791</span>           address, address + size);</div>
 <div class="line"><span class="lineno">  792</span> </div>
 <div class="line"><span class="lineno">  793</span>    <span class="comment">// Wait to be able to reserve</span></div>
-<div class="line"><span class="lineno">  794</span>    m_lock.lock();</div>
+<div class="line"><span class="lineno">  794</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a27a03c3d6b4cdd677e7d16e59689e38e">lock</a>();</div>
 <div class="line"><span class="lineno">  795</span> </div>
 <div class="line"><span class="lineno">  796</span>    <span class="comment">// Align to a page, if rounding down need to correct the range</span></div>
 <div class="line"><span class="lineno">  797</span>    <span class="keywordtype">size_t</span> aligned_address = <a class="code hl_function" href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a11cc364e5cd2a0bebeabd79b2bd35c0d">align_direct_to_page</a>(address);</div>
@@ -1691,13 +1693,13 @@ Static Public Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  811</span>    m_used_frames += page_count;</div>
 <div class="line"><span class="lineno">  812</span> </div>
 <div class="line"><span class="lineno">  813</span>    <span class="comment">// Clear the lock</span></div>
-<div class="line"><span class="lineno">  814</span>    m_lock.unlock();</div>
+<div class="line"><span class="lineno">  814</span>    m_lock.<a class="code hl_function" href="classMaxOS_1_1common_1_1Spinlock.html#a7c26334ccfa43ef932ef3c73e2c11492">unlock</a>();</div>
 <div class="line"><span class="lineno">  815</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb">Logger::DEBUG</a>() &lt;&lt; <span class="stringliteral">&quot;Reserved Address for &quot;</span> &lt;&lt; type &lt;&lt; <span class="stringliteral">&quot;: 0x&quot;</span> &lt;&lt; aligned_address &lt;&lt; <span class="stringliteral">&quot; - 0x&quot;</span> &lt;&lt; aligned_address + size</div>
 <div class="line"><span class="lineno">  816</span>                    &lt;&lt; <span class="stringliteral">&quot; (length of 0x&quot;</span> &lt;&lt; size &lt;&lt; <span class="stringliteral">&quot;)\n&quot;</span>;</div>
 <div class="line"><span class="lineno">  817</span>}</div>
 <div class="ttc" id="aclassMaxOS_1_1memory_1_1PhysicalMemoryManager_html_a11cc364e5cd2a0bebeabd79b2bd35c0d"><div class="ttname"><a href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a11cc364e5cd2a0bebeabd79b2bd35c0d">MaxOS::memory::PhysicalMemoryManager::align_direct_to_page</a></div><div class="ttdeci">static size_t align_direct_to_page(size_t size)</div><div class="ttdoc">Aligns a address to the page size.</div><div class="ttdef"><b>Definition</b> <a href="physical_8cpp_source.html#l00764">physical.cpp:764</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="physical_8cpp_source.html#l00764">align_direct_to_page()</a>, <a class="el" href="physical_8cpp_source.html#l00167">align_up_to_page()</a>, <a class="el" href="logger_8cpp_source.html#l00204">MaxOS::Logger::DEBUG()</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, and <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>.</p>
+<p class="reference">References <a class="el" href="physical_8cpp_source.html#l00764">align_direct_to_page()</a>, <a class="el" href="physical_8cpp_source.html#l00167">align_up_to_page()</a>, <a class="el" href="logger_8cpp_source.html#l00204">MaxOS::Logger::DEBUG()</a>, <a class="el" href="spinlock_8cpp_source.html#l00021">MaxOS::common::Spinlock::lock()</a>, <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>, <a class="el" href="physical_8h_source.html#l00093">MaxOS::memory::ROW_BITS</a>, and <a class="el" href="spinlock_8cpp_source.html#l00028">MaxOS::common::Spinlock::unlock()</a>.</p>
 
 </div>
 </div>
@@ -1827,7 +1829,7 @@ Static Public Attributes</h2></td></tr>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="physical_8cpp_source.html#l00155">align_to_page()</a>, and <a class="el" href="physical_8h_source.html#l00092">MaxOS::memory::PAGE_SIZE</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="virtual_8cpp_source.html#l00142">MaxOS::memory::VirtualMemoryManager::allocate()</a>, <a class="el" href="physical_8cpp_source.html#l00270">allocate_area()</a>, <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>, <a class="el" href="physical_8cpp_source.html#l00341">free_area()</a>, <a class="el" href="virtual_8cpp_source.html#l00524">MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()</a>, <a class="el" href="physical_8cpp_source.html#l00565">map_area()</a>, <a class="el" href="physical_8cpp_source.html#l00549">map_area()</a>, <a class="el" href="virtual_8cpp_source.html#l00602">MaxOS::memory::VirtualMemoryManager::unload_range_from_process()</a>, <a class="el" href="physical_8cpp_source.html#l00624">unmap_area()</a>, and <a class="el" href="virtual_8cpp_source.html#l00071">MaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="virtual_8cpp_source.html#l00142">MaxOS::memory::VirtualMemoryManager::allocate()</a>, <a class="el" href="physical_8cpp_source.html#l00270">allocate_area()</a>, <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>, <a class="el" href="physical_8cpp_source.html#l00341">free_area()</a>, <a class="el" href="virtual_8cpp_source.html#l00524">MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()</a>, <a class="el" href="physical_8cpp_source.html#l00565">map_area()</a>, <a class="el" href="physical_8cpp_source.html#l00549">map_area()</a>, <a class="el" href="virtual_8cpp_source.html#l00602">MaxOS::memory::VirtualMemoryManager::unload_range_from_process()</a>, <a class="el" href="physical_8cpp_source.html#l00624">unmap_area()</a>, <a class="el" href="vesa_8cpp_source.html#l00024">MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()</a>, and <a class="el" href="virtual_8cpp_source.html#l00071">MaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()</a>.</p>
 
 </div>
 </div>
@@ -1876,7 +1878,7 @@ Static Public Attributes</h2></td></tr>
 </div><!-- fragment -->
 <p class="reference">References <a class="el" href="physical_8h_source.html#l00099">MaxOS::memory::HIGHER_HALF_DIRECT_MAP</a>, and <a class="el" href="physical_8h_source.html#l00098">MaxOS::memory::HIGHER_HALF_OFFSET</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00188">allocate_frame()</a>, <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>, <a class="el" href="scheduler_8cpp_source.html#l00150">MaxOS::processes::GlobalScheduler::load_multiboot_elfs()</a>, <a class="el" href="scheduler_8cpp_source.html#l00190">MaxOS::processes::GlobalScheduler::prepare_initrd()</a>, <a class="el" href="framebuffer_8cpp_source.html#l00280">MaxOS::console::FramebufferConsole::print_logo()</a>, and <a class="el" href="virtual_8cpp_source.html#l00025">MaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="physical_8cpp_source.html#l00188">allocate_frame()</a>, <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>, <a class="el" href="scheduler_8cpp_source.html#l00150">MaxOS::processes::GlobalScheduler::load_multiboot_elfs()</a>, <a class="el" href="scheduler_8cpp_source.html#l00190">MaxOS::processes::GlobalScheduler::prepare_initrd()</a>, <a class="el" href="framebuffer_8cpp_source.html#l00280">MaxOS::console::FramebufferConsole::print_logo()</a>, <a class="el" href="vesa_8cpp_source.html#l00024">MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()</a>, and <a class="el" href="virtual_8cpp_source.html#l00025">MaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()</a>.</p>
 
 </div>
 </div>
@@ -2229,17 +2231,17 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The current physical memory manager in use. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000014">Todo:</a></b></dt><dd>Make private with getter, maybe make mapping static? </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000038">Todo:</a></b></dt><dd>Make private with getter, maybe make mapping static? </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="physical_8h_source.html#l00183">183</a> of file <a class="el" href="physical_8h_source.html">physical.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="virtual_8cpp_source.html#l00142">MaxOS::memory::VirtualMemoryManager::allocate()</a>, <a class="el" href="ipc_8cpp_source.html#l00099">MaxOS::processes::SharedMemory::close()</a>, <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>, <a class="el" href="cpu_8cpp_source.html#l00588">MaxOS::system::CPU::init_cores()</a>, <a class="el" href="apic_8cpp_source.html#l00245">MaxOS::hardwarecommunication::IOAPIC::IOAPIC()</a>, <a class="el" href="virtual_8cpp_source.html#l00524">MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()</a>, <a class="el" href="virtual_8cpp_source.html#l00552">MaxOS::memory::VirtualMemoryManager::load_range_from_process()</a>, <a class="el" href="apic_8cpp_source.html#l00021">MaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()</a>, <a class="el" href="physical_8cpp_source.html#l00031">PhysicalMemoryManager()</a>, <a class="el" href="ipc_8cpp_source.html#l00030">MaxOS::processes::SharedMemory::SharedMemory()</a>, <a class="el" href="virtual_8cpp_source.html#l00602">MaxOS::memory::VirtualMemoryManager::unload_range_from_process()</a>, <a class="el" href="virtual_8cpp_source.html#l00025">MaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()</a>, <a class="el" href="process_8cpp_source.html#l00338">MaxOS::processes::Process::~Process()</a>, and <a class="el" href="virtual_8cpp_source.html#l00071">MaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="virtual_8cpp_source.html#l00142">MaxOS::memory::VirtualMemoryManager::allocate()</a>, <a class="el" href="ipc_8cpp_source.html#l00099">MaxOS::processes::SharedMemory::close()</a>, <a class="el" href="framebuffer_8cpp_source.html#l00025">MaxOS::console::FramebufferConsole::FramebufferConsole()</a>, <a class="el" href="cpu_8cpp_source.html#l00588">MaxOS::system::CPU::init_cores()</a>, <a class="el" href="apic_8cpp_source.html#l00245">MaxOS::hardwarecommunication::IOAPIC::IOAPIC()</a>, <a class="el" href="virtual_8cpp_source.html#l00524">MaxOS::memory::VirtualMemoryManager::load_physical_into_address_space()</a>, <a class="el" href="virtual_8cpp_source.html#l00552">MaxOS::memory::VirtualMemoryManager::load_range_from_process()</a>, <a class="el" href="apic_8cpp_source.html#l00021">MaxOS::hardwarecommunication::LocalAPIC::LocalAPIC()</a>, <a class="el" href="physical_8cpp_source.html#l00031">PhysicalMemoryManager()</a>, <a class="el" href="ipc_8cpp_source.html#l00030">MaxOS::processes::SharedMemory::SharedMemory()</a>, <a class="el" href="virtual_8cpp_source.html#l00602">MaxOS::memory::VirtualMemoryManager::unload_range_from_process()</a>, <a class="el" href="vesa_8cpp_source.html#l00024">MaxOS::drivers::video::VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation()</a>, <a class="el" href="virtual_8cpp_source.html#l00025">MaxOS::memory::VirtualMemoryManager::VirtualMemoryManager()</a>, <a class="el" href="kernel_2src_2processes_2process_8cpp_source.html#l00338">MaxOS::processes::Process::~Process()</a>, and <a class="el" href="virtual_8cpp_source.html#l00071">MaxOS::memory::VirtualMemoryManager::~VirtualMemoryManager()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/MaxOS/MaxOS/kernel/include/memory/<a class="el" href="physical_8h_source.html">physical.h</a></li>
-<li>/home/runner/work/MaxOS/MaxOS/kernel/src/memory/<a class="el" href="physical_8cpp_source.html">physical.cpp</a></li>
+<li>kernel/include/memory/<a class="el" href="physical_8h_source.html">physical.h</a></li>
+<li>kernel/src/memory/<a class="el" href="physical_8cpp_source.html">physical.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

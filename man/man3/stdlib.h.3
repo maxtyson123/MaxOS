@@ -1,0 +1,374 @@
+.TH "libraries/libc/include/stdlib.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/include/stdlib.h \- Defines fundamental functions that arent related to I/O, strings or maths\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libc_common\&.h>\fP
+.br
+\fC#include <stddef\&.h>\fP
+.br
+\fC#include <sys/wait\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fB_div\fP"
+.br
+.RI "Internal representation for the result of a div() call\&. "
+.ti -1c
+.RI "struct \fB_ldiv\fP"
+.br
+.RI "Internal representation for the result of a ldiv() call\&. "
+.ti -1c
+.RI "struct \fB_lldiv\fP"
+.br
+.RI "Internal representation for the result of a lldiv() call\&. "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBEXIT_FAILURE\fP   1"
+.br
+.RI "Unsuccessful termination for exit() "
+.ti -1c
+.RI "#define \fBEXIT_SUCCESS\fP   0"
+.br
+.RI "Successful termination for exit() "
+.ti -1c
+.RI "#define \fBRAND_MAX\fP   0xFFFFFFFF"
+.br
+.RI "Maximum value returned by rand() "
+.ti -1c
+.RI "#define \fBMB_CUR_MAX\fP   (__mb_cur_max())"
+.br
+.RI "Maximum number of bytes in a character for the current locale\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct \fB_div\fP \fBdiv_t\fP"
+.br
+.RI "Public alais for \fB_div\fP\&. "
+.ti -1c
+.RI "typedef struct \fB_ldiv\fP \fBldiv_t\fP"
+.br
+.RI "Public alais for \fB_ldiv\fP\&. "
+.ti -1c
+.RI "typedef struct \fB_lldiv\fP \fBlldiv_t\fP"
+.br
+.RI "Public alais for \fB_lldiv\fP\&. "
+.ti -1c
+.RI "typedef void(* \fBexit_func_t\fP) (void)"
+.br
+.ti -1c
+.RI "typedef int(* \fBbs_func_t\fP) (const void *, const void *)"
+.br
+.ti -1c
+.RI "typedef int(* \fBqsort_func_t\fP) (const void *, const void *)"
+.br
+.ti -1c
+.RI "typedef int(* \fBqsort_r_func_t\fP) (const void *, const void *, void *)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "size_t \fB__mb_cur_max\fP (void)"
+.br
+.ti -1c
+.RI "_Noreturn void \fB_Exit\fP (int)"
+.br
+.ti -1c
+.RI "_Noreturn void \fBabort\fP (void)"
+.br
+.ti -1c
+.RI "_Noreturn void \fBexit\fP (int)"
+.br
+.ti -1c
+.RI "_Noreturn void \fBquick_exit\fP (int)"
+.br
+.ti -1c
+.RI "int \fBatexit\fP (exit_func_t)"
+.br
+.ti -1c
+.RI "int \fBat_quick_exit\fP (exit_func_t)"
+.br
+.ti -1c
+.RI "void * \fBmalloc\fP (size_t)"
+.br
+.ti -1c
+.RI "void * \fBcalloc\fP (size_t, size_t)"
+.br
+.ti -1c
+.RI "void * \fBrealloc\fP (void *, size_t)"
+.br
+.ti -1c
+.RI "void * \fBreallocarray\fP (void *, size_t, size_t)"
+.br
+.ti -1c
+.RI "void \fBfree\fP (void *)"
+.br
+.ti -1c
+.RI "void * \fBaligned_alloc\fP (size_t, size_t)"
+.br
+.ti -1c
+.RI "int \fBposix_memalign\fP (void **, size_t, size_t)"
+.br
+.ti -1c
+.RI "char * \fBgetenv\fP (const char *)"
+.br
+.ti -1c
+.RI "char * \fBsecure_getenv\fP (const char *)"
+.br
+.ti -1c
+.RI "int \fBsetenv\fP (const char *, const char *, int)"
+.br
+.ti -1c
+.RI "int \fBunsetenv\fP (const char *)"
+.br
+.ti -1c
+.RI "int \fBputenv\fP (char *)"
+.br
+.ti -1c
+.RI "double \fBatof\fP (const char *)"
+.br
+.ti -1c
+.RI "int \fBatoi\fP (const char *)"
+.br
+.ti -1c
+.RI "long \fBatol\fP (const char *)"
+.br
+.ti -1c
+.RI "long long \fBatoll\fP (const char *)"
+.br
+.ti -1c
+.RI "long \fBstrtol\fP (const char *restrict, char **restrict, int)"
+.br
+.ti -1c
+.RI "unsigned long \fBstrtoul\fP (const char *restrict, char **restrict, int)"
+.br
+.ti -1c
+.RI "long long \fBstrtoll\fP (const char *restrict, char **restrict, int)"
+.br
+.ti -1c
+.RI "unsigned long long \fBstrtoull\fP (const char *restrict, char **restrict, int)"
+.br
+.ti -1c
+.RI "double \fBstrtod\fP (const char *restrict, char **restrict)"
+.br
+.ti -1c
+.RI "float \fBstrtof\fP (const char *restrict, char **restrict)"
+.br
+.ti -1c
+.RI "long double \fBstrtold\fP (const char *restrict, char **restrict)"
+.br
+.ti -1c
+.RI "int \fBabs\fP (int)"
+.br
+.ti -1c
+.RI "long \fBlabs\fP (long)"
+.br
+.ti -1c
+.RI "long long \fBllabs\fP (long long)"
+.br
+.ti -1c
+.RI "\fBdiv_t\fP \fBdiv\fP (int, int)"
+.br
+.ti -1c
+.RI "\fBldiv_t\fP \fBldiv\fP (long, long)"
+.br
+.ti -1c
+.RI "\fBlldiv_t\fP \fBlldiv\fP (long long, long long)"
+.br
+.ti -1c
+.RI "void * \fBbsearch\fP (const void *, const void *, size_t, size_t, bs_func_t)"
+.br
+.ti -1c
+.RI "void \fBqsort\fP (void *, size_t, size_t, qsort_func_t)"
+.br
+.ti -1c
+.RI "void \fBqsort_r\fP (void *, size_t, size_t, qsort_r_func_t, void *)"
+.br
+.ti -1c
+.RI "int \fBrand\fP (void)"
+.br
+.ti -1c
+.RI "void \fBsrand\fP (unsigned)"
+.br
+.ti -1c
+.RI "long \fBrandom\fP (void)"
+.br
+.ti -1c
+.RI "void \fBsrandom\fP (unsigned)"
+.br
+.ti -1c
+.RI "double \fBdrand48\fP (void)"
+.br
+.ti -1c
+.RI "long \fBlrand48\fP (void)"
+.br
+.ti -1c
+.RI "long \fBmrand48\fP (void)"
+.br
+.ti -1c
+.RI "double \fBerand48\fP (unsigned short[3])"
+.br
+.ti -1c
+.RI "long \fBjrand48\fP (unsigned short[3])"
+.br
+.ti -1c
+.RI "long \fBnrand48\fP (unsigned short[3])"
+.br
+.ti -1c
+.RI "void \fBsrand48\fP (long)"
+.br
+.ti -1c
+.RI "unsigned short * \fBseed48\fP (unsigned short[3])"
+.br
+.ti -1c
+.RI "void \fBlcong48\fP (unsigned short[7])"
+.br
+.ti -1c
+.RI "int \fBmblen\fP (const char *, size_t)"
+.br
+.ti -1c
+.RI "int \fBmbtowc\fP (wchar_t *restrict, const char *restrict, size_t)"
+.br
+.ti -1c
+.RI "size_t \fBmbstowcs\fP (wchar_t *restrict, const char *restrict, size_t)"
+.br
+.ti -1c
+.RI "int \fBwctomb\fP (char *, wchar_t)"
+.br
+.ti -1c
+.RI "size_t \fBwcstombs\fP (char *restrict, const wchar_t *restrict, size_t)"
+.br
+.ti -1c
+.RI "char * \fBmkdtemp\fP (char *)"
+.br
+.ti -1c
+.RI "int \fBmkstemp\fP (char *)"
+.br
+.ti -1c
+.RI "int \fBmkostemp\fP (char *, int)"
+.br
+.ti -1c
+.RI "int \fBgrantpt\fP (int)"
+.br
+.ti -1c
+.RI "int \fBposix_openpt\fP (int)"
+.br
+.ti -1c
+.RI "int \fBunlockpt\fP (int)"
+.br
+.ti -1c
+.RI "char * \fBptsname\fP (int)"
+.br
+.ti -1c
+.RI "int \fBptsname_r\fP (int, char *, size_t)"
+.br
+.ti -1c
+.RI "char * \fBinitstate\fP (unsigned, char *, size_t)"
+.br
+.ti -1c
+.RI "char * \fBsetstate\fP (char *)"
+.br
+.ti -1c
+.RI "long \fBa64l\fP (const char *)"
+.br
+.ti -1c
+.RI "char * \fBl64a\fP (long)"
+.br
+.ti -1c
+.RI "int \fBsystem\fP (const char *)"
+.br
+.ti -1c
+.RI "int \fBgetsubopt\fP (char **restrict, char *const *restrict, char **restrict)"
+.br
+.ti -1c
+.RI "void \fBsetkey\fP (const char *)"
+.br
+.ti -1c
+.RI "char * \fBrealpath\fP (const char *restrict, char *restrict)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines fundamental functions that arent related to I/O, strings or maths\&. 
+
+
+.PP
+\fBSee also\fP
+.RS 4
+https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/stdlib.h.html
+.RE
+.PP
+\fBDate\fP
+.RS 4
+16 December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBstdlib\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define EXIT_FAILURE   1"
+
+.PP
+Unsuccessful termination for exit() 
+.PP
+Definition at line \fB22\fP of file \fBstdlib\&.h\fP\&.
+.SS "#define EXIT_SUCCESS   0"
+
+.PP
+Successful termination for exit() 
+.PP
+Definition at line \fB23\fP of file \fBstdlib\&.h\fP\&.
+.SS "#define MB_CUR_MAX   (__mb_cur_max())"
+
+.PP
+Maximum number of bytes in a character for the current locale\&. 
+.PP
+Definition at line \fB26\fP of file \fBstdlib\&.h\fP\&.
+.SS "#define RAND_MAX   0xFFFFFFFF"
+
+.PP
+Maximum value returned by rand() 
+.PP
+Definition at line \fB25\fP of file \fBstdlib\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef int(* bs_func_t) (const void *, const void *)"
+
+.PP
+Definition at line \fB70\fP of file \fBstdlib\&.h\fP\&.
+.SS "typedef void(* exit_func_t) (void)"
+
+.PP
+Definition at line \fB69\fP of file \fBstdlib\&.h\fP\&.
+.SS "typedef int(* qsort_func_t) (const void *, const void *)"
+
+.PP
+Definition at line \fB71\fP of file \fBstdlib\&.h\fP\&.
+.SS "typedef int(* qsort_r_func_t) (const void *, const void *, void *)"
+
+.PP
+Definition at line \fB72\fP of file \fBstdlib\&.h\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

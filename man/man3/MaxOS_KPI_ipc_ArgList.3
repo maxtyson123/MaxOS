@@ -1,0 +1,939 @@
+.TH "MaxOS::KPI::ipc::ArgList" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::KPI::ipc::ArgList \- Class to handle seralisation of args across an RPC shared message endpoint boundary\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <rpc\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.RI "Resets the arg payload and entries\&. "
+.ti -1c
+.RI "bool \fBadd_arg\fP (\fBArgType\fP type, const void *data, size_t length)"
+.br
+.RI "Adds an argument to the argument list\&. "
+.ti -1c
+.RI "bool \fBget_arg\fP (size_t index, \fBArgType\fP &type, void *buffer, size_t buffer_size) const"
+.br
+.RI "Gets an argument from the argument list\&. "
+.ti -1c
+.RI "size_t \fBarg_count\fP () const"
+.br
+.RI "Gets the number of arguments in the argument list\&. "
+.ti -1c
+.RI "void \fBpush_bool\fP (bool value)"
+.br
+.RI "Adds a boolean argument to the end of the argument list\&. "
+.ti -1c
+.RI "void \fBpush_uint32\fP (uint32_t value)"
+.br
+.RI "Adds a uint32_t argument to the end of the argument list\&. "
+.ti -1c
+.RI "void \fBpush_uint64\fP (uint64_t value)"
+.br
+.RI "Adds a uint64_t argument to the end of the argument list\&. "
+.ti -1c
+.RI "void \fBpush_int32\fP (int32_t value)"
+.br
+.RI "Adds an int32_t argument to the end of the argument list\&. "
+.ti -1c
+.RI "void \fBpush_int64\fP (int64_t value)"
+.br
+.RI "Adds an int64_t argument to the end of the argument list\&. "
+.ti -1c
+.RI "void \fBpush_string\fP (const \fBstring\fP &value)"
+.br
+.RI "Adds a string argument to the end of the argument list\&. "
+.ti -1c
+.RI "void \fBpush_blob\fP (const void *data, size_t length)"
+.br
+.RI "Adds a blob argument to the end of the argument list\&. "
+.ti -1c
+.RI "bool \fBget_bool\fP (size_t index) const"
+.br
+.RI "Gets a boolean argument from the argument list\&. "
+.ti -1c
+.RI "uint32_t \fBget_uint32\fP (size_t index) const"
+.br
+.RI "Gets a uint32_t argument from the argument list\&. "
+.ti -1c
+.RI "uint64_t \fBget_uint64\fP (size_t index) const"
+.br
+.RI "Gets a uint64_t argument from the argument list\&. "
+.ti -1c
+.RI "int32_t \fBget_int32\fP (size_t index) const"
+.br
+.RI "Gets an int32_t argument from the argument list\&. "
+.ti -1c
+.RI "int64_t \fBget_int64\fP (size_t index) const"
+.br
+.RI "Gets an int64_t argument from the argument list\&. "
+.ti -1c
+.RI "\fBstring\fP \fBget_string\fP (size_t index) const"
+.br
+.RI "Gets a string argument from the argument list\&. "
+.ti -1c
+.RI "const void * \fBget_blob\fP (size_t index) const"
+.br
+.RI "Gets a blob argument from the argument list\&. "
+.ti -1c
+.RI "bool \fBget_bool\fP ()"
+.br
+.ti -1c
+.RI "uint32_t \fBget_uint32\fP ()"
+.br
+.ti -1c
+.RI "uint64_t \fBget_uint64\fP ()"
+.br
+.ti -1c
+.RI "int32_t \fBget_int32\fP ()"
+.br
+.ti -1c
+.RI "int64_t \fBget_int64\fP ()"
+.br
+.ti -1c
+.RI "\fBstring\fP \fBget_string\fP ()"
+.br
+.ti -1c
+.RI "const void * \fBget_blob\fP ()"
+.br
+.ti -1c
+.RI "void \fBreset_cursor\fP ()"
+.br
+.RI "Reset the index of the last read arg\&. "
+.ti -1c
+.RI "bool \fBhas_more\fP () const"
+.br
+.ti -1c
+.RI "const uint8_t * \fBpayload\fP () const"
+.br
+.RI "Gets the payload of the argument list\&. "
+.ti -1c
+.RI "size_t \fBpayload_size\fP () const"
+.br
+.RI "Gets the size of the payload of the argument list\&. "
+.ti -1c
+.RI "void \fBappend_args\fP (const \fBArgList\fP &other, size_t start_index=0)"
+.br
+.RI "Appends arguments from another \fBArgList\fP to this one\&. "
+.ti -1c
+.RI "size_t \fBserialise\fP (uint8_t *buffer, size_t size)"
+.br
+.RI "Converts the argument list into a buffer containing the type and data of each argument in the format [arg count][arg entries][payload]\&. "
+.ti -1c
+.RI "void \fBdeserialise\fP (const uint8_t *buffer, size_t size)"
+.br
+.RI "Loads a buffer of serialised \fBArgList\fP args into this list\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Class to handle seralisation of args across an RPC shared message endpoint boundary\&. 
+
+
+.PP
+\fBTodo\fP
+.RS 4
+Allow for payloads larger than MAX_PAYLOAD_SIZE 
+.RE
+.PP
+
+.PP
+Definition at line \fB100\fP of file \fBrpc\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "bool MaxOS::KPI::ipc::ArgList::add_arg (\fBArgType\fP type, const void * data, size_t length)"
+
+.PP
+Adds an argument to the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP The type of argument 
+.br
+\fIdata\fP The argument data 
+.br
+\fIlength\fP The length of the argument data 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+.RE
+.PP
+
+.PP
+Definition at line \fB43\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+43                                                                        {
+44 
+45         // Not enough space to add more args
+46         if (m_entry_count >= MAX_ARGS || m_payload_size + length > sizeof(m_payload))
+47             return false;
+48 
+49         // Create the entry
+50         m_entries[m_entry_count]\&.type = type;
+51         m_entries[m_entry_count]\&.offset = m_payload_size;
+52         m_entries[m_entry_count]\&.length = length;
+53 
+54         // Copy the data into the payload
+55         memcpy(&m_payload[m_payload_size], data, length);
+56         m_payload_size += length;
+57         m_entry_count++;
+58 
+59         return true;
+60     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::ipc::MAX_ARGS\fP, and \fBMaxOS::KPI::ipc::ArgEntry::offset\fP\&.
+.PP
+Referenced by \fBappend_args()\fP, \fBpush_blob()\fP, \fBpush_bool()\fP, \fBpush_int32()\fP, \fBpush_int64()\fP, \fBpush_string()\fP, \fBpush_uint32()\fP, and \fBpush_uint64()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::append_args (const \fBArgList\fP & other, size_t start_index = \fC0\fP)"
+
+.PP
+Appends arguments from another \fBArgList\fP to this one\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The other \fBArgList\fP to append from 
+.br
+\fIstart_index\fP Where in the other \fBArgList\fP to begin appending from (defaults to 0) 
+.RE
+.PP
+
+.PP
+Definition at line \fB327\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+327                                                                       {
+328 
+329         // Append each argument from the other ArgList
+330         for (size_t i = start_index; i < other\&.m_entry_count; ++i)
+331             add_arg(other\&.m_entries[i]\&.type, &other\&.m_payload[other\&.m_entries[i]\&.offset], other\&.m_entries[i]\&.length);
+332 
+333     }
+.fi
+
+.PP
+References \fBadd_arg()\fP, and \fBMaxOS::KPI::ipc::ArgEntry::offset\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::ipc::rpc_call()\fP, and \fBMaxOS::KPI::ipc::rpc_server_process_next()\fP\&.
+.SS "size_t MaxOS::KPI::ipc::ArgList::arg_count () const"
+
+.PP
+Gets the number of arguments in the argument list\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The number of arguments 
+.RE
+.PP
+
+.PP
+Definition at line \fB97\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+97                                     {
+98 
+99         return m_entry_count;
+100     }
+.fi
+
+.SS "void MaxOS::KPI::ipc::ArgList::clear ()"
+
+.PP
+Resets the arg payload and entries\&. 
+.PP
+Definition at line \fB26\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+26                         {
+27 
+28         m_payload_size = 0;
+29         m_entry_count = 0;
+30 
+31         reset_cursor();
+32 
+33     }
+.fi
+
+.PP
+References \fBreset_cursor()\fP\&.
+.PP
+Referenced by \fBdeserialise()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::deserialise (const uint8_t * buffer, size_t size)"
+
+.PP
+Loads a buffer of serialised \fBArgList\fP args into this list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to read the serialized data from 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The size of the now deserialized data 
+.RE
+.PP
+
+.PP
+Definition at line \fB375\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+375                                                                 {
+376 
+377         // Reset
+378         clear();
+379         size_t offset = 0;
+380 
+381         // Arg count
+382         memcpy(&m_entry_count, (void*) (buffer + offset), sizeof(m_entry_count));
+383         offset += sizeof(m_entry_count);
+384 
+385         // Arg entries
+386         memcpy(&m_entries, (void*) (buffer + offset), m_entry_count * sizeof(arg_entry_t));
+387         offset += m_entry_count * sizeof(arg_entry_t);
+388 
+389         // Payload data
+390         m_payload_size = size \- (sizeof(m_entry_count) + m_entry_count * sizeof(arg_entry_t));
+391         memcpy(&m_payload, (void*) (buffer + offset), m_payload_size);
+392         offset += m_payload_size;
+393     }
+.fi
+
+.PP
+References \fBclear()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::ipc::rpc_call()\fP, and \fBMaxOS::KPI::ipc::rpc_server_process_next()\fP\&.
+.SS "bool MaxOS::KPI::ipc::ArgList::get_arg (size_t index, \fBArgType\fP & type, void * buffer, size_t buffer_size) const"
+
+.PP
+Gets an argument from the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the argument to get 
+.br
+\fItype\fP The type of the argument 
+.br
+\fIbuffer\fP The buffer to store the argument data 
+.br
+\fIbuffer_size\fP The size of the buffer 
+.br
+\fIout_length\fP The length of the argument data 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the argument was retrieved successfully, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB72\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+72                                                                                              {
+73 
+74         // Index out of bounds
+75         if (index >= m_entry_count)
+76             return false;
+77         m_last_entry = index;
+78 
+79         // Get the entry
+80         const arg_entry_t& entry = m_entries[index];
+81         type = entry\&.type;
+82 
+83         // Make sure buffer is large enough and the type matches
+84         if (buffer_size < entry\&.length || entry\&.type != type)
+85             return false;
+86 
+87         // Copy the data into the buffer
+88         memcpy(buffer, &m_payload[entry\&.offset], entry\&.length);
+89         return true;
+90     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::ipc::ArgEntry::offset\fP\&.
+.PP
+Referenced by \fBget_bool()\fP, \fBget_int32()\fP, \fBget_int64()\fP, \fBget_uint32()\fP, and \fBget_uint64()\fP\&.
+.SS "const void * MaxOS::KPI::ipc::ArgList::get_blob ()\fC [inline]\fP"
+
+.PP
+Definition at line \fB142\fP of file \fBrpc\&.h\fP\&..PP
+.nf
+142 { return get_blob(m_last_entry++); }
+.fi
+
+.SS "const void * MaxOS::KPI::ipc::ArgList::get_blob (size_t index) const"
+
+.PP
+Gets a blob argument from the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the argument to get 
+.br
+\fIout_length\fP The length of the blob data 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The blob data 
+.RE
+.PP
+
+.PP
+Definition at line \fB282\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+282                                                     {
+283 
+284         // Get the argument
+285         const arg_entry_t& entry = m_entries[index];
+286         return (void*) (m_payload + entry\&.offset);
+287 
+288     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::ipc::ArgEntry::offset\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::ipc::rpc_server_process_next()\fP\&.
+.SS "bool MaxOS::KPI::ipc::ArgList::get_bool ()\fC [inline]\fP"
+
+.PP
+Definition at line \fB136\fP of file \fBrpc\&.h\fP\&..PP
+.nf
+136 { return get_bool(m_last_entry++); }
+.fi
+
+.SS "bool MaxOS::KPI::ipc::ArgList::get_bool (size_t index) const"
+
+.PP
+Gets a boolean argument from the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the argument to get 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The boolean value 
+.RE
+.PP
+
+.PP
+Definition at line \fB186\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+186                                              {
+187 
+188         // Get the argument
+189         bool value = false;
+190         ArgType type;
+191         get_arg(index, type, &value, sizeof(bool));
+192         return value;
+193 
+194     }
+.fi
+
+.PP
+References \fBget_arg()\fP\&.
+.SS "int32_t MaxOS::KPI::ipc::ArgList::get_int32 ()\fC [inline]\fP"
+
+.PP
+Definition at line \fB139\fP of file \fBrpc\&.h\fP\&..PP
+.nf
+139 { return get_int32(m_last_entry++); }
+.fi
+
+.SS "int32_t MaxOS::KPI::ipc::ArgList::get_int32 (size_t index) const"
+
+.PP
+Gets an int32_t argument from the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the argument to get 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The int32_t value 
+.RE
+.PP
+
+.PP
+Definition at line \fB234\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+234                                                  {
+235 
+236         // Get the argument
+237         int32_t value = 0;
+238         ArgType type;
+239         get_arg(index, type, &value, sizeof(int32_t));
+240         return value;
+241 
+242     }
+.fi
+
+.PP
+References \fBget_arg()\fP\&.
+.SS "int64_t MaxOS::KPI::ipc::ArgList::get_int64 ()\fC [inline]\fP"
+
+.PP
+Definition at line \fB140\fP of file \fBrpc\&.h\fP\&..PP
+.nf
+140 { return get_int64(m_last_entry++); }
+.fi
+
+.SS "int64_t MaxOS::KPI::ipc::ArgList::get_int64 (size_t index) const"
+
+.PP
+Gets an int64_t argument from the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the argument to get 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The int64_t value 
+.RE
+.PP
+
+.PP
+Definition at line \fB250\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+250                                                  {
+251 
+252         // Get the argument
+253         int64_t value = 0;
+254         ArgType type;
+255         get_arg(index, type, &value, sizeof(int64_t));
+256         return value;
+257 
+258     }
+.fi
+
+.PP
+References \fBget_arg()\fP\&.
+.SS "\fBstring\fP MaxOS::KPI::ipc::ArgList::get_string ()\fC [inline]\fP"
+
+.PP
+Definition at line \fB141\fP of file \fBrpc\&.h\fP\&..PP
+.nf
+141 { return get_string(m_last_entry++); }
+.fi
+
+.SS "\fBstring\fP MaxOS::KPI::ipc::ArgList::get_string (size_t index) const"
+
+.PP
+Gets a string argument from the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the argument to get 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The string value 
+.RE
+.PP
+
+.PP
+Definition at line \fB267\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+267                                                  {
+268 
+269         // Get the argument
+270         const arg_entry_t& entry = m_entries[index];
+271         return String((const char*) (m_payload + entry\&.offset));
+272 
+273     }
+.fi
+
+.PP
+References \fBMaxOS::KPI::ipc::ArgEntry::offset\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::ipc::rpc_server_process_next()\fP\&.
+.SS "uint32_t MaxOS::KPI::ipc::ArgList::get_uint32 ()\fC [inline]\fP"
+
+.PP
+Definition at line \fB137\fP of file \fBrpc\&.h\fP\&..PP
+.nf
+137 { return get_uint32(m_last_entry++); }
+.fi
+
+.SS "uint32_t MaxOS::KPI::ipc::ArgList::get_uint32 (size_t index) const"
+
+.PP
+Gets a uint32_t argument from the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the argument to get 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The uint32_t value 
+.RE
+.PP
+
+.PP
+Definition at line \fB202\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+202                                                    {
+203 
+204         // Get the argument
+205         uint32_t value = 0;
+206         ArgType type;
+207         get_arg(index, type, &value, sizeof(uint32_t));
+208         return value;
+209 
+210     }
+.fi
+
+.PP
+References \fBget_arg()\fP\&.
+.SS "uint64_t MaxOS::KPI::ipc::ArgList::get_uint64 ()\fC [inline]\fP"
+
+.PP
+Definition at line \fB138\fP of file \fBrpc\&.h\fP\&..PP
+.nf
+138 { return get_uint64(m_last_entry++); }
+.fi
+
+.SS "uint64_t MaxOS::KPI::ipc::ArgList::get_uint64 (size_t index) const"
+
+.PP
+Gets a uint64_t argument from the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the argument to get 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The uint64_t value 
+.RE
+.PP
+
+.PP
+Definition at line \fB218\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+218                                                    {
+219 
+220         // Get the argument
+221         uint64_t value = 0;
+222         ArgType type;
+223         get_arg(index, type, &value, sizeof(uint64_t));
+224         return value;
+225 
+226     }
+.fi
+
+.PP
+References \fBget_arg()\fP\&.
+.SS "bool MaxOS::KPI::ipc::ArgList::has_more () const"
+
+.PP
+Definition at line \fB297\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+297                                  {
+298         return m_last_entry < m_entry_count;
+299     }
+.fi
+
+.SS "const uint8_t * MaxOS::KPI::ipc::ArgList::payload () const"
+
+.PP
+Gets the payload of the argument list\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The payload data 
+.RE
+.PP
+
+.PP
+Definition at line \fB306\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+306                                           {
+307 
+308         return m_payload;
+309     }
+.fi
+
+.SS "size_t MaxOS::KPI::ipc::ArgList::payload_size () const"
+
+.PP
+Gets the size of the payload of the argument list\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The payload size 
+.RE
+.PP
+
+.PP
+Definition at line \fB316\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+316                                        {
+317 
+318         return m_payload_size;
+319     }
+.fi
+
+.PP
+Referenced by \fBserialise()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::push_blob (const void * data, size_t length)"
+
+.PP
+Adds a blob argument to the end of the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP The blob data to add 
+.br
+\fIlength\fP The length of the blob data 
+.RE
+.PP
+
+.PP
+Definition at line \fB174\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+174                                                            {
+175 
+176         add_arg(ArgType::BLOB, data, length);
+177 
+178     }
+.fi
+
+.PP
+References \fBadd_arg()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::ipc::rpc_call()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::push_bool (bool value)"
+
+.PP
+Adds a boolean argument to the end of the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The boolean value to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB107\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+107                                       {
+108 
+109         add_arg(ArgType::BOOL, &value, sizeof(bool));
+110 
+111     }
+.fi
+
+.PP
+References \fBadd_arg()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::push_int32 (int32_t value)"
+
+.PP
+Adds an int32_t argument to the end of the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The int32_t value to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB140\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+140                                           {
+141 
+142         add_arg(ArgType::INT32, &value, sizeof(int32_t));
+143 
+144     }
+.fi
+
+.PP
+References \fBadd_arg()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::push_int64 (int64_t value)"
+
+.PP
+Adds an int64_t argument to the end of the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The int64_t value to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB151\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+151                                           {
+152 
+153         add_arg(ArgType::INT64, &value, sizeof(int64_t));
+154 
+155     }
+.fi
+
+.PP
+References \fBadd_arg()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::push_string (const \fBstring\fP & value)"
+
+.PP
+Adds a string argument to the end of the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The string value to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB162\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+162                                                  {
+163 
+164         add_arg(ArgType::STRING, value\&.c_str(), value\&.length() + 1);
+165 
+166     }
+.fi
+
+.PP
+References \fBadd_arg()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::ipc::rpc_call()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::push_uint32 (uint32_t value)"
+
+.PP
+Adds a uint32_t argument to the end of the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The uint32_t value to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB118\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+118                                             {
+119 
+120         add_arg(ArgType::UINT32, &value, sizeof(uint32_t));
+121 
+122     }
+.fi
+
+.PP
+References \fBadd_arg()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::push_uint64 (uint64_t value)"
+
+.PP
+Adds a uint64_t argument to the end of the argument list\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The uint64_t value to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB129\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+129                                             {
+130 
+131         add_arg(ArgType::UINT64, &value, sizeof(uint64_t));
+132 
+133     }
+.fi
+
+.PP
+References \fBadd_arg()\fP\&.
+.SS "void MaxOS::KPI::ipc::ArgList::reset_cursor ()"
+
+.PP
+Reset the index of the last read arg\&. 
+.PP
+Definition at line \fB293\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+293                                {
+294         m_last_entry = 0;
+295     }
+.fi
+
+.PP
+Referenced by \fBclear()\fP\&.
+.SS "size_t MaxOS::KPI::ipc::ArgList::serialise (uint8_t * buffer, size_t size)"
+
+.PP
+Converts the argument list into a buffer containing the type and data of each argument in the format [arg count][arg entries][payload]\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to write the serialized data to 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The size of the serialized data
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+validation 
+.RE
+.PP
+
+.PP
+Definition at line \fB344\fP of file \fBrpc\&.cpp\fP\&..PP
+.nf
+344                                                           {
+345 
+346         size_t offset = 0;
+347         size_t space_needed = sizeof(m_entry_count) + m_entry_count * sizeof(arg_entry_t) + payload_size();
+348 
+349         // Check bounds
+350         if (space_needed > size)
+351             return 0;
+352 
+353         // Arg count
+354         memcpy((void*) (buffer + offset), &m_entry_count, sizeof(m_entry_count));
+355         offset += sizeof(m_entry_count);
+356 
+357         // Arg entries
+358         memcpy((void*) (buffer + offset), &m_entries, m_entry_count * sizeof(arg_entry_t));
+359         offset += m_entry_count * sizeof(arg_entry_t);
+360 
+361         // Payload data
+362         memcpy((void*) (buffer + offset), &m_payload, m_payload_size);
+363         offset += m_payload_size;
+364 
+365         return offset;
+366     }
+.fi
+
+.PP
+References \fBpayload_size()\fP\&.
+.PP
+Referenced by \fBMaxOS::KPI::ipc::rpc_call()\fP, and \fBMaxOS::KPI::ipc::rpc_server_process_next()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -1,0 +1,269 @@
+.TH "FileServer::filesystem::File" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::filesystem::File \- Handles file operations and information\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <filesystem\&.h>\fP
+.PP
+Inherited by \fBFileServer::format::Fat32File\fP, \fBFileServer::format::TARFile\fP, and \fBFileServer::format::ext2::Ext2File\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBwrite\fP (\fBbuffer_t\fP *data, size_t \fBsize\fP)"
+.br
+.RI "write data to the file "
+.ti -1c
+.RI "virtual void \fBread\fP (\fBbuffer_t\fP *data, size_t \fBsize\fP)"
+.br
+.RI "read data from the file "
+.ti -1c
+.RI "virtual void \fBflush\fP ()"
+.br
+.RI "Flush the file to the disk\&. "
+.ti -1c
+.RI "void \fBseek\fP (\fBSeekType\fP seek_type, size_t offset)"
+.br
+.RI "Seek to a position in the file\&. "
+.ti -1c
+.RI "uint32_t \fBposition\fP () const"
+.br
+.RI "Get where the file is currently at (amount read/write/seeked) "
+.ti -1c
+.RI "size_t \fBsize\fP () const"
+.br
+.RI "Get the size of the file\&. "
+.ti -1c
+.RI "string \fBname\fP ()"
+.br
+.RI "Get the name of the file\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBm_offset\fP = 0"
+.br
+.RI "The current offset in the file\&. "
+.ti -1c
+.RI "string \fBm_name\fP"
+.br
+.RI "The name of the file\&. "
+.ti -1c
+.RI "size_t \fBm_size\fP = 0"
+.br
+.RI "The size of the file\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles file operations and information\&. 
+.PP
+Definition at line \fB33\fP of file \fBfilesystem\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void File::flush ()\fC [virtual]\fP"
+
+.PP
+Flush the file to the disk\&. 
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2File\fP, and \fBFileServer::format::Fat32File\fP\&.
+.PP
+Definition at line \fB42\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+42                  {
+43 }
+.fi
+
+.PP
+Referenced by \fBFileServer::format::ext2::Ext2File::flush()\fP, and \fBFileServer::format::Fat32File::flush()\fP\&.
+.SS "string File::name ()"
+
+.PP
+Get the name of the file\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the file 
+.RE
+.PP
+
+.PP
+Definition at line \fB83\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+83                   {
+84     return m_name;
+85 }
+.fi
+
+.PP
+References \fBm_name\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::Ext2File::Ext2File()\fP, \fBFileServer::format::Fat32File::Fat32File()\fP, and \fBFileServer::filesystem::Directory::rename_file()\fP\&.
+.SS "uint32_t File::position () const"
+
+.PP
+Get where the file is currently at (amount read/write/seeked) 
+.PP
+\fBReturns\fP
+.RS 4
+The current position in the file 
+.RE
+.PP
+
+.PP
+Definition at line \fB74\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+74                               {
+75     return m_offset;
+76 }
+.fi
+
+.PP
+References \fBm_offset\fP\&.
+.PP
+Referenced by \fBFileServer::vfs::FileResource::read()\fP\&.
+.SS "void File::read (\fBbuffer_t\fP * data, size_t amount)\fC [virtual]\fP"
+
+.PP
+read data from the file 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP The byte buffer to read into 
+.br
+\fIamount\fP The amount of data to read 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2File\fP, \fBFileServer::format::Fat32File\fP, and \fBFileServer::format::TARFile\fP\&.
+.PP
+Definition at line \fB36\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+36                                              {
+37 }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::FileResource::read()\fP\&.
+.SS "void File::seek (\fBSeekType\fP seek_type, size_t offset)"
+
+.PP
+Seek to a position in the file\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIseek_type\fP The type of seek to perform (where to seek to) 
+.br
+\fIoffset\fP The amount to seek 
+.RE
+.PP
+
+.PP
+Definition at line \fB51\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+51                                                  {
+52 
+53     // Seek based on the type
+54     switch (seek_type) {
+55         case SeekType::SET:
+56             m_offset = offset;
+57             break;
+58 
+59         case SeekType::CURRENT:
+60             m_offset += offset;
+61             break;
+62 
+63         case SeekType::END:
+64             m_offset = size() \- offset;
+65             break;
+66     }
+67 }
+.fi
+
+.PP
+References \fBm_offset\fP, and \fBsize()\fP\&.
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::open_file()\fP, and \fBFileServer::vfs::FileResource::write()\fP\&.
+.SS "size_t File::size () const"
+
+.PP
+Get the size of the file\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The size of the file (in bytes) 
+.RE
+.PP
+
+.PP
+Definition at line \fB92\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+92                         {
+93     return m_size;
+94 }
+.fi
+
+.PP
+References \fBm_size\fP\&.
+.PP
+Referenced by \fBFileServer::vfs::FileResource::read()\fP, and \fBseek()\fP\&.
+.SS "void File::write (\fBbuffer_t\fP * data, size_t amount)\fC [virtual]\fP"
+
+.PP
+write data to the file 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP The byte buffer to write 
+.br
+\fIamount\fP The amount of data to write 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2File\fP, and \fBFileServer::format::Fat32File\fP\&.
+.PP
+Definition at line \fB27\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+27                                               {
+28 }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::FileResource::write()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "string FileServer::filesystem::File::m_name\fC [protected]\fP"
+
+.PP
+The name of the file\&. 
+.PP
+Definition at line \fB37\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::Ext2File::Ext2File()\fP, \fBFileServer::format::Fat32File::Fat32File()\fP, and \fBname()\fP\&.
+.SS "uint32_t FileServer::filesystem::File::m_offset = 0\fC [protected]\fP"
+
+.PP
+The current offset in the file\&. 
+.PP
+Definition at line \fB36\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBFileServer::format::Fat32File::Fat32File()\fP, \fBposition()\fP, \fBFileServer::format::ext2::Ext2File::read()\fP, \fBFileServer::format::Fat32File::read()\fP, \fBFileServer::format::TARFile::read()\fP, \fBseek()\fP, \fBFileServer::format::ext2::Ext2File::write()\fP, and \fBFileServer::format::Fat32File::write()\fP\&.
+.SS "size_t FileServer::filesystem::File::m_size = 0\fC [protected]\fP"
+
+.PP
+The size of the file\&. 
+.PP
+Definition at line \fB38\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::Ext2File::Ext2File()\fP, \fBFileServer::format::Fat32File::Fat32File()\fP, \fBFileServer::format::ext2::Ext2File::read()\fP, \fBFileServer::format::TARFile::read()\fP, \fBsize()\fP, \fBFileServer::format::ext2::Ext2File::write()\fP, and \fBFileServer::format::Fat32File::write()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

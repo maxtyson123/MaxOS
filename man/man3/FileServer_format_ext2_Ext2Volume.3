@@ -1,0 +1,770 @@
+.TH "FileServer::format::ext2::Ext2Volume" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::format::ext2::Ext2Volume \- Common operations for an ext2 volume that are used by both files & directories (like block & inode allocation)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ext2\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBExt2Volume\fP (\fBLibDriver::generic::Disk\fP *\fBdisk\fP, lba_t \fBpartition_offset\fP)"
+.br
+.RI "Construct a new Ext2 Volume object, reads the superblock and block group descriptors\&. "
+.ti -1c
+.RI "void \fBwrite_block\fP (uint32_t block_num, \fBcommon::buffer_t\fP *buffer) const"
+.br
+.RI "write a single block from a buffer into onto the disk "
+.ti -1c
+.RI "void \fBwrite_inode\fP (uint32_t inode_num, \fBinode_t\fP *inode) const"
+.br
+.RI "write an inode to the filesystem "
+.ti -1c
+.RI "uint32_t \fBcreate_inode\fP (bool is_directory)"
+.br
+.RI "Allocates a new inode and sets the base metadata\&. Also allocates block 0 of the inode\&. "
+.ti -1c
+.RI "void \fBfree_inode\fP (uint32_t inode)"
+.br
+.RI "Mark an inode as free\&. Note: does NOT unallocated the inodes blocks, use free_group_blocks()\&. "
+.ti -1c
+.RI "void \fBread_block\fP (uint32_t block_num, \fBcommon::buffer_t\fP *buffer) const"
+.br
+.RI "Reads a single block from the disk into a buffer\&. "
+.ti -1c
+.RI "\fBinode_t\fP \fBread_inode\fP (uint32_t inode_num) const"
+.br
+.RI "read an inode from the filesystem "
+.ti -1c
+.RI "uint32_t \fBallocate_block\fP ()"
+.br
+.RI "Allocates a single block to be used by an inode\&. "
+.ti -1c
+.RI "\fBcommon::Vector\fP< uint32_t > \fBallocate_blocks\fP (uint32_t amount)"
+.br
+.RI "Allocates a set of blocks to be used by an inode\&. "
+.ti -1c
+.RI "uint32_t \fBbytes_to_blocks\fP (size_t bytes) const"
+.br
+.RI "How many blocks are needed to contain a set amount of bytes\&. "
+.ti -1c
+.RI "void \fBfree_blocks\fP (const \fBcommon::Vector\fP< uint32_t > &blocks)"
+.br
+.RI "Frees a group of blocks\&. Preferably with adjacent blocks apearing next to each other but not enforced\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBLibDriver::generic::Disk\fP * \fBdisk\fP"
+.br
+.RI "The disk that this volume is on\&. "
+.ti -1c
+.RI "lba_t \fBpartition_offset\fP"
+.br
+.RI "How far into the disk this partition starts\&. "
+.ti -1c
+.RI "\fBsuperblock_t\fP \fBsuperblock\fP"
+.br
+.RI "The superblock of the ext2 filesystem\&. "
+.ti -1c
+.RI "\fBblock_group_descriptor_t\fP ** \fBblock_groups\fP"
+.br
+.RI "The block group descriptors\&. "
+.ti -1c
+.RI "uint8_t * \fBbgdt_cache\fP = nullptr"
+.br
+.RI "The block group descriptor table last read/written\&. "
+.ti -1c
+.RI "size_t \fBblock_size\fP"
+.br
+.RI "How large each block is (in bytes) "
+.ti -1c
+.RI "uint32_t \fBblock_group_descriptor_table_block\fP"
+.br
+.RI "Where the block group descriptor table starts\&. "
+.ti -1c
+.RI "uint32_t \fBblock_group_descriptor_table_size\fP"
+.br
+.RI "How many block groups are in the block group descriptor table\&. "
+.ti -1c
+.RI "uint32_t \fBtotal_block_groups\fP"
+.br
+.RI "How many block groups are in the filesystem\&. "
+.ti -1c
+.RI "size_t \fBpointers_per_block\fP"
+.br
+.RI "How many block pointers fit in a block\&. "
+.ti -1c
+.RI "uint32_t \fBinodes_per_block\fP"
+.br
+.RI "How many inodes fit in a block\&. "
+.ti -1c
+.RI "uint32_t \fBsectors_per_block\fP"
+.br
+.RI "How many sectors does a block take\&. "
+.ti -1c
+.RI "\fBcommon::Spinlock\fP \fBext2_lock\fP"
+.br
+.RI "Lock for synchronised access to the volume (\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Common operations for an ext2 volume that are used by both files & directories (like block & inode allocation) 
+
+
+.PP
+\fBTodo\fP
+.RS 4
+Free blocks 
+.RE
+.PP
+
+.PP
+Definition at line \fB328\fP of file \fBext2\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Ext2Volume::Ext2Volume (\fBLibDriver::generic::Disk\fP * disk, lba_t partition_offset)"
+
+.PP
+Construct a new Ext2 Volume object, reads the superblock and block group descriptors\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdisk\fP The disk to read from 
+.br
+\fIpartition_offset\fP The offset of the partition on the disk in sectors
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Should lock per file and not expose volume lock 
+.RE
+.PP
+
+.PP
+Definition at line \fB26\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+27 : disk(disk),
+28   partition_offset(partition_offset),
+29   superblock({})
+30 {
+31 
+32     // Read superblock
+33     buffer_t superblock_buffer(&superblock, 1024);
+34     disk\->read(partition_offset + 2, &superblock_buffer, 512);
+35     disk\->read(partition_offset + 3, &superblock_buffer, 512);
+36 
+37     // Validate signature
+38     ASSERT(superblock\&.signature == 0xEF53, "Ext2 Filesystem doesnt have a valid signature\\n");
+39 
+40     // Version 0 has constant inode info
+41     if(superblock\&.version_major < 1) {
+42         superblock\&.first_inode = 11;
+43         superblock\&.inode_size = 128;
+44     }
+45 
+46     // Parse the superblock
+47     block_size = 1024 << superblock\&.block_size;
+48     total_block_groups = (superblock\&.total_blocks + superblock\&.blocks_per_group \- 1) / superblock\&.blocks_per_group;
+49     block_group_descriptor_table_block = superblock\&.starting_block + 1;
+50     block_group_descriptor_table_size = total_block_groups * sizeof(block_group_descriptor_t);
+51     pointers_per_block = block_size / sizeof(uint32_t);
+52     inodes_per_block = block_size / superblock\&.inode_size;
+53     sectors_per_block = block_size / 512;
+54 
+55     // Read the block groups
+56     block_groups = new block_group_descriptor_t* [total_block_groups] { nullptr };
+57     uint32_t bgdt_lba = partition_offset + block_group_descriptor_table_block * sectors_per_block;
+58     uint32_t sectors_to_read = (block_group_descriptor_table_size + block_size \- 1) / block_size * sectors_per_block;
+59     buffer_t bg_buffer(sectors_to_read * 512);
+60     for(uint32_t i = 0; i < sectors_to_read; ++i)
+61         disk\->read(bgdt_lba + i, &bg_buffer, 512);
+62 
+63     // Cache the groups
+64     bgdt_cache = new uint8_t[sectors_to_read * 512];
+65     memcpy(bgdt_cache, bg_buffer\&.raw(), sectors_to_read * 512);
+66 
+67     // Store the block groups
+68     for(uint32_t i = 0; i < total_block_groups; ++i) {
+69         block_groups[i] = new block_group_descriptor_t;
+70         memcpy(block_groups[i], bg_buffer\&.raw() + i * sizeof(block_group_descriptor_t),
+71                sizeof(block_group_descriptor_t));
+72     }
+73 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t Ext2Volume::allocate_block ()"
+
+.PP
+Allocates a single block to be used by an inode\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The new block number or 0 if the allocation failed 
+.RE
+.PP
+
+.PP
+Definition at line \fB180\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+180                                     {
+181 
+182     return allocate_blocks(1)[0];
+183 }
+.fi
+
+.PP
+References \fBallocate_blocks()\fP\&.
+.PP
+Referenced by \fBcreate_inode()\fP\&.
+.SS "\fBVector\fP< uint32_t > Ext2Volume::allocate_blocks (uint32_t amount)"
+
+.PP
+Allocates a set of blocks to be used by an inode\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIamount\fP The amount of blocks to allocate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A list of the allocated blocks or [0] if the allocation failed 
+.RE
+.PP
+
+.PP
+Definition at line \fB191\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+191                                                             {
+192 
+193     // No blocks to allocate
+194     if(!amount)
+195         return { 1, 0 };
+196 
+197     // Find the block group with enough free blocks
+198     block_group_descriptor_t* block_group = block_groups[0];
+199     for(uint32_t bg_index = 0; bg_index < total_block_groups; block_group = block_groups[++bg_index])
+200         if(block_group\->free_blocks >= amount)
+201             return allocate_group_blocks(bg_index, amount);
+202 
+203     // No block group can contain the block so split across multiple
+204     Vector<uint32_t> result { };
+205     while(amount > 0) {
+206 
+207         // Find the block group with most free blocks
+208         block_group = block_groups[0];
+209         uint32_t bg_index = 0;
+210         for(; bg_index < total_block_groups; ++bg_index)
+211             if(block_groups[bg_index]\->free_blocks > block_group\->free_blocks)
+212                 block_group = block_groups[bg_index];
+213 
+214         // No space
+215         if(block_group\->free_blocks == 0)
+216             return { 1, 0 };
+217 
+218         // Allocate the remaining blocks
+219         auto allocated = allocate_group_blocks(bg_index, 1);
+220         amount \-= allocated\&.size();
+221         for(auto block : allocated)
+222             result\&.push_back(block);
+223     }
+224 
+225     return result;
+226 }
+.fi
+
+.PP
+References \fBblock_groups\fP, \fBfree_blocks()\fP, and \fBtotal_block_groups\fP\&.
+.PP
+Referenced by \fBallocate_block()\fP, and \fBFileServer::format::ext2::InodeHandler::grow()\fP\&.
+.SS "uint32_t Ext2Volume::bytes_to_blocks (size_t bytes) const"
+
+.PP
+How many blocks are needed to contain a set amount of bytes\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbytes\fP Bytes needed 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The blocks required 
+.RE
+.PP
+
+.PP
+Definition at line \fB375\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+375                                                        {
+376     return (bytes + block_size \- 1) / block_size;
+377 }
+.fi
+
+.PP
+References \fBblock_size\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::InodeHandler::grow()\fP\&.
+.SS "uint32_t Ext2Volume::create_inode (bool is_directory)"
+
+.PP
+Allocates a new inode and sets the base metadata\&. Also allocates block 0 of the inode\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIis_directory\fP is the inode to be used for a directory 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The new inode 
+.RE
+.PP
+
+.PP
+Definition at line \fB385\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+385                                                    {
+386 
+387     ext2_lock\&.lock();
+388 
+389     // Find the block group with enough free inodes
+390     block_group_descriptor_t* block_group = block_groups[0];
+391     uint32_t bg_index = 0;
+392     for(; bg_index < total_block_groups; block_group = block_groups[++bg_index])
+393         if(block_group\->free_inodes >= 1)
+394             break;
+395 
+396     // Read bitmap
+397     buffer_t bitmap(block_size);
+398     read_block(block_group\->block_inode_bitmap, &bitmap);
+399 
+400     // First group contains reserved inodes
+401     uint32_t inode_index = 0;
+402     if(bg_index == 0 && superblock\&.first_inode > 1)
+403         inode_index = superblock\&.first_inode \- 1;
+404 
+405     // Find a free inode
+406     for(; inode_index < superblock\&.inodes_per_group; ++inode_index) {
+407 
+408         // Block is already used
+409         if((bitmap\&.raw()[inode_index / 8] & (1u << (inode_index % 8))) != 0)
+410             continue;
+411 
+412         // Mark as used
+413         block_group\->free_inodes\-\-;
+414         superblock\&.unallocated_inodes\-\-;
+415         bitmap\&.raw()[inode_index / 8] |= (uint8_t) (1u << (inode_index % 8));
+416 
+417         break;
+418     }
+419 
+420     // Convert into the 1\-based inode index in the group
+421     inode_index += bg_index * superblock\&.inodes_per_group + 1;
+422 
+423     // Save the changed metadata
+424     write_block(block_group\->block_inode_bitmap, &bitmap);
+425     write_back_block_groups();
+426     write_back_superblock();
+427 
+428     // Create the inode
+429     inode_t inode { };
+430     //TODO: CLOCK inode\&.creation_time = time_to_epoch(Clock::active_clock()\->get_time());
+431     //TODO: CLOCK inode\&.last_modification_time = time_to_epoch(Clock::active_clock()\->get_time());
+432     inode\&.block_pointers[0] = allocate_block();
+433     inode\&.hard_links = is_directory ? 2 : 1;
+434     inode\&.type = ((uint16_t) (is_directory ? InodeType::DIRECTORY : InodeType::FILE) >> 12) & 0xF;
+435     inode\&.permissions =
+436             (uint16_t) (is_directory ? InodePermissionsDefaults::DIRECTORY : InodePermissionsDefaults::FILE) & 0x0FFF;
+437     write_inode(inode_index, &inode);
+438 
+439     ext2_lock\&.unlock();
+440     return inode_index;
+441 }
+.fi
+
+.PP
+References \fBallocate_block()\fP, \fBblock_groups\fP, \fBblock_size\fP, \fBext2_lock\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::common::Buffer::raw()\fP, \fBread_block()\fP, \fBsuperblock\fP, \fBtotal_block_groups\fP, \fBMaxOS::common::Spinlock::unlock()\fP, \fBwrite_block()\fP, and \fBwrite_inode()\fP\&.
+.SS "void Ext2Volume::free_blocks (const \fBcommon::Vector\fP< uint32_t > & blocks)"
+
+.PP
+Frees a group of blocks\&. Preferably with adjacent blocks apearing next to each other but not enforced\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIblocks\fP The blocks to free 
+.RE
+.PP
+
+.PP
+Definition at line \fB479\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+479                                                                  {
+480 
+481     // No blocks to free
+482     if(blocks\&.empty())
+483         return;
+484 
+485     uint32_t start = blocks[0];
+486     uint32_t previous = start;
+487     uint32_t amount = 1;
+488 
+489     // Free each adjacent set of blocks
+490     for(auto& block : blocks) {
+491 
+492         // First is already accounted for
+493         if(block == start)
+494             continue;
+495 
+496         // Is this block adjacent
+497         if((previous + 1) == block) {
+498             previous = block;
+499             amount += 1;
+500             continue;
+501         }
+502 
+503         // Adjacent set has ended
+504         uint32_t group = (start \- superblock\&.starting_block) / superblock\&.blocks_per_group;
+505         free_group_blocks(group, amount, start);
+506 
+507         // Reset
+508         start = block;
+509         previous = start;
+510         amount = 1;
+511     }
+512 
+513     // Account for the last set of blocks in the loop
+514     uint32_t group = (start \- superblock\&.starting_block) / superblock\&.blocks_per_group;
+515     free_group_blocks(group, amount, start);
+516 }
+.fi
+
+.PP
+References \fBMaxOS::common::Vector< Type >::empty()\fP, and \fBsuperblock\fP\&.
+.PP
+Referenced by \fBallocate_blocks()\fP, and \fBFileServer::format::ext2::InodeHandler::free()\fP\&.
+.SS "void Ext2Volume::free_inode (uint32_t inode)"
+
+.PP
+Mark an inode as free\&. Note: does NOT unallocated the inodes blocks, use free_group_blocks()\&. 
+.PP
+\fBSee also\fP
+.RS 4
+free_group_blocks
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIinode\fP The inode number to mark as free 
+.RE
+.PP
+
+.PP
+Definition at line \fB449\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+449                                           {
+450 
+451     // Find the block group containing the inode
+452     uint32_t bg_index = (inode \- 1) / superblock\&.inodes_per_group;
+453     block_group_descriptor_t* block_group = block_groups[bg_index];
+454 
+455     // Read bitmap
+456     buffer_t bitmap(block_size);
+457     read_block(block_group\->block_inode_bitmap, &bitmap);
+458 
+459     // First group contains reserved inodes
+460     uint32_t inode_index = (inode \- 1) % superblock\&.inodes_per_group;
+461     if(bg_index == 0 && (inode_index < (superblock\&.first_inode \- 1)))
+462         return;
+463 
+464     // Mark as used
+465     block_group\->free_inodes++;
+466     superblock\&.unallocated_inodes++;
+467     bitmap\&.raw()[inode_index / 8] &= (uint8_t) ~(1u << (inode_index % 8));
+468 
+469     // Save the changed metadata
+470     write_block(block_group\->block_inode_bitmap, &bitmap);
+471     write_back_block_groups();
+472     write_back_superblock();
+473 }
+.fi
+
+.PP
+References \fBblock_groups\fP, \fBblock_size\fP, \fBMaxOS::common::Buffer::raw()\fP, \fBread_block()\fP, \fBsuperblock\fP, and \fBwrite_block()\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::InodeHandler::free()\fP\&.
+.SS "void Ext2Volume::read_block (uint32_t block_num, \fBcommon::buffer_t\fP * buffer) const"
+
+.PP
+Reads a single block from the disk into a buffer\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIblock_num\fP The block to read 
+.br
+\fIbuffer\fP The buffer to read into 
+.RE
+.PP
+
+.PP
+Definition at line \fB132\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+132                                                                       {
+133 
+134     // Ensure the buffer is in the right format
+135     buffer\->set_offset(0);
+136 
+137     // Read each sector of the block
+138     for(size_t i = 0; i < sectors_per_block; ++i)
+139         disk\->read(partition_offset + block_num * sectors_per_block + i, buffer, 512);
+140 
+141     // Reset buffer
+142     buffer\->set_offset(0);
+143 
+144 }
+.fi
+
+.PP
+References \fBdisk\fP, \fBpartition_offset\fP, \fBLibDriver::generic::Disk::read()\fP, \fBsectors_per_block\fP, and \fBMaxOS::common::Buffer::set_offset()\fP\&.
+.PP
+Referenced by \fBcreate_inode()\fP, \fBfree_inode()\fP, \fBFileServer::format::ext2::Ext2File::read()\fP, \fBFileServer::format::ext2::Ext2Directory::read_from_disk()\fP, \fBread_inode()\fP, \fBFileServer::format::ext2::Ext2File::write()\fP, and \fBwrite_inode()\fP\&.
+.SS "\fBinode_t\fP Ext2Volume::read_inode (uint32_t inode_num) const"
+
+.PP
+read an inode from the filesystem 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinode_num\fP The inode index 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The inode read 
+.RE
+.PP
+
+.PP
+Definition at line \fB152\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+152                                                        {
+153 
+154     inode_t inode;
+155 
+156     // Locate the inode
+157     uint32_t group = (inode_num \- 1) / superblock\&.inodes_per_group;
+158     uint32_t index = (inode_num \- 1) % superblock\&.inodes_per_group;
+159 
+160     // Locate the block
+161     uint32_t inode_table = block_groups[group]\->inode_table_address;
+162     uint32_t offset = index * superblock\&.inode_size;
+163     uint32_t block = offset / block_size;
+164     uint32_t in_block_offset = offset % block_size;
+165 
+166     // Read the block
+167     buffer_t buffer(block_size);
+168     read_block(inode_table + block, &buffer);
+169 
+170     // Read the inode from the block
+171     buffer\&.copy_to(&inode, sizeof(inode_t), in_block_offset);
+172     return inode;
+173 }
+.fi
+
+.PP
+References \fBblock_groups\fP, \fBblock_size\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBread_block()\fP, and \fBsuperblock\fP\&.
+.SS "void Ext2Volume::write_block (uint32_t block_num, \fBcommon::buffer_t\fP * buffer) const"
+
+.PP
+write a single block from a buffer into onto the disk 
+.PP
+\fBParameters\fP
+.RS 4
+\fIblock_num\fP The block to update 
+.br
+\fIbuffer\fP The buffer to read from 
+.RE
+.PP
+
+.PP
+Definition at line \fB83\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+83                                                                        {
+84 
+85     // Ensure the buffer is in the right format
+86     buffer\->set_offset(0);
+87     bool old = buffer\->update_offset;
+88     buffer\->update_offset = true;
+89 
+90     // Read each sector of the block
+91     for(size_t i = 0; i < sectors_per_block; ++i)
+92         disk\->write(partition_offset + block_num * sectors_per_block + i, buffer, 512);
+93 
+94     // Reset buffer
+95     buffer\->set_offset(0);
+96     buffer\->update_offset = old;
+97 }
+.fi
+
+.PP
+References \fBdisk\fP, \fBpartition_offset\fP, \fBsectors_per_block\fP, \fBMaxOS::common::Buffer::set_offset()\fP, \fBMaxOS::common::Buffer::update_offset\fP, and \fBLibDriver::generic::Disk::write()\fP\&.
+.PP
+Referenced by \fBcreate_inode()\fP, \fBfree_inode()\fP, \fBFileServer::format::ext2::Ext2File::write()\fP, and \fBwrite_inode()\fP\&.
+.SS "void Ext2Volume::write_inode (uint32_t inode_num, \fBinode_t\fP * inode) const"
+
+.PP
+write an inode to the filesystem 
+.PP
+\fBParameters\fP
+.RS 4
+\fIinode_num\fP The inode index 
+.br
+\fIinode\fP The inode to read from 
+.RE
+.PP
+
+.PP
+Definition at line \fB105\fP of file \fBext2\&.cpp\fP\&..PP
+.nf
+105                                                                      {
+106 
+107     // Locate the inode
+108     uint32_t group = (inode_num \- 1) / superblock\&.inodes_per_group;
+109     uint32_t index = (inode_num \- 1) % superblock\&.inodes_per_group;
+110 
+111     // Locate the block
+112     uint32_t inode_table = block_groups[group]\->inode_table_address;
+113     uint32_t offset = index * superblock\&.inode_size;
+114     uint32_t block = offset / block_size;
+115     uint32_t in_block_offset = offset % block_size;
+116 
+117     // Read the inode
+118     buffer_t buffer(block_size);
+119     read_block(inode_table + block, &buffer);
+120     buffer\&.copy_from(inode, sizeof(inode_t), in_block_offset);
+121 
+122     // Modify the block
+123     write_block(inode_table + block, &buffer);
+124 }
+.fi
+
+.PP
+References \fBblock_groups\fP, \fBblock_size\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBread_block()\fP, \fBsuperblock\fP, and \fBwrite_block()\fP\&.
+.PP
+Referenced by \fBcreate_inode()\fP, and \fBFileServer::format::ext2::InodeHandler::save()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint8_t* FileServer::format::ext2::Ext2Volume::bgdt_cache = nullptr"
+
+.PP
+The block group descriptor table last read/written\&. 
+.PP
+Definition at line \fB347\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t FileServer::format::ext2::Ext2Volume::block_group_descriptor_table_block"
+
+.PP
+Where the block group descriptor table starts\&. 
+.PP
+Definition at line \fB350\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t FileServer::format::ext2::Ext2Volume::block_group_descriptor_table_size"
+
+.PP
+How many block groups are in the block group descriptor table\&. 
+.PP
+Definition at line \fB351\fP of file \fBext2\&.h\fP\&.
+.SS "\fBblock_group_descriptor_t\fP** FileServer::format::ext2::Ext2Volume::block_groups"
+
+.PP
+The block group descriptors\&. 
+.PP
+Definition at line \fB346\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBallocate_blocks()\fP, \fBcreate_inode()\fP, \fBfree_inode()\fP, \fBread_inode()\fP, and \fBwrite_inode()\fP\&.
+.SS "size_t FileServer::format::ext2::Ext2Volume::block_size"
+
+.PP
+How large each block is (in bytes) 
+.PP
+Definition at line \fB349\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBbytes_to_blocks()\fP, \fBcreate_inode()\fP, \fBfree_inode()\fP, \fBFileServer::format::ext2::InodeHandler::InodeHandler()\fP, \fBFileServer::format::ext2::Ext2File::read()\fP, \fBFileServer::format::ext2::Ext2Directory::read_from_disk()\fP, \fBread_inode()\fP, \fBFileServer::format::ext2::Ext2File::write()\fP, and \fBwrite_inode()\fP\&.
+.SS "\fBLibDriver::generic::Disk\fP* FileServer::format::ext2::Ext2Volume::disk"
+
+.PP
+The disk that this volume is on\&. 
+.PP
+Definition at line \fB342\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBread_block()\fP, and \fBwrite_block()\fP\&.
+.SS "\fBcommon::Spinlock\fP FileServer::format::ext2::Ext2Volume::ext2_lock"
+
+.PP
+Lock for synchronised access to the volume (\&. 
+.PP
+\fBTodo\fP
+.RS 4
+: remove public?) 
+.RE
+.PP
+
+.PP
+Definition at line \fB357\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBcreate_inode()\fP, \fBFileServer::format::ext2::InodeHandler::free()\fP, \fBFileServer::format::ext2::Ext2File::read()\fP, \fBFileServer::format::ext2::Ext2Directory::read_from_disk()\fP, and \fBFileServer::format::ext2::Ext2File::write()\fP\&.
+.SS "uint32_t FileServer::format::ext2::Ext2Volume::inodes_per_block"
+
+.PP
+How many inodes fit in a block\&. 
+.PP
+Definition at line \fB354\fP of file \fBext2\&.h\fP\&.
+.SS "lba_t FileServer::format::ext2::Ext2Volume::partition_offset"
+
+.PP
+How far into the disk this partition starts\&. 
+.PP
+Definition at line \fB343\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBread_block()\fP, and \fBwrite_block()\fP\&.
+.SS "size_t FileServer::format::ext2::Ext2Volume::pointers_per_block"
+
+.PP
+How many block pointers fit in a block\&. 
+.PP
+Definition at line \fB353\fP of file \fBext2\&.h\fP\&.
+.SS "uint32_t FileServer::format::ext2::Ext2Volume::sectors_per_block"
+
+.PP
+How many sectors does a block take\&. 
+.PP
+Definition at line \fB355\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBread_block()\fP, and \fBwrite_block()\fP\&.
+.SS "\fBsuperblock_t\fP FileServer::format::ext2::Ext2Volume::superblock"
+
+.PP
+The superblock of the ext2 filesystem\&. 
+.PP
+Definition at line \fB345\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBcreate_inode()\fP, \fBfree_blocks()\fP, \fBfree_inode()\fP, \fBread_inode()\fP, and \fBwrite_inode()\fP\&.
+.SS "uint32_t FileServer::format::ext2::Ext2Volume::total_block_groups"
+
+.PP
+How many block groups are in the filesystem\&. 
+.PP
+Definition at line \fB352\fP of file \fBext2\&.h\fP\&.
+.PP
+Referenced by \fBallocate_blocks()\fP, and \fBcreate_inode()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

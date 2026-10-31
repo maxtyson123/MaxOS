@@ -1,0 +1,129 @@
+.TH "MaxOS::common::Spinlock" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::Spinlock \- Enables a resource to be used by only one instance at a time through locking and unlocking\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <spinlock\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBlock\fP ()"
+.br
+.RI "Lock the spinlock once it is available\&. "
+.ti -1c
+.RI "void \fBunlock\fP ()"
+.br
+.RI "Unlock the spinlock\&. "
+.ti -1c
+.RI "bool \fBis_locked\fP () const"
+.br
+.RI "Check if the spinlock is locked\&. "
+.ti -1c
+.RI "void \fBacquire\fP ()"
+.br
+.RI "Acquire the spinlock: wait until the lock is available, spinning until that happens\&. "
+.ti -1c
+.RI "void \fBrelease\fP ()"
+.br
+.RI "Release the spinlock\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Enables a resource to be used by only one instance at a time through locking and unlocking\&. 
+.PP
+Definition at line \fB18\fP of file \fBspinlock\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void Spinlock::acquire ()"
+
+.PP
+Acquire the spinlock: wait until the lock is available, spinning until that happens\&. 
+.PP
+Definition at line \fB48\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+48                        {
+49     while (__atomic_test_and_set(&m_locked, __ATOMIC_ACQUIRE))
+50         asm("pause");
+51 }
+.fi
+
+.PP
+Referenced by \fBlock()\fP\&.
+.SS "bool Spinlock::is_locked () const"
+
+.PP
+Check if the spinlock is locked\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if the spinlock is locked, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB38\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+38                                {
+39     bool v;
+40     __atomic_load(&m_locked, &v, __ATOMIC_RELAXED);
+41     return v;
+42 }
+.fi
+
+.SS "void Spinlock::lock ()"
+
+.PP
+Lock the spinlock once it is available\&. 
+.PP
+Definition at line \fB21\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+21                     {
+22     acquire();
+23 }
+.fi
+
+.PP
+References \fBacquire()\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::Process::add_thread()\fP, \fBMaxOS::memory::PhysicalMemoryManager::allocate_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::allocate_frame()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::close_resource()\fP, \fBFileServer::format::ext2::Ext2Volume::create_inode()\fP, \fBFileServer::format::ext2::InodeHandler::free()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_frame()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::system::CPU::PANIC()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, \fBFileServer::format::ext2::Ext2File::read()\fP, \fBFileServer::format::ext2::Ext2Directory::read_from_disk()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::register_resource()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::processes::resources::BridgeHandler::send_to_bridge()\fP, and \fBFileServer::format::ext2::Ext2File::write()\fP\&.
+.SS "void Spinlock::release ()"
+
+.PP
+Release the spinlock\&. 
+.PP
+Definition at line \fB56\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+56                        {
+57     __atomic_clear(&m_locked, __ATOMIC_RELEASE);
+58 }
+.fi
+
+.PP
+Referenced by \fBunlock()\fP\&.
+.SS "void Spinlock::unlock ()"
+
+.PP
+Unlock the spinlock\&. 
+.PP
+Definition at line \fB28\fP of file \fBspinlock\&.cpp\fP\&..PP
+.nf
+28                       {
+29 
+30     release();
+31 }
+.fi
+
+.PP
+References \fBrelease()\fP\&.
+.PP
+Referenced by \fBMaxOS::processes::Process::add_thread()\fP, \fBMaxOS::memory::PhysicalMemoryManager::allocate_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::allocate_frame()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::close_resource()\fP, \fBFileServer::format::ext2::Ext2Volume::create_inode()\fP, \fBFileServer::format::ext2::InodeHandler::free()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_area()\fP, \fBMaxOS::memory::PhysicalMemoryManager::free_frame()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::get_resource()\fP, \fBMaxOS::memory::PhysicalMemoryManager::PhysicalMemoryManager()\fP, \fBMaxOS::system::CPU::prepare_for_panic()\fP, \fBFileServer::format::ext2::Ext2File::read()\fP, \fBFileServer::format::ext2::Ext2Directory::read_from_disk()\fP, \fBMaxOS::processes::resources::BaseResourceRegistry::register_resource()\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::processes::resources::BridgeHandler::send_to_bridge()\fP, and \fBFileServer::format::ext2::Ext2File::write()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -1,0 +1,204 @@
+.TH "MaxOS::common::GenericInputStream< Type >" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::GenericInputStream< Type > \- Manages the connection of a stream to handlers\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <inputStream\&.h>\fP
+.PP
+Inherited by \fBMaxOS::common::InputStreamProcessor< Type, Type >\fP, \fBMaxOS::common::InputStreamProcessor< Type, Type * >\fP, and \fBMaxOS::common::InputStreamProcessor< string, string >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericInputStream\fP ()"
+.br
+.RI "Creates a new \fBGenericInputStream\fP\&. "
+.ti -1c
+.RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< Type > *)"
+.br
+.RI "Creates a new \fBGenericInputStream\fP and connects it to the handler\&. "
+.ti -1c
+.RI "\fB~GenericInputStream\fP ()"
+.br
+.RI "Destroys the \fBGenericInputStream\fP and disconnects all handlers\&. "
+.ti -1c
+.RI "void \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< Type > *)"
+.br
+.RI "Adds a inputStreamEventHandler to the list of internetProtocolHandlers\&. "
+.ti -1c
+.RI "void \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< Type > *)"
+.br
+.RI "Removes a handler from the list of handlers\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< Type > * > \fBm_input_stream_event_handlers\fP"
+.br
+.RI "List of streams being observed by this handler\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Type>
+.br
+class MaxOS::common::GenericInputStream< Type >"Manages the connection of a stream to handlers\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+
+.PP
+Definition at line \fB103\fP of file \fBinputStream\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Type > \fBMaxOS::common::GenericInputStream\fP< Type >::GenericInputStream ()\fC [default]\fP"
+
+.PP
+Creates a new \fBGenericInputStream\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+
+.SS "template<class Type > \fBMaxOS::common::GenericInputStream\fP< Type >::GenericInputStream (\fBInputStreamEventHandler\fP< Type > * input_stream_event_handler)\fC [explicit]\fP"
+
+.PP
+Creates a new \fBGenericInputStream\fP and connects it to the handler\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIinput_stream_event_handler\fP The handler to handle the data 
+.RE
+.PP
+
+.PP
+Definition at line \fB377\fP of file \fBinputStream\&.h\fP\&..PP
+.nf
+377                                                                                                                                {
+378 
+379         // Connect the handler
+380         connect_input_stream_event_handler(input_stream_event_handler);
+381     }
+.fi
+
+.SS "template<class Type > \fBMaxOS::common::GenericInputStream\fP< Type >::~\fBGenericInputStream\fP ()"
+
+.PP
+Destroys the \fBGenericInputStream\fP and disconnects all handlers\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+
+.PP
+Definition at line \fB388\fP of file \fBinputStream\&.h\fP\&..PP
+.nf
+388                                                                        {
+389 
+390         // Disconnect all handlers
+391         while(!m_input_stream_event_handlers\&.empty())
+392             disconnect_input_stream_event_handler(*(m_input_stream_event_handlers\&.begin()));
+393     }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Type > void \fBMaxOS::common::GenericInputStream\fP< Type >::connect_input_stream_event_handler (\fBInputStreamEventHandler\fP< Type > * input_stream_event_handler)"
+
+.PP
+Adds a inputStreamEventHandler to the list of internetProtocolHandlers\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIinput_stream_event_handler\fP The inputStreamEventHandler to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB400\fP of file \fBinputStream\&.h\fP\&..PP
+.nf
+400                                                                                                                                                     {
+401 
+402         // Don't add the handler if it is already connected
+403         if(m_input_stream_event_handlers\&.find(input_stream_event_handler) != m_input_stream_event_handlers\&.end())
+404             return;
+405 
+406         // Add the handler
+407         m_input_stream_event_handlers\&.push_back(input_stream_event_handler);
+408 
+409     }
+.fi
+
+.SS "template<class Type > void \fBMaxOS::common::GenericInputStream\fP< Type >::disconnect_input_stream_event_handler (\fBInputStreamEventHandler\fP< Type > * input_stream_event_handler)"
+
+.PP
+Removes a handler from the list of handlers\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIinput_stream_event_handler\fP The handler to remove 
+.RE
+.PP
+
+.PP
+Definition at line \fB417\fP of file \fBinputStream\&.h\fP\&..PP
+.nf
+417                                                                                                                                                        {
+418 
+419         // Don't remove the handler if it is not connected
+420         if(m_input_stream_event_handlers\&.find(input_stream_event_handler) == m_input_stream_event_handlers\&.end())
+421             return;
+422 
+423         // Remove the handler
+424         m_input_stream_event_handlers\&.erase(input_stream_event_handler);
+425 
+426         // Fire the end of stream event
+427         input_stream_event_handler\->on_end_of_stream(this);
+428 
+429     }
+.fi
+
+.PP
+References \fBMaxOS::common::InputStreamEventHandler< Type >::on_end_of_stream()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class Type > \fBcommon::Vector\fP<\fBInputStreamEventHandler\fP<Type>*> \fBMaxOS::common::GenericInputStream\fP< Type >::m_input_stream_event_handlers\fC [protected]\fP"
+
+.PP
+List of streams being observed by this handler\&. 
+.PP
+Definition at line \fB106\fP of file \fBinputStream\&.h\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -1,9 +1,20 @@
 var searchData=
 [
-  ['elf64_0',['ELF64',['../classMaxOS_1_1processes_1_1ELF64.html',1,'MaxOS::processes']]],
-  ['elfheader64_1',['ELFHeader64',['../structMaxOS_1_1processes_1_1ELFHeader64.html',1,'MaxOS::processes']]],
-  ['elfprogramheader64_2',['ELFProgramHeader64',['../structMaxOS_1_1processes_1_1ELFProgramHeader64.html',1,'MaxOS::processes']]],
-  ['elfsectionheader64_3',['ELFSectionHeader64',['../structMaxOS_1_1processes_1_1ELFSectionHeader64.html',1,'MaxOS::processes']]],
-  ['exceptionhandler_4',['ExceptionHandler',['../classMaxOS_1_1hardwarecommunication_1_1ExceptionHandler.html',1,'MaxOS::hardwarecommunication']]],
-  ['exceptionhandlers_5',['ExceptionHandlers',['../classMaxOS_1_1hardwarecommunication_1_1ExceptionHandlers.html',1,'MaxOS::hardwarecommunication']]]
+  ['datareceivedevent_0',['DataReceivedEvent',['../classMaxOS_1_1net_1_1DataReceivedEvent.html',1,'MaxOS::net']]],
+  ['desktop_1',['Desktop',['../classMaxOS_1_1gui_1_1Desktop.html',1,'MaxOS::gui']]],
+  ['device_2',['Device',['../classDriverManager_1_1core_1_1Device.html',1,'DriverManager::core']]],
+  ['deviceclass_3',['DeviceClass',['../structLibDriver_1_1DeviceClass.html',1,'LibDriver']]],
+  ['deviceenumerator_4',['DeviceEnumerator',['../classDriverManager_1_1core_1_1DeviceEnumerator.html',1,'DriverManager::core']]],
+  ['deviceenumeratoreventhandler_5',['DeviceEnumeratorEventHandler',['../classDriverManager_1_1core_1_1DeviceEnumeratorEventHandler.html',1,'DriverManager::core']]],
+  ['deviceidentification_6',['DeviceIdentification',['../structLibDriver_1_1DeviceIdentification.html',1,'LibDriver']]],
+  ['devicemodel_7',['DeviceModel',['../structLibDriver_1_1DeviceModel.html',1,'LibDriver']]],
+  ['directory_8',['Directory',['../classFileServer_1_1filesystem_1_1Directory.html',1,'FileServer::filesystem']]],
+  ['directoryentry_9',['directoryentry',['../structFileServer_1_1format_1_1DirectoryEntry.html',1,'FileServer::format::DirectoryEntry'],['../structFileServer_1_1format_1_1ext2_1_1DirectoryEntry.html',1,'FileServer::format::ext2::DirectoryEntry']]],
+  ['directoryresource_10',['DirectoryResource',['../classFileServer_1_1vfs_1_1DirectoryResource.html',1,'FileServer::vfs']]],
+  ['disconnectedevent_11',['DisconnectedEvent',['../classMaxOS_1_1net_1_1DisconnectedEvent.html',1,'MaxOS::net']]],
+  ['disk_12',['Disk',['../classLibDriver_1_1generic_1_1Disk.html',1,'LibDriver::generic']]],
+  ['disksector_13',['DiskSector',['../structLibDriver_1_1generic_1_1DiskSector.html',1,'LibDriver::generic']]],
+  ['dividebyzerohandler_14',['DivideByZeroHandler',['../classMaxOS_1_1hardwarecommunication_1_1DivideByZeroHandler.html',1,'MaxOS::hardwarecommunication']]],
+  ['driver_15',['Driver',['../classLibDriver_1_1Driver.html',1,'LibDriver']]],
+  ['driverentry_16',['DriverEntry',['../structDriverManager_1_1core_1_1DriverEntry.html',1,'DriverManager::core']]]
 ];

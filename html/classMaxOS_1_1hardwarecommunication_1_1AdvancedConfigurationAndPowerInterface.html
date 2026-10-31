@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Max OS: MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface Class Reference</title>
+<title>MaxOS: MaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,7 +36,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Max OS<span id="projectnumber">&#160;0.3</span>
+   <div id="projectname">MaxOS<span id="projectnumber">&#160;0.3</span>
    </div>
   </td>
  </tr>
@@ -164,16 +164,16 @@ Public Member Functions</h2></td></tr>
 <div class="line"><span class="lineno">   26</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a6bcb1b11271a35f8bff3d7e20fec2e4f">Logger::INFO</a>() &lt;&lt; <span class="stringliteral">&quot;Setting up ACPI\n&quot;</span>;</div>
 <div class="line"><span class="lineno">   27</span> </div>
 <div class="line"><span class="lineno">   28</span>    <span class="comment">// If the new ACPI is not supported, panic</span></div>
-<div class="line"><span class="lineno">   29</span>    ASSERT(multiboot-&gt;<a class="code hl_function" href="classMaxOS_1_1system_1_1Multiboot.html#ac4bab27793f89e2c1edfaa90ca23ec35">new_acpi</a>() != <span class="keyword">nullptr</span> || multiboot-&gt;<a class="code hl_function" href="classMaxOS_1_1system_1_1Multiboot.html#ab65ea1a3a5fccf72a4baa99f2d6bbaba">old_acpi</a>() != <span class="keyword">nullptr</span>, <span class="stringliteral">&quot;No ACPI found!&quot;</span>);</div>
+<div class="line"><span class="lineno">   29</span>    ASSERT(multiboot-&gt;new_acpi() != <span class="keyword">nullptr</span> || multiboot-&gt;old_acpi() != <span class="keyword">nullptr</span>, <span class="stringliteral">&quot;No ACPI found!&quot;</span>);</div>
 <div class="line"><span class="lineno">   30</span> </div>
 <div class="line"><span class="lineno">   31</span>    <span class="comment">// Check if the new ACPI is supported</span></div>
-<div class="line"><span class="lineno">   32</span>    m_using_new_acpi = multiboot-&gt;<a class="code hl_function" href="classMaxOS_1_1system_1_1Multiboot.html#ab65ea1a3a5fccf72a4baa99f2d6bbaba">old_acpi</a>() == <span class="keyword">nullptr</span>;</div>
+<div class="line"><span class="lineno">   32</span>    m_using_new_acpi = multiboot-&gt;old_acpi() == <span class="keyword">nullptr</span>;</div>
 <div class="line"><span class="lineno">   33</span>    <a class="code hl_function" href="classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb">Logger::DEBUG</a>() &lt;&lt; <span class="stringliteral">&quot;CPU Supports &quot;</span> &lt;&lt; (m_using_new_acpi ? <span class="stringliteral">&quot;New&quot;</span> : <span class="stringliteral">&quot;Old&quot;</span>) &lt;&lt; <span class="stringliteral">&quot; ACPI\n&quot;</span>;</div>
 <div class="line"><span class="lineno">   34</span> </div>
 <div class="line"><span class="lineno">   35</span>    <span class="keywordflow">if</span>(m_using_new_acpi)</div>
-<div class="line"><span class="lineno">   36</span>        m_rsdp2 = (<a class="code hl_struct" href="structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2.html">RSDPDescriptor2</a>*) (multiboot-&gt;<a class="code hl_function" href="classMaxOS_1_1system_1_1Multiboot.html#ac4bab27793f89e2c1edfaa90ca23ec35">new_acpi</a>() + 1);</div>
+<div class="line"><span class="lineno">   36</span>        m_rsdp2 = (<a class="code hl_struct" href="structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2.html">RSDPDescriptor2</a>*) (multiboot-&gt;new_acpi() + 1);</div>
 <div class="line"><span class="lineno">   37</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">   38</span>        m_rsdp = (<a class="code hl_struct" href="structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor.html">RSDPDescriptor</a>*) (multiboot-&gt;<a class="code hl_function" href="classMaxOS_1_1system_1_1Multiboot.html#ab65ea1a3a5fccf72a4baa99f2d6bbaba">old_acpi</a>() + 1);</div>
+<div class="line"><span class="lineno">   38</span>        m_rsdp = (<a class="code hl_struct" href="structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor.html">RSDPDescriptor</a>*) (multiboot-&gt;old_acpi() + 1);</div>
 <div class="line"><span class="lineno">   39</span> </div>
 <div class="line"><span class="lineno">   40</span>    <span class="comment">// Map the XSDT/RSDT</span></div>
 <div class="line"><span class="lineno">   41</span>    uint64_t physical_address = m_using_new_acpi ? m_rsdp2-&gt;xsdt_address : m_rsdp-&gt;rsdt_address;</div>
@@ -197,8 +197,6 @@ Public Member Functions</h2></td></tr>
 <div class="line"><span class="lineno">   59</span>}</div>
 <div class="ttc" id="aclassMaxOS_1_1Logger_html_a44040e7f56db620657286c3dc2b230fb"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb">MaxOS::Logger::DEBUG</a></div><div class="ttdeci">static LogRecord DEBUG()</div><div class="ttdoc">Gets the active logger for debug logs.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00204">logger.cpp:204</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1Logger_html_a6bcb1b11271a35f8bff3d7e20fec2e4f"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a6bcb1b11271a35f8bff3d7e20fec2e4f">MaxOS::Logger::INFO</a></div><div class="ttdeci">static LogRecord INFO()</div><div class="ttdoc">Gets the active logger for info logs.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00195">logger.cpp:195</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1system_1_1Multiboot_html_ab65ea1a3a5fccf72a4baa99f2d6bbaba"><div class="ttname"><a href="classMaxOS_1_1system_1_1Multiboot.html#ab65ea1a3a5fccf72a4baa99f2d6bbaba">MaxOS::system::Multiboot::old_acpi</a></div><div class="ttdeci">multiboot_tag_old_acpi * old_acpi()</div><div class="ttdoc">Get the old ACPI tag.</div><div class="ttdef"><b>Definition</b> <a href="multiboot_8cpp_source.html#l00138">multiboot.cpp:138</a></div></div>
-<div class="ttc" id="aclassMaxOS_1_1system_1_1Multiboot_html_ac4bab27793f89e2c1edfaa90ca23ec35"><div class="ttname"><a href="classMaxOS_1_1system_1_1Multiboot.html#ac4bab27793f89e2c1edfaa90ca23ec35">MaxOS::system::Multiboot::new_acpi</a></div><div class="ttdeci">multiboot_tag_new_acpi * new_acpi()</div><div class="ttdoc">Get the new ACPI tag.</div><div class="ttdef"><b>Definition</b> <a href="multiboot_8cpp_source.html#l00147">multiboot.cpp:147</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2_html"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor2.html">MaxOS::hardwarecommunication::RSDPDescriptor2</a></div><div class="ttdoc">Root System Description Pointer (RSDP) structure for ACPI 2 and above.</div><div class="ttdef"><b>Definition</b> <a href="acpi_8h_source.html#l00047">acpi.h:47</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor_html"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1RSDPDescriptor.html">MaxOS::hardwarecommunication::RSDPDescriptor</a></div><div class="ttdoc">Root System Description Pointer (RSDP) structure for ACPI 1.</div><div class="ttdef"><b>Definition</b> <a href="acpi_8h_source.html#l00032">acpi.h:32</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1RSDT_html"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1RSDT.html">MaxOS::hardwarecommunication::RSDT</a></div><div class="ttdoc">Root System Description Table (RSDT) structure for ACPI 1. Contains the header and an array of pointe...</div><div class="ttdef"><b>Definition</b> <a href="acpi_8h_source.html#l00081">acpi.h:81</a></div></div>
@@ -251,7 +249,7 @@ Public Member Functions</h2></td></tr>
 <div class="line"><span class="lineno">  176</span>        header = (<a class="code hl_struct" href="structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html">ACPISDTHeader</a>*) <a class="code hl_function" href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a1ad616354df4569df849c6f1331cd4b4">PhysicalMemoryManager::to_io_region</a>((uint64_t) header);</div>
 <div class="line"><span class="lineno">  177</span> </div>
 <div class="line"><span class="lineno">  178</span>        <span class="comment">// Check if the signature matches</span></div>
-<div class="line"><span class="lineno">  179</span>        <span class="keywordflow">if</span>(strncmp(header-&gt;signature, signature, 4))</div>
+<div class="line"><span class="lineno">  179</span>        <span class="keywordflow">if</span>(<a class="code hl_function" href="string_8h.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a>(header-&gt;signature, signature, 4))</div>
 <div class="line"><span class="lineno">  180</span>            <span class="keywordflow">return</span> header;</div>
 <div class="line"><span class="lineno">  181</span>    }</div>
 <div class="line"><span class="lineno">  182</span> </div>
@@ -259,18 +257,19 @@ Public Member Functions</h2></td></tr>
 <div class="line"><span class="lineno">  184</span>    <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><span class="lineno">  185</span>}</div>
 <div class="ttc" id="aclassMaxOS_1_1memory_1_1PhysicalMemoryManager_html_a1ad616354df4569df849c6f1331cd4b4"><div class="ttname"><a href="classMaxOS_1_1memory_1_1PhysicalMemoryManager.html#a1ad616354df4569df849c6f1331cd4b4">MaxOS::memory::PhysicalMemoryManager::to_io_region</a></div><div class="ttdeci">static void * to_io_region(uintptr_t physical_address)</div><div class="ttdoc">Converts a physical address to an IO region address if it is in the lower region using the higher hal...</div><div class="ttdef"><b>Definition</b> <a href="physical_8cpp_source.html#l00914">physical.cpp:914</a></div></div>
+<div class="ttc" id="astring_8h_html_a9a382141e88fb589c55148c54fa45d64"><div class="ttname"><a href="string_8h.html#a9a382141e88fb589c55148c54fa45d64">strncmp</a></div><div class="ttdeci">bool strncmp(char const *str1, char const *str2, int length)</div><div class="ttdoc">Checks if one string pointer is equal to another string pointer up to a specified length (each must b...</div><div class="ttdef"><b>Definition</b> <a href="string_8cpp_source.html#l01107">string.cpp:1107</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader_html"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html">MaxOS::hardwarecommunication::ACPISDTHeader</a></div><div class="ttdoc">Common header for all ACPI System Description Tables (SDTs)</div><div class="ttdef"><b>Definition</b> <a href="acpi_8h_source.html#l00062">acpi.h:62</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1XSDT_html_a014b986aaf9a0eb72742a00f1c2474d9"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1XSDT.html#a014b986aaf9a0eb72742a00f1c2474d9">MaxOS::hardwarecommunication::XSDT::pointers</a></div><div class="ttdeci">uint64_t pointers[]</div><div class="ttdoc">An array of physical addresses pointing to other ACPI SDTs.</div><div class="ttdef"><b>Definition</b> <a href="acpi_8h_source.html#l00095">acpi.h:95</a></div></div>
 </div><!-- fragment -->
-<p class="reference">References <a class="el" href="acpi_8h_source.html#l00095">MaxOS::hardwarecommunication::XSDT::pointers</a>, and <a class="el" href="physical_8cpp_source.html#l00914">MaxOS::memory::PhysicalMemoryManager::to_io_region()</a>.</p>
+<p class="reference">References <a class="el" href="acpi_8h_source.html#l00095">MaxOS::hardwarecommunication::XSDT::pointers</a>, <a class="el" href="string_8cpp_source.html#l01107">strncmp()</a>, and <a class="el" href="physical_8cpp_source.html#l00914">MaxOS::memory::PhysicalMemoryManager::to_io_region()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="apic_8cpp_source.html#l00245">MaxOS::hardwarecommunication::IOAPIC::IOAPIC()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/MaxOS/MaxOS/kernel/include/hardwarecommunication/<a class="el" href="acpi_8h_source.html">acpi.h</a></li>
-<li>/home/runner/work/MaxOS/MaxOS/kernel/src/hardwarecommunication/<a class="el" href="acpi_8cpp_source.html">acpi.cpp</a></li>
+<li>kernel/include/hardwarecommunication/<a class="el" href="acpi_8h_source.html">acpi.h</a></li>
+<li>kernel/src/hardwarecommunication/<a class="el" href="acpi_8cpp_source.html">acpi.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

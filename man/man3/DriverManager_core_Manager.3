@@ -1,0 +1,252 @@
+.TH "DriverManager::core::Manager" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+DriverManager::core::Manager \- Manages the drivers, handles the adding and removing of drivers\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <manager\&.h>\fP
+.PP
+Inherits \fBDriverManager::core::DeviceEnumeratorEventHandler\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBManager\fP ()"
+.br
+.RI "Constructs the Driver \fBManager\fP, adding any default driver selectors\&. "
+.ti -1c
+.RI "\fB~Manager\fP () final"
+.br
+.RI "Destructor for the Driver \fBManager\fP, removes all drivers and driver selectors\&. "
+.ti -1c
+.RI "void \fBadd_device_enumerator\fP (\fBDeviceEnumerator\fP *)"
+.br
+.RI "Add a device enumerator to the driver manager\&. "
+.ti -1c
+.RI "void \fBremove_device_enumerator\fP (\fBDeviceEnumerator\fP *)"
+.br
+.RI "Remove a device enumerator from the manager\&. "
+.ti -1c
+.RI "void \fBfind_devices\fP ()"
+.br
+.RI "Find the devices\&. "
+.ti -1c
+.RI "void \fBregister_device\fP (\fBDevice\fP *device)"
+.br
+.ti -1c
+.RI "void \fBon_device_enumerated\fP (\fBDevice\fP *) final"
+.br
+.RI "When a driver is selected add it to the manager\&. "
+.ti -1c
+.RI "\fBDevice\fP * \fBget_device\fP (int id)"
+.br
+.ti -1c
+.RI "bool \fBall_drivers_started\fP ()"
+.br
+.RI "Check if all the found drivers have been started\&. "
+.ti -1c
+.RI "void \fBstart_drivers\fP ()"
+.br
+.RI "Start the drivers any devices that haven't been started\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Manages the drivers, handles the adding and removing of drivers\&. 
+.PP
+Definition at line \fB31\fP of file \fBmanager\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Manager::Manager ()"
+
+.PP
+Constructs the Driver \fBManager\fP, adding any default driver selectors\&. 
+.PP
+Definition at line \fB29\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+29                  {
+30 
+31     add_device_enumerator(new PCIController);
+32     // add_driver_selector(new UniversalSerialBusController);
+33 
+34     // Load the inital drivers
+35     load_driver_list("/0/boot/initrd/initdrivers\&.json");
+36 }
+.fi
+
+.PP
+References \fBadd_device_enumerator()\fP\&.
+.SS "Manager::~Manager ()\fC [final]\fP"
+
+.PP
+Destructor for the Driver \fBManager\fP, removes all drivers and driver selectors\&. 
+.PP
+Definition at line \fB41\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+41                   {
+42 
+43     // Free the driver selectors
+44     for(auto& enumerator : m_device_enumerators)
+45         delete enumerator;
+46 
+47 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void Manager::add_device_enumerator (\fBDeviceEnumerator\fP * device_enumerator)"
+
+.PP
+Add a device enumerator to the driver manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdevice_enumerator\fP The driver selector to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB149\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+149                                                                        {
+150 
+151     m_device_enumerators\&.push_back(device_enumerator);
+152 
+153 }
+.fi
+
+.PP
+Referenced by \fBManager()\fP\&.
+.SS "bool Manager::all_drivers_started ()"
+
+.PP
+Check if all the found drivers have been started\&. 
+.PP
+\fBReturns\fP
+.RS 4
+True if all the drivers found by the manager have been started 
+.RE
+.PP
+
+.PP
+Definition at line \fB134\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+134                                   {
+135 
+136     for (const auto& device : m_devices)
+137         if (!device\->driver_started)
+138             return false;
+139 
+140     return true;
+141 
+142 }
+.fi
+
+.SS "void Manager::find_devices ()"
+
+.PP
+Find the devices\&. 
+.PP
+Definition at line \fB169\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+169                            {
+170 
+171     // Select the drivers
+172     for(auto& device_enumerator : m_device_enumerators)
+173         device_enumerator\->enumerate_devices(this);
+174 }
+.fi
+
+.SS "\fBDevice\fP * Manager::get_device (int id)"
+
+.PP
+Definition at line \fB185\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+185                                    {
+186 
+187     for (const auto& device : m_devices)
+188         if (device \-> id == id)
+189             return device;
+190 
+191     return nullptr;
+192 }
+.fi
+
+.SS "void Manager::on_device_enumerated (\fBDevice\fP * driver)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+When a driver is selected add it to the manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdriver\fP The driver that was selected 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBDriverManager::core::DeviceEnumeratorEventHandler\fP\&.
+.PP
+Definition at line \fB181\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+181                                                  {
+182     register_device(driver);
+183 }
+.fi
+
+.SS "void Manager::register_device (\fBDevice\fP * device)"
+
+.PP
+Definition at line \fB195\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+195                                             {
+196 
+197     device \-> id = m_next_device_id++;
+198     m_devices\&.push_back(device);
+199 
+200 }
+.fi
+
+.SS "void Manager::remove_device_enumerator (\fBDeviceEnumerator\fP * device_enumerator)"
+
+.PP
+Remove a device enumerator from the manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdevice_enumerator\fP The driver selector to add 
+.RE
+.PP
+
+.PP
+Definition at line \fB160\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+160                                                                           {
+161 
+162     m_device_enumerators\&.erase(device_enumerator);
+163 
+164 }
+.fi
+
+.SS "void Manager::start_drivers ()"
+
+.PP
+Start the drivers any devices that haven't been started\&. 
+.PP
+Definition at line \fB205\fP of file \fBmanager\&.cpp\fP\&..PP
+.nf
+205                             {
+206 
+207     for (const auto& device : m_devices)
+208         if (!device\->driver_started)
+209             start_driver(device);
+210 
+211 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

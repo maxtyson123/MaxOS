@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['deliverymode_0',['DeliveryMode',['../apic_8h.html#ae5961c617d1c9a84a7e86fbec0f59f44',1,'MaxOS::hardwarecommunication']]],
-  ['descriptorflags_1',['DescriptorFlags',['../gdt_8h.html#a9939ce6f20f93eab7ad3ae6ee5d164c0',1,'MaxOS::system']]]
+  ['channel_0',['Channel',['../clock_8h.html#aad2ff069bce1ac4aae5dee8ad49a0f78',1,'MaxOS::hardwarecommunication']]],
+  ['clusterstate_1',['ClusterState',['../fat32_8h.html#af88c864e4f3f9cbeafd8a3944fc073f8',1,'FileServer::format']]],
+  ['consolecolour_2',['ConsoleColour',['../colour_8h.html#a163092be7d061323a91e03e6e8965da9',1,'MaxOS::common']]],
+  ['cpu_5ffeature_5fecx_3',['CPU_FEATURE_ECX',['../cpu_8h.html#a955509bd4aa295b6038a6812bf689200',1,'MaxOS::system']]],
+  ['cpu_5ffeature_5fedx_4',['CPU_FEATURE_EDX',['../cpu_8h.html#aabd92958148e45d498450aaf57c8d6ab',1,'MaxOS::system']]],
+  ['creatoros_5',['CreatorOS',['../ext2_8h.html#a6fcdbb3041339ca17e0ce8c4748cf9bf',1,'FileServer::format::ext2']]]
 ];

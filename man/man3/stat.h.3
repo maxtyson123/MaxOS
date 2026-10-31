@@ -1,0 +1,314 @@
+.TH "libraries/libc/include/sys/stat.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/include/sys/stat.h \- Defines the structure of the data returned by the fstat(), lstat(), and \fBstat()\fP functions\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libc_common\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+\fC#include <time\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBstat\fP"
+.br
+.RI "The status of file\&. "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBS_IFMT\fP   (0xF000)"
+.br
+.RI "Bitmap mask to extract the file type from a mode_t value\&. "
+.ti -1c
+.RI "#define \fB_S_IFMTE\fP(m)   ((m) & \fBS_IFMT\fP)"
+.br
+.RI "Extract the file type info from a given mode_t\&. "
+.ti -1c
+.RI "#define \fBS_IFIFO\fP   (0x1000)"
+.br
+.RI "Named pipe (first in-out) "
+.ti -1c
+.RI "#define \fBS_IFCHR\fP   (0x2000)"
+.br
+.RI "Character stream device\&. "
+.ti -1c
+.RI "#define \fBS_IFDIR\fP   (0x4000)"
+.br
+.RI "Directory\&. "
+.ti -1c
+.RI "#define \fBS_IFBLK\fP   (0x6000)"
+.br
+.RI "Storage block device\&. "
+.ti -1c
+.RI "#define \fBS_IFREG\fP   (0x8000)"
+.br
+.RI "File\&. "
+.ti -1c
+.RI "#define \fBS_IFLNK\fP   (0xA000)"
+.br
+.RI "Link to another file\&. "
+.ti -1c
+.RI "#define \fBS_IFSOCK\fP   (0xC000)"
+.br
+.RI "IPC socket\&. "
+.ti -1c
+.RI "#define \fBS_ISFIFO\fP(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFIFO\fP)"
+.br
+.RI "Test for a pipe or FIFO special file\&. "
+.ti -1c
+.RI "#define \fBS_ISCHR\fP(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFCHR\fP)"
+.br
+.RI "Test for a character special file\&. "
+.ti -1c
+.RI "#define \fBS_ISDIR\fP(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFDIR\fP)"
+.br
+.RI "Test for a directory\&. "
+.ti -1c
+.RI "#define \fBS_ISBLK\fP(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFBLK\fP)"
+.br
+.RI "Test for a block special file\&. "
+.ti -1c
+.RI "#define \fBS_ISREG\fP(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFREG\fP)"
+.br
+.RI "Test for a regular file\&. "
+.ti -1c
+.RI "#define \fBS_ISLNK\fP(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFLNK\fP)"
+.br
+.RI "Test for a symbolic link\&. "
+.ti -1c
+.RI "#define \fBS_ISSOCK\fP(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFSOCK\fP)"
+.br
+.RI "Test for a socket\&. "
+.ti -1c
+.RI "#define \fBS_TYPEISMQ\fP(buf)   0"
+.br
+.RI "Test for a message queue\&. "
+.ti -1c
+.RI "#define \fBS_TYPEISSEM\fP(buf)   0"
+.br
+.RI "Test for a semaphore\&. "
+.ti -1c
+.RI "#define \fBS_TYPEISSHM\fP(buf)   0"
+.br
+.RI "Test for a shared memory object\&.s\&. "
+.ti -1c
+.RI "#define \fBS_TYPEISTMO\fP(buf)   0"
+.br
+.RI "Test macro for a typed memory object\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBchmod\fP (const char *, \fBmode_t\fP)"
+.br
+.ti -1c
+.RI "int \fBfchmod\fP (int, \fBmode_t\fP)"
+.br
+.ti -1c
+.RI "int \fBfchmodat\fP (int, const char *, \fBmode_t\fP, int)"
+.br
+.ti -1c
+.RI "int \fBfstat\fP (int, struct \fBstat\fP)"
+.br
+.ti -1c
+.RI "int \fBfstatat\fP (int, const char *restrict, struct \fBstat\fP *restrict, int)"
+.br
+.ti -1c
+.RI "int \fBlstat\fP (const char *restrict, struct \fBstat\fP *restrict)"
+.br
+.ti -1c
+.RI "int \fBstat\fP (const char *restrict, struct \fBstat\fP *restrict)"
+.br
+.ti -1c
+.RI "int \fBfutimens\fP (int, const struct \fBtimespec\fP[2])"
+.br
+.ti -1c
+.RI "int \fButimensat\fP (int, const char *, const struct \fBtimespec\fP[2], int)"
+.br
+.ti -1c
+.RI "int \fBmkdir\fP (const char *, \fBmode_t\fP)"
+.br
+.ti -1c
+.RI "int \fBmkdirat\fP (int, const char *, \fBmode_t\fP)"
+.br
+.ti -1c
+.RI "int \fBmkfifo\fP (const char *, \fBmode_t\fP)"
+.br
+.ti -1c
+.RI "int \fBmkfifoat\fP (int, const char *, \fBmode_t\fP)"
+.br
+.ti -1c
+.RI "int \fBmknod\fP (const char *, \fBmode_t\fP, \fBdev_t\fP)"
+.br
+.ti -1c
+.RI "int \fBmknodat\fP (int, const char *, \fBmode_t\fP, \fBdev_t\fP)"
+.br
+.ti -1c
+.RI "\fBmode_t\fP \fBumask\fP (\fBmode_t\fP)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines the structure of the data returned by the fstat(), lstat(), and \fBstat()\fP functions\&. 
+
+
+.PP
+\fBSee also\fP
+.RS 4
+https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_stat.h.html
+.RE
+.PP
+\fBDate\fP
+.RS 4
+15 December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+S_IFIFO etc are linux specific, move to platform (same for S_TYPEISMQ) 
+.RE
+.PP
+
+.PP
+Definition in file \fBstat\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define _S_IFMTE(m)   ((m) & \fBS_IFMT\fP)"
+
+.PP
+Extract the file type info from a given mode_t\&. 
+.PP
+Definition at line \fB49\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_IFBLK   (0x6000)"
+
+.PP
+Storage block device\&. 
+.PP
+Definition at line \fB54\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_IFCHR   (0x2000)"
+
+.PP
+Character stream device\&. 
+.PP
+Definition at line \fB52\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_IFDIR   (0x4000)"
+
+.PP
+Directory\&. 
+.PP
+Definition at line \fB53\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_IFIFO   (0x1000)"
+
+.PP
+Named pipe (first in-out) 
+.PP
+Definition at line \fB51\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_IFLNK   (0xA000)"
+
+.PP
+Link to another file\&. 
+.PP
+Definition at line \fB56\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_IFMT   (0xF000)"
+
+.PP
+Bitmap mask to extract the file type from a mode_t value\&. 
+.PP
+Definition at line \fB48\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_IFREG   (0x8000)"
+
+.PP
+File\&. 
+.PP
+Definition at line \fB55\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_IFSOCK   (0xC000)"
+
+.PP
+IPC socket\&. 
+.PP
+Definition at line \fB57\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_ISBLK(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFBLK\fP)"
+
+.PP
+Test for a block special file\&. 
+.PP
+Definition at line \fB62\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_ISCHR(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFCHR\fP)"
+
+.PP
+Test for a character special file\&. 
+.PP
+Definition at line \fB60\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_ISDIR(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFDIR\fP)"
+
+.PP
+Test for a directory\&. 
+.PP
+Definition at line \fB61\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_ISFIFO(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFIFO\fP)"
+
+.PP
+Test for a pipe or FIFO special file\&. 
+.PP
+Definition at line \fB59\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_ISLNK(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFLNK\fP)"
+
+.PP
+Test for a symbolic link\&. 
+.PP
+Definition at line \fB64\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_ISREG(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFREG\fP)"
+
+.PP
+Test for a regular file\&. 
+.PP
+Definition at line \fB63\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_ISSOCK(m)   (\fB_S_IFMTE\fP(m) == \fBS_IFSOCK\fP)"
+
+.PP
+Test for a socket\&. 
+.PP
+Definition at line \fB65\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_TYPEISMQ(buf)   0"
+
+.PP
+Test for a message queue\&. 
+.PP
+Definition at line \fB67\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_TYPEISSEM(buf)   0"
+
+.PP
+Test for a semaphore\&. 
+.PP
+Definition at line \fB68\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_TYPEISSHM(buf)   0"
+
+.PP
+Test for a shared memory object\&.s\&. 
+.PP
+Definition at line \fB69\fP of file \fBstat\&.h\fP\&.
+.SS "#define S_TYPEISTMO(buf)   0"
+
+.PP
+Test macro for a typed memory object\&. 
+.PP
+Definition at line \fB70\fP of file \fBstat\&.h\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -1,0 +1,269 @@
+.TH "FileServer::vfs::FileResource" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::vfs::FileResource \- A wrapper for a File which exposes File operations as Resource operations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vfsresource\&.h>\fP
+.PP
+Inherits \fBMaxOS::KPI::Resource\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFileResource\fP (const string &\fBname\fP, size_t flags, \fBMaxOS::KPI::ResourceType\fP \fBtype\fP)"
+.br
+.RI "Construct a new File Resource object\&. "
+.ti -1c
+.RI "int \fBread\fP (void *buffer, size_t size, size_t flags) final"
+.br
+.RI "Read from a file resource\&. "
+.ti -1c
+.RI "int \fBwrite\fP (const void *buffer, size_t size, size_t flags) final"
+.br
+.RI "write to a file resource "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::KPI::Resource\fP
+.in +1c
+.ti -1c
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBResourceType\fP \fBtype\fP)"
+.br
+.RI "Constructs a new \fBResource\fP object\&. "
+.ti -1c
+.RI "\fBstring\fP \fBname\fP ()"
+.br
+.RI "Gets the name of this resource\&. "
+.ti -1c
+.RI "\fBResourceType\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of this resource\&. "
+.ti -1c
+.RI "virtual void \fBopen\fP (size_t flags)"
+.br
+.RI "Opens the resource\&. "
+.ti -1c
+.RI "virtual void \fBclose\fP (size_t flags)"
+.br
+.RI "Closes the resource\&. "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBfilesystem::File\fP * \fBfile\fP"
+.br
+.RI "The file that this resource handles & exposes\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A wrapper for a File which exposes File operations as Resource operations\&. 
+
+
+.PP
+\fBSee also\fP
+.RS 4
+File 
+.PP
+\fBResource\fP 
+.RE
+.PP
+
+.PP
+Definition at line \fB30\fP of file \fBvfsresource\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "FileResource::FileResource (const string & name, size_t flags, \fBMaxOS::KPI::ResourceType\fP type)"
+
+.PP
+Construct a new File Resource object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the resource 
+.br
+\fIflags\fP The flags for the resource when opened 
+.br
+\fItype\fP The type of the resource 
+.RE
+.PP
+
+.PP
+Definition at line \fB26\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+27 : Resource(name, flags, type),
+28   file(nullptr) // Initialised by the registry
+29 {
+30 
+31 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "int FileResource::read (void * buffer, size_t size, size_t flags)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Read from a file resource\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to read into 
+.br
+\fIsize\fP The number of bytes to read 
+.br
+\fIflags\fP The flags to pass to the reading 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully read or -1 on error 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
+.PP
+Definition at line \fB43\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+43                                                               {
+44 
+45     // File not found
+46     if(!file)
+47         return \-1;
+48 
+49     // Handle the operation
+50     switch ((FileFlags)flags) {
+51 
+52         case FileFlags::DEFAULT:{
+53 
+54             buffer_t file_buffer(buffer, size);
+55             file\->read(&file_buffer, size);
+56             break;
+57         }
+58 
+59         case FileFlags::READ_SIZE:{
+60             return file\->size();
+61         }
+62 
+63         case FileFlags::READ_OFFSET:{
+64 
+65             return file\->position();
+66         }
+67 
+68         default:
+69             return \-1;
+70     }
+71     return size;
+72 }
+.fi
+
+.PP
+References \fBfile\fP, \fBFileServer::filesystem::File::position()\fP, \fBFileServer::filesystem::File::read()\fP, and \fBFileServer::filesystem::File::size()\fP\&.
+.SS "int FileResource::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+write to a file resource 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to write from 
+.br
+\fIsize\fP The number of bytes to write 
+.br
+\fIflags\fP The flags to pass to the writing 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The number of bytes successfully written or -1 on error
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+may cause two resources, current one with old path and duplicate one with new path, as the Bridge will still store the resource name as the old name\&. Due to the cache they will point to the same opened file object and in theory not cause issues with each other
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+May want to fix the out of sync of renaming a resource 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
+.PP
+Definition at line \fB88\fP of file \fBvfsresource\&.cpp\fP\&..PP
+.nf
+88                                                                      {
+89 
+90     // File not found
+91     if(!file)
+92         return \-1;
+93 
+94     // Handle the operation
+95     switch ((FileFlags)flags) {
+96         case FileFlags::DEFAULT:{
+97 
+98             buffer_t file_buffer((void*)buffer, size);
+99             file\->write(&file_buffer, size);
+100             break;
+101         }
+102 
+103         case FileFlags::WRITE_SEEK_SET:
+104             file\->seek(SeekType::SET, size);
+105             break;
+106 
+107         case FileFlags::WRITE_SEEK_CUR:
+108             file\->seek(SeekType::CURRENT, size);
+109             break;
+110 
+111         case FileFlags::WRITE_SEEK_END:
+112             file\->seek(SeekType::END, size);
+113             break;
+114 
+115         case FileFlags::WRITE_NAME:{
+116 
+117             // Open the parent
+118             auto parent_directory = VirtualFileSystem::current_file_system()\->open_directory(Path::parent_directory(name()));
+119 
+120             // Rename in the parent
+121             string new_name = string((uint8_t*)buffer, size);
+122             parent_directory\->rename_file(file, new_name);
+123 
+124             // Update name references
+125             new_name = Path::join_path(Path::parent_directory(name()), new_name);
+126             VirtualFileSystem::current_file_system()\->update_cache(name(), new_name);
+127             // rename_resource();
+128 
+129             break;
+130         }
+131 
+132         default:
+133             return \-1;
+134 
+135     }
+136 
+137     return size;
+138 }
+.fi
+
+.PP
+References \fBFileServer::vfs::VirtualFileSystem::current_file_system()\fP, \fBfile\fP, \fBLibFS::Path::join_path()\fP, \fBMaxOS::KPI::Resource::name()\fP, \fBFileServer::vfs::VirtualFileSystem::open_directory()\fP, \fBLibFS::Path::parent_directory()\fP, \fBFileServer::filesystem::File::seek()\fP, \fBFileServer::vfs::VirtualFileSystem::update_cache()\fP, and \fBFileServer::filesystem::File::write()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBfilesystem::File\fP* FileServer::vfs::FileResource::file"
+
+.PP
+The file that this resource handles & exposes\&. 
+.PP
+Definition at line \fB36\fP of file \fBvfsresource\&.h\fP\&.
+.PP
+Referenced by \fBread()\fP, and \fBwrite()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

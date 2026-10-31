@@ -1,0 +1,94 @@
+.TH "FileServer::format::TARVolume" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::format::TARVolume
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTARVolume\fP (uint64_t *start)"
+.br
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBtar_header_t\fP * > \fBheaders\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBfile_size\fP (const \fBtar_header_t\fP *header)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB43\fP of file \fBtar\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "TARVolume::TARVolume (uint64_t * start)"
+
+.PP
+Definition at line \fB18\fP of file \fBtar\&.cpp\fP\&..PP
+.nf
+19 {
+20     uint8_t* address = (uint8_t*)start;
+21 
+22     // Cache all the headers
+23     for (size_t i = 0; ; i++) {
+24 
+25         // Get the header
+26         auto header = (tar_header_t*)address;
+27 
+28         if (header\->filename[0] == '\\0')
+29             break;
+30 
+31         // Cache
+32         m_headers\&.push_back(header);
+33         klog("TAR: '%s' size=%d\\n", header\->filename, (int)file_size(header));
+34 
+35         // Move to the starting block for the next header
+36         size_t size = file_size(header);
+37         address += ((size / 512) + 1) * 512;
+38 
+39         // All blocks are 512 bytes, if the file size is not a multiple of this then it is padded with zeros, skip
+40         if (size % 512)
+41             address += 512;
+42 
+43     }
+44 
+45 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "size_t TARVolume::file_size (const \fBtar_header_t\fP * header)"
+
+.PP
+Definition at line \fB53\fP of file \fBtar\&.cpp\fP\&..PP
+.nf
+53                                                       {
+54 
+55     size_t size = 0;
+56     size_t count = 1;
+57 
+58     // Compute the size (encoded in base 8)
+59     for (size_t i = 11; i > 0; i\-\-, count *= 8)
+60         size += (header\->size[i \- 1] \- '0') * count;
+61 
+62     return size;
+63 }
+.fi
+
+.SS "\fBVector\fP< \fBtar_header_t\fP * > TARVolume::headers ()"
+
+.PP
+Definition at line \fB49\fP of file \fBtar\&.cpp\fP\&..PP
+.nf
+49                                           {
+50     return m_headers;
+51 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

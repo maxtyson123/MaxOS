@@ -1,0 +1,504 @@
+.TH "FileServer::format::Fat32Directory" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::format::Fat32Directory \- Handles the directory operations on the FAT32 filesystem\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fat32\&.h>\fP
+.PP
+Inherits \fBFileServer::filesystem::Directory\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFat32Directory\fP (\fBFat32Volume\fP *volume, lba_t cluster, const string &\fBname\fP)"
+.br
+.RI "Construct a new Fat32 Directory object\&. "
+.ti -1c
+.RI "void \fBread_from_disk\fP () final"
+.br
+.RI "read the directory from the disk "
+.ti -1c
+.RI "\fBFile\fP * \fBcreate_file\fP (const string &\fBname\fP) final"
+.br
+.RI "Create a new file in the directory\&. "
+.ti -1c
+.RI "void \fBremove_file\fP (const string &\fBname\fP) final"
+.br
+.RI "Delete a file from the subdirectory\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBcreate_subdirectory\fP (const string &\fBname\fP) final"
+.br
+.RI "Create a new directory in the directory\&. "
+.ti -1c
+.RI "void \fBremove_subdirectory\fP (const string &\fBname\fP) final"
+.br
+.RI "Remove a directory entry from the directory\&. "
+.ti -1c
+.RI "lba_t \fBfirst_cluster\fP () const"
+.br
+.RI "Get the first cluster of the directory\&. "
+.in -1c
+
+Public Member Functions inherited from \fBFileServer::filesystem::Directory\fP
+.in +1c
+.ti -1c
+.RI "virtual \fB~Directory\fP ()"
+.br
+.RI "Destructor for \fBDirectory\fP, frees all files and subdirectories\&. "
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBFile\fP * > \fBfiles\fP ()"
+.br
+.RI "Get the files in the directory\&. "
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBDirectory\fP * > \fBsubdirectories\fP ()"
+.br
+.RI "Get the subdirectories in the directory\&. "
+.ti -1c
+.RI "\fBFile\fP * \fBopen_file\fP (const string &\fBname\fP)"
+.br
+.RI "Open a file in the directory\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBopen_subdirectory\fP (const string &\fBname\fP)"
+.br
+.RI "Open a directory in the directory\&. "
+.ti -1c
+.RI "void \fBrename_file\fP (\fBFile\fP *file, const string &new_name)"
+.br
+.RI "Rename a file in the directory\&. "
+.ti -1c
+.RI "virtual void \fBrename_file\fP (const string &old_name, const string &new_name)"
+.br
+.RI "Rename a file in the directory\&. "
+.ti -1c
+.RI "void \fBrename_subdirectory\fP (\fBDirectory\fP *directory, const string &new_name)"
+.br
+.RI "Rename a subdirectory in the directory\&. "
+.ti -1c
+.RI "virtual void \fBrename_subdirectory\fP (const string &old_name, const string &new_name)"
+.br
+.RI "Rename a subdirectory in the directory\&. "
+.ti -1c
+.RI "string \fBname\fP ()"
+.br
+.RI "Get the name of the directory\&. "
+.ti -1c
+.RI "size_t \fBsize\fP ()"
+.br
+.RI "Get the size of the directory\&. "
+.ti -1c
+.RI "void \fBdebug_contents\fP (uint64_t depth=50)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBsave_entry_to_disk\fP (\fBdir_entry_t\fP *entry)"
+.br
+.RI "Writes an updated directory entry to the disk\&. "
+.ti -1c
+.RI "void \fBupdate_entry_on_disk\fP (size_t index)"
+.br
+.RI "Save the directory entry at the given index to the disk\&. "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBFat32File\fP"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBFileServer::filesystem::Directory\fP
+.in +1c
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBFile\fP * > \fBm_files\fP"
+.br
+.RI "The files in this directory\&. "
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBDirectory\fP * > \fBm_subdirectories\fP"
+.br
+.RI "The subdirectories in this directory\&. "
+.ti -1c
+.RI "string \fBm_name\fP"
+.br
+.RI "The name of this directory\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the directory operations on the FAT32 filesystem\&. 
+.PP
+Definition at line \fB243\fP of file \fBfat32\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Fat32Directory::Fat32Directory (\fBFat32Volume\fP * volume, lba_t cluster, const string & name)"
+
+.PP
+Construct a new Fat32 Directory object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvolume\fP The FAT32 volume 
+.br
+\fIcluster\fP The cluster of the directory 
+.br
+\fIname\fP The name of the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB420\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+421         : m_volume(volume),
+422         m_first_cluster(cluster) {
+423     m_name = name;
+424 }
+.fi
+
+.PP
+References \fBFileServer::filesystem::Directory::m_name\fP, and \fBFileServer::filesystem::Directory::name()\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBFile\fP * Fat32Directory::create_file (const string & name)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Create a new file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the file to create 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The new file object or null if it could not be created 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBFileServer::filesystem::Directory\fP\&.
+.PP
+Definition at line \fB886\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+886                                                     {
+887 
+888     // Check if the file already exists
+889     for(auto& file : m_files)
+890         if(file\->name() == name)
+891             return nullptr;
+892 
+893     // Check if the name is too long
+894     if(name\&.length() > MAX_NAME_LENGTH)
+895         return nullptr;
+896 
+897     // Create the file
+898     auto file = new Fat32File(m_volume, this, create_entry(name, false), name);
+899     m_files\&.push_back(file);
+900     return file;
+901 }
+.fi
+
+.PP
+References \fBFileServer::filesystem::Directory::m_files\fP, \fBFileServer::format::MAX_NAME_LENGTH\fP, and \fBFileServer::filesystem::Directory::name()\fP\&.
+.SS "\fBDirectory\fP * Fat32Directory::create_subdirectory (const string & name)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Create a new directory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the directory to create 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The new directory object or null if it could not be created 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBFileServer::filesystem::Directory\fP\&.
+.PP
+Definition at line \fB929\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+929                                                                  {
+930 
+931     // Check if the directory already exists
+932     for(auto& subdirectory : m_subdirectories)
+933         if(subdirectory\->name() == name)
+934             return nullptr;
+935 
+936     // Check if the name is too long
+937     if(name\&.length() > MAX_NAME_LENGTH)
+938         return nullptr;
+939 
+940     // Create the directory
+941     auto entry = create_entry(name, true);
+942     uint32_t cluster = ((entry\->first_cluster_high << 16) | entry\->first_cluster_low);
+943 
+944     // Store the directory
+945     auto directory = new Fat32Directory(m_volume, cluster, name);
+946     m_subdirectories\&.push_back(directory);
+947     return directory;
+948 }
+.fi
+
+.PP
+References \fBFileServer::filesystem::Directory::m_subdirectories\fP, \fBFileServer::format::MAX_NAME_LENGTH\fP, and \fBFileServer::filesystem::Directory::name()\fP\&.
+.SS "lba_t FileServer::format::Fat32Directory::first_cluster () const\fC [inline]\fP"
+
+.PP
+Get the first cluster of the directory\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The first cluster of the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB287\fP of file \fBfat32\&.h\fP\&..PP
+.nf
+287 { return m_first_cluster; }
+.fi
+
+.PP
+Referenced by \fBremove_file()\fP, and \fBremove_subdirectory()\fP\&.
+.SS "void Fat32Directory::read_from_disk ()\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+read the directory from the disk 
+.PP
+Reimplemented from \fBFileServer::filesystem::Directory\fP\&.
+.PP
+Definition at line \fB825\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+825                                     {
+826 
+827     for(auto& file : m_files)
+828         delete file;
+829     m_files\&.clear();
+830 
+831     for(auto& directory : m_subdirectories)
+832         delete directory;
+833     m_subdirectories\&.clear();
+834 
+835     // Load the entries from the disk into memory
+836     read_all_entries();
+837 
+838     // Parse the entries
+839     string long_name = "";
+840     for(auto& entry : m_entries) {
+841 
+842         // Skip free entries and volume labels
+843         if(entry\&.name[0] == (uint8_t) DirectoryEntryType::FREE
+844            || entry\&.attributes == (uint8_t) DirectoryEntryAttributes::FREE
+845            || entry\&.attributes == (uint8_t) DirectoryEntryAttributes::VOLUME_ID)
+846             continue;
+847 
+848         // Extract the long name
+849         if(entry\&.attributes == (uint8_t) DirectoryEntryAttributes::LONG_NAME) {
+850             long_name = parse_long_filename((long_file_name_entry_t*) &entry, long_name);
+851             continue;
+852         }
+853 
+854         bool is_directory = entry\&.attributes == (uint8_t) DirectoryEntryAttributes::DIRECTORY;
+855 
+856         // Get the name of the entry
+857         string name = long_name;
+858         if(long_name == "") {
+859             name = string(entry\&.name, 8);
+860 
+861             // Add the extension
+862             if(!is_directory)
+863                 name = name\&.strip() + "\&." + string(entry\&.extension, 3);
+864         }
+865 
+866         long_name = "";
+867 
+868         // Get the starting cluster
+869         uint32_t start_cluster = (entry\&.first_cluster_high << 16) | entry\&.first_cluster_low;
+870 
+871         // Store the file or directory
+872         if(is_directory)
+873             m_subdirectories\&.push_back(new Fat32Directory(m_volume, start_cluster, name\&.strip()));
+874         else
+875             m_files\&.push_back(new Fat32File(m_volume, this, &entry, name));
+876 
+877     }
+878 }
+.fi
+
+.PP
+References \fBFileServer::filesystem::Directory::m_files\fP, \fBFileServer::filesystem::Directory::m_subdirectories\fP, and \fBFileServer::filesystem::Directory::name()\fP\&.
+.SS "void Fat32Directory::remove_file (const string & name)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Delete a file from the subdirectory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the file to delete 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBFileServer::filesystem::Directory\fP\&.
+.PP
+Definition at line \fB908\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+908                                                    {
+909     // Find the file if it exists
+910     for(auto& file : m_files)
+911         if(file\->name() == name) {
+912 
+913             // Remove the file from the directory
+914             m_files\&.erase(file);
+915             remove_entry(((Fat32File*) file)\->first_cluster());
+916 
+917             // Delete the file reference
+918             delete file;
+919             return;
+920         }
+921 }
+.fi
+
+.PP
+References \fBfirst_cluster()\fP, \fBFileServer::filesystem::Directory::m_files\fP, and \fBFileServer::filesystem::Directory::name()\fP\&.
+.SS "void Fat32Directory::remove_subdirectory (const string & name)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Remove a directory entry from the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the entry to remove 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBFileServer::filesystem::Directory\fP\&.
+.PP
+Definition at line \fB955\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+955                                                            {
+956     // Find the directory if it exists
+957     for(auto& subdirectory : m_subdirectories) {
+958         if(subdirectory\->name() != name)
+959             continue;
+960 
+961         // Remove all the files in the directory
+962         for(auto& file : subdirectory\->files())
+963             subdirectory\->remove_file(file\->name());
+964 
+965         // Remove all the subdirectories in the directory
+966         for(auto& child_dir : subdirectory\->subdirectories())
+967             child_dir\->remove_subdirectory(child_dir\->name());
+968 
+969         // Remove the entry
+970         m_subdirectories\&.erase(subdirectory);
+971         remove_entry(((Fat32Directory*) subdirectory)\->first_cluster());
+972 
+973         // Delete the directory
+974         delete subdirectory;
+975         return;
+976     }
+977 }
+.fi
+
+.PP
+References \fBfirst_cluster()\fP, \fBFileServer::filesystem::Directory::m_subdirectories\fP, and \fBFileServer::filesystem::Directory::name()\fP\&.
+.SS "void Fat32Directory::save_entry_to_disk (\fBdir_entry_t\fP * entry)\fC [protected]\fP"
+
+.PP
+Writes an updated directory entry to the disk\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIentry\fP The entry to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB585\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+585                                                              {
+586 
+587     int index = 0;
+588     for(auto& m_entry : m_entries) {
+589         if(&m_entry == entry)
+590             break;
+591         index++;
+592     }
+593 
+594     update_entry_on_disk(index);
+595 }
+.fi
+
+.PP
+References \fBupdate_entry_on_disk()\fP\&.
+.PP
+Referenced by \fBFileServer::format::Fat32File::write()\fP\&.
+.SS "void Fat32Directory::update_entry_on_disk (size_t index)\fC [protected]\fP"
+
+.PP
+Save the directory entry at the given index to the disk\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindex\fP The index of the entry to update 
+.RE
+.PP
+
+.PP
+Definition at line \fB601\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+601                                                       {
+602 
+603     // Get the entry
+604     auto entry = m_entries[index];
+605 
+606     // Determine sector offset and in\-sector byte offset
+607     uint32_t bytes_per_sector = m_volume\->bpb\&.bytes_per_sector;
+608     uint32_t entry_offset = index * sizeof(dir_entry_t);
+609     uint32_t sector_offset = entry_offset / bytes_per_sector;
+610     uint32_t in_sector_offset = entry_offset % bytes_per_sector;
+611 
+612     // Find which cluster has the entry
+613     uint32_t cluster = m_first_cluster;
+614     for(uint32_t offset_remaining = entry_offset;
+615         offset_remaining >= bytes_per_sector; offset_remaining \-= bytes_per_sector)
+616         cluster = m_volume\->next_cluster(cluster);
+617 
+618     // Read the full sector into a buffer
+619     lba_t base_lba = m_volume\->data_lba + (cluster \- 2) * m_volume\->bpb\&.sectors_per_cluster;
+620     buffer_t sector_buffer(bytes_per_sector, false);
+621     m_volume\->disk\->read(base_lba + sector_offset, &sector_buffer);
+622 
+623     // Update the entry in the buffer
+624     sector_buffer\&.copy_from(&entry, sizeof(dir_entry_t), in_sector_offset);
+625     m_volume\->disk\->write(base_lba + sector_offset, &sector_buffer);
+626 }
+.fi
+
+.PP
+References \fBFileServer::format::Fat32Volume::bpb\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBFileServer::format::Fat32Volume::data_lba\fP, \fBFileServer::format::Fat32Volume::disk\fP, \fBFileServer::format::Fat32Volume::next_cluster()\fP, \fBLibDriver::generic::Disk::read()\fP, and \fBLibDriver::generic::Disk::write()\fP\&.
+.PP
+Referenced by \fBsave_entry_to_disk()\fP\&.
+.SH "Friends And Related Symbol Documentation"
+.PP 
+.SS "friend class \fBFat32File\fP\fC [friend]\fP"
+
+.PP
+Definition at line \fB244\fP of file \fBfat32\&.h\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

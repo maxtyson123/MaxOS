@@ -1,0 +1,100 @@
+.TH "programs/Init/src/main.cpp" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+programs/Init/src/main.cpp \- Entry point for the MaxOS Init program\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <cstdint>\fP
+.br
+\fC#include <libkpi/processes/thread\&.h>\fP
+.br
+\fC#include <libkpi/ipc/sharedmemory\&.h>\fP
+.br
+\fC#include <libcommon/mem\&.h>\fP
+.br
+\fC#include <libcommon/string\&.h>\fP
+.br
+\fC#include <libfs/server/fileserver_client\&.h>\fP
+.br
+\fC#include <libfs/directory\&.h>\fP
+.br
+\fC#include <libfs/file\&.h>\fP
+.br
+\fC#include <libfs/path\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fB_start\fP (int argc, char *argv[])"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Entry point for the MaxOS Init program\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+10th December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBmain\&.cpp\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void _start (int argc, char * argv[])"
+
+.PP
+Definition at line \fB124\fP of file \fBmain\&.cpp\fP\&..PP
+.nf
+125 {
+126     // Parse the ram disk
+127     klog("welcome to userspace\\n");
+128     auto size = *(volatile uint32_t*)0xFFF000;
+129     auto header = (struct tar_header*)(0xFFF000 + sizeof(uint32_t));
+130 
+131     // Pass ramdisk to fileserver
+132     auto address = create_shared_memory("init_initrd", size);
+133     if (!address) {
+134         klog("Init: initrd region FAILED\\n");
+135         exit(1);
+136     }
+137 
+138     memcpy(address, header, size);
+139     wait_for_fileserver_server();
+140     mount_ramdisk("init_initrd");
+141     klog("ramdisk mounted\\n");
+142 
+143     // Start driver manager
+144     string dm_path = "/0/boot/initrd/DriverManager\&.elf";
+145     exec_file(Path::file_name(dm_path)\&.c_str(), dm_path\&.c_str());
+146     klog("DriverManager launched\\n");
+147 
+148     // Wait for fileserver to parse disks
+149     filesystem_self_test();
+150 
+151     // Start core services
+152 
+153     // Handoff to user login
+154 
+155     // Don't be scheduled again, but cant kms as that would kill child processes and thus core servers
+156     while (true)
+157         sleep(UINT32_MAX);
+158 }
+.fi
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

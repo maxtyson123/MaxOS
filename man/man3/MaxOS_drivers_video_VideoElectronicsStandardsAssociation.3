@@ -1,0 +1,163 @@
+.TH "MaxOS::drivers::video::VideoElectronicsStandardsAssociation" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::video::VideoElectronicsStandardsAssociation \- Driver for the VESA video controller, handles the rendering of pixels to the screen using VESA\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vesa\&.h>\fP
+.PP
+Inherits Video\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVideoElectronicsStandardsAssociation\fP (\fBmultiboot_tag_framebuffer\fP *framebuffer_info)"
+.br
+.RI "Constructs a new VESA driver object\&. Maps the framebuffer into the higher half\&. "
+.ti -1c
+.RI "bool \fBsupports_mode\fP (uint32_t width, uint32_t height, uint32_t) final"
+.br
+.RI "Checks if the VESA driver supports the given mode\&. "
+.ti -1c
+.RI "\fBstring\fP \fBvendor_name\fP () final"
+.br
+.RI "The name of the vendor of the VESA standard\&. "
+.ti -1c
+.RI "\fBstring\fP \fBdevice_name\fP () final"
+.br
+.RI "The name of the device\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Driver for the VESA video controller, handles the rendering of pixels to the screen using VESA\&. 
+.PP
+Definition at line \fB26\fP of file \fBvesa\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "VideoElectronicsStandardsAssociation::VideoElectronicsStandardsAssociation (\fBmultiboot_tag_framebuffer\fP * framebuffer_info)\fC [explicit]\fP"
+
+.PP
+Constructs a new VESA driver object\&. Maps the framebuffer into the higher half\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIframebuffer_info\fP The framebuffer information from multiboot 
+.RE
+.PP
+
+.PP
+Definition at line \fB24\fP of file \fBvesa\&.cpp\fP\&..PP
+.nf
+25 : m_framebuffer_info(framebuffer_info)
+26 {
+27 
+28     Logger::INFO() << "Setting up VESA driver\\n";
+29 
+30     // Save the framebuffer info
+31     m_bpp = m_framebuffer_info\->common\&.framebuffer_bpp;
+32     m_pitch = m_framebuffer_info\->common\&.framebuffer_pitch;
+33     m_framebuffer_size = m_framebuffer_info\->common\&.framebuffer_height * m_pitch;
+34     this\->set_mode(framebuffer_info\->common\&.framebuffer_width, framebuffer_info\->common\&.framebuffer_height, framebuffer_info\->common\&.framebuffer_bpp);
+35     Logger::DEBUG() << "Framebuffer: bpp=" << m_bpp << ", pitch=" << m_pitch << ", size=" << m_framebuffer_size << "\\n";
+36 
+37     // Map the frame buffer into the higher half
+38     auto physical_address = (uint64_t) m_framebuffer_info\->common\&.framebuffer_addr;
+39     m_framebuffer_address = (uint64_t *) PhysicalMemoryManager::to_dm_region(physical_address);
+40     PhysicalMemoryManager::s_current_manager\->map_area((physical_address_t *) physical_address, m_framebuffer_address, m_framebuffer_size, WRITE | PRESENT);
+41 
+42     // Reserve the physical memory
+43     size_t pages = PhysicalMemoryManager::size_to_frames(m_framebuffer_size);
+44     PhysicalMemoryManager::s_current_manager\->reserve(m_framebuffer_info\->common\&.framebuffer_addr, pages, "Framebuffer");
+45 
+46     // Log info
+47     Logger::DEBUG() << "Framebuffer address: physical=0x" << (uint64_t) physical_address << ", virtual=0x" << (uint64_t) m_framebuffer_address << "\\n";
+48     Logger::DEBUG() << "Framebuffer mapped: 0x" << (uint64_t) m_framebuffer_address << " \- 0x" << (uint64_t) (m_framebuffer_address + m_framebuffer_size) << " (pages: " << pages << ")\\n";
+49 
+50 }
+.fi
+
+.PP
+References \fBmultiboot_tag_framebuffer::common\fP, \fBMaxOS::Logger::DEBUG()\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_addr\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_bpp\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_height\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_pitch\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP, \fBMaxOS::Logger::INFO()\fP, \fBMaxOS::memory::PhysicalMemoryManager::map_area()\fP, \fBMaxOS::memory::PRESENT\fP, \fBMaxOS::memory::PhysicalMemoryManager::reserve()\fP, \fBMaxOS::memory::PhysicalMemoryManager::s_current_manager\fP, \fBMaxOS::memory::PhysicalMemoryManager::size_to_frames()\fP, \fBMaxOS::memory::PhysicalMemoryManager::to_dm_region()\fP, and \fBMaxOS::memory::WRITE\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBstring\fP VideoElectronicsStandardsAssociation::device_name ()\fC [final]\fP"
+
+.PP
+The name of the device\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the device 
+.RE
+.PP
+
+.PP
+Definition at line \fB130\fP of file \fBvesa\&.cpp\fP\&..PP
+.nf
+130                                                          {
+131     return "VESA compatible graphics card";
+132 }
+.fi
+
+.SS "bool VideoElectronicsStandardsAssociation::supports_mode (uint32_t width, uint32_t height, uint32_t color_depth)\fC [final]\fP"
+
+.PP
+Checks if the VESA driver supports the given mode\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwidth\fP The m_width of the screen 
+.br
+\fIheight\fP The m_height of the screen 
+.br
+\fIcolor_depth\fP The color depth of the screen 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+.RE
+.PP
+
+.PP
+Definition at line \fB79\fP of file \fBvesa\&.cpp\fP\&..PP
+.nf
+79                                                                                                               {
+80 
+81     // Check if the mode is supported
+82     return width == m_framebuffer_info\->common\&.framebuffer_width
+83            && height == m_framebuffer_info\->common\&.framebuffer_height
+84            && color_depth == m_framebuffer_info\->common\&.framebuffer_bpp;
+85 }
+.fi
+
+.PP
+References \fBmultiboot_tag_framebuffer::common\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_bpp\fP, \fBmultiboot_tag_framebuffer_common::framebuffer_height\fP, and \fBmultiboot_tag_framebuffer_common::framebuffer_width\fP\&.
+.SS "\fBstring\fP VideoElectronicsStandardsAssociation::vendor_name ()\fC [final]\fP"
+
+.PP
+The name of the vendor of the VESA standard\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the vendor 
+.RE
+.PP
+
+.PP
+Definition at line \fB119\fP of file \fBvesa\&.cpp\fP\&..PP
+.nf
+119                                                          {
+120 
+121     // Creator of the VESA standard
+122     return "NEC Home Electronics";
+123 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -1,0 +1,127 @@
+.TH "LibDriver::generic::Ethernet" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LibDriver::generic::Ethernet
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBLibDriver::Driver\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fBMediaAccessControlAddress\fP \fBget_media_access_control_address\fP ()"
+.br
+.RI "Get the MAC address\&. "
+.ti -1c
+.RI "virtual void \fBsend\fP (uint8_t *buffer, uint32_t size)"
+.br
+.RI "send data to the network via the driver backend "
+.in -1c
+
+Public Member Functions inherited from \fBLibDriver::Driver\fP
+.in +1c
+.ti -1c
+.RI "virtual uint32_t \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBMediaAccessControlAddress\fP \fBcreate_media_access_control_address\fP (uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6)"
+.br
+.RI "Create a Media Access Control Address\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB25\fP of file \fBethernet\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBMediaAccessControlAddress\fP Ethernet::create_media_access_control_address (uint8_t digit1, uint8_t digit2, uint8_t digit3, uint8_t digit4, uint8_t digit5, uint8_t digit6)\fC [static]\fP"
+
+.PP
+Create a Media Access Control Address\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdigit1\fP The m_first_memory_chunk digit 
+.br
+\fIdigit2\fP The second digit 
+.br
+\fIdigit3\fP The third digit 
+.br
+\fIdigit4\fP The fourth digit 
+.br
+\fIdigit5\fP The fifth digit 
+.br
+\fIdigit6\fP The last digit 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The MAC address 
+.RE
+.PP
+
+.PP
+Definition at line \fB50\fP of file \fBethernet\&.cpp\fP\&..PP
+.nf
+50                                                                                                                                                                       {
+51     return // digit6 is the most significant byte
+52             (uint64_t) digit6 << 40
+53             | (uint64_t) digit5 << 32
+54             | (uint64_t) digit4 << 24
+55             | (uint64_t) digit3 << 16
+56             | (uint64_t) digit2 << 8
+57             | (uint64_t) digit1;
+58 }
+.fi
+
+.SS "\fBMediaAccessControlAddress\fP Ethernet::get_media_access_control_address ()\fC [virtual]\fP"
+
+.PP
+Get the MAC address\&. 
+.PP
+\fBReturns\fP
+.RS 4
+the MAC address 
+.RE
+.PP
+
+.PP
+Definition at line \fB22\fP of file \fBethernet\&.cpp\fP\&..PP
+.nf
+22                                                                      {
+23     return 0;
+24 }
+.fi
+
+.SS "void Ethernet::send (uint8_t * buffer, uint32_t size)\fC [virtual]\fP"
+
+.PP
+send data to the network via the driver backend 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP The buffer to send 
+.br
+\fIsize\fP The size of the buffer 
+.RE
+.PP
+
+.PP
+Definition at line \fB32\fP of file \fBethernet\&.cpp\fP\&..PP
+.nf
+32                                                   {
+33 
+34 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -1,0 +1,182 @@
+.TH "LibDriver::generic::Video" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LibDriver::generic::Video \- \fBDriver\fP for the video controller, handles the setting of the video mode\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <video\&.h>\fP
+.PP
+Inherits \fBLibDriver::Driver\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual bool \fBsupports_mode\fP (uint32_t width, uint32_t height, uint32_t color_depth)"
+.br
+.RI "Check if the video driver supports a certain mode\&. "
+.ti -1c
+.RI "bool \fBset_mode\fP (uint32_t width, uint32_t height, uint32_t color_depth)"
+.br
+.RI "Set the mode of the video driver\&. "
+.in -1c
+
+Public Member Functions inherited from \fBLibDriver::Driver\fP
+.in +1c
+.ti -1c
+.RI "virtual uint32_t \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual bool \fBinternal_set_mode\fP (uint32_t width, uint32_t height, uint32_t color_depth)"
+.br
+.RI "Set the mode of the video driver\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBm_width\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBm_height\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBm_color_depth\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBDriver\fP for the video controller, handles the setting of the video mode\&. 
+.PP
+Definition at line \fB22\fP of file \fBvideo\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "bool Video::internal_set_mode (uint32_t width, uint32_t height, uint32_t color_depth)\fC [protected]\fP, \fC [virtual]\fP"
+
+.PP
+Set the mode of the video driver\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwidth\fP The width of the screen 
+.br
+\fIheight\fP The height of the screen 
+.br
+\fIcolor_depth\fP The color depth of the screen 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true If the mode was set successfully false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB26\fP of file \fBvideo\&.cpp\fP\&..PP
+.nf
+26                                                           {
+27     return false;
+28 }
+.fi
+
+.PP
+Referenced by \fBset_mode()\fP\&.
+.SS "bool Video::set_mode (uint32_t width, uint32_t height, uint32_t color_depth)"
+
+.PP
+Set the mode of the video driver\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwidth\fP The width of the screen 
+.br
+\fIheight\fP The height of the screen 
+.br
+\fIcolor_depth\fP The color depth of the screen 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true If the mode was set successfully (and the screen was updated) false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB50\fP of file \fBvideo\&.cpp\fP\&..PP
+.nf
+50                                                                           {
+51 
+52     // Cant set it if not supported
+53     if(!supports_mode(width, height, color_depth))
+54         return false;
+55 
+56     // Try set the mode
+57     if(!internal_set_mode(width, height, color_depth))
+58         return false;
+59 
+60     // Store the mode
+61     m_width = width;
+62     m_height = height;
+63     m_color_depth = color_depth;
+64     return true;
+65 }
+.fi
+
+.PP
+References \fBinternal_set_mode()\fP, and \fBsupports_mode()\fP\&.
+.SS "bool Video::supports_mode (uint32_t width, uint32_t height, uint32_t color_depth)\fC [virtual]\fP"
+
+.PP
+Check if the video driver supports a certain mode\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwidth\fP The width of the screen 
+.br
+\fIheight\fP The height of the screen 
+.br
+\fIcolor_depth\fP The color depth of the screen 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true If the mode is supported, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB38\fP of file \fBvideo\&.cpp\fP\&..PP
+.nf
+38                                                       {
+39     return false;
+40 }
+.fi
+
+.PP
+Referenced by \fBset_mode()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "uint32_t LibDriver::generic::Video::m_color_depth\fC [protected]\fP"
+
+.PP
+Definition at line \fB29\fP of file \fBvideo\&.h\fP\&.
+.SS "uint32_t LibDriver::generic::Video::m_height\fC [protected]\fP"
+
+.PP
+Definition at line \fB28\fP of file \fBvideo\&.h\fP\&.
+.SS "uint32_t LibDriver::generic::Video::m_width\fC [protected]\fP"
+
+.PP
+Definition at line \fB27\fP of file \fBvideo\&.h\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

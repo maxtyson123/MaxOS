@@ -1,0 +1,194 @@
+.TH "FileServer::filesystem::FileSystem" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::filesystem::FileSystem \- Handles the disk operations and file system information\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <filesystem\&.h>\fP
+.PP
+Inherited by \fBFileServer::format::Fat32FileSystem\fP, \fBFileServer::format::TARFileSystem\fP, and \fBFileServer::format::ext2::Ext2FileSystem\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fB~FileSystem\fP ()"
+.br
+.RI "Destructor for \fBFileSystem\fP, frees the root directory (Which in turn frees all files and subdirectories) "
+.ti -1c
+.RI "\fBDirectory\fP * \fBroot_directory\fP ()"
+.br
+.RI "Get the directory at '/'\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBget_directory\fP (const string &path)"
+.br
+.RI "Get the directory at a given path\&. "
+.ti -1c
+.RI "bool \fBexists\fP (const string &path)"
+.br
+.RI "Check if a path exists on the filesystem\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBDirectory\fP * \fBm_root_directory\fP = nullptr"
+.br
+.RI "The fist directory in the file system (not be confused with the system root) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the disk operations and file system information\&. 
+.PP
+Definition at line \fB100\fP of file \fBfilesystem\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "FileSystem::~FileSystem ()\fC [virtual]\fP"
+
+.PP
+Destructor for \fBFileSystem\fP, frees the root directory (Which in turn frees all files and subdirectories) 
+.PP
+Definition at line \fB335\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+335                         {
+336 
+337     // Free the root directory
+338     delete m_root_directory;
+339 
+340 }
+.fi
+
+.PP
+References \fBm_root_directory\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "bool FileSystem::exists (const string & path)"
+
+.PP
+Check if a path exists on the filesystem\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to check 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the path exists, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB392\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+392                                           {
+393 
+394     // Get the directory at the path
+395     string directory_path = Path::file_path(path);
+396     Directory* directory = get_directory(directory_path);
+397 
+398     // Check if the directory exists
+399     if (!directory)
+400         return false;
+401 
+402     // Check if the file exists
+403     const string file_name = Path::file_name(path);
+404     return directory\->open_file(file_name) != nullptr;
+405 }
+.fi
+
+.PP
+References \fBLibFS::Path::file_name()\fP, \fBLibFS::Path::file_path()\fP, \fBget_directory()\fP, and \fBFileServer::filesystem::Directory::open_file()\fP\&.
+.SS "\fBDirectory\fP * FileSystem::get_directory (const string & path)"
+
+.PP
+Get the directory at a given path\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to the directory 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The directory object or null if it could not be opened 
+.RE
+.PP
+
+.PP
+Definition at line \fB357\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+357                                                        {
+358 
+359     // Check if the path is the root
+360     if (path == "/")
+361         return root_directory();
+362 
+363     // Recursively open the directory
+364     Directory* directory = root_directory();
+365     string directory_path = path;
+366     while (directory_path\&.length() > 0) {
+367 
+368         // Get the name of the directory
+369         string directory_name = Path::top_directory(directory_path);
+370 
+371         // Open the directory
+372         Directory* subdirectory = directory\->open_subdirectory(directory_name);
+373         if (!subdirectory)
+374             return nullptr;
+375 
+376         // Set the new directory
+377         directory = subdirectory;
+378 
+379         // Get the path to the next directory
+380         directory_path = directory_path\&.substring(directory_name\&.length() + 1, directory_path\&.length() \- directory_name\&.length() \- 1);
+381     }
+382 
+383     return directory;
+384 }
+.fi
+
+.PP
+References \fBFileServer::filesystem::Directory::open_subdirectory()\fP, \fBroot_directory()\fP, and \fBLibFS::Path::top_directory()\fP\&.
+.PP
+Referenced by \fBexists()\fP, and \fBFileServer::vfs::VirtualFileSystem::open_directory()\fP\&.
+.SS "\fBDirectory\fP * FileSystem::root_directory ()"
+
+.PP
+Get the directory at '/'\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The root directory of the filesystem 
+.RE
+.PP
+
+.PP
+Definition at line \fB347\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+347                                       {
+348     return m_root_directory;
+349 }
+.fi
+
+.PP
+References \fBm_root_directory\fP\&.
+.PP
+Referenced by \fBget_directory()\fP, and \fBFileServer::vfs::VirtualFileSystem::root_directory()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBDirectory\fP* FileServer::filesystem::FileSystem::m_root_directory = nullptr\fC [protected]\fP"
+
+.PP
+The fist directory in the file system (not be confused with the system root) 
+.PP
+Definition at line \fB102\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::Ext2FileSystem::Ext2FileSystem()\fP, \fBFileServer::format::Fat32FileSystem::Fat32FileSystem()\fP, \fBroot_directory()\fP, \fBFileServer::format::ext2::Ext2FileSystem::~Ext2FileSystem()\fP, and \fB~FileSystem()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

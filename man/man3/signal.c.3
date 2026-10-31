@@ -1,0 +1,189 @@
+.TH "libraries/libc/src/signal.c" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/src/signal.c \- Defines functions to handle async events in a proc\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <signal\&.h>\fP
+.br
+\fC#include <platform\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBkill\fP (\fBpid_t\fP pid, int sig)"
+.br
+.RI "Send a sig to a process\&. "
+.ti -1c
+.RI "int \fBkillpg\fP (\fBpid_t\fP pgid, int sig)"
+.br
+.RI "Send a sig to a process group\&. "
+.ti -1c
+.RI "int \fBpthread_kill\fP (\fBpthread_t\fP thread, int sig)"
+.br
+.RI "Send a sig to a thread\&. "
+.ti -1c
+.RI "int \fBraise\fP (int sig)"
+.br
+.RI "Send a sig to the executing process\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines functions to handle async events in a proc\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+16 December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBsignal\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int kill (\fBpid_t\fP pid, int sig)"
+
+.PP
+Send a sig to a process\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpid\fP The process (or process group if negative) to send the sig to 
+.br
+\fIsig\fP The sig to send 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 on success, or -1 with an errno 
+.RE
+.PP
+
+.PP
+Definition at line \fB21\fP of file \fBsignal\&.c\fP\&..PP
+.nf
+22 {
+23 
+24     // Ensure a valid sig
+25     if(sig < 0 || sig >= _NSIG)
+26         RETURN_ERR(EINVAL);
+27 
+28     // Send the kill sig (platform specific)
+29     return _platform_kill(pid,sig);
+30 }
+.fi
+
+.PP
+References \fB_NSIG\fP, \fB_platform_kill()\fP, and \fBEINVAL\fP\&.
+.PP
+Referenced by \fBkillpg()\fP, and \fBraise()\fP\&.
+.SS "int killpg (\fBpid_t\fP pgid, int sig)"
+
+.PP
+Send a sig to a process group\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpgid\fP The process group to send the sig to 
+.br
+\fIsig\fP The sig to send 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 on success, or -1 with an errno 
+.RE
+.PP
+
+.PP
+Definition at line \fB39\fP of file \fBsignal\&.c\fP\&..PP
+.nf
+40 {
+41 
+42     // IDs must be positive as platform expects negatives to represent a group which fails under \-(\-pgid)
+43     if (pgid < 0)
+44         RETURN_ERR(EINVAL);
+45 
+46     // Send the kill sig and make it a group (platform specific)
+47     return kill(\-pgid,sig);
+48 
+49 }
+.fi
+
+.PP
+References \fBEINVAL\fP, and \fBkill()\fP\&.
+.SS "int pthread_kill (\fBpthread_t\fP thread, int sig)"
+
+.PP
+Send a sig to a thread\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIthread\fP The destination thread to send the sig to 
+.br
+\fIsig\fP The sig to send 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 on success, or -1 with an errno 
+.RE
+.PP
+
+.PP
+Definition at line \fB58\fP of file \fBsignal\&.c\fP\&..PP
+.nf
+58                                            {
+59 
+60     // TODO: POSIX pthreads support
+61     return \-1;
+62 
+63 }
+.fi
+
+.SS "int raise (int sig)"
+
+.PP
+Send a sig to the executing process\&. 
+.PP
+\fBReturns\fP
+.RS 4
+0 on success, or -1 with an errno 
+.RE
+.PP
+
+.PP
+Definition at line \fB70\fP of file \fBsignal\&.c\fP\&..PP
+.nf
+70                   {
+71 
+72     // Ensure a valid sig
+73     if(sig < 0 || sig >= _NSIG)
+74         RETURN_ERR(EINVAL);
+75 
+76     return kill(_platform_getpid(), sig);
+77 
+78 }
+.fi
+
+.PP
+References \fB_NSIG\fP, \fB_platform_getpid()\fP, \fBEINVAL\fP, and \fBkill()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

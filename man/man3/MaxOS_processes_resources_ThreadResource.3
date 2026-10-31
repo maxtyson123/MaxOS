@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::resources::ThreadResource" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::resources::ThreadResource" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,12 +10,12 @@ MaxOS::processes::resources::ThreadResource \- A wrapper for a \fBThread\fP whic
 .PP
 \fC#include <scheduler_resources\&.h>\fP
 .PP
-Inherits Resource\&.
+Inherits \fBMaxOS::KPI::Resource\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBThreadResource\fP (const string &name, size_t flags, \fBresource_type_t\fP type)"
+.RI "\fBThreadResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBresource_type_t\fP \fBtype\fP)"
 .br
 .ti -1c
 .RI "void \fBclose\fP (size_t flags) final"
@@ -29,6 +29,26 @@ Inherits Resource\&.
 .RI "int \fBwrite\fP (const void *buffer, size_t size, size_t flags) final"
 .br
 .RI "Writes data to the thread resource\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::KPI::Resource\fP
+.in +1c
+.ti -1c
+.RI "\fBResource\fP (const \fBstring\fP &\fBname\fP, size_t flags, \fBResourceType\fP \fBtype\fP)"
+.br
+.RI "Constructs a new \fBResource\fP object\&. "
+.ti -1c
+.RI "\fBstring\fP \fBname\fP ()"
+.br
+.RI "Gets the name of this resource\&. "
+.ti -1c
+.RI "\fBResourceType\fP \fBtype\fP ()"
+.br
+.RI "Gets the type of this resource\&. "
+.ti -1c
+.RI "virtual void \fBopen\fP (size_t flags)"
+.br
+.RI "Opens the resource\&. "
 .in -1c
 .SS "Public Attributes"
 
@@ -65,7 +85,7 @@ The thread pointer will be freed by scheduler during \fBclose()\fP
 Definition at line \fB59\fP of file \fBscheduler_resources\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "ThreadResource::ThreadResource (const string & name, size_t flags, \fBresource_type_t\fP type)"
+.SS "ThreadResource::ThreadResource (const \fBstring\fP & name, size_t flags, \fBresource_type_t\fP type)"
 
 .PP
 Definition at line \fB179\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
@@ -78,7 +98,7 @@ Definition at line \fB179\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 
 .SH "Member Function Documentation"
 .PP 
-.SS "void ThreadResource::close (size_t flags)\fC [final]\fP"
+.SS "void ThreadResource::close (size_t flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Closes the thread resource, marking the thread to be removed by the scheduler\&. 
@@ -90,6 +110,8 @@ Closes the thread resource, marking the thread to be removed by the scheduler\&.
 .PP
 
 .PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
+.PP
 Definition at line \fB190\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 .nf
 190                                        {
@@ -100,7 +122,7 @@ Definition at line \fB190\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 
 .PP
 References \fBthread\fP, and \fBMaxOS::processes::Thread::thread_state\fP\&.
-.SS "int ThreadResource::read (void * buffer, size_t size, size_t flags)\fC [final]\fP"
+.SS "int ThreadResource::read (void * buffer, size_t size, size_t flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Reads data from the thread resource\&. 
@@ -120,6 +142,8 @@ The number of bytes successfully read or -1 on error
 .RE
 .PP
 
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
 .PP
 Definition at line \fB204\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 .nf
@@ -165,7 +189,7 @@ Definition at line \fB204\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 
 .PP
 References \fBexit_code\fP, \fBMaxOS::processes::Thread::parent_pid\fP, \fBthread\fP, \fBMaxOS::processes::Thread::thread_state\fP, \fBMaxOS::processes::Thread::ticks\fP, \fBMaxOS::processes::Thread::tid\fP, and \fBMaxOS::processes::Thread::wakeup_time\fP\&.
-.SS "int ThreadResource::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP"
+.SS "int ThreadResource::write (const void * buffer, size_t size, size_t flags)\fC [final]\fP, \fC [virtual]\fP"
 
 .PP
 Writes data to the thread resource\&. 
@@ -185,6 +209,8 @@ The number of bytes successfully written or -1 on error
 .RE
 .PP
 
+.PP
+Reimplemented from \fBMaxOS::KPI::Resource\fP\&.
 .PP
 Definition at line \fB252\fP of file \fBscheduler_resources\&.cpp\fP\&..PP
 .nf
@@ -260,4 +286,4 @@ Referenced by \fBclose()\fP, \fBread()\fP, and \fBwrite()\fP\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

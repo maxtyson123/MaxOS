@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['acpi_5fsdt_5fheader_5ft_0',['acpi_sdt_header_t',['../acpi_8h.html#a139ce3bc2b7412df9abe428c218fd5e0',1,'MaxOS::hardwarecommunication']]]
+  ['_5fplatform_5flocale_0',['_platform_locale',['../example_8h.html#a0c36e2d1c643e0a1c398628fd9601e5e',1,'example.h']]]
 ];

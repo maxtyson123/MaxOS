@@ -1,0 +1,127 @@
+.TH "MaxOS::gui::widgets::ButtonEventHandler" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::gui::widgets::ButtonEventHandler \- Handles button events\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <button\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::EventHandler< ButtonEvents >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "common::Event< \fBButtonEvents\fP > * \fBon_event\fP (common::Event< \fBButtonEvents\fP > *) override"
+.br
+.RI "Handles the button events\&. "
+.ti -1c
+.RI "virtual void \fBon_button_pressed\fP (\fBButton\fP *source)"
+.br
+.RI "Handles the button pressed event\&. "
+.ti -1c
+.RI "virtual void \fBon_button_released\fP (\fBButton\fP *source)"
+.br
+.RI "Handles the button released event\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::EventHandler< ButtonEvents >\fP
+.in +1c
+.ti -1c
+.RI "void \fBon_sample_event\fP (int x, int y)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles button events\&. 
+.PP
+Definition at line \fB61\fP of file \fBbutton\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void ButtonEventHandler::on_button_pressed (\fBButton\fP * source)\fC [virtual]\fP"
+
+.PP
+Handles the button pressed event\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP The source of the event 
+.RE
+.PP
+
+.PP
+Definition at line \fB49\fP of file \fBbutton\&.cpp\fP\&..PP
+.nf
+49                                                   {
+50 
+51 }
+.fi
+
+.PP
+Referenced by \fBon_event()\fP\&.
+.SS "void ButtonEventHandler::on_button_released (\fBButton\fP * source)\fC [virtual]\fP"
+
+.PP
+Handles the button released event\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP The source of the event 
+.RE
+.PP
+
+.PP
+Definition at line \fB58\fP of file \fBbutton\&.cpp\fP\&..PP
+.nf
+58                                                    {
+59 
+60 }
+.fi
+
+.PP
+Referenced by \fBon_event()\fP\&.
+.SS "Event< \fBButtonEvents\fP > * ButtonEventHandler::on_event (common::Event< \fBButtonEvents\fP > * event)\fC [override]\fP"
+
+.PP
+Handles the button events\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIevent\fP The event to handle 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The handled event 
+.RE
+.PP
+
+.PP
+Definition at line \fB28\fP of file \fBbutton\&.cpp\fP\&..PP
+.nf
+28                                                                             {
+29 
+30     switch (event\->type) {
+31 
+32         case ButtonEvents::PRESSED:
+33             on_button_pressed(((ButtonPressedEvent*) event)\->source);
+34             break;
+35 
+36         case ButtonEvents::RELEASED:
+37             on_button_released(((ButtonReleasedEvent*) event)\->source);
+38             break;
+39 
+40     }
+41     return event;
+42 }
+.fi
+
+.PP
+References \fBon_button_pressed()\fP, and \fBon_button_released()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

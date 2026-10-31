@@ -1,0 +1,332 @@
+.TH "MaxOS::common::InputStreamBuffer< Type >" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::InputStreamBuffer< Type > \- Buffers data from a stream and fires an event when a certain element is read\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <inputStream\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::InputStreamProcessor< Type, Type * >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInputStreamBuffer\fP (Type event_fire_element, Type termination_element)"
+.br
+.RI "Creates a new \fBInputStreamBuffer\fP\&. "
+.ti -1c
+.RI "\fB~InputStreamBuffer\fP ()"
+.br
+.RI "Destroys the \fBInputStreamBuffer\fP\&. "
+.ti -1c
+.RI "void \fBon_stream_read\fP (Type) override"
+.br
+.RI "Called when data is read from a stream\&. Adds the data to the buffer and checks if the event should be fired\&. "
+.ti -1c
+.RI "void \fBon_end_of_stream\fP (\fBGenericInputStream\fP< Type > *) override"
+.br
+.RI "Called when a stream has finished\&. Flushes the buffer if there is any data in it\&. "
+.ti -1c
+.RI "void \fBflush\fP ()"
+.br
+.RI "Flushes the buffer by adding the termination element and firing an on read event (NOTE: The buffer is not cleared after this just overwritten) "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "Type \fBm_buffer\fP [10240]"
+.br
+.RI "The buffer to store data in\&. "
+.ti -1c
+.RI "int \fBm_offset\fP { 0 }"
+.br
+.RI "The current position in the buffer\&. "
+.ti -1c
+.RI "Type \fBm_event_fire_element\fP"
+.br
+.RI "The element that will cause the buffer to flush and fire an event\&. "
+.ti -1c
+.RI "Type \fBm_termination_element\fP"
+.br
+.RI "The element that will cause the buffer to flush and end the stream\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBGenericInputStream\fP< Type > * > \fBm_generic_input_streams\fP"
+.br
+.RI "List of streams being observed by this handler\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::GenericInputStream< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBcommon::Vector\fP< \fBInputStreamEventHandler\fP< Type > * > \fBm_input_stream_event_handlers\fP"
+.br
+.RI "List of streams being observed by this handler\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::common::InputStreamProcessor< Type, Type * >\fP
+.in +1c
+.ti -1c
+.RI "\fBInputStreamProcessor\fP ()"
+.br
+.RI "Creates a new \fBInputStreamProcessor\fP\&. "
+.ti -1c
+.RI "\fBInputStreamProcessor\fP (\fBInputStreamEventHandler\fP< Type * > *generic_stream_event_handler)"
+.br
+.RI "Creates a new \fBInputStreamProcessor\fP\&. "
+.ti -1c
+.RI "\fB~InputStreamProcessor\fP ()"
+.br
+.RI "Destroys the \fBInputStreamProcessor\fP\&. "
+.ti -1c
+.RI "void \fBon_end_of_stream\fP (\fBGenericInputStream\fP< Type > *stream) override"
+.br
+.RI "Called when a stream has finished\&. Passes the event on to the handlers and then removes the stream from the array of streams\&. "
+.in -1c
+
+Protected Member Functions inherited from \fBMaxOS::common::InputStreamEventHandler< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBInputStreamEventHandler\fP ()"
+.br
+.RI "_______________________________________________TEMPLATES_________________________________________________________________/// "
+.ti -1c
+.RI "\fB~InputStreamEventHandler\fP ()"
+.br
+.RI "Destroys the \fBInputStreamProcessor\fP and disconnects it from all streams\&. "
+.in -1c
+
+Protected Member Functions inherited from \fBMaxOS::common::GenericInputStream< Type >\fP
+.in +1c
+.ti -1c
+.RI "\fBGenericInputStream\fP ()"
+.br
+.RI "Creates a new \fBGenericInputStream\fP\&. "
+.ti -1c
+.RI "\fBGenericInputStream\fP (\fBInputStreamEventHandler\fP< Type > *)"
+.br
+.RI "Creates a new \fBGenericInputStream\fP and connects it to the handler\&. "
+.ti -1c
+.RI "\fB~GenericInputStream\fP ()"
+.br
+.RI "Destroys the \fBGenericInputStream\fP and disconnects all handlers\&. "
+.ti -1c
+.RI "void \fBconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< Type > *)"
+.br
+.RI "Adds a inputStreamEventHandler to the list of internetProtocolHandlers\&. "
+.ti -1c
+.RI "void \fBdisconnect_input_stream_event_handler\fP (\fBInputStreamEventHandler\fP< Type > *)"
+.br
+.RI "Removes a handler from the list of handlers\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Type>
+.br
+class MaxOS::common::InputStreamBuffer< Type >"Buffers data from a stream and fires an event when a certain element is read\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+
+.PP
+Definition at line \fB81\fP of file \fBinputStream\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Type > \fBMaxOS::common::InputStreamBuffer\fP< Type >::InputStreamBuffer (Type event_fire_element, Type termination_element)"
+
+.PP
+Creates a new \fBInputStreamBuffer\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIevent_fire_element\fP The element to fire the event on 
+.br
+\fItermination_element\fP The element that signifies the end of the part of the stream to be buffered (e\&.g a newline) 
+.RE
+.PP
+
+.PP
+Definition at line \fB289\fP of file \fBinputStream\&.h\fP\&..PP
+.nf
+290             : m_event_fire_element(event_fire_element),
+291             m_termination_element(termination_element) {
+292 
+293     }
+.fi
+
+.SS "template<class Type > \fBMaxOS::common::InputStreamBuffer\fP< Type >::~\fBInputStreamBuffer\fP ()\fC [default]\fP"
+
+.PP
+Destroys the \fBInputStreamBuffer\fP\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Type > void \fBMaxOS::common::InputStreamBuffer\fP< Type >::flush ()"
+
+.PP
+Flushes the buffer by adding the termination element and firing an on read event (NOTE: The buffer is not cleared after this just overwritten) 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+
+.PP
+Definition at line \fB347\fP of file \fBinputStream\&.h\fP\&..PP
+.nf
+347                                                              {
+348 
+349         // Ensure the buffer is not empty
+350         if(m_offset == 0)
+351             return;
+352 
+353         // Add the termination element to the buffer
+354         m_buffer[m_offset] = m_termination_element;
+355 
+356         // Fire the on read event
+357         InputStreamProcessor<Type, Type*>::on_stream_read(m_buffer);
+358 
+359         // Reset the offset
+360         m_offset = 0;
+361 
+362     }
+.fi
+
+.PP
+References \fBMaxOS::common::InputStreamEventHandler< Type >::on_stream_read()\fP\&.
+.SS "template<class Type > void \fBMaxOS::common::InputStreamBuffer\fP< Type >::on_end_of_stream (\fBGenericInputStream\fP< Type > * stream)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Called when a stream has finished\&. Flushes the buffer if there is any data in it\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP The type of data the stream is handling 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP The stream that has finished 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
+.PP
+Definition at line \fB332\fP of file \fBinputStream\&.h\fP\&..PP
+.nf
+332                                                                                                         {
+333 
+334         // flush the buffer if there is any data in it
+335         if(m_offset > 0)
+336             flush();
+337 
+338         // Pass the event on to the handlers and remove the stream
+339         InputStreamProcessor<Type, Type*>::on_end_of_stream(stream);
+340     }
+.fi
+
+.PP
+References \fBMaxOS::common::InputStreamProcessor< Type, ProcessorType >::on_end_of_stream()\fP\&.
+.SS "template<class Type > void \fBMaxOS::common::InputStreamBuffer\fP< Type >::on_stream_read (Type read_element)\fC [override]\fP, \fC [virtual]\fP"
+
+.PP
+Called when data is read from a stream\&. Adds the data to the buffer and checks if the event should be fired\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIType\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIread_element\fP 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBMaxOS::common::InputStreamEventHandler< Type >\fP\&.
+.PP
+Definition at line \fB308\fP of file \fBinputStream\&.h\fP\&..PP
+.nf
+308                                                                                        {
+309 
+310         // flush the buffer if the event fire element is read
+311         if(read_element == m_event_fire_element) {
+312             flush();
+313             return;
+314         }
+315 
+316         // Ensure the buffer is not full
+317         if(m_offset >= 10238) {
+318             flush();
+319         }
+320 
+321         // Add the element
+322         m_buffer[m_offset++] = read_element;
+323 
+324     }
+.fi
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class Type > Type \fBMaxOS::common::InputStreamBuffer\fP< Type >::m_buffer[10240]\fC [protected]\fP"
+
+.PP
+The buffer to store data in\&. 
+.PP
+Definition at line \fB83\fP of file \fBinputStream\&.h\fP\&.
+.SS "template<class Type > Type \fBMaxOS::common::InputStreamBuffer\fP< Type >::m_event_fire_element\fC [protected]\fP"
+
+.PP
+The element that will cause the buffer to flush and fire an event\&. 
+.PP
+Definition at line \fB85\fP of file \fBinputStream\&.h\fP\&.
+.SS "template<class Type > int \fBMaxOS::common::InputStreamBuffer\fP< Type >::m_offset { 0 }\fC [protected]\fP"
+
+.PP
+The current position in the buffer\&. 
+.PP
+Definition at line \fB84\fP of file \fBinputStream\&.h\fP\&..PP
+.nf
+84 { 0 };                 
+.fi
+
+.SS "template<class Type > Type \fBMaxOS::common::InputStreamBuffer\fP< Type >::m_termination_element\fC [protected]\fP"
+
+.PP
+The element that will cause the buffer to flush and end the stream\&. 
+.PP
+Definition at line \fB86\fP of file \fBinputStream\&.h\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -1,4 +1,4 @@
-.TH "MaxOS::system::CPU" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::system::CPU" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,7 +29,7 @@ MaxOS::system::CPU \- Manages the \fBCPU\fP and its cores\&.
 
 .in +1c
 .ti -1c
-.RI "static \fBcpu_status_t\fP * \fBprepare_for_panic\fP (\fBcpu_status_t\fP *status=nullptr, const string &msg='')"
+.RI "static \fBcpu_status_t\fP * \fBprepare_for_panic\fP (\fBcpu_status_t\fP *status=nullptr, const \fBstring\fP &msg='')"
 .br
 .RI "Ensure the \fBCPU\fP must panic and prepare for it if so\&. "
 .ti -1c
@@ -111,11 +111,11 @@ MaxOS::system::CPU \- Manages the \fBCPU\fP and its cores\&.
 .br
 .RI "The core that triggered the panic\&. "
 .ti -1c
-.RI "static common::Spinlock \fBpanic_lock\fP"
+.RI "static \fBcommon::Spinlock\fP \fBpanic_lock\fP"
 .br
 .RI "Lock to prevent multiple panics at once\&. "
 .ti -1c
-.RI "static common::Vector< \fBCore\fP * > \fBcores\fP"
+.RI "static \fBcommon::Vector\fP< \fBCore\fP * > \fBcores\fP"
 .br
 .RI "The list of \fBCPU\fP cores in the system (populated during initialization, includes the BSP and cores that failed to start) "
 .in -1c
@@ -554,10 +554,10 @@ Definition at line \fB463\fP of file \fBcpu\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::GlobalScheduler::core_scheduler()\fP, \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::Logger::ERROR()\fP, \fBget_status()\fP, \fBhalt()\fP, \fBMaxOS::system::Core::id\fP, \fBMaxOS::processes::Process::name\fP, \fBMaxOS::Logger::Out()\fP, \fBpanic_core\fP, \fBpanic_lock\fP, \fBprepare_for_panic()\fP, \fBprint_registers()\fP, \fBstack_trace()\fP, \fBMaxOS::processes::Scheduler::ticks()\fP, and \fBMaxOS::processes::Process::total_ticks()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::core_scheduler()\fP, \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::Logger::ERROR()\fP, \fBget_status()\fP, \fBhalt()\fP, \fBMaxOS::system::Core::id\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::processes::Process::name\fP, \fBMaxOS::Logger::Out()\fP, \fBpanic_core\fP, \fBpanic_lock\fP, \fBprepare_for_panic()\fP, \fBprint_registers()\fP, \fBstack_trace()\fP, \fBMaxOS::processes::Scheduler::ticks()\fP, and \fBMaxOS::processes::Process::total_ticks()\fP\&.
 .PP
 Referenced by \fBMaxOS::Logger::assert()\fP, and \fBMaxOS::hardwarecommunication::ExceptionHandler::handle_interrupt()\fP\&.
-.SS "\fBcpu_status_t\fP * CPU::prepare_for_panic (\fBcpu_status_t\fP * status = \fCnullptr\fP, const string & msg = \fC''\fP)\fC [static]\fP"
+.SS "\fBcpu_status_t\fP * CPU::prepare_for_panic (\fBcpu_status_t\fP * status = \fCnullptr\fP, const \fBstring\fP & msg = \fC''\fP)\fC [static]\fP"
 
 .PP
 Ensure the \fBCPU\fP must panic and prepare for it if so\&. 
@@ -618,7 +618,7 @@ Definition at line \fB521\fP of file \fBcpu\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::Logger::active_logger()\fP, \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::deactivate()\fP, \fBMaxOS::Logger::ERROR()\fP, \fBexecuting_core()\fP, \fBMaxOS::processes::GlobalScheduler::force_remove_process()\fP, \fBMaxOS::memory::PhysicalMemoryManager::in_higher_region()\fP, \fBMaxOS::processes::GlobalScheduler::is_active()\fP, \fBMaxOS::system::Core::local_apic\fP, \fBMaxOS::processes::Process::name\fP, \fBMaxOS::Logger::Out()\fP, \fBpanic_core\fP, \fBpanic_lock\fP, \fBMaxOS::console::FramebufferConsole::print_logo()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::send_interrupt()\fP, and \fBMaxOS::processes::GlobalScheduler::system_scheduler()\fP\&.
+References \fBMaxOS::Logger::active_logger()\fP, \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::deactivate()\fP, \fBMaxOS::Logger::ERROR()\fP, \fBexecuting_core()\fP, \fBMaxOS::processes::GlobalScheduler::force_remove_process()\fP, \fBMaxOS::memory::PhysicalMemoryManager::in_higher_region()\fP, \fBMaxOS::processes::GlobalScheduler::is_active()\fP, \fBMaxOS::system::Core::local_apic\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::processes::Process::name\fP, \fBMaxOS::Logger::Out()\fP, \fBpanic_core\fP, \fBpanic_lock\fP, \fBMaxOS::console::FramebufferConsole::print_logo()\fP, \fBMaxOS::hardwarecommunication::LocalAPIC::send_interrupt()\fP, \fBMaxOS::processes::GlobalScheduler::system_scheduler()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .PP
 Referenced by \fBMaxOS::hardwarecommunication::ExceptionHandler::handle_interrupt()\fP, and \fBPANIC()\fP\&.
 .SS "void CPU::print_registers (\fBcpu_status_t\fP * status)\fC [static]\fP"
@@ -817,7 +817,7 @@ The APIC interface for the \fBCPU\fP\&.
 Definition at line \fB264\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBCPU()\fP, \fBfind_cores()\fP, \fBkernel_main()\fP, and \fBMaxOS::system::Core::wake_up()\fP\&.
-.SS "common::Vector<\fBCore\fP*> MaxOS::system::CPU::cores\fC [inline]\fP, \fC [static]\fP"
+.SS "\fBcommon::Vector\fP<\fBCore\fP*> MaxOS::system::CPU::cores\fC [inline]\fP, \fC [static]\fP"
 
 .PP
 The list of \fBCPU\fP cores in the system (populated during initialization, includes the BSP and cores that failed to start) 
@@ -833,7 +833,7 @@ The core that triggered the panic\&.
 Definition at line \fB266\fP of file \fBcpu\&.h\fP\&.
 .PP
 Referenced by \fBPANIC()\fP, and \fBprepare_for_panic()\fP\&.
-.SS "common::Spinlock MaxOS::system::CPU::panic_lock\fC [inline]\fP, \fC [static]\fP"
+.SS "\fBcommon::Spinlock\fP MaxOS::system::CPU::panic_lock\fC [inline]\fP, \fC [static]\fP"
 
 .PP
 Lock to prevent multiple panics at once\&. 
@@ -844,4 +844,4 @@ Referenced by \fBMaxOS::console::FramebufferConsole::get_background_color()\fP, 
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

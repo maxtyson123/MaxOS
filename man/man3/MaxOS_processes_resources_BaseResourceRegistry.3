@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::resources::BaseResourceRegistry" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::resources::BaseResourceRegistry" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,11 +35,11 @@ Inherited by \fBMaxOS::processes::resources::ResourceRegistry< BridgeResource >\
 .br
 .RI "Close the resource provided, if it exists in this registry\&. "
 .ti -1c
-.RI "virtual \fBResource\fP * \fBget_resource\fP (const string &name)"
+.RI "virtual \fBResource\fP * \fBget_resource\fP (const \fBstring\fP &name)"
 .br
 .RI "Gets a resource from the registry by name\&. "
 .ti -1c
-.RI "virtual \fBResource\fP * \fBcreate_resource\fP (const string &name, size_t flags, uintptr_t data)"
+.RI "virtual \fBResource\fP * \fBcreate_resource\fP (const \fBstring\fP &name, size_t flags, uintptr_t data)"
 .br
 .RI "Try to create a new resource with the specified name, will fail if the name is in use\&. "
 .in -1c
@@ -47,15 +47,15 @@ Inherited by \fBMaxOS::processes::resources::ResourceRegistry< BridgeResource >\
 
 .in +1c
 .ti -1c
-.RI "common::Map< string, \fBResource\fP * > \fBm_resources\fP"
+.RI "\fBcommon::Map\fP< \fBstring\fP, \fBResource\fP * > \fBm_resources\fP"
 .br
 .RI "The map of resource names to resource instances\&. "
 .ti -1c
-.RI "common::Map< string, uint64_t > \fBm_resource_uses\fP"
+.RI "\fBcommon::Map\fP< \fBstring\fP, uint64_t > \fBm_resource_uses\fP"
 .br
 .RI "The map of resource names to how many processes are using them\&. "
 .ti -1c
-.RI "common::Spinlock \fBm_lock\fP"
+.RI "\fBcommon::Spinlock\fP \fBm_lock\fP"
 .br
 .RI "The lock to make the registry threadsafe\&. "
 .ti -1c
@@ -154,8 +154,8 @@ Definition at line \fB100\fP of file \fBresource\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBm_lock\fP, \fBm_resource_uses\fP, and \fBm_resources\fP\&.
-.SS "\fBResource\fP * BaseResourceRegistry::create_resource (const string & name, size_t flags, uintptr_t data)\fC [virtual]\fP"
+References \fBMaxOS::KPI::Resource::close()\fP, \fBMaxOS::common::Map< Key, Value >::erase()\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBm_lock\fP, \fBm_resource_uses\fP, \fBm_resources\fP, \fBMaxOS::KPI::Resource::name()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
+.SS "\fBResource\fP * BaseResourceRegistry::create_resource (const \fBstring\fP & name, size_t flags, uintptr_t data)\fC [virtual]\fP"
 
 .PP
 Try to create a new resource with the specified name, will fail if the name is in use\&. 
@@ -185,7 +185,7 @@ Definition at line \fB134\fP of file \fBresource\&.cpp\fP\&..PP
 
 .PP
 Referenced by \fBMaxOS::system::SyscallManager::syscall_resource_create()\fP\&.
-.SS "\fBResource\fP * BaseResourceRegistry::get_resource (const string & name)\fC [virtual]\fP"
+.SS "\fBResource\fP * BaseResourceRegistry::get_resource (const \fBstring\fP & name)\fC [virtual]\fP"
 
 .PP
 Gets a resource from the registry by name\&. 
@@ -226,7 +226,7 @@ Definition at line \fB52\fP of file \fBresource\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBm_lock\fP, \fBm_resource_uses\fP, and \fBm_resources\fP\&.
+References \fBMaxOS::common::Spinlock::lock()\fP, \fBm_lock\fP, \fBm_resource_uses\fP, \fBm_resources\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::resources::BridgeHandler::BridgeHandler()\fP, \fBMaxOS::processes::resources::BridgeResourceRegistry::get_resource()\fP, \fBMaxOS::processes::resources::ThreadResourceRegistry::get_resource()\fP, and \fBMaxOS::processes::resources::ProcessResourceRegistry::get_resource()\fP\&.
 .SS "bool BaseResourceRegistry::register_resource (\fBResource\fP * resource)"
@@ -267,7 +267,7 @@ Definition at line \fB76\fP of file \fBresource\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBm_lock\fP, \fBm_resource_uses\fP, and \fBm_resources\fP\&.
+References \fBMaxOS::common::Map< Key, Value >::insert()\fP, \fBMaxOS::common::Spinlock::lock()\fP, \fBm_lock\fP, \fBm_resource_uses\fP, \fBm_resources\fP, \fBMaxOS::KPI::Resource::name()\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::resources::BridgeResourceRegistry::create_resource()\fP, \fBMaxOS::processes::resources::ResourceRegistry< Type >::create_resource()\fP, \fBMaxOS::processes::resources::BridgeResourceRegistry::get_resource()\fP, \fBMaxOS::processes::resources::ThreadResourceRegistry::get_resource()\fP, and \fBMaxOS::processes::resources::ProcessResourceRegistry::get_resource()\fP\&.
 .SS "\fBresource_type_t\fP BaseResourceRegistry::type ()"
@@ -296,7 +296,7 @@ References \fBm_type\fP\&.
 Referenced by \fBBaseResourceRegistry()\fP, \fBMaxOS::processes::resources::ResourceRegistry< Type >::create_resource()\fP, and \fBMaxOS::processes::resources::GlobalResourceRegistry::remove_registry()\fP\&.
 .SH "Member Data Documentation"
 .PP 
-.SS "common::Spinlock MaxOS::processes::resources::BaseResourceRegistry::m_lock\fC [protected]\fP"
+.SS "\fBcommon::Spinlock\fP MaxOS::processes::resources::BaseResourceRegistry::m_lock\fC [protected]\fP"
 
 .PP
 The lock to make the registry threadsafe\&. 
@@ -304,7 +304,7 @@ The lock to make the registry threadsafe\&.
 Definition at line \fB38\fP of file \fBresource\&.h\fP\&.
 .PP
 Referenced by \fBclose_resource()\fP, \fBget_resource()\fP, and \fBregister_resource()\fP\&.
-.SS "common::Map<string, uint64_t> MaxOS::processes::resources::BaseResourceRegistry::m_resource_uses\fC [protected]\fP"
+.SS "\fBcommon::Map\fP<\fBstring\fP, uint64_t> MaxOS::processes::resources::BaseResourceRegistry::m_resource_uses\fC [protected]\fP"
 
 .PP
 The map of resource names to how many processes are using them\&. 
@@ -312,7 +312,7 @@ The map of resource names to how many processes are using them\&.
 Definition at line \fB36\fP of file \fBresource\&.h\fP\&.
 .PP
 Referenced by \fBclose_resource()\fP, \fBget_resource()\fP, and \fBregister_resource()\fP\&.
-.SS "common::Map<string, \fBResource\fP*> MaxOS::processes::resources::BaseResourceRegistry::m_resources\fC [protected]\fP"
+.SS "\fBcommon::Map\fP<\fBstring\fP, \fBResource\fP*> MaxOS::processes::resources::BaseResourceRegistry::m_resources\fC [protected]\fP"
 
 .PP
 The map of resource names to resource instances\&. 
@@ -331,4 +331,4 @@ Referenced by \fBMaxOS::processes::resources::BridgeResourceRegistry::create_res
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

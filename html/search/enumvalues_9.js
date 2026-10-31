@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['user_0',['USER',['../physical_8h.html#ae0e83b5743a37b4d0d2a93bb3bbe84eba6c21f04b9fd8f97d73dbcedbd6380a22',1,'MaxOS::memory']]]
+  ['shared_0',['SHARED',['../virtual_8h.html#a12ca8e10f17e52d8375319daaaf6f380a997819290df7a1861b890d56d9f7c973',1,'MaxOS::memory']]]
 ];

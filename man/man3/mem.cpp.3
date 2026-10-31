@@ -1,0 +1,495 @@
+.TH "libraries/libcommon/src/mem.cpp" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libcommon/src/mem.cpp \- Implements memory management functions\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libcommon/mem\&.h>\fP
+.br
+\fC#include <libkpi/syscalls\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void * \fBmemcpy\fP (void *destination, const void *source, uint64_t num)"
+.br
+.RI "Copies a block of memory from one location to another\&. "
+.ti -1c
+.RI "void * \fBmemset\fP (void *ptr, unsigned char value, uint64_t num)"
+.br
+.RI "Fills a block of memory with a specified value\&. "
+.ti -1c
+.RI "void * \fBmemmove\fP (void *destination, const void *source, uint64_t num)"
+.br
+.RI "Copies a block of memory from one location to another\&. "
+.ti -1c
+.RI "int \fBmemcmp\fP (const void *ptr1, const void *ptr2, uint64_t num)"
+.br
+.RI "Compares two blocks of memory\&. "
+.ti -1c
+.RI "void * \fBoperator new\fP (size_t size)  throw ()"
+.br
+.RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
+.ti -1c
+.RI "void * \fBoperator new[]\fP (size_t size)  throw ()"
+.br
+.RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
+.ti -1c
+.RI "void * \fBoperator new\fP (size_t size, void *pointer)"
+.br
+.RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
+.ti -1c
+.RI "void * \fBoperator new[]\fP (size_t size, void *pointer)"
+.br
+.RI "Overloaded new operator, allocates memory using the KERNEL memory manager\&. "
+.ti -1c
+.RI "void \fBoperator delete\fP (void *pointer)"
+.br
+.RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
+.ti -1c
+.RI "void \fBoperator delete[]\fP (void *pointer)"
+.br
+.RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
+.ti -1c
+.RI "void \fBoperator delete\fP (void *pointer, size_t)"
+.br
+.RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
+.ti -1c
+.RI "void \fBoperator delete[]\fP (void *pointer, size_t size)"
+.br
+.RI "Overloaded delete operator, frees memory using the KERNEL memory manager\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Implements memory management functions\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+4th December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBmem\&.cpp\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int memcmp (const void * ptr1, const void * ptr2, uint64_t num)"
+
+.PP
+Compares two blocks of memory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr1\fP The m_first_memory_chunk block of memory 
+.br
+\fIptr2\fP The second block of memory 
+.br
+\fInum\fP The number of bytes to compare 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 if the blocks of memory are equal, -1 if ptr1 < ptr2, 1 if ptr1 > ptr2 
+.RE
+.PP
+
+.PP
+Definition at line \fB104\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+104                                                                  {
+105 
+106         // Make sure the pointers exist
+107         if (ptr1 == nullptr || ptr2 == nullptr)
+108             return 0;
+109 
+110         const auto* p1 = (const unsigned char*) ptr1;
+111         const auto* p2 = (const unsigned char*) ptr2;
+112         for (size_t i = 0; i < num; i++) {
+113             if (p1[i] < p2[i])
+114                 return \-1;
+115             if (p1[i] > p2[i])
+116                 return 1;
+117         }
+118         return 0;
+119     }
+.fi
+
+.SS "void * memcpy (void * destination, const void * source, uint64_t num)"
+
+.PP
+Copies a block of memory from one location to another\&. 
+.PP
+\fBSee also\fP
+.RS 4
+https://wiki.osdev.org/Meaty_Skeleton#memcpy.28.29
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIdestination\fP The destination to copy to 
+.br
+\fIsource\fP The source to copy from 
+.br
+\fInum\fP The number of bytes to copy 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The destination 
+.RE
+.PP
+
+.PP
+Definition at line \fB24\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+24                                                                       {
+25 
+26         // Make sure the source and destination are not the same
+27         if (destination == source)
+28             return destination;
+29 
+30         // Make sure they exist
+31         if (destination == nullptr || source == nullptr)
+32             return destination;
+33 
+34         // Get the source and destination
+35         auto* dst = (unsigned char*) destination;
+36         const auto* src = (const unsigned char*) source;
+37 
+38         // Copy the data
+39         for (size_t i = 0; i < num; i++)
+40             dst[i] = src[i];
+41 
+42         // Usefully for easier code writing
+43         return destination;
+44     }
+.fi
+
+.SS "void * memmove (void * destination, const void * source, uint64_t num)"
+
+.PP
+Copies a block of memory from one location to another\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdestination\fP The destination to copy to 
+.br
+\fIsource\fP The source to copy from 
+.br
+\fInum\fP The number of bytes to copy 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The destination 
+.RE
+.PP
+
+.PP
+Definition at line \fB74\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+74                                                                        {
+75 
+76         // Make sure the source and destination are not the same
+77         if (destination == source)
+78             return destination;
+79 
+80         // Make sure they exist
+81         if (destination == nullptr || source == nullptr)
+82             return destination;
+83 
+84         auto* dst = (unsigned char*) destination;
+85         const auto* src = (const unsigned char*) source;
+86         if (dst < src) {
+87             for (size_t i = 0; i < num; i++)
+88                 dst[i] = src[i];
+89         } else {
+90             for (size_t i = num; i != 0; i\-\-)
+91                 dst[i \- 1] = src[i \- 1];
+92         }
+93         return destination;
+94     }
+.fi
+
+.SS "void * memset (void * ptr, unsigned char value, uint64_t num)"
+
+.PP
+Fills a block of memory with a specified value\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr\fP The pointer to the block of memory 
+.br
+\fIvalue\fP The value to fill the block of memory with 
+.br
+\fInum\fP The number of bytes to fill 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The pointer to the block of memory 
+.RE
+.PP
+
+.PP
+Definition at line \fB54\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+54                                                                {
+55 
+56         // Make sure the pointer exists
+57         if (ptr == nullptr)
+58             return ptr;
+59 
+60         auto* dst = (unsigned char*) ptr;
+61         for (size_t i = 0; i < num; i++)
+62             dst[i] = (unsigned char) value;
+63         return ptr;
+64     }
+.fi
+
+.SS "void operator delete (void * pointer)"
+
+.PP
+Overloaded delete operator, frees memory using the KERNEL memory manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP The pointer to the memory to free 
+.RE
+.PP
+
+.PP
+Definition at line \fB193\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+193                                     {
+194 
+195     // Handle the memory freeing
+196 #ifdef MAXOS_KERNEL
+197     return MaxOS::memory::MemoryManager::kfree(pointer);
+198 #else
+199     return MaxOS::KPI::free_memory(pointer);
+200 #endif
+201 }
+.fi
+
+.PP
+References \fBMaxOS::memory::MemoryManager::kfree()\fP\&.
+.SS "void operator delete (void * pointer, size_t size)"
+
+.PP
+Overloaded delete operator, frees memory using the KERNEL memory manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP The pointer to the memory to free 
+.br
+\fIsize\fP The size of the memory to free - ignored in this implementation 
+.RE
+.PP
+
+.PP
+Definition at line \fB224\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+224                                             {
+225 
+226     // Handle the memory freeing
+227 #ifdef MAXOS_KERNEL
+228     return MaxOS::memory::MemoryManager::kfree(pointer);
+229 #else
+230     return MaxOS::KPI::free_memory(pointer);
+231 #endif
+232 }
+.fi
+
+.PP
+References \fBMaxOS::memory::MemoryManager::kfree()\fP\&.
+.SS "void operator delete[] (void * pointer)"
+
+.PP
+Overloaded delete operator, frees memory using the KERNEL memory manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP The pointer to the memory to free 
+.RE
+.PP
+
+.PP
+Definition at line \fB208\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+208                                       {
+209 
+210     // Handle the memory freeing
+211 #ifdef MAXOS_KERNEL
+212     return MaxOS::memory::MemoryManager::kfree(pointer);
+213 #else
+214     return MaxOS::KPI::free_memory(pointer);
+215 #endif
+216 }
+.fi
+
+.PP
+References \fBMaxOS::memory::MemoryManager::kfree()\fP\&.
+.SS "void operator delete[] (void * pointer, size_t size)"
+
+.PP
+Overloaded delete operator, frees memory using the KERNEL memory manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP The pointer to the memory to free 
+.br
+\fIsize\fP The size of the memory to free - ignored in this implementation 
+.RE
+.PP
+
+.PP
+Definition at line \fB240\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+240                                                    {
+241 
+242     // Handle the memory freeing
+243 #ifdef MAXOS_KERNEL
+244     return MaxOS::memory::MemoryManager::kfree(pointer);
+245 #else
+246     return MaxOS::KPI::free_memory(pointer);
+247 #endif
+248 }
+.fi
+
+.PP
+References \fBMaxOS::memory::MemoryManager::kfree()\fP\&.
+.SS "void * operator new (size_t size)"
+
+.PP
+Overloaded new operator, allocates memory using the KERNEL memory manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The size of the memory to allocate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The pointer to the allocated memory 
+.RE
+.PP
+
+.PP
+Definition at line \fB137\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+137                                         {
+138 
+139     // Handle the memory allocation
+140 #ifdef MAXOS_KERNEL
+141     return MaxOS::memory::MemoryManager::kmalloc(size);
+142 #else
+143     return MaxOS::KPI::allocate_memory(size);
+144 #endif
+145 }
+.fi
+
+.PP
+References \fBMaxOS::memory::MemoryManager::kmalloc()\fP\&.
+.SS "void * operator new (size_t size, void * pointer)"
+
+.PP
+Overloaded new operator, allocates memory using the KERNEL memory manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointer\fP The pointer to the memory to allocate 
+.br
+\fIsize\fP The size of the memory to free - ignored in this implementation 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The pointer to the memory 
+.RE
+.PP
+
+.PP
+Definition at line \fB170\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+170                                                {
+171 
+172     return pointer;
+173 }
+.fi
+
+.SS "void * operator new[] (size_t size)"
+
+.PP
+Overloaded new operator, allocates memory using the KERNEL memory manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The size of the memory to allocate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The pointer to the allocated memory 
+.RE
+.PP
+
+.PP
+Definition at line \fB153\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+153                                           {
+154 
+155     // Handle the memory allocation
+156 #ifdef MAXOS_KERNEL
+157     return MaxOS::memory::MemoryManager::kmalloc(size);
+158 #else
+159     return MaxOS::KPI::allocate_memory(size);
+160 #endif
+161 }
+.fi
+
+.PP
+References \fBMaxOS::memory::MemoryManager::kmalloc()\fP\&.
+.SS "void * operator new[] (size_t size, void * pointer)"
+
+.PP
+Overloaded new operator, allocates memory using the KERNEL memory manager\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP The size of the memory to free - ignored in this implementation 
+.br
+\fIpointer\fP The pointer to the memory to allocate 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The pointer to the memory 
+.RE
+.PP
+
+.PP
+Definition at line \fB182\fP of file \fBmem\&.cpp\fP\&..PP
+.nf
+182                                                  {
+183 
+184 
+185     return pointer;
+186 }
+.fi
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

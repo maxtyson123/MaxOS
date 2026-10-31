@@ -1,0 +1,132 @@
+.TH "MaxOS::drivers::peripherals::Mouse" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::peripherals::Mouse \- Driver for the PS/2 mouse, manages the mouse and triggers events when the mouse moves or a button is pressed\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mouse\&.h>\fP
+.PP
+Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP, Driver, and MaxOS::common::EventManager< MouseEvents >\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMouse\fP ()"
+.br
+.RI "Constructs a new \fBMouse\fP object and registers it as an interrupt handler for interrupt 0x2C\&. "
+.ti -1c
+.RI "void \fBactivate\fP () final"
+.br
+.RI "activate the mouse "
+.ti -1c
+.RI "\fBstring\fP \fBdevice_name\fP () final"
+.br
+.RI "Get the name of the device\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "virtual \fBsystem::cpu_status_t\fP * \fBhandle_interrupt\fP (\fBsystem::cpu_status_t\fP *status)"
+.br
+.RI "Handles an interrupt and returns the status\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "\fBInterruptHandler\fP (uint8_t interrupt_number, int64_t redirect=\-1, uint64_t redirect_index=0)"
+.br
+.RI "Creates a new interrupt handler and registers it with the interrupt manager\&. "
+.ti -1c
+.RI "virtual \fB~InterruptHandler\fP ()"
+.br
+.RI "Destroys the interrupt handler and unregisters it from the interrupt manager\&. "
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::hardwarecommunication::InterruptHandler\fP
+.in +1c
+.ti -1c
+.RI "uint8_t \fBm_interrupt_number\fP"
+.br
+.RI "The interrupt number this handler handles\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Driver for the PS/2 mouse, manages the mouse and triggers events when the mouse moves or a button is pressed\&. 
+.PP
+Definition at line \fB88\fP of file \fBmouse\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Mouse::Mouse ()"
+
+.PP
+Constructs a new \fBMouse\fP object and registers it as an interrupt handler for interrupt 0x2C\&. 
+.PP
+Definition at line \fB79\fP of file \fBmouse\&.cpp\fP\&..PP
+.nf
+80         : InterruptHandler(0x2C, 0xC, 0x28),
+81         data_port(0x60),
+82         command_port(0x64) {
+83 
+84 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void Mouse::activate ()\fC [final]\fP"
+
+.PP
+activate the mouse 
+.PP
+Definition at line \fB91\fP of file \fBmouse\&.cpp\fP\&..PP
+.nf
+91                      {
+92 
+93     //  Get the current state of the mouse
+94     command_port\&.write(0x20);
+95     uint8_t status = (data_port\&.read() | 2);
+96 
+97     // Write the new state
+98     command_port\&.write(0x60);
+99     data_port\&.write(status);
+100 
+101     // Tell the PIC to start listening to the mouse
+102     command_port\&.write(0xAB);
+103 
+104     // Activate the mouse
+105     command_port\&.write(0xD4);
+106     data_port\&.write(0xF4);
+107     data_port\&.read();
+108 }
+.fi
+
+.SS "\fBstring\fP Mouse::device_name ()\fC [final]\fP"
+
+.PP
+Get the name of the device\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the device 
+.RE
+.PP
+
+.PP
+Definition at line \fB155\fP of file \fBmouse\&.cpp\fP\&..PP
+.nf
+155                           {
+156     return "Mouse";
+157 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

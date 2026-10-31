@@ -1,0 +1,103 @@
+.TH "FileServer::partition::MSDOSPartition" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::partition::MSDOSPartition \- Handles mounting of partitions documented in an MSDOS partition table\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <msdos\&.h>\fP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBmount_partitions\fP (\fBLibDriver::generic::Disk\fP *disk)"
+.br
+.RI "read the partition table of a given hard disk "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles mounting of partitions documented in an MSDOS partition table\&. 
+
+
+.PP
+\fBTodo\fP
+.RS 4
+Abstract some of this into a base class and use it for GPT and other partition tables 
+.RE
+.PP
+
+.PP
+Definition at line \fB352\fP of file \fBmsdos\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void MSDOSPartition::mount_partitions (\fBLibDriver::generic::Disk\fP * disk)\fC [static]\fP"
+
+.PP
+read the partition table of a given hard disk 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdisk\fP The hard disk to read the partition table from 
+.RE
+.PP
+
+.PP
+Definition at line \fB26\fP of file \fBmsdos\&.cpp\fP\&..PP
+.nf
+26                                                 {
+27 
+28     // Read the MBR from the hard disk
+29     MasterBootRecord mbr = {};
+30     buffer_t mbr_buffer(&mbr, sizeof(MasterBootRecord));
+31     disk\->read(0, &mbr_buffer);
+32 
+33     // Check if the magic number is correct
+34     if (mbr\&.magic != 0xAA55) {
+35         klog("Could not find valid MBR on disk 0x%x\\n", disk);
+36         return;
+37     }
+38 
+39     // Get the VFS
+40     VirtualFileSystem *vfs = VirtualFileSystem::current_file_system();
+41 
+42     // Loop through the primary partitions
+43     for (auto &entry: mbr\&.primary_partition) {
+44 
+45         // Empty entry
+46         if (entry\&.type == 0)
+47             continue;
+48 
+49         klog("MSDOSPartition \- found:");
+50 
+51         // Create a file system for the partition
+52         switch ((PartitionType) entry\&.type) {
+53             case PartitionType::EMPTY:
+54                 klog("%h empty partition\\n");
+55                 break;
+56 
+57             case PartitionType::FAT32:
+58                 vfs\->mount_filesystem(new Fat32FileSystem(disk, entry\&.start_LBA));
+59                 klog("%h fat32 partition\\n");
+60                 break;
+61 
+62             case PartitionType::LINUX_EXT2:
+63                 vfs\->mount_filesystem(new ext2::Ext2FileSystem(disk, entry\&.start_LBA));
+64                 klog("%h ext2 partition\\n");
+65                 break;
+66 
+67             default:
+68                 klog("%h unknown or unimplemented partition type: 0x%x\\n", (uint64_t) entry\&.type );
+69         }
+70     }
+71 }
+.fi
+
+.PP
+References \fBFileServer::vfs::VirtualFileSystem::current_file_system()\fP, \fBMaxOS::KPI::klog()\fP, \fBFileServer::partition::MasterBootRecord::magic\fP, \fBFileServer::vfs::VirtualFileSystem::mount_filesystem()\fP, \fBFileServer::partition::MasterBootRecord::primary_partition\fP, and \fBLibDriver::generic::Disk::read()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

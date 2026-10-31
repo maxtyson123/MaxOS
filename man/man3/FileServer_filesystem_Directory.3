@@ -1,0 +1,602 @@
+.TH "FileServer::filesystem::Directory" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::filesystem::Directory \- Handles a group of files (directory)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <filesystem\&.h>\fP
+.PP
+Inherited by \fBFileServer::format::Fat32Directory\fP, \fBFileServer::format::TARDirectory\fP, and \fBFileServer::format::ext2::Ext2Directory\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fB~Directory\fP ()"
+.br
+.RI "Destructor for \fBDirectory\fP, frees all files and subdirectories\&. "
+.ti -1c
+.RI "virtual void \fBread_from_disk\fP ()"
+.br
+.RI "read the directory from the disk "
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBFile\fP * > \fBfiles\fP ()"
+.br
+.RI "Get the files in the directory\&. "
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBDirectory\fP * > \fBsubdirectories\fP ()"
+.br
+.RI "Get the subdirectories in the directory\&. "
+.ti -1c
+.RI "\fBFile\fP * \fBopen_file\fP (const string &\fBname\fP)"
+.br
+.RI "Open a file in the directory\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBopen_subdirectory\fP (const string &\fBname\fP)"
+.br
+.RI "Open a directory in the directory\&. "
+.ti -1c
+.RI "virtual \fBFile\fP * \fBcreate_file\fP (const string &\fBname\fP)"
+.br
+.RI "Create a file in the directory\&. "
+.ti -1c
+.RI "virtual void \fBremove_file\fP (const string &\fBname\fP)"
+.br
+.RI "Delete a file in the directory\&. "
+.ti -1c
+.RI "void \fBrename_file\fP (\fBFile\fP *file, const string &new_name)"
+.br
+.RI "Rename a file in the directory\&. "
+.ti -1c
+.RI "virtual void \fBrename_file\fP (const string &old_name, const string &new_name)"
+.br
+.RI "Rename a file in the directory\&. "
+.ti -1c
+.RI "void \fBrename_subdirectory\fP (\fBDirectory\fP *directory, const string &new_name)"
+.br
+.RI "Rename a subdirectory in the directory\&. "
+.ti -1c
+.RI "virtual void \fBrename_subdirectory\fP (const string &old_name, const string &new_name)"
+.br
+.RI "Rename a subdirectory in the directory\&. "
+.ti -1c
+.RI "virtual \fBDirectory\fP * \fBcreate_subdirectory\fP (const string &\fBname\fP)"
+.br
+.RI "Create a directory in the directory\&. "
+.ti -1c
+.RI "virtual void \fBremove_subdirectory\fP (const string &\fBname\fP)"
+.br
+.RI "Try to remove a directory in the directory\&. "
+.ti -1c
+.RI "string \fBname\fP ()"
+.br
+.RI "Get the name of the directory\&. "
+.ti -1c
+.RI "size_t \fBsize\fP ()"
+.br
+.RI "Get the size of the directory\&. "
+.ti -1c
+.RI "void \fBdebug_contents\fP (uint64_t depth=50)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBFile\fP * > \fBm_files\fP"
+.br
+.RI "The files in this directory\&. "
+.ti -1c
+.RI "\fBMaxOS::common::Vector\fP< \fBDirectory\fP * > \fBm_subdirectories\fP"
+.br
+.RI "The subdirectories in this directory\&. "
+.ti -1c
+.RI "string \fBm_name\fP"
+.br
+.RI "The name of this directory\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles a group of files (directory) 
+.PP
+Definition at line \fB59\fP of file \fBfilesystem\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Directory::~Directory ()\fC [virtual]\fP"
+
+.PP
+Destructor for \fBDirectory\fP, frees all files and subdirectories\&. 
+.PP
+Definition at line \fB101\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+101                       {
+102 
+103     // Free the files
+104     for (auto &file: m_files)
+105         delete file;
+106 
+107     // Free the subdirectories
+108     for (auto &subdirectory: m_subdirectories)
+109         delete subdirectory;
+110 
+111 }
+.fi
+
+.PP
+References \fBm_files\fP, and \fBm_subdirectories\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBFile\fP * Directory::create_file (const string & name)\fC [virtual]\fP"
+
+.PP
+Create a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the file to create 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A new file object or null if it could not be created 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2Directory\fP, and \fBFileServer::format::Fat32Directory\fP\&.
+.PP
+Definition at line \fB152\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+152                                                {
+153     return nullptr;
+154 }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::create_file()\fP, and \fBFileServer::vfs::DirectoryResource::write()\fP\&.
+.SS "\fBDirectory\fP * Directory::create_subdirectory (const string & name)\fC [virtual]\fP"
+
+.PP
+Create a directory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the directory to create 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The new directory object or null if it could not be created 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2Directory\fP, and \fBFileServer::format::Fat32Directory\fP\&.
+.PP
+Definition at line \fB198\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+198                                                             {
+199     return nullptr;
+200 }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::create_directory()\fP, and \fBFileServer::vfs::DirectoryResource::write()\fP\&.
+.SS "void Directory::debug_contents (uint64_t depth = \fC50\fP)"
+
+.PP
+Definition at line \fB235\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+235                                                  {
+236 
+237     struct StackEntry {
+238         Directory* dir;
+239         uint64_t depth;
+240     };
+241 
+242     // Small stack container (uses your kernel Vector)
+243     Vector<StackEntry> stack;
+244     stack\&.push_back({ this, 0 });
+245 
+246     while (!stack\&.empty()) {
+247         StackEntry entry = stack\&.pop_back();
+248 
+249         Directory* cur = entry\&.dir;
+250         uint64_t cur_depth = entry\&.depth;
+251         if (!cur) continue;
+252 
+253         // Build indent string (two spaces per depth)
+254         string indent;
+255         for (uint64_t i = 0; i < cur_depth; ++i)
+256             indent += "  ";
+257 
+258         // Print directory header
+259         KPI::klog("%s[DIR ] %s\\n", indent\&.c_str(), cur\->name()\&.c_str());
+260 
+261         // Print files in the directory (non\-recursive)
+262         for (auto *f : cur\->m_files) {
+263             if (!f) continue;
+264             KPI::klog("%s  [FILE] %s\\n", indent\&.c_str(), f\->name()\&.c_str());
+265         }
+266 
+267         // Depth limit check: if we've reached max_depth, do not push children
+268         if (max_depth != (uint64_t)\-1 && cur_depth >= max_depth)
+269             continue;
+270 
+271         // Push subdirectories onto the stack\&.
+272         // Push in reverse order so the output order matches the natural forward order\&.
+273         size_t sub_count = cur\->m_subdirectories\&.size();
+274         for (size_t i = sub_count; i\-\- > 0; )
+275         {
+276             Directory* sd = cur\->m_subdirectories[i];
+277             if (!sd) continue;
+278             stack\&.push_back({ sd, cur_depth + 1 });
+279         }
+280     }
+281 
+282 }
+.fi
+
+.SS "\fBVector\fP< \fBFile\fP * > Directory::files ()"
+
+.PP
+Get the files in the directory\&. 
+.PP
+\fBReturns\fP
+.RS 4
+A list of all the files in the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB125\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+125                                {
+126     return m_files;
+127 }
+.fi
+
+.PP
+References \fBm_files\fP\&.
+.SS "string Directory::name ()"
+
+.PP
+Get the name of the directory\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB215\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+215                        {
+216     return m_name;
+217 }
+.fi
+
+.PP
+References \fBm_name\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::Ext2Directory::create_file()\fP, \fBFileServer::format::Fat32Directory::create_file()\fP, \fBFileServer::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBFileServer::format::Fat32Directory::create_subdirectory()\fP, \fBFileServer::vfs::VirtualFileSystem::delete_directory()\fP, \fBFileServer::format::ext2::Ext2Directory::Ext2Directory()\fP, \fBFileServer::format::Fat32Directory::Fat32Directory()\fP, \fBopen_file()\fP, \fBopen_subdirectory()\fP, \fBFileServer::format::Fat32Directory::read_from_disk()\fP, \fBFileServer::format::ext2::Ext2Directory::remove_file()\fP, \fBFileServer::format::Fat32Directory::remove_file()\fP, \fBFileServer::format::ext2::Ext2Directory::remove_subdirectory()\fP, \fBFileServer::format::Fat32Directory::remove_subdirectory()\fP, and \fBrename_subdirectory()\fP\&.
+.SS "\fBFile\fP * Directory::open_file (const string & name)"
+
+.PP
+Open a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the file to open 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+.RE
+.PP
+
+.PP
+Definition at line \fB135\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+135                                              {
+136 
+137     // Try to find the file
+138     for (auto &file: m_files)
+139         if (file\->name() == name)
+140             return file;
+141 
+142     // File not found
+143     return nullptr;
+144 }
+.fi
+
+.PP
+References \fBm_files\fP, and \fBname()\fP\&.
+.PP
+Referenced by \fBFileServer::filesystem::FileSystem::exists()\fP, and \fBFileServer::vfs::VirtualFileSystem::open_file()\fP\&.
+.SS "\fBDirectory\fP * Directory::open_subdirectory (const string & name)"
+
+.PP
+Open a directory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the directory to open 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The directory object or null if it could not be opened 
+.RE
+.PP
+
+.PP
+Definition at line \fB179\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+179                                                           {
+180 
+181     // Try to find the directory
+182     for (auto &subdirectory: m_subdirectories)
+183         if (subdirectory\->name() == name) {
+184             subdirectory\->read_from_disk();
+185             return subdirectory;
+186         }
+187 
+188     // Directory not found
+189     return nullptr;
+190 }
+.fi
+
+.PP
+References \fBm_subdirectories\fP, \fBname()\fP, and \fBread_from_disk()\fP\&.
+.PP
+Referenced by \fBFileServer::filesystem::FileSystem::get_directory()\fP, and \fBFileServer::vfs::VirtualFileSystem::open_directory()\fP\&.
+.SS "void Directory::read_from_disk ()\fC [virtual]\fP"
+
+.PP
+read the directory from the disk 
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2Directory\fP, \fBFileServer::format::Fat32Directory\fP, and \fBFileServer::format::TARDirectory\fP\&.
+.PP
+Definition at line \fB116\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+116                                {
+117 
+118 }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::create_directory()\fP, \fBFileServer::format::ext2::Ext2FileSystem::Ext2FileSystem()\fP, \fBFileServer::format::Fat32FileSystem::Fat32FileSystem()\fP, \fBFileServer::vfs::VirtualFileSystem::open_directory()\fP, \fBFileServer::vfs::VirtualFileSystem::open_directory()\fP, and \fBopen_subdirectory()\fP\&.
+.SS "void Directory::remove_file (const string & name)\fC [virtual]\fP"
+
+.PP
+Delete a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the file to remove 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2Directory\fP, and \fBFileServer::format::Fat32Directory\fP\&.
+.PP
+Definition at line \fB161\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+161                                               {
+162 }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::delete_file()\fP, and \fBFileServer::vfs::DirectoryResource::write()\fP\&.
+.SS "void Directory::remove_subdirectory (const string & name)\fC [virtual]\fP"
+
+.PP
+Try to remove a directory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the directory to remove 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2Directory\fP, and \fBFileServer::format::Fat32Directory\fP\&.
+.PP
+Definition at line \fB206\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+206                                                       {
+207 }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::delete_directory()\fP, and \fBFileServer::vfs::DirectoryResource::write()\fP\&.
+.SS "void Directory::rename_file (const string & old_name, const string & new_name)\fC [virtual]\fP"
+
+.PP
+Rename a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIold_name\fP The file to rename 
+.br
+\fInew_name\fP The new name of the file 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2Directory\fP\&.
+.PP
+Definition at line \fB302\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+302                                                                           {
+303 
+304     ASSERT(false, "not implemented");
+305 
+306 }
+.fi
+
+.SS "void Directory::rename_file (\fBFile\fP * file, const string & new_name)"
+
+.PP
+Rename a file in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIfile\fP The file to rename 
+.br
+\fInew_name\fP The new name of the file 
+.RE
+.PP
+
+.PP
+Definition at line \fB290\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+290                                                               {
+291 
+292     rename_file(file\->name(), new_name);
+293 
+294 }
+.fi
+
+.PP
+References \fBFileServer::filesystem::File::name()\fP, and \fBrename_file()\fP\&.
+.PP
+Referenced by \fBrename_file()\fP\&.
+.SS "void Directory::rename_subdirectory (const string & old_name, const string & new_name)\fC [virtual]\fP"
+
+.PP
+Rename a subdirectory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIold_name\fP The directory to rename 
+.br
+\fInew_name\fP The new name of the directory 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBFileServer::format::ext2::Ext2Directory\fP\&.
+.PP
+Definition at line \fB326\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+326                                                                                   {
+327     ASSERT(false, "not implemented");
+328 }
+.fi
+
+.SS "void Directory::rename_subdirectory (\fBDirectory\fP * directory, const string & new_name)"
+
+.PP
+Rename a subdirectory in the directory\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirectory\fP The directory to rename 
+.br
+\fInew_name\fP The new name of the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB314\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+314                                                                                 {
+315 
+316     rename_subdirectory(directory\->name(), new_name);
+317 
+318 }
+.fi
+
+.PP
+References \fBname()\fP, and \fBrename_subdirectory()\fP\&.
+.PP
+Referenced by \fBrename_subdirectory()\fP\&.
+.SS "size_t Directory::size ()"
+
+.PP
+Get the size of the directory\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The size of the directory (sum of all the files in bytes) 
+.RE
+.PP
+
+.PP
+Definition at line \fB224\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+224                        {
+225 
+226     // Sum the size of all the files
+227     size_t size = 0;
+228     for (auto &file: m_files)
+229         size += file\->size();
+230 
+231     return size;
+232 
+233 }
+.fi
+
+.PP
+References \fBm_files\fP, and \fBsize()\fP\&.
+.PP
+Referenced by \fBsize()\fP\&.
+.SS "\fBVector\fP< \fBDirectory\fP * > Directory::subdirectories ()"
+
+.PP
+Get the subdirectories in the directory\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The subdirectories in the directory 
+.RE
+.PP
+
+.PP
+Definition at line \fB169\fP of file \fBfilesystem\&.cpp\fP\&..PP
+.nf
+169                                              {
+170     return m_subdirectories;
+171 }
+.fi
+
+.PP
+References \fBm_subdirectories\fP\&.
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::delete_directory()\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBMaxOS::common::Vector\fP<\fBFile\fP*> FileServer::filesystem::Directory::m_files\fC [protected]\fP"
+
+.PP
+The files in this directory\&. 
+.PP
+Definition at line \fB61\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::Ext2Directory::create_file()\fP, \fBFileServer::format::Fat32Directory::create_file()\fP, \fBfiles()\fP, \fBopen_file()\fP, \fBFileServer::format::ext2::Ext2Directory::read_from_disk()\fP, \fBFileServer::format::Fat32Directory::read_from_disk()\fP, \fBFileServer::format::TARDirectory::read_from_disk()\fP, \fBFileServer::format::Fat32Directory::remove_file()\fP, \fBsize()\fP, and \fB~Directory()\fP\&.
+.SS "string FileServer::filesystem::Directory::m_name\fC [protected]\fP"
+
+.PP
+The name of this directory\&. 
+.PP
+Definition at line \fB64\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::Ext2Directory::Ext2Directory()\fP, \fBFileServer::format::Fat32Directory::Fat32Directory()\fP, \fBname()\fP, and \fBFileServer::format::TARDirectory::read_from_disk()\fP\&.
+.SS "\fBMaxOS::common::Vector\fP<\fBDirectory\fP*> FileServer::filesystem::Directory::m_subdirectories\fC [protected]\fP"
+
+.PP
+The subdirectories in this directory\&. 
+.PP
+Definition at line \fB62\fP of file \fBfilesystem\&.h\fP\&.
+.PP
+Referenced by \fBFileServer::format::ext2::Ext2Directory::create_subdirectory()\fP, \fBFileServer::format::Fat32Directory::create_subdirectory()\fP, \fBopen_subdirectory()\fP, \fBFileServer::format::ext2::Ext2Directory::read_from_disk()\fP, \fBFileServer::format::Fat32Directory::read_from_disk()\fP, \fBFileServer::format::TARDirectory::read_from_disk()\fP, \fBFileServer::format::Fat32Directory::remove_subdirectory()\fP, \fBsubdirectories()\fP, and \fB~Directory()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

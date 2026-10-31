@@ -1,4 +1,4 @@
-.TH "MaxOS::processes::Process" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::processes::Process" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,15 +13,15 @@ MaxOS::processes::Process \- A process that can be scheduled by the \fBScheduler
 
 .in +1c
 .ti -1c
-.RI "\fBProcess\fP (const string &\fBname\fP, bool \fBis_kernel\fP=false)"
+.RI "\fBProcess\fP (const \fBstring\fP &\fBname\fP, bool \fBis_kernel\fP=false)"
 .br
 .RI "Base Constructor for the \fBProcess\fP\&. "
 .ti -1c
-.RI "\fBProcess\fP (const string &\fBname\fP, void(*_entry_point)(void *), void *args, int arg_amount, bool \fBis_kernel\fP=false)"
+.RI "\fBProcess\fP (const \fBstring\fP &\fBname\fP, void(*_entry_point)(void *), void *args, int arg_amount, bool \fBis_kernel\fP=false)"
 .br
 .RI "Constructor for the \fBProcess\fP class (from a function) "
 .ti -1c
-.RI "\fBProcess\fP (const string &\fBname\fP, void *args, int arg_amount, \fBELF64\fP *elf, bool \fBis_kernel\fP=false)"
+.RI "\fBProcess\fP (const \fBstring\fP &\fBname\fP, void *args, int arg_amount, \fBELF64\fP *elf, bool \fBis_kernel\fP=false)"
 .br
 .RI "Constructor for the \fBProcess\fP class (from an elf, will free the elf memory after loading) "
 .ti -1c
@@ -29,7 +29,7 @@ MaxOS::processes::Process \- A process that can be scheduled by the \fBScheduler
 .br
 .RI "Destructor for the \fBProcess\fP class\&. "
 .ti -1c
-.RI "common::Vector< \fBThread\fP * > \fBthreads\fP ()"
+.RI "\fBcommon::Vector\fP< \fBThread\fP * > \fBthreads\fP ()"
 .br
 .RI "Gets the threads of the process\&. "
 .ti -1c
@@ -61,11 +61,11 @@ MaxOS::processes::Process \- A process that can be scheduled by the \fBScheduler
 .br
 .RI "Whether this process is a kernel process\&. "
 .ti -1c
-.RI "string \fBname\fP"
+.RI "\fBstring\fP \fBname\fP"
 .br
 .RI "The name of the process\&. "
 .ti -1c
-.RI "string \fBworking_directory\fP = '/'"
+.RI "\fBstring\fP \fBworking_directory\fP = '/'"
 .br
 .RI "The working directory of the process\&. "
 .ti -1c
@@ -84,7 +84,7 @@ A process that can be scheduled by the \fBScheduler\fP, wraps & manages threads 
 Definition at line \fB94\fP of file \fBprocess\&.h\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "Process::Process (const string & p_name, bool is_kernel = \fCfalse\fP)\fC [explicit]\fP"
+.SS "Process::Process (const \fBstring\fP & p_name, bool is_kernel = \fCfalse\fP)\fC [explicit]\fP"
 
 .PP
 Base Constructor for the \fBProcess\fP\&. 
@@ -110,7 +110,7 @@ Definition at line \fB280\fP of file \fBprocess\&.cpp\fP\&..PP
 
 .PP
 References \fBis_kernel\fP, \fBmemory_manager\fP, and \fBMaxOS::memory::MemoryManager::s_kernel_memory_manager\fP\&.
-.SS "Process::Process (const string & p_name, void(*)(void *) _entry_point, void * args, int arg_amount, bool is_kernel = \fCfalse\fP)"
+.SS "Process::Process (const \fBstring\fP & p_name, void(*)(void *) _entry_point, void * args, int arg_amount, bool is_kernel = \fCfalse\fP)"
 
 .PP
 Constructor for the \fBProcess\fP class (from a function) 
@@ -145,7 +145,7 @@ Definition at line \fB297\fP of file \fBprocess\&.cpp\fP\&..PP
 
 .PP
 References \fBadd_thread()\fP\&.
-.SS "Process::Process (const string & p_name, void * args, int arg_amount, \fBELF64\fP * elf, bool is_kernel = \fCfalse\fP)"
+.SS "Process::Process (const \fBstring\fP & p_name, void * args, int arg_amount, \fBELF64\fP * elf, bool is_kernel = \fCfalse\fP)"
 
 .PP
 Constructor for the \fBProcess\fP class (from an elf, will free the elf memory after loading) 
@@ -247,7 +247,7 @@ Definition at line \fB359\fP of file \fBprocess\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::Thread::parent_pid\fP\&.
+References \fBMaxOS::common::Spinlock::lock()\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBMaxOS::common::Spinlock::unlock()\fP\&.
 .PP
 Referenced by \fBProcess()\fP, and \fBProcess()\fP\&.
 .SS "uint64_t Process::pid () const"
@@ -342,7 +342,7 @@ Definition at line \fB399\fP of file \fBprocess\&.cpp\fP\&..PP
 References \fBpid()\fP\&.
 .PP
 Referenced by \fBMaxOS::processes::Scheduler::add_process()\fP\&.
-.SS "Vector< \fBThread\fP * > Process::threads ()"
+.SS "\fBVector\fP< \fBThread\fP * > Process::threads ()"
 
 .PP
 Gets the threads of the process\&. 
@@ -410,7 +410,7 @@ The manager for memory used by this process\&.
 Definition at line \fB121\fP of file \fBprocess\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::memory::MemoryManager::free()\fP, \fBMaxOS::runtime::GDBServer::handle_remove_breakpoint()\fP, \fBMaxOS::runtime::GDBServer::handle_set_breakpoint()\fP, \fBMaxOS::memory::MemoryManager::malloc()\fP, \fBMaxOS::processes::SharedMemory::open()\fP, \fBMaxOS::processes::GlobalScheduler::prepare_initrd()\fP, \fBProcess()\fP, \fBProcess()\fP, \fBMaxOS::runtime::GDBServer::send_memory()\fP, \fBMaxOS::processes::resources::BridgeHandler::send_to_bridge()\fP, \fBMaxOS::processes::Thread::Thread()\fP, and \fB~Process()\fP\&.
-.SS "string MaxOS::processes::Process::name"
+.SS "\fBstring\fP MaxOS::processes::Process::name"
 
 .PP
 The name of the process\&. 
@@ -426,7 +426,7 @@ The manger for resources used by this process\&.
 Definition at line \fB122\fP of file \fBprocess\&.h\fP\&.
 .PP
 Referenced by \fBMaxOS::memory::VirtualMemoryManager::free()\fP, \fBMaxOS::memory::VirtualMemoryManager::load_shared_memory()\fP, \fBMaxOS::processes::resources::ProcessResource::read()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_close()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_open()\fP, \fBMaxOS::system::SyscallManager::syscall_resource_read()\fP, and \fBMaxOS::system::SyscallManager::syscall_resource_write()\fP\&.
-.SS "string MaxOS::processes::Process::working_directory = '/'"
+.SS "\fBstring\fP MaxOS::processes::Process::working_directory = '/'"
 
 .PP
 The working directory of the process\&. 
@@ -437,4 +437,4 @@ Referenced by \fBMaxOS::processes::resources::ProcessResource::read()\fP, and \f
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -3,5 +3,5 @@ var dir_0916d6c84603084faf60d20148b0c25b =
     [ "cpu.h", "cpu_8h.html", "cpu_8h" ],
     [ "gdt.h", "gdt_8h.html", "gdt_8h" ],
     [ "multiboot.h", "multiboot_8h_source.html", null ],
-    [ "syscalls.h", "syscalls_8h.html", "syscalls_8h" ]
+    [ "syscalls.h", "kernel_2include_2system_2syscalls_8h.html", "kernel_2include_2system_2syscalls_8h" ]
 ];

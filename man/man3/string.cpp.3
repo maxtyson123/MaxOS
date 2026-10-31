@@ -1,0 +1,467 @@
+.TH "libraries/libcommon/src/string.cpp" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libcommon/src/string.cpp \- Implementation of a simple String class for handling text of varying types and lengths\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libcommon/string\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBstrlen\fP (const char *str)"
+.br
+.RI "Gets the length of a string\&. "
+.ti -1c
+.RI "char * \fBitoa\fP (int base, int64_t number)"
+.br
+.RI "Converts integer to string\&. "
+.ti -1c
+.RI "char * \fBhtoa\fP (uint64_t number)"
+.br
+.RI "Converts hex to string\&. "
+.ti -1c
+.RI "int \fBstrcmp\fP (const char *str1, const char *str2)"
+.br
+.RI "Compares two strings\&. "
+.ti -1c
+.RI "int \fBstrcmp\fP (char const *str1, \fBString\fP const &str2)"
+.br
+.RI "Compares two strings\&. "
+.ti -1c
+.RI "int \fBstrcmp\fP (\fBString\fP const &str1, char const *str2)"
+.br
+.RI "Compares two strings\&. "
+.ti -1c
+.RI "int \fBstrcmp\fP (\fBString\fP const &str1, \fBString\fP const &str2)"
+.br
+.RI "Compares two strings\&. "
+.ti -1c
+.RI "bool \fBstrncmp\fP (char const *str1, char const *str2, int length)"
+.br
+.RI "Checks if one string pointer is equal to another string pointer up to a specified length (each must be >= this length) "
+.ti -1c
+.RI "bool \fBstrncmp\fP (char const *str1, \fBString\fP const &str2, int length)"
+.br
+.RI "Checks if one string pointer is equal to another String up to a specified length (each must be >= this length) "
+.ti -1c
+.RI "bool \fBstrncmp\fP (\fBString\fP const &str1, char const *str2, int length)"
+.br
+.RI "Checks if one String is equal to another string pointer up to a specified length (each must be >= this length) "
+.ti -1c
+.RI "bool \fBstrncmp\fP (\fBString\fP const &str1, \fBString\fP const &str2, int length)"
+.br
+.RI "Checks if one String is equal to another String up to a specified length (each must be >= this length) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Implementation of a simple String class for handling text of varying types and lengths\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+7th January 2024 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBstring\&.cpp\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "char * htoa (uint64_t number)"
+
+.PP
+Converts hex to string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fInumber\fP The number to convert 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The converted string 
+.RE
+.PP
+
+.PP
+Definition at line \fB1023\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+1023                             {
+1024     // If there is no buffer use a default buffer
+1025     static char buffer[50] = { 0 };
+1026     int i = 49;
+1027 
+1028     // Null terminate the string
+1029     buffer[i] = '\\0';
+1030     \-\-i;
+1031 
+1032     if (number == 0) {
+1033         buffer[i] = '0';
+1034         return &buffer[i];
+1035     }
+1036 
+1037     for (; number && i; \-\-i, number /= 16)
+1038         buffer[i] = "0123456789ABCDEF"[number % 16];
+1039 
+1040     return &buffer[i + 1];
+1041 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::KPI::klog()\fP, \fBMaxOS::String::String()\fP, and \fBMaxOS::common::OutputStream::write_hex()\fP\&.
+.SS "char * itoa (int base, int64_t number)"
+
+.PP
+Converts integer to string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbase\fP The base of the number (10 for decimal, 16 for hex) 
+.br
+\fInumber\fP The number to convert
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The converted string 
+.RE
+.PP
+
+.PP
+Definition at line \fB988\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+988                                      {
+989 
+990     // If there is no buffer use a default buffer
+991     static char buffer[50] = { 0 };
+992 
+993     int i = 49;
+994     bool is_negative = number < 0;
+995 
+996     // Null terminate the string
+997     buffer[i] = '\\0';
+998     \-\-i;
+999 
+1000     if (number == 0) {
+1001         buffer[i] = '0';
+1002         return &buffer[i];
+1003     }
+1004 
+1005 
+1006     for (; number && i; \-\-i, number /= base)
+1007         buffer[i] = "0123456789ABCDEF"[number % base];
+1008 
+1009     if (is_negative) {
+1010         buffer[i] = '\-';
+1011         return &buffer[i];
+1012     }
+1013 
+1014     return &buffer[i + 1];
+1015 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::KPI::klog()\fP, \fBMaxOS::String::String()\fP, and \fBMaxOS::common::OutputStream::write_int()\fP\&.
+.SS "int strcmp (char const * str1, \fBString\fP const & str2)"
+
+.PP
+Compares two strings\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 if the strings are equal, a negative value if str1 is less than str2, or a positive value if str1 is greater than str2 
+.RE
+.PP
+
+.PP
+Definition at line \fB1065\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+1065                                                  {
+1066 
+1067     // Use the other strcmp function
+1068     return strcmp(str1, str2\&.c_str());
+1069 
+1070 }
+.fi
+
+.PP
+References \fBMaxOS::String::c_str()\fP, and \fBstrcmp()\fP\&.
+.SS "int strcmp (const char * str1, const char * str2)"
+
+.PP
+Compares two strings\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 if the strings are equal, a negative value if str1 is less than str2, or a positive value if str1 is greater than str2 
+.RE
+.PP
+
+.PP
+Definition at line \fB1050\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+1050                                                {
+1051     while (*str1 && (*str1 == *str2)) {
+1052         str1++;
+1053         str2++;
+1054     }
+1055     return *(unsigned char*)str1 \- *(unsigned char*)str2;
+1056 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::KPI::ipc::find_function()\fP, \fBMaxOS::processes::GlobalScheduler::load_multiboot_elfs()\fP, \fBMaxOS::console::FramebufferConsole::put_character()\fP, \fBstrcmp()\fP, \fBstrcmp()\fP, and \fBstrcmp()\fP\&.
+.SS "int strcmp (\fBString\fP const & str1, char const * str2)"
+
+.PP
+Compares two strings\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 if the strings are equal, a negative value if str1 is less than str2, or a positive value if str1 is greater than str2 
+.RE
+.PP
+
+.PP
+Definition at line \fB1079\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+1079                                                  {
+1080 
+1081     // Use the other strcmp function
+1082     return strcmp(str1\&.c_str(), str2);
+1083 }
+.fi
+
+.PP
+References \fBMaxOS::String::c_str()\fP, and \fBstrcmp()\fP\&.
+.SS "int strcmp (\fBString\fP const & str1, \fBString\fP const & str2)"
+
+.PP
+Compares two strings\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 if the strings are equal, a negative value if str1 is less than str2, or a positive value if str1 is greater than str2 
+.RE
+.PP
+
+.PP
+Definition at line \fB1092\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+1092                                                    {
+1093 
+1094     // Use the other strcmp function
+1095     return strcmp(str1\&.c_str(), str2\&.c_str());
+1096 
+1097 }
+.fi
+
+.PP
+References \fBMaxOS::String::c_str()\fP, and \fBstrcmp()\fP\&.
+.SS "int strlen (const char * str)"
+
+.PP
+Gets the length of a string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP The string to get the length of 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The length of the string 
+.RE
+.PP
+
+.PP
+Definition at line \fB974\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+974                             {
+975     int len = 0;
+976     for (; str[len] != '\\0'; len++);
+977     return len;
+978 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::KPI::processes::change_working_directory_handle()\fP, \fBMaxOS::processes::resources::ProcessResourceRegistry::create_resource()\fP, \fBLibFS::new_directory()\fP, \fBLibFS::new_file()\fP, \fBLibFS::remove_directory()\fP, \fBLibFS::remove_file()\fP, \fBLibFS::rename_directory()\fP, \fBMaxOS::String::String()\fP, \fBMaxOS::String::String()\fP, and \fBMaxOS::processes::Thread::Thread()\fP\&.
+.SS "bool strncmp (char const * str1, char const * str2, int length)"
+
+.PP
+Checks if one string pointer is equal to another string pointer up to a specified length (each must be >= this length) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.br
+\fIlength\fP The length of the string to compare 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the strings are equal, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB1107\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+1107                                                              {
+1108 
+1109     // Check if the strings are equal
+1110     for (int i = 0; i < length; i++)
+1111         if (str1[i] != str2[i])
+1112             return false;
+1113 
+1114     // Strings are equal
+1115     return true;
+1116 
+1117 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::hardwarecommunication::AdvancedConfigurationAndPowerInterface::find()\fP, \fBstrncmp()\fP, \fBstrncmp()\fP, and \fBstrncmp()\fP\&.
+.SS "bool strncmp (char const * str1, \fBString\fP const & str2, int length)"
+
+.PP
+Checks if one string pointer is equal to another String up to a specified length (each must be >= this length) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.br
+\fIlength\fP The length of the string to compare 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the strings are equal, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB1127\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+1127                                                                {
+1128 
+1129     // Use the other strncmp function
+1130     return strncmp(str1, str2\&.c_str(), length);
+1131 
+1132 }
+.fi
+
+.PP
+References \fBMaxOS::String::c_str()\fP, and \fBstrncmp()\fP\&.
+.SS "bool strncmp (\fBString\fP const & str1, char const * str2, int length)"
+
+.PP
+Checks if one String is equal to another string pointer up to a specified length (each must be >= this length) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.br
+\fIlength\fP The length of the string to compare 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the strings are equal, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB1142\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+1142                                                                {
+1143 
+1144     // Use the other strncmp function
+1145     return strncmp(str1\&.c_str(), str2, length);
+1146 
+1147 }
+.fi
+
+.PP
+References \fBMaxOS::String::c_str()\fP, and \fBstrncmp()\fP\&.
+.SS "bool strncmp (\fBString\fP const & str1, \fBString\fP const & str2, int length)"
+
+.PP
+Checks if one String is equal to another String up to a specified length (each must be >= this length) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr1\fP The first string 
+.br
+\fIstr2\fP The second string 
+.br
+\fIlength\fP The length of the string to compare 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the strings are equal, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB1157\fP of file \fBstring\&.cpp\fP\&..PP
+.nf
+1157                                                                  {
+1158 
+1159     // Use the other strncmp function
+1160     return strncmp(str1\&.c_str(), str2\&.c_str(), length);
+1161 }
+.fi
+
+.PP
+References \fBMaxOS::String::c_str()\fP, and \fBstrncmp()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

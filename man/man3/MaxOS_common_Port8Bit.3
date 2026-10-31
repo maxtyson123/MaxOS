@@ -1,0 +1,131 @@
+.TH "MaxOS::common::Port8Bit" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::Port8Bit \- Handles 8 bit ports\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <port\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::Port\fP\&.
+.PP
+Inherited by \fBMaxOS::common::Port8BitSlow\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPort8Bit\fP (uint16_t port_number)"
+.br
+.RI "Construct a new \fBPort\fP object for ports handling 8 bit read/writes\&. "
+.ti -1c
+.RI "virtual void \fBwrite\fP (uint8_t data)"
+.br
+.RI "write a byte to the port "
+.ti -1c
+.RI "virtual uint8_t \fBread\fP ()"
+.br
+.RI "read a byte from the port "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::common::Port\fP
+.in +1c
+.ti -1c
+.RI "\fBPort\fP (uint16_t port_number, uint8_t port_bytes)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::Port\fP
+.in +1c
+.ti -1c
+.RI "uint16_t \fBm_port_number\fP"
+.br
+.RI "The port to write to / read from\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles 8 bit ports\&. 
+.PP
+Definition at line \fB32\fP of file \fBport\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Port8Bit::Port8Bit (uint16_t port_number)\fC [explicit]\fP"
+
+.PP
+Construct a new \fBPort\fP object for ports handling 8 bit read/writes\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIport_number\fP The IO port number 
+.RE
+.PP
+
+.PP
+Definition at line \fB42\fP of file \fBport\&.cpp\fP\&..PP
+.nf
+43 : Port(port_number, 1) {
+44 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "uint8_t Port8Bit::read ()\fC [virtual]\fP"
+
+.PP
+read a byte from the port 
+.PP
+\fBReturns\fP
+.RS 4
+the byte read 
+.RE
+.PP
+
+.PP
+Definition at line \fB63\fP of file \fBport\&.cpp\fP\&..PP
+.nf
+63                        {
+64 
+65     uint8_t result;
+66     asm volatile("inb %1, %0" : "=a" (result) : "Nd" (m_port_number));
+67     return result;
+68 }
+.fi
+
+.PP
+References \fBMaxOS::common::Port::m_port_number\fP\&.
+.PP
+Referenced by \fBMaxOS::console::SerialConsole::can_read()\fP, \fBATADriver::AdvancedTechnologyAttachment::flush()\fP, \fBMaxOS::console::SerialConsole::put_character()\fP, \fBATADriver::AdvancedTechnologyAttachment::read()\fP, \fBMaxOS::console::SerialConsole::read_char()\fP, \fBMaxOS::console::SerialConsole::SerialConsole()\fP, and \fBATADriver::AdvancedTechnologyAttachment::write()\fP\&.
+.SS "void Port8Bit::write (uint8_t data)\fC [virtual]\fP"
+
+.PP
+write a byte to the port 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP the byte to write 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBMaxOS::common::Port8BitSlow\fP\&.
+.PP
+Definition at line \fB53\fP of file \fBport\&.cpp\fP\&..PP
+.nf
+53                                  {
+54 
+55     asm volatile("outb %0, %1" : : "a" (data), "Nd" (m_port_number));
+56 }
+.fi
+
+.PP
+References \fBMaxOS::common::Port::m_port_number\fP\&.
+.PP
+Referenced by \fBATADriver::AdvancedTechnologyAttachment::AdvancedTechnologyAttachment()\fP, \fBATADriver::AdvancedTechnologyAttachment::flush()\fP, \fBMaxOS::console::SerialConsole::put_character()\fP, \fBATADriver::AdvancedTechnologyAttachment::read()\fP, \fBMaxOS::console::SerialConsole::SerialConsole()\fP, and \fBATADriver::AdvancedTechnologyAttachment::write()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

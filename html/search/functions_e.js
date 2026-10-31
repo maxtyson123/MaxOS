@@ -1,8 +1,11 @@
 var searchData=
 [
-  ['old_5facpi_0',['old_acpi',['../classMaxOS_1_1system_1_1Multiboot.html#ab65ea1a3a5fccf72a4baa99f2d6bbaba',1,'MaxOS::system::Multiboot']]],
-  ['open_1',['open',['../classMaxOS_1_1processes_1_1SharedMemory.html#af67de70cf4842e416acd0d8362de514e',1,'MaxOS::processes::SharedMemory::open()'],['../classMaxOS_1_1processes_1_1resources_1_1BridgeResource.html#ab7609c41f748e69daf63c15dcb17fde4',1,'MaxOS::processes::resources::BridgeResource::open()']]],
-  ['open_5fresource_2',['open_resource',['../classMaxOS_1_1processes_1_1resources_1_1ResourceManager.html#ab0f802921984197ca744db19a0767f9d',1,'MaxOS::processes::resources::ResourceManager']]],
-  ['operator_3c_3c_3',['operator&lt;&lt;',['../classMaxOS_1_1Logger.html#ae4a08e44a698816d241d08029c37bc59',1,'MaxOS::Logger::operator&lt;&lt;()'],['../classMaxOS_1_1LogRecord.html#a61df30fd0718594bca1354143966e1ef',1,'MaxOS::LogRecord::operator&lt;&lt;(const T &amp;value)'],['../classMaxOS_1_1LogRecord.html#a214941af49157f1d8ab9b273f483d37a',1,'MaxOS::LogRecord::operator&lt;&lt;(char c)']]],
-  ['out_4',['Out',['../classMaxOS_1_1Logger.html#ab4e063a519100f839b4a14611297c0c0',1,'MaxOS::Logger']]]
+  ['name_0',['name',['../classMaxOS_1_1KPI_1_1Resource.html#a78265383b9068d644a5d45b854a5c49c',1,'MaxOS::KPI::Resource::name()'],['../classFileServer_1_1filesystem_1_1File.html#ada67576556e0415df8bf213d0ce50991',1,'FileServer::filesystem::File::name()'],['../classFileServer_1_1filesystem_1_1Directory.html#ac3e243e6b9d373feb0c31e4a153bab39',1,'FileServer::filesystem::Directory::name()']]],
+  ['new_5facpi_1',['new_acpi',['../classMaxOS_1_1system_1_1Multiboot.html#ac4bab27793f89e2c1edfaa90ca23ec35',1,'MaxOS::system::Multiboot']]],
+  ['new_5fdirectory_2',['new_directory',['../namespaceLibFS.html#abffd03a41ab6130be55c131b92016010',1,'LibFS']]],
+  ['new_5ffile_3',['new_file',['../namespaceLibFS.html#a095078bdfe42eb8dea79e2574d5d27b6',1,'LibFS']]],
+  ['next_5fchunk_4',['next_chunk',['../structMaxOS_1_1memory_1_1allocator_1_1ChunkHeader.html#adf0e65e5dce3778e192f52551ef59dfd',1,'MaxOS::memory::allocator::ChunkHeader']]],
+  ['next_5fcluster_5',['next_cluster',['../classFileServer_1_1format_1_1Fat32Volume.html#a12b7e165dde3e75b98bd43835e5cf96a',1,'FileServer::format::Fat32Volume']]],
+  ['next_5fpid_6',['next_pid',['../classMaxOS_1_1processes_1_1GlobalScheduler.html#a06e979b83c4cd3db3eed8b333188d037',1,'MaxOS::processes::GlobalScheduler']]],
+  ['next_5ftid_7',['next_tid',['../classMaxOS_1_1processes_1_1GlobalScheduler.html#a6197a324f9a16fdf1b3990df4eb7ddd3',1,'MaxOS::processes::GlobalScheduler']]]
 ];

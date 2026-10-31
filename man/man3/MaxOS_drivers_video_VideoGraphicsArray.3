@@ -1,0 +1,136 @@
+.TH "MaxOS::drivers::video::VideoGraphicsArray" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::drivers::video::VideoGraphicsArray \- Driver for the VGA graphics controller, handles the rendering of pixels to the screen\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vga\&.h>\fP
+.PP
+Inherits Video\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVideoGraphicsArray\fP ()"
+.br
+.RI "Constructs a new Video Graphics Array (VGA) driver object, initializing the necessary I/O ports for VGA register access\&. "
+.ti -1c
+.RI "\fBstring\fP \fBvendor_name\fP () final"
+.br
+.RI "Gets the name of the vendor\&. "
+.ti -1c
+.RI "\fBstring\fP \fBdevice_name\fP () final"
+.br
+.RI "Gets the name of the device\&. "
+.ti -1c
+.RI "bool \fBsupports_mode\fP (uint32_t width, uint32_t height, uint32_t colour_depth) final"
+.br
+.RI "Checks if the specified resolution is supported\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Driver for the VGA graphics controller, handles the rendering of pixels to the screen\&. 
+.PP
+Definition at line \fB28\fP of file \fBvga\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "VideoGraphicsArray::VideoGraphicsArray ()"
+
+.PP
+Constructs a new Video Graphics Array (VGA) driver object, initializing the necessary I/O ports for VGA register access\&. 
+.PP
+Definition at line \fB22\fP of file \fBvga\&.cpp\fP\&..PP
+.nf
+23 : m_misc_port(0x3C2),
+24   m_crtc_index_port(0x3D4),
+25   crtc_data_port(0x3D5),
+26   m_sequence_index_port(0x3C4),
+27   m_sequence_data_port(0x3C5),
+28   m_graphics_controller_index_port(0x3CE),
+29   m_graphics_controller_data_port(0x3CF),
+30   m_attribute_controller_index_port(0x3C0),
+31   m_attribute_controller_read_port(0x3C1),
+32   m_attribute_controller_write_port(0x3C0),
+33   m_attribute_controller_reset_port(0x3DA)
+34 {
+35 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBstring\fP VideoGraphicsArray::device_name ()\fC [final]\fP"
+
+.PP
+Gets the name of the device\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the device\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB208\fP of file \fBvga\&.cpp\fP\&..PP
+.nf
+208                                        {
+209     return "VGA compatible graphics card";
+210 }
+.fi
+
+.SS "bool VideoGraphicsArray::supports_mode (uint32_t width, uint32_t height, uint32_t colour_depth)\fC [final]\fP"
+
+.PP
+Checks if the specified resolution is supported\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwidth\fP The width of the resolution\&. 
+.br
+\fIheight\fP The height of the resolution\&. 
+.br
+\fIcolour_depth\fP The byte depth of the resolution\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the specified resolution is supported, otherwise false\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB98\fP of file \fBvga\&.cpp\fP\&..PP
+.nf
+98                                                                                              {
+99     return width == 320 && height == 200 && colour_depth == 8;
+100 }
+.fi
+
+.SS "\fBstring\fP VideoGraphicsArray::vendor_name ()\fC [final]\fP"
+
+.PP
+Gets the name of the vendor\&. 
+.PP
+\fBReturns\fP
+.RS 4
+The name of the vendor\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB197\fP of file \fBvga\&.cpp\fP\&..PP
+.nf
+197                                        {
+198 
+199     // VGA was made by IBM
+200     return "IBM";
+201 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

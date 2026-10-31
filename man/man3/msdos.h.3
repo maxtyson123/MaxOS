@@ -1,0 +1,364 @@
+.TH "programs/FileServer/include/partition/msdos.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+programs/FileServer/include/partition/msdos.h \- Defines structures and enums for handling Microsoft - Desktop Operating System (MS-DOS) partitions in a filesystem\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <cstdint>\fP
+.br
+\fC#include <libdriver/generic/disk\&.h>\fP
+.br
+\fC#include <format/fat32\&.h>\fP
+.br
+\fC#include <format/ext2\&.h>\fP
+.br
+\fC#include <vfs/vfs\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBFileServer::partition::PartitionTableEntry\fP"
+.br
+.RI "Stores information about a partition\&. "
+.ti -1c
+.RI "struct \fBFileServer::partition::MasterBootRecord\fP"
+.br
+.RI "Stores information about the master boot record\&. "
+.ti -1c
+.RI "class \fBFileServer::partition::MSDOSPartition\fP"
+.br
+.RI "Handles mounting of partitions documented in an MSDOS partition table\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::partition::PartitionTableEntry\fP \fBFileServer::partition::partition_table_entry_t\fP"
+.br
+.RI "Alias for \fBPartitionTableEntry\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::partition::MasterBootRecord\fP \fBFileServer::partition::master_boot_record_t\fP"
+.br
+.RI "Alias for \fBMasterBootRecord\fP struct\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBFileServer::partition::PartitionType\fP { \fBEMPTY\fP, \fBFAT12\fP, \fBXENIX_ROOT\fP, \fBXENIX_USR\fP, \fBFAT16\fP, \fBEXTENDED\fP, \fBFAT16_32MB\fP, \fBNTFS\fP, \fBQNX_QNY\fP, \fBAIX_DATA\fP, \fBOS2_BOOT_MANAGER\fP, \fBFAT32\fP, \fBFAT32_LBA\fP, \fBUNUSED_1\fP, \fBFAT16_LBA\fP, \fBEXTENDED_LBA\fP, \fBOPUS\fP, \fBFAT12_HIDDEN\fP, \fBCOMPAQ\fP, \fBUNUSED_2\fP, \fBFAT16_HIDDEN\fP, \fBUNUSED_3\fP, \fBFAT16_32MB_HIDDEN\fP, \fBIFS_HIDDEN\fP, \fBAST_SMART_SLEEP\fP, \fBUNUSED_4\fP, \fBUNUSED_5\fP, \fBFAT32_HIDDEN\fP, \fBFAT32_LBA_HIDDEN\fP, \fBUNUSED_6\fP, \fBFAT16_LBA_HIDDEN\fP, \fBUNUSED_7\fP, \fBUNUSED_8\fP, \fBRESERVED_1\fP, \fBUNUSED_10\fP, \fBRESERVED_2\fP, \fBNEC_DOS\fP, \fBUNUSED_11\fP, \fBRESERVED_3\fP, \fBUNUSED_12\fP, \fBUNUSED_13\fP, \fBUNUSED_14\fP, \fBUNUSED_15\fP, \fBUNUSED_16\fP, \fBUNUSED_17\fP, \fBUNUSED_18\fP, \fBUNUSED_19\fP, \fBUNUSED_20\fP, \fBUNUSED_21\fP, \fBRESERVED_4\fP, \fBNOS\fP, \fBRESERVED_5\fP, \fBRESERVED_6\fP, \fBJFS\fP, \fBRESERVED_7\fP, \fBUNUSED_22\fP, \fBTHEOS_3_2\fP, \fBPLAN9\fP, \fBTHEOS_4_4GB\fP, \fBTHEOS_4_EXTENDED\fP, \fBPARTITIONMAGIC_RECOVERY\fP, \fBHIDDEN_NETWARE\fP, \fBUNUSED_23\fP, \fBUNUSED_24\fP, \fBVENIX\fP, \fBLINUX_MINIX\fP, \fBLINUX_SWAP\fP, \fBLINUX_NATIVE\fP, \fBGOBACK\fP, \fBBOOT_US\fP, \fBEUMEL_ELAN_46\fP, \fBEUMEL_ELAN_47\fP, \fBEUMEL_ELAN_48\fP, \fBUNUSED_25\fP, \fBADAOS\fP, \fBUNUSED_26\fP, \fBOBERON\fP, \fBQNX4\fP, \fBQNX4_SECOND\fP, \fBQNX4_THIRD\fP, \fBONTRACK_DM\fP, \fBONTRACK_DM_RW\fP, \fBCPM\fP, \fBDISK_MANAGER_AUX3\fP, \fBDISK_MANAGER_DDO\fP, \fBEZ_DRIVE\fP, \fBGOLDEN_BOW\fP, \fBDRIVE_PRO\fP, \fBUNUSED_27\fP, \fBUNUSED_28\fP, \fBUNUSED_29\fP, \fBUNUSED_30\fP, \fBPRIAM_EDISK\fP, \fBUNUSED_31\fP, \fBUNUSED_32\fP, \fBUNUSED_33\fP, \fBUNUSED_34\fP, \fBSPEEDSTOR\fP, \fBUNUSED_35\fP, \fBUNIX\fP, \fBPC_ARMOUR\fP, \fBNOVELL_NETWARE386\fP, \fBNOVELL_SMS\fP, \fBNOVELL\fP, \fBNOVELL_OLD\fP, \fBNOVELL_NETWARE_NSS\fP, \fBUNUSED_36\fP, \fBUNUSED_37\fP, \fBUNUSED_38\fP, \fBUNUSED_39\fP, \fBUNUSED_40\fP, \fBUNUSED_41\fP, \fBDISKSECURE\fP, \fBRESERVED_8\fP, \fBUNUSED_42\fP, \fBRESERVED_9\fP, \fBSCRAMDISK\fP, \fBIBM_PCIX\fP, \fBRESERVED_10\fP, \fBM2FS\fP, \fBXOSL_FS\fP, \fBUNUSED_43\fP, \fBUNUSED_44\fP, \fBUNUSED_45\fP, \fBUNUSED_46\fP, \fBUNUSED_47\fP, \fBUNUSED_48\fP, \fBUNUSED_49\fP, \fBMINIX\fP, \fBMINIX2\fP, \fBLINUX_SWAP_ALT\fP, \fBLINUX_EXT2\fP, \fBHIBERNATION\fP, \fBLINUX_EXTENDED\fP, \fBLINUX_RAID\fP, \fBNTFS_VOLUME_SET\fP, \fBUNUSED_50\fP, \fBUNUSED_51\fP, \fBLINUX_KERNEL\fP, \fBFAULT_TOLERANT_FAT32\fP, \fBFT_FAT32_LBA\fP, \fBFREEFDISK_FAT12\fP, \fBLINUX_LVM\fP, \fBUNUSED_52\fP, \fBFREEFDISK_FAT16\fP, \fBFREEFDISK_EXTENDED\fP, \fBFREEFDISK_FAT16_LARGE\fP, \fBHIDDEN_LINUX_NATIVE\fP, \fBAMOEBA_BAD_BLOCK\fP, \fBMIT_EXOPC\fP, \fBUNUSED_53\fP, \fBFREEFDISK_FAT32\fP, \fBFREEFDISK_FAT32_LBA\fP, \fBDCE376\fP, \fBFREEFDISK_FAT16_LBA\fP, \fBFREEFDISK_EXTENDED_LBA\fP, \fBUNUSED_54\fP, \fBUNUSED_55\fP, \fBUNUSED_56\fP, \fBBSD_OS\fP, \fBLAPTOP_HIBERNATION\fP, \fBHP_VOLUME_EXPANSION\fP, \fBUNUSED_57\fP, \fBRESERVED_11\fP, \fBRESERVED_12\fP, \fBBSD_386\fP, \fBOPENBSD\fP, \fBNEXTSTEP\fP, \fBMAC_OS_X\fP, \fBNETBSD\fP, \fBOLIVETTI_SERVICE\fP, \fBMAC_OS_X_BOOT\fP, \fBUNUSED_58\fP, \fBUNUSED_59\fP, \fBSHAGOS\fP, \fBSHAGOS_SWAP\fP, \fBBOOTSTAR\fP, \fBRESERVED_13\fP, \fBUNUSED_60\fP, \fBRESERVED_14\fP, \fBRESERVED_15\fP, \fBUNUSED_61\fP, \fBRESERVED_16\fP, \fBBSDI_BSD386_FS\fP, \fBBSDI_BSD386_SWAP\fP, \fBUNUSED_62\fP, \fBUNUSED_63\fP, \fBBOOT_WIZARD_HIDDEN\fP, \fBUNUSED_64\fP, \fBUNUSED_65\fP, \fBSOLARIS8_BOOT\fP, \fBUNUSED_66\fP, \fBCTOS\fP, \fBDRDOS_FAT12\fP, \fBRESERVED_17\fP, \fBHIDDEN_LINUX_SWAP\fP, \fBDRDOS_FAT16\fP, \fBDRDOS_EXTENDED\fP, \fBDRDOS_FAT16_LARGE\fP, \fBNTFS_CORRUPT\fP, \fBUNUSED_67\fP, \fBUNUSED_68\fP, \fBUNUSED_69\fP, \fBDRDOS_FAT32\fP, \fBDRDOS_FAT32_LBA\fP, \fBCTOS_MEMDUMP\fP, \fBDRDOS_FAT16_LBA\fP, \fBUNUSED_70\fP, \fBREAL32_SECURE_BIG\fP, \fBOLD_MULTIUSER_DOS_FAT12\fP, \fBUNUSED_71\fP, \fBUNUSED_72\fP, \fBOLD_MULTIUSER_DOS_FAT16\fP, \fBOLD_MULTIUSER_DOS_EXTENDED\fP, \fBOLD_MULTIUSER_DOS_FAT16_LARGE\fP, \fBUNUSED_73\fP, \fBCPM86\fP, \fBUNUSED_74\fP, \fBNON_FS_DATA\fP, \fBDIGITAL_RESEARCH_CPM\fP, \fBUNUSED_75\fP, \fBHIDDEN_CTOS_MEMDUMP\fP, \fBDELL_POWEREDGE\fP, \fBDGUX\fP, \fBSTM_AVFS\fP, \fBSPEEDSTOR_FAT_EXTENDED\fP, \fBUNUSED_76\fP, \fBSPEEDSTOR_RO\fP, \fBSPEEDSTOR_EXTENDED\fP, \fBTANDY_DOS\fP, \fBRESERVED_18\fP, \fBUNUSED_77\fP, \fBUNUSED_78\fP, \fBUNUSED_79\fP, \fBBEFS\fP, \fBSPRYTIX\fP, \fBEFI_PROTECTIVE\fP, \fBEFI_SYSTEM\fP, \fBLINUX_PA_RISC\fP, \fBSPEEDSTOR_2\fP, \fBDOS_3_3_SECONDARY\fP, \fBRESERVED_19\fP, \fBSPEEDSTOR_LARGE\fP, \fBPROLOGUE_MULTI\fP, \fBRESERVED_20\fP, \fBUNUSED_80\fP, \fBUNUSED_81\fP, \fBUNUSED_82\fP, \fBBOCHS\fP, \fBVMFS\fP, \fBVMWARE_SWAP\fP, \fBLINUX_RAID_AUTO\fP, \fBNT_HIDDEN\fP, \fBXENIX_BAD_BLOCK\fP }"
+.br
+.RI "Credit: http://www.osdever.net/documents/pdf/partitiontypes.pdf\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines structures and enums for handling Microsoft - Desktop Operating System (MS-DOS) partitions in a filesystem\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+18th April 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBmsdos\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBFileServer::partition::PartitionType\fP\fC [strong]\fP"
+
+.PP
+Credit: http://www.osdever.net/documents/pdf/partitiontypes.pdf\&. 
+.PP
+Definition at line \fB24\fP of file \fBmsdos\&.h\fP\&..PP
+.nf
+24                              {
+25         EMPTY,                 // 0x00
+26         FAT12,                 // 0x01
+27         XENIX_ROOT,            // 0x02
+28         XENIX_USR,             // 0x03
+29         FAT16,                 // 0x04
+30         EXTENDED,              // 0x05
+31         FAT16_32MB,            // 0x06
+32         NTFS,                  // 0x07
+33         QNX_QNY,               // 0x08
+34         AIX_DATA,              // 0x09
+35         OS2_BOOT_MANAGER,      // 0x0A
+36         FAT32,                 // 0x0B
+37         FAT32_LBA,             // 0x0C
+38         UNUSED_1,              // 0x0D
+39         FAT16_LBA,             // 0x0E
+40         EXTENDED_LBA,          // 0x0F
+41         OPUS,                  // 0x10
+42         FAT12_HIDDEN,          // 0x11
+43         COMPAQ,                // 0x12
+44         UNUSED_2,              // 0x13
+45         FAT16_HIDDEN,          // 0x14
+46         UNUSED_3,              // 0x15
+47         FAT16_32MB_HIDDEN,     // 0x16
+48         IFS_HIDDEN,            // 0x17
+49         AST_SMART_SLEEP,       // 0x18
+50         UNUSED_4,              // 0x19
+51         UNUSED_5,              // 0x1A
+52         FAT32_HIDDEN,          // 0x1B
+53         FAT32_LBA_HIDDEN,      // 0x1C
+54         UNUSED_6,              // 0x1D
+55         FAT16_LBA_HIDDEN,      // 0x1E
+56 
+57         UNUSED_7,              // 0x1F
+58         UNUSED_8,              // 0x20
+59         RESERVED_1,            // 0x21
+60         UNUSED_10,             // 0x22
+61         RESERVED_2,            // 0x23
+62         NEC_DOS,               // 0x24
+63         UNUSED_11,             // 0x25
+64         RESERVED_3,            // 0x26
+65 
+66         // 0x27 \- 0x30: unassigned
+67         UNUSED_12,             // 0x27
+68         UNUSED_13,             // 0x28
+69         UNUSED_14,             // 0x29
+70         UNUSED_15,             // 0x2A
+71         UNUSED_16,             // 0x2B
+72         UNUSED_17,             // 0x2C
+73         UNUSED_18,             // 0x2D
+74         UNUSED_19,             // 0x2E
+75         UNUSED_20,             // 0x2F
+76         UNUSED_21,             // 0x30
+77 
+78         RESERVED_4,            // 0x31
+79         NOS,                   // 0x32
+80         RESERVED_5,            // 0x33
+81         RESERVED_6,            // 0x34
+82         JFS,                   // 0x35
+83         RESERVED_7,            // 0x36
+84         UNUSED_22,             // 0x37
+85         THEOS_3_2,             // 0x38
+86         PLAN9,                 // 0x39
+87         THEOS_4_4GB,           // 0x3A
+88         THEOS_4_EXTENDED,      // 0x3B
+89         PARTITIONMAGIC_RECOVERY, // 0x3C
+90         HIDDEN_NETWARE,        // 0x3D
+91         UNUSED_23,             // 0x3E
+92         UNUSED_24,             // 0x3F
+93 
+94         VENIX,                 // 0x40
+95         LINUX_MINIX,           // 0x41
+96         LINUX_SWAP,            // 0x42
+97         LINUX_NATIVE,          // 0x43
+98         GOBACK,                // 0x44
+99         BOOT_US,               // 0x45
+100         EUMEL_ELAN_46,         // 0x46
+101         EUMEL_ELAN_47,         // 0x47
+102         EUMEL_ELAN_48,         // 0x48
+103         UNUSED_25,             // 0x49
+104         ADAOS,                 // 0x4A
+105         UNUSED_26,             // 0x4B
+106         OBERON,                // 0x4C
+107         QNX4,                  // 0x4D
+108         QNX4_SECOND,           // 0x4E
+109         QNX4_THIRD,            // 0x4F
+110 
+111         ONTRACK_DM,            // 0x50
+112         ONTRACK_DM_RW,         // 0x51
+113         CPM,                   // 0x52
+114         DISK_MANAGER_AUX3,     // 0x53
+115         DISK_MANAGER_DDO,      // 0x54
+116         EZ_DRIVE,              // 0x55
+117         GOLDEN_BOW,            // 0x56
+118         DRIVE_PRO,             // 0x57
+119 
+120         UNUSED_27,             // 0x58
+121         UNUSED_28,             // 0x59
+122         UNUSED_29,             // 0x5A
+123         UNUSED_30,             // 0x5B
+124         PRIAM_EDISK,           // 0x5C
+125         UNUSED_31,             // 0x5D
+126         UNUSED_32,             // 0x5E
+127         UNUSED_33,             // 0x5F
+128 
+129         UNUSED_34,             // 0x60
+130         SPEEDSTOR,             // 0x61
+131         UNUSED_35,             // 0x62
+132         UNIX,                  // 0x63
+133         PC_ARMOUR,             // 0x64
+134         NOVELL_NETWARE386,     // 0x65
+135         NOVELL_SMS,            // 0x66
+136         NOVELL,                // 0x67
+137         NOVELL_OLD,            // 0x68
+138         NOVELL_NETWARE_NSS,    // 0x69
+139 
+140         UNUSED_36,             // 0x6A
+141         UNUSED_37,             // 0x6B
+142         UNUSED_38,             // 0x6C
+143         UNUSED_39,             // 0x6D
+144         UNUSED_40,             // 0x6E
+145         UNUSED_41,             // 0x6F
+146 
+147         DISKSECURE,            // 0x70
+148         RESERVED_8,            // 0x71
+149         UNUSED_42,             // 0x72
+150         RESERVED_9,            // 0x73
+151         SCRAMDISK,             // 0x74
+152         IBM_PCIX,              // 0x75
+153         RESERVED_10,           // 0x76
+154         M2FS,                  // 0x77
+155         XOSL_FS,               // 0x78
+156         UNUSED_43,             // 0x79
+157         UNUSED_44,             // 0x7A
+158         UNUSED_45,             // 0x7B
+159         UNUSED_46,             // 0x7C
+160         UNUSED_47,             // 0x7D
+161         UNUSED_48,             // 0x7E
+162         UNUSED_49,             // 0x7F
+163 
+164         MINIX,                 // 0x80
+165         MINIX2,                // 0x81
+166         LINUX_SWAP_ALT,        // 0x82
+167         LINUX_EXT2,            // 0x83
+168         HIBERNATION,           // 0x84
+169         LINUX_EXTENDED,        // 0x85
+170         LINUX_RAID,            // 0x86
+171         NTFS_VOLUME_SET,       // 0x87
+172         UNUSED_50,             // 0x88
+173         UNUSED_51,             // 0x89
+174         LINUX_KERNEL,          // 0x8A
+175         FAULT_TOLERANT_FAT32,  // 0x8B
+176         FT_FAT32_LBA,          // 0x8C
+177         FREEFDISK_FAT12,       // 0x8D
+178         LINUX_LVM,             // 0x8E
+179         UNUSED_52,             // 0x8F
+180         FREEFDISK_FAT16,       // 0x90
+181         FREEFDISK_EXTENDED,    // 0x91
+182         FREEFDISK_FAT16_LARGE, // 0x92
+183         HIDDEN_LINUX_NATIVE,   // 0x93
+184         AMOEBA_BAD_BLOCK,      // 0x94
+185         MIT_EXOPC,             // 0x95
+186         UNUSED_53,             // 0x96
+187         FREEFDISK_FAT32,       // 0x97
+188         FREEFDISK_FAT32_LBA,   // 0x98
+189         DCE376,                // 0x99
+190         FREEFDISK_FAT16_LBA,   // 0x9A
+191         FREEFDISK_EXTENDED_LBA,// 0x9B
+192 
+193         UNUSED_54,             // 0x9C
+194         UNUSED_55,             // 0x9D
+195         UNUSED_56,             // 0x9E
+196 
+197         BSD_OS,                // 0x9F
+198         LAPTOP_HIBERNATION,    // 0xA0
+199         HP_VOLUME_EXPANSION,   // 0xA1
+200         UNUSED_57,             // 0xA2
+201         RESERVED_11,           // 0xA3
+202         RESERVED_12,           // 0xA4
+203         BSD_386,               // 0xA5
+204         OPENBSD,               // 0xA6
+205         NEXTSTEP,              // 0xA7
+206         MAC_OS_X,              // 0xA8
+207         NETBSD,                // 0xA9
+208         OLIVETTI_SERVICE,      // 0xAA
+209         MAC_OS_X_BOOT,         // 0xAB
+210         UNUSED_58,             // 0xAC
+211         UNUSED_59,             // 0xAD
+212         SHAGOS,                // 0xAE
+213         SHAGOS_SWAP,           // 0xAF
+214         BOOTSTAR,              // 0xB0
+215 
+216         RESERVED_13,           // 0xB1
+217         UNUSED_60,             // 0xB2
+218         RESERVED_14,           // 0xB3
+219         RESERVED_15,           // 0xB4
+220         UNUSED_61,             // 0xB5
+221         RESERVED_16,           // 0xB6
+222 
+223         BSDI_BSD386_FS,        // 0xB7
+224         BSDI_BSD386_SWAP,      // 0xB8
+225         UNUSED_62,             // 0xB9
+226         UNUSED_63,             // 0xBA
+227         BOOT_WIZARD_HIDDEN,    // 0xBB
+228         UNUSED_64,             // 0xBC
+229         UNUSED_65,             // 0xBD
+230         SOLARIS8_BOOT,         // 0xBE
+231         UNUSED_66,             // 0xBF
+232         CTOS,                  // 0xC0
+233         DRDOS_FAT12,           // 0xC1
+234         RESERVED_17,           // 0xC2
+235         HIDDEN_LINUX_SWAP,     // 0xC3
+236         DRDOS_FAT16,           // 0xC4
+237         DRDOS_EXTENDED,        // 0xC5
+238         DRDOS_FAT16_LARGE,     // 0xC6
+239         NTFS_CORRUPT,          // 0xC7
+240 
+241         UNUSED_67,             // 0xC8
+242         UNUSED_68,             // 0xC9
+243         UNUSED_69,             // 0xCA
+244 
+245         DRDOS_FAT32,           // 0xCB
+246         DRDOS_FAT32_LBA,       // 0xCC
+247         CTOS_MEMDUMP,          // 0xCD
+248         DRDOS_FAT16_LBA,       // 0xCE
+249         UNUSED_70,             // 0xCF
+250         REAL32_SECURE_BIG,     // 0xD0
+251         OLD_MULTIUSER_DOS_FAT12,// 0xD1
+252         UNUSED_71,             // 0xD2
+253         UNUSED_72,             // 0xD3
+254         OLD_MULTIUSER_DOS_FAT16,// 0xD4
+255         OLD_MULTIUSER_DOS_EXTENDED,// 0xD5
+256         OLD_MULTIUSER_DOS_FAT16_LARGE,// 0xD6
+257         UNUSED_73,             // 0xD7
+258         CPM86,                 // 0xD8
+259         UNUSED_74,             // 0xD9
+260         NON_FS_DATA,           // 0xDA
+261         DIGITAL_RESEARCH_CPM,  // 0xDB
+262         UNUSED_75,             // 0xDC
+263         HIDDEN_CTOS_MEMDUMP,   // 0xDD
+264         DELL_POWEREDGE,        // 0xDE
+265         DGUX,                  // 0xDF
+266         STM_AVFS,              // 0xE0
+267         SPEEDSTOR_FAT_EXTENDED,// 0xE1
+268         UNUSED_76,             // 0xE2
+269         SPEEDSTOR_RO,          // 0xE3
+270         SPEEDSTOR_EXTENDED,    // 0xE4
+271         TANDY_DOS,             // 0xE5
+272 
+273         RESERVED_18,           // 0xE6
+274         UNUSED_77,             // 0xE7
+275         UNUSED_78,             // 0xE8
+276         UNUSED_79,             // 0xE9
+277 
+278         BEFS,                  // 0xEA
+279         SPRYTIX,               // 0xEB
+280         EFI_PROTECTIVE,        // 0xEE
+281         EFI_SYSTEM,            // 0xEF
+282         LINUX_PA_RISC,         // 0xF0
+283         SPEEDSTOR_2,           // 0xF1
+284         DOS_3_3_SECONDARY,     // 0xF2
+285         RESERVED_19,           // 0xF3
+286         SPEEDSTOR_LARGE,       // 0xF4
+287         PROLOGUE_MULTI,        // 0xF5
+288         RESERVED_20,           // 0xF6
+289         UNUSED_80,             // 0xF7
+290         UNUSED_81,             // 0xF8
+291         UNUSED_82,             // 0xF9
+292         BOCHS,                 // 0xFA
+293         VMFS,                  // 0xFB
+294         VMWARE_SWAP,           // 0xFC
+295         LINUX_RAID_AUTO,       // 0xFD
+296         NT_HIDDEN,             // 0xFE
+297         XENIX_BAD_BLOCK        // 0xFF
+298     };
+.fi
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

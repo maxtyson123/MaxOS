@@ -1,8 +1,125 @@
 var annotated_dup =
 [
+    [ "ATADriver", null, [
+      [ "AdvancedTechnologyAttachment", "classATADriver_1_1AdvancedTechnologyAttachment.html", "classATADriver_1_1AdvancedTechnologyAttachment" ]
+    ] ],
+    [ "DriverManager", null, [
+      [ "core", null, [
+        [ "BaseAddressRegister", "structDriverManager_1_1core_1_1BaseAddressRegister.html", "structDriverManager_1_1core_1_1BaseAddressRegister" ],
+        [ "Device", "classDriverManager_1_1core_1_1Device.html", null ],
+        [ "DeviceEnumerator", "classDriverManager_1_1core_1_1DeviceEnumerator.html", "classDriverManager_1_1core_1_1DeviceEnumerator" ],
+        [ "DeviceEnumeratorEventHandler", "classDriverManager_1_1core_1_1DeviceEnumeratorEventHandler.html", "classDriverManager_1_1core_1_1DeviceEnumeratorEventHandler" ],
+        [ "DriverEntry", "structDriverManager_1_1core_1_1DriverEntry.html", null ],
+        [ "IDStringCacheItem", "structDriverManager_1_1core_1_1IDStringCacheItem.html", null ],
+        [ "Manager", "classDriverManager_1_1core_1_1Manager.html", "classDriverManager_1_1core_1_1Manager" ],
+        [ "PCIController", "classDriverManager_1_1core_1_1PCIController.html", "classDriverManager_1_1core_1_1PCIController" ],
+        [ "PCIDeviceDescriptor", "structDriverManager_1_1core_1_1PCIDeviceDescriptor.html", "structDriverManager_1_1core_1_1PCIDeviceDescriptor" ]
+      ] ]
+    ] ],
+    [ "FileServer", null, [
+      [ "filesystem", null, [
+        [ "Directory", "classFileServer_1_1filesystem_1_1Directory.html", "classFileServer_1_1filesystem_1_1Directory" ],
+        [ "File", "classFileServer_1_1filesystem_1_1File.html", "classFileServer_1_1filesystem_1_1File" ],
+        [ "FileSystem", "classFileServer_1_1filesystem_1_1FileSystem.html", "classFileServer_1_1filesystem_1_1FileSystem" ],
+        [ "FSDriverManagerEventHanlder", "classFileServer_1_1filesystem_1_1FSDriverManagerEventHanlder.html", null ]
+      ] ],
+      [ "format", null, [
+        [ "ext2", null, [
+          [ "BlockGroupDescriptor", "structFileServer_1_1format_1_1ext2_1_1BlockGroupDescriptor.html", "structFileServer_1_1format_1_1ext2_1_1BlockGroupDescriptor" ],
+          [ "DirectoryEntry", "structFileServer_1_1format_1_1ext2_1_1DirectoryEntry.html", "structFileServer_1_1format_1_1ext2_1_1DirectoryEntry" ],
+          [ "Ext2Directory", "classFileServer_1_1format_1_1ext2_1_1Ext2Directory.html", "classFileServer_1_1format_1_1ext2_1_1Ext2Directory" ],
+          [ "Ext2File", "classFileServer_1_1format_1_1ext2_1_1Ext2File.html", "classFileServer_1_1format_1_1ext2_1_1Ext2File" ],
+          [ "Ext2FileSystem", "classFileServer_1_1format_1_1ext2_1_1Ext2FileSystem.html", "classFileServer_1_1format_1_1ext2_1_1Ext2FileSystem" ],
+          [ "Ext2Volume", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume.html", "classFileServer_1_1format_1_1ext2_1_1Ext2Volume" ],
+          [ "Inode", "structFileServer_1_1format_1_1ext2_1_1Inode.html", "structFileServer_1_1format_1_1ext2_1_1Inode" ],
+          [ "InodeHandler", "classFileServer_1_1format_1_1ext2_1_1InodeHandler.html", "classFileServer_1_1format_1_1ext2_1_1InodeHandler" ],
+          [ "InodeOS2Linux", "structFileServer_1_1format_1_1ext2_1_1InodeOS2Linux.html", "structFileServer_1_1format_1_1ext2_1_1InodeOS2Linux" ],
+          [ "SuperBlock", "structFileServer_1_1format_1_1ext2_1_1SuperBlock.html", "structFileServer_1_1format_1_1ext2_1_1SuperBlock" ]
+        ] ],
+        [ "BiosParameterBlock32", "structFileServer_1_1format_1_1BiosParameterBlock32.html", "structFileServer_1_1format_1_1BiosParameterBlock32" ],
+        [ "DirectoryEntry", "structFileServer_1_1format_1_1DirectoryEntry.html", "structFileServer_1_1format_1_1DirectoryEntry" ],
+        [ "Fat32Directory", "classFileServer_1_1format_1_1Fat32Directory.html", "classFileServer_1_1format_1_1Fat32Directory" ],
+        [ "Fat32File", "classFileServer_1_1format_1_1Fat32File.html", "classFileServer_1_1format_1_1Fat32File" ],
+        [ "Fat32FileSystem", "classFileServer_1_1format_1_1Fat32FileSystem.html", "classFileServer_1_1format_1_1Fat32FileSystem" ],
+        [ "Fat32Volume", "classFileServer_1_1format_1_1Fat32Volume.html", "classFileServer_1_1format_1_1Fat32Volume" ],
+        [ "FSInfo", "structFileServer_1_1format_1_1FSInfo.html", "structFileServer_1_1format_1_1FSInfo" ],
+        [ "LongFileNameEntry", "structFileServer_1_1format_1_1LongFileNameEntry.html", "structFileServer_1_1format_1_1LongFileNameEntry" ],
+        [ "TARDirectory", "classFileServer_1_1format_1_1TARDirectory.html", "classFileServer_1_1format_1_1TARDirectory" ],
+        [ "TARFile", "classFileServer_1_1format_1_1TARFile.html", "classFileServer_1_1format_1_1TARFile" ],
+        [ "TARFileSystem", "classFileServer_1_1format_1_1TARFileSystem.html", null ],
+        [ "TARHeader", "structFileServer_1_1format_1_1TARHeader.html", null ],
+        [ "TARVolume", "classFileServer_1_1format_1_1TARVolume.html", null ]
+      ] ],
+      [ "partition", null, [
+        [ "MasterBootRecord", "structFileServer_1_1partition_1_1MasterBootRecord.html", "structFileServer_1_1partition_1_1MasterBootRecord" ],
+        [ "MSDOSPartition", "classFileServer_1_1partition_1_1MSDOSPartition.html", null ],
+        [ "PartitionTableEntry", "structFileServer_1_1partition_1_1PartitionTableEntry.html", "structFileServer_1_1partition_1_1PartitionTableEntry" ]
+      ] ],
+      [ "vfs", null, [
+        [ "DirectoryResource", "classFileServer_1_1vfs_1_1DirectoryResource.html", "classFileServer_1_1vfs_1_1DirectoryResource" ],
+        [ "FileResource", "classFileServer_1_1vfs_1_1FileResource.html", "classFileServer_1_1vfs_1_1FileResource" ],
+        [ "VFSResourceServer", "classFileServer_1_1vfs_1_1VFSResourceServer.html", "classFileServer_1_1vfs_1_1VFSResourceServer" ],
+        [ "VirtualFileSystem", "classFileServer_1_1vfs_1_1VirtualFileSystem.html", "classFileServer_1_1vfs_1_1VirtualFileSystem" ]
+      ] ]
+    ] ],
+    [ "IDEDriver", null, [
+      [ "IntegratedDriveElectronicsController", "classIDEDriver_1_1IntegratedDriveElectronicsController.html", "classIDEDriver_1_1IntegratedDriveElectronicsController" ]
+    ] ],
+    [ "LibDriver", null, [
+      [ "generic", null, [
+        [ "Disk", "classLibDriver_1_1generic_1_1Disk.html", "classLibDriver_1_1generic_1_1Disk" ],
+        [ "DiskSector", "structLibDriver_1_1generic_1_1DiskSector.html", null ],
+        [ "Ethernet", "classLibDriver_1_1generic_1_1Ethernet.html", "classLibDriver_1_1generic_1_1Ethernet" ],
+        [ "Keyboard", "classLibDriver_1_1generic_1_1Keyboard.html", "classLibDriver_1_1generic_1_1Keyboard" ],
+        [ "KeyboardInterpreter", "classLibDriver_1_1generic_1_1KeyboardInterpreter.html", "classLibDriver_1_1generic_1_1KeyboardInterpreter" ],
+        [ "KeyboardInterpreterEN_US", "classLibDriver_1_1generic_1_1KeyboardInterpreterEN__US.html", "classLibDriver_1_1generic_1_1KeyboardInterpreterEN__US" ],
+        [ "KeyboardState", "classLibDriver_1_1generic_1_1KeyboardState.html", "classLibDriver_1_1generic_1_1KeyboardState" ],
+        [ "Mouse", "classLibDriver_1_1generic_1_1Mouse.html", "classLibDriver_1_1generic_1_1Mouse" ],
+        [ "Video", "classLibDriver_1_1generic_1_1Video.html", "classLibDriver_1_1generic_1_1Video" ]
+      ] ],
+      [ "HardwareCommunication", null, [
+        [ "HardwareMapping", "structLibDriver_1_1HardwareCommunication_1_1HardwareMapping.html", null ],
+        [ "HardwareRange", "structLibDriver_1_1HardwareCommunication_1_1HardwareRange.html", null ]
+      ] ],
+      [ "DeviceClass", "structLibDriver_1_1DeviceClass.html", null ],
+      [ "DeviceIdentification", "structLibDriver_1_1DeviceIdentification.html", null ],
+      [ "DeviceModel", "structLibDriver_1_1DeviceModel.html", null ],
+      [ "Driver", "classLibDriver_1_1Driver.html", "classLibDriver_1_1Driver" ]
+    ] ],
+    [ "LibFS", "namespaceLibFS.html", [
+      [ "EntryInformation", "structLibFS_1_1EntryInformation.html", null ],
+      [ "Path", "classLibFS_1_1Path.html", null ]
+    ] ],
     [ "MaxOS", null, [
       [ "common", null, [
-        [ "GraphicsContext", "classMaxOS_1_1common_1_1GraphicsContext.html", "classMaxOS_1_1common_1_1GraphicsContext" ]
+        [ "Buffer", "classMaxOS_1_1common_1_1Buffer.html", "classMaxOS_1_1common_1_1Buffer" ],
+        [ "Colour", "classMaxOS_1_1common_1_1Colour.html", "classMaxOS_1_1common_1_1Colour" ],
+        [ "EventHandler", "classMaxOS_1_1common_1_1EventHandler.html", null ],
+        [ "GenericInputStream", "classMaxOS_1_1common_1_1GenericInputStream.html", "classMaxOS_1_1common_1_1GenericInputStream" ],
+        [ "GenericOutputStream", "classMaxOS_1_1common_1_1GenericOutputStream.html", "classMaxOS_1_1common_1_1GenericOutputStream" ],
+        [ "GraphicsContext", "classMaxOS_1_1common_1_1GraphicsContext.html", "classMaxOS_1_1common_1_1GraphicsContext" ],
+        [ "InputStream", "classMaxOS_1_1common_1_1InputStream.html", "classMaxOS_1_1common_1_1InputStream" ],
+        [ "InputStreamBuffer", "classMaxOS_1_1common_1_1InputStreamBuffer.html", "classMaxOS_1_1common_1_1InputStreamBuffer" ],
+        [ "InputStreamEventHandler", "classMaxOS_1_1common_1_1InputStreamEventHandler.html", "classMaxOS_1_1common_1_1InputStreamEventHandler" ],
+        [ "InputStreamProcessor", "classMaxOS_1_1common_1_1InputStreamProcessor.html", "classMaxOS_1_1common_1_1InputStreamProcessor" ],
+        [ "InputStreamSocket", "classMaxOS_1_1common_1_1InputStreamSocket.html", "classMaxOS_1_1common_1_1InputStreamSocket" ],
+        [ "JSONNode", "classMaxOS_1_1common_1_1JSONNode.html", "classMaxOS_1_1common_1_1JSONNode" ],
+        [ "JSONObject", "classMaxOS_1_1common_1_1JSONObject.html", null ],
+        [ "JSONParser", "classMaxOS_1_1common_1_1JSONParser.html", null ],
+        [ "Map", "classMaxOS_1_1common_1_1Map.html", "classMaxOS_1_1common_1_1Map" ],
+        [ "MapIterationHandler", "classMaxOS_1_1common_1_1MapIterationHandler.html", "classMaxOS_1_1common_1_1MapIterationHandler" ],
+        [ "OutputStream", "classMaxOS_1_1common_1_1OutputStream.html", "classMaxOS_1_1common_1_1OutputStream" ],
+        [ "Pair", "classMaxOS_1_1common_1_1Pair.html", "classMaxOS_1_1common_1_1Pair" ],
+        [ "Port", "classMaxOS_1_1common_1_1Port.html", "classMaxOS_1_1common_1_1Port" ],
+        [ "Port16Bit", "classMaxOS_1_1common_1_1Port16Bit.html", "classMaxOS_1_1common_1_1Port16Bit" ],
+        [ "Port32Bit", "classMaxOS_1_1common_1_1Port32Bit.html", "classMaxOS_1_1common_1_1Port32Bit" ],
+        [ "Port8Bit", "classMaxOS_1_1common_1_1Port8Bit.html", "classMaxOS_1_1common_1_1Port8Bit" ],
+        [ "Port8BitSlow", "classMaxOS_1_1common_1_1Port8BitSlow.html", "classMaxOS_1_1common_1_1Port8BitSlow" ],
+        [ "Rectangle", "classMaxOS_1_1common_1_1Rectangle.html", "classMaxOS_1_1common_1_1Rectangle" ],
+        [ "Spinlock", "classMaxOS_1_1common_1_1Spinlock.html", "classMaxOS_1_1common_1_1Spinlock" ],
+        [ "Time", "structMaxOS_1_1common_1_1Time.html", "structMaxOS_1_1common_1_1Time" ],
+        [ "Vector", "classMaxOS_1_1common_1_1Vector.html", "classMaxOS_1_1common_1_1Vector" ],
+        [ "VectorIterationHandler", "classMaxOS_1_1common_1_1VectorIterationHandler.html", "classMaxOS_1_1common_1_1VectorIterationHandler" ]
       ] ],
       [ "console", null, [
         [ "Console", "classMaxOS_1_1console_1_1Console.html", "classMaxOS_1_1console_1_1Console" ],
@@ -11,6 +128,46 @@ var annotated_dup =
         [ "FramebufferConsole", "classMaxOS_1_1console_1_1FramebufferConsole.html", "classMaxOS_1_1console_1_1FramebufferConsole" ],
         [ "SerialConsole", "classMaxOS_1_1console_1_1SerialConsole.html", "classMaxOS_1_1console_1_1SerialConsole" ],
         [ "TextModeConsole", "classMaxOS_1_1console_1_1TextModeConsole.html", "classMaxOS_1_1console_1_1TextModeConsole" ]
+      ] ],
+      [ "drivers", null, [
+        [ "ethernet", null, [
+          [ "AMD_AM79C973", "classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973.html", "classMaxOS_1_1drivers_1_1ethernet_1_1AMD__AM79C973" ],
+          [ "BufferDescriptor", "structMaxOS_1_1drivers_1_1ethernet_1_1BufferDescriptor.html", "structMaxOS_1_1drivers_1_1ethernet_1_1BufferDescriptor" ],
+          [ "InitializationBlock", "structMaxOS_1_1drivers_1_1ethernet_1_1InitializationBlock.html", "structMaxOS_1_1drivers_1_1ethernet_1_1InitializationBlock" ],
+          [ "IntelI217", "classMaxOS_1_1drivers_1_1ethernet_1_1IntelI217.html", "classMaxOS_1_1drivers_1_1ethernet_1_1IntelI217" ],
+          [ "RawDataHandler", "classMaxOS_1_1drivers_1_1ethernet_1_1RawDataHandler.html", "classMaxOS_1_1drivers_1_1ethernet_1_1RawDataHandler" ],
+          [ "ReceiveDescriptor", "structMaxOS_1_1drivers_1_1ethernet_1_1ReceiveDescriptor.html", "structMaxOS_1_1drivers_1_1ethernet_1_1ReceiveDescriptor" ],
+          [ "SendDescriptor", "structMaxOS_1_1drivers_1_1ethernet_1_1SendDescriptor.html", "structMaxOS_1_1drivers_1_1ethernet_1_1SendDescriptor" ]
+        ] ],
+        [ "peripherals", null, [
+          [ "Mouse", "classMaxOS_1_1drivers_1_1peripherals_1_1Mouse.html", "classMaxOS_1_1drivers_1_1peripherals_1_1Mouse" ],
+          [ "MouseDownEvent", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseDownEvent.html", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseDownEvent" ],
+          [ "MouseEventHandler", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseEventHandler.html", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseEventHandler" ],
+          [ "MouseMoveEvent", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseMoveEvent.html", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseMoveEvent" ],
+          [ "MouseUpEvent", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseUpEvent.html", "classMaxOS_1_1drivers_1_1peripherals_1_1MouseUpEvent" ]
+        ] ],
+        [ "video", null, [
+          [ "VideoElectronicsStandardsAssociation", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation.html", "classMaxOS_1_1drivers_1_1video_1_1VideoElectronicsStandardsAssociation" ],
+          [ "VideoGraphicsArray", "classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray.html", "classMaxOS_1_1drivers_1_1video_1_1VideoGraphicsArray" ]
+        ] ]
+      ] ],
+      [ "gui", null, [
+        [ "widgets", null, [
+          [ "Button", "classMaxOS_1_1gui_1_1widgets_1_1Button.html", "classMaxOS_1_1gui_1_1widgets_1_1Button" ],
+          [ "ButtonEventHandler", "classMaxOS_1_1gui_1_1widgets_1_1ButtonEventHandler.html", "classMaxOS_1_1gui_1_1widgets_1_1ButtonEventHandler" ],
+          [ "ButtonPressedEvent", "classMaxOS_1_1gui_1_1widgets_1_1ButtonPressedEvent.html", "classMaxOS_1_1gui_1_1widgets_1_1ButtonPressedEvent" ],
+          [ "ButtonReleasedEvent", "classMaxOS_1_1gui_1_1widgets_1_1ButtonReleasedEvent.html", "classMaxOS_1_1gui_1_1widgets_1_1ButtonReleasedEvent" ],
+          [ "InputBox", "classMaxOS_1_1gui_1_1widgets_1_1InputBox.html", "classMaxOS_1_1gui_1_1widgets_1_1InputBox" ],
+          [ "InputBoxEventHandler", "classMaxOS_1_1gui_1_1widgets_1_1InputBoxEventHandler.html", "classMaxOS_1_1gui_1_1widgets_1_1InputBoxEventHandler" ],
+          [ "InputBoxTextChangedEvent", "classMaxOS_1_1gui_1_1widgets_1_1InputBoxTextChangedEvent.html", "classMaxOS_1_1gui_1_1widgets_1_1InputBoxTextChangedEvent" ],
+          [ "Text", "classMaxOS_1_1gui_1_1widgets_1_1Text.html", "classMaxOS_1_1gui_1_1widgets_1_1Text" ]
+        ] ],
+        [ "CompositeWidget", "classMaxOS_1_1gui_1_1CompositeWidget.html", "classMaxOS_1_1gui_1_1CompositeWidget" ],
+        [ "Desktop", "classMaxOS_1_1gui_1_1Desktop.html", "classMaxOS_1_1gui_1_1Desktop" ],
+        [ "Font", "classMaxOS_1_1gui_1_1Font.html", "classMaxOS_1_1gui_1_1Font" ],
+        [ "Widget", "classMaxOS_1_1gui_1_1Widget.html", "classMaxOS_1_1gui_1_1Widget" ],
+        [ "WidgetMoverResizer", "classMaxOS_1_1gui_1_1WidgetMoverResizer.html", "classMaxOS_1_1gui_1_1WidgetMoverResizer" ],
+        [ "Window", "classMaxOS_1_1gui_1_1Window.html", "classMaxOS_1_1gui_1_1Window" ]
       ] ],
       [ "hardwarecommunication", null, [
         [ "ACPISDTHeader", "structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader.html", "structMaxOS_1_1hardwarecommunication_1_1ACPISDTHeader" ],
@@ -44,6 +201,25 @@ var annotated_dup =
         [ "RSDT", "structMaxOS_1_1hardwarecommunication_1_1RSDT.html", "structMaxOS_1_1hardwarecommunication_1_1RSDT" ],
         [ "XSDT", "structMaxOS_1_1hardwarecommunication_1_1XSDT.html", "structMaxOS_1_1hardwarecommunication_1_1XSDT" ]
       ] ],
+      [ "KPI", null, [
+        [ "ipc", null, [
+          [ "ArgEntry", "structMaxOS_1_1KPI_1_1ipc_1_1ArgEntry.html", "structMaxOS_1_1KPI_1_1ipc_1_1ArgEntry" ],
+          [ "ArgList", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList" ],
+          [ "FunctionEntry", "structMaxOS_1_1KPI_1_1ipc_1_1FunctionEntry.html", null ],
+          [ "RPCHeader", "structMaxOS_1_1KPI_1_1ipc_1_1RPCHeader.html", null ]
+        ] ],
+        [ "processes", null, [
+          [ "ExecuteCommand", "structMaxOS_1_1KPI_1_1processes_1_1ExecuteCommand.html", null ],
+          [ "handle_info", "structMaxOS_1_1KPI_1_1processes_1_1handle__info.html", null ],
+          [ "ProcessEnvironment", "structMaxOS_1_1KPI_1_1processes_1_1ProcessEnvironment.html", null ],
+          [ "ProcessStats", "structMaxOS_1_1KPI_1_1processes_1_1ProcessStats.html", null ],
+          [ "ThreadStats", "structMaxOS_1_1KPI_1_1processes_1_1ThreadStats.html", null ]
+        ] ],
+        [ "Resource", "classMaxOS_1_1KPI_1_1Resource.html", "classMaxOS_1_1KPI_1_1Resource" ],
+        [ "ResourceServer", "classMaxOS_1_1KPI_1_1ResourceServer.html", "classMaxOS_1_1KPI_1_1ResourceServer" ],
+        [ "ServiceMessageRing", "structMaxOS_1_1KPI_1_1ServiceMessageRing.html", null ],
+        [ "ServiceResourceMessage", "structMaxOS_1_1KPI_1_1ServiceResourceMessage.html", null ]
+      ] ],
       [ "memory", null, [
         [ "allocator", null, [
           [ "BumpAllocator", "classMaxOS_1_1memory_1_1allocator_1_1BumpAllocator.html", "classMaxOS_1_1memory_1_1allocator_1_1BumpAllocator" ],
@@ -67,6 +243,33 @@ var annotated_dup =
         [ "VirtualMemoryChunk", "structMaxOS_1_1memory_1_1VirtualMemoryChunk.html", "structMaxOS_1_1memory_1_1VirtualMemoryChunk" ],
         [ "VirtualMemoryManager", "classMaxOS_1_1memory_1_1VirtualMemoryManager.html", "classMaxOS_1_1memory_1_1VirtualMemoryManager" ],
         [ "VirtualMemoryRegion", "structMaxOS_1_1memory_1_1VirtualMemoryRegion.html", "structMaxOS_1_1memory_1_1VirtualMemoryRegion" ]
+      ] ],
+      [ "net", null, [
+        [ "AddressResolutionProtocol", "classMaxOS_1_1net_1_1AddressResolutionProtocol.html", "classMaxOS_1_1net_1_1AddressResolutionProtocol" ],
+        [ "ARPMessage", "structMaxOS_1_1net_1_1ARPMessage.html", "structMaxOS_1_1net_1_1ARPMessage" ],
+        [ "ConnectedEvent", "classMaxOS_1_1net_1_1ConnectedEvent.html", "classMaxOS_1_1net_1_1ConnectedEvent" ],
+        [ "DataReceivedEvent", "classMaxOS_1_1net_1_1DataReceivedEvent.html", "classMaxOS_1_1net_1_1DataReceivedEvent" ],
+        [ "DisconnectedEvent", "classMaxOS_1_1net_1_1DisconnectedEvent.html", "classMaxOS_1_1net_1_1DisconnectedEvent" ],
+        [ "EthernetFrameFooter", "structMaxOS_1_1net_1_1EthernetFrameFooter.html", "structMaxOS_1_1net_1_1EthernetFrameFooter" ],
+        [ "EthernetFrameHandler", "classMaxOS_1_1net_1_1EthernetFrameHandler.html", "classMaxOS_1_1net_1_1EthernetFrameHandler" ],
+        [ "EthernetFrameHeader", "structMaxOS_1_1net_1_1EthernetFrameHeader.html", "structMaxOS_1_1net_1_1EthernetFrameHeader" ],
+        [ "EthernetFramePayloadHandler", "classMaxOS_1_1net_1_1EthernetFramePayloadHandler.html", "classMaxOS_1_1net_1_1EthernetFramePayloadHandler" ],
+        [ "ICMPHeader", "structMaxOS_1_1net_1_1ICMPHeader.html", "structMaxOS_1_1net_1_1ICMPHeader" ],
+        [ "InternetControlMessageProtocol", "classMaxOS_1_1net_1_1InternetControlMessageProtocol.html", "classMaxOS_1_1net_1_1InternetControlMessageProtocol" ],
+        [ "InternetProtocolHandler", "classMaxOS_1_1net_1_1InternetProtocolHandler.html", "classMaxOS_1_1net_1_1InternetProtocolHandler" ],
+        [ "IPV4AddressResolver", "classMaxOS_1_1net_1_1IPV4AddressResolver.html", "classMaxOS_1_1net_1_1IPV4AddressResolver" ],
+        [ "IPV4Header", "structMaxOS_1_1net_1_1IPV4Header.html", "structMaxOS_1_1net_1_1IPV4Header" ],
+        [ "IPV4PayloadHandler", "classMaxOS_1_1net_1_1IPV4PayloadHandler.html", "classMaxOS_1_1net_1_1IPV4PayloadHandler" ],
+        [ "TCPHeader", "structMaxOS_1_1net_1_1TCPHeader.html", "structMaxOS_1_1net_1_1TCPHeader" ],
+        [ "TCPPayloadHandler", "classMaxOS_1_1net_1_1TCPPayloadHandler.html", "classMaxOS_1_1net_1_1TCPPayloadHandler" ],
+        [ "TCPPseudoHeader", "structMaxOS_1_1net_1_1TCPPseudoHeader.html", "structMaxOS_1_1net_1_1TCPPseudoHeader" ],
+        [ "TCPSocket", "classMaxOS_1_1net_1_1TCPSocket.html", "classMaxOS_1_1net_1_1TCPSocket" ],
+        [ "TransmissionControlProtocolHandler", "classMaxOS_1_1net_1_1TransmissionControlProtocolHandler.html", "classMaxOS_1_1net_1_1TransmissionControlProtocolHandler" ],
+        [ "UDPDataReceivedEvent", "classMaxOS_1_1net_1_1UDPDataReceivedEvent.html", "classMaxOS_1_1net_1_1UDPDataReceivedEvent" ],
+        [ "UDPHeader", "structMaxOS_1_1net_1_1UDPHeader.html", "structMaxOS_1_1net_1_1UDPHeader" ],
+        [ "UDPPayloadHandler", "classMaxOS_1_1net_1_1UDPPayloadHandler.html", "classMaxOS_1_1net_1_1UDPPayloadHandler" ],
+        [ "UDPSocket", "classMaxOS_1_1net_1_1UDPSocket.html", "classMaxOS_1_1net_1_1UDPSocket" ],
+        [ "UserDatagramProtocolHandler", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler.html", "classMaxOS_1_1net_1_1UserDatagramProtocolHandler" ]
       ] ],
       [ "processes", null, [
         [ "resources", null, [
@@ -127,8 +330,33 @@ var annotated_dup =
         [ "TaskStateSegment", "structMaxOS_1_1system_1_1TaskStateSegment.html", "structMaxOS_1_1system_1_1TaskStateSegment" ]
       ] ],
       [ "Logger", "classMaxOS_1_1Logger.html", "classMaxOS_1_1Logger" ],
-      [ "LogRecord", "classMaxOS_1_1LogRecord.html", "classMaxOS_1_1LogRecord" ]
+      [ "LogRecord", "classMaxOS_1_1LogRecord.html", "classMaxOS_1_1LogRecord" ],
+      [ "String", "classMaxOS_1_1String.html", "classMaxOS_1_1String" ],
+      [ "StringBuilder", "classMaxOS_1_1StringBuilder.html", "classMaxOS_1_1StringBuilder" ]
     ] ],
+    [ "__locale", "struct____locale.html", null ],
+    [ "_div", "struct__div.html", "struct__div" ],
+    [ "_ldiv", "struct__ldiv.html", "struct__ldiv" ],
+    [ "_lldiv", "struct__lldiv.html", "struct__lldiv" ],
+    [ "_platform_mcontext", "struct__platform__mcontext.html", null ],
+    [ "_siginfo", "struct__siginfo.html", "struct__siginfo" ],
+    [ "_stack", "struct__stack.html", "struct__stack" ],
+    [ "_struct_platform_locale", "struct__struct__platform__locale.html", null ],
+    [ "_ucontext", "struct__ucontext.html", "struct__ucontext" ],
+    [ "aiocb", "structaiocb.html", "structaiocb" ],
+    [ "AncillaryMessageHeader", "structAncillaryMessageHeader.html", "structAncillaryMessageHeader" ],
+    [ "EthernetDriver", "classEthernetDriver.html", null ],
+    [ "f_owner_ex", "structf__owner__ex.html", "structf__owner__ex" ],
+    [ "flock", "structflock.html", "structflock" ],
+    [ "in6_addr", "structin6__addr.html", "structin6__addr" ],
+    [ "IntegerMaxDivision", "structIntegerMaxDivision.html", null ],
+    [ "InternetAddress", "structInternetAddress.html", "structInternetAddress" ],
+    [ "ipv6_mreq", "structipv6__mreq.html", null ],
+    [ "itimerspec", "structitimerspec.html", "structitimerspec" ],
+    [ "lconv", "structlconv.html", "structlconv" ],
+    [ "linger", "structlinger.html", null ],
+    [ "Linger", "structLinger.html", null ],
+    [ "MessageHeader", "structMessageHeader.html", "structMessageHeader" ],
     [ "multiboot_color", "structmultiboot__color.html", "structmultiboot__color" ],
     [ "multiboot_header", "structmultiboot__header.html", "structmultiboot__header" ],
     [ "multiboot_header_tag", "structmultiboot__header__tag.html", "structmultiboot__header__tag" ],
@@ -162,5 +390,15 @@ var annotated_dup =
     [ "multiboot_tag_string", "structmultiboot__tag__string.html", "structmultiboot__tag__string" ],
     [ "multiboot_tag_vbe", "structmultiboot__tag__vbe.html", "structmultiboot__tag__vbe" ],
     [ "multiboot_vbe_info_block", "structmultiboot__vbe__info__block.html", "structmultiboot__vbe__info__block" ],
-    [ "multiboot_vbe_mode_info_block", "structmultiboot__vbe__mode__info__block.html", "structmultiboot__vbe__mode__info__block" ]
+    [ "multiboot_vbe_mode_info_block", "structmultiboot__vbe__mode__info__block.html", "structmultiboot__vbe__mode__info__block" ],
+    [ "sigaction", "structsigaction.html", "structsigaction" ],
+    [ "sigevent", "structsigevent.html", "structsigevent" ],
+    [ "sigval", "unionsigval.html", null ],
+    [ "sockaddr_in", "structsockaddr__in.html", "structsockaddr__in" ],
+    [ "sockaddr_in6", "structsockaddr__in6.html", "structsockaddr__in6" ],
+    [ "SocketAddress", "structSocketAddress.html", "structSocketAddress" ],
+    [ "SocketAddressStorage", "structSocketAddressStorage.html", null ],
+    [ "stat", "structstat.html", "structstat" ],
+    [ "timespec", "structtimespec.html", "structtimespec" ],
+    [ "tm", "structtm.html", "structtm" ]
 ];

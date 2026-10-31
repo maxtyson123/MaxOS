@@ -1,0 +1,215 @@
+.TH "programs/FileServer/include/format/fat32.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+programs/FileServer/include/format/fat32.h \- Defines structures and constants for the File Allocation Table 32 (FAT32) filesystem format and the relevant Filesystem, Directory and File classes\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <cstdint>\fP
+.br
+\fC#include <libcommon/macros\&.h>\fP
+.br
+\fC#include <libdriver/generic/disk\&.h>\fP
+.br
+\fC#include <filesystem/filesystem\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBFileServer::format::BiosParameterBlock32\fP"
+.br
+.RI "Stores information about the FAT32 filesystem\&. "
+.ti -1c
+.RI "struct \fBFileServer::format::FSInfo\fP"
+.br
+.RI "Stores extra information about the FAT32 filesystem\&. "
+.ti -1c
+.RI "struct \fBFileServer::format::DirectoryEntry\fP"
+.br
+.RI "Stores information about a file or directory\&. "
+.ti -1c
+.RI "struct \fBFileServer::format::LongFileNameEntry\fP"
+.br
+.RI "Directory entry for a long file name\&. "
+.ti -1c
+.RI "class \fBFileServer::format::Fat32Volume\fP"
+.br
+.RI "Handles the FAT table that stores the information about the files on the disk and operations on the disk\&. "
+.ti -1c
+.RI "class \fBFileServer::format::Fat32File\fP"
+.br
+.RI "Handles the file operations on the FAT32 filesystem\&. "
+.ti -1c
+.RI "class \fBFileServer::format::Fat32Directory\fP"
+.br
+.RI "Handles the directory operations on the FAT32 filesystem\&. "
+.ti -1c
+.RI "class \fBFileServer::format::Fat32FileSystem\fP"
+.br
+.RI "Handles the FAT32 filesystem operations\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBMaxOS::string\fP \fBFileServer::format::string\fP"
+.br
+.ti -1c
+.RI "typedef \fBfilesystem::Directory\fP \fBFileServer::format::Directory\fP"
+.br
+.ti -1c
+.RI "typedef \fBfilesystem::File\fP \fBFileServer::format::File\fP"
+.br
+.ti -1c
+.RI "typedef \fBfilesystem::lba_t\fP \fBFileServer::format::lba_t\fP"
+.br
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::format::BiosParameterBlock32\fP \fBFileServer::format::bpb32_t\fP"
+.br
+.RI "Alias for \fBBiosParameterBlock32\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::format::FSInfo\fP \fBFileServer::format::fs_info_t\fP"
+.br
+.RI "Alias for \fBFSInfo\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::format::DirectoryEntry\fP \fBFileServer::format::dir_entry_t\fP"
+.br
+.RI "Alias for \fBDirectoryEntry\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::format::LongFileNameEntry\fP \fBFileServer::format::long_file_name_entry_t\fP"
+.br
+.RI "Alias for \fBLongFileNameEntry\fP struct\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBFileServer::format::DirectoryEntryAttributes\fP { \fBFREE\fP = 0x00, \fBREAD_ONLY\fP = 0x01, \fBHIDDEN\fP = 0x02, \fBSYSTEM\fP = 0x04, \fBVOLUME_ID\fP = 0x08, \fBDIRECTORY\fP = 0x10, \fBARCHIVE\fP = 0x20, \fBLONG_NAME\fP = READ_ONLY | HIDDEN | SYSTEM | VOLUME_ID }"
+.br
+.RI "Flags for a directory entry in a FAT32 System\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::DirectoryEntryType\fP { \fBLAST\fP = 0x00, \fBFREE\fP = 0xE5 }"
+.br
+.RI "The type of a directory entry\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ClusterState\fP : uint32_t { \fBFREE\fP = 0x00000000, \fBBAD\fP = 0x0FFFFFF7, \fBEND_OF_CHAIN\fP = 0xFFFFFFFF }"
+.br
+.RI "The state of a cluster in the FAT32 filesystem\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr uint16_t \fBFileServer::format::MAX_NAME_LENGTH\fP = 255"
+.br
+.RI "Highest number of characters in a file/directory name\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines structures and constants for the File Allocation Table 32 (FAT32) filesystem format and the relevant Filesystem, Directory and File classes\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+1st January 2023 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+BUG: Subdirectory seems to write to the disk this end but tools like fatcat complain the that the EOC isn't written (cluster 3037) 
+.PP
+Implment: create/delete/rename files & directories 
+.RE
+.PP
+
+.PP
+Definition in file \fBfat32\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef filesystem::Directory \fBFileServer::format::Directory\fP"
+
+.PP
+Definition at line \fB27\fP of file \fBfat32\&.h\fP\&.
+.SS "typedef filesystem::File \fBFileServer::format::File\fP"
+
+.PP
+Definition at line \fB28\fP of file \fBfat32\&.h\fP\&.
+.SS "typedef filesystem::lba_t FileServer::format::lba_t"
+
+.PP
+Definition at line \fB29\fP of file \fBfat32\&.h\fP\&.
+.SS "typedef \fBMaxOS::string\fP FileServer::format::string"
+
+.PP
+Definition at line \fB26\fP of file \fBfat32\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBFileServer::format::ClusterState\fP : uint32_t\fC [strong]\fP"
+
+.PP
+The state of a cluster in the FAT32 filesystem\&. 
+.PP
+Definition at line \fB166\fP of file \fBfat32\&.h\fP\&..PP
+.nf
+166                             : uint32_t {
+167         FREE = 0x00000000,
+168         BAD = 0x0FFFFFF7,
+169         END_OF_CHAIN = 0xFFFFFFFF,
+170     };
+.fi
+
+.SS "enum class \fBFileServer::format::DirectoryEntryAttributes\fP\fC [strong]\fP"
+
+.PP
+Flags for a directory entry in a FAT32 System\&. 
+.PP
+Definition at line \fB123\fP of file \fBfat32\&.h\fP\&..PP
+.nf
+123                                         {
+124         FREE = 0x00,
+125         READ_ONLY = 0x01,
+126         HIDDEN = 0x02,
+127         SYSTEM = 0x04,
+128         VOLUME_ID = 0x08,
+129         DIRECTORY = 0x10,
+130         ARCHIVE = 0x20,
+131         LONG_NAME = READ_ONLY | HIDDEN | SYSTEM | VOLUME_ID,
+132     };
+.fi
+
+.SS "enum class \fBFileServer::format::DirectoryEntryType\fP\fC [strong]\fP"
+
+.PP
+The type of a directory entry\&. 
+.PP
+Definition at line \fB138\fP of file \fBfat32\&.h\fP\&..PP
+.nf
+138                                   {
+139         LAST = 0x00,
+140         FREE = 0xE5,
+141     };
+.fi
+
+.SH "Variable Documentation"
+.PP 
+.SS "constexpr uint16_t FileServer::format::MAX_NAME_LENGTH = 255\fC [constexpr]\fP"
+
+.PP
+Highest number of characters in a file/directory name\&. 
+.PP
+Definition at line \fB173\fP of file \fBfat32\&.h\fP\&.
+.PP
+Referenced by \fBFileServer::format::Fat32Directory::create_file()\fP, and \fBFileServer::format::Fat32Directory::create_subdirectory()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

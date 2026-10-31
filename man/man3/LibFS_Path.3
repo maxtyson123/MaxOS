@@ -1,0 +1,488 @@
+.TH "LibFS::Path" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LibFS::Path \- Handles file & directory paths\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <path\&.h>\fP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBvalid\fP (const \fBMaxOS::string\fP &path)"
+.br
+.RI "Check if a path is valid\&. "
+.ti -1c
+.RI "static bool \fBis_file\fP (const \fBMaxOS::string\fP &path)"
+.br
+.RI "Check if a path is a file\&. "
+.ti -1c
+.RI "static \fBMaxOS::string\fP \fBfile_name\fP (const \fBMaxOS::string\fP &path)"
+.br
+.RI "Get the file name component of a path if it exists or an empty string\&. "
+.ti -1c
+.RI "static \fBMaxOS::string\fP \fBfile_extension\fP (const \fBMaxOS::string\fP &path)"
+.br
+.RI "Try to get the file extension from a path (assumes split by '\&.') "
+.ti -1c
+.RI "static \fBMaxOS::string\fP \fBfile_path\fP (const \fBMaxOS::string\fP &path)"
+.br
+.RI "Finds the path to the directory the file is in\&. "
+.ti -1c
+.RI "static bool \fBis_child_of\fP (const \fBMaxOS::string\fP &path, const \fBMaxOS::string\fP &parent)"
+.br
+.ti -1c
+.RI "static \fBMaxOS::string\fP \fBtop_directory\fP (const \fBMaxOS::string\fP &path)"
+.br
+.RI "Get the top directory of a path\&. "
+.ti -1c
+.RI "static \fBMaxOS::string\fP \fBparent_directory\fP (const \fBMaxOS::string\fP &path)"
+.br
+.RI "Get the parent directory of the path\&. "
+.ti -1c
+.RI "static \fBMaxOS::string\fP \fBabsolute_path\fP (const \fBMaxOS::string\fP &path)"
+.br
+.RI "Calculates path with out any '\&.\&./' or '\&./'\&. "
+.ti -1c
+.RI "static \fBMaxOS::string\fP \fBjoin_path\fP (const \fBMaxOS::string\fP &base, const \fBMaxOS::string\fP &extended)"
+.br
+.RI "Joins two paths together\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles file & directory paths\&. 
+.PP
+Definition at line \fB21\fP of file \fBpath\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBstring\fP Path::absolute_path (const \fBMaxOS::string\fP & path)\fC [static]\fP"
+
+.PP
+Calculates path with out any '\&.\&./' or '\&./'\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The new path, direct from root 
+.RE
+.PP
+
+.PP
+Definition at line \fB219\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+219                                              {
+220 
+221     // Split the path into components
+222     auto components = path\&.split("/");
+223     common::Vector<string> absolute_components;
+224     for (auto &component: components) {
+225 
+226         // Skip empty or self references
+227         if (component == "" || component == "\&.")
+228             continue;
+229 
+230         // Handle parent directory references
+231         if (component == "\&.\&.") {
+232             if (!absolute_components\&.empty())
+233                 absolute_components\&.pop_back();
+234         } else
+235             absolute_components\&.push_back(component);
+236     }
+237 
+238     // Join the components back into a path
+239     string absolute_path = "/";
+240     for(const auto& component : absolute_components)
+241         absolute_path += component + "/";
+242 
+243     // Remove trailing slash if file
+244     if(is_file(path) && absolute_path\&.length() > 1)
+245         absolute_path = absolute_path\&.substring(0, absolute_path\&.length() \- 1);
+246 
+247     return absolute_path;
+248 }
+.fi
+
+.PP
+References \fBabsolute_path()\fP, \fBMaxOS::common::Vector< Type >::empty()\fP, \fBis_file()\fP, \fBMaxOS::common::Vector< Type >::pop_back()\fP, and \fBMaxOS::common::Vector< Type >::push_back()\fP\&.
+.PP
+Referenced by \fBabsolute_path()\fP, \fBis_child_of()\fP, and \fBFileServer::vfs::VFSResourceServer::process_relative_path()\fP\&.
+.SS "\fBstring\fP Path::file_extension (const \fBMaxOS::string\fP & path)\fC [static]\fP"
+
+.PP
+Try to get the file extension from a path (assumes split by '\&.') 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to get the file extension from 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The file extension or the original path if it does not exist 
+.RE
+.PP
+
+.PP
+Definition at line \fB82\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+82                                               {
+83 
+84     // Find the last \&.
+85     int last_dot = \-1;
+86     for (size_t i = 0; i < path\&.length(); i++)
+87         if (path[i] == '\&.')
+88             last_dot = i;
+89 
+90     // Make sure there was a dot to split
+91     if (last_dot == \-1)
+92         return "";
+93 
+94     // Get the file extension (what is after the "\&.")
+95     string file_extension = path\&.substring(last_dot + 1, path\&.length() \- last_dot \- 1);
+96     return file_extension;
+97 
+98 }
+.fi
+
+.PP
+References \fBfile_extension()\fP\&.
+.PP
+Referenced by \fBfile_extension()\fP, and \fBis_file()\fP\&.
+.SS "\fBstring\fP Path::file_name (const \fBMaxOS::string\fP & path)\fC [static]\fP"
+
+.PP
+Get the file name component of a path if it exists or an empty string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to get the file name from 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The file name or the original path if it does not exist
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+reverse loop is quicker 
+.RE
+.PP
+
+.PP
+Definition at line \fB59\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+59                                          {
+60 
+61     // Find the last /
+62     int last_slash = \-1;
+63     for (size_t i = 0; i < path\&.length(); i++)
+64         if (path[i] == '/')
+65             last_slash = i;
+66 
+67     // Make sure there was a slash to split
+68     if (last_slash == \-1)
+69         return path;
+70 
+71     // Get the file name
+72     string file_name = path\&.substring(last_slash + 1, path\&.length() \- last_slash \- 1);
+73     return file_name;
+74 }
+.fi
+
+.PP
+References \fBfile_name()\fP\&.
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::create_directory()\fP, \fBFileServer::vfs::VirtualFileSystem::create_file()\fP, \fBFileServer::vfs::VirtualFileSystem::delete_directory()\fP, \fBFileServer::vfs::VirtualFileSystem::delete_file()\fP, \fBFileServer::filesystem::FileSystem::exists()\fP, \fBfile_name()\fP, \fBis_file()\fP, and \fBFileServer::vfs::VirtualFileSystem::open_file()\fP\&.
+.SS "\fBstring\fP Path::file_path (const \fBMaxOS::string\fP & path)\fC [static]\fP"
+
+.PP
+Finds the path to the directory the file is in\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to get the file path from 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The file path or the original path if it does not exist 
+.RE
+.PP
+
+.PP
+Definition at line \fB106\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+106                                          {
+107 
+108     // Try to find the last /
+109     int last_slash = \-1;
+110     for (size_t i = 0; i < path\&.length(); i++)
+111         if (path[i] == '/')
+112             last_slash = i;
+113 
+114     // Make sure there was a slash to split
+115     if (last_slash == \-1)
+116         return path;
+117 
+118     // Get the file path
+119     string file_path = path\&.substring(0, last_slash);
+120     return file_path;
+121 
+122 }
+.fi
+
+.PP
+References \fBfile_path()\fP\&.
+.PP
+Referenced by \fBFileServer::filesystem::FileSystem::exists()\fP, \fBfile_path()\fP, and \fBFileServer::vfs::VirtualFileSystem::open_directory()\fP\&.
+.SS "bool Path::is_child_of (const \fBMaxOS::string\fP & path, const \fBMaxOS::string\fP & parent)\fC [static]\fP"
+
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to check 
+.br
+\fIparent\fP The parent the 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+.RE
+.PP
+
+.PP
+Definition at line \fB130\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+130                                                                {
+131 
+132     // Validation (@todo add to all)
+133     if (!valid(path) || !valid(parent))
+134         return false;
+135 
+136     // Normalise both
+137     string abs_path     = absolute_path(path);
+138     string abs_parent   = absolute_path(parent);
+139 
+140     // Ensure the parent is a directory
+141     if (is_file(abs_parent))
+142         abs_parent = parent_directory(abs_parent);
+143 
+144     // Not a parent of itself
+145     if (abs_path == abs_parent)
+146         return false;
+147 
+148     // Root is parent of all
+149     if (abs_parent == "/")
+150         return true;
+151 
+152     // Child would have to be longer than parent
+153     if (abs_path\&.length() <= abs_parent\&.length())
+154         return false;
+155 
+156     // Child prefix must be parent
+157     if (abs_path\&.substring(0, abs_parent\&.length()) != abs_parent)
+158         return false;
+159 
+160     // Prefix must end with "/" otherwise could be a longer name of the parent ie "/a/b" vs "ab/b"
+161     if (abs_path[abs_parent\&.length()] != '/')
+162         return false;
+163 
+164     // Must be parent
+165     return true;
+166 }
+.fi
+
+.PP
+References \fBabsolute_path()\fP, \fBis_file()\fP, \fBparent_directory()\fP, and \fBvalid()\fP\&.
+.PP
+Referenced by \fBFileServer::format::TARDirectory::read_from_disk()\fP\&.
+.SS "bool Path::is_file (const \fBMaxOS::string\fP & path)\fC [static]\fP"
+
+.PP
+Check if a path is a file\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to check 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the path is a file, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB45\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+45                                      {
+46 
+47     return file_name(path)\&.length() > 0 && file_extension(path)\&.length() > 0;
+48 }
+.fi
+
+.PP
+References \fBfile_extension()\fP, and \fBfile_name()\fP\&.
+.PP
+Referenced by \fBabsolute_path()\fP, \fBis_child_of()\fP, and \fBFileServer::vfs::VirtualFileSystem::update_cache()\fP\&.
+.SS "\fBstring\fP Path::join_path (const \fBMaxOS::string\fP & base, const \fBMaxOS::string\fP & extended)\fC [static]\fP"
+
+.PP
+Joins two paths together\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbase\fP The base path 
+.br
+\fIextended\fP What to add to the base path (if its from root, '/', then it will just return this) 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The joint path 
+.RE
+.PP
+
+.PP
+Definition at line \fB257\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+257                                                                  {
+258 
+259     // The new path is from root
+260     if(extended[0] == '/')
+261         return extended;
+262 
+263     return base + extended;
+264 }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::VFSResourceServer::process_relative_path()\fP, \fBFileServer::vfs::FileResource::write()\fP, and \fBFileServer::vfs::DirectoryResource::write()\fP\&.
+.SS "\fBstring\fP Path::parent_directory (const \fBMaxOS::string\fP & path)\fC [static]\fP"
+
+.PP
+Get the parent directory of the path\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to either the file or the directory 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+.RE
+.PP
+
+.PP
+Definition at line \fB197\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+197                                                 {
+198 
+199     // Find the last /
+200     int last_slash = \-1;
+201     for (size_t i = 0; i < path\&.length(); i++)
+202         if (path[i] == '/')
+203             last_slash = i;
+204 
+205     // If no slash or only root, return empty string
+206     if (last_slash <= 0)
+207         return "/";
+208 
+209     // Return substring up to last slash
+210     return path\&.substring(0, last_slash);
+211 }
+.fi
+
+.PP
+Referenced by \fBis_child_of()\fP, \fBFileServer::vfs::FileResource::write()\fP, and \fBFileServer::vfs::DirectoryResource::write()\fP\&.
+.SS "\fBstring\fP Path::top_directory (const \fBMaxOS::string\fP & path)\fC [static]\fP"
+
+.PP
+Get the top directory of a path\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to get the top directory from 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The top directory or the original path if it does not exist 
+.RE
+.PP
+
+.PP
+Definition at line \fB174\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+174                                              {
+175 
+176     // Find the first /
+177     int first_slash = \-1;
+178     for (size_t i = 0; i < path\&.length(); i++)
+179         if (path[i] == '/')
+180             first_slash = i;
+181 
+182     // Make sure there was a slash to split
+183     if (first_slash == \-1)
+184         return path;
+185 
+186     // Get the top directory
+187     string top_directory = path\&.substring(0, first_slash);
+188     return top_directory;
+189 }
+.fi
+
+.PP
+References \fBtop_directory()\fP\&.
+.PP
+Referenced by \fBFileServer::filesystem::FileSystem::get_directory()\fP, and \fBtop_directory()\fP\&.
+.SS "bool Path::valid (const \fBMaxOS::string\fP & path)\fC [static]\fP"
+
+.PP
+Check if a path is valid\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP The path to check 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+True if the path is valid, false otherwise 
+.RE
+.PP
+
+.PP
+Definition at line \fB24\fP of file \fBpath\&.cpp\fP\&..PP
+.nf
+24                                    {
+25 
+26     // Must not be empty
+27     if (path\&.length() == 0)
+28         return false;
+29 
+30     // Must start with a /
+31     if (path[0] != '/')
+32         return false;
+33 
+34     // Valid
+35     return true;
+36 
+37 }
+.fi
+
+.PP
+Referenced by \fBFileServer::vfs::VirtualFileSystem::create_directory()\fP, \fBFileServer::vfs::VirtualFileSystem::create_file()\fP, \fBFileServer::vfs::VirtualFileSystem::delete_directory()\fP, \fBFileServer::vfs::VirtualFileSystem::delete_file()\fP, \fBis_child_of()\fP, \fBFileServer::vfs::VirtualFileSystem::open_directory()\fP, and \fBFileServer::vfs::VirtualFileSystem::open_file()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

@@ -1,0 +1,163 @@
+.TH "MaxOS::net::TCPPayloadHandler" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::net::TCPPayloadHandler \- Handler for TCP payloads\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tcp\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::EventHandler< TCPPayloadHandlerEvents >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTCPPayloadHandler\fP ()"
+.br
+.RI "\fBHandler\fP/// "
+.ti -1c
+.RI "common::Event< \fBTCPPayloadHandlerEvents\fP > * \fBon_event\fP (common::Event< \fBTCPPayloadHandlerEvents\fP > *event) override"
+.br
+.RI "Handle an event occurring on the TCP payload handler\&. "
+.ti -1c
+.RI "virtual void \fBhandle_transmission_control_protocol_payload\fP (\fBTCPSocket\fP *socket, uint8_t *data, uint16_t size)"
+.br
+.RI "Handle TCP data received on the socket\&. "
+.ti -1c
+.RI "virtual void \fBconnected\fP (\fBTCPSocket\fP *socket)"
+.br
+.RI "Handle a new TCP connection on the socket\&. "
+.ti -1c
+.RI "virtual void \fBdisconnected\fP (\fBTCPSocket\fP *socket)"
+.br
+.RI "Handle a TCP disconnection on the socket\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::EventHandler< TCPPayloadHandlerEvents >\fP
+.in +1c
+.ti -1c
+.RI "void \fBon_sample_event\fP (int x, int y)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handler for TCP payloads\&. 
+.PP
+Definition at line \fB159\fP of file \fBtcp\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void TCPPayloadHandler::connected (\fBTCPSocket\fP * socket)\fC [virtual]\fP"
+
+.PP
+Handle a new TCP connection on the socket\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsocket\fP The socket that was connected 
+.RE
+.PP
+
+.PP
+Definition at line \fB40\fP of file \fBtcp\&.cpp\fP\&..PP
+.nf
+40                                                    {
+41 
+42 }
+.fi
+
+.PP
+Referenced by \fBon_event()\fP\&.
+.SS "void TCPPayloadHandler::disconnected (\fBTCPSocket\fP * socket)\fC [virtual]\fP"
+
+.PP
+Handle a TCP disconnection on the socket\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsocket\fP The socket that was disconnected 
+.RE
+.PP
+
+.PP
+Definition at line \fB49\fP of file \fBtcp\&.cpp\fP\&..PP
+.nf
+49                                                       {
+50 
+51 }
+.fi
+
+.PP
+Referenced by \fBon_event()\fP\&.
+.SS "void TCPPayloadHandler::handle_transmission_control_protocol_payload (\fBTCPSocket\fP * socket, uint8_t * data, uint16_t size)\fC [virtual]\fP"
+
+.PP
+Handle TCP data received on the socket\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsocket\fP The socket the data was received on 
+.br
+\fIdata\fP The data received 
+.br
+\fIsize\fP The size of the data in bytes 
+.RE
+.PP
+
+.PP
+Definition at line \fB31\fP of file \fBtcp\&.cpp\fP\&..PP
+.nf
+31                                                                                                                     {
+32 
+33 }
+.fi
+
+.PP
+Referenced by \fBon_event()\fP\&.
+.SS "Event< \fBTCPPayloadHandlerEvents\fP > * TCPPayloadHandler::on_event (common::Event< \fBTCPPayloadHandlerEvents\fP > * event)\fC [override]\fP"
+
+.PP
+Handle an event occurring on the TCP payload handler\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIevent\fP The event to handle 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The handled event 
+.RE
+.PP
+
+.PP
+Definition at line \fB59\fP of file \fBtcp\&.cpp\fP\&..PP
+.nf
+59                                                                                                  {
+60 
+61     switch(event\->type) {
+62         case TCPPayloadHandlerEvents::CONNECTED:
+63             connected(((ConnectedEvent*) event)\->socket);
+64             break;
+65         case TCPPayloadHandlerEvents::DISCONNECTED:
+66             disconnected(((DisconnectedEvent*) event)\->socket);
+67             break;
+68         case TCPPayloadHandlerEvents::DATA_RECEIVED:
+69             handle_transmission_control_protocol_payload(((DataReceivedEvent*) event)\->socket,
+70                                                          ((DataReceivedEvent*) event)\->data,
+71                                                          ((DataReceivedEvent*) event)\->size);
+72             break;
+73     }
+74 
+75     return event;
+76 }
+.fi
+
+.PP
+References \fBconnected()\fP, \fBdisconnected()\fP, and \fBhandle_transmission_control_protocol_payload()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

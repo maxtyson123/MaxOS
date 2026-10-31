@@ -1,0 +1,240 @@
+.TH "LibDriver::generic::Disk" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LibDriver::generic::Disk \- Generic \fBDisk\fP, handles the reading and writing of data to the hard drive\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <disk\&.h>\fP
+.PP
+Inherits \fBLibDriver::Driver\fP\&.
+.PP
+Inherited by \fBATADriver::AdvancedTechnologyAttachment\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBread\fP (uint32_t sector, \fBMaxOS::common::buffer_t\fP *data_buffer, size_t amount=512)"
+.br
+.RI "read data from the disk into a buffer (max capacity 512 bytes) "
+.ti -1c
+.RI "virtual void \fBread\fP (uint32_t sector, uint8_t *data_buffer, size_t amount)"
+.br
+.RI "read data from the disk "
+.ti -1c
+.RI "void \fBwrite\fP (uint32_t sector, \fBMaxOS::common::buffer_t\fP *data, size_t amount=512)"
+.br
+.RI "write data to the disk from a buffer (max capacity 512 bytes) "
+.ti -1c
+.RI "virtual void \fBwrite\fP (uint32_t sector, uint8_t *data, size_t count)"
+.br
+.RI "write data to the disk "
+.ti -1c
+.RI "virtual \fBdisk_sector_t\fP \fBread_sector\fP (uint32_t sector)"
+.br
+.RI "Read one whole sector by value\&. The ATA driver (which overrides read) answers the RPC through this\&. "
+.ti -1c
+.RI "virtual int \fBwrite_sector\fP (uint32_t sector, \fBdisk_sector_t\fP data)"
+.br
+.ti -1c
+.RI "virtual void \fBflush\fP ()"
+.br
+.RI "Flush the disk cache\&. "
+.in -1c
+
+Public Member Functions inherited from \fBLibDriver::Driver\fP
+.in +1c
+.ti -1c
+.RI "virtual uint32_t \fBreset\fP ()"
+.br
+.RI "Reset the driver\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Generic \fBDisk\fP, handles the reading and writing of data to the hard drive\&. 
+.PP
+Definition at line \fB31\fP of file \fBdisk\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "void Disk::flush ()\fC [virtual]\fP"
+
+.PP
+Flush the disk cache\&. This function is used to flush the disk cache to ensure that all data is written to the disk\&. 
+.PP
+Reimplemented in \fBATADriver::AdvancedTechnologyAttachment\fP\&.
+.PP
+Definition at line \fB114\fP of file \fBdisk\&.cpp\fP\&..PP
+.nf
+114                  {
+115 }
+.fi
+
+.SS "void Disk::read (uint32_t sector, \fBMaxOS::common::buffer_t\fP * data_buffer, size_t amount = \fC512\fP)"
+
+.PP
+read data from the disk into a buffer (max capacity 512 bytes) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsector\fP The sector to read from 
+.br
+\fIdata_buffer\fP The buffer to read the data into 
+.RE
+.PP
+
+.PP
+Definition at line \fB28\fP of file \fBdisk\&.cpp\fP\&..PP
+.nf
+28                                                                      {
+29 
+30     // Only read as much as the buffer can still hold
+31     size_t remaining = data_buffer\->capacity() > data_buffer\->offset() ? data_buffer\->capacity() \- data_buffer\->offset() : 0;
+32     size_t length = (amount > 512) ? 512 : amount;
+33     if (length > remaining)
+34         length = remaining;
+35 
+36     // Read the sector, then place it at the buffer's current offset
+37     uint8_t sector_data[512] = {};
+38     read(sector, sector_data, length);
+39     data_buffer\->copy_from(sector_data, length);
+40 
+41 }
+.fi
+
+.PP
+References \fBMaxOS::common::Buffer::capacity()\fP, \fBMaxOS::common::Buffer::copy_from()\fP, \fBMaxOS::common::Buffer::offset()\fP, and \fBread()\fP\&.
+.PP
+Referenced by \fBFileServer::format::Fat32Volume::Fat32Volume()\fP, \fBFileServer::partition::MSDOSPartition::mount_partitions()\fP, \fBFileServer::format::Fat32Volume::next_cluster()\fP, \fBFileServer::format::Fat32File::read()\fP, \fBread()\fP, \fBFileServer::format::ext2::Ext2Volume::read_block()\fP, \fBread_sector()\fP, \fBFileServer::format::Fat32Volume::set_next_cluster()\fP, \fBFileServer::format::Fat32Directory::update_entry_on_disk()\fP, and \fBFileServer::format::Fat32File::write()\fP\&.
+.SS "void Disk::read (uint32_t sector, uint8_t * data_buffer, size_t amount)\fC [virtual]\fP"
+
+.PP
+read data from the disk 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsector\fP The sector to read from 
+.br
+\fIdata_buffer\fP The buffer to read the data into 
+.br
+\fIamount\fP The amount of data to read 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBATADriver::AdvancedTechnologyAttachment\fP\&.
+.PP
+Definition at line \fB50\fP of file \fBdisk\&.cpp\fP\&..PP
+.nf
+50                                                                     {
+51 
+52     disk_sector_t result = read_sector(sector);
+53     memcpy(data_buffer, result\&.data, amount > 512 ? 512 : amount);
+54 
+55 }
+.fi
+
+.PP
+References \fBread_sector()\fP\&.
+.SS "\fBdisk_sector_t\fP Disk::read_sector (uint32_t sector)\fC [virtual]\fP"
+
+.PP
+Read one whole sector by value\&. The ATA driver (which overrides read) answers the RPC through this\&. 
+.PP
+Definition at line \fB96\fP of file \fBdisk\&.cpp\fP\&..PP
+.nf
+96                                                {
+97 
+98     disk_sector_t result = {};
+99     read(sector, result\&.data, 512);
+100     return result;
+101 }
+.fi
+
+.PP
+References \fBread()\fP\&.
+.PP
+Referenced by \fBread()\fP\&.
+.SS "void Disk::write (uint32_t sector, \fBMaxOS::common::buffer_t\fP * data, size_t amount = \fC512\fP)"
+
+.PP
+write data to the disk from a buffer (max capacity 512 bytes) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsector\fP The sector to write to 
+.br
+\fIdata\fP The buffer to write the data from 
+.RE
+.PP
+
+.PP
+Definition at line \fB63\fP of file \fBdisk\&.cpp\fP\&..PP
+.nf
+63                                                                {
+64 
+65     // Only write what the buffer actually holds from its current offset
+66     size_t remaining = data\->capacity() > data\->offset() ? data\->capacity() \- data\->offset() : 0;
+67     size_t length = (amount > 512) ? 512 : amount;
+68     if (length > remaining)
+69         length = remaining;
+70 
+71     // Take the data from the buffer's current offset
+72     uint8_t sector_data[512] = {};
+73     data\->copy_to(sector_data, length);
+74     write(sector, sector_data, length);
+75 
+76 }
+.fi
+
+.PP
+References \fBMaxOS::common::Buffer::capacity()\fP, \fBMaxOS::common::Buffer::copy_to()\fP, \fBMaxOS::common::Buffer::offset()\fP, and \fBwrite()\fP\&.
+.PP
+Referenced by \fBFileServer::format::Fat32Volume::allocate_cluster()\fP, \fBFileServer::format::Fat32Volume::free_cluster()\fP, \fBFileServer::format::Fat32Volume::set_next_cluster()\fP, \fBFileServer::format::Fat32Directory::update_entry_on_disk()\fP, \fBFileServer::format::Fat32File::write()\fP, \fBwrite()\fP, and \fBFileServer::format::ext2::Ext2Volume::write_block()\fP\&.
+.SS "void Disk::write (uint32_t sector, uint8_t * data, size_t count)\fC [virtual]\fP"
+
+.PP
+write data to the disk 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsector\fP The sector to write to 
+.br
+\fIdata\fP The buffer to write the data into 
+.br
+\fIcount\fP The amount of data to write 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBATADriver::AdvancedTechnologyAttachment\fP\&.
+.PP
+Definition at line \fB85\fP of file \fBdisk\&.cpp\fP\&..PP
+.nf
+85                                                              {
+86 
+87     disk_sector_t out = {};
+88     memcpy(out\&.data, data, count > 512 ? 512 : count);
+89     write_sector(sector, out);
+90 
+91 }
+.fi
+
+.SS "int Disk::write_sector (uint32_t sector, \fBdisk_sector_t\fP data)\fC [virtual]\fP"
+
+.PP
+Definition at line \fB103\fP of file \fBdisk\&.cpp\fP\&..PP
+.nf
+103                                                           {
+104 
+105     write(sector, data\&.data, 512);
+106     return 0;
+107 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

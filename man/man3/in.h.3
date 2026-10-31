@@ -1,0 +1,605 @@
+.TH "libraries/libc/include/netinet/in.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/include/netinet/in.h \- Internet address family\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libc_common\&.h>\fP
+.br
+\fC#include <inttypes\&.h>\fP
+.br
+\fC#include <sys/socket\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBInternetAddress\fP"
+.br
+.RI "IPv4 Internet address\&. "
+.ti -1c
+.RI "struct \fBsockaddr_in\fP"
+.br
+.RI "Socket address for the IPv4 Internet address family\&. "
+.ti -1c
+.RI "struct \fBin6_addr\fP"
+.br
+.RI "IPv6 Internet address\&. "
+.ti -1c
+.RI "struct \fBsockaddr_in6\fP"
+.br
+.RI "Socket address for the IPv6 Internet address family\&. "
+.ti -1c
+.RI "struct \fBipv6_mreq\fP"
+.br
+.RI "IPv6 multicast group request\&. "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBIN6ADDR_ANY_INIT\fP   {{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }}"
+.br
+.ti -1c
+.RI "#define \fBIN6ADDR_LOOPBACK_INIT\fP   {{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }}"
+.br
+.ti -1c
+.RI "#define \fBIPPROTO_IP\fP   0"
+.br
+.RI "Internet protocol\&. "
+.ti -1c
+.RI "#define \fBIPPROTO_IPV6\fP   1"
+.br
+.RI "Internet Protocol Version 6\&. "
+.ti -1c
+.RI "#define \fBIPPROTO_ICMP\fP   2"
+.br
+.RI "Control message protocol\&. "
+.ti -1c
+.RI "#define \fBIPPROTO_RAW\fP   3"
+.br
+.RI "Raw IP Packets Protocol\&. "
+.ti -1c
+.RI "#define \fBIPPROTO_TCP\fP   4"
+.br
+.RI "Transmission control protocol\&. "
+.ti -1c
+.RI "#define \fBIPPROTO_UDP\fP   5"
+.br
+.RI "User datagram protoco\&. "
+.ti -1c
+.RI "#define \fBINADDR_ANY\fP   ((\fBin_addr_t\fP) 0x00000000U)"
+.br
+.RI "IPv4 wildcard address\&. "
+.ti -1c
+.RI "#define \fBINADDR_BROADCAST\fP   ((\fBin_addr_t\fP) 0xffffffffU)"
+.br
+.RI "IPv4 broadcast address\&. "
+.ti -1c
+.RI "#define \fBINET_ADDRSTRLEN\fP   16"
+.br
+.RI "Length of the string form for IP\&. "
+.ti -1c
+.RI "#define \fBINET6_ADDRSTRLEN\fP   46"
+.br
+.RI "Length of the string form for IPv6\&. "
+.ti -1c
+.RI "#define \fBIPV6_JOIN_GROUP\fP   1"
+.br
+.RI "Join a multicast group (\&. "
+.ti -1c
+.RI "#define \fBIPV6_LEAVE_GROUP\fP   2"
+.br
+.RI "Quit a multicast group (\&. "
+.ti -1c
+.RI "#define \fBIPV6_MULTICAST_HOPS\fP   3"
+.br
+.RI "Multicast hop limit (\&. "
+.ti -1c
+.RI "#define \fBIPV6_MULTICAST_IF\fP   4"
+.br
+.RI "Interface to use for outgoing multicast packets (\&. "
+.ti -1c
+.RI "#define \fBIPV6_MULTICAST_LOOP\fP   5"
+.br
+.RI "Multicast packets are delivered back to the local application (\&. "
+.ti -1c
+.RI "#define \fBIPV6_UNICAST_HOPS\fP   6"
+.br
+.RI "Unicast hop limit (\&. "
+.ti -1c
+.RI "#define \fBIPV6_V6ONLY\fP   7"
+.br
+.RI "Restrict AF_INET6 socket to IPv6 communications only (\&. "
+.ti -1c
+.RI "#define \fB__LIBC_IN6_FIRST_4_ZERO\fP(a)"
+.br
+.RI "Test if first 4 bytes are 0\&. "
+.ti -1c
+.RI "#define \fB__LIBC_IN6_FIRST_8_ZERO\fP(a)"
+.br
+.RI "Test if first 8 bytes are 0\&. "
+.ti -1c
+.RI "#define \fB__LIBC_IN6_FIRST_10_ZERO\fP(a)"
+.br
+.RI "Test if first 10 bytes are 0\&. "
+.ti -1c
+.RI "#define \fB__LIBC_IN6_FIRST_12_ZERO\fP(a)"
+.br
+.RI "Test if first 12 bytes are 0\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_UNSPECIFIED\fP(a)"
+.br
+.RI "Test whether an IPv6 address is unspecified (::) "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_LOOPBACK\fP(a)"
+.br
+.RI "Test whether an IPv6 address is loopback (::1) "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_MULTICAST\fP(a)       ((a)\->s6_addr[0] == 0xff)"
+.br
+.RI "Test whether an IPv6 address is multicast\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_LINKLOCAL\fP(a)"
+.br
+.RI "Test whether an IPv6 address is link-local unicast\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_SITELOCAL\fP(a)"
+.br
+.RI "Test whether an IPv6 address is site-local unicast\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_V4MAPPED\fP(a)"
+.br
+.RI "Test whether an IPv6 address is IPv4-mapped\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_V4COMPAT\fP(a)"
+.br
+.RI "Test whether an IPv6 address is IPv4-compatible\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_MC_NODELOCAL\fP(a)"
+.br
+.RI "Test whether an IPv6 address is node-local multicast\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_MC_LINKLOCAL\fP(a)"
+.br
+.RI "Test whether an IPv6 address is link-local multicast\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_MC_SITELOCAL\fP(a)"
+.br
+.RI "Test whether an IPv6 address is site-local multicast\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_MC_ORGLOCAL\fP(a)"
+.br
+.RI "Test whether an IPv6 address is organization-local multicast\&. "
+.ti -1c
+.RI "#define \fBIN6_IS_ADDR_MC_GLOBAL\fP(a)"
+.br
+.RI "Test whether an IPv6 address is global multicast\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef uint16_t \fBin_port_t\fP"
+.br
+.ti -1c
+.RI "typedef uint32_t \fBin_addr_t\fP"
+.br
+.RI "IPv4 address, stored in network byte order\&. "
+.ti -1c
+.RI "typedef struct \fBInternetAddress\fP \fBin_addr\fP"
+.br
+.RI "Public alias for \fBInternetAddress\fP\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const struct \fBin6_addr\fP \fBin6addr_any\fP"
+.br
+.RI "The wildcard IPv6 address\&. "
+.ti -1c
+.RI "const struct \fBin6_addr\fP \fBin6addr_loopback\fP"
+.br
+.RI "The loopback IPv6 address\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Internet address family\&. 
+
+
+.PP
+\fBSee also\fP
+.RS 4
+https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/netinet_in.h.html
+.RE
+.PP
+\fBDate\fP
+.RS 4
+29 October 2026 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBin\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define __LIBC_IN6_FIRST_10_ZERO(a)"
+\fBValue:\fP.PP
+.nf
+    (__LIBC_IN6_FIRST_8_ZERO(a) && \\
+     (a)\->s6_addr[8] == 0 && (a)\->s6_addr[9] == 0)
+.fi
+
+.PP
+Test if first 10 bytes are 0\&. 
+.PP
+Definition at line \fB132\fP of file \fBin\&.h\fP\&.
+.SS "#define __LIBC_IN6_FIRST_12_ZERO(a)"
+\fBValue:\fP.PP
+.nf
+    (__LIBC_IN6_FIRST_10_ZERO(a) && \\
+     (a)\->s6_addr[10] == 0 && (a)\->s6_addr[11] == 0)
+.fi
+
+.PP
+Test if first 12 bytes are 0\&. 
+.PP
+Definition at line \fB137\fP of file \fBin\&.h\fP\&.
+.SS "#define __LIBC_IN6_FIRST_4_ZERO(a)"
+\fBValue:\fP.PP
+.nf
+    ((a)\->s6_addr[0] == 0 && (a)\->s6_addr[1] == 0 && \\
+     (a)\->s6_addr[2] == 0 && (a)\->s6_addr[3] == 0)
+.fi
+
+.PP
+Test if first 4 bytes are 0\&. 
+.PP
+Definition at line \fB121\fP of file \fBin\&.h\fP\&.
+.SS "#define __LIBC_IN6_FIRST_8_ZERO(a)"
+\fBValue:\fP.PP
+.nf
+    (__LIBC_IN6_FIRST_4_ZERO(a) && \\
+     (a)\->s6_addr[4] == 0 && (a)\->s6_addr[5] == 0 && \\
+     (a)\->s6_addr[6] == 0 && (a)\->s6_addr[7] == 0)
+.fi
+
+.PP
+Test if first 8 bytes are 0\&. 
+.PP
+Definition at line \fB126\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_LINKLOCAL(a)"
+\fBValue:\fP.PP
+.nf
+    ((a)\->s6_addr[0] == 0xfe && \\
+     ((a)\->s6_addr[1] & 0xc0) == 0x80)
+.fi
+
+.PP
+Test whether an IPv6 address is link-local unicast\&. 
+.PP
+Definition at line \fB162\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_LOOPBACK(a)"
+\fBValue:\fP.PP
+.nf
+    (__LIBC_IN6_FIRST_8_ZERO(a) && \\
+     (a)\->s6_addr[8] == 0 && (a)\->s6_addr[9] == 0 && \\
+     (a)\->s6_addr[10] == 0 && (a)\->s6_addr[11] == 0 && \\
+     (a)\->s6_addr[12] == 0 && (a)\->s6_addr[13] == 0 && \\
+     (a)\->s6_addr[14] == 0 && (a)\->s6_addr[15] == 1)
+.fi
+
+.PP
+Test whether an IPv6 address is loopback (::1) 
+.PP
+Definition at line \fB150\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_MC_GLOBAL(a)"
+\fBValue:\fP.PP
+.nf
+    (IN6_IS_ADDR_MULTICAST(a) && \\
+     ((a)\->s6_addr[1] & 0x0f) == 0x0e)
+.fi
+
+.PP
+Test whether an IPv6 address is global multicast\&. 
+.PP
+Definition at line \fB206\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_MC_LINKLOCAL(a)"
+\fBValue:\fP.PP
+.nf
+    (IN6_IS_ADDR_MULTICAST(a) && \\
+     ((a)\->s6_addr[1] & 0x0f) == 0x02)
+.fi
+
+.PP
+Test whether an IPv6 address is link-local multicast\&. 
+.PP
+Definition at line \fB191\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_MC_NODELOCAL(a)"
+\fBValue:\fP.PP
+.nf
+    (IN6_IS_ADDR_MULTICAST(a) && \\
+     ((a)\->s6_addr[1] & 0x0f) == 0x01)
+.fi
+
+.PP
+Test whether an IPv6 address is node-local multicast\&. 
+.PP
+Definition at line \fB186\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_MC_ORGLOCAL(a)"
+\fBValue:\fP.PP
+.nf
+    (IN6_IS_ADDR_MULTICAST(a) && \\
+     ((a)\->s6_addr[1] & 0x0f) == 0x08)
+.fi
+
+.PP
+Test whether an IPv6 address is organization-local multicast\&. 
+.PP
+Definition at line \fB201\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_MC_SITELOCAL(a)"
+\fBValue:\fP.PP
+.nf
+    (IN6_IS_ADDR_MULTICAST(a) && \\
+     ((a)\->s6_addr[1] & 0x0f) == 0x05)
+.fi
+
+.PP
+Test whether an IPv6 address is site-local multicast\&. 
+.PP
+Definition at line \fB196\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_MULTICAST(a)       ((a)\->s6_addr[0] == 0xff)"
+
+.PP
+Test whether an IPv6 address is multicast\&. 
+.PP
+Definition at line \fB158\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_SITELOCAL(a)"
+\fBValue:\fP.PP
+.nf
+    ((a)\->s6_addr[0] == 0xfe && \\
+     ((a)\->s6_addr[1] & 0xc0) == 0xc0)
+.fi
+
+.PP
+Test whether an IPv6 address is site-local unicast\&. 
+.PP
+Definition at line \fB167\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_UNSPECIFIED(a)"
+\fBValue:\fP.PP
+.nf
+    (__LIBC_IN6_FIRST_8_ZERO(a) && \\
+     (a)\->s6_addr[8] == 0 && (a)\->s6_addr[9] == 0 && \\
+     (a)\->s6_addr[10] == 0 && (a)\->s6_addr[11] == 0 && \\
+     (a)\->s6_addr[12] == 0 && (a)\->s6_addr[13] == 0 && \\
+     (a)\->s6_addr[14] == 0 && (a)\->s6_addr[15] == 0)
+.fi
+
+.PP
+Test whether an IPv6 address is unspecified (::) 
+.PP
+Definition at line \fB142\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_V4COMPAT(a)"
+\fBValue:\fP.PP
+.nf
+    (__LIBC_IN6_FIRST_12_ZERO(a) && \\
+     !((a)\->s6_addr[12] == 0 && (a)\->s6_addr[13] == 0 && \\
+       (a)\->s6_addr[14] == 0 && (a)\->s6_addr[15] == 0) && \\
+     !((a)\->s6_addr[12] == 0 && (a)\->s6_addr[13] == 0 && \\
+       (a)\->s6_addr[14] == 0 && (a)\->s6_addr[15] == 1))
+.fi
+
+.PP
+Test whether an IPv6 address is IPv4-compatible\&. 
+.PP
+Definition at line \fB178\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6_IS_ADDR_V4MAPPED(a)"
+\fBValue:\fP.PP
+.nf
+    (__LIBC_IN6_FIRST_10_ZERO(a) && \\
+     (a)\->s6_addr[10] == 0xff && \\
+     (a)\->s6_addr[11] == 0xff)
+.fi
+
+.PP
+Test whether an IPv6 address is IPv4-mapped\&. 
+.PP
+Definition at line \fB172\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6ADDR_ANY_INIT   {{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }}"
+
+.PP
+Definition at line \fB87\fP of file \fBin\&.h\fP\&.
+.SS "#define IN6ADDR_LOOPBACK_INIT   {{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }}"
+
+.PP
+Definition at line \fB88\fP of file \fBin\&.h\fP\&.
+.SS "#define INADDR_ANY   ((\fBin_addr_t\fP) 0x00000000U)"
+
+.PP
+IPv4 wildcard address\&. 
+.PP
+Definition at line \fB106\fP of file \fBin\&.h\fP\&.
+.SS "#define INADDR_BROADCAST   ((\fBin_addr_t\fP) 0xffffffffU)"
+
+.PP
+IPv4 broadcast address\&. 
+.PP
+Definition at line \fB107\fP of file \fBin\&.h\fP\&.
+.SS "#define INET6_ADDRSTRLEN   46"
+
+.PP
+Length of the string form for IPv6\&. 
+.PP
+Definition at line \fB110\fP of file \fBin\&.h\fP\&.
+.SS "#define INET_ADDRSTRLEN   16"
+
+.PP
+Length of the string form for IP\&. 
+.PP
+Definition at line \fB109\fP of file \fBin\&.h\fP\&.
+.SS "#define IPPROTO_ICMP   2"
+
+.PP
+Control message protocol\&. 
+.PP
+Definition at line \fB101\fP of file \fBin\&.h\fP\&.
+.SS "#define IPPROTO_IP   0"
+
+.PP
+Internet protocol\&. 
+.PP
+Definition at line \fB99\fP of file \fBin\&.h\fP\&.
+.SS "#define IPPROTO_IPV6   1"
+
+.PP
+Internet Protocol Version 6\&. 
+.PP
+Definition at line \fB100\fP of file \fBin\&.h\fP\&.
+.SS "#define IPPROTO_RAW   3"
+
+.PP
+Raw IP Packets Protocol\&. 
+.PP
+Definition at line \fB102\fP of file \fBin\&.h\fP\&.
+.SS "#define IPPROTO_TCP   4"
+
+.PP
+Transmission control protocol\&. 
+.PP
+Definition at line \fB103\fP of file \fBin\&.h\fP\&.
+.SS "#define IPPROTO_UDP   5"
+
+.PP
+User datagram protoco\&. 
+.PP
+Definition at line \fB104\fP of file \fBin\&.h\fP\&.
+.SS "#define IPV6_JOIN_GROUP   1"
+
+.PP
+Join a multicast group (\&. 
+.PP
+\fBTodo\fP
+.RS 4
+platform specidic) 
+.RE
+.PP
+
+.PP
+Definition at line \fB112\fP of file \fBin\&.h\fP\&.
+.SS "#define IPV6_LEAVE_GROUP   2"
+
+.PP
+Quit a multicast group (\&. 
+.PP
+\fBTodo\fP
+.RS 4
+platform specidic) 
+.RE
+.PP
+
+.PP
+Definition at line \fB113\fP of file \fBin\&.h\fP\&.
+.SS "#define IPV6_MULTICAST_HOPS   3"
+
+.PP
+Multicast hop limit (\&. 
+.PP
+\fBTodo\fP
+.RS 4
+platform specidic) 
+.RE
+.PP
+
+.PP
+Definition at line \fB114\fP of file \fBin\&.h\fP\&.
+.SS "#define IPV6_MULTICAST_IF   4"
+
+.PP
+Interface to use for outgoing multicast packets (\&. 
+.PP
+\fBTodo\fP
+.RS 4
+platform specidic) 
+.RE
+.PP
+
+.PP
+Definition at line \fB115\fP of file \fBin\&.h\fP\&.
+.SS "#define IPV6_MULTICAST_LOOP   5"
+
+.PP
+Multicast packets are delivered back to the local application (\&. 
+.PP
+\fBTodo\fP
+.RS 4
+platform specidic) 
+.RE
+.PP
+
+.PP
+Definition at line \fB116\fP of file \fBin\&.h\fP\&.
+.SS "#define IPV6_UNICAST_HOPS   6"
+
+.PP
+Unicast hop limit (\&. 
+.PP
+\fBTodo\fP
+.RS 4
+platform specidic) 
+.RE
+.PP
+
+.PP
+Definition at line \fB117\fP of file \fBin\&.h\fP\&.
+.SS "#define IPV6_V6ONLY   7"
+
+.PP
+Restrict AF_INET6 socket to IPv6 communications only (\&. 
+.PP
+\fBTodo\fP
+.RS 4
+platform specidic) 
+.RE
+.PP
+
+.PP
+Definition at line \fB118\fP of file \fBin\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "\fBin_addr_t\fP"
+
+.PP
+IPv4 address, stored in network byte order\&. 
+.PP
+Definition at line \fB30\fP of file \fBin\&.h\fP\&.
+.SS "typedef uint16_t in_port_t"
+
+.PP
+Definition at line \fB24\fP of file \fBin\&.h\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "const struct \fBin6_addr\fP in6addr_any"
+
+.PP
+The wildcard IPv6 address\&. 
+.PP
+Definition at line \fB82\fP of file \fBin\&.h\fP\&.
+.SS "const struct \fBin6_addr\fP in6addr_loopback"
+
+.PP
+The loopback IPv6 address\&. 
+.PP
+Definition at line \fB85\fP of file \fBin\&.h\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

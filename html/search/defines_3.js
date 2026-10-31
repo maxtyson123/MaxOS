@@ -1,4 +1,20 @@
 var searchData=
 [
-  ['ubsan_5faligned_0',['UBSAN_ALIGNED',['../ubsan_8h.html#ad00c497d57e53ff391a678ca4f6b9e46',1,'ubsan.h']]]
+  ['cld_5fcontinued_0',['CLD_CONTINUED',['../signal_8h.html#afad5fd60fd725025f0682ec2697d1b45',1,'signal.h']]],
+  ['cld_5fdumped_1',['CLD_DUMPED',['../signal_8h.html#afe6e9bccf7df675f022a3e484a73461f',1,'signal.h']]],
+  ['cld_5fexited_2',['CLD_EXITED',['../signal_8h.html#a3e6df4a3087d9aa8ba11c61c38c9218c',1,'signal.h']]],
+  ['cld_5fkilled_3',['CLD_KILLED',['../signal_8h.html#a2d5941afd29bca8b8f74461cb97fe982',1,'signal.h']]],
+  ['cld_5fstopped_4',['CLD_STOPPED',['../signal_8h.html#a1844847a22da24371fa347b959283916',1,'signal.h']]],
+  ['cld_5ftrapped_5',['CLD_TRAPPED',['../signal_8h.html#aa679c19d95672068f1e4a4673a15ff1c',1,'signal.h']]],
+  ['clock_5fmonotonic_6',['CLOCK_MONOTONIC',['../include_2time_8h.html#a6fb83f5e91e704391ff796553d5e0f46',1,'time.h']]],
+  ['clock_5fprocess_5fcputime_5fid_7',['CLOCK_PROCESS_CPUTIME_ID',['../include_2time_8h.html#ae1c3939a1e7b7cd1e5a4a7fa601cc4e9',1,'time.h']]],
+  ['clock_5frealtime_8',['CLOCK_REALTIME',['../include_2time_8h.html#a922ce1ae64374c9410c8a999e25e82af',1,'time.h']]],
+  ['clock_5fthread_5fcputime_5fid_9',['CLOCK_THREAD_CPUTIME_ID',['../include_2time_8h.html#a30114e19c18f57f83727bcaba2458f1e',1,'time.h']]],
+  ['clocks_5fper_5fsec_10',['CLOCKS_PER_SEC',['../include_2time_8h.html#a3d9fc3c745d0880902fe3ea3d5d5f71e',1,'time.h']]],
+  ['cmsg_5falign_11',['CMSG_ALIGN',['../socket_8h.html#a8ac2789826cd04c49c954e68707a26eb',1,'socket.h']]],
+  ['cmsg_5fdata_12',['CMSG_DATA',['../socket_8h.html#a5ab6d56e410ac0904107e84aeb1484cc',1,'socket.h']]],
+  ['cmsg_5ffirsthdr_13',['CMSG_FIRSTHDR',['../socket_8h.html#a326c46eb0fceb09b6ebb075804fd1e0c',1,'socket.h']]],
+  ['cmsg_5flen_14',['CMSG_LEN',['../socket_8h.html#adb36e4ff4fa9a0c6730321c4bfcf64bc',1,'socket.h']]],
+  ['cmsg_5fnxthdr_15',['CMSG_NXTHDR',['../socket_8h.html#a4f70853d9633fb80428189cd7bb292d0',1,'socket.h']]],
+  ['cmsg_5fspace_16',['CMSG_SPACE',['../socket_8h.html#a8db11d639dd07c723256f3bb5bc89044',1,'socket.h']]]
 ];

@@ -1,0 +1,93 @@
+.TH "libraries/libcommon/src/port.cpp" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libcommon/src/port.cpp \- Implementation of a Port class for handling IO ports\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libcommon/port\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fB__attribute__\fP ((weak)) void userspace_port_enable_hook(uint16_t port"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "uint8_t \fBbytes\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Implementation of a Port class for handling IO ports\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+10th April 2022 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBport\&.cpp\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "uint8_t bytes"
+\fBInitial value:\fP.PP
+.nf
+{
+        
+    }
+}
+
+
+Port::Port(uint16_t port_number, uint8_t port_bytes)
+: m_port_number(port_number)
+{
+
+    
+
+        userspace_port_enable_hook(port_number, port_bytes);
+
+
+}
+
+Port::~Port() = default
+.fi
+
+.PP
+Definition at line \fB14\fP of file \fBport\&.cpp\fP\&..PP
+.nf
+14                                                                                         {
+15         // Default: Do nothing (Kernel mode or libkpi not linked)
+16     }
+17 }
+18 
+24 Port::Port(uint16_t port_number, uint8_t port_bytes)
+25 : m_port_number(port_number)
+26 {
+27 
+28     // Userspace needs to enable the ports
+29     #ifndef MAXOS_KERNEL
+30         userspace_port_enable_hook(port_number, port_bytes);
+31     #endif
+32 
+33 }
+.fi
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

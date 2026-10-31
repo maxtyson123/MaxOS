@@ -1,0 +1,941 @@
+.TH "libraries/libc/include/errno.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libraries/libc/include/errno.h \- Defines the standard error codes that report why a call fails\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <libc_common\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBerrno\fP   (*__errno_location())"
+.br
+.ti -1c
+.RI "#define \fBEPERM\fP   1"
+.br
+.RI "Operation not permitted\&. "
+.ti -1c
+.RI "#define \fBENOENT\fP   2"
+.br
+.RI "File/Dir doesnt exist\&. "
+.ti -1c
+.RI "#define \fBESRCH\fP   3"
+.br
+.RI "Process doesnt exist\&. "
+.ti -1c
+.RI "#define \fBEINTR\fP   4"
+.br
+.RI "Syscall was interrupted\&. "
+.ti -1c
+.RI "#define \fBEIO\fP   5"
+.br
+.RI "Error in I/O operation\&. "
+.ti -1c
+.RI "#define \fBENXIO\fP   6"
+.br
+.RI "Device or address doesnt exist\&. "
+.ti -1c
+.RI "#define \fBE2BIG\fP   7"
+.br
+.RI "Too many args passed\&. "
+.ti -1c
+.RI "#define \fBENOEXEC\fP   8"
+.br
+.RI "File is not in a valid format\&. "
+.ti -1c
+.RI "#define \fBEBADF\fP   9"
+.br
+.RI "File descriptor was invalid or closed\&. "
+.ti -1c
+.RI "#define \fBECHILD\fP   10"
+.br
+.RI "Child process doesnt exist\&. "
+.ti -1c
+.RI "#define \fBEAGAIN\fP   11"
+.br
+.RI "Resource temporary unavailable (try again) "
+.ti -1c
+.RI "#define \fBENOMEM\fP   12"
+.br
+.RI "Not enough memory to perform the requested operation\&. "
+.ti -1c
+.RI "#define \fBEACCES\fP   13"
+.br
+.RI "Permission denied\&. "
+.ti -1c
+.RI "#define \fBEFAULT\fP   14"
+.br
+.RI "Invalid memory address\&. "
+.ti -1c
+.RI "#define \fBENOTBLK\fP   15"
+.br
+.RI "Was not passed a block device when this was required\&. "
+.ti -1c
+.RI "#define \fBEBUSY\fP   16"
+.br
+.RI "Requested resource is currently in used\&. "
+.ti -1c
+.RI "#define \fBEEXIST\fP   17"
+.br
+.RI "The resource requested to be created already exists\&. "
+.ti -1c
+.RI "#define \fBEXDEV\fP   18"
+.br
+.RI "Operation crosses multiple filesystems which is not allowed\&. "
+.ti -1c
+.RI "#define \fBENODEV\fP   19"
+.br
+.RI "Device is not available\&. "
+.ti -1c
+.RI "#define \fBENOTDIR\fP   20"
+.br
+.RI "Part of the path supplied is not a directory\&. "
+.ti -1c
+.RI "#define \fBEISDIR\fP   21"
+.br
+.RI "Cant perform this operation on a directory\&. "
+.ti -1c
+.RI "#define \fBEINVAL\fP   22"
+.br
+.RI "One of the passed arguments is invalid\&. "
+.ti -1c
+.RI "#define \fBENFILE\fP   23"
+.br
+.RI "Too many files open on this OS\&. "
+.ti -1c
+.RI "#define \fBEMFILE\fP   24"
+.br
+.RI "Too many files open on this process\&. "
+.ti -1c
+.RI "#define \fBENOTTY\fP   25"
+.br
+.RI "This operation can only be performed on a character device\&. "
+.ti -1c
+.RI "#define \fBETXTBSY\fP   26"
+.br
+.RI "File is currently in use\&. "
+.ti -1c
+.RI "#define \fBEFBIG\fP   27"
+.br
+.RI "File is too big\&. "
+.ti -1c
+.RI "#define \fBENOSPC\fP   28"
+.br
+.RI "Not enough space left on the requested device\&. "
+.ti -1c
+.RI "#define \fBESPIPE\fP   29"
+.br
+.RI "Cant perform seek on this file\&. "
+.ti -1c
+.RI "#define \fBEROFS\fP   30"
+.br
+.RI "Non read only operation on a read only filesystem\&. "
+.ti -1c
+.RI "#define \fBEMLINK\fP   31"
+.br
+.RI "Too many hardlinks\&. "
+.ti -1c
+.RI "#define \fBEPIPE\fP   32"
+.br
+.RI "Cant write to an invalid or closed connection\&. "
+.ti -1c
+.RI "#define \fBEDOM\fP   33"
+.br
+.RI "Maths operation outside of domain\&. "
+.ti -1c
+.RI "#define \fBERANGE\fP   34"
+.br
+.RI "Maths operation outside of range (over/underflow for type) "
+.ti -1c
+.RI "#define \fBENOMSG\fP   35"
+.br
+.RI "No message of the specified type availble\&. "
+.ti -1c
+.RI "#define \fBEIDRM\fP   36"
+.br
+.RI "IPC endpoint has been closed\&. "
+.ti -1c
+.RI "#define \fBEDEADLK\fP   45"
+.br
+.RI "Operation would cause a locking loop\&. "
+.ti -1c
+.RI "#define \fBENOLCK\fP   46"
+.br
+.RI "No locks exist to complete the operation\&. "
+.ti -1c
+.RI "#define \fBENOSTR\fP   60"
+.br
+.RI "Device doesnt support streams\&. "
+.ti -1c
+.RI "#define \fBENODATA\fP   61"
+.br
+.RI "No data available for non blocking operation\&. "
+.ti -1c
+.RI "#define \fBETIME\fP   62"
+.br
+.RI "Stream timed out\&. "
+.ti -1c
+.RI "#define \fBENOSR\fP   63"
+.br
+.RI "Not enough resources for stream\&. "
+.ti -1c
+.RI "#define \fBENOLINK\fP   67"
+.br
+.RI "Link doesnt exist anymore\&. "
+.ti -1c
+.RI "#define \fBEPROTO\fP   71"
+.br
+.RI "Peer/Client broke the rules of a protocol\&. "
+.ti -1c
+.RI "#define \fBEBADMSG\fP   77"
+.br
+.RI "Message is invalid or in the incorrect format\&. "
+.ti -1c
+.RI "#define \fBEFTYPE\fP   79"
+.br
+.RI "Wrong file type/format\&. "
+.ti -1c
+.RI "#define \fBENOSYS\fP   88"
+.br
+.RI "Syscall doesnt exist\&. "
+.ti -1c
+.RI "#define \fBENOTEMPTY\fP   90"
+.br
+.RI "The target directory still contains entries\&. "
+.ti -1c
+.RI "#define \fBENAMETOOLONG\fP   91"
+.br
+.RI "Name exceeds the maximum\&. "
+.ti -1c
+.RI "#define \fBELOOP\fP   92"
+.br
+.RI "Too many links encountered (resulting in a loop) "
+.ti -1c
+.RI "#define \fBEOPNOTSUPP\fP   95"
+.br
+.RI "Operation not supported on this resource\&. "
+.ti -1c
+.RI "#define \fBEPFNOSUPPORT\fP   96"
+.br
+.RI "Protocol not supported on this system\&. "
+.ti -1c
+.RI "#define \fBECONNRESET\fP   104"
+.br
+.RI "Connection unexpectedly terminated by remote\&. "
+.ti -1c
+.RI "#define \fBENOBUFS\fP   105"
+.br
+.RI "No space in the buffer available\&. "
+.ti -1c
+.RI "#define \fBEAFNOSUPPORT\fP   106"
+.br
+.RI "Address not supported on this system\&. "
+.ti -1c
+.RI "#define \fBEPROTOTYPE\fP   107"
+.br
+.RI "Protocol type not supported on this socket\&. "
+.ti -1c
+.RI "#define \fBENOTSOCK\fP   108"
+.br
+.RI "This operation can only be performed on a socket\&. "
+.ti -1c
+.RI "#define \fBENOPROTOOPT\fP   109"
+.br
+.RI "Option not supported on this socket\&. "
+.ti -1c
+.RI "#define \fBECONNREFUSED\fP   111"
+.br
+.RI "Attempt to connect was refused by peer\&. "
+.ti -1c
+.RI "#define \fBEADDRINUSE\fP   112"
+.br
+.RI "Address already in use\&. "
+.ti -1c
+.RI "#define \fBECONNABORTED\fP   113"
+.br
+.RI "Connection terminated locally\&. "
+.ti -1c
+.RI "#define \fBENETUNREACH\fP   114"
+.br
+.RI "No route exists to connect to the target network\&. "
+.ti -1c
+.RI "#define \fBENETDOWN\fP   115"
+.br
+.RI "Target network is unavailable\&. "
+.ti -1c
+.RI "#define \fBETIMEDOUT\fP   116"
+.br
+.RI "Operation took longer then allowed\&. "
+.ti -1c
+.RI "#define \fBEHOSTDOWN\fP   117"
+.br
+.RI "Target network's machine is unavailable\&. "
+.ti -1c
+.RI "#define \fBEHOSTUNREACH\fP   118"
+.br
+.RI "No route exists to connect to the target network's machine\&. "
+.ti -1c
+.RI "#define \fBEINPROGRESS\fP   119"
+.br
+.RI "Patience is a virtue\&. "
+.ti -1c
+.RI "#define \fBEALREADY\fP   120"
+.br
+.RI "Operation has already been started\&. "
+.ti -1c
+.RI "#define \fBEDESTADDRREQ\fP   121"
+.br
+.RI "No destination address was supplied\&. "
+.ti -1c
+.RI "#define \fBEMSGSIZE\fP   122"
+.br
+.RI "The message passed was too big\&. "
+.ti -1c
+.RI "#define \fBEPROTONOSUPPORT\fP   123"
+.br
+.RI "Protocol not supported on this system\&. "
+.ti -1c
+.RI "#define \fBEADDRNOTAVAIL\fP   125"
+.br
+.RI "Cannot use this address on this system\&. "
+.ti -1c
+.RI "#define \fBENETRESET\fP   126"
+.br
+.RI "Connection terminated by a network level reset\&. "
+.ti -1c
+.RI "#define \fBEISCONN\fP   127"
+.br
+.RI "Socket is already connected\&. "
+.ti -1c
+.RI "#define \fBENOTCONN\fP   128"
+.br
+.RI "Socket is not connected\&. "
+.ti -1c
+.RI "#define \fBETOOMANYREFS\fP   129"
+.br
+.RI "Socket self references, causing a loop\&. "
+.ti -1c
+.RI "#define \fBEDQUOT\fP   132"
+.br
+.RI "User doesnt have enough space to perform operation\&. "
+.ti -1c
+.RI "#define \fBESTALE\fP   133"
+.br
+.RI "Filesystem resource no longer valid\&. "
+.ti -1c
+.RI "#define \fBENOTSUP\fP   134"
+.br
+.RI "Operation not supported on resource\&. "
+.ti -1c
+.RI "#define \fBEILSEQ\fP   138"
+.br
+.RI "Attempted to process character sequence that had illegal bytes\&. "
+.ti -1c
+.RI "#define \fBEOVERFLOW\fP   139"
+.br
+.RI "Value too large for type\&. "
+.ti -1c
+.RI "#define \fBECANCELED\fP   140"
+.br
+.RI "Operation terminated\&. "
+.ti -1c
+.RI "#define \fBENOTRECOVERABLE\fP   141"
+.br
+.RI "System state cannot be restored\&. "
+.ti -1c
+.RI "#define \fBEOWNERDEAD\fP   142"
+.br
+.RI "Owner of the resource exited\&. "
+.ti -1c
+.RI "#define \fBEWOULDBLOCK\fP   \fBEAGAIN\fP"
+.br
+.RI "Operation cannot be performed immediately\&. "
+.ti -1c
+.RI "#define \fBRETURN_ERR\fP(e)   do { errno = (e); return \-1; } while (0)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int * \fB__errno_location\fP (void)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "CPP_START int \fB__errno\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines the standard error codes that report why a call fails\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+14 December 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Linux port / remove specifics 
+.RE
+.PP
+
+.PP
+Definition in file \fBerrno\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define E2BIG   7"
+
+.PP
+Too many args passed\&. 
+.PP
+Definition at line \fB28\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EACCES   13"
+
+.PP
+Permission denied\&. 
+.PP
+Definition at line \fB34\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EADDRINUSE   112"
+
+.PP
+Address already in use\&. 
+.PP
+Definition at line \fB95\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EADDRNOTAVAIL   125"
+
+.PP
+Cannot use this address on this system\&. 
+.PP
+Definition at line \fB108\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EAFNOSUPPORT   106"
+
+.PP
+Address not supported on this system\&. 
+.PP
+Definition at line \fB89\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EAGAIN   11"
+
+.PP
+Resource temporary unavailable (try again) 
+.PP
+Definition at line \fB32\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EALREADY   120"
+
+.PP
+Operation has already been started\&. 
+.PP
+Definition at line \fB103\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EBADF   9"
+
+.PP
+File descriptor was invalid or closed\&. 
+.PP
+Definition at line \fB30\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EBADMSG   77"
+
+.PP
+Message is invalid or in the incorrect format\&. 
+.PP
+Definition at line \fB74\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EBUSY   16"
+
+.PP
+Requested resource is currently in used\&. 
+.PP
+Definition at line \fB37\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ECANCELED   140"
+
+.PP
+Operation terminated\&. 
+.PP
+Definition at line \fB121\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ECHILD   10"
+
+.PP
+Child process doesnt exist\&. 
+.PP
+Definition at line \fB31\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ECONNABORTED   113"
+
+.PP
+Connection terminated locally\&. 
+.PP
+Definition at line \fB96\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ECONNREFUSED   111"
+
+.PP
+Attempt to connect was refused by peer\&. 
+.PP
+Definition at line \fB94\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ECONNRESET   104"
+
+.PP
+Connection unexpectedly terminated by remote\&. 
+.PP
+Definition at line \fB87\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EDEADLK   45"
+
+.PP
+Operation would cause a locking loop\&. 
+.PP
+Definition at line \fB59\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EDESTADDRREQ   121"
+
+.PP
+No destination address was supplied\&. 
+.PP
+Definition at line \fB104\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EDOM   33"
+
+.PP
+Maths operation outside of domain\&. 
+.PP
+Definition at line \fB54\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EDQUOT   132"
+
+.PP
+User doesnt have enough space to perform operation\&. 
+.PP
+Definition at line \fB114\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EEXIST   17"
+
+.PP
+The resource requested to be created already exists\&. 
+.PP
+Definition at line \fB38\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EFAULT   14"
+
+.PP
+Invalid memory address\&. 
+.PP
+Definition at line \fB35\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EFBIG   27"
+
+.PP
+File is too big\&. 
+.PP
+Definition at line \fB48\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EFTYPE   79"
+
+.PP
+Wrong file type/format\&. 
+.PP
+Definition at line \fB76\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EHOSTDOWN   117"
+
+.PP
+Target network's machine is unavailable\&. 
+.PP
+Definition at line \fB100\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EHOSTUNREACH   118"
+
+.PP
+No route exists to connect to the target network's machine\&. 
+.PP
+Definition at line \fB101\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EIDRM   36"
+
+.PP
+IPC endpoint has been closed\&. 
+.PP
+Definition at line \fB57\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EILSEQ   138"
+
+.PP
+Attempted to process character sequence that had illegal bytes\&. 
+.PP
+Definition at line \fB119\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EINPROGRESS   119"
+
+.PP
+Patience is a virtue\&. 
+.PP
+Definition at line \fB102\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EINTR   4"
+
+.PP
+Syscall was interrupted\&. 
+.PP
+Definition at line \fB25\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EINVAL   22"
+
+.PP
+One of the passed arguments is invalid\&. 
+.PP
+Definition at line \fB43\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EIO   5"
+
+.PP
+Error in I/O operation\&. 
+.PP
+Definition at line \fB26\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EISCONN   127"
+
+.PP
+Socket is already connected\&. 
+.PP
+Definition at line \fB110\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EISDIR   21"
+
+.PP
+Cant perform this operation on a directory\&. 
+.PP
+Definition at line \fB42\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ELOOP   92"
+
+.PP
+Too many links encountered (resulting in a loop) 
+.PP
+Definition at line \fB82\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EMFILE   24"
+
+.PP
+Too many files open on this process\&. 
+.PP
+Definition at line \fB45\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EMLINK   31"
+
+.PP
+Too many hardlinks\&. 
+.PP
+Definition at line \fB52\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EMSGSIZE   122"
+
+.PP
+The message passed was too big\&. 
+.PP
+Definition at line \fB105\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENAMETOOLONG   91"
+
+.PP
+Name exceeds the maximum\&. 
+.PP
+Definition at line \fB81\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENETDOWN   115"
+
+.PP
+Target network is unavailable\&. 
+.PP
+Definition at line \fB98\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENETRESET   126"
+
+.PP
+Connection terminated by a network level reset\&. 
+.PP
+Definition at line \fB109\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENETUNREACH   114"
+
+.PP
+No route exists to connect to the target network\&. 
+.PP
+Definition at line \fB97\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENFILE   23"
+
+.PP
+Too many files open on this OS\&. 
+.PP
+Definition at line \fB44\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOBUFS   105"
+
+.PP
+No space in the buffer available\&. 
+.PP
+Definition at line \fB88\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENODATA   61"
+
+.PP
+No data available for non blocking operation\&. 
+.PP
+Definition at line \fB65\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENODEV   19"
+
+.PP
+Device is not available\&. 
+.PP
+Definition at line \fB40\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOENT   2"
+
+.PP
+File/Dir doesnt exist\&. 
+.PP
+Definition at line \fB23\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOEXEC   8"
+
+.PP
+File is not in a valid format\&. 
+.PP
+Definition at line \fB29\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOLCK   46"
+
+.PP
+No locks exist to complete the operation\&. 
+.PP
+Definition at line \fB60\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOLINK   67"
+
+.PP
+Link doesnt exist anymore\&. 
+.PP
+Definition at line \fB69\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOMEM   12"
+
+.PP
+Not enough memory to perform the requested operation\&. 
+.PP
+Definition at line \fB33\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOMSG   35"
+
+.PP
+No message of the specified type availble\&. 
+.PP
+Definition at line \fB56\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOPROTOOPT   109"
+
+.PP
+Option not supported on this socket\&. 
+.PP
+Definition at line \fB92\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOSPC   28"
+
+.PP
+Not enough space left on the requested device\&. 
+.PP
+Definition at line \fB49\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOSR   63"
+
+.PP
+Not enough resources for stream\&. 
+.PP
+Definition at line \fB67\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOSTR   60"
+
+.PP
+Device doesnt support streams\&. 
+.PP
+Definition at line \fB64\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOSYS   88"
+
+.PP
+Syscall doesnt exist\&. 
+.PP
+Definition at line \fB78\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOTBLK   15"
+
+.PP
+Was not passed a block device when this was required\&. 
+.PP
+Definition at line \fB36\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOTCONN   128"
+
+.PP
+Socket is not connected\&. 
+.PP
+Definition at line \fB111\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOTDIR   20"
+
+.PP
+Part of the path supplied is not a directory\&. 
+.PP
+Definition at line \fB41\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOTEMPTY   90"
+
+.PP
+The target directory still contains entries\&. 
+.PP
+Definition at line \fB80\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOTRECOVERABLE   141"
+
+.PP
+System state cannot be restored\&. 
+.PP
+Definition at line \fB122\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOTSOCK   108"
+
+.PP
+This operation can only be performed on a socket\&. 
+.PP
+Definition at line \fB91\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOTSUP   134"
+
+.PP
+Operation not supported on resource\&. 
+.PP
+Definition at line \fB116\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENOTTY   25"
+
+.PP
+This operation can only be performed on a character device\&. 
+.PP
+Definition at line \fB46\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ENXIO   6"
+
+.PP
+Device or address doesnt exist\&. 
+.PP
+Definition at line \fB27\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EOPNOTSUPP   95"
+
+.PP
+Operation not supported on this resource\&. 
+.PP
+Definition at line \fB84\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EOVERFLOW   139"
+
+.PP
+Value too large for type\&. 
+.PP
+Definition at line \fB120\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EOWNERDEAD   142"
+
+.PP
+Owner of the resource exited\&. 
+.PP
+Definition at line \fB123\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EPERM   1"
+
+.PP
+Operation not permitted\&. 
+.PP
+Definition at line \fB22\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EPFNOSUPPORT   96"
+
+.PP
+Protocol not supported on this system\&. 
+.PP
+Definition at line \fB85\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EPIPE   32"
+
+.PP
+Cant write to an invalid or closed connection\&. 
+.PP
+Definition at line \fB53\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EPROTO   71"
+
+.PP
+Peer/Client broke the rules of a protocol\&. 
+.PP
+Definition at line \fB71\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EPROTONOSUPPORT   123"
+
+.PP
+Protocol not supported on this system\&. 
+.PP
+Definition at line \fB106\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EPROTOTYPE   107"
+
+.PP
+Protocol type not supported on this socket\&. 
+.PP
+Definition at line \fB90\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ERANGE   34"
+
+.PP
+Maths operation outside of range (over/underflow for type) 
+.PP
+Definition at line \fB55\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EROFS   30"
+
+.PP
+Non read only operation on a read only filesystem\&. 
+.PP
+Definition at line \fB51\fP of file \fBerrno\&.h\fP\&.
+.SS "#define errno   (*__errno_location())"
+
+.PP
+Definition at line \fB20\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ESPIPE   29"
+
+.PP
+Cant perform seek on this file\&. 
+.PP
+Definition at line \fB50\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ESRCH   3"
+
+.PP
+Process doesnt exist\&. 
+.PP
+Definition at line \fB24\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ESTALE   133"
+
+.PP
+Filesystem resource no longer valid\&. 
+.PP
+Definition at line \fB115\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ETIME   62"
+
+.PP
+Stream timed out\&. 
+.PP
+Definition at line \fB66\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ETIMEDOUT   116"
+
+.PP
+Operation took longer then allowed\&. 
+.PP
+Definition at line \fB99\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ETOOMANYREFS   129"
+
+.PP
+Socket self references, causing a loop\&. 
+.PP
+Definition at line \fB112\fP of file \fBerrno\&.h\fP\&.
+.SS "#define ETXTBSY   26"
+
+.PP
+File is currently in use\&. 
+.PP
+Definition at line \fB47\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EWOULDBLOCK   \fBEAGAIN\fP"
+
+.PP
+Operation cannot be performed immediately\&. 
+.PP
+Definition at line \fB125\fP of file \fBerrno\&.h\fP\&.
+.SS "#define EXDEV   18"
+
+.PP
+Operation crosses multiple filesystems which is not allowed\&. 
+.PP
+Definition at line \fB39\fP of file \fBerrno\&.h\fP\&.
+.SS "#define RETURN_ERR(e)   do { errno = (e); return \-1; } while (0)"
+
+.PP
+Definition at line \fB127\fP of file \fBerrno\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int * __errno_location (void)\fC [extern]\fP"
+
+.PP
+Definition at line \fB15\fP of file \fBerrno\&.c\fP\&..PP
+.nf
+15                             {
+16  return &__errno_storage;
+17 }
+.fi
+
+.SH "Variable Documentation"
+.PP 
+.SS "CPP_START int __errno\fC [extern]\fP"
+
+.PP
+Definition at line \fB12\fP of file \fBerrno\&.c\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

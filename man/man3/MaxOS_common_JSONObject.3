@@ -1,0 +1,181 @@
+.TH "MaxOS::common::JSONObject" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::JSONObject
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBMaxOS::common::JSONNode\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBJSONObject\fP (\fBstring\fP key, \fBMap\fP< \fBstring\fP, \fBJSONNode\fP * > values)"
+.br
+.ti -1c
+.RI "\fBJSONNode\fP & \fBget_value\fP (\fBstring\fP key)"
+.br
+.ti -1c
+.RI "void \fBset_value\fP (\fBstring\fP key, \fBJSONNode\fP *value)"
+.br
+.ti -1c
+.RI "\fBJSONNode\fP & \fBoperator[]\fP (\fBstring\fP key)"
+.br
+.ti -1c
+.RI "\fBstring\fP \fBto_string\fP (int level=0) final"
+.br
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::JSONNode\fP
+.in +1c
+.ti -1c
+.RI "\fBJSONNode\fP (\fBstring\fP key, void *value, JSONNodeType type)"
+.br
+.ti -1c
+.RI "\fBoperator int64_t\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator bool\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator string\fP ()"
+.br
+.ti -1c
+.RI "\fBJSONNode\fP & \fBoperator[]\fP (int index)"
+.br
+.ti -1c
+.RI "\fBJSONNode\fP & \fBoperator[]\fP (\fBstring\fP key)"
+.br
+.ti -1c
+.RI "size_t \fBarray_size\fP ()"
+.br
+.ti -1c
+.RI "bool \fBis_null\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Static Public Attributes inherited from \fBMaxOS::common::JSONNode\fP
+.in +1c
+.ti -1c
+.RI "static \fBJSONNode\fP \fBNullNode\fP = \fBJSONNode\fP('', nullptr, UNKNOWN)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB55\fP of file \fBjson\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "JSONObject::JSONObject (\fBstring\fP key, \fBMap\fP< \fBstring\fP, \fBJSONNode\fP * > values)"
+
+.PP
+Definition at line \fB152\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+153     : JSONNode(key, this, OBJECT),
+154       m_values(values),
+155       m_self_key(key) {
+156 }
+.fi
+
+.SS "JSONObject::~JSONObject ()"
+
+.PP
+Definition at line \fB158\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+158                         {
+159 
+160     // Delete all child nodes
+161     for (int i = 0; i < m_values\&.size(); i++)
+162         delete m_values[i];
+163 
+164 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBJSONNode\fP & JSONObject::get_value (\fBstring\fP key)"
+
+.PP
+Definition at line \fB166\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+166                                           {
+167 
+168     // Invaild key
+169     auto value = m_values\&.find(key);
+170     if (value == m_values\&.end())
+171         return NullNode;
+172 
+173     return *value\->second;
+174 }
+.fi
+
+.SS "\fBJSONNode\fP & JSONObject::operator[] (\fBstring\fP key)"
+
+.PP
+Definition at line \fB182\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+182                                            {
+183     return get_value(key);
+184 }
+.fi
+
+.SS "void JSONObject::set_value (\fBstring\fP key, \fBJSONNode\fP * value)"
+
+.PP
+Definition at line \fB176\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+176                                                       {
+177 
+178     m_values\&.insert(key, value);
+179 
+180 }
+.fi
+
+.SS "\fBstring\fP JSONObject::to_string (int level = \fC0\fP)\fC [final]\fP, \fC [virtual]\fP"
+
+.PP
+Reimplemented from \fBMaxOS::common::JSONNode\fP\&.
+.PP
+Definition at line \fB186\fP of file \fBjson\&.cpp\fP\&..PP
+.nf
+186                                       {
+187 
+188     // Empty object
+189     if (m_values\&.size() == 0)
+190         return "{}";
+191 
+192     // Get the indent at two spaces per level
+193     string indent = "  "s * level;
+194 
+195     // Add each keypair to the output
+196     string out = "{";
+197     for (auto it = m_values\&.begin(); it != m_values\&.end(); ++it) {
+198 
+199         // Get the value pair
+200         string    key   = it\->first;
+201         JSONNode* value = it\->second;
+202 
+203         // Add to the output
+204         out += indent + "  \\"" + key + "\\": " + value\->to_string(level + 1);
+205 
+206         // Move to next
+207         auto next_it = it;
+208         if (++next_it != m_values\&.end())
+209             out += ",";
+210         out += "\\n";
+211 
+212     }
+213 
+214     // Close object
+215     out += indent + "}";
+216     return out;
+217 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

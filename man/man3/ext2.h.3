@@ -1,0 +1,423 @@
+.TH "programs/FileServer/include/format/ext2.h" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+programs/FileServer/include/format/ext2.h \- Defines structures and enums for the Extended 2 (ext2) filesystem format and relevant Filesystem, Directory and File classes\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <cstdint>\fP
+.br
+\fC#include <libcommon/spinlock\&.h>\fP
+.br
+\fC#include <libcommon/macros\&.h>\fP
+.br
+\fC#include <libdriver/generic/disk\&.h>\fP
+.br
+\fC#include <filesystem/filesystem\&.h>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBFileServer::format::ext2::SuperBlock\fP"
+.br
+.RI "The metadata of the ext2 filesystem\&. Found at an offset of 1024 bytes from the start of the partition\&. "
+.ti -1c
+.RI "struct \fBFileServer::format::ext2::BlockGroupDescriptor\fP"
+.br
+.RI "The metadata for a block group in ext2\&. "
+.ti -1c
+.RI "struct \fBFileServer::format::ext2::Inode\fP"
+.br
+.RI "The metadata for a file or directory in ext2\&. "
+.ti -1c
+.RI "struct \fBFileServer::format::ext2::InodeOS2Linux\fP"
+.br
+.RI "The OS specific data for Linux created ext2 inodes\&. "
+.ti -1c
+.RI "struct \fBFileServer::format::ext2::DirectoryEntry\fP"
+.br
+.RI "An entry in a directory that points to a file or subdirectory (the name follows this struct) "
+.ti -1c
+.RI "class \fBFileServer::format::ext2::Ext2Volume\fP"
+.br
+.RI "Common operations for an ext2 volume that are used by both files & directories (like block & inode allocation) "
+.ti -1c
+.RI "class \fBFileServer::format::ext2::InodeHandler\fP"
+.br
+.RI "Simplfies the management of an inode & its blocks\&. "
+.ti -1c
+.RI "class \fBFileServer::format::ext2::Ext2File\fP"
+.br
+.RI "Handles the file operations on the ext2 filesystem\&. "
+.ti -1c
+.RI "class \fBFileServer::format::ext2::Ext2Directory\fP"
+.br
+.RI "Handles the directory operations on the ext2 filesystem\&. "
+.ti -1c
+.RI "class \fBFileServer::format::ext2::Ext2FileSystem\fP"
+.br
+.RI "Handles the ext2 filesystem operations\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBMaxOS::string\fP \fBFileServer::format::ext2::string\fP"
+.br
+.ti -1c
+.RI "typedef \fBfilesystem::Directory\fP \fBFileServer::format::ext2::Directory\fP"
+.br
+.ti -1c
+.RI "typedef \fBfilesystem::File\fP \fBFileServer::format::ext2::File\fP"
+.br
+.ti -1c
+.RI "typedef \fBfilesystem::lba_t\fP \fBFileServer::format::ext2::lba_t\fP"
+.br
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::format::ext2::SuperBlock\fP \fBFileServer::format::ext2::superblock_t\fP"
+.br
+.RI "Alias for \fBSuperBlock\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::format::ext2::BlockGroupDescriptor\fP \fBFileServer::format::ext2::block_group_descriptor_t\fP"
+.br
+.RI "Alias for \fBBlockGroupDescriptor\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::format::ext2::Inode\fP \fBFileServer::format::ext2::inode_t\fP"
+.br
+.RI "Alias for \fBInode\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::format::ext2::InodeOS2Linux\fP \fBFileServer::format::ext2::linux_os_2_t\fP"
+.br
+.RI "Alias for \fBInodeOS2Linux\fP struct\&. "
+.ti -1c
+.RI "typedef struct PACKED \fBFileServer::format::ext2::DirectoryEntry\fP \fBFileServer::format::ext2::directory_entry_t\fP"
+.br
+.RI "Alias for \fBDirectoryEntry\fP struct\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::FileSystemState\fP { \fBCLEAN\fP = 1, \fBERROR\fP = 2 }"
+.br
+.RI "The state of the filesystem\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::ErrorOperation\fP { \fBIGNORE\fP = 1, \fBREMOUNT\fP = 2, \fBPANIC\fP = 3 }"
+.br
+.RI "What to do when an error occurs\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::CreatorOS\fP { \fBLINUX\fP, \fBGNU_HURD\fP, \fBMASIX\fP, \fBFREE_BSD\fP, \fBOTHER_LITES\fP }"
+.br
+.RI "The OS which created the filesystem\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::OptionalFeatures\fP { \fBPREALLOCATE_DIRECTORY\fP = 0x1, \fBAFS_SERVER_INODES\fP = 0x2, \fBJOURNAL_ENABLED\fP = 0x4, \fBATTRIBUTES_EXTENDED\fP = 0x8, \fBRESIZEABLE\fP = 0x10, \fBHASH_INDEXING\fP = 0x20 }"
+.br
+.RI "What features that are optional are supported by this filesystem\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::RequiredFeatures\fP { \fBCOMPRESSION\fP = 0x1, \fBDIRECTORY_HAS_TYPE\fP = 0x2, \fBMUST_REPLAY_JOURNAL\fP = 0x4, \fBJOURNAL_DEVICE\fP = 0x8 }"
+.br
+.RI "What features that are required are supported by this filesystem\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::ReadOnlyFeatures\fP { \fBSPARSE_SUPER_BLOCKS\fP = 0x1, \fBFILES_64_BIT\fP = 0x2, \fBBINARY_TREE_DIRECTORIES\fP = 0x4 }"
+.br
+.RI "What features that are only required in read-only mode\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::InodeType\fP { \fBUNKNOWN\fP, \fBFIFO\fP = 0x1000, \fBCHARACTER_DEVICE\fP = 0x2000, \fBDIRECTORY\fP = 0x4000, \fBBLOCK_DEVICE\fP = 0x6000, \fBFILE\fP = 0x8000, \fBSYMBOLIC_LINK\fP = 0xA000, \fBSOCKET\fP = 0xC000 }"
+.br
+.RI "The type of an inode\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::InodePermissions\fP { \fBOTHER_EXECUTE\fP = 0x1, \fBOTHER_WRITE\fP = 0x2, \fBOTHER_READ\fP = 0x4, \fBGROUP_EXECUTE\fP = 0x8, \fBGROUP_WRITE\fP = 0x10, \fBGROUP_READ\fP = 0x20, \fBUSER_EXECUTE\fP = 0x40, \fBUSER_WRITE\fP = 0x80, \fBUSER_READ\fP = 0x100, \fBSTICKY\fP = 0x200, \fBGROUP_ID\fP = 0x400, \fBUSER_ID\fP = 0x800 }"
+.br
+.RI "The permissions that an inode can have\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::InodePermissionsDefaults\fP { \fBFILE\fP = 0x1A4, \fBDIRECTORY\fP = 0x1ED }"
+.br
+.RI "The default permissions for files and directories\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::InodeFlags\fP { \fBSECURE_DELETE\fP = 0x1, \fBKEEP_DATA\fP = 0x2, \fBFILE_COMPRESSION\fP = 0x4, \fBSYNC_UPDATES\fP = 0x8, \fBFILE_IMMUTABLE\fP = 0x10, \fBAPPEND_ONLY\fP = 0x20, \fBDONT_DUMP\fP = 0x40, \fBNO_LAST_ACCESS\fP = 0x80, \fBHASH_INDEXED\fP = 0x10000, \fBAFS_DIRECTORY\fP = 0x20000, \fBJOURNAL_FILE_DATA\fP = 0x40000 }"
+.br
+.RI "The flags that can be set on an inode\&. "
+.ti -1c
+.RI "enum class \fBFileServer::format::ext2::EntryType\fP { \fBUNKNOWN\fP, \fBFILE\fP, \fBDIRECTORY\fP, \fBCHARACTER_DEVICE\fP, \fBBLOCK_DEVICE\fP, \fBFIFO\fP, \fBSOCKET\fP, \fBSYMBOLIC_LINK\fP }"
+.br
+.RI "The type of a directory entry\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines structures and enums for the Extended 2 (ext2) filesystem format and relevant Filesystem, Directory and File classes\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+17th July 2025 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBext2\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "\fBFileServer::format::ext2::block_group_descriptor_t\fP"
+
+.PP
+Alias for BlockGroupDescriptor struct\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Support updating directory_count when creating/deleting directories 
+.RE
+.PP
+
+.SS "typedef filesystem::Directory \fBFileServer::format::ext2::Directory\fP"
+
+.PP
+Definition at line \fB25\fP of file \fBext2\&.h\fP\&.
+.SS "typedef filesystem::File \fBFileServer::format::ext2::File\fP"
+
+.PP
+Definition at line \fB26\fP of file \fBext2\&.h\fP\&.
+.SS "typedef filesystem::lba_t FileServer::format::ext2::lba_t"
+
+.PP
+Definition at line \fB27\fP of file \fBext2\&.h\fP\&.
+.SS "\fBFileServer::format::ext2::linux_os_2_t\fP"
+
+.PP
+Alias for InodeOS2Linux struct\&. 
+.PP
+\fBTodo\fP
+.RS 4
+HURD, MASIX 
+.RE
+.PP
+
+.SS "typedef \fBMaxOS::string\fP FileServer::format::ext2::string"
+
+.PP
+Definition at line \fB24\fP of file \fBext2\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum class \fBFileServer::format::ext2::CreatorOS\fP\fC [strong]\fP"
+
+.PP
+The OS which created the filesystem\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Add MaxOS 
+.RE
+.PP
+
+.PP
+Definition at line \fB110\fP of file \fBext2\&.h\fP\&..PP
+.nf
+110                          {
+111         LINUX,
+112         GNU_HURD,
+113         MASIX,
+114         FREE_BSD,
+115         OTHER_LITES,
+116     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::EntryType\fP\fC [strong]\fP"
+
+.PP
+The type of a directory entry\&. 
+.PP
+\fBWarning\fP
+.RS 4
+MaxOS only supports FILE, DIRECTORY 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Support more 
+.RE
+.PP
+
+.PP
+Definition at line \fB311\fP of file \fBext2\&.h\fP\&..PP
+.nf
+311                          {
+312         UNKNOWN,
+313         FILE,
+314         DIRECTORY,
+315         CHARACTER_DEVICE,
+316         BLOCK_DEVICE,
+317         FIFO,
+318         SOCKET,
+319         SYMBOLIC_LINK
+320     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::ErrorOperation\fP\fC [strong]\fP"
+
+.PP
+What to do when an error occurs\&. 
+.PP
+Definition at line \fB98\fP of file \fBext2\&.h\fP\&..PP
+.nf
+98                               {
+99         IGNORE = 1,
+100         REMOUNT = 2,
+101         PANIC = 3,
+102     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::FileSystemState\fP\fC [strong]\fP"
+
+.PP
+The state of the filesystem\&. 
+.PP
+Definition at line \fB89\fP of file \fBext2\&.h\fP\&..PP
+.nf
+89                                {
+90         CLEAN = 1,
+91         ERROR = 2,
+92     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::InodeFlags\fP\fC [strong]\fP"
+
+.PP
+The flags that can be set on an inode\&. 
+.PP
+Definition at line \fB257\fP of file \fBext2\&.h\fP\&..PP
+.nf
+257                           {
+258         SECURE_DELETE = 0x1,  // Zero out data on deletion
+259         KEEP_DATA = 0x2,
+260         FILE_COMPRESSION = 0x4,
+261         SYNC_UPDATES = 0x8,
+262         FILE_IMMUTABLE = 0x10,
+263         APPEND_ONLY = 0x20,
+264         DONT_DUMP = 0x40,
+265         NO_LAST_ACCESS = 0x80,
+266         HASH_INDEXED = 0x10000,
+267         AFS_DIRECTORY = 0x20000,
+268         JOURNAL_FILE_DATA = 0x40000,
+269     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::InodePermissions\fP\fC [strong]\fP"
+
+.PP
+The permissions that an inode can have\&. 
+.PP
+Definition at line \fB227\fP of file \fBext2\&.h\fP\&..PP
+.nf
+227                                 {
+228         OTHER_EXECUTE = 0x1,
+229         OTHER_WRITE = 0x2,
+230         OTHER_READ = 0x4,
+231         GROUP_EXECUTE = 0x8,
+232         GROUP_WRITE = 0x10,
+233         GROUP_READ = 0x20,
+234         USER_EXECUTE = 0x40,
+235         USER_WRITE = 0x80,
+236         USER_READ = 0x100,
+237         STICKY = 0x200,
+238         GROUP_ID = 0x400,
+239         USER_ID = 0x800,
+240     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::InodePermissionsDefaults\fP\fC [strong]\fP"
+
+.PP
+The default permissions for files and directories\&. 
+.PP
+\fBTodo\fP
+.RS 4
+Document these values 
+.RE
+.PP
+
+.PP
+Definition at line \fB248\fP of file \fBext2\&.h\fP\&..PP
+.nf
+248                                         {
+249         FILE = 0x1A4,
+250         DIRECTORY = 0x1ED,
+251     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::InodeType\fP\fC [strong]\fP"
+
+.PP
+The type of an inode\&. 
+.PP
+Definition at line \fB212\fP of file \fBext2\&.h\fP\&..PP
+.nf
+212                          {
+213         UNKNOWN,
+214         FIFO = 0x1000,
+215         CHARACTER_DEVICE = 0x2000,
+216         DIRECTORY = 0x4000,
+217         BLOCK_DEVICE = 0x6000,
+218         FILE = 0x8000,
+219         SYMBOLIC_LINK = 0xA000,
+220         SOCKET = 0xC000,
+221     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::OptionalFeatures\fP\fC [strong]\fP"
+
+.PP
+What features that are optional are supported by this filesystem\&. 
+.PP
+Definition at line \fB122\fP of file \fBext2\&.h\fP\&..PP
+.nf
+122                                 {
+123         PREALLOCATE_DIRECTORY = 0x1,
+124         AFS_SERVER_INODES = 0x2,
+125         JOURNAL_ENABLED = 0x4,
+126         ATTRIBUTES_EXTENDED = 0x8,
+127         RESIZEABLE = 0x10,
+128         HASH_INDEXING = 0x20,
+129     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::ReadOnlyFeatures\fP\fC [strong]\fP"
+
+.PP
+What features that are only required in read-only mode\&. 
+.PP
+Definition at line \fB146\fP of file \fBext2\&.h\fP\&..PP
+.nf
+146                                 {
+147         SPARSE_SUPER_BLOCKS = 0x1,
+148         FILES_64_BIT = 0x2,
+149         BINARY_TREE_DIRECTORIES = 0x4,
+150     };
+.fi
+
+.SS "enum class \fBFileServer::format::ext2::RequiredFeatures\fP\fC [strong]\fP"
+
+.PP
+What features that are required are supported by this filesystem\&. 
+.PP
+Definition at line \fB135\fP of file \fBext2\&.h\fP\&..PP
+.nf
+135                                 {
+136         COMPRESSION = 0x1,
+137         DIRECTORY_HAS_TYPE = 0x2,
+138         MUST_REPLAY_JOURNAL = 0x4,
+139         JOURNAL_DEVICE = 0x8,
+140     };
+.fi
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

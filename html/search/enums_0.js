@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['accessmode_0',['AccessMode',['../clock_8h.html#a200fb05522ccfe33aaffda5eb980547e',1,'MaxOS::hardwarecommunication']]]
+  ['_5fidtype_0',['_IDType',['../wait_8h.html#adb908bb79198d5a464610bf8dd9acb78',1,'wait.h']]]
 ];

@@ -1,36 +1,28 @@
-.TH "/home/runner/work/MaxOS/MaxOS/kernel/src/processes/process.cpp" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "libraries/libkpi/src/processes/process.cpp" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/runner/work/MaxOS/MaxOS/kernel/src/processes/process.cpp \- Implementation of a Thread and Process classes for managing system processes\&.  
+libraries/libkpi/src/processes/process.cpp \- Implements the abstraction for process management functions and structures\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <processes/process\&.h>\fP
+\fC#include <libkpi/processes/process\&.h>\fP
 .br
-\fC#include <common/logger\&.h>\fP
+\fC#include <libkpi/processes/thread\&.h>\fP
 .br
-\fC#include <processes/scheduler\&.h>\fP
+\fC#include <libfs/file\&.h>\fP
 .br
 
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "void \fBsave_cpu_state_naked\fP (volatile void *location) __attribute__((naked))"
-.br
-.RI "Save the state of the CPU at the exit of this function\&. "
-.in -1c
 .SH "Detailed Description"
 .PP 
-Implementation of a Thread and Process classes for managing system processes\&. 
+Implements the abstraction for process management functions and structures\&. 
 
 
 .PP
 \fBDate\fP
 .RS 4
-25th February 2025 
+2nd December 2025 
 .RE
 .PP
 \fBAuthor\fP
@@ -41,108 +33,6 @@ Max Tyson
 
 .PP
 Definition in file \fBprocess\&.cpp\fP\&.
-.SH "Function Documentation"
-.PP 
-.SS "void save_cpu_state_naked (volatile void * location)"
-
-.PP
-Save the state of the CPU at the exit of this function\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIlocation\fP Where to save the state to 
-.RE
-.PP
-
-.PP
-Definition at line \fB153\fP of file \fBprocess\&.cpp\fP\&..PP
-.nf
-153                                                               {
-154     asm volatile(
-155 
-156         // Save registers
-157         "pushq %rax\\n"
-158         "pushq %rbx\\n"
-159         "pushq %rcx\\n"
-160         "pushq %rdx\\n"
-161         "pushq %rbp\\n"
-162         "pushq %rsi\\n"
-163         "pushq %rdi\\n"
-164         "pushq %r8\\n"
-165         "pushq %r9\\n"
-166         "pushq %r10\\n"
-167         "pushq %r11\\n"
-168         "pushq %r12\\n"
-169         "pushq %r13\\n"
-170         "pushq %r14\\n"
-171         "pushq %r15\\n"
-172 
-173         // Store the save location
-174         "movq %rdi, %rsi\\n"
-175 
-176         // Save general registers
-177         "movq   0(%rsp), %rax\\n"   "movq %rax, 0x00(%rsi)\\n"
-178         "movq   8(%rsp), %rax\\n"   "movq %rax, 0x08(%rsi)\\n"
-179         "movq  16(%rsp), %rax\\n"   "movq %rax, 0x10(%rsi)\\n"
-180         "movq  24(%rsp), %rax\\n"   "movq %rax, 0x18(%rsi)\\n"
-181         "movq  32(%rsp), %rax\\n"   "movq %rax, 0x20(%rsi)\\n"
-182         "movq  40(%rsp), %rax\\n"   "movq %rax, 0x28(%rsi)\\n"
-183         "movq  48(%rsp), %rax\\n"   "movq %rax, 0x30(%rsi)\\n"
-184         "movq  56(%rsp), %rax\\n"   "movq %rax, 0x38(%rsi)\\n"
-185         "movq  64(%rsp), %rax\\n"   "movq %rax, 0x40(%rsi)\\n"
-186         "movq  72(%rsp), %rax\\n"   "movq %rax, 0x48(%rsi)\\n"
-187         "movq  80(%rsp), %rax\\n"   "movq %rax, 0x50(%rsi)\\n"
-188         "movq  88(%rsp), %rax\\n"   "movq %rax, 0x58(%rsi)\\n"
-189         "movq  96(%rsp), %rax\\n"   "movq %rax, 0x60(%rsi)\\n"
-190         "movq 104(%rsp), %rax\\n"   "movq %rax, 0x68(%rsi)\\n"
-191         "movq 112(%rsp), %rax\\n"   "movq %rax, 0x70(%rsi)\\n"
-192 
-193         // Save the return address as the instruction pointer
-194         "movq 120(%rsp), %rax\\n"
-195         "movq %rax, 0x88(%rsi)\\n"
-196 
-197         // CS
-198         "xorq %rax, %rax\\n"
-199         "movw %cs, %ax\\n"
-200         "movq %rax, 0x90(%rsi)\\n"
-201 
-202         // RFLAGS
-203         "pushfq\\n"
-204         "popq %rax\\n"
-205         "movq %rax, 0x98(%rsi)\\n"
-206 
-207         // RSP
-208         "leaq 120(%rsp), %rax\\n"
-209         "movq %rax, 0xA0(%rsi)\\n"
-210 
-211         // SS
-212         "xorq %rax, %rax\\n"
-213         "movw %ss, %ax\\n"
-214         "movq %rax, 0xA8(%rsi)\\n"
-215 
-216         // Restore registers
-217         "popq %r15\\n"
-218         "popq %r14\\n"
-219         "popq %r13\\n"
-220         "popq %r12\\n"
-221         "popq %r11\\n"
-222         "popq %r10\\n"
-223         "popq %r9\\n"
-224         "popq %r8\\n"
-225         "popq %rdi\\n"
-226         "popq %rsi\\n"
-227         "popq %rbp\\n"
-228         "popq %rdx\\n"
-229         "popq %rcx\\n"
-230         "popq %rbx\\n"
-231         "popq %rax\\n"
-232         "ret\\n"
-233     );
-234 }
-.fi
-
-.PP
-Referenced by \fBMaxOS::processes::Thread::save_cpu_state()\fP\&.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

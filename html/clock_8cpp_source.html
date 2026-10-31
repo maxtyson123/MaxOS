@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Max OS: /home/runner/work/MaxOS/MaxOS/kernel/src/hardwarecommunication/clock.cpp Source File</title>
+<title>MaxOS: kernel/src/hardwarecommunication/clock.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,7 +36,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="Logo.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Max OS<span id="projectnumber">&#160;0.3</span>
+   <div id="projectname">MaxOS<span id="projectnumber">&#160;0.3</span>
    </div>
   </td>
  </tr>
@@ -158,8 +158,8 @@ $(document).ready(function(){initNavTree('clock_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>uint8_t Clock::read_hardware_clock(uint8_t address) {</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    m_command_port.write(address);</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keywordflow">return</span> m_data_port.read();</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    m_command_port.<a class="code hl_function" href="classMaxOS_1_1common_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(address);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keywordflow">return</span> m_data_port.<a class="code hl_function" href="classMaxOS_1_1common_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3">read</a>();</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>}</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>uint8_t Clock::binary_representation(uint8_t number)<span class="keyword"> const </span>{</div>
@@ -219,14 +219,14 @@ $(document).ready(function(){initNavTree('clock_8cpp_source.html',''); initResiz
 </div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
 <div class="foldopen" id="foldopen00156" data-start="{" data-end="}">
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="classMaxOS_1_1hardwarecommunication_1_1Clock.html#a0fa3464d6ab6a9a79b3c1149301b3cba">  156</a></span>common::time_t <a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Clock.html#a0fa3464d6ab6a9a79b3c1149301b3cba">Clock::get_time</a>() {</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="classMaxOS_1_1hardwarecommunication_1_1Clock.html#a0fa3464d6ab6a9a79b3c1149301b3cba">  156</a></span><a class="code hl_struct" href="structMaxOS_1_1common_1_1Time.html">common::time_t</a> <a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1Clock.html#a0fa3464d6ab6a9a79b3c1149301b3cba">Clock::get_time</a>() {</div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="comment">// Wait for the clock to be ready</span></div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="keywordflow">while</span> (read_hardware_clock(0xA) &amp; 0x80)</div>
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <span class="keyword">asm</span> <span class="keyword">volatile</span>(<span class="stringliteral">&quot;nop&quot;</span>);</div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <span class="comment">// Read the time from the clock</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    time_t time{};</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    <a class="code hl_typedef" href="types_8h.html#a7f5991675a84025dc7c24754a9b257c0">time_t</a> time{};</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    time.year = binary_representation(read_hardware_clock(0x9)) + 2000;</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    time.month = binary_representation(read_hardware_clock(0x8));</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    time.day = binary_representation(read_hardware_clock(0x7));</div>
@@ -286,12 +286,12 @@ $(document).ready(function(){initNavTree('clock_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>            .access_mode    = (uint8_t) AccessMode::LOW_HIGH_BYTE,</div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            .channel        = (uint8_t) Channel::INTERRUPT</div>
 <div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    };</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    m_command_port.write(*(uint8_t *) &amp;command);</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    m_command_port.<a class="code hl_function" href="classMaxOS_1_1common_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(*(uint8_t *) &amp;command);</div>
 <div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <span class="comment">// Set the clock rate to 1 ms;</span></div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    uint16_t rate = 1193182 / 1000;</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    m_data_port.write(rate &amp; 0xFF);</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    m_data_port.write(rate &gt;&gt; 8);</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    m_data_port.<a class="code hl_function" href="classMaxOS_1_1common_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(rate &amp; 0xFF);</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    m_data_port.<a class="code hl_function" href="classMaxOS_1_1common_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">write</a>(rate &gt;&gt; 8);</div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    <span class="comment">// Stop the clock</span></div>
 <div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    m_local_apic-&gt;<a class="code hl_function" href="classMaxOS_1_1hardwarecommunication_1_1LocalAPIC.html#a58100a1d7ff3dac52a6abfb1d5686561">write</a>(0x380, 0x00);</div>
@@ -322,6 +322,8 @@ $(document).ready(function(){initNavTree('clock_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>}</div>
 <div class="ttc" id="aclassMaxOS_1_1Logger_html_a44040e7f56db620657286c3dc2b230fb"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a44040e7f56db620657286c3dc2b230fb">MaxOS::Logger::DEBUG</a></div><div class="ttdeci">static LogRecord DEBUG()</div><div class="ttdoc">Gets the active logger for debug logs.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00204">logger.cpp:204</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1Logger_html_a6bcb1b11271a35f8bff3d7e20fec2e4f"><div class="ttname"><a href="classMaxOS_1_1Logger.html#a6bcb1b11271a35f8bff3d7e20fec2e4f">MaxOS::Logger::INFO</a></div><div class="ttdeci">static LogRecord INFO()</div><div class="ttdoc">Gets the active logger for info logs.</div><div class="ttdef"><b>Definition</b> <a href="logger_8cpp_source.html#l00195">logger.cpp:195</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1Port8Bit_html_a425297307d64cb5d9889b32767f8fdc3"><div class="ttname"><a href="classMaxOS_1_1common_1_1Port8Bit.html#a425297307d64cb5d9889b32767f8fdc3">MaxOS::common::Port8Bit::read</a></div><div class="ttdeci">virtual uint8_t read()</div><div class="ttdoc">read a byte from the port</div><div class="ttdef"><b>Definition</b> <a href="port_8cpp_source.html#l00063">port.cpp:63</a></div></div>
+<div class="ttc" id="aclassMaxOS_1_1common_1_1Port8Bit_html_a6ede8fba6ba7e26c5982a91a3d5ffa72"><div class="ttname"><a href="classMaxOS_1_1common_1_1Port8Bit.html#a6ede8fba6ba7e26c5982a91a3d5ffa72">MaxOS::common::Port8Bit::write</a></div><div class="ttdeci">virtual void write(uint8_t data)</div><div class="ttdoc">write a byte to the port</div><div class="ttdef"><b>Definition</b> <a href="port_8cpp_source.html#l00053">port.cpp:53</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_html"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController.html">MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController</a></div><div class="ttdoc">Handles both the Local APIC (boot core) and IO APIC.</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00240">apic.h:240</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController_html_af632f7fe1f4a8d9716ec845628946eef"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1AdvancedProgrammableInterruptController.html#af632f7fe1f4a8d9716ec845628946eef">MaxOS::hardwarecommunication::AdvancedProgrammableInterruptController::local_apic</a></div><div class="ttdeci">LocalAPIC * local_apic() const</div><div class="ttdoc">Get the local apic.</div><div class="ttdef"><b>Definition</b> <a href="apic_8cpp_source.html#l00527">apic.cpp:527</a></div></div>
 <div class="ttc" id="aclassMaxOS_1_1hardwarecommunication_1_1Clock_html"><div class="ttname"><a href="classMaxOS_1_1hardwarecommunication_1_1Clock.html">MaxOS::hardwarecommunication::Clock</a></div><div class="ttdoc">Driver for the APIC clock.</div><div class="ttdef"><b>Definition</b> <a href="clock_8h_source.html#l00124">clock.h:124</a></div></div>
@@ -343,11 +345,13 @@ $(document).ready(function(){initNavTree('clock_8cpp_source.html',''); initResiz
 <div class="ttc" id="aclock_8h_html"><div class="ttname"><a href="clock_8h.html">clock.h</a></div><div class="ttdoc">Defines drivers for the Programmable Interval Timer (PIT) and APIC Clock.</div></div>
 <div class="ttc" id="aclock_8h_html_a999d2448233cb14cc99f67b5866b287a"><div class="ttname"><a href="clock_8h.html#a999d2448233cb14cc99f67b5866b287a">MaxOS::hardwarecommunication::TICK_CALIBRATE_LENGTH</a></div><div class="ttdeci">constexpr uint16_t TICK_CALIBRATE_LENGTH</div><div class="ttdoc">How many loops to spin for calibration.</div><div class="ttdef"><b>Definition</b> <a href="clock_8h_source.html#l00090">clock.h:90</a></div></div>
 <div class="ttc" id="alogger_8h_html"><div class="ttname"><a href="logger_8h.html">logger.h</a></div><div class="ttdoc">Defines a Logger class for logging messages with different severity levels to multiple output streams...</div></div>
+<div class="ttc" id="astructMaxOS_1_1common_1_1Time_html"><div class="ttname"><a href="structMaxOS_1_1common_1_1Time.html">MaxOS::common::Time</a></div><div class="ttdoc">Stores the year, month, day, hour, minute and second of a time.</div><div class="ttdef"><b>Definition</b> <a href="mmon_2include_2libcommon_2time_8h_source.html#l00024">time.h:24</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_html"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect.html">MaxOS::hardwarecommunication::InterruptRedirect</a></div><div class="ttdoc">Defines how an interrupt input is redirected to a specific processor via the I/O APIC.</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00174">apic.h:174</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_html_a2053b8d74b7cd332244eab0ea86aa656"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect.html#a2053b8d74b7cd332244eab0ea86aa656">MaxOS::hardwarecommunication::InterruptRedirect::index</a></div><div class="ttdeci">uint8_t index</div><div class="ttdoc">Where in the IO APIC redirection table this redirect should be placed.</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00177">apic.h:177</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1InterruptRedirect_html_a76765f5aa84e5fb559be5ec37eb8d5d8"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1InterruptRedirect.html#a76765f5aa84e5fb559be5ec37eb8d5d8">MaxOS::hardwarecommunication::InterruptRedirect::type</a></div><div class="ttdeci">uint8_t type</div><div class="ttdoc">The type of redirect (should be 0 for normal interrupts)</div><div class="ttdef"><b>Definition</b> <a href="apic_8h_source.html#l00176">apic.h:176</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1PITCommand_html"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1PITCommand.html">MaxOS::hardwarecommunication::PITCommand</a></div><div class="ttdoc">The command byte to send to the PIT, specifies the channel, access mode, operating mode and BCD mode.</div><div class="ttdef"><b>Definition</b> <a href="clock_8h_source.html#l00076">clock.h:76</a></div></div>
 <div class="ttc" id="astructMaxOS_1_1hardwarecommunication_1_1PITCommand_html_a7e1767d8e9379363c96fe7de2dbd0ed6"><div class="ttname"><a href="structMaxOS_1_1hardwarecommunication_1_1PITCommand.html#a7e1767d8e9379363c96fe7de2dbd0ed6">MaxOS::hardwarecommunication::PITCommand::bcd_mode</a></div><div class="ttdeci">uint8_t bcd_mode</div><div class="ttdoc">0 = binary, 1 = BCD</div><div class="ttdef"><b>Definition</b> <a href="clock_8h_source.html#l00078">clock.h:78</a></div></div>
+<div class="ttc" id="atypes_8h_html_a7f5991675a84025dc7c24754a9b257c0"><div class="ttname"><a href="types_8h.html#a7f5991675a84025dc7c24754a9b257c0">time_t</a></div><div class="ttdeci">int64_t time_t</div><div class="ttdoc">Seconds since epoch.</div><div class="ttdef"><b>Definition</b> <a href="types_8h_source.html#l00030">types.h:30</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

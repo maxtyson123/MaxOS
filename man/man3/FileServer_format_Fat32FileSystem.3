@@ -1,0 +1,89 @@
+.TH "FileServer::format::Fat32FileSystem" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::format::Fat32FileSystem \- Handles the FAT32 filesystem operations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fat32\&.h>\fP
+.PP
+Inherits \fBFileServer::filesystem::FileSystem\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFat32FileSystem\fP (\fBLibDriver::generic::Disk\fP *disk, uint32_t partition_offset)"
+.br
+.RI "Construct a new Fat32 File System object\&. "
+.in -1c
+
+Public Member Functions inherited from \fBFileServer::filesystem::FileSystem\fP
+.in +1c
+.ti -1c
+.RI "virtual \fB~FileSystem\fP ()"
+.br
+.RI "Destructor for \fBFileSystem\fP, frees the root directory (Which in turn frees all files and subdirectories) "
+.ti -1c
+.RI "\fBDirectory\fP * \fBroot_directory\fP ()"
+.br
+.RI "Get the directory at '/'\&. "
+.ti -1c
+.RI "\fBDirectory\fP * \fBget_directory\fP (const string &path)"
+.br
+.RI "Get the directory at a given path\&. "
+.ti -1c
+.RI "bool \fBexists\fP (const string &path)"
+.br
+.RI "Check if a path exists on the filesystem\&. "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Attributes inherited from \fBFileServer::filesystem::FileSystem\fP
+.in +1c
+.ti -1c
+.RI "\fBDirectory\fP * \fBm_root_directory\fP = nullptr"
+.br
+.RI "The fist directory in the file system (not be confused with the system root) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles the FAT32 filesystem operations\&. 
+.PP
+Definition at line \fB294\fP of file \fBfat32\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Fat32FileSystem::Fat32FileSystem (\fBLibDriver::generic::Disk\fP * disk, uint32_t partition_offset)"
+
+.PP
+Construct a new Fat32 File System object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdisk\fP The disk to mount the filesystem from 
+.br
+\fIpartition_offset\fP The partition offset on the disk 
+.RE
+.PP
+
+.PP
+Definition at line \fB985\fP of file \fBfat32\&.cpp\fP\&..PP
+.nf
+986         : m_volume(disk, partition_offset) {
+987 
+988     // Create the root directory
+989     m_root_directory = new Fat32Directory(&m_volume, m_volume\&.bpb\&.root_cluster, "/");
+990     m_root_directory\->read_from_disk();
+991 
+992 }
+.fi
+
+.PP
+References \fBFileServer::format::Fat32Volume::bpb\fP, \fBFileServer::filesystem::FileSystem::m_root_directory\fP, and \fBFileServer::filesystem::Directory::read_from_disk()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

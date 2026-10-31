@@ -1,0 +1,106 @@
+.TH "programs/net/tcp.cpp" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+programs/net/tcp.cpp \- Implementation of Transmission Control Protocol (TCP) classes and handlers\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <net/tcp\&.h>\fP
+.br
+\fC#include 'net/udp\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBbig_endian_32\fP (uint32_t x)"
+.br
+.RI "Convert a 32-bit integer to big-endian format\&. "
+.ti -1c
+.RI "uint32_t \fBbig_endian_16\fP (uint16_t x)"
+.br
+.RI "Convert a 16-bit integer to big-endian format\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Implementation of Transmission Control Protocol (TCP) classes and handlers\&. 
+
+
+.PP
+\fBDate\fP
+.RS 4
+26th March 2024 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Max Tyson 
+.RE
+.PP
+
+.PP
+Definition in file \fBtcp\&.cpp\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "uint32_t big_endian_16 (uint16_t x)"
+
+.PP
+Convert a 16-bit integer to big-endian format\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The 16-bit integer to convert 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The big-endian formatted integer 
+.RE
+.PP
+
+.PP
+Definition at line \fB187\fP of file \fBtcp\&.cpp\fP\&..PP
+.nf
+187                                    {
+188     return ((x & 0xFF00) >> 8)
+189            | ((x & 0x00FF) << 8);
+190 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
+.SS "uint32_t big_endian_32 (uint32_t x)"
+
+.PP
+Convert a 32-bit integer to big-endian format\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP The 32-bit integer to convert 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The big-endian formatted integer 
+.RE
+.PP
+
+.PP
+Definition at line \fB174\fP of file \fBtcp\&.cpp\fP\&..PP
+.nf
+174                                    {
+175     return ((x & 0xFF000000) >> 24)
+176            | ((x & 0x00FF0000) >> 8)
+177            | ((x & 0x0000FF00) << 8)
+178            | ((x & 0x000000FF) << 24);
+179 }
+.fi
+
+.PP
+Referenced by \fBMaxOS::net::TransmissionControlProtocolHandler::handle_internet_protocol_payload()\fP, and \fBMaxOS::net::TransmissionControlProtocolHandler::send_transmission_control_protocol_packet()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

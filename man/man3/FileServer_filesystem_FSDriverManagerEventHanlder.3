@@ -1,0 +1,57 @@
+.TH "FileServer::filesystem::FSDriverManagerEventHanlder" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+FileServer::filesystem::FSDriverManagerEventHanlder
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits EventHandler_drivermanager\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBon_driver_ready\fP (mstring id) override"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB16\fP of file \fBfs_event_handler\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "FSDriverManagerEventHanlder::FSDriverManagerEventHanlder ()"
+
+.PP
+Definition at line \fB14\fP of file \fBfs_event_handler\&.cpp\fP\&..PP
+.nf
+14                                                          {
+15 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void FSDriverManagerEventHanlder::on_driver_ready (mstring id)\fC [override]\fP"
+
+.PP
+Definition at line \fB19\fP of file \fBfs_event_handler\&.cpp\fP\&..PP
+.nf
+19                                                             {
+20 
+21     //  Only care about disks (@todo only sub to disks?)
+22     device_identification_t info =  get_device_identification(id);
+23     if (info\&.driver_type != DriverType::DISK)
+24         return;
+25 
+26     // Discover partitions on disk
+27     auto disk = new DiskClient(id);
+28     MSDOSPartition::mount_partitions(disk);
+29 
+30     klog("added disk with device id=%s\\n", id\&.c_str());
+31 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

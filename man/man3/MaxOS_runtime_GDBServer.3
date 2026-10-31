@@ -1,4 +1,4 @@
-.TH "MaxOS::runtime::GDBServer" 3 "Version 0.3" "Max OS" \" -*- nroff -*-
+.TH "MaxOS::runtime::GDBServer" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -23,19 +23,19 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .br
 .RI "Begin debugging a thread, will start paused\&. "
 .ti -1c
-.RI "string \fBget_checksum\fP (const string &payload)"
+.RI "\fBstring\fP \fBget_checksum\fP (const \fBstring\fP &payload)"
 .br
 .RI "Calculates the GDB checksum of a command\&. "
 .ti -1c
-.RI "bool \fBcheck_checksum\fP (const string &payload, const string &checksum)"
+.RI "bool \fBcheck_checksum\fP (const \fBstring\fP &payload, const \fBstring\fP &checksum)"
 .br
 .RI "Validates the checksum of a commnad\&. "
 .ti -1c
-.RI "string \fBbuild_message\fP (const string &payload)"
+.RI "\fBstring\fP \fBbuild_message\fP (const \fBstring\fP &payload)"
 .br
 .RI "Converts a message into the form GDB expects, including and ACK package\&. "
 .ti -1c
-.RI "void \fBsend_message\fP (const string &payload)"
+.RI "void \fBsend_message\fP (const \fBstring\fP &payload)"
 .br
 .RI "Converts a message to the required form and sends it over serial\&. "
 .ti -1c
@@ -43,7 +43,7 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .br
 .RI "Send an empty message to the GDB server\&. "
 .ti -1c
-.RI "void \fBsend_supported\fP (const string &peer_supported)"
+.RI "void \fBsend_supported\fP (const \fBstring\fP &peer_supported)"
 .br
 .RI "Sends the features that this GDB stub supports to the GDB server\&. "
 .ti -1c
@@ -51,7 +51,7 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .br
 .RI "Sends the registers of the thread to the GDB server\&. "
 .ti -1c
-.RI "void \fBsend_memory\fP (const string &message)"
+.RI "void \fBsend_memory\fP (const \fBstring\fP &message)"
 .br
 .RI "Send a chunk of memory to the GDB server\&. "
 .ti -1c
@@ -66,7 +66,7 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .br
 .RI "Set the trap flag and allow the thread to run\&. "
 .ti -1c
-.RI "void \fBhandle_set_breakpoint\fP (const string &message)"
+.RI "void \fBhandle_set_breakpoint\fP (const \fBstring\fP &message)"
 .br
 .RI "Set a software break point by replacing the instruction with a INT3\&. "
 .ti -1c
@@ -74,7 +74,7 @@ Inherits \fBMaxOS::hardwarecommunication::InterruptHandler\fP\&.
 .br
 .RI "Set a software break point by replacing the instruction with a INT3\&. "
 .ti -1c
-.RI "void \fBhandle_remove_breakpoint\fP (const string &message)"
+.RI "void \fBhandle_remove_breakpoint\fP (const \fBstring\fP &message)"
 .br
 .RI "Remove a software break point, and replace the original opcode\&. "
 .ti -1c
@@ -218,7 +218,7 @@ Definition at line \fB536\fP of file \fBgdbstub\&.cpp\fP\&..PP
 
 .PP
 Referenced by \fBMaxOS::runtime::TrapFlagExcpetion::handle_interrupt()\fP, and \fBMaxOS::runtime::BreakPointException::handle_interrupt()\fP\&.
-.SS "string GDBServer::build_message (const string & payload)"
+.SS "\fBstring\fP GDBServer::build_message (const \fBstring\fP & payload)"
 
 .PP
 Converts a message into the form GDB expects, including and ACK package\&. 
@@ -246,7 +246,7 @@ Definition at line \fB258\fP of file \fBgdbstub\&.cpp\fP\&..PP
 References \fBget_checksum()\fP\&.
 .PP
 Referenced by \fBsend_message()\fP\&.
-.SS "bool GDBServer::check_checksum (const string & payload, const string & checksum)"
+.SS "bool GDBServer::check_checksum (const \fBstring\fP & payload, const \fBstring\fP & checksum)"
 
 .PP
 Validates the checksum of a commnad\&. 
@@ -274,7 +274,7 @@ Definition at line \fB248\fP of file \fBgdbstub\&.cpp\fP\&..PP
 
 .PP
 References \fBget_checksum()\fP\&.
-.SS "string GDBServer::get_checksum (const string & payload)"
+.SS "\fBstring\fP GDBServer::get_checksum (const \fBstring\fP & payload)"
 
 .PP
 Calculates the GDB checksum of a command\&. 
@@ -355,7 +355,7 @@ Definition at line \fB520\fP of file \fBgdbstub\&.cpp\fP\&..PP
 
 .PP
 References \fBhandle_remove_breakpoint()\fP, and \fBMaxOS::processes::Thread::thread_state\fP\&.
-.SS "void GDBServer::handle_remove_breakpoint (const string & message)"
+.SS "void GDBServer::handle_remove_breakpoint (const \fBstring\fP & message)"
 
 .PP
 Remove a software break point, and replace the original opcode\&. 
@@ -433,8 +433,8 @@ Definition at line \fB472\fP of file \fBgdbstub\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBsend_message()\fP\&.
-.SS "void GDBServer::handle_set_breakpoint (const string & message)"
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::common::Map< Key, Value >::end()\fP, \fBMaxOS::common::Map< Key, Value >::erase()\fP, \fBMaxOS::common::Map< Key, Value >::find()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBsend_message()\fP\&.
+.SS "void GDBServer::handle_set_breakpoint (const \fBstring\fP & message)"
 
 .PP
 Set a software break point by replacing the instruction with a INT3\&. 
@@ -511,7 +511,7 @@ Definition at line \fB420\fP of file \fBgdbstub\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBsend_message()\fP\&.
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::common::Map< Key, Value >::end()\fP, \fBMaxOS::common::Map< Key, Value >::find()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::common::Map< Key, Value >::insert()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBsend_message()\fP\&.
 .SS "void GDBServer::handle_step_instruction ()"
 
 .PP
@@ -553,7 +553,7 @@ Definition at line \fB275\fP of file \fBgdbstub\&.cpp\fP\&..PP
 
 .PP
 References \fBsend_message()\fP\&.
-.SS "void GDBServer::send_memory (const string & message)"
+.SS "void GDBServer::send_memory (const \fBstring\fP & message)"
 
 .PP
 Send a chunk of memory to the GDB server\&. 
@@ -621,8 +621,8 @@ Definition at line \fB359\fP of file \fBgdbstub\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Thread::parent_pid\fP, and \fBsend_message()\fP\&.
-.SS "void GDBServer::send_message (const string & payload)"
+References \fBMaxOS::processes::GlobalScheduler::current_process()\fP, \fBMaxOS::processes::GlobalScheduler::get_process()\fP, \fBMaxOS::processes::Process::memory_manager\fP, \fBMaxOS::processes::Thread::parent_pid\fP, \fBsend_message()\fP, and \fBMaxOS::String::to_lower()\fP\&.
+.SS "void GDBServer::send_message (const \fBstring\fP & payload)"
 
 .PP
 Converts a message to the required form and sends it over serial\&. 
@@ -643,7 +643,7 @@ Definition at line \fB267\fP of file \fBgdbstub\&.cpp\fP\&..PP
 .fi
 
 .PP
-References \fBbuild_message()\fP\&.
+References \fBbuild_message()\fP, and \fBMaxOS::common::OutputStream::write()\fP\&.
 .PP
 Referenced by \fBMaxOS::runtime::TrapFlagExcpetion::handle_interrupt()\fP, \fBMaxOS::runtime::BreakPointException::handle_interrupt()\fP, \fBhandle_remove_breakpoint()\fP, \fBhandle_set_breakpoint()\fP, \fBsend_empty()\fP, \fBsend_memory()\fP, \fBsend_registers()\fP, and \fBsend_supported()\fP\&.
 .SS "void GDBServer::send_registers ()"
@@ -694,7 +694,7 @@ Definition at line \fB300\fP of file \fBgdbstub\&.cpp\fP\&..PP
 
 .PP
 References \fBsend_message()\fP\&.
-.SS "void GDBServer::send_supported (const string & peer_supported)"
+.SS "void GDBServer::send_supported (const \fBstring\fP & peer_supported)"
 
 .PP
 Sends the features that this GDB stub supports to the GDB server\&. 
@@ -733,4 +733,4 @@ Definition at line \fB119\fP of file \fBgdbstub\&.h\fP\&.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for Max OS from the source code\&.
+Generated automatically by Doxygen for MaxOS from the source code\&.

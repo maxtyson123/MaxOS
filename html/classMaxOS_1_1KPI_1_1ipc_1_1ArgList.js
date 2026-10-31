@@ -1,0 +1,27 @@
+var classMaxOS_1_1KPI_1_1ipc_1_1ArgList =
+[
+    [ "add_arg", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#ae608b48bc5268c6e227c6d8689154100", null ],
+    [ "append_args", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a8d30081f8d47981f72d360e2592cb483", null ],
+    [ "arg_count", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#af8bc90c25896a429521b7b9a767faa3a", null ],
+    [ "clear", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a7c5308fc86558608b3d922fb8b559945", null ],
+    [ "deserialise", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a77892dfb28642ddfb0e7468035419489", null ],
+    [ "get_arg", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a24183c6f08982c8fe04b2d902988d798", null ],
+    [ "get_blob", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a3db412cf6086c41ca8126b05cd4f409b", null ],
+    [ "get_bool", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a25a5f38bf533eb34a38f84a282a654e5", null ],
+    [ "get_int32", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a95c52cca57195574c53d94768cdb617d", null ],
+    [ "get_int64", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#ad0e98e5e20171b29bddc1e39ad8623a0", null ],
+    [ "get_string", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#af0a5833d7714d3d2a8327c0a7130f5f7", null ],
+    [ "get_uint32", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#af1a6bedb6e6509702518f8eaf99488da", null ],
+    [ "get_uint64", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#aa5d70edddb265f363b0166721fdb0462", null ],
+    [ "payload", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a50a6cb9cb9a81076611cc3ea6c4ebd94", null ],
+    [ "payload_size", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a7f978a486a1c99f99486591a2c14f684", null ],
+    [ "push_blob", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a6e49ab4e10dd636f8dd84498f8263fb2", null ],
+    [ "push_bool", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a6d2eafab330ec10cfcaa00041c575865", null ],
+    [ "push_int32", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a276011f1e90f59159ca85d2c73655621", null ],
+    [ "push_int64", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a73b3718cde8f2730121380245f5d4620", null ],
+    [ "push_string", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a920bf0a610e8b1345e548a97894594a8", null ],
+    [ "push_uint32", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a838e4f0fdc187110a346af21af118aa7", null ],
+    [ "push_uint64", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a780d5132be50c77204493c8fa57aa1cc", null ],
+    [ "reset_cursor", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a68b69ccdf204ccdad4c05b473ddd46d3", null ],
+    [ "serialise", "classMaxOS_1_1KPI_1_1ipc_1_1ArgList.html#a1a89e847d40870912c1304aaf6170ca1", null ]
+];

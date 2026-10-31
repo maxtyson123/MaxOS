@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['sa_5ffamily_5ft_0',['sa_family_t',['../socket_8h.html#a0ab85ad997a18f2fcd70d3f3a372755e',1,'socket.h']]],
+  ['seektype_1',['SeekType',['../filesystem_8h.html#a58b0468e18a2016f2c7735173628efa4',1,'FileServer::filesystem']]],
+  ['send_5fdescriptor_5ft_2',['send_descriptor_t',['../intel__i217_8h.html#a1608b63414538a36ae7dd2d760a3e2fc',1,'MaxOS::drivers::ethernet']]],
+  ['shift_5fout_5fof_5fbounds_5finfo_5ft_3',['shift_out_of_bounds_info_t',['../ubsan_8h.html#afbc159cbc9f16a8f54cef0722129177f',1,'MaxOS::runtime']]],
+  ['size_5ft_4',['size_t',['../types_8h.html#aa9d55e2f20e580b7445617d0d12fff6e',1,'types.h']]],
+  ['sockaddr_5',['sockaddr',['../socket_8h.html#a502d98d83f992164997402998d8bb38a',1,'socket.h']]],
+  ['sockaddr_5fstorage_6',['sockaddr_storage',['../socket_8h.html#a7775e68737dce935f8e36bc5aabfb7ac',1,'socket.h']]],
+  ['source_5flocation_5ft_7',['source_location_t',['../ubsan_8h.html#a1b4e9dffd1d17d13b0908f75ab29ed96',1,'MaxOS::runtime']]],
+  ['stack_5fframe_5ft_8',['stack_frame_t',['../cpu_8h.html#a87e3471d15e54393e3055d6162c73f50',1,'MaxOS::system']]],
+  ['stack_5ft_9',['stack_t',['../signal_8h.html#aca51d9a1c3b1ac1b2b54ed9dd7c26981',1,'signal.h']]],
+  ['string_10',['string',['../string_8h.html#a4a6e5834af96b66d8015f5a24c09e1b3',1,'MaxOS']]],
+  ['subnetmask_11',['SubnetMask',['../ipv4_8h.html#a675fed9f30ec224711b40893d3f784d6',1,'MaxOS::net']]],
+  ['superblock_5ft_12',['superblock_t',['../ext2_8h.html#a9e9c01ae21a393a6a50737b229a88069',1,'FileServer::format::ext2']]],
+  ['suseconds_5ft_13',['suseconds_t',['../types_8h.html#a9689b50d0507478638692894336b075a',1,'types.h']]],
+  ['syscall_5fargs_5ft_14',['syscall_args_t',['../kernel_2include_2system_2syscalls_8h.html#ae07c2d3c76cef8b4896680224d3d913a',1,'MaxOS::system']]],
+  ['syscall_5ffunc_5ft_15',['syscall_func_t',['../kernel_2include_2system_2syscalls_8h.html#a2bbff8c2e565180b9baa53c02b018ed5',1,'MaxOS::system']]]
+];

@@ -1,0 +1,123 @@
+.TH "MaxOS::common::Port32Bit" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::common::Port32Bit \- Handles 32 bit ports\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <port\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::Port\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPort32Bit\fP (uint16_t port_number)"
+.br
+.RI "Construct a new \fBPort\fP object for ports handling 32 bit read/writes\&. "
+.ti -1c
+.RI "virtual void \fBwrite\fP (uint32_t data)"
+.br
+.RI "write a double word to the port (32Bit) "
+.ti -1c
+.RI "virtual uint32_t \fBread\fP ()"
+.br
+.RI "read a double word from the port (32Bit) "
+.in -1c
+.SS "Additional Inherited Members"
+
+
+Protected Member Functions inherited from \fBMaxOS::common::Port\fP
+.in +1c
+.ti -1c
+.RI "\fBPort\fP (uint16_t port_number, uint8_t port_bytes)"
+.br
+.in -1c
+
+Protected Attributes inherited from \fBMaxOS::common::Port\fP
+.in +1c
+.ti -1c
+.RI "uint16_t \fBm_port_number\fP"
+.br
+.RI "The port to write to / read from\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles 32 bit ports\&. 
+.PP
+Definition at line \fB70\fP of file \fBport\&.h\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Port32Bit::Port32Bit (uint16_t port_number)\fC [explicit]\fP"
+
+.PP
+Construct a new \fBPort\fP object for ports handling 32 bit read/writes\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIport_number\fP The IO port number 
+.RE
+.PP
+
+.PP
+Definition at line \fB129\fP of file \fBport\&.cpp\fP\&..PP
+.nf
+130 : Port(port_number, 4) {
+131 }
+.fi
+
+.SH "Member Function Documentation"
+.PP 
+.SS "uint32_t Port32Bit::read ()\fC [virtual]\fP"
+
+.PP
+read a double word from the port (32Bit) 
+.PP
+\fBReturns\fP
+.RS 4
+the double word read 
+.RE
+.PP
+
+.PP
+Definition at line \fB150\fP of file \fBport\&.cpp\fP\&..PP
+.nf
+150                          {
+151 
+152     uint32_t result;
+153     asm volatile("inl %1, %0" : "=a" (result) : "Nd" (m_port_number));
+154     return result;
+155 }
+.fi
+
+.PP
+References \fBMaxOS::common::Port::m_port_number\fP\&.
+.SS "void Port32Bit::write (uint32_t data)\fC [virtual]\fP"
+
+.PP
+write a double word to the port (32Bit) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdata\fP the double word to write 
+.RE
+.PP
+
+.PP
+Definition at line \fB140\fP of file \fBport\&.cpp\fP\&..PP
+.nf
+140                                    {
+141 
+142     asm volatile("outl %0, %1" : : "a" (data), "Nd" (m_port_number));
+143 }
+.fi
+
+.PP
+References \fBMaxOS::common::Port::m_port_number\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.

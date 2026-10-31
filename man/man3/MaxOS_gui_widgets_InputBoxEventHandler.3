@@ -1,0 +1,97 @@
+.TH "MaxOS::gui::widgets::InputBoxEventHandler" 3 "Version 0.3" "MaxOS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MaxOS::gui::widgets::InputBoxEventHandler \- Handles input box events\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <inputbox\&.h>\fP
+.PP
+Inherits \fBMaxOS::common::EventHandler< InputBoxEvents >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "common::Event< \fBInputBoxEvents\fP > * \fBon_event\fP (common::Event< \fBInputBoxEvents\fP > *event) override"
+.br
+.RI "Delegates an event to the event handler for that event type\&. "
+.ti -1c
+.RI "virtual void \fBon_input_box_text_changed\fP (const \fBstring\fP &text)"
+.br
+.RI "Event triggered when the text in the input box is changed\&. "
+.in -1c
+
+Public Member Functions inherited from \fBMaxOS::common::EventHandler< InputBoxEvents >\fP
+.in +1c
+.ti -1c
+.RI "void \fBon_sample_event\fP (int x, int y)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handles input box events\&. 
+.PP
+Definition at line \fB44\fP of file \fBinputbox\&.h\fP\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "Event< \fBInputBoxEvents\fP > * InputBoxEventHandler::on_event (common::Event< \fBInputBoxEvents\fP > * event)\fC [override]\fP"
+
+.PP
+Delegates an event to the event handler for that event type\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIevent\fP The event triggered 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The event triggered potentially modified by the handler\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB28\fP of file \fBinputbox\&.cpp\fP\&..PP
+.nf
+28                                                                                   {
+29 
+30     switch (event\->type) {
+31         case InputBoxEvents::TEXT_CHANGED:
+32             on_input_box_text_changed(((InputBoxTextChangedEvent*) event)\->new_text);
+33             break;
+34     }
+35 
+36     return event;
+37 }
+.fi
+
+.PP
+References \fBon_input_box_text_changed()\fP\&.
+.SS "void InputBoxEventHandler::on_input_box_text_changed (const \fBstring\fP & text)\fC [virtual]\fP"
+
+.PP
+Event triggered when the text in the input box is changed\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItext\fP The new text in the input box 
+.RE
+.PP
+
+.PP
+Definition at line \fB44\fP of file \fBinputbox\&.cpp\fP\&..PP
+.nf
+44                                                                        {
+45 
+46 }
+.fi
+
+.PP
+Referenced by \fBon_event()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for MaxOS from the source code\&.
