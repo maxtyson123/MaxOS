@@ -80,22 +80,20 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install epstopdf
-        run: sudo apt-get update && sudo apt-get install -y texlive-font-utils
+      - name: Install doxygen
+        run: sudo apt-get update && sudo apt-get install -y doxygen
 
       - name: Generate Docs
-        run: |
-          cd toolchain
-          ./make_documentation.sh
+        run: toolchain/shared/docs/build.sh --all
 
       - name: Upload to branch
 
         # Only upload if this is not a pull request (i.e., it's a push to main)
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
           BRANCH: docs
-          FOLDER: docs/doxy
+          FOLDER: build/docs
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: ({sha}) {msg}"

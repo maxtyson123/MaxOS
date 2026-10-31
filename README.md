@@ -241,7 +241,7 @@ No user usage so far (userland will be added in the future)
 - [x] Loading ELF
 - [x] Multiple Cores Support (SMP & Scheduler)
 - [x] Move VFS & drivers to userspace
-- [ ] Reorganise project (central repo that points to org sub repos - unifies documentation for each subrepo and build etc)
+- [x] Reorganise project (central repo that points to org sub repos - unifies documentation for each subrepo and build etc)
 - [ ] Move networking to userspace (& rewrite, fix)
 - [ ] Porting & Dynamically Linking Libc
 - [ ] Proper error system
