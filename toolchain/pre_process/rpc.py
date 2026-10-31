@@ -531,6 +531,7 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             "      private:",
             f"           static {class_name}Server* s_instance;",
             f"           {class_name}* m_driver;",
+            f"           uint64_t m_endpoint = 0;",
             "      public:",
             f"           {class_name}Server({class_name}* driver);",
             f"           ~{class_name}Server();",
@@ -539,6 +540,8 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             f"           static {class_name}* driver();",
             "",
             "            void start(mstring id);",
+            "            uint64_t open(mstring id);",
+            "            bool process_next();",
             "    };",
             ""
 
@@ -633,11 +636,22 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             "    return s_instance->m_driver;",
             "}",
             "",
-            f"void {class_name}Server::start(mstring id) {{",
+            f"uint64_t {class_name}Server::open(mstring id) {{",
             '    mstring server_name = (mstring)"driver_" + id;',
-            "    rpc_server_loop(server_name.c_str());",
+            "    m_endpoint = create_endpoint(server_name.c_str());",
+            "    return m_endpoint;",
             "}",
-            ""
+            "",
+            f"bool {class_name}Server::process_next() {{",
+            "    return m_endpoint != 0 && rpc_server_process_next(m_endpoint, false);",
+            "}",
+            "",
+            f"void {class_name}Server::start(mstring id) {{",
+            "    if (open(id) == 0)",
+            "        return;",
+            "    rpc_server_loop(m_endpoint);",
+            "}",
+            "",
 
 
         ])
