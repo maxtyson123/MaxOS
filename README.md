@@ -71,7 +71,7 @@
 
 ## About The Project
 
-[![MaxOS][product-screenshot]](#)
+![MaxOS](docs/Screenshots/Boot/Console_v3.png)
 
 Max OS is a hobby operating system developed for the 64bit platform using C++ and Assembly. The project is currently in
 the early stages of development and is not yet ready for use. The project is being developed as a learning experience
@@ -241,7 +241,7 @@ No user usage so far (userland will be added in the future)
 - [x] Loading ELF
 - [x] Multiple Cores Support (SMP & Scheduler)
 - [x] Move VFS & drivers to userspace
-- [ ] Reorganise project (central repo that points to org sub repos - unifies documentation for each subrepo and build etc)
+- [x] Reorganise project (central repo that points to org sub repos - unifies documentation for each subrepo and build etc)
 - [ ] Move networking to userspace (& rewrite, fix)
 - [ ] Porting & Dynamically Linking Libc
 - [ ] Proper error system

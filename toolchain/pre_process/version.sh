@@ -134,6 +134,6 @@ namespace MaxOS{
 #endif //MAX_OS_VERSION_H
 EOF
 
-# Copy the version to the doxygen file (replace PROJECT_NUMBER         = x.x with the VERSION_STRING value)
-sed -i.bak "s/PROJECT_NUMBER         = .*/PROJECT_NUMBER         = ${MAJOR_VERSION}.${MINOR_VERSION}/" "${SCRIPTDIR}/../../docs/doxy/Doxyfile"
-rm "${SCRIPTDIR}/../../docs/doxy/Doxyfile.bak"
+# Copy the version to the docs config
+sed -i.bak "s/^DOCS_VERSION=.*/DOCS_VERSION=\"${MAJOR_VERSION}.${MINOR_VERSION}\"/" "${SCRIPTDIR}/../../docs/docs.conf"
+rm "${SCRIPTDIR}/../../docs/docs.conf.bak"

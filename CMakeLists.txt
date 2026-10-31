@@ -105,3 +105,9 @@ IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
         USES_TERMINAL
     )
 ENDIF()
+
+ADD_CUSTOM_TARGET(docs
+    COMMENT "Building documentation"
+    COMMAND bash ${CMAKE_SOURCE_DIR}/toolchain/shared/docs/build.sh --all --root ${CMAKE_SOURCE_DIR}
+    USES_TERMINAL
+)
