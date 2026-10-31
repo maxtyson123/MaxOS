@@ -1,10 +1,20 @@
 #TODO: now that have the STD lib no need for this, just do MAKE_PROG
 FUNCTION(MAKE_PROG_NOSTD TARGET_NAME SRC_DIR)
 
-    # Get the location arg
+    # Set install location
     SET(_LOCATION "/os/apps")
+
     IF(ARGC GREATER 2)
-        SET(_LOCATION "${ARGV2}")
+        IF(ARGV2 STREQUAL "app")
+            SET(_LOCATION "/os/apps")
+        ELSEIF(ARGV2 STREQUAL "server")
+            SET(_LOCATION "/os/servers")
+        ELSEIF(ARGV2 STREQUAL "driver")
+            SET(_LOCATION "/os/drivers")
+        ELSE()
+            # Custom location
+            SET(_LOCATION "${ARGV2}")
+        ENDIF()
     ENDIF()
 
     # Set compiler flags freestanding no stdlib

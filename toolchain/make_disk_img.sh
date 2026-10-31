@@ -176,7 +176,7 @@ create_fs_part() {
         ./ext2fuse.sh
         popd > /dev/null
       fi
-      fuse-ext2 "/dev/r${part#/dev/}" "$mount_point" -o rw+,allow_other,noappledouble 2>/dev/null || fail "Could not mount image to mount point"
+      fuse-ext2 "/dev/r${part#/dev/}" "$mount_point" -o rw+,allow_other,noappledouble || fail "Could not mount image to mount point"
     else
       sudo mount "$part" "$mount_point" 2>/dev/null || fail "Could not mount image to mount point"
     fi

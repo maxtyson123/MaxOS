@@ -52,5 +52,7 @@ sync
 
 # fuse-ext2 only writes its metadata when it is flushed, normal sync doesn't reach it
 if [ "$IS_MACOS" -eq 1 ]; then
-  gsync "$MOUNT_DIR/0" "$MOUNT_DIR/1" 2>/dev/null || true || warn "Could not flush the image mounts"
+     sync
+     gsync "$MOUNT_DIR/0" "$MOUNT_DIR/1" 2>/dev/null || warn "Could not flush the image mounts"
+     gsync "$MOUNT_DIR/../MaxOS.img" || fail "Could not flush disk image"
 fi
