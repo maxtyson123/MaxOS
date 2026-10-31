@@ -20,7 +20,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -29,18 +29,26 @@ jobs:
           sudo apt update
           sudo apt install -y build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev cmake nasm
 
-      - name: Cache toolchain
+      - name: Restore toolchain cache
         id: cache-toolchain
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v4
         with:
           path: toolchain/cross_compiler
           key: ${{ runner.os }}-cross_compiler_3
 
       - name: Build toolchain
+        id: build-toolchain
         if: steps.cache-toolchain.outputs.cache-hit != 'true'
         run: |
           cd toolchain
           ./make_cross_compiler.sh --no-deps
+
+      - name: Save toolchain cache
+        if: steps.build-toolchain.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: toolchain/cross_compiler
+          key: ${{ runner.os }}-cross_compiler_3
 
       - name: Build MaxOS (Release)
         run: |
@@ -68,7 +76,9 @@ jobs:
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Install epstopdf
         run: sudo apt-get update && sudo apt-get install -y texlive-font-utils
