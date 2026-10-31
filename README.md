@@ -71,7 +71,7 @@
 
 ## About The Project
 
-[![MaxOS][product-screenshot]](#)
+![MaxOS](docs/Screenshots/Boot/Console_v3.png)
 
 Max OS is a hobby operating system developed for the 64bit platform using C++ and Assembly. The project is currently in
 the early stages of development and is not yet ready for use. The project is being developed as a learning experience
