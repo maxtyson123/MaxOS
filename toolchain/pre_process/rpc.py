@@ -6,6 +6,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional, Tuple, Dict
 
+
+# TODO: move to mcc
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT_DIR = SCRIPT_DIR.parent.parent
 
@@ -17,7 +20,8 @@ TYPE_MAP = {
     "int32": "int32_t",
     "int64": "int64_t",
     "string": "mstring",#"const char*",
-    "void": "void"
+    "void": "void",
+    "bytes": "MaxOS::common::ByteSpan",
 }
 
 PUSH_FUNC_MAP = {
@@ -27,6 +31,7 @@ PUSH_FUNC_MAP = {
     "int32": "push_int32",
     "int64": "push_int64",
     "mstring": "push_string",
+    "bytes": "push_bytes",
 }
 
 GET_FUNC_MAP = {
@@ -36,6 +41,7 @@ GET_FUNC_MAP = {
     "int32": "get_int32",
     "int64": "get_int64",
     "mstring": "get_string",
+    "bytes": "get_bytes",
 }
 
 RPC_FLAGS_MAP = {
@@ -51,6 +57,7 @@ CPP_TO_IDL = {
     "int32_t": "int32",
     "int64_t": "int64",
     "string": "mstring",
+    "MaxOS::common::ByteSpan": "bytes",
 }
 
 # CLASSES
@@ -190,6 +197,23 @@ def default_cpp_value_expr(cpp_type: str) -> str:
 def arg_decl_list(args: List[Argument]) -> str:
     return ", ".join([f"{idl_to_cpp(a.type_idl)} {a.name}" for a in args])
 
+def service_uses_bytes(service: RpcService) -> bool:
+
+    for function in service.functions:
+
+        if any(arg.type_idl == "bytes" for arg in function.args):
+            return True
+
+        if any(cpp_type_to_idl(t) == "bytes" for t in function.return_types):
+            return True
+
+    for event in service.events:
+
+        if any(arg.type_idl == "bytes" for arg in event.args):
+            return True
+
+    return False
+
 def start_header(lines: List[str], gaurd: str):
     lines.append("#ifndef " + gaurd)
     lines.append("#define " + gaurd)
@@ -207,7 +231,7 @@ def add_extra_includes(lines: List[str], includes: List[str]):
     for inc in dict.fromkeys(includes):
         lines.append(f"#include {inc}")
 
-def extract_arguments(function: RpcMethod, lines: List[str], get: bool = True) -> List[str]:
+def extract_arguments(function: RpcMethod, lines: List[str], get: bool = True, start_index: int = 0) -> List[str]:
 
     access = "->" if get else "."
 
@@ -216,7 +240,7 @@ def extract_arguments(function: RpcMethod, lines: List[str], get: bool = True) -
 
         # Get the operation
         fn = GET_FUNC_MAP.get(arg.type_idl) if get else PUSH_FUNC_MAP.get(arg.type_idl)
-        fn_param = i if get else arg.name
+        fn_param = i + start_index if get else arg.name
         fn_result = f" {idl_to_cpp(arg.type_idl)} {arg.name} = " if get else ""
 
         # Get the arg
@@ -229,7 +253,7 @@ def extract_arguments(function: RpcMethod, lines: List[str], get: bool = True) -
         if get:
             cpp_type = idl_to_cpp(arg.type_idl)
             blob_name = f"_{arg.name}_blob"
-            lines.append(f"    const void* {blob_name} = _args->get_blob({i}); // custom arg; fallback to blob")
+            lines.append(f"    const void* {blob_name} = _args->get_blob({i + start_index}); // custom arg; fallback to blob")
             lines.append(f"    {cpp_type} {arg.name} = {default_cpp_value_expr(cpp_type)};")
             lines.append(f"    if ({blob_name} != nullptr) {arg.name} = *(({cpp_type} const*){blob_name});")
         else:
@@ -503,9 +527,17 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
         # Shared lines
         both = [srv_h_lines, cli_h_lines]
 
-        # Header gaurds
-        srv_gaurd = "{0}_{1}_SERVER_H".format(service.namespace.upper().replace("::", "_"), class_name.upper())
-        client_gaurd = "{0}_{1}_CLIENT_H".format(service.namespace.upper().replace("::", "_"), class_name.upper())
+        # Header guards
+        srv_gaurd = "{0}_{1}_SERVER_H".format(
+            service.namespace.upper().replace("::", "_"),
+            class_name.upper()
+        )
+
+        client_gaurd = "{0}_{1}_CLIENT_H".format(
+            service.namespace.upper().replace("::", "_"),
+            class_name.upper()
+        )
+
         start_header(srv_h_lines, srv_gaurd)
         start_header(cli_h_lines, client_gaurd)
 
@@ -513,64 +545,137 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
         lib_name = service.source_file.parent.name
         add_lines("#include <libkpi/ipc/rpc.h>", both)
         add_lines("#include <libcommon/string.h>", both)
-        if header_file: 
-            add_lines(f'#include <{lib_name}/{header_file}>', both)
+
+        if service_uses_bytes(service):
+            add_lines("#include <libcommon/byte_span.h>", both)
+
+        if header_file:
+            add_lines(f"#include <{lib_name}/{header_file}>", both)
+
         add_extra_includes(srv_h_lines, service.extra_includes)
         add_extra_includes(cli_h_lines, service.extra_includes)
+
+        if service.events:
+            srv_h_lines.extend([
+                "#include <libcommon/map.h>",
+                "#include <libcommon/vector.h>",
+            ])
+
         add_lines("", both)
 
-        # Add namespace if needed
+        # Namespace
         add_lines("using mstring = MaxOS::string;", both)
         add_lines("", both)
-        if service.namespace != "": add_lines(f"namespace {service.namespace} {{", both)
+
+        if service.namespace:
+            add_lines(f"namespace {service.namespace} {{", both)
+
         add_lines("", both)
 
-        # Define the server
+        # Server class
         srv_h_lines.extend([
-            f"   class {class_name}Server" + " {",
-            "      private:",
-            f"           static {class_name}Server* s_instance;",
-            f"           {class_name}* m_driver;",
-            f"           uint64_t m_endpoint = 0;",
-            "      public:",
-            f"           {class_name}Server({class_name}* driver);",
-            f"           ~{class_name}Server();",
-            "",
-            f"           static {class_name}Server* server();",
-            f"           static {class_name}* driver();",
-            "",
-            "            void start(mstring id);",
-            "            uint64_t open(mstring id);",
-            "            bool process_next();",
-            "    };",
-            ""
-
+            f"class {class_name}Server {{",
+            "private:",
+            f"    static {class_name}Server* s_instance;",
+            f"    {class_name}* m_driver;",
+            "    uint64_t m_endpoint = 0;",
         ])
 
-        # Define the client
+        if service.events:
+            srv_h_lines.append(
+                "    MaxOS::common::Map<mstring, MaxOS::common::Vector<mstring>> m_event_subscribers;"
+            )
+
+        srv_h_lines.extend([
+            "",
+            "public:",
+            f"    {class_name}Server({class_name}* driver);",
+            f"    ~{class_name}Server();",
+            "",
+            f"    static {class_name}Server* server();",
+            f"    static {class_name}* driver();",
+            "",
+            "    void start(mstring id);",
+            "    uint64_t open(mstring id);",
+            "    bool process_next();",
+        ])
+
+        if service.events:
+
+            srv_h_lines.extend([
+                "",
+                "    void subscribe_event(const mstring& event, const mstring& endpoint);",
+                "    void unsubscribe_event(const mstring& event, const mstring& endpoint);",
+            ])
+
+            for event in service.events:
+                args = arg_decl_list(event.args)
+                srv_h_lines.append(
+                    f"    void fire_{event.name}({args});"
+                )
+
+        srv_h_lines.append("};")
+        add_lines("", both)
+
+        # Client class
         cli_h_lines.extend([
-            f"   class {class_name}Client : public {class_name} " + "{",
-            "      private:",
-            "            mstring m_id;",
-            "      public:",
-            f"          explicit {class_name}Client(mstring id);",
-            f"          ~{class_name}Client();",
+            f"class {class_name}Client : public {class_name} {{",
+            "private:",
+            "    mstring m_id;",
+            "",
+            "public:",
+            f"    explicit {class_name}Client(mstring id);",
+            f"    ~{class_name}Client();",
             ""
         ])
 
-        # Add the function declarations (override)
         for function in service.functions:
 
-            # Get the return type and args
             ret = function.cpp_return_type
             args = arg_decl_list(function.args)
-            cli_h_lines.append(f"           virtual {ret} {function.name}({args.strip()});")
 
-        cli_h_lines.append("    };")
-        add_lines("", both)
+            cli_h_lines.append(
+                f"    virtual {ret} {function.name}({args.strip()});"
+            )
 
-        # Close the files
-        if service.namespace != "": add_lines("} // namespace " + service.namespace, both)
+        cli_h_lines.append("};")
+
+        # Event handler interface
+        if service.events:
+
+            cli_h_lines.extend([
+                "",
+                f"class EventHandler_{class_name} {{",
+                "private:",
+                "    uint64_t m_endpoint = 0;",
+                "    mstring m_server_name;",
+                "    mstring m_client_endpoint;",
+                "",
+                "public:",
+                f"    explicit EventHandler_{class_name}(mstring id);",
+                f"    virtual ~EventHandler_{class_name}();",
+                ""
+            ])
+
+            for event in service.events:
+
+                args = arg_decl_list(event.args)
+
+                cli_h_lines.append(
+                    f"    virtual void {event.name}({args}) = 0;"
+                )
+
+            cli_h_lines.extend([
+                "",
+                "    bool try_setup_self();",
+                "    bool process_next();",
+                "};",
+            ])
+
+        # Close namespace
+        if service.namespace:
+            add_lines("} // namespace " + service.namespace, both)
+
         end_header(srv_h_lines, srv_gaurd)
         end_header(cli_h_lines, client_gaurd)
     generate_service_class_headers()
@@ -588,6 +693,10 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
         # Setup header stuff
         srv_cpp_lines.append(f'#include <{path}{srv_h.name}>')
         cli_cpp_lines.append(f'#include <{path}{cli_h.name}>')
+
+        if service.events:
+            cli_cpp_lines.append("#include <libcommon/map.h>")
+
         add_lines("", both)
         add_lines("using namespace MaxOS::KPI::ipc;", both)
 
@@ -602,7 +711,16 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
 
         # Server: forward declare wrappers
         for function in service.functions:
-            srv_cpp_lines.append(f"static void {function.name}_wrapper(ArgList* args, ArgList* returns);")
+            srv_cpp_lines.append(
+                f"static void {function.name}_wrapper(ArgList* args, ArgList* returns);"
+            )
+
+        if service.events:
+            srv_cpp_lines.extend([
+                f"static void _subscribe_{class_lower}_events_wrapper(ArgList* args, ArgList* returns);",
+                f"static void _unsubscribe_{class_lower}_events_wrapper(ArgList* args, ArgList* returns);",
+            ])
+
         srv_cpp_lines.append("")
 
         # Server: Class
@@ -615,8 +733,16 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
             "",
             "      // Register RPC calls",
         ])
+
         for function in service.functions:
             srv_cpp_lines.append(f'      register_function("{function.name}", {function.name}_wrapper);')
+
+        if service.events:
+            srv_cpp_lines.extend([
+                f'      register_function("_subscribe_{class_lower}_events", _subscribe_{class_lower}_events_wrapper);',
+                f'      register_function("_unsubscribe_{class_lower}_events", _unsubscribe_{class_lower}_events_wrapper);',
+            ])
+
         srv_cpp_lines.extend([
             "}",
             "",
@@ -655,6 +781,78 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
 
 
         ])
+
+        # Server-side events
+        if service.events:
+
+            # Subscribe
+            srv_cpp_lines.extend([
+                f"void {class_name}Server::subscribe_event(const mstring& event, const mstring& endpoint) {{",
+                "    m_event_subscribers[event].push_back(endpoint);",
+                "}",
+                "",
+                f"void {class_name}Server::unsubscribe_event(const mstring& event, const mstring& endpoint) {{",
+                "    auto it = m_event_subscribers.find(event);",
+                "    if (it != m_event_subscribers.end())",
+                "        it->second.erase(endpoint);",
+                "}",
+                "",
+            ])
+
+            # Subscribe RPC wrapper
+            srv_cpp_lines.extend([
+                f"static void _subscribe_{class_lower}_events_wrapper(ArgList* _args, ArgList*) {{",
+                f"    auto* server = {class_name}Server::server();",
+                "    if (!server) return;",
+                "",
+                "    mstring endpoint = _args->get_string(0);",
+                "",
+                "    for (size_t i = 1; i < _args->arg_count(); ++i)",
+                "        server->subscribe_event(_args->get_string(i), endpoint);",
+                "}",
+                "",
+            ])
+
+            # Unsubscribe RPC wrapper
+            srv_cpp_lines.extend([
+                f"static void _unsubscribe_{class_lower}_events_wrapper(ArgList* _args, ArgList*) {{",
+                f"    auto* server = {class_name}Server::server();",
+                "    if (!server) return;",
+                "",
+                "    mstring endpoint = _args->get_string(0);",
+                "",
+                "    for (size_t i = 1; i < _args->arg_count(); ++i)",
+                "        server->unsubscribe_event(_args->get_string(i), endpoint);",
+                "}",
+                "",
+            ])
+
+            # Event publishers
+            for event in service.events:
+
+                args = arg_decl_list(event.args)
+                rpc_name = f"{class_lower}_{event.name}"
+
+                srv_cpp_lines.extend([
+                    f"void {class_name}Server::fire_{event.name}({args}) {{",
+                    f'    auto it = m_event_subscribers.find("{event.name}");',
+                    "    if (it == m_event_subscribers.end()) return;",
+                    "",
+                    "    for (auto& endpoint : it->second) {",
+                    "        ArgList _args;",
+                    "        _args.push_string(endpoint);",
+                    ""
+                ])
+
+                extract_arguments(event, srv_cpp_lines, get=False)
+
+                srv_cpp_lines.extend([
+                    "",
+                    f'        rpc_call(endpoint.c_str(), "{rpc_name}", &_args, nullptr, (size_t)RPCMEssageFlags::ONE_WAY);',
+                    "    }",
+                    "}",
+                    ""
+                ])
 
         # Server: wrappers
         for function in service.functions:
@@ -736,6 +934,169 @@ def generate_service_class_files(service: RpcService, output_inc: Path, output_s
                 cli_cpp_lines.append(f"    return {default_cpp_value_expr(return_value)};")
             cli_cpp_lines.append("}")
             cli_cpp_lines.append("")
+
+        # Client-side event support
+        if service.events:
+
+            handlers_name = f"g_{class_lower}_event_handlers"
+            registered_name = f"g_{class_lower}_event_functions_registered"
+            counter_name = f"g_{class_lower}_next_event_id"
+
+            # Global event handler registry
+            cli_cpp_lines.extend([
+                "",
+                f"static MaxOS::common::Map<mstring, EventHandler_{class_name}*>* {handlers_name} = nullptr;",
+                f"static bool {registered_name} = false;",
+                f"static uint64_t {counter_name} = 0;",
+                ""
+            ])
+
+            # Generate event RPC wrappers
+            for event in service.events:
+
+                wrapper_name = f"_{class_lower}_{event.name}_event_wrapper"
+                rpc_name = f"{class_lower}_{event.name}"
+
+                cli_cpp_lines.extend([
+                    f"static void {wrapper_name}(ArgList* _args, ArgList*) {{",
+                    "",
+                    "    // Identify which event listener received this message",
+                    "    mstring _rpc_listener_endpoint = _args->get_string(0);",
+                    "",
+                    f"    if (!{handlers_name}) return;",
+                    "",
+                    f"    auto it = {handlers_name}->find(_rpc_listener_endpoint);",
+                    f"    if (it == {handlers_name}->end() || !it->second) return;",
+                    "",
+                    f"    EventHandler_{class_name}* _rpc_handler = it->second;",
+                    ""
+                ])
+
+                call_args = extract_arguments(
+                    event,
+                    cli_cpp_lines,
+                    get=True,
+                    start_index=1
+                )
+
+                cli_cpp_lines.extend([
+                    "",
+                    f"    _rpc_handler->{event.name}({', '.join(call_args)});",
+                    "}",
+                    ""
+                ])
+
+            # Constructor
+            cli_cpp_lines.extend([
+                f"EventHandler_{class_name}::EventHandler_{class_name}(mstring id) {{",
+                '    m_server_name = (mstring)"driver_" + id;',
+                f'    m_client_endpoint = (mstring)"{class_lower}_events_" + mstring(MaxOS::KPI::processes::pid()) + "_" + id + "_" + mstring({counter_name}++);',
+                "}",
+                ""
+            ])
+
+            # Destructor
+            cli_cpp_lines.extend([
+                f"EventHandler_{class_name}::~EventHandler_{class_name}() {{",
+                "",
+                "    if (!m_endpoint)",
+                "        return;",
+                "",
+                f"    if ({handlers_name})",
+                f"        {handlers_name}->erase(m_client_endpoint);",
+                "",
+                "    // Unsubscribe from events",
+                "    ArgList _args;",
+                "    _args.push_string(m_client_endpoint);",
+            ])
+
+            for event in service.events:
+                cli_cpp_lines.append(f'    _args.push_string("{event.name}");')
+
+            cli_cpp_lines.extend([
+                "",
+                f'    rpc_call(m_server_name.c_str(), "_unsubscribe_{class_lower}_events", &_args, nullptr, (size_t)RPCMEssageFlags::ONE_WAY);',
+                "",
+                "    close_endpoint(m_endpoint);",
+                "    m_endpoint = 0;",
+                "}",
+                ""
+            ])
+
+            # Try setup
+            cli_cpp_lines.extend([
+                f"bool EventHandler_{class_name}::try_setup_self() {{",
+                "",
+                "    // Already connected",
+                "    if (m_endpoint)",
+                "        return true;",
+                "",
+                "    // Check that the driver server is available",
+                "    uint64_t server_endpoint = open_endpoint(m_server_name.c_str());",
+                "    if (!server_endpoint)",
+                "        return false;",
+                "",
+                "    close_endpoint(server_endpoint);",
+                "",
+                "    // Initialise the event registry",
+                f"    if (!{handlers_name})",
+                f"        {handlers_name} = new MaxOS::common::Map<mstring, EventHandler_{class_name}*>();",
+                "",
+                "    // Register RPC wrappers once per process",
+                f"    if (!{registered_name}) {{",
+            ])
+
+            for event in service.events:
+                wrapper_name = f"_{class_lower}_{event.name}_event_wrapper"
+                rpc_name = f"{class_lower}_{event.name}"
+
+                cli_cpp_lines.append(
+                    f'        register_function("{rpc_name}", {wrapper_name});'
+                )
+
+            cli_cpp_lines.extend([
+                f"        {registered_name} = true;",
+                "    }",
+                "",
+                "    // Create the receiving endpoint before subscribing",
+                "    m_endpoint = create_endpoint(m_client_endpoint.c_str());",
+                "    if (!m_endpoint)",
+                "        return false;",
+                "",
+                "    // Register this particular handler instance",
+                f"    {handlers_name}->insert(m_client_endpoint, this);",
+                "",
+                "    // Subscribe to events",
+                "    ArgList _args;",
+                "    _args.push_string(m_client_endpoint);",
+            ])
+
+            for event in service.events:
+                cli_cpp_lines.append(
+                    f'    _args.push_string("{event.name}");'
+                )
+
+            cli_cpp_lines.extend([
+                "",
+                f'    if (!rpc_call(m_server_name.c_str(), "_subscribe_{class_lower}_events", &_args, nullptr, (size_t)RPCMEssageFlags::ONE_WAY)) {{',
+                f"        {handlers_name}->erase(m_client_endpoint);",
+                "        close_endpoint(m_endpoint);",
+                "        m_endpoint = 0;",
+                "        return false;",
+                "    }",
+                "",
+                "    return true;",
+                "}",
+                ""
+            ])
+
+            # Process pending events
+            cli_cpp_lines.extend([
+                f"bool EventHandler_{class_name}::process_next() {{",
+                "    return m_endpoint && rpc_server_process_next(m_endpoint, false);",
+                "}",
+                ""
+            ])
 
         # Close namespace
         if service.namespace != "":
