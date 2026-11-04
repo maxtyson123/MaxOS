@@ -86,9 +86,6 @@ workflow artifacts. To ensure a cleaner git history, each feature/change is done
 into the main branch once working. To see the history of each feature press on the pull request number. If you are
 intrested in the active development find the latest branch <a href="https://github.com/maxtyson123/MaxOS/branches">
 Here</a>.
-
-_Note:_ Ignore all the networking code & drivers, they are very outdated, badly written and will soon be ported over to
-userspace and rewritten.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
@@ -242,7 +239,7 @@ No user usage so far (userland will be added in the future)
 - [x] Multiple Cores Support (SMP & Scheduler)
 - [x] Move VFS & drivers to userspace
 - [x] Reorganise project (central repo that points to org sub repos - unifies documentation for each subrepo and build etc)
-- [ ] Move networking to userspace (& rewrite, fix)
+- [x] Move networking to userspace (& rewrite, fix)
 - [ ] Porting & Dynamically Linking Libc
 - [ ] Proper error system
 - [ ] Clean up ALL Todos
